@@ -1,0 +1,13 @@
+openapi: 3.0.3
+info:
+  title: DangDang-Work API
+  version: 1.0.0
+servers:
+  - url: http://db:3333
+paths:
+  /health:
+    get:
+      description: Get a health check
+      responses:
+        200:
+          description: OK
