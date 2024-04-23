@@ -9,7 +9,7 @@ module.exports = {
   testPathIgnorePatterns: ['/node_modules/', 'dist'],
   rootDir: '.',
   transform: {
-    '^.+\\.(t|j)s?$': ['@swc/jest'],
+    '^.+\\.ts?$': ['@swc/jest'],
   },
   collectCoverageFrom: ['**/*.(t|j)s', '!**/node_modules/**'],
   roots: ['<rootDir>/'],
