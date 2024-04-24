@@ -148,3 +148,5 @@ docker-compose-prod.yml
 .prometheus
 
 **/.env.*
+
+.DS_Store
