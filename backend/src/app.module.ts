@@ -23,30 +23,30 @@ import { WinstonLoggerModule } from './common/logger/winstonLogger.module';
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV}`,
     }),
-    TypeOrmModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => {
-        if (process.env.NODE_ENV === 'test') {
-          return {
-            type: 'sqlite',
-            database: config.get<string>('DB_NAME'),
-            entities: ['dist/**/*.entity{.ts,.js}'],
-            synchronize: true,
-          };
-        }
+    // TypeOrmModule.forRootAsync({
+    //   inject: [ConfigService],
+    //   useFactory: (config: ConfigService) => {
+    //     if (process.env.NODE_ENV === 'test') {
+    //       return {
+    //         type: 'sqlite',
+    //         database: config.get<string>('DB_NAME'),
+    //         entities: ['dist/**/*.entity{.ts,.js}'],
+    //         synchronize: true,
+    //       };
+    //     }
 
-        return {
-          type: 'mysql',
-          host: config.get<string>('MYSQL_HOST'),
-          port: config.get<number>('MYSQL_PORT'),
-          username: config.get<string>('MYSQL_ROOT_USER'),
-          password: config.get<string>('MYSQL_ROOT_PASSWORD'),
-          database: config.get<string>('MYSQL_DATABASE'),
-          entities: ['dist/**/*.entity{.ts,.js}'],
-          synchronize: true,
-        };
-      },
-    }),
+    //     return {
+    //       type: 'mysql',
+    //       host: config.get<string>('MYSQL_HOST'),
+    //       port: config.get<number>('MYSQL_PORT'),
+    //       username: config.get<string>('MYSQL_ROOT_USER'),
+    //       password: config.get<string>('MYSQL_ROOT_PASSWORD'),
+    //       database: config.get<string>('MYSQL_DATABASE'),
+    //       entities: ['dist/**/*.entity{.ts,.js}'],
+    //       synchronize: true,
+    //     };
+    //   },
+    //}),
     UsersModule,
     ConfigModule,
   ],
