@@ -59,8 +59,8 @@ Mariadb은 Docker를 실행해야 사용 할 수 있습니다.
    ```
 3. Docker mariadb 이미지를 다운 받습니다.
    ```shell
-   docker run -d --name local-mariadb -p 5001:3306 \
-   -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=test mariadb \
+   docker run -d --name local-mariadb -p 3306:3306 \
+   -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=dangdangwalk mariadb \
    --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
    ```
 4. Nest.js를 실행합니다.
