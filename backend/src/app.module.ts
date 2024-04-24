@@ -8,9 +8,11 @@ import { UsersModule } from './users/users.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { PrometheusInterceptor } from './common/interceptor/prometheus.interceptor';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
+import { WinstonLoggerModule } from './common/logger/winstonLogger.module';
 
 @Module({
   imports: [
+    WinstonLoggerModule,
     PrometheusModule.register({
       path: '/metrics',
       defaultMetrics: {
@@ -46,6 +48,7 @@ import { PrometheusModule } from '@willsoto/nestjs-prometheus';
       },
     }),
     UsersModule,
+    ConfigModule,
   ],
   controllers: [AppController, HealthController],
   providers: [
