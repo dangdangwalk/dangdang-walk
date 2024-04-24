@@ -1,0 +1,11 @@
+filters:
+  - label: backend
+    regexs:
+      - /Backend/
+    targets: [title]
+    events: [pull_request]
+  - label: front
+    regexs:
+      - /Frontend/
+    targets: [title]
+    events: [pull_request]
