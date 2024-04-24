@@ -8,6 +8,8 @@ import { UsersModule } from './users/users.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { PrometheusInterceptor } from './common/interceptor/prometheus.interceptor';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
+import { ConfigModule } from './common/config/config.module';
+import { LoggerModule } from './common/logger/logger.module';
 
 @Module({
   imports: [
@@ -46,6 +48,8 @@ import { PrometheusModule } from '@willsoto/nestjs-prometheus';
       },
     }),
     UsersModule,
+    ConfigModule,
+    LoggerModule,
   ],
   controllers: [AppController, HealthController],
   providers: [
