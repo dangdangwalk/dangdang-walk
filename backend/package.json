@@ -27,6 +27,7 @@
     "@nestjs/platform-express": "^10.3.5",
     "@nestjs/typeorm": "^10.0.2",
     "@willsoto/nestjs-prometheus": "^6.0.0",
+    "app-root-path": "^3.1.0",
     "axios": "^1.6.8",
     "cross-env": "^7.0.3",
     "nest-winston": "^1.9.4",
