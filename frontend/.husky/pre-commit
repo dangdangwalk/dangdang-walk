@@ -23,12 +23,12 @@ if [[ ! $current_branch =~ ^(frontend|backend)\/DANG-[1-9][0-9]*$ ]]; then
 fi
 
 # Check if the current branch starts with "backend"
-if [[ $current_branch == frontend* ]]; then
-  echo -e "${YELLOW}[WARNING]${NC} frontend 폴더에서 작업하셨나요? 현재 실행 중인 스크립트가 backend 폴더에 위치하고 있습니다."
-  echo -e "${YELLOW}[WARNING]${NC} frontend 설정으로 스크립트를 실행하려면 ${PINK}frontend 폴더에서${NC} ${MAGENTA}npm run prepare${NC}를 실행 한 뒤 다시 ${MAGENTA}git commit${NC}을 시도하세요."
+if [[ $current_branch == backend* ]]; then
+  echo -e "${YELLOW}[WARNING]${NC} backend 폴더에서 작업하셨나요? 현재 실행 중인 스크립트가 frontend 폴더에 위치하고 있습니다."
+  echo -e "${YELLOW}[WARNING]${NC} backend 설정으로 스크립트를 실행하려면 ${PINK}backend 폴더에서${NC} ${MAGENTA}npm run prepare${NC}를 실행 한 뒤 다시 ${MAGENTA}git commit${NC}을 시도하세요."
 fi
 
-cd backend
+cd frontend
 
 # Apply linter and formatter
 echo -e "${GREEN}[INFO]${NC} staged된 파일에 대해 linter와 formatter 적용"
