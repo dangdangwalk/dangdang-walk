@@ -55,7 +55,8 @@ export class PrometheusInterceptor implements NestInterceptor, OnModuleInit {
     return true;
   }
 
-  // @ts-ignore
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const originUrl = context.switchToHttp().getRequest().url.toString();
 
