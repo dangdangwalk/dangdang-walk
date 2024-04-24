@@ -1,7 +1,9 @@
 # DangDang-walk
+
 이는 프로젝트 애플리케이션용 REST API입니다.
 
 ## Tech Stack
+
 - Next: 14.2.2
 - Nest: 10.3.0
 - MySQL:8.0.22
@@ -9,6 +11,7 @@
 - Node: 18.17.1
 
 ## Getting Started
+
 - 해당 Repository에서 프로젝트를 복제합니다.
 - `front` 와 `backend` 각 폴더에 실행방법은 다음과 같습니다.
   - front
@@ -22,46 +25,65 @@
     - `npm run start:prod` 명령어를 입력하여 prod 환경 Nest.js를 실행합니다.
     - `npm run test` 명령어를 입력하여 Nest.js 테스트를 실행합니다.
     - `npm run test:e2e` 명령어를 입력하여 Nest.js e2e 테스트를 실행합니다.
+- git hook 사용법
+  - `npm install` 명령어를 입력해 husky와 lint-staged 모듈을 다운받습니다.
+  - **자신이 작업할 폴더(backend 또는 frontend)로 이동해** `npm run prepare`를 실행합니다.
+    - 이는 `git commit` 시 실행할 git hook script 파일의 위치를 설정하는 것으로 언제든 `npm run prepare`를 통해 변경할 수 있습니다.
+    - 자신이 작업할 폴더와 git hook script 파일이 위치하는 폴더가 동일하게 설정되도록 합니다.
+  - 이제 `git commit` 시 `pre-commit` git hook script가 자동으로 실행되며 다음과 같은 작업을 합니다.
+    - branch 이름이 프로젝트의 naming convention을 따르는지 검사 (ex. frontend/DANG-1, backend/DANG-26)
+    - commit message 작성 전에 lint-staged로 linter와 formatter 적용
+  - `pre-commit` git hook script에서는 branch 이름이 backend로 시작하면 backend에서 작업한 것으로 간주하며, `git commit` 실행 시 frontend의 script가 실행될 경우 다음과 같은 경고 메시지가 출력됩니다. 그 반대도 마찬가지이며 필요한 경우 경고 메시지의 안내에 따릅니다.
+    ![image](https://github.com/jihwooon/dangdang-walk/assets/71831926/279a2f4f-0756-4bbb-892f-6179f6f10d28)
+  - `git commit` 시 git hook의 실행을 skip하고 싶다면 `-n/--no-verify` option을 사용합니다.
+    ```bash
+    git commit -n # Skips git hooks
+    ```
+    Root directory에서 작업한 경우와 같이 특수한 경우가 아니라면 git hook의 실행을 skip하는 행동은 지양합니다.
 
 ## Database Setting
-### **Local Environment**  
-  로컬 개발 시 Mariadb 데이터베이스를 사용합니다.  
-  Mariadb은 Docker를 실행해야 사용 할 수 있습니다.
+
+### **Local Environment**
+
+로컬 개발 시 Mariadb 데이터베이스를 사용합니다.
+Mariadb은 Docker를 실행해야 사용 할 수 있습니다.
 
 1. `.env.local` 파일을 backend 폴더에 생성합니다.
 2. env 파일 내에 다음과 같은 내용을 추가합니다.
-    ```yaml
-    MYSQL_HOST=local # 호스트 명에 따라 이름을 변경해줍니다.
-    MYSQL_DATABASE=test
-    MYSQL_ROOT_USER=root
-    MYSQL_ROOT_PASSWORD=root
-    MYSQL_PORT=3306 # 기본 포트 3306
-    ```
+   ```yaml
+   MYSQL_HOST=local # 호스트 명에 따라 이름을 변경해줍니다.
+   MYSQL_DATABASE=test
+   MYSQL_ROOT_USER=root
+   MYSQL_ROOT_PASSWORD=root
+   MYSQL_PORT=3306 # 기본 포트 3306
+   ```
 3. Docker mariadb 이미지를 다운 받습니다.
    ```shell
    docker run -d --name local-mariadb -p 5001:3306 \
    -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=test mariadb \
    --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-   ```  
+   ```
 4. Nest.js를 실행합니다.
 
-### **Dev Environment**  
+### **Dev Environment**
+
 Dev 개발 시 Dockerfile를 build를 해야 합니다.
 
 1. backend 폴더 내 `.env.dev` 파일을 생성합니다.
 2. `.env.dev` 파일 내에 Local 환경에 설정값과 동일하게 추가합니다.
-   - MYSQL_HOST는 docker-compose 내에 데이터베이스 호스트명과 동일하게 변경해야합니다.  
+   - MYSQL_HOST는 docker-compose 내에 데이터베이스 호스트명과 동일하게 변경해야합니다.
      ex) `db -> MYSQL_HOST=db`, `dev-db -> MYSQL_HOST=dev-db`
 3. Root 폴더에 `docker-compose-dev.yml`를 Build 실행합니다.
-    ```shell
+   ```shell
    docker-compose -f docker-compose-dev.yml build
-    ```
+   ```
 4. Build 완료 시 docker-compose를 실행합니다.
-    ```shell
-    docker-compose -f docker-compose-dev.yml up 
-    ```
+   ```shell
+   docker-compose -f docker-compose-dev.yml up
+   ```
 
 ### **Monitoring Environment**
+
 Monitoring를 사용하기 위해서는 Prometheus와 Grafana를 실행해야 합니다.
 
 1. `docker-compose -f docker-compose-dev.yml up` 를 실행합니다.
