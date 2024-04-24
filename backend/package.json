@@ -36,9 +36,12 @@
     "@willsoto/nestjs-prometheus": "^6.0.0",
     "axios": "^1.6.8",
     "cross-env": "^7.0.3",
+    "nest-winston": "^1.9.4",
     "prom-client": "^15.1.2",
     "reflect-metadata": "^0.1.14",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "winston": "^3.13.0",
+    "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.3.2",
