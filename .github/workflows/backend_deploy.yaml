@@ -1,0 +1,43 @@
+name: AWS ECR Prod Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - backend/
+  pull_request:
+    branches:
+      - main
+    paths:
+      - backend/
+
+jobs:
+  build:
+    name: ECR Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: setEnv
+        if : github.ref == 'refs/heads/main'
+        run: |
+          echo "IMAGE=dangdang-api" >> $GITHUB_ENV
+          echo "REPO=180993267331.dkr.ecr.ap-northeast-2.amazonaws.com" >> $GITHUB_ENV
+          echo "TAG=${GITHUB_SHA::7}" >> $GITHUB_ENV
+      - name: Configure AWS credentials
+        if : github.ref == 'refs/heads/main'
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+      - name: Docker build
+        if: github.ref == 'refs/heads/main'
+        run: |
+          docker build -t $IMAGE . --target prod
+      - name: ECR push
+        if: github.ref == 'refs/heads/main'
+        run:
+          aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin $REPO
+          docker build -t $IMAGE .
+          docker tag $IMAGE:$TAG $REPO/$IMAGE:$TAG
+          docker push $REPO/$IMAGE:$TAG
