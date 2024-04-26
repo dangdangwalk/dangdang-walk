@@ -16,6 +16,9 @@ jobs:
   build:
     name: ECR Build
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./fronted
     steps:
       - name: setEnv
         if : github.ref == 'refs/heads/main'
