@@ -1,4 +1,4 @@
-name: AWS ECR Prod Deploy
+name: AWS ECR Prod Frontend Deploy
 
 on:
   push:
@@ -18,8 +18,29 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./fronted
+        working-directory: ./frontend
     steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 21.2.0
+          cache: "npm"
+          cache-dependency-path: ./frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm run test
+
+      - name: Run build
+        run: npm run build
+
       - name: setEnv
         if : github.ref == 'refs/heads/main'
         run: |
@@ -35,12 +56,12 @@ jobs:
           aws-region: ap-northeast-2
       - name: Docker build
         if: github.ref == 'refs/heads/main'
-        run: |    
+        run: |
           docker build -t $IMAGE . --target prod
       - name: ECR push
         if: github.ref == 'refs/heads/main'
         run:
-          aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin $REPO 
+          aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin $REPO
           docker build -t $IMAGE .
           docker tag $IMAGE:$TAG $REPO/$IMAGE:$TAG
           docker push $REPO/$IMAGE:$TAG
