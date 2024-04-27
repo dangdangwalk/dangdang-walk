@@ -47,8 +47,6 @@ jobs:
           echo "IMAGE=dangdang-front" >> $GITHUB_ENV
           echo "REPO=180993267331.dkr.ecr.ap-northeast-2.amazonaws.com" >> $GITHUB_ENV
           echo "TAG=${GITHUB_SHA::7}" >> $GITHUB_ENV
-          echo "PRIVATE_KEY=${{ secrets.EC2_SSH_PRIVTE_KEY}}" >> $GITHUB_ENV
-          echo "EC2_HOST=${{ secrets.EC2_PUBLIC_HOST}}" >> $GITHUB_ENV
           echo "EC2_SSH_USER=ubuntu" >> $GITHUB_ENV
       - name: Configure AWS credentials
         if : github.ref == 'refs/heads/main'
@@ -59,24 +57,23 @@ jobs:
           aws-region: ap-northeast-2
       - name: Docker build
         if: github.ref == 'refs/heads/main'
-        run: |
-          docker build -t $IMAGE . --target prod
+        run: |    
+          docker build --platform linux/amd64 --no-cache -f Dockerfile -t ${{env.IMAGE}} --target prod .
       - name: ECR push
         if: github.ref == 'refs/heads/main'
-        run:
-          aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin $REPO
-          docker build -t $IMAGE .
-          docker tag $IMAGE:$TAG $REPO/$IMAGE:$TAG
-          docker push $REPO/$IMAGE:$TAG
+        run: |
+          aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{env.REPO}}
+          docker tag ${{env.IMAGE}}:${{env.TAG}} ${{env.REPO}}/${{env.IMAGE}}:${{env.TAG}}
+          docker push ${{env.REPO}}/${{env.IMAGE}}:${{env.TAG}}
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to EC2
-        uses: appleboy/ssh-action@master
+      - name: Deploy to Amazon EC2
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ env.EC2_HOST }}
+          host: ${{ secrets.EC2_PUBLIC_HOST }}
           username: ${{ env.EC2_SSH_USER }}
-          key: ${{ env.PRIVATE_KEY }}
+          key: ${{ secrets.EC2_SSH_PRIVTE_KEY}}
           script: |
             ./run-frontend.sh
