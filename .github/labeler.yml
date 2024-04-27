@@ -1,5 +1,0 @@
-frontend:
-  - head-branch: ["^frontend", "frontend"]
-
-backend:
-  - head-branch: ["^backend", "backend"]
