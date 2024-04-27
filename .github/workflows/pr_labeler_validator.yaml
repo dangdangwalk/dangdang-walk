@@ -11,6 +11,12 @@ jobs:
       issues: write
       pull-requests: write
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            .github
+
       - name: Add labels to PR
         id: labeler
         uses: actions/labeler@v5
