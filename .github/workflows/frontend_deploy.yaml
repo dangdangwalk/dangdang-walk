@@ -50,8 +50,8 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
       - name: Docker build
-        run: |    
-          docker build --platform linux/amd64 --no-cache -f Dockerfile -t ${GITHUB_SHA::7} --target prod .
+        run: |
+          docker build --platform linux/amd64 -t dangdang-front --target prod .
       - name: ECR push
         run: |
           aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin $REPO
