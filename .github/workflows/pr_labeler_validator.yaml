@@ -8,6 +8,7 @@ jobs:
   label_and_validate:
     runs-on: ubuntu-latest
     permissions: # for comment bot using default GITHUB_TOKEN
+      contents: read
       issues: write
       pull-requests: write
     steps:
@@ -15,7 +16,7 @@ jobs:
         id: labeler
         uses: actions/labeler@v5
         with:
-          repo-token: ${{ secrets.TOKEN }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check branch name format
         if: steps.labeler.outputs.new-labels == ''
