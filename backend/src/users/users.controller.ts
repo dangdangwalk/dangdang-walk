@@ -3,5 +3,5 @@ import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
 
 @Controller('user')
 export class UsersController {
-  constructor(private readonly logger: WinstonLoggerService) {}
+    constructor(private readonly logger: WinstonLoggerService) {}
 }
