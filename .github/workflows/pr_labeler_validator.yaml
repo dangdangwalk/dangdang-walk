@@ -23,7 +23,7 @@ jobs:
         id: check_branch_name
         run: |
           branch_name=$(echo "${{ github.event.pull_request.head.ref }}")
-          if [[ ! $branch_name =~ ^(frontend|backend)\/DANG-[1-9][0-9]*$ ]]; then
+          if [[ ! $branch_name =~ ^(frontend|backend|infra)\/DANG-[1-9][0-9]*$ ]]; then
             echo "invalid_branch=true" >> "$GITHUB_OUTPUT"
             echo "branch_name=$branch_name" >> "$GITHUB_OUTPUT"
           fi
@@ -31,7 +31,7 @@ jobs:
       - name: Check PR title format
         id: check_pr_title
         run: |
-          title_regex="^(frontend|backend)\/DANG-[1-9][0-9]*: .+$"
+          title_regex="^(frontend|backend|infra)\/DANG-[1-9][0-9]*: .+$"
           pr_title="${{ github.event.pull_request.title }}"
           if [[ ! $pr_title =~ $title_regex ]]; then
             echo "invalid_title=true" >> "$GITHUB_OUTPUT"
@@ -55,6 +55,7 @@ jobs:
                             "ex.\n" +
                             "    frontend/DANG-1\n" +
                             "    backend/DANG-2\n" +
+                            "    infra/DANG-3\n" +
                             "```";
             await github.rest.issues.createComment({
               owner: context.repo.owner,
@@ -80,6 +81,7 @@ jobs:
                             "ex.\n" +
                             "    frontend/DANG-1: PR에서 수행한 작업 간략히 설명\n" +
                             "    backend/DANG-2: PR에서 수행한 작업 간략히 설명\n" +
+                            "    infra/DANG-3: PR에서 수행한 작업 간략히 설명\n" +
                             "```";
             await github.rest.issues.createComment({
               owner: context.repo.owner,

@@ -3,3 +3,6 @@ frontend:
 
 backend:
   - head-branch: ["^backend", "backend"]
+
+infra:
+  - head-branch: ["^infra", "infra"]
