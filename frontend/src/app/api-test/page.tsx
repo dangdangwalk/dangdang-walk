@@ -8,7 +8,7 @@ export default function ApiTest() {
 
     return (
         <main className="flex min-h-screen flex-col items-center p-24 gap-5">
-            <button className="bg-red-400 p-4 rounded-md" onClick={handleClick}>
+            <button className="bg-red-400 p-5 rounded-md" onClick={handleClick}>
                 API에 요청 보내기
             </button>
             <div>{text}</div>
