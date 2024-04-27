@@ -1,0 +1,88 @@
+name: Labeler and Validator
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  label_and_validate:
+    runs-on: ubuntu-latest
+    permissions: # for comment bot using default GITHUB_TOKEN
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Add labels to PR
+        id: labeler
+        uses: actions/labeler@v5
+        with:
+          repo-token: ${{ secrets.TOKEN }}
+
+      - name: Check branch name format
+        if: steps.labeler.outputs.new-labels == ''
+        id: check_branch_name
+        run: |
+          branch_name=$(echo "${{ github.event.pull_request.head.ref }}")
+          if [[ ! $branch_name =~ ^(frontend|backend)\/DANG-[1-9][0-9]*$ ]]; then
+            echo "invalid_branch=true" >> "$GITHUB_OUTPUT"
+            echo "branch_name=$branch_name" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check PR title format
+        id: check_pr_title
+        run: |
+          title_regex="^(frontend|backend)\/DANG-[1-9][0-9]*: .+$"
+          pr_title="${{ github.event.pull_request.title }}"
+          if [[ ! $pr_title =~ $title_regex ]]; then
+            echo "invalid_title=true" >> "$GITHUB_OUTPUT"
+            echo "pr_title=$pr_title" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Add comment for invalid branch name
+        if: steps.check_branch_name.outputs.invalid_branch == 'true'
+        uses: actions/github-script@v7
+        env:
+          BRANCH_NAME: ${{steps.check_branch_name.outputs.branch_name}}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const branchName = process.env.BRANCH_NAME;
+            const message = "## :warning: Branch Naming Convention 위반\n" +
+                            "Branch 이름(\"" + branchName + "\")이 프로젝트의 Branch Naming Convention에 맞지 않습니다.\n" +
+                            "다음과 같은 형식으로 수정해 주세요.\n" +
+                            "```\n" +
+                            "[role]/[Task-ID]\n\n" +
+                            "ex.\n" +
+                            "    frontend/DANG-1\n" +
+                            "    backend/DANG-2\n" +
+                            "```";
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body: message
+            });
+
+      - name: Add comment for invalid PR title
+        if: steps.check_pr_title.outputs.invalid_title == 'true'
+        uses: actions/github-script@v7
+        env:
+          PR_TITLE: ${{steps.check_pr_title.outputs.pr_title}}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const prTitle = process.env.PR_TITLE;
+            const message = "## :warning: PR Title Convention 위반\n" +
+                            "작성하신 PR 제목(\"" + prTitle + "\")이 프로젝트의 PR Title Convention에 맞지 않습니다.\n" +
+                            "다음과 같은 형식으로 수정해 주세요.\n" +
+                            "```\n" +
+                            "[branch name]: [description]\n\n" +
+                            "ex.\n" +
+                            "    frontend/DANG-1: PR에서 수행한 작업 간략히 설명\n" +
+                            "    backend/DANG-2: PR에서 수행한 작업 간략히 설명\n" +
+                            "```";
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body: message
+            });
