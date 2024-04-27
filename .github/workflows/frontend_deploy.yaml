@@ -55,8 +55,8 @@ jobs:
       - name: ECR push
         run: |
           aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin $REPO
-          docker tag $IMAGE $REPO/$IMAGE:${GITHUB_SHA::7}
-          docker push $REPO/$IMAGE:${GITHUB_SHA::7}
+          docker tag $IMAGE $REPO/$IMAGE:latest
+          docker push $REPO/$IMAGE:latest
   deploy:
     needs: build
     runs-on: ubuntu-latest
