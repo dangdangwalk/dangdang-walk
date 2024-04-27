@@ -17,9 +17,11 @@ export default function ApiTest() {
 
     async function handleClick() {
         try {
-            const res = await axios.get('localhost:3333/health');
-
-            setText(res.data);
+            const res = await axios.get('http://localhost:3333/health');
+            console.log(res);
+            setText(
+                `status code: ${res.status === 200 ? '200 ✅' : `${res.status} ❌`}; data: { status: ${res.data.status} }`
+            );
         } catch (err) {
             if (err instanceof AxiosError) {
                 setText(err.message);
