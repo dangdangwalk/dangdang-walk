@@ -1,16 +1,16 @@
-name: AWS ECR Prod Frontend Deploy
+name: Frontend Deploy
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
     paths:
       - "frontend/**"
-  pull_request:
-    branches:
-      - main
-    paths:
-      - "frontend/**"
+
+env:
+  IMAGE: dangdang-front
+  REPO: 180993267331.dkr.ecr.ap-northeast-2.amazonaws.com
+  TAG: ${GITHUB_SHA::7}
+  EC2_SSH_USER: ubuntu
 
 jobs:
   build:
@@ -51,19 +51,19 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
       - name: Docker build
         run: |
-          docker build --platform linux/amd64 -t dangdang-front --target prod .
+          docker build --platform linux/amd64 -t ${{ env.IMAGE }} --target prod .
       - name: ECR push
         run: |
-          aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin $REPO
-          docker tag $IMAGE $REPO/$IMAGE:${GITHUB_SHA::7}
-          docker push $REPO/$IMAGE:${GITHUB_SHA::7}
+          aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ env.REPO }}
+          docker tag ${{ env.IMAGE }} ${{ env.REPO }}/${{ env.IMAGE }}:${{ env.TAG }}
+          docker push ${{ env.REPO }}/${{ env.IMAGE}}:${{ env.TAG }}
   deploy:
     needs: build
-    runs-on: [ self-hosted, dangdang-front ]
+    runs-on: [ self-hosted, label-front ]
     steps:
       - name: Deploy to Amazon EC2
         run : |
           docker ps -q --filter "name=${{ env.IMAGE }}" | grep -q . && docker stop ${{ env.IMAGE }} && docker image prune -f
           aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ env.REPO }}
-          docker pull ${{ env.REPO }}/${{ env.IMAGE }}:${{ env.hash }}
-          docker run -d --name ${{ env.IMAGE }} --rm -p 3000:3000 ${{ env.REPO }}/${{ env.IMAGE }}:${{ env.hash }}
+          docker pull ${{ env.REPO }}/${{ env.IMAGE }}:${{ env.TAG }}
+          docker run -d --name ${{ env.IMAGE }} --restart always --rm -p 3000:3000 ${{ env.REPO }}/${{ env.IMAGE }}:${{ env.TAG }}
