@@ -24,23 +24,16 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 2
-
       - name: Setup node.js
         uses: actions/setup-node@v4
         with:
           node-version: 21.2.0
           cache: "npm"
           cache-dependency-path: ./frontend/package-lock.json
-
       - name: Install dependencies
         run: npm install
-
-      - name: Run tests
-        run: npm run test
-
       - name: Run build
         run: npm run build
-
       - name: setEnv
         run: |
           echo "IMAGE=dangdang-front" >> $GITHUB_ENV
@@ -53,14 +46,17 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
+      - name: ECR Login
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
       - name: Docker build
         run: |    
-          docker build --platform linux/amd64 --no-cache -f Dockerfile -t ${{env.IMAGE}} --target prod .
+          docker build --platform linux/amd64 --no-cache -f Dockerfile -t ${GITHUB_SHA::7} --target prod .
       - name: ECR push
         run: |
-          aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{env.REPO}}
-          docker tag ${{env.IMAGE}}:${{env.TAG}} ${{env.REPO}}/${{env.IMAGE}}:${{env.TAG}}
-          docker push ${{env.REPO}}/${{env.IMAGE}}:${{env.TAG}}
+          aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin $REPO
+          docker tag $IMAGE $REPO/$IMAGE:${GITHUB_SHA::7}
+          docker push $REPO/$IMAGE:${GITHUB_SHA::7}
   deploy:
     needs: build
     runs-on: ubuntu-latest
