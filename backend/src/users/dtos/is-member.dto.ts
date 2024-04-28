@@ -1,5 +1,5 @@
 import { IsIn, IsString } from 'class-validator';
-import { Role } from '../users.entity';
+import { Role } from '../user-roles.enum';
 
 export class IsMemberDto {
     @IsString()

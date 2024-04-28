@@ -1,17 +1,10 @@
 import { Column, CreateDateColumn, Entity, PrimaryColumn } from 'typeorm';
-
-export enum Role {
-    Admin = 'ADMIN',
-    User = 'USER',
-}
+import { Role } from './user-roles.enum';
 
 @Entity()
 export class User {
     @PrimaryColumn()
     id: string;
-
-    // @Column()
-    // nickname: string;
 
     @Column({
         type: 'enum',

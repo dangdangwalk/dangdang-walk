@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository, InjectEntityManager } from '@nestjs/typeorm';
 import { User } from './users.entity';
 import { Repository, EntityManager } from 'typeorm';
-import { Role } from './users.entity';
+import { Role } from './user-roles.enum';
 
 @Injectable()
 export class UsersService {
@@ -25,7 +25,7 @@ export class UsersService {
         return user;
     }
 
-    async update(id: number, attrs: Partial<User>) {
+    async update(id: string, attrs: Partial<User>) {
         const user = await this.findOne(id.toString());
         if (!user) {
             throw new NotFoundException('users not found');
