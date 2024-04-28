@@ -6,6 +6,9 @@ export class User {
     @PrimaryColumn()
     id: string;
 
+    @Column()
+    nickname: string;
+
     @Column({
         type: 'enum',
         enum: Role,
