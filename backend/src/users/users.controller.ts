@@ -10,7 +10,7 @@ export class UsersController {
         private readonly userService: UsersService
     ) {}
 
-    @Post('/is-member-of')
+    @Post('/check-member')
     @UsePipes(new ValidationPipe())
     async isMember(@Body() body: IsMemberDto) {
         const isMember = await this.userService.isMemberOrCreate(body.userId, body.role);
