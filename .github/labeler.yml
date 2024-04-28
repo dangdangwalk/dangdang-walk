@@ -1,8 +1,8 @@
 frontend:
-  - head-branch: ["^frontend", "frontend"]
+  - head-branch: ["^frontend"]
 
 backend:
-  - head-branch: ["^backend", "backend"]
+  - head-branch: ["^backend"]
 
 infra:
-  - head-branch: ["^infra", "infra"]
+  - head-branch: ["^infra"]

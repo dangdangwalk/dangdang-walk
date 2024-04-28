@@ -2,15 +2,14 @@ name: Labeler and Validator
 
 on:
   pull_request:
-    types: [opened]
+    types: [opened, edited]
 
 jobs:
   label_and_validate:
-    runs-on: ubuntu-latest
-    permissions: # for comment bot using default GITHUB_TOKEN
+    permissions:
       contents: read
-      issues: write
       pull-requests: write
+    runs-on: ubuntu-latest
     steps:
       - name: Add labels to PR
         id: labeler
@@ -19,30 +18,18 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check branch name format
-        if: steps.labeler.outputs.new-labels == ''
-        id: check_branch_name
         run: |
           branch_name=$(echo "${{ github.event.pull_request.head.ref }}")
           if [[ ! $branch_name =~ ^(frontend|backend|infra)\/DANG-[1-9][0-9]*$ ]]; then
-            echo "invalid_branch=true" >> "$GITHUB_OUTPUT"
-            echo "branch_name=$branch_name" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Check PR title format
-        id: check_pr_title
-        run: |
-          title_regex="^(frontend|backend|infra)\/DANG-[1-9][0-9]*: .+$"
-          pr_title="${{ github.event.pull_request.title }}"
-          if [[ ! $pr_title =~ $title_regex ]]; then
-            echo "invalid_title=true" >> "$GITHUB_OUTPUT"
-            echo "pr_title=$pr_title" >> "$GITHUB_OUTPUT"
+            echo "is_invalid_branch_name=true" >> "$GITHUB_ENV"
+            echo "branch_name=$branch_name" >> "$GITHUB_ENV"
           fi
 
       - name: Add comment for invalid branch name
-        if: steps.check_branch_name.outputs.invalid_branch == 'true'
+        if: env.is_invalid_branch_name == 'true'
         uses: actions/github-script@v7
         env:
-          BRANCH_NAME: ${{steps.check_branch_name.outputs.branch_name}}
+          BRANCH_NAME: ${{ env.branch_name }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -64,11 +51,23 @@ jobs:
               body: message
             });
 
+            core.setFailed("Branch Naming Convention 위반");
+
+      - name: Check PR title format
+        run: |
+          branch_name=$(echo "${{ github.event.pull_request.head.ref }}")
+          title_regex="^${branch_name}: .+$"
+          pr_title="${{ github.event.pull_request.title }}"
+          if [[ ! $pr_title =~ $title_regex ]]; then
+            echo "is_invalid_title=true" >> "$GITHUB_ENV"
+            echo "pr_title=$pr_title" >> "$GITHUB_ENV"
+          fi
+
       - name: Add comment for invalid PR title
-        if: steps.check_pr_title.outputs.invalid_title == 'true'
+        if: env.is_invalid_title == 'true'
         uses: actions/github-script@v7
         env:
-          PR_TITLE: ${{steps.check_pr_title.outputs.pr_title}}
+          PR_TITLE: ${{ env.pr_title }}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -89,3 +88,5 @@ jobs:
               issue_number: context.payload.pull_request.number,
               body: message
             });
+
+            core.setFailed("PR Title Convention 위반");
