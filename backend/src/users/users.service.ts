@@ -3,6 +3,7 @@ import { InjectRepository, InjectEntityManager } from '@nestjs/typeorm';
 import { User } from './users.entity';
 import { Repository, EntityManager } from 'typeorm';
 import { Role } from './user-roles.enum';
+import { generateUuid } from 'src/utils/hash.utils';
 
 @Injectable()
 export class UsersService {
@@ -46,7 +47,15 @@ export class UsersService {
         await this.entityManager.transaction(async (transactionalEntityManager) => {
             let user = await transactionalEntityManager.findOne(User, { where: { id: userId } });
             if (!user) {
-                user = transactionalEntityManager.create(User, { id: userId, role });
+                let uuid: string = generateUuid();
+
+                let duplicatedUser = await transactionalEntityManager.findOne(User, { where: { nickname: uuid } });
+                while (duplicatedUser) {
+                    duplicatedUser = await transactionalEntityManager.findOne(User, { where: { nickname: uuid } });
+                    uuid = generateUuid();
+                }
+
+                user = transactionalEntityManager.create(User, { id: userId, role, nickname: uuid });
                 await transactionalEntityManager.save(user);
                 isMember = false;
             }
