@@ -149,7 +149,7 @@ docker-compose-prod.yml
 
 **/.env.*
 
-.DS_Store
+**/.DS_Store/**
 
 /log
 
