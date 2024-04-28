@@ -1,17 +1,17 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryColumn } from 'typeorm';
 
 export enum Role {
-    Admin = 'Admin',
-    User = 'User',
+    Admin = 'ADMIN',
+    User = 'USER',
 }
 
 @Entity()
 export class User {
-    @PrimaryGeneratedColumn()
+    @PrimaryColumn()
     id: string;
 
-    @Column()
-    nickname: string;
+    // @Column()
+    // nickname: string;
 
     @Column({
         type: 'enum',
@@ -20,6 +20,6 @@ export class User {
     })
     role: Role;
 
-    @Column()
+    @CreateDateColumn()
     created_at: Date;
 }
