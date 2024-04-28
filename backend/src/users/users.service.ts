@@ -27,7 +27,7 @@ export class UsersService {
     }
 
     async update(id: string, attrs: Partial<User>) {
-        const user = await this.findOne(id.toString());
+        const user = await this.findOne(id);
         if (!user) {
             throw new NotFoundException('users not found');
         }
