@@ -2,7 +2,6 @@ import { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import NaverProvider from 'next-auth/providers/naver';
 import KakaoProvider from 'next-auth/providers/kakao';
-import axios from 'axios';
 export const authOptions: NextAuthOptions = {
     secret: process.env.NEXTAUTH_SECRET,
     providers: [
@@ -27,9 +26,22 @@ export const authOptions: NextAuthOptions = {
         async signIn({ account }) {
             //백엔드 api
             try {
-                const { data } = await axios.post('http://localhost:3333/users/check-member', {
-                    userId: account?.providerAccountId,
+                const response = await fetch('http://localhost:3333/users/check-member', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        userId: account?.providerAccountId,
+                    }),
                 });
+
+                if (!response.ok) {
+                    // HTTP 상태 코드가 200이 아닌 경우 오류 처리
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
                 console.log('🎉🎉🎉🎉🎉backend data🎉🎉🎉🎉🎉 : ', data);
                 return true;
             } catch (error) {
