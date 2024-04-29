@@ -1,4 +1,4 @@
-name: AWS ECR Prod Backend Deploy
+name: ECR Prod Backend Deploy
 
 on:
   push:
@@ -52,12 +52,16 @@ jobs:
           docker tag ${{ env.IMAGE }} ${{ env.REPO }}/${{ env.IMAGE }}:${{ env.TAG }}
           docker push ${{ env.REPO }}/${{ env.IMAGE}}:${{ env.TAG }}
   deploy:
+    name: ECR Deploy
     needs: build
     runs-on: [ self-hosted, label-api ]
     steps:
+      - name: Create .env.prod
+        run: |      
+          echo "${{ secrets.ENV_PROD_FILE }}" >> .env.prod
       - name: Deploy to Amazon EC2
         run : | 
           aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ env.REPO }}
           docker pull ${{ env.REPO }}/${{ env.IMAGE }}:${{ env.TAG }}
-          docker run -d --name ${{ env.IMAGE }} --rm -p 8888:8888 ${{ env.REPO }}/${{ env.IMAGE }}:${{ env.TAG }} 
+          docker run -d --name ${{ env.IMAGE }} --rm -p 8888:8888 --env-file .env.prod ${{ env.REPO }}/${{ env.IMAGE }}:${{ env.TAG }} 
           docker image prune -f
