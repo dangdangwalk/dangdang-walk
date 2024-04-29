@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@tanstack/react-query": "^5.32.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -48,6 +49,7 @@
   },
   "devDependencies": {
     "@craco/craco": "^7.1.0",
+    "@tanstack/eslint-plugin-query": "^5.28.11",
     "craco-alias": "^3.0.1"
   }
 }
