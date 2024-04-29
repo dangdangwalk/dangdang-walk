@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import React from 'react';
+import Navbar from './components/Navbar';
+import AuthContext from './context/AuthContext';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -16,8 +18,17 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
-            <body className={inter.className}>{children}</body>
+        <html lang="en" className={inter.className}>
+            <body>
+                <AuthContext>
+                    <main className="h-full flex-grow border border-sky-500">{children}</main>
+                </AuthContext>
+                <footer className="sticky bottom-0">
+                    <div>
+                        <Navbar />
+                    </div>
+                </footer>
+            </body>
         </html>
     );
 }
