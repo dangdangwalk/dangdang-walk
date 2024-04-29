@@ -12,8 +12,8 @@ export class UsersController {
 
     @Post('/check-member')
     @UsePipes(new ValidationPipe())
-    async isMember(@Body() body: IsMemberDto) {
-        const isMember = await this.userService.isMemberOrCreate(body.userId, body.role);
-        return { isMember };
+    async isMember(@Body() { userId, role }: IsMemberDto): Promise<boolean> {
+        const isMember = await this.userService.isMemberOrCreate(userId, role);
+        return isMember;
     }
 }
