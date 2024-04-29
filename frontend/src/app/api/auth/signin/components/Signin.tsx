@@ -7,6 +7,7 @@ type Props = {
 };
 export default function Signin({ providers, callbackUrl }: Props) {
     console.log(providers);
+    console.log(callbackUrl);
 
     return (
         <div>
