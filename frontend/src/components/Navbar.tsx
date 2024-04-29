@@ -11,16 +11,16 @@ const Navbar = () => {
       <div className='flex justify-around items-center'>
         <Link to='/'>
           {location.pathname === '/' ? (
-            <img src={myPageOn} alt='Walk On' />
+            <img src={WalkOn} alt='Walk On' />
           ) : (
-            <img src={myPageOff} alt='Walk Off' />
+            <img src={WalkOff} alt='Walk Off' />
           )}
         </Link>
         <Link to='/profile'>
           {location.pathname === '/profile' ? (
-            <img src={WalkOn} alt='MyPage On' />
+            <img src={myPageOn} alt='MyPage On' />
           ) : (
-            <img src={WalkOff} alt='MyPage Off' />
+            <img src={myPageOff} alt='MyPage Off' />
           )}
         </Link>
       </div>
