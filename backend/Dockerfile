@@ -71,5 +71,5 @@ COPY --chown=nestjs:nodejs --from=build /app/log /app/log
 
 USER nestjs
 
-HEALTHCHECK CMD curl --fail http://localhost:8888/health || exit 1
+HEALTHCHECK CMD curl --fail http://localhost:3031/health || exit 1
 CMD [ "node", "dist/main.js" ]
