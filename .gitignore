@@ -154,3 +154,5 @@ docker-compose-prod.yml
 /log
 
 */log/*
+
+*.sqlite
