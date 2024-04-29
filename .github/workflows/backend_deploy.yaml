@@ -60,8 +60,8 @@ jobs:
         run: |      
           echo "${{ secrets.ENV_PROD_FILE }}" >> .env.prod
       - name: Deploy to Amazon EC2
-        run : | 
+        run : |
+          docker ps -q --filter "name=${{ env.IMAGE }}" | grep -q . && docker stop ${{ env.IMAGE }} && docker image prune -f
           aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ env.REPO }}
           docker pull ${{ env.REPO }}/${{ env.IMAGE }}:${{ env.TAG }}
           docker run -d --name ${{ env.IMAGE }} --rm -p 8888:8888 --env-file .env.prod ${{ env.REPO }}/${{ env.IMAGE }}:${{ env.TAG }} 
-          docker image prune -f
