@@ -10,6 +10,7 @@ jobs:
       contents: read
       pull-requests: write
     runs-on: ubuntu-latest
+    if: github.event.action == 'opened' || github.event.changes.title.from
     steps:
       - name: Add labels to PR
         id: labeler
