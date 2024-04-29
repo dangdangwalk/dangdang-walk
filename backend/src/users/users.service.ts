@@ -45,8 +45,8 @@ export class UsersService {
     async isMemberOrCreate(userId: string, role: Role | undefined = Role.User): Promise<boolean> {
         let isMember = true;
         await this.entityManager.transaction(async (transactionalEntityManager) => {
-            let user = await transactionalEntityManager.findOne(User, { where: { id: userId } });
-            if (!user) {
+            const foundUser = await transactionalEntityManager.findOne(User, { where: { id: userId } });
+            if (!foundUser) {
                 let uuid: string = generateUuid();
 
                 let duplicatedUser = await transactionalEntityManager.findOne(User, { where: { nickname: uuid } });
@@ -55,8 +55,8 @@ export class UsersService {
                     uuid = generateUuid();
                 }
 
-                user = transactionalEntityManager.create(User, { id: userId, role, nickname: uuid });
-                await transactionalEntityManager.save(user);
+                const newUser = transactionalEntityManager.create(User, { id: userId, role, nickname: uuid });
+                await transactionalEntityManager.save(newUser);
                 isMember = false;
             }
         });
