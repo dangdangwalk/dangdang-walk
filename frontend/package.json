@@ -1,45 +1,28 @@
 {
-    "name": "front",
-    "version": "0.1.0",
-    "private": true,
-    "scripts": {
-        "dev": "next dev",
-        "build": "next build",
-        "start": "next start",
-        "test": "vitest",
-        "lint": "next lint",
-        "prettier": "npx prettier . --write",
-        "prepare": "cd .. && husky frontend/.husky"
-    },
-    "lint-staged": {
-        "*.{ts,tsx}": [
-            "eslint",
-            "prettier --write"
-        ]
-    },
-    "dependencies": {
-        "husky": "^9.0.11",
-        "next": "14.2.2",
-        "next-auth": "^4.24.7",
-        "react": "^18",
-        "react-dom": "^18"
-    },
-    "devDependencies": {
-        "@testing-library/react": "^15.0.4",
-        "@types/node": "^20",
-        "@types/react": "^18",
-        "@types/react-dom": "^18",
-        "@vitejs/plugin-react": "^4.2.1",
-        "eslint": "^8",
-        "eslint-config-next": "14.2.2",
-        "eslint-config-prettier": "^9.1.0",
-        "eslint-plugin-prettier": "^5.1.3",
-        "jsdom": "^24.0.0",
-        "lint-staged": "^15.2.2",
-        "postcss": "^8",
-        "prettier": "3.2.5",
-        "tailwindcss": "^3.4.1",
-        "typescript": "^5",
-        "vitest": "^1.5.0"
-    }
+  "name": "frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@typescript-eslint/eslint-plugin": "^7.2.0",
+    "@typescript-eslint/parser": "^7.2.0",
+    "@vitejs/plugin-react-swc": "^3.5.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0"
+  }
 }
