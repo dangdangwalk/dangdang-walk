@@ -9,6 +9,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { PrometheusInterceptor } from './common/interceptor/prometheus.interceptor';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { WinstonLoggerModule } from './common/logger/winstonLogger.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
     imports: [
@@ -49,6 +50,7 @@ import { WinstonLoggerModule } from './common/logger/winstonLogger.module';
         }),
         UsersModule,
         ConfigModule,
+        AuthModule,
     ],
     controllers: [AppController, HealthController],
     providers: [
