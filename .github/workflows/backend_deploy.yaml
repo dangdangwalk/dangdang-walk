@@ -24,13 +24,19 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 2
-      - name: Setup node.js
-        uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
         with:
-          node-version: 21.2.0
-          cache: "npm"
-          cache-dependency-path: ./backend/package-lock.json
-      - name: Install dependencies
+          path: backend/node_modules
+          key: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('backend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('backend/package-lock.json') }}
+      - name: Install Dependencies
+        if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
         run: npm ci
       - name: Run build
         run: npm run build
@@ -61,8 +67,8 @@ jobs:
           echo "${{ secrets.ENV_PROD_FILE }}" >> .env.prod
       - name: Deploy to Amazon EC2
         run : |
-          docker ps -q --filter "name=${{ env.IMAGE }}" | grep -q . && docker stop ${{ env.IMAGE }} && docker rm ${{ env.IMAGE }}
+          docker ps -q --filter "name=${{ env.IMAGE }}" | grep -q . && docker stop ${{ env.IMAGE }} && docker container prune -f
           aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ env.REPO }}
           docker pull ${{ env.REPO }}/${{ env.IMAGE }}:${{ env.TAG }}
           docker run -d --name ${{ env.IMAGE }} --restart always -p 8888:8888 --env-file .env.prod ${{ env.REPO }}/${{ env.IMAGE }}:${{ env.TAG }} 
-          docker image prune -f
+          docker image prune -a --filter "until=1h" -f

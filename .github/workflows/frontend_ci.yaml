@@ -49,11 +49,13 @@ jobs:
         id: cache
         uses: actions/cache@v3
         with:
-          path: '**/node_modules'
+          path: frontend/node_modules
+          key: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('frontend/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-node-
+            ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('frontend/package-lock.json') }}
       - name: Install Dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
+        if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
         run: npm ci
       - name: Run build
         run: npm run build
