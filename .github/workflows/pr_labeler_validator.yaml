@@ -10,7 +10,6 @@ jobs:
       contents: read
       pull-requests: write
     runs-on: ubuntu-latest
-    if: github.event.action == 'opened' || github.event.changes.title.from
     steps:
       - name: Add labels to PR
         id: labeler
@@ -19,6 +18,7 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check branch name format
+        if: github.event.action == 'opened' || github.event.changes.title.from
         run: |
           branch_name=$(echo "${{ github.event.pull_request.head.ref }}")
           if [[ ! $branch_name =~ ^(frontend|backend|infra)\/DANG-[1-9][0-9]*$ ]]; then
@@ -55,6 +55,7 @@ jobs:
             core.setFailed("Branch Naming Convention 위반");
 
       - name: Check PR title format
+        if: github.event.action == 'opened' || github.event.changes.title.from
         run: |
           branch_name=$(echo "${{ github.event.pull_request.head.ref }}")
           title_regex="^${branch_name}: .+$"
