@@ -5,6 +5,6 @@ export class WalkLogPhotos {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
-    photo_url: string;
+    @Column({ name: 'photo_url' })
+    photoUrl: string;
 }

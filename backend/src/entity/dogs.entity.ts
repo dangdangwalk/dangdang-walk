@@ -9,14 +9,14 @@ export class Dogs {
 
     @OneToOne(() => DogWalkDay)
     @JoinColumn({ name: 'walk_day_id' })
-    walk_day_id: DogWalkDay;
+    walkDayId: DogWalkDay;
 
     @Column()
     name: string;
 
     @OneToOne(() => Breed)
     @JoinColumn({ name: 'breed_id' })
-    breed_id: Breed;
+    breedId: Breed;
 
     @Column({
         type: 'enum',
@@ -27,12 +27,12 @@ export class Dogs {
     @Column()
     birth: Date;
 
-    @Column()
-    is_neutered: boolean;
+    @Column({ name: 'is_neutered' })
+    isNeutered: boolean;
 
-    @Column()
-    photo_url: string;
+    @Column({ name: 'photo_url' })
+    photoUrl: string;
 
-    @Column()
-    is_walking: boolean;
+    @Column({ name: 'is_walking' })
+    isWalking: boolean;
 }

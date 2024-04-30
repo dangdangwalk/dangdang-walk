@@ -4,13 +4,13 @@ import { Dogs } from './dogs.entity';
 
 @Entity('users_dogs')
 export class UsersDogs {
-    @PrimaryColumn()
+    @PrimaryColumn({ name: 'user_id' })
     @ManyToOne(() => Users, (users) => users.id)
     @JoinColumn({ name: 'user_id' })
-    user_id: Users;
+    userId: Users;
 
-    @PrimaryColumn()
+    @PrimaryColumn({ name: 'dog_id' })
     @ManyToOne(() => Dogs, (dog) => dog.id)
     @JoinColumn({ name: 'dog_id' })
-    dog_id: Dogs;
+    dogId: Dogs;
 }

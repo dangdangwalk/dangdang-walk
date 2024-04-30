@@ -8,19 +8,19 @@ export class WalkJournals {
 
     @ManyToOne(() => Users, (users) => users.id)
     @JoinColumn({ name: 'user_id' })
-    user_id: Users;
+    userId: Users;
 
-    @Column()
-    log_image_url: string;
+    @Column({ name: 'log_image_url' })
+    logImageUrl: string;
 
     @Column()
     calories: number;
 
-    @Column()
+    @Column({ nullable: true })
     memo: string;
 
-    @Column()
-    started_at: Date;
+    @Column({ name: 'started_at' })
+    startedAt: Date;
 
     @Column()
     duration: string;
