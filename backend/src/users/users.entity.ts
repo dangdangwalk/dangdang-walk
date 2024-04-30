@@ -1,10 +1,11 @@
-import { Column, CreateDateColumn, Entity, PrimaryColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Role } from './user-roles.enum';
+import { Dogs } from 'src/entity/dogs.entity';
 
 @Entity()
-export class User {
-    @PrimaryColumn()
-    id: string;
+export class Users {
+    @PrimaryGeneratedColumn()
+    id: number;
 
     @Column({ unique: true })
     nickname: string;
@@ -15,6 +16,22 @@ export class User {
         default: Role.User,
     })
     role: Role;
+
+    @OneToOne(() => Dogs)
+    @JoinColumn({ name: 'main_dog_id' })
+    mainDogId: number;
+
+    @Column({ name: 'oauth_id' })
+    oauthId: string;
+
+    @Column({ name: 'oauth_access_token' })
+    oauthAccessToken: string;
+
+    @Column({ name: 'oauth_refresh_token' })
+    oauthRefreshToken: string;
+
+    @Column({ name: 'refresh_token' })
+    refreshToken: string;
 
     @CreateDateColumn()
     created_at: Date;
