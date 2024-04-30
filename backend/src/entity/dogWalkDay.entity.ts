@@ -5,24 +5,24 @@ export class DogWalkDay {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ nullable: true })
+    @Column({ default: 0 })
     mon: number;
 
-    @Column({ nullable: true })
+    @Column({ default: 0 })
     tue: number;
 
-    @Column({ nullable: true })
+    @Column({ default: 0 })
     wed: number;
 
-    @Column({ nullable: true })
+    @Column({ default: 0 })
     thr: number;
 
-    @Column({ nullable: true })
+    @Column({ default: 0 })
     fri: number;
 
-    @Column({ nullable: true })
+    @Column({ default: 0 })
     sat: number;
 
-    @Column({ nullable: true })
+    @Column({ default: 0 })
     sun: number;
 }

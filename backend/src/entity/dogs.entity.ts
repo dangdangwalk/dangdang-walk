@@ -1,6 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
 import { DogWalkDay } from './dogWalkDay.entity';
 import { Breed } from './breed.entity';
+import { Gender } from './dogs-gender.enum';
 
 @Entity('dogs')
 export class Dogs {
@@ -20,7 +21,7 @@ export class Dogs {
 
     @Column({
         type: 'enum',
-        enum: ['MALE', 'FEMALE'],
+        enum: Gender,
     })
     gender: 'MALE' | 'FEMALE';
 

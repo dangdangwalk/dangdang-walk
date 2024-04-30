@@ -1,4 +1,4 @@
-import { User } from '../users/users.entity';
+import { Users } from '../users/users.entity';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('walk_journals')
@@ -6,9 +6,9 @@ export class WalkJournals {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => User, (users) => users.id)
+    @ManyToOne(() => Users, (users) => users.id)
     @JoinColumn({ name: 'user_id' })
-    userId: User;
+    userId: Users;
 
     @Column({ name: 'log_image_url' })
     logImageUrl: string;
@@ -26,5 +26,5 @@ export class WalkJournals {
     duration: string;
 
     @Column()
-    distance: number;
+    private distance: number;
 }
