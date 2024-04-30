@@ -6,6 +6,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { UsersModule } from 'src/users/users.module';
 import { HttpModule } from '@nestjs/axios';
+import { KakaoController } from './kakao/kakao.controller';
+import { KakaoService } from './kakao/kakao.service';
 
 @Module({
     imports: [
@@ -22,7 +24,7 @@ import { HttpModule } from '@nestjs/axios';
             inject: [ConfigService],
         }),
     ],
-    controllers: [],
-    providers: [AuthService],
+    controllers: [KakaoController],
+    providers: [AuthService, KakaoService],
 })
 export class AuthModule {}

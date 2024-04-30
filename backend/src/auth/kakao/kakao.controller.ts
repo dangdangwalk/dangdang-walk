@@ -3,6 +3,7 @@ import { Response } from 'express';
 import { OAuthController } from '../auth.controller';
 import { ConfigService } from '@nestjs/config';
 import { KakaoService } from './kakao.service';
+import { TOKEN_LIFETIME_MAP } from '../auth.service';
 
 @Controller('auth/kakao')
 export class KakaoController implements OAuthController {
@@ -29,9 +30,18 @@ export class KakaoController implements OAuthController {
     ) {
         if (error) throw new BadRequestException(errorDescription);
 
-        const { accessToken } = await this.kakaoService.login(autherizeCode);
+        const { accessToken, refreshToken } = await this.kakaoService.login(autherizeCode);
 
-        response.cookie('access-token', accessToken);
+        response.cookie('accessToken', accessToken, {
+            httpOnly: true,
+            secure: Boolean(this.configService.get<string>('NODE_ENV', 'test') === 'production'),
+            maxAge: TOKEN_LIFETIME_MAP.access.maxAge,
+        });
+        response.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: Boolean(this.configService.get<string>('NODE_ENV', 'test') === 'production'),
+            maxAge: TOKEN_LIFETIME_MAP.refresh.maxAge,
+        });
         response.redirect(this.CLIENT_REDIRECT_URL);
     }
 }

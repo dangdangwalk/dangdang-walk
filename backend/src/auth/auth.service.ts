@@ -9,7 +9,15 @@ interface JwtPayload {
 type Provider = 'kakao' | 'naver' | 'google';
 type TokenType = 'access' | 'refresh';
 type TokenExpiryMap = {
-    [key in TokenType]: string;
+    [key in TokenType]: {
+        expiresIn: string;
+        maxAge: number;
+    };
+};
+
+export const TOKEN_LIFETIME_MAP: TokenExpiryMap = {
+    access: { expiresIn: '12h', maxAge: 12 * 60 * 60 * 1000 },
+    refresh: { expiresIn: '14d', maxAge: 14 * 24 * 60 * 60 * 1000 },
 };
 
 @Injectable()
@@ -19,18 +27,13 @@ export class AuthService {
     private readonly logger = new Logger(AuthService.name);
 
     signToken(userId: number, tokenType: TokenType, provider: Provider) {
-        const tokenExpiryMap: TokenExpiryMap = {
-            access: '12h',
-            refresh: '14d',
-        };
-
         const payload: JwtPayload = {
             userId,
             provider,
         };
 
         const newToken = this.jwtService.sign(payload, {
-            expiresIn: tokenExpiryMap[tokenType],
+            expiresIn: TOKEN_LIFETIME_MAP[tokenType].expiresIn,
         });
 
         return newToken;
@@ -46,5 +49,5 @@ export class AuthService {
 export interface OAuthService {
     requestToken(autherizeCode: string): Promise<any>;
     requestUserInfo(accessToken: string): Promise<any>;
-    login(autherizeCode: string): Promise<{ accessToken: string }>;
+    login(autherizeCode: string): Promise<{ accessToken: string; refreshToken: string }>;
 }

@@ -83,6 +83,6 @@ export class KakaoService implements OAuthService {
         const refreshToken = this.authService.signToken(userId, 'refresh', this.PROVIDER);
         // users table에 refreshToken 저장
 
-        return { accessToken };
+        return { accessToken, refreshToken };
     }
 }
