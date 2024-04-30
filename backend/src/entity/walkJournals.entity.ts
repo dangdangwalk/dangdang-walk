@@ -2,7 +2,7 @@ import { Users } from '../users/users.entity';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('walk_journals')
-export class walkJournals {
+export class WalkJournals {
     @PrimaryGeneratedColumn()
     id: number;
 

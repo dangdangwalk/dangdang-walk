@@ -5,7 +5,7 @@ import { Dogs } from './dogs.entity';
 @Entity('users_dogs')
 export class UsersDogs {
     @PrimaryColumn()
-    @ManyToOne(() => Users, (user) => user.id)
+    @ManyToOne(() => Users, (users) => users.id)
     @JoinColumn({ name: 'user_id' })
     user_id: Users;
 

@@ -1,18 +1,18 @@
 import { Column, Entity, JoinColumn, ManyToOne, Point, PrimaryColumn } from 'typeorm';
-import { walkJournals } from './walk_journals.entity';
+import { WalkJournals } from './walkJournals.entity';
 import { Dogs } from './dogs.entity';
 
 @Entity('excrements')
 export class Excrements {
-    @PrimaryColumn()
-    @ManyToOne(() => walkJournals, (walkJournals) => walkJournals.id)
+    @PrimaryColumn({ name: 'journal_id' })
+    @ManyToOne(() => WalkJournals, (WalkJournals) => WalkJournals.id)
     @JoinColumn({ name: 'journal_id' })
-    journal_id: number;
+    journalId: number;
 
-    @PrimaryColumn()
+    @PrimaryColumn({ name: 'dog_id' })
     @ManyToOne(() => Dogs, (dog) => dog.id)
     @JoinColumn({ name: 'dog_id' })
-    dog_id: number;
+    dogId: number;
 
     @Column({
         type: 'enum',
