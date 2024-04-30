@@ -10,6 +10,9 @@ export class WalkJournals {
     @JoinColumn({ name: 'user_id' })
     userId: Users;
 
+    @Column()
+    title: string;
+
     @Column({ name: 'log_image_url' })
     logImageUrl: string;
 
