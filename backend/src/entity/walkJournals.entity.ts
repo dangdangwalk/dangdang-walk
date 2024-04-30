@@ -1,4 +1,4 @@
-import { User } from '../users/users.entity';
+import { Users } from '../users/users.entity';
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('walk_journals')
@@ -6,24 +6,24 @@ export class WalkJournals {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => User, (users) => users.id)
+    @ManyToOne(() => Users, (users) => users.id)
     @JoinColumn({ name: 'user_id' })
-    private userId: User;
+    userId: Users;
 
     @Column({ name: 'log_image_url' })
-    private logImageUrl: string;
+    logImageUrl: string;
 
     @Column()
-    private calories: number;
+    calories: number;
 
     @Column({ nullable: true })
-    private memo: string;
+    memo: string;
 
     @Column({ name: 'started_at' })
-    private startedAt: Date;
+    startedAt: Date;
 
     @Column()
-    private duration: string;
+    duration: string;
 
     @Column()
     private distance: number;
