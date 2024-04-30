@@ -1,8 +1,9 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
-import { AuthService, OAuthService } from '../auth.service';
+import { AuthService } from '../auth.service';
+import { TokenService } from '../token/token.service';
 
 interface requestTokenResponse {
     access_token: string;
@@ -21,16 +22,15 @@ interface requestUserInfoResponse {
 }
 
 @Injectable()
-export class NaverService extends OAuthService {
-    constructor(configService: ConfigService, httpService: HttpService, authService: AuthService) {
-        super(configService, httpService, authService, 'naver');
+export class NaverService extends AuthService {
+    constructor(configService: ConfigService, httpService: HttpService, tokenService: TokenService) {
+        super(configService, httpService, tokenService, 'naver');
     }
 
-    private readonly logger = new Logger(NaverService.name);
     private readonly CLIENT_ID = this.configService.get<string>('NAVER_CLIENT_ID');
     private readonly CLIENT_SECRET = this.configService.get<string>('NAVER_CLIENT_SECRET');
 
-    async requestToken(autherizeCode: string) {
+    protected async requestToken(autherizeCode: string) {
         const { data } = await firstValueFrom(
             this.httpService.post<requestTokenResponse>(
                 `https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id=${this.CLIENT_ID}&client_secret=${this.CLIENT_SECRET}&code=${autherizeCode}&state=naverLoginState`
@@ -40,7 +40,7 @@ export class NaverService extends OAuthService {
         return data;
     }
 
-    async requestUserId(accessToken: string) {
+    protected async requestUserId(accessToken: string) {
         const { data } = await firstValueFrom(
             this.httpService.get<requestUserInfoResponse>('https://openapi.naver.com/v1/nid/me', {
                 headers: {

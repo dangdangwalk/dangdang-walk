@@ -1,10 +1,10 @@
 import { Controller } from '@nestjs/common';
-import { OAuthController } from '../auth.controller';
+import { AuthController } from '../auth.controller';
 import { ConfigService } from '@nestjs/config';
 import { GoogleService } from './google.service';
 
 @Controller('auth/google')
-export class GoogleController extends OAuthController {
+export class GoogleController extends AuthController {
     constructor(configService: ConfigService, googleService: GoogleService) {
         super(configService, googleService);
     }

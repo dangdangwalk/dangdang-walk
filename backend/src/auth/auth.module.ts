@@ -1,9 +1,6 @@
-// auth.module.ts
-
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { AuthService } from './auth.service';
 import { UsersModule } from 'src/users/users.module';
 import { HttpModule } from '@nestjs/axios';
 import { KakaoController } from './kakao/kakao.controller';
@@ -12,6 +9,7 @@ import { NaverService } from './naver/naver.service';
 import { NaverController } from './naver/naver.controller';
 import { GoogleController } from './google/google.controller';
 import { GoogleService } from './google/google.service';
+import { TokenService } from './token/token.service';
 
 @Module({
     imports: [
@@ -29,6 +27,6 @@ import { GoogleService } from './google/google.service';
         }),
     ],
     controllers: [KakaoController, NaverController, GoogleController],
-    providers: [AuthService, KakaoService, NaverService, GoogleService],
+    providers: [TokenService, KakaoService, NaverService, GoogleService],
 })
 export class AuthModule {}
