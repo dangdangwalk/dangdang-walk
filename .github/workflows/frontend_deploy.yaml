@@ -63,10 +63,6 @@ jobs:
     steps:
       - name: Deploy to Amazon EC2
         run : |
-          APP_ON=$(sudo docker ps | grep ${{ env.IMAGE }})
-          if [ -n "$APP_ON" ]; then
-            docker stop ${{ env.IMAGE }}
-          fi
           docker ps -q --filter "name=${{ env.IMAGE }}" | grep -q . && docker stop ${{ env.IMAGE }} && docker container prune -f
           aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ env.REPO }}
           docker pull ${{ env.REPO }}/${{ env.IMAGE }}:${{ env.TAG }}
