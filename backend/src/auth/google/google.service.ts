@@ -26,18 +26,15 @@ interface requestUserInfoResponse {
 }
 
 @Injectable()
-export class GoogleService implements OAuthService {
-    constructor(
-        private readonly configService: ConfigService,
-        private readonly httpService: HttpService,
-        private readonly authService: AuthService
-    ) {}
+export class GoogleService extends OAuthService {
+    constructor(configService: ConfigService, httpService: HttpService, authService: AuthService) {
+        super(configService, httpService, authService, 'google');
+    }
 
     private readonly logger = new Logger(GoogleService.name);
     private readonly CLIENT_ID = this.configService.get<string>('GOOGLE_CLIENT_ID');
     private readonly CLIENT_SECRET = this.configService.get<string>('GOOGLE_CLIENT_SECRET');
     private readonly REDIRECT_URI = this.configService.get<string>('GOOGLE_REDIRECT_URI');
-    private readonly PROVIDER = 'google';
 
     async requestToken(autherizeCode: string) {
         const { data } = await firstValueFrom(
@@ -61,18 +58,5 @@ export class GoogleService implements OAuthService {
         );
 
         return data.sub;
-    }
-
-    async login(autherizeCode: string) {
-        const { access_token: oauthAccessToken } = await this.requestToken(autherizeCode);
-        const oauthId = await this.requestUserId(oauthAccessToken);
-
-        // oauthId가 users table에 존재하는지 확인해서 로그인 or 회원가입 처리하고 userId 가져오기
-        const userId = 1;
-        const accessToken = this.authService.signToken(userId, 'access', this.PROVIDER);
-        const refreshToken = this.authService.signToken(userId, 'refresh', this.PROVIDER);
-        // users table에 refreshToken 저장
-
-        return { accessToken, refreshToken };
     }
 }

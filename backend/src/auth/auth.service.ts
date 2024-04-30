@@ -1,4 +1,6 @@
+import { HttpService } from '@nestjs/axios';
 import { Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 
 interface JwtPayload {
@@ -46,8 +48,28 @@ export class AuthService {
     }
 }
 
-export interface OAuthService {
-    requestToken(autherizeCode: string): Promise<any>;
-    requestUserId(accessToken: string): Promise<any>;
-    login(autherizeCode: string): Promise<{ accessToken: string; refreshToken: string }>;
+export abstract class OAuthService {
+    constructor(
+        protected readonly configService: ConfigService,
+        protected readonly httpService: HttpService,
+        private readonly authService: AuthService,
+        protected readonly PROVIDER: Provider
+    ) {}
+
+    abstract requestToken(autherizeCode: string): Promise<any>;
+
+    abstract requestUserId(accessToken: string): Promise<number | string>;
+
+    async login(autherizeCode: string): Promise<{ accessToken: string; refreshToken: string }> {
+        const { access_token: oauthAccessToken } = await this.requestToken(autherizeCode);
+        const oauthId = await this.requestUserId(oauthAccessToken);
+
+        // oauthId가 users table에 존재하는지 확인해서 로그인 or 회원가입 처리하고 userId 가져오기
+        const userId = 1;
+        const accessToken = this.authService.signToken(userId, 'access', this.PROVIDER);
+        const refreshToken = this.authService.signToken(userId, 'refresh', this.PROVIDER);
+        // users table에 refreshToken 저장
+
+        return { accessToken, refreshToken };
+    }
 }
