@@ -22,7 +22,7 @@ export class Dogs {
 
     @OneToOne(() => Breed)
     @JoinColumn({ name: 'breed_id' })
-    breedId: Breed;
+    breedId: number;
 
     @Column({
         type: 'enum',
