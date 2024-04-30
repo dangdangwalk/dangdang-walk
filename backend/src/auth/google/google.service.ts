@@ -4,15 +4,14 @@ import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../auth.service';
 import { TokenService } from '../token/token.service';
+import { UsersService } from 'src/users/users.service';
 
 interface requestTokenResponse {
-    token_type: string;
     access_token: string;
-    id_token?: string;
     expires_in: number;
     refresh_token: string;
-    refresh_token_expires_in: number;
-    scope?: string;
+    scope: string;
+    token_type: string;
 }
 
 interface requestUserInfoResponse {
@@ -28,8 +27,13 @@ interface requestUserInfoResponse {
 
 @Injectable()
 export class GoogleService extends AuthService {
-    constructor(configService: ConfigService, httpService: HttpService, tokenService: TokenService) {
-        super(configService, httpService, tokenService, 'google');
+    constructor(
+        configService: ConfigService,
+        httpService: HttpService,
+        tokenService: TokenService,
+        usersService: UsersService
+    ) {
+        super(configService, httpService, tokenService, usersService, 'google');
     }
 
     private readonly CLIENT_ID = this.configService.get<string>('GOOGLE_CLIENT_ID');

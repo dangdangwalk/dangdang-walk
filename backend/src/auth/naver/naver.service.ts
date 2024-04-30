@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../auth.service';
 import { TokenService } from '../token/token.service';
+import { UsersService } from 'src/users/users.service';
 
 interface requestTokenResponse {
     access_token: string;
@@ -23,8 +24,13 @@ interface requestUserInfoResponse {
 
 @Injectable()
 export class NaverService extends AuthService {
-    constructor(configService: ConfigService, httpService: HttpService, tokenService: TokenService) {
-        super(configService, httpService, tokenService, 'naver');
+    constructor(
+        configService: ConfigService,
+        httpService: HttpService,
+        tokenService: TokenService,
+        usersService: UsersService
+    ) {
+        super(configService, httpService, tokenService, usersService, 'naver');
     }
 
     private readonly CLIENT_ID = this.configService.get<string>('NAVER_CLIENT_ID');
