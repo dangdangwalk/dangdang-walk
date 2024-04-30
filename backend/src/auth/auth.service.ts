@@ -48,6 +48,6 @@ export class AuthService {
 
 export interface OAuthService {
     requestToken(autherizeCode: string): Promise<any>;
-    requestUserInfo(accessToken: string): Promise<any>;
+    requestUserId(accessToken: string): Promise<any>;
     login(autherizeCode: string): Promise<{ accessToken: string; refreshToken: string }>;
 }

@@ -16,12 +16,8 @@ interface requestTokenResponse {
 
 interface requestUserInfoResponse {
     id: number;
-    has_signed_up?: boolean;
-    connected_at?: Date;
-    synched_at?: Date;
-    properties?: JSON;
-    kakao_account?: { [key: string]: any };
-    for_partner?: { uuid?: string };
+    expires_in: number;
+    app_id: number;
 }
 
 @Injectable()
@@ -34,11 +30,11 @@ export class KakaoService implements OAuthService {
 
     private readonly logger = new Logger(KakaoService.name);
     private readonly CLIENT_ID = this.configService.get<string>('KAKAO_CLIENT_ID');
-    private readonly REDIRECT_URI = this.configService.get<string>('KAKAO_REDIRECT_URI');
     private readonly CLIENT_SECRET = this.configService.get<string>('KAKAO_CLIENT_SECRET');
+    private readonly REDIRECT_URI = this.configService.get<string>('KAKAO_REDIRECT_URI');
     private readonly PROVIDER = 'kakao';
 
-    async requestToken(autherizeCode: string): Promise<requestTokenResponse> {
+    async requestToken(autherizeCode: string) {
         const { data } = await firstValueFrom(
             this.httpService.post<requestTokenResponse>(
                 'https://kauth.kakao.com/oauth/token',
@@ -60,22 +56,21 @@ export class KakaoService implements OAuthService {
         return data;
     }
 
-    async requestUserInfo(accessToken: string): Promise<requestUserInfoResponse> {
+    async requestUserId(accessToken: string) {
         const { data } = await firstValueFrom(
-            this.httpService.get<requestUserInfoResponse>('https://kapi.kakao.com/v2/user/me', {
+            this.httpService.get<requestUserInfoResponse>('https://kapi.kakao.com/v1/user/access_token_info', {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
-                    'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
                 },
             })
         );
 
-        return data;
+        return data.id;
     }
 
     async login(autherizeCode: string) {
         const { access_token: oauthAccessToken } = await this.requestToken(autherizeCode);
-        const { id: oauthId } = await this.requestUserInfo(oauthAccessToken);
+        const oauthId = await this.requestUserId(oauthAccessToken);
 
         // oauthId가 users table에 존재하는지 확인해서 로그인 or 회원가입 처리하고 userId 가져오기
         const userId = 1;

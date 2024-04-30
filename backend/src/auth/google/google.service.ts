@@ -15,13 +15,14 @@ interface requestTokenResponse {
 }
 
 interface requestUserInfoResponse {
-    id: number;
-    has_signed_up?: boolean;
-    connected_at?: Date;
-    synched_at?: Date;
-    properties?: JSON;
-    kakao_account?: { [key: string]: any };
-    for_partner?: { uuid?: string };
+    azp: string;
+    aud: string;
+    sub: string;
+    scope: string;
+    exp: string;
+    expires_in: string;
+    email: string;
+    email_verified: string;
 }
 
 @Injectable()
@@ -52,21 +53,19 @@ export class GoogleService implements OAuthService {
         return data;
     }
 
-    async requestUserInfo(accessToken: string) {
+    async requestUserId(accessToken: string) {
         const { data } = await firstValueFrom(
-            this.httpService.get<requestUserInfoResponse>('https://www.googleapis.com/oauth2/v2/userinfo', {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            })
+            this.httpService.get<requestUserInfoResponse>(
+                `https://oauth2.googleapis.com/tokeninfo?access_token=${accessToken}`
+            )
         );
 
-        return data;
+        return data.sub;
     }
 
     async login(autherizeCode: string) {
         const { access_token: oauthAccessToken } = await this.requestToken(autherizeCode);
-        const { id: oauthId } = await this.requestUserInfo(oauthAccessToken);
+        const oauthId = await this.requestUserId(oauthAccessToken);
 
         // oauthId가 users table에 존재하는지 확인해서 로그인 or 회원가입 처리하고 userId 가져오기
         const userId = 1;

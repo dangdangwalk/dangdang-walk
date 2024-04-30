@@ -43,7 +43,7 @@ export class NaverService implements OAuthService {
         return data;
     }
 
-    async requestUserInfo(accessToken: string) {
+    async requestUserId(accessToken: string) {
         const { data } = await firstValueFrom(
             this.httpService.get<requestUserInfoResponse>('https://openapi.naver.com/v1/nid/me', {
                 headers: {
@@ -52,12 +52,12 @@ export class NaverService implements OAuthService {
             })
         );
 
-        return data.response;
+        return data.response.id;
     }
 
     async login(autherizeCode: string) {
         const { access_token: oauthAccessToken } = await this.requestToken(autherizeCode);
-        const { id: oauthId } = await this.requestUserInfo(oauthAccessToken);
+        const oauthId = await this.requestUserId(oauthAccessToken);
 
         // oauthId가 users table에 존재하는지 확인해서 로그인 or 회원가입 처리하고 userId 가져오기
         const userId = 1;
