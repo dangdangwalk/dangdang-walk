@@ -15,7 +15,7 @@ export class UsersService {
     async create(
         nickname: string,
         role: Role,
-        mainDogId: number,
+        mainDogId: number | null,
         oauthId: string,
         oauthAccessToken: string,
         oauthRefreshToken: string,
@@ -58,32 +58,44 @@ export class UsersService {
         return this.userRepo.remove(user);
     }
 
-    /**
-     * 주어진 userId를 가진 사용자가 존재하지 않으면 새로운 사용자를 생성합니다.
-     * 사용자가 이미 존재하면 true를 반환하고, 새로운 사용자가 생성되었으면 false를 반환합니다.
-     *
-     * @param userId - 사용자의 고유 식별자입니다.
-     * @param role - 사용자의 역할입니다. 제공되지 않으면 기본값은 'User'입니다.
-     * @returns 사용자가 이미 존재하면 true를, 새로운 사용자가 생성되었으면 false를 반환하는 Promise입니다.
-     */
-    async isMemberOrCreate(userId: number, role: Role | undefined = Role.User): Promise<boolean> {
-        let isMember = true;
-        await this.entityManager.transaction(async (transactionalEntityManager) => {
-            const foundUser = await transactionalEntityManager.findOne(Users, { where: { id: userId } });
-            if (!foundUser) {
-                let uuid: string = generateUuid();
+    async loginOrCreateUser(
+        oauthId: string,
+        oauthAccessToken: string,
+        oauthRefreshToken: string,
+        refreshToken: string
+    ) {
+        let user = await this.userRepo.findOne({ where: { oauthId } });
 
-                let duplicatedUser = await transactionalEntityManager.findOne(Users, { where: { nickname: uuid } });
-                while (duplicatedUser) {
-                    duplicatedUser = await transactionalEntityManager.findOne(Users, { where: { nickname: uuid } });
-                    uuid = generateUuid();
-                }
+        if (!user) {
+            const nickname = await this.generateUniqueNickname();
+            user = await this.create(
+                nickname,
+                Role.User,
+                null,
+                oauthId,
+                oauthAccessToken,
+                oauthRefreshToken,
+                refreshToken
+            );
+        } else {
+            user.oauthAccessToken = oauthAccessToken;
+            user.oauthRefreshToken = oauthRefreshToken;
+            user.refreshToken = refreshToken;
+            await this.userRepo.save(user);
+        }
 
-                const newUser = transactionalEntityManager.create(Users, { id: userId, role, nickname: uuid });
-                await transactionalEntityManager.save(newUser);
-                isMember = false;
-            }
-        });
-        return isMember;
+        return user.id;
+    }
+
+    private async generateUniqueNickname(): Promise<string> {
+        let nickname = generateUuid();
+        let user = await this.userRepo.findOne({ where: { nickname } });
+
+        while (user) {
+            nickname = generateUuid();
+            user = await this.userRepo.findOne({ where: { nickname } });
+        }
+
+        return nickname;
     }
 }

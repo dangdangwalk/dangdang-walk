@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../auth.service';
 import { TokenService } from '../token/token.service';
+import { UsersService } from 'src/users/users.service';
 
 interface requestTokenResponse {
     token_type: string;
@@ -23,8 +24,13 @@ interface requestUserInfoResponse {
 
 @Injectable()
 export class KakaoService extends AuthService {
-    constructor(configService: ConfigService, httpService: HttpService, tokenService: TokenService) {
-        super(configService, httpService, tokenService, 'kakao');
+    constructor(
+        configService: ConfigService,
+        httpService: HttpService,
+        tokenService: TokenService,
+        usersService: UsersService
+    ) {
+        super(configService, httpService, tokenService, usersService, 'kakao');
     }
 
     private readonly CLIENT_ID = this.configService.get<string>('KAKAO_CLIENT_ID');
@@ -62,6 +68,6 @@ export class KakaoService extends AuthService {
             })
         );
 
-        return data.id;
+        return data.id.toString();
     }
 }
