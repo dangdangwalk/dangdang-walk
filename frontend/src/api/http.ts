@@ -33,7 +33,7 @@ export const createClient = (config?: AxiosRequestConfig): AxiosInstance => {
     return axiosInstance;
 };
 
-const httpClient = createClient();
+export const httpClient = createClient();
 
 type RequestMethod = 'get' | 'post' | 'put' | 'delete';
 
