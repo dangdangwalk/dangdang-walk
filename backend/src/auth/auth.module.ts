@@ -8,6 +8,8 @@ import { UsersModule } from 'src/users/users.module';
 import { HttpModule } from '@nestjs/axios';
 import { KakaoController } from './kakao/kakao.controller';
 import { KakaoService } from './kakao/kakao.service';
+import { NaverService } from './naver/naver.service';
+import { NaverController } from './naver/naver.controller';
 
 @Module({
     imports: [
@@ -24,7 +26,7 @@ import { KakaoService } from './kakao/kakao.service';
             inject: [ConfigService],
         }),
     ],
-    controllers: [KakaoController],
-    providers: [AuthService, KakaoService],
+    controllers: [KakaoController, NaverController],
+    providers: [AuthService, KakaoService, NaverService],
 })
 export class AuthModule {}
