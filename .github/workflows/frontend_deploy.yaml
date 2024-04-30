@@ -20,17 +20,23 @@ jobs:
       run:
         working-directory: ./frontend
     steps:
-      - name: Check out code
-        uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v3
         with:
-          fetch-depth: 2
-      - name: Setup node.js
-        uses: actions/setup-node@v4
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
         with:
-          node-version: 21.2.0
-          cache: "npm"
-          cache-dependency-path: ./frontend/package-lock.json
-      - name: Install dependencies
+          path: frontend/node_modules
+          key: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('frontend/package-lock.json') }}
+      - name: Install Dependencies
+        if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
         run: npm ci
       - name: Run build
         run: npm run build
@@ -57,7 +63,12 @@ jobs:
     steps:
       - name: Deploy to Amazon EC2
         run : |
-          docker ps -q --filter "name=${{ env.IMAGE }}" | grep -q . && docker stop ${{ env.IMAGE }} && docker image prune -f
+          APP_ON=$(sudo docker ps | grep ${{ env.IMAGE }})
+          if [ -n "$APP_ON" ]; then
+            docker stop ${{ env.IMAGE }}
+          fi
+          docker ps -q --filter "name=${{ env.IMAGE }}" | grep -q . && docker stop ${{ env.IMAGE }} && docker container prune -f
           aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ env.REPO }}
           docker pull ${{ env.REPO }}/${{ env.IMAGE }}:${{ env.TAG }}
           docker run -d --name ${{ env.IMAGE }} --restart always -p 3000:3000 ${{ env.REPO }}/${{ env.IMAGE }}:${{ env.TAG }}
+          docker image prune -a --filter "until=1h" -f
