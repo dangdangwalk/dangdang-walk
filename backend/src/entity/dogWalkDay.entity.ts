@@ -6,23 +6,23 @@ export class DogWalkDay {
     id: number;
 
     @Column({ default: 0 })
-    private mon: number;
+    mon: number;
 
     @Column({ default: 0 })
-    private tue: number;
+    tue: number;
 
     @Column({ default: 0 })
-    private wed: number;
+    wed: number;
 
     @Column({ default: 0 })
-    private thr: number;
+    thr: number;
 
     @Column({ default: 0 })
-    private fri: number;
+    fri: number;
 
     @Column({ default: 0 })
-    private sat: number;
+    sat: number;
 
     @Column({ default: 0 })
-    private sun: number;
+    sun: number;
 }

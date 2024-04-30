@@ -10,30 +10,30 @@ export class Dogs {
 
     @OneToOne(() => DogWalkDay)
     @JoinColumn({ name: 'walk_day_id' })
-    private walkDayId: DogWalkDay;
+    walkDayId: DogWalkDay;
 
     @Column()
-    private name: string;
+    name: string;
 
     @OneToOne(() => Breed)
     @JoinColumn({ name: 'breed_id' })
-    private breedId: Breed;
+    breedId: Breed;
 
     @Column({
         type: 'enum',
         enum: Gender,
     })
-    private gender: 'MALE' | 'FEMALE';
+    gender: 'MALE' | 'FEMALE';
 
     @Column()
-    private birth: Date;
+    birth: Date;
 
     @Column({ name: 'is_neutered' })
-    private isNeutered: boolean;
+    isNeutered: boolean;
 
     @Column({ name: 'photo_url' })
-    private photoUrl: string;
+    photoUrl: string;
 
     @Column({ name: 'is_walking' })
-    private isWalking: boolean;
+    isWalking: boolean;
 }

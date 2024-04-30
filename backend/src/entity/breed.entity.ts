@@ -6,8 +6,8 @@ export class Breed {
     id: number;
 
     @Column()
-    private name: string;
+    name: string;
 
     @Column()
-    private activity: number;
+    activity: number;
 }
