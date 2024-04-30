@@ -10,6 +10,8 @@ import { KakaoController } from './kakao/kakao.controller';
 import { KakaoService } from './kakao/kakao.service';
 import { NaverService } from './naver/naver.service';
 import { NaverController } from './naver/naver.controller';
+import { GoogleController } from './google/google.controller';
+import { GoogleService } from './google/google.service';
 
 @Module({
     imports: [
@@ -26,7 +28,7 @@ import { NaverController } from './naver/naver.controller';
             inject: [ConfigService],
         }),
     ],
-    controllers: [KakaoController, NaverController],
-    providers: [AuthService, KakaoService, NaverService],
+    controllers: [KakaoController, NaverController, GoogleController],
+    providers: [AuthService, KakaoService, NaverService, GoogleService],
 })
 export class AuthModule {}
