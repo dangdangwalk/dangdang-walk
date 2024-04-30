@@ -1,8 +1,9 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
-import { AuthService, OAuthService } from '../auth.service';
+import { AuthService } from '../auth.service';
+import { TokenService } from '../token/token.service';
 
 interface requestTokenResponse {
     token_type: string;
@@ -21,17 +22,16 @@ interface requestUserInfoResponse {
 }
 
 @Injectable()
-export class KakaoService extends OAuthService {
-    constructor(configService: ConfigService, httpService: HttpService, authService: AuthService) {
-        super(configService, httpService, authService, 'kakao');
+export class KakaoService extends AuthService {
+    constructor(configService: ConfigService, httpService: HttpService, tokenService: TokenService) {
+        super(configService, httpService, tokenService, 'kakao');
     }
 
-    private readonly logger = new Logger(KakaoService.name);
     private readonly CLIENT_ID = this.configService.get<string>('KAKAO_CLIENT_ID');
     private readonly CLIENT_SECRET = this.configService.get<string>('KAKAO_CLIENT_SECRET');
     private readonly REDIRECT_URI = this.configService.get<string>('KAKAO_REDIRECT_URI');
 
-    async requestToken(autherizeCode: string) {
+    protected async requestToken(autherizeCode: string) {
         const { data } = await firstValueFrom(
             this.httpService.post<requestTokenResponse>(
                 'https://kauth.kakao.com/oauth/token',
@@ -53,7 +53,7 @@ export class KakaoService extends OAuthService {
         return data;
     }
 
-    async requestUserId(accessToken: string) {
+    protected async requestUserId(accessToken: string) {
         const { data } = await firstValueFrom(
             this.httpService.get<requestUserInfoResponse>('https://kapi.kakao.com/v1/user/access_token_info', {
                 headers: {

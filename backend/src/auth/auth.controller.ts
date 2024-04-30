@@ -1,12 +1,13 @@
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
-import { OAuthService, TOKEN_LIFETIME_MAP } from './auth.service';
+import { AuthService } from './auth.service';
 import { BadRequestException, Get, Query, Res } from '@nestjs/common';
+import { TOKEN_LIFETIME_MAP } from './token/token.service';
 
-export abstract class OAuthController {
+export abstract class AuthController {
     constructor(
         protected readonly configService: ConfigService,
-        private oauthService: OAuthService
+        private oauthService: AuthService
     ) {}
 
     protected abstract AUTHORIZE_CODE_REQUEST_URL: string;

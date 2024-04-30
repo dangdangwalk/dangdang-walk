@@ -1,10 +1,10 @@
 import { Controller } from '@nestjs/common';
-import { OAuthController } from '../auth.controller';
+import { AuthController } from '../auth.controller';
 import { ConfigService } from '@nestjs/config';
 import { KakaoService } from './kakao.service';
 
 @Controller('auth/kakao')
-export class KakaoController extends OAuthController {
+export class KakaoController extends AuthController {
     constructor(configService: ConfigService, kakaoService: KakaoService) {
         super(configService, kakaoService);
     }

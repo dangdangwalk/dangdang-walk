@@ -1,64 +1,20 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
+import { TokenService } from './token/token.service';
 
-interface JwtPayload {
-    userId: number;
-    provider: Provider;
-}
+export type Provider = 'kakao' | 'naver' | 'google';
 
-type Provider = 'kakao' | 'naver' | 'google';
-type TokenType = 'access' | 'refresh';
-type TokenExpiryMap = {
-    [key in TokenType]: {
-        expiresIn: string;
-        maxAge: number;
-    };
-};
-
-export const TOKEN_LIFETIME_MAP: TokenExpiryMap = {
-    access: { expiresIn: '12h', maxAge: 12 * 60 * 60 * 1000 },
-    refresh: { expiresIn: '14d', maxAge: 14 * 24 * 60 * 60 * 1000 },
-};
-
-@Injectable()
-export class AuthService {
-    constructor(private jwtService: JwtService) {}
-
-    private readonly logger = new Logger(AuthService.name);
-
-    signToken(userId: number, tokenType: TokenType, provider: Provider) {
-        const payload: JwtPayload = {
-            userId,
-            provider,
-        };
-
-        const newToken = this.jwtService.sign(payload, {
-            expiresIn: TOKEN_LIFETIME_MAP[tokenType].expiresIn,
-        });
-
-        return newToken;
-    }
-
-    decodeToken(token: string) {
-        const data = this.jwtService.verify<JwtPayload>(token);
-
-        return data;
-    }
-}
-
-export abstract class OAuthService {
+export abstract class AuthService {
     constructor(
         protected readonly configService: ConfigService,
         protected readonly httpService: HttpService,
-        private readonly authService: AuthService,
+        private readonly tokenService: TokenService,
         protected readonly PROVIDER: Provider
     ) {}
 
-    abstract requestToken(autherizeCode: string): Promise<any>;
+    protected abstract requestToken(autherizeCode: string): Promise<any>;
 
-    abstract requestUserId(accessToken: string): Promise<number | string>;
+    protected abstract requestUserId(accessToken: string): Promise<number | string>;
 
     async login(autherizeCode: string): Promise<{ accessToken: string; refreshToken: string }> {
         const { access_token: oauthAccessToken } = await this.requestToken(autherizeCode);
@@ -66,8 +22,8 @@ export abstract class OAuthService {
 
         // oauthId가 users table에 존재하는지 확인해서 로그인 or 회원가입 처리하고 userId 가져오기
         const userId = 1;
-        const accessToken = this.authService.signToken(userId, 'access', this.PROVIDER);
-        const refreshToken = this.authService.signToken(userId, 'refresh', this.PROVIDER);
+        const accessToken = this.tokenService.sign(userId, 'access', this.PROVIDER);
+        const refreshToken = this.tokenService.sign(userId, 'refresh', this.PROVIDER);
         // users table에 refreshToken 저장
 
         return { accessToken, refreshToken };

@@ -1,10 +1,10 @@
 import { Controller } from '@nestjs/common';
-import { OAuthController } from '../auth.controller';
+import { AuthController } from '../auth.controller';
 import { ConfigService } from '@nestjs/config';
 import { NaverService } from './naver.service';
 
 @Controller('auth/naver')
-export class NaverController extends OAuthController {
+export class NaverController extends AuthController {
     constructor(configService: ConfigService, naverService: NaverService) {
         super(configService, naverService);
     }
