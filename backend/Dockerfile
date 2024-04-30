@@ -41,9 +41,8 @@ COPY --chown=node:node --from=dev /app/node_modules /app/node_modules
 
 COPY --chown=nestjs:nodejs . .
 
-RUN mkdir /app/log
-
-RUN npm run build && \
+RUN if [ ! -d "/app/log" ]; then mkdir -p /app/log; fi && \
+    npm run build && \
     npm ci --omit=dev && \
     npm cache clean --force
 
