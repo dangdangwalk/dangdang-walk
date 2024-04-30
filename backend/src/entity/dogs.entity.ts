@@ -1,6 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
 import { DogWalkDay } from './dogWalkDay.entity';
 import { Breed } from './breed.entity';
+import { Gender } from './dogs-gender.enum';
 
 @Entity('dogs')
 export class Dogs {
@@ -9,30 +10,30 @@ export class Dogs {
 
     @OneToOne(() => DogWalkDay)
     @JoinColumn({ name: 'walk_day_id' })
-    walkDayId: DogWalkDay;
+    private walkDayId: DogWalkDay;
 
     @Column()
-    name: string;
+    private name: string;
 
     @OneToOne(() => Breed)
     @JoinColumn({ name: 'breed_id' })
-    breedId: Breed;
+    private breedId: Breed;
 
     @Column({
         type: 'enum',
-        enum: ['MALE', 'FEMALE'],
+        enum: Gender,
     })
-    gender: 'MALE' | 'FEMALE';
+    private gender: 'MALE' | 'FEMALE';
 
     @Column()
-    birth: Date;
+    private birth: Date;
 
     @Column({ name: 'is_neutered' })
-    isNeutered: boolean;
+    private isNeutered: boolean;
 
     @Column({ name: 'photo_url' })
-    photoUrl: string;
+    private photoUrl: string;
 
     @Column({ name: 'is_walking' })
-    isWalking: boolean;
+    private isWalking: boolean;
 }

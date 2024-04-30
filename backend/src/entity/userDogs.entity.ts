@@ -7,10 +7,10 @@ export class UsersDogs {
     @PrimaryColumn({ name: 'user_id' })
     @ManyToOne(() => User, (users) => users.id)
     @JoinColumn({ name: 'user_id' })
-    userId: User;
+    private userId: User;
 
     @PrimaryColumn({ name: 'dog_id' })
     @ManyToOne(() => Dogs, (dog) => dog.id)
     @JoinColumn({ name: 'dog_id' })
-    dogId: Dogs;
+    private dogId: Dogs;
 }

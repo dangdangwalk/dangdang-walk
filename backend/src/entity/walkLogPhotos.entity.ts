@@ -6,5 +6,5 @@ export class WalkLogPhotos {
     id: number;
 
     @Column({ name: 'photo_url' })
-    photoUrl: string;
+    private photoUrl: string;
 }
