@@ -8,29 +8,27 @@ import Home from './pages/Home';
 import Profile from './pages/Profile';
 
 const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <App />,
-    children: [
-      {
-        index: true,
+    {
         path: '/',
-        element: <Home />,
-      },
-      {
-        path: '/profile',
-        element: <Profile />,
-      },
-    ],
-  },
+        element: <App />,
+        children: [
+            {
+                index: true,
+                path: '/',
+                element: <Home />,
+            },
+            {
+                path: '/profile',
+                element: <Profile />,
+            },
+        ],
+    },
 ]);
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>
+    <React.StrictMode>
+        <RouterProvider router={router} />
+    </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
