@@ -8,7 +8,7 @@ export class WalkJournals {
 
     @ManyToOne(() => Users, (users) => users.id)
     @JoinColumn({ name: 'user_id' })
-    userId: Users;
+    userId: number;
 
     @Column()
     title: string;
@@ -29,5 +29,5 @@ export class WalkJournals {
     duration: string;
 
     @Column()
-    private distance: number;
+    distance: number;
 }
