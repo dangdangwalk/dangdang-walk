@@ -10,9 +10,11 @@ import { PrometheusInterceptor } from './common/interceptor/prometheus.intercept
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { WinstonLoggerModule } from './common/logger/winstonLogger.module';
 import { AuthModule } from './auth/auth.module';
+import { FakeModule } from './fake/fake.module';
 
 @Module({
     imports: [
+        FakeModule,
         WinstonLoggerModule,
         PrometheusModule.register({
             path: '/metrics',
