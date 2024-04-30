@@ -2,6 +2,7 @@ import { Column, Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'ty
 import { DogWalkDay } from './dogWalkDay.entity';
 import { Breed } from './breed.entity';
 import { Gender } from './dogs-gender.enum';
+import { DailyWalkTime } from './dailyWalkTime.entity';
 
 @Entity('dogs')
 export class Dogs {
@@ -11,6 +12,10 @@ export class Dogs {
     @OneToOne(() => DogWalkDay)
     @JoinColumn({ name: 'walk_day_id' })
     walkDayId: DogWalkDay;
+
+    @OneToOne(() => DailyWalkTime)
+    @JoinColumn({ name: 'daily_walk_time_id' })
+    DailyWalkTimeId: number;
 
     @Column()
     name: string;
