@@ -6,7 +6,7 @@ export class DailyWalkTime {
     id: number;
 
     @Column()
-    name: string;
+    duration: number;
 
     @Column({ name: 'updated_at' })
     updatedAt: Date;
