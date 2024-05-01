@@ -1,12 +1,12 @@
 import { Body, Controller, ParseArrayPipe, ParseIntPipe, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { Serialize } from 'src/common/interceptor/serialize.interceptor';
 import { WalkCommandDto } from './dtos/walk-command.dto';
-import { DogService } from 'src/dog/dog.service';
+import { DogsService } from 'src/dog/dogs.service';
 
 @Controller('/walk')
 @UsePipes(new ValidationPipe())
 export class WalkController {
-    constructor(private readonly dogService: DogService) {}
+    constructor(private readonly dogService: DogsService) {}
 
     @Serialize(WalkCommandDto)
     @Post('/start')
