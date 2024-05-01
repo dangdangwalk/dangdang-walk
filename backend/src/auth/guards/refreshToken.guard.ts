@@ -17,7 +17,7 @@ export class RefreshTokenGuard implements CanActivate {
 
         try {
             const payload = this.tokenService.verify(token) as RefreshTokenPayload;
-            const isValid = this.authService.validateRefreshToken(token, payload.oauthId);
+            const isValid = await this.authService.validateRefreshToken(token, payload.oauthId);
 
             request.user = payload;
 
