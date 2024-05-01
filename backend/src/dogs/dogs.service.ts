@@ -101,7 +101,7 @@ export class DogsService {
         return result;
     }
 
-    async getDogsStatistics() {
+    async getDogsStatistics(): Promise<DogStatisticDto[]> {
         const ownDogIds = await this.usersService.getDogsList(1);
         const dogWalkDayIds = await this.getDogWalkDayIdList(ownDogIds);
         const dailyWalkTimeIds = await this.getDailyWalkTimeIdList(ownDogIds);
@@ -121,6 +121,6 @@ export class DogsService {
             throw new NotFoundException();
         }
 
-        this.makeStatisticData(dogProfiles, amountOfWalk, walkTime, weeklyWalkCheck);
+        return this.makeStatisticData(dogProfiles, amountOfWalk, walkTime, weeklyWalkCheck);
     }
 }

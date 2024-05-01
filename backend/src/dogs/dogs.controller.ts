@@ -3,6 +3,8 @@ import { UsersService } from 'src/users/users.service';
 import { DogsService } from './dogs.service';
 import { BreedService } from 'src/breed/breed.service';
 import { DogWalkDayService } from 'src/dog-walk-day/dog-walk-day.service';
+import { DogStatisticDto } from './dto/dog-statistic.dto';
+import { Serialize } from 'src/common/interceptor/serialize.interceptor';
 
 export type DogProfile = {
     id: number;
@@ -23,7 +25,7 @@ export class DogsController {
         return await this.dogsService.truncateNotAvaialableDog(ownDogs);
     }
 
-    //TODO : 로직을 서비스로 이관
+    @Serialize(DogStatisticDto)
     @Get('/statistics')
     async getDogsStatistics() {
         return this.dogsService.getDogsStatistics();
