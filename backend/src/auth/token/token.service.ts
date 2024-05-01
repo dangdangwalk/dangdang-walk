@@ -9,6 +9,7 @@ export interface AccessTokenPayload {
 
 export interface RefreshTokenPayload {
     oauthId: string;
+    provider: OauthProvider;
 }
 
 type TokenType = 'access' | 'refresh';
@@ -41,9 +42,10 @@ export class TokenService {
         return newToken;
     }
 
-    signRefreshToken(oauthId: string) {
+    signRefreshToken(oauthId: string, provider: OauthProvider) {
         const payload: RefreshTokenPayload = {
             oauthId,
+            provider,
         };
 
         const newToken = this.jwtService.sign(payload, {
