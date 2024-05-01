@@ -48,5 +48,18 @@ export class AuthController {
 
     @Get('token')
     @UseGuards(RefreshTokenGuard)
-    token(@User() user: RefreshTokenPayload) {}
+    async token(@User() user: RefreshTokenPayload, @Res({ passthrough: true }) response: Response) {
+        const { accessToken, refreshToken } = await this.authService.reissueTokens(user.oauthId, user.provider);
+
+        response.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: Boolean(this.configService.get<string>('NODE_ENV', 'test') === 'production'),
+            maxAge: TOKEN_LIFETIME_MAP.refresh.maxAge,
+        });
+
+        return {
+            accessToken,
+            expiresIn: TOKEN_LIFETIME_MAP.access.maxAge / 1000,
+        };
+    }
 }
