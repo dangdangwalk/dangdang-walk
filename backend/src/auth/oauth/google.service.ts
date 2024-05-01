@@ -32,7 +32,6 @@ export class GoogleService implements OauthService {
 
     private readonly CLIENT_ID = this.configService.get<string>('GOOGLE_CLIENT_ID');
     private readonly CLIENT_SECRET = this.configService.get<string>('GOOGLE_CLIENT_SECRET');
-    private readonly REDIRECT_URI = this.configService.get<string>('GOOGLE_REDIRECT_URI');
 
     async requestToken(authorizeCode: string) {
         const { data } = await firstValueFrom(
@@ -41,7 +40,6 @@ export class GoogleService implements OauthService {
                 client_secret: this.CLIENT_SECRET,
                 code: authorizeCode,
                 grant_type: 'authorization_code',
-                redirect_uri: this.REDIRECT_URI,
             })
         );
 
