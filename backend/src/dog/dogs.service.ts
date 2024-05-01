@@ -38,7 +38,6 @@ export class DogsService {
     }
 
     async truncateNotAvaialableDog(dogIds: number[]): Promise<DogProfile[]> {
-        //: Promise<dogProfile[]> {
         const availableDogList = await this.repo.find({ where: { id: In(dogIds), isWalking: false } });
         const availableDogProfileList = this.makeProfileList(availableDogList);
         console.log(availableDogProfileList);

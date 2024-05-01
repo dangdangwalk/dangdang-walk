@@ -13,10 +13,8 @@ import { AuthModule } from './auth/auth.module';
 import { FakeModule } from './fake/fake.module';
 import { DogModule } from './dog/dog.module';
 import { WalkModule } from './walk/walk.module';
-import { HomeScreenModule } from './home-screen/home-screen.module';
 import { BreedModule } from './breed/breed.module';
 import { DogWalkDayModule } from './dog-walk-day/dog-walk-day.module';
-import { DailyWalktimeModule } from './daily-walktime/daily-walktime.module';
 
 @Module({
     imports: [
@@ -61,10 +59,8 @@ import { DailyWalktimeModule } from './daily-walktime/daily-walktime.module';
         AuthModule,
         DogModule,
         WalkModule,
-        HomeScreenModule,
         BreedModule,
         DogWalkDayModule,
-        DailyWalktimeModule,
     ],
     controllers: [AppController, HealthController],
     providers: [
