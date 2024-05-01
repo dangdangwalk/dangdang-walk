@@ -87,7 +87,7 @@ export class UsersService {
         return user.id;
     }
 
-    private async generateUniqueNickname(): Promise<string> {
+    async generateUniqueNickname(): Promise<string> {
         let nickname = generateUuid();
         let user = await this.userRepo.findOne({ where: { nickname } });
 
