@@ -12,6 +12,17 @@ export class DogService {
         if (!dog) {
             throw new NotFoundException();
         }
+        Object.assign(dog, attrs);
         return this.repo.save(dog);
+    }
+
+    async updateIsWalking(dogIdArr: number[], stateToUpdate: boolean) {
+        const attrs = {
+            isWalking: stateToUpdate,
+        };
+        for (const curDogId of dogIdArr) {
+            await this.update(curDogId, attrs);
+        }
+        return dogIdArr;
     }
 }

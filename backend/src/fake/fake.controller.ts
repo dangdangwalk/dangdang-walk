@@ -56,18 +56,6 @@ export class FakeController {
         return result;
     }
 
-    @Post('/walk/start')
-    fakeWalkStart() {
-        const result = [1, 2, 3, 4, 5];
-        return result;
-    }
-
-    @Delete('/walk/stop')
-    fakeWalkStop() {
-        const result = [1, 2, 3, 4, 5];
-        return result;
-    }
-
     @Post('/journals')
     fakeJournalsSave() {
         return true;
