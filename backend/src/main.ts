@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { PORT } from './setting';
+import { PORT } from './config/settings';
 import * as process from 'node:process';
 import { setupSession } from './config/session';
 
