@@ -4,7 +4,6 @@ import { PORT } from './config/settings';
 import * as process from 'node:process';
 import { setupSession } from './config/session';
 
-
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
