@@ -37,9 +37,11 @@ export class TokenService {
         return newToken;
     }
 
-    signRefreshToken() {
+    signRefreshToken(oauthId: string) {
         const newToken = this.jwtService.sign(
-            {},
+            {
+                oauthId,
+            },
             {
                 expiresIn: TOKEN_LIFETIME_MAP.refresh.expiresIn,
             }

@@ -27,7 +27,7 @@ export abstract class AuthService {
             await this.requestToken(autherizeCode);
         const oauthId = await this.requestUserId(oauthAccessToken);
 
-        const refreshToken = this.tokenService.signRefreshToken();
+        const refreshToken = this.tokenService.signRefreshToken(oauthId);
 
         const userId = await this.usersService.loginOrCreateUser(
             oauthId,
