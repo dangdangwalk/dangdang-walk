@@ -21,9 +21,11 @@ async function bootstrap() {
         })
     );
 
-    await app.listen(PORT, () => {
-        console.log(`Server running at http://${process.env.MYSQL_HOST}:${PORT}`);
-    });
+    await (async () => {
+        await app.listen(PORT, () => {
+            console.log(`Server running at http://${process.env.MYSQL_HOST}:${PORT}`);
+        });
+    })();
 }
 
 bootstrap();
