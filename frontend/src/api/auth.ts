@@ -1,4 +1,3 @@
-import { getCookie } from '@/utils/cookie';
 import { httpClient } from './http';
 
 type ResponseToken = {
@@ -7,12 +6,7 @@ type ResponseToken = {
 };
 
 const getAccessToken = async (): Promise<ResponseToken> => {
-    const refreshToken = getCookie('refreshToken');
-    const { data } = await httpClient.get('/login', {
-        // headers: {
-        //     Authorization: `Bearer ${refreshToken}`,
-        // },
-    });
+    const { data } = await httpClient.get('/auth/token');
     return data;
 };
 
