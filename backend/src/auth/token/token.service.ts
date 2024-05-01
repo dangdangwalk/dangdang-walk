@@ -2,9 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { OauthProvider } from '../auth.controller';
 
-interface JwtPayload {
+export interface AccessTokenPayload {
     userId: number;
     provider: OauthProvider;
+}
+
+export interface RefreshTokenPayload {
+    oauthId: string;
 }
 
 type TokenType = 'access' | 'refresh';
@@ -25,7 +29,7 @@ export class TokenService {
     constructor(private jwtService: JwtService) {}
 
     signAccessToken(userId: number, provider: OauthProvider) {
-        const payload: JwtPayload = {
+        const payload: AccessTokenPayload = {
             userId,
             provider,
         };
@@ -38,20 +42,19 @@ export class TokenService {
     }
 
     signRefreshToken(oauthId: string) {
-        const newToken = this.jwtService.sign(
-            {
-                oauthId,
-            },
-            {
-                expiresIn: TOKEN_LIFETIME_MAP.refresh.expiresIn,
-            }
-        );
+        const payload: RefreshTokenPayload = {
+            oauthId,
+        };
+
+        const newToken = this.jwtService.sign(payload, {
+            expiresIn: TOKEN_LIFETIME_MAP.refresh.expiresIn,
+        });
 
         return newToken;
     }
 
     verify(token: string) {
-        const payload = this.jwtService.verify<JwtPayload>(token, {
+        const payload = this.jwtService.verify<AccessTokenPayload | RefreshTokenPayload>(token, {
             ignoreExpiration: false,
         });
 

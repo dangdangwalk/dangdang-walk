@@ -1,8 +1,10 @@
-import { Body, Controller, Delete, Get, Post, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
-import { TOKEN_LIFETIME_MAP } from './token/token.service';
+import { RefreshTokenPayload, TOKEN_LIFETIME_MAP } from './token/token.service';
+import { RefreshTokenGuard } from './guards/refreshToken.guard';
+import { User } from 'src/users/decorators/user.decorator';
 
 export type OauthProvider = 'google' | 'kakao' | 'naver';
 
@@ -45,5 +47,6 @@ export class AuthController {
     deactivate() {}
 
     @Get('token')
-    token() {}
+    @UseGuards(RefreshTokenGuard)
+    token(@User() user: RefreshTokenPayload) {}
 }

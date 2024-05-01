@@ -37,4 +37,10 @@ export class AuthService {
 
         return { accessToken, refreshToken };
     }
+
+    async validateRefreshToken(token: string, oauthId: string): Promise<boolean> {
+        const user = await this.usersService.findOneWithOauthID(oauthId);
+
+        return user.refreshToken === token;
+    }
 }
