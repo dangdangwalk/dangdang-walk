@@ -24,38 +24,6 @@ export class FakeController {
         return result;
     }
 
-    @Get('/available-dogs')
-    fakeAvailable() {
-        const result = [];
-        result.push({
-            id: '1',
-            name: 'dukji',
-            photoUrl: 'http://www/fake.com',
-        });
-        result.push({
-            id: '2',
-            name: 'dangdang',
-            photoUrl: 'http://www/fake2.com',
-        });
-        result.push({
-            id: '3',
-            name: '댕댕이',
-            photoUrl: 'http://www/fake3.com',
-        });
-        result.push({
-            id: '4',
-            name: '깜지',
-            photoUrl: 'http://www/fake4.com',
-        });
-        result.push({
-            id: '5',
-            name: '참깨',
-            photoUrl: 'http://www/fake5.com',
-        });
-
-        return result;
-    }
-
     @Post('/journals')
     fakeJournalsSave() {
         return true;
