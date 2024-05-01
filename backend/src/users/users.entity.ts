@@ -34,5 +34,31 @@ export class Users {
     refreshToken: string;
 
     @CreateDateColumn()
-    created_at: Date;
+    createdAt: Date;
+
+    constructor() {}
+
+    static create(
+        id: number,
+        nickname: string,
+        role: Role,
+        mainDogId: number,
+        oauthId: string,
+        oauthAccessToken: string,
+        oauthRefreshToken: string,
+        refreshToken: string,
+        createAt: Date
+    ) {
+        const user = new Users();
+        user.id = id;
+        user.nickname = nickname;
+        user.role = role;
+        user.mainDogId = mainDogId;
+        user.oauthId = oauthId;
+        user.oauthAccessToken = oauthAccessToken;
+        user.oauthRefreshToken = oauthRefreshToken;
+        user.refreshToken = refreshToken;
+        user.createdAt = createAt;
+        return user;
+    }
 }
