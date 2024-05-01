@@ -51,10 +51,10 @@ export class TokenService {
     }
 
     verify(token: string) {
-        const data = this.jwtService.verify<JwtPayload>(token, {
+        const payload = this.jwtService.verify<JwtPayload>(token, {
             ignoreExpiration: false,
         });
 
-        return data;
+        return payload;
     }
 }
