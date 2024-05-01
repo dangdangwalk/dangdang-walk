@@ -29,7 +29,6 @@ export class KakaoService implements OauthService {
 
     private readonly CLIENT_ID = this.configService.get<string>('KAKAO_CLIENT_ID');
     private readonly CLIENT_SECRET = this.configService.get<string>('KAKAO_CLIENT_SECRET');
-    private readonly REDIRECT_URI = this.configService.get<string>('KAKAO_REDIRECT_URI');
 
     async requestToken(authorizeCode: string) {
         const { data } = await firstValueFrom(
@@ -39,7 +38,6 @@ export class KakaoService implements OauthService {
                     code: authorizeCode,
                     grant_type: 'authorization_code',
                     client_id: this.CLIENT_ID,
-                    redirect_uri: this.REDIRECT_URI,
                     client_secret: this.CLIENT_SECRET,
                 },
                 {
