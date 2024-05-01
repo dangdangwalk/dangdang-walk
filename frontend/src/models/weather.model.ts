@@ -14,7 +14,7 @@ type weatherCategory =
     | 'VEC' // 풍향
     | 'WSD'; //풍속
 
-export interface Weather {
+export interface WeatherData {
     baseDate: string;
     baseTime: string;
     category: weatherCategory;
