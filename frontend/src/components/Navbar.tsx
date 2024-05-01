@@ -7,7 +7,7 @@ import WalkOn from '@/assets/icons/navbar/walk_on.svg';
 function Navbar() {
     const location = useLocation();
     return (
-        <div className="fixed w-full left-0 bottom-0 border-t border-slate-300 h-15">
+        <div className="fixed w-full left-0 bottom-0 border-t border-slate-300 h-15 bg-neutral-50">
             <div className="flex justify-around items-center">
                 <Link to="/">
                     {location.pathname === '/' ? (
