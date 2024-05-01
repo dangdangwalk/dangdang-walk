@@ -41,7 +41,7 @@
         "eject": "react-scripts eject",
         "typecheck": "tsc --noEmit --skipLibCheck",
         "format": "prettier . --write",
-        "lint": "eslint --fix './src/**/*.{js,ts,jsx,tsx}'",
+        "lint": "eslint --fix \"./src/**/*.{js,ts,jsx,tsx}\"",
         "prepare": "cd .. && husky frontend/.husky"
     },
     "lint-staged": {
