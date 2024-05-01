@@ -2,9 +2,10 @@ import { Body, Controller, Delete, Get, Post, Res, UseGuards } from '@nestjs/com
 import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
-import { RefreshTokenPayload, TOKEN_LIFETIME_MAP } from './token/token.service';
+import { AccessTokenPayload, RefreshTokenPayload, TOKEN_LIFETIME_MAP } from './token/token.service';
 import { RefreshTokenGuard } from './guards/refreshToken.guard';
 import { User } from 'src/users/decorators/user.decorator';
+import { AuthGuard } from './guards/auth.guard';
 
 export type OauthProvider = 'google' | 'kakao' | 'naver';
 
@@ -44,12 +45,17 @@ export class AuthController {
     logout() {}
 
     @Delete('deactivate')
-    deactivate() {}
+    @UseGuards(AuthGuard)
+    async deactivate(@User() { userId }: AccessTokenPayload, @Res({ passthrough: true }) response: Response) {
+        await this.authService.deactivate(userId);
+
+        response.clearCookie('refreshToken');
+    }
 
     @Get('token')
     @UseGuards(RefreshTokenGuard)
-    async token(@User() user: RefreshTokenPayload, @Res({ passthrough: true }) response: Response) {
-        const { accessToken, refreshToken } = await this.authService.reissueTokens(user.oauthId, user.provider);
+    async token(@User() { oauthId, provider }: RefreshTokenPayload, @Res({ passthrough: true }) response: Response) {
+        const { accessToken, refreshToken } = await this.authService.reissueTokens(oauthId, provider);
 
         response.cookie('refreshToken', refreshToken, {
             httpOnly: true,
