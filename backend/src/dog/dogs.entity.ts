@@ -11,10 +11,16 @@ export class Dogs {
 
     @OneToOne(() => DogWalkDay, { nullable: false })
     @JoinColumn({ name: 'walk_day_id' })
-    walkDayId: DogWalkDay;
+    walkDay: DogWalkDay;
+
+    @Column({ name: 'walk_day_id' })
+    walkDayId: number;
 
     @OneToOne(() => DailyWalkTime, { nullable: false })
     @JoinColumn({ name: 'daily_walk_time_id' })
+    dailyWalkTime: DailyWalkTime;
+
+    @Column({ name: 'daily_walk_time_id' })
     dailyWalkTimeId: number;
 
     @Column()
@@ -22,6 +28,9 @@ export class Dogs {
 
     @OneToOne(() => Breed, { nullable: false })
     @JoinColumn({ name: 'breed_id' })
+    breed: Breed;
+
+    @Column({ name: 'breed_id' })
     breedId: number;
 
     @Column({
