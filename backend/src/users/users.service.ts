@@ -4,7 +4,7 @@ import { Users } from './users.entity';
 import { Repository } from 'typeorm';
 import { Role } from './user-roles.enum';
 import { generateUuid } from '../utils/hash.utils';
-import { UsersDogs } from 'src/users/userDogs.entity';
+import { UsersDogs } from 'src/users/user-dogs.entity';
 
 @Injectable()
 export class UsersService {
