@@ -1,8 +1,9 @@
 import { ConfigService } from '@nestjs/config';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
-import { BadRequestException, Get, Query, Res } from '@nestjs/common';
+import { BadRequestException, Get, Query, Req, Res } from '@nestjs/common';
 import { TOKEN_LIFETIME_MAP } from './token/token.service';
+import { RedirectUrl } from './decorator/redirectUrl.decorator';
 
 export abstract class AuthController {
     constructor(
@@ -11,10 +12,15 @@ export abstract class AuthController {
     ) {}
 
     protected abstract AUTHORIZE_CODE_REQUEST_URL: string;
-    private readonly CLIENT_REDIRECT_URL = this.configService.get<string>('CORS_ORIGIN', 'http://localhost:3000');
 
     @Get()
-    async authorize(@Res({ passthrough: true }) response: Response) {
+    async authorize(
+        @Req() request: Request,
+        @Res({ passthrough: true }) response: Response,
+        @Query('redirect') redirectUrl: string
+    ) {
+        request.session.redirectUrl =
+            redirectUrl ?? this.configService.get<string>('CORS_ORIGIN', 'http://localhost:3000');
         response.redirect(this.AUTHORIZE_CODE_REQUEST_URL);
     }
 
@@ -23,7 +29,8 @@ export abstract class AuthController {
         @Query('code') autherizeCode: string,
         @Res({ passthrough: true }) response: Response,
         @Query('error') error: string,
-        @Query('error_description') errorDescription: string
+        @Query('error_description') errorDescription: string,
+        @RedirectUrl() redirectUrl: string
     ) {
         if (error) throw new BadRequestException(errorDescription ?? error);
 
@@ -39,6 +46,6 @@ export abstract class AuthController {
             secure: Boolean(this.configService.get<string>('NODE_ENV', 'test') === 'production'),
             maxAge: TOKEN_LIFETIME_MAP.refresh.maxAge,
         });
-        response.redirect(this.CLIENT_REDIRECT_URL);
+        response.redirect(redirectUrl);
     }
 }
