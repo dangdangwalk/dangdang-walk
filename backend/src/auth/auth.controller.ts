@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { BadRequestException, Get, Query, Req, Res } from '@nestjs/common';
 import { TOKEN_LIFETIME_MAP } from './token/token.service';
-import { RedirectUrl } from './decorator/redirectUrl.decorator';
+import { RedirectUrl } from './decorators/redirectUrl.decorator';
 
 export abstract class AuthController {
     constructor(
