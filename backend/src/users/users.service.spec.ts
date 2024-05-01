@@ -3,7 +3,7 @@ import { Repository } from 'typeorm';
 import { Users } from './users.entity';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { UsersDogs } from './userDogs.entity';
+import { UsersDogs } from './user-dogs.entity';
 import { mockUser } from '../fixture/users.fixture';
 import { NotFoundException } from '@nestjs/common';
 
