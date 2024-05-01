@@ -1,7 +1,6 @@
 import { IsArray, IsInt } from 'class-validator';
 
-export class WalkCommand {
+export class WalkCommandDto {
     @IsArray()
-    @IsInt({ each: true })
-    dog_id: number[];
+    dogId: string[];
 }
