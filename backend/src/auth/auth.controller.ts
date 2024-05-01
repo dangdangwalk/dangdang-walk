@@ -42,7 +42,10 @@ export class AuthController {
     }
 
     @Post('logout')
-    logout() {}
+    @UseGuards(AuthGuard)
+    async logout(@Res({ passthrough: true }) response: Response) {
+        response.clearCookie('refreshToken');
+    }
 
     @Delete('deactivate')
     @UseGuards(AuthGuard)
