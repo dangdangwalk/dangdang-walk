@@ -38,6 +38,10 @@ export class AuthService {
         return { accessToken, refreshToken };
     }
 
+    async deactivate(userId: number): Promise<void> {
+        await this.usersService.remove(userId);
+    }
+
     async validateAccessToken(userId: number): Promise<boolean> {
         try {
             await this.usersService.findOne(userId);
