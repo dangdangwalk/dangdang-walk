@@ -17,7 +17,15 @@ export default function Health() {
     );
 
     async function handleClick() {
-        const res = await axios.get('http://localhost:3333/health');
-        console.log(res);
+        try {
+            const res = await axios.get('http://localhost:3333/health');
+            console.log(res);
+
+            setIsSuccess(true);
+        } catch (err) {
+            console.error(err);
+
+            setIsSuccess(false);
+        }
     }
 }
