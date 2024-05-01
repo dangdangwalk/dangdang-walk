@@ -52,7 +52,6 @@ export class UsersService {
         return this.userRepo.save(user);
     }
 
-    //TODO : row를 지우지 않고 상태만 탈퇴로 바꾼다
     async remove(id: number) {
         const user = await this.findOne(id);
         if (!user) throw new NotFoundException('users not found');
