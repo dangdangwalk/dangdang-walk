@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('daily_walk_time')
 export class DailyWalkTime {
@@ -8,6 +8,11 @@ export class DailyWalkTime {
     @Column()
     duration: number;
 
-    @Column({ name: 'updated_at' })
+    @CreateDateColumn({ name: 'updated_at' })
     updatedAt: Date;
+
+    @BeforeUpdate()
+    setUpdatedAtBeforeUpdate() {
+        this.updatedAt = new Date();
+    }
 }

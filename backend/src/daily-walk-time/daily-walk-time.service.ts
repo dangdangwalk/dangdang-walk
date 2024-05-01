@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class DailyWalkTimeService {}
+export class DailyWalkTimeService {
+}
