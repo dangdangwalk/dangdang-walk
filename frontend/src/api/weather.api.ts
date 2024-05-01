@@ -1,4 +1,3 @@
-import { WeatherData } from '@/models/weather.model';
 import { createClient } from './http';
 
 const REACT_APP_WEATHER_URL = process.env.REACT_APP_WEATHER_URL;
