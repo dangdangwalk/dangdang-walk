@@ -2,9 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
-import { AuthService } from '../auth.service';
-import { TokenService } from '../token/token.service';
-import { UsersService } from 'src/users/users.service';
+import { OauthService } from './oauth.service.interface';
 
 interface requestTokenResponse {
     access_token: string;
@@ -26,26 +24,22 @@ interface requestUserInfoResponse {
 }
 
 @Injectable()
-export class GoogleService extends AuthService {
+export class GoogleService implements OauthService {
     constructor(
-        configService: ConfigService,
-        httpService: HttpService,
-        tokenService: TokenService,
-        usersService: UsersService
-    ) {
-        super(configService, httpService, tokenService, usersService, 'google');
-    }
+        private readonly configService: ConfigService,
+        private readonly httpService: HttpService
+    ) {}
 
     private readonly CLIENT_ID = this.configService.get<string>('GOOGLE_CLIENT_ID');
     private readonly CLIENT_SECRET = this.configService.get<string>('GOOGLE_CLIENT_SECRET');
     private readonly REDIRECT_URI = this.configService.get<string>('GOOGLE_REDIRECT_URI');
 
-    protected async requestToken(autherizeCode: string) {
+    async requestToken(authorizeCode: string) {
         const { data } = await firstValueFrom(
             this.httpService.post<requestTokenResponse>(`https://oauth2.googleapis.com/token`, {
                 client_id: this.CLIENT_ID,
                 client_secret: this.CLIENT_SECRET,
-                code: autherizeCode,
+                code: authorizeCode,
                 grant_type: 'authorization_code',
                 redirect_uri: this.REDIRECT_URI,
             })
@@ -54,7 +48,7 @@ export class GoogleService extends AuthService {
         return data;
     }
 
-    protected async requestUserId(accessToken: string) {
+    async requestUserId(accessToken: string) {
         const { data } = await firstValueFrom(
             this.httpService.get<requestUserInfoResponse>(
                 `https://oauth2.googleapis.com/tokeninfo?access_token=${accessToken}`

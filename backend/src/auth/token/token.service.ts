@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Provider } from '../auth.service';
+import { OauthProvider } from '../auth.controller';
 
 interface JwtPayload {
     userId: number;
-    provider: Provider;
+    provider: OauthProvider;
 }
 
 type TokenType = 'access' | 'refresh';
 type TokenExpiryMap = {
     [key in TokenType]: {
         expiresIn: string;
-        maxAge: number;
+        maxAge: number; // [ms]
     };
 };
 
@@ -24,7 +24,7 @@ export const TOKEN_LIFETIME_MAP: TokenExpiryMap = {
 export class TokenService {
     constructor(private jwtService: JwtService) {}
 
-    signAccessToken(userId: number, provider: Provider) {
+    signAccessToken(userId: number, provider: OauthProvider) {
         const payload: JwtPayload = {
             userId,
             provider,

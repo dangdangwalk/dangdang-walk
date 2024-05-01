@@ -2,9 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
-import { AuthService } from '../auth.service';
-import { TokenService } from '../token/token.service';
-import { UsersService } from 'src/users/users.service';
+import { OauthService } from './oauth.service.interface';
 
 interface requestTokenResponse {
     token_type: string;
@@ -23,26 +21,22 @@ interface requestUserInfoResponse {
 }
 
 @Injectable()
-export class KakaoService extends AuthService {
+export class KakaoService implements OauthService {
     constructor(
-        configService: ConfigService,
-        httpService: HttpService,
-        tokenService: TokenService,
-        usersService: UsersService
-    ) {
-        super(configService, httpService, tokenService, usersService, 'kakao');
-    }
+        private readonly configService: ConfigService,
+        private readonly httpService: HttpService
+    ) {}
 
     private readonly CLIENT_ID = this.configService.get<string>('KAKAO_CLIENT_ID');
     private readonly CLIENT_SECRET = this.configService.get<string>('KAKAO_CLIENT_SECRET');
     private readonly REDIRECT_URI = this.configService.get<string>('KAKAO_REDIRECT_URI');
 
-    protected async requestToken(autherizeCode: string) {
+    async requestToken(authorizeCode: string) {
         const { data } = await firstValueFrom(
             this.httpService.post<requestTokenResponse>(
                 'https://kauth.kakao.com/oauth/token',
                 {
-                    code: autherizeCode,
+                    code: authorizeCode,
                     grant_type: 'authorization_code',
                     client_id: this.CLIENT_ID,
                     redirect_uri: this.REDIRECT_URI,
@@ -59,7 +53,7 @@ export class KakaoService extends AuthService {
         return data;
     }
 
-    protected async requestUserId(accessToken: string) {
+    async requestUserId(accessToken: string) {
         const { data } = await firstValueFrom(
             this.httpService.get<requestUserInfoResponse>('https://kapi.kakao.com/v1/user/access_token_info', {
                 headers: {

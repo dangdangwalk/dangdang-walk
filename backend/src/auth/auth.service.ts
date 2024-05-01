@@ -1,31 +1,28 @@
-import { HttpService } from '@nestjs/axios';
-import { ConfigService } from '@nestjs/config';
 import { TokenService } from './token/token.service';
 import { UsersService } from 'src/users/users.service';
+import { Injectable } from '@nestjs/common';
+import { OauthProvider } from './auth.controller';
+import { KakaoService } from './oauth/kakao.service';
+import { NaverService } from './oauth/naver.service';
+import { GoogleService } from './oauth/google.service';
 
-export type Provider = 'kakao' | 'naver' | 'google';
-
-export abstract class AuthService {
+@Injectable()
+export class AuthService {
     constructor(
-        protected readonly configService: ConfigService,
-        protected readonly httpService: HttpService,
         private readonly tokenService: TokenService,
-        protected readonly usersService: UsersService,
-        protected readonly PROVIDER: Provider
+        private readonly usersService: UsersService,
+        private readonly googleService: GoogleService,
+        private readonly kakaoService: KakaoService,
+        private readonly naverService: NaverService
     ) {}
 
-    protected abstract requestToken(autherizeCode: string): Promise<{
-        access_token: string;
-        refresh_token: string;
-        [key: string]: any;
-    }>;
-
-    protected abstract requestUserId(accessToken: string): Promise<string>;
-
-    async login(autherizeCode: string): Promise<{ accessToken: string; refreshToken: string }> {
+    async login(
+        authorizeCode: string,
+        provider: OauthProvider
+    ): Promise<{ accessToken: string; refreshToken: string }> {
         const { access_token: oauthAccessToken, refresh_token: oauthRefreshToken } =
-            await this.requestToken(autherizeCode);
-        const oauthId = await this.requestUserId(oauthAccessToken);
+            await this[`${provider}Service`].requestToken(authorizeCode);
+        const oauthId = await this[`${provider}Service`].requestUserId(oauthAccessToken);
 
         const refreshToken = this.tokenService.signRefreshToken(oauthId);
 
@@ -36,7 +33,7 @@ export abstract class AuthService {
             refreshToken
         );
 
-        const accessToken = this.tokenService.signAccessToken(userId, this.PROVIDER);
+        const accessToken = this.tokenService.signAccessToken(userId, provider);
 
         return { accessToken, refreshToken };
     }
