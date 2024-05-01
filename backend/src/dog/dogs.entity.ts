@@ -9,18 +9,18 @@ export class Dogs {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @OneToOne(() => DogWalkDay)
+    @OneToOne(() => DogWalkDay, { nullable: false })
     @JoinColumn({ name: 'walk_day_id' })
     walkDayId: DogWalkDay;
 
-    @OneToOne(() => DailyWalkTime)
+    @OneToOne(() => DailyWalkTime, { nullable: false })
     @JoinColumn({ name: 'daily_walk_time_id' })
-    DailyWalkTimeId: number;
+    dailyWalkTimeId: number;
 
     @Column()
     name: string;
 
-    @OneToOne(() => Breed)
+    @OneToOne(() => Breed, { nullable: false })
     @JoinColumn({ name: 'breed_id' })
     breedId: number;
 
