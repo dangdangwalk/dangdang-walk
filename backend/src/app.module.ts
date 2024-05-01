@@ -11,7 +11,7 @@ import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { WinstonLoggerModule } from './common/logger/winstonLogger.module';
 import { AuthModule } from './auth/auth.module';
 import { FakeModule } from './fake/fake.module';
-import { DogModule } from './dog/dog.module';
+import { DogsModule } from './dogs/dogs.module';
 import { WalkModule } from './walk/walk.module';
 import { BreedModule } from './breed/breed.module';
 import { DogWalkDayModule } from './dog-walk-day/dog-walk-day.module';
@@ -57,7 +57,7 @@ import { DogWalkDayModule } from './dog-walk-day/dog-walk-day.module';
         UsersModule,
         ConfigModule,
         AuthModule,
-        DogModule,
+        DogsModule,
         WalkModule,
         BreedModule,
         DogWalkDayModule,

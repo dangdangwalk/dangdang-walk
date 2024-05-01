@@ -5,9 +5,9 @@ export class DogStatisticDto {
 
     photoUrl: string;
 
-    amountOfWalk: string;
+    amountOfWalk: number;
 
-    walkTime: string;
+    walkTime: number;
 
     weeklyWalkCheck: number[];
 }

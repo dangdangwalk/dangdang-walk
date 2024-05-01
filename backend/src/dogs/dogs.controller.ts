@@ -2,9 +2,10 @@ import { Controller, Get } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { DogsService } from './dogs.service';
 import { BreedService } from 'src/breed/breed.service';
+import { DogWalkDayService } from 'src/dog-walk-day/dog-walk-day.service';
 
 export type DogProfile = {
-    dogId: number;
+    id: number;
     name: string;
     photoUrl: string;
 };
@@ -13,8 +14,7 @@ export type DogProfile = {
 export class DogsController {
     constructor(
         private readonly usersService: UsersService,
-        private readonly dogsService: DogsService,
-        private readonly breedService: BreedService
+        private readonly dogsService: DogsService
     ) {}
 
     @Get('/walk-available')
@@ -23,11 +23,9 @@ export class DogsController {
         return await this.dogsService.truncateNotAvaialableDog(ownDogs);
     }
 
+    //TODO : 로직을 서비스로 이관
     @Get('/statistics')
     async getDogsStatistics() {
-        const ownDogs = await this.usersService.getDogsList(1);
-        const mininumActivies = await this.breedService.getActivityList(ownDogs);
-        //const walkDays await
-        console.log(mininumActivies);
+        return this.dogsService.getDogsStatistics();
     }
 }

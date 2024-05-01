@@ -7,7 +7,7 @@ import { In, Repository } from 'typeorm';
 export class DailyWalkTimeService {
     constructor(@InjectRepository(DailyWalkTime) private readonly dailyWalkTimeRepo: Repository<DailyWalkTime>) {}
 
-    async getCurrntDurationList(walkTimeIds: number[]) {
+    async getWalkTimeList(walkTimeIds: number[]) {
         const walkTimeList = await this.dailyWalkTimeRepo.find({ where: { id: In(walkTimeIds) } });
         return walkTimeList.map((cur) => {
             return cur.duration;
