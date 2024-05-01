@@ -1,13 +1,13 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 // import { getToken, removeToken } from '../store/authStore';
 
-const { REACT_APP_BASE_URL } = process.env;
+const { REACT_APP_NEST_BASE_URL } = process.env;
 const DEFAULT_TIMEOUT = 30000;
 
-console.log(REACT_APP_BASE_URL);
+console.log(REACT_APP_NEST_BASE_URL);
 export const createClient = (config?: AxiosRequestConfig): AxiosInstance => {
     const axiosInstance = axios.create({
-        baseURL: REACT_APP_BASE_URL,
+        baseURL: REACT_APP_NEST_BASE_URL,
         timeout: DEFAULT_TIMEOUT,
         headers: {
             'Content-Type': `application/json;charset=UTF-8`,
