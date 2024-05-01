@@ -11,6 +11,8 @@ import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { WinstonLoggerModule } from './common/logger/winstonLogger.module';
 import { AuthModule } from './auth/auth.module';
 import { FakeModule } from './fake/fake.module';
+import { DogModule } from './dog/dog.module';
+import { WalkModule } from './walk/walk.module';
 
 @Module({
     imports: [
@@ -53,6 +55,8 @@ import { FakeModule } from './fake/fake.module';
         UsersModule,
         ConfigModule,
         AuthModule,
+        DogModule,
+        WalkModule,
     ],
     controllers: [AppController, HealthController],
     providers: [
