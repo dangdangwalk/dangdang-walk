@@ -1,15 +1,16 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository, InjectEntityManager } from '@nestjs/typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from './users.entity';
-import { Repository, EntityManager } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Role } from './user-roles.enum';
 import { generateUuid } from '../utils/hash.utils';
+import { UsersDogs } from 'src/users/userDogs.entity';
 
 @Injectable()
 export class UsersService {
     constructor(
         @InjectRepository(Users) private userRepo: Repository<Users>,
-        @InjectEntityManager() private entityManager: EntityManager
+        @InjectRepository(UsersDogs) private usersDogsRepo: Repository<UsersDogs>
     ) {}
 
     async create(
@@ -97,5 +98,11 @@ export class UsersService {
         }
 
         return nickname;
+    }
+
+    async getDogsList(userId: number): Promise<number[]> {
+        const foundDogs = await this.usersDogsRepo.find({ where: { userId: 1 } });
+
+        return [1, 2, 3];
     }
 }
