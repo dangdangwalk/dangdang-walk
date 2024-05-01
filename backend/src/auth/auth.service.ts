@@ -24,7 +24,7 @@ export class AuthService {
             await this[`${provider}Service`].requestToken(authorizeCode);
         const oauthId = await this[`${provider}Service`].requestUserId(oauthAccessToken);
 
-        const refreshToken = this.tokenService.signRefreshToken(oauthId);
+        const refreshToken = this.tokenService.signRefreshToken(oauthId, provider);
 
         const userId = await this.usersService.loginOrCreateUser(
             oauthId,
@@ -39,8 +39,22 @@ export class AuthService {
     }
 
     async validateRefreshToken(token: string, oauthId: string): Promise<boolean> {
-        const user = await this.usersService.findOneWithOauthID(oauthId);
+        const { refreshToken } = await this.usersService.findOneWithOauthID(oauthId);
 
-        return user.refreshToken === token;
+        return refreshToken === token;
+    }
+
+    async reissueTokens(
+        oauthId: string,
+        provider: OauthProvider
+    ): Promise<{ accessToken: string; refreshToken: string }> {
+        const { id: userId } = await this.usersService.findOneWithOauthID(oauthId);
+
+        const accessToken = this.tokenService.signAccessToken(userId, provider);
+        const refreshToken = this.tokenService.signRefreshToken(oauthId, provider);
+
+        this.usersService.update(userId, { refreshToken });
+
+        return { accessToken, refreshToken };
     }
 }
