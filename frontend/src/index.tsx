@@ -1,13 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import Health from '@/pages/Health';
 import Home from '@/pages/Home';
-import Profile from '@/pages/Profile';
 import Login from '@/pages/Login';
+import Profile from '@/pages/Profile';
+import React from 'react';
 import { CookiesProvider } from 'react-cookie';
+import ReactDOM from 'react-dom/client';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import App from './App';
+import './index.css';
+import reportWebVitals from './reportWebVitals';
 const router = createBrowserRouter([
     {
         path: '/',
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
             {
                 path: '/login',
                 element: <Login />,
+            },
+            {
+                path: '/health',
+                element: <Health />,
             },
         ],
     },
