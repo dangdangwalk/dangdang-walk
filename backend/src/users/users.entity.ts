@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Role } from './user-roles.enum';
-import { Dogs } from 'src/entity/dogs.entity';
+import { Dogs } from 'src/dog/dogs.entity';
 
 @Entity()
 export class Users {
