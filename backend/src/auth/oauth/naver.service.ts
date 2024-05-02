@@ -20,6 +20,11 @@ interface requestUserInfoResponse {
     };
 }
 
+interface requestLogoutResponse {
+    access_token: string;
+    result: string;
+}
+
 @Injectable()
 export class NaverService implements OauthService {
     constructor(
@@ -50,5 +55,13 @@ export class NaverService implements OauthService {
         );
 
         return data.response.id;
+    }
+
+    async requestLogout(accessToken: string) {
+        await firstValueFrom(
+            this.httpService.post<requestLogoutResponse>(
+                `https://nid.naver.com/oauth2.0/token?grant_type=delete&client_id=${this.CLIENT_ID}&client_secret=${this.CLIENT_SECRET}&access_token=${accessToken}&service_provider=NAVER`
+            )
+        );
     }
 }
