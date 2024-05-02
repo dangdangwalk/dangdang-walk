@@ -19,7 +19,10 @@ export class Users {
 
     @ManyToOne(() => Dogs)
     @JoinColumn({ name: 'main_dog_id' })
-    mainDogId: number | null;
+    mainDog: Dogs;
+
+    @Column({ name: 'main_dog_id', nullable: true })
+    mainDogId: number;
 
     @Column({ name: 'oauth_id' })
     oauthId: string;

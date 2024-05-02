@@ -7,13 +7,14 @@ export class Excrements {
     @PrimaryColumn({ name: 'journal_id' })
     @ManyToOne(() => WalkJournals, (WalkJournals) => WalkJournals.id)
     @JoinColumn({ name: 'journal_id' })
-    journalId: number;
+    journal: WalkJournals;
 
     @PrimaryColumn({ name: 'dog_id' })
     @ManyToOne(() => Dogs, (dog) => dog.id)
     @JoinColumn({ name: 'dog_id' })
-    dogId: number;
+    dog: Dogs;
 
+    @Column({ name: '' })
     @Column({
         type: 'enum',
         enum: ['FECES', 'URINE'],

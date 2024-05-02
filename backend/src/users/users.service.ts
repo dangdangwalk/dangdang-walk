@@ -16,7 +16,7 @@ export class UsersService {
     async create(
         nickname: string,
         role: Role,
-        mainDogId: number | null,
+        mainDogId: number | undefined,
         oauthId: string,
         oauthAccessToken: string,
         oauthRefreshToken: string,
@@ -77,7 +77,7 @@ export class UsersService {
             user = await this.create(
                 nickname,
                 Role.User,
-                null,
+                undefined,
                 oauthId,
                 oauthAccessToken,
                 oauthRefreshToken,

@@ -97,7 +97,6 @@ export class DogsService {
                 weeklyWalkCheck: weeklyWalkCheck[i],
             });
         }
-        console.log(result);
         return result;
     }
 
