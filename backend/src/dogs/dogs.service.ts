@@ -100,8 +100,8 @@ export class DogsService {
         return result;
     }
 
-    async getDogsStatistics(): Promise<DogStatisticDto[]> {
-        const ownDogIds = await this.usersService.getDogsList(1);
+    async getDogsStatistics(userId: number): Promise<DogStatisticDto[]> {
+        const ownDogIds = await this.usersService.getDogsList(userId);
         const dogWalkDayIds = await this.getDogWalkDayIdList(ownDogIds);
         const dailyWalkTimeIds = await this.getDailyWalkTimeIdList(ownDogIds);
 
