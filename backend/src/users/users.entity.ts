@@ -1,6 +1,6 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Role } from './user-roles.enum';
-import { Dogs } from 'src/dog/dogs.entity';
+import { Dogs } from 'src/dogs/dogs.entity';
 
 @Entity()
 export class Users {
@@ -19,7 +19,10 @@ export class Users {
 
     @ManyToOne(() => Dogs)
     @JoinColumn({ name: 'main_dog_id' })
-    mainDogId: number | null;
+    mainDog: Dogs;
+
+    @Column({ name: 'main_dog_id', nullable: true })
+    mainDogId: number;
 
     @Column({ name: 'oauth_id' })
     oauthId: string;

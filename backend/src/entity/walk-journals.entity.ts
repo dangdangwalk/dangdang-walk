@@ -8,6 +8,9 @@ export class WalkJournals {
 
     @ManyToOne(() => Users, (users) => users.id)
     @JoinColumn({ name: 'user_id' })
+    user: Users;
+
+    @Column({ name: 'user_id' })
     userId: number;
 
     @Column()

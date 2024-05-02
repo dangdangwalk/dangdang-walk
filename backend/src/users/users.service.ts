@@ -4,7 +4,7 @@ import { Users } from './users.entity';
 import { Repository } from 'typeorm';
 import { Role } from './user-roles.enum';
 import { generateUuid } from '../utils/hash.utils';
-import { UsersDogs } from 'src/users/userDogs.entity';
+import { UsersDogs } from 'src/users/user-dogs.entity';
 
 @Injectable()
 export class UsersService {
@@ -16,7 +16,7 @@ export class UsersService {
     async create(
         nickname: string,
         role: Role,
-        mainDogId: number | null,
+        mainDogId: number | undefined,
         oauthId: string,
         oauthAccessToken: string,
         oauthRefreshToken: string,
@@ -77,7 +77,7 @@ export class UsersService {
             user = await this.create(
                 nickname,
                 Role.User,
-                null,
+                undefined,
                 oauthId,
                 oauthAccessToken,
                 oauthRefreshToken,

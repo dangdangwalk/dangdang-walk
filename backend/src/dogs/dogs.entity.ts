@@ -1,27 +1,36 @@
 import { Column, Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
-import { DogWalkDay } from '../entity/dogWalkDay.entity';
-import { Breed } from '../entity/breed.entity';
-import { Gender } from '../entity/dogs-gender.enum';
-import { DailyWalkTime } from '../entity/dailyWalkTime.entity';
+import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
+import { Breed } from '../breed/breed.entity';
+import { Gender } from './dogs-gender.enum';
+import { DailyWalkTime } from '../daily-walk-time/daily-walk-time.entity';
 
 @Entity('dogs')
 export class Dogs {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @OneToOne(() => DogWalkDay)
+    @OneToOne(() => DogWalkDay, { nullable: false })
     @JoinColumn({ name: 'walk_day_id' })
-    walkDayId: DogWalkDay;
+    walkDay: DogWalkDay;
 
-    @OneToOne(() => DailyWalkTime)
+    @Column({ name: 'walk_day_id' })
+    walkDayId: number;
+
+    @OneToOne(() => DailyWalkTime, { nullable: false })
     @JoinColumn({ name: 'daily_walk_time_id' })
-    DailyWalkTimeId: number;
+    dailyWalkTime: DailyWalkTime;
+
+    @Column({ name: 'daily_walk_time_id' })
+    dailyWalkTimeId: number;
 
     @Column()
     name: string;
 
-    @OneToOne(() => Breed)
+    @OneToOne(() => Breed, { nullable: false })
     @JoinColumn({ name: 'breed_id' })
+    breed: Breed;
+
+    @Column({ name: 'breed_id' })
     breedId: number;
 
     @Column({
