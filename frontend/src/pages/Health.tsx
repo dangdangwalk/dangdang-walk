@@ -17,8 +17,10 @@ export default function Health() {
     );
 
     async function handleClick() {
+        const { REACT_APP_NEST_BASE_URL } = process.env;
+
         try {
-            const res = await axios.get('http://localhost:3333/health');
+            const res = await axios.get(`${REACT_APP_NEST_BASE_URL}/health`);
             console.log(res);
 
             setIsSuccess(true);
