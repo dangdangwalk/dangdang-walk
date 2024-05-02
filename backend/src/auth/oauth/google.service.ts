@@ -33,13 +33,14 @@ export class GoogleService implements OauthService {
     private readonly CLIENT_ID = this.configService.get<string>('GOOGLE_CLIENT_ID');
     private readonly CLIENT_SECRET = this.configService.get<string>('GOOGLE_CLIENT_SECRET');
 
-    async requestToken(authorizeCode: string) {
+    async requestToken(authorizeCode: string, redirectURI: string) {
         const { data } = await firstValueFrom(
             this.httpService.post<requestTokenResponse>(`https://oauth2.googleapis.com/token`, {
                 client_id: this.CLIENT_ID,
                 client_secret: this.CLIENT_SECRET,
                 code: authorizeCode,
                 grant_type: 'authorization_code',
+                redirect_uri: redirectURI,
             })
         );
 

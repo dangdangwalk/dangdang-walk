@@ -25,9 +25,10 @@ export class AuthController {
     async login(
         @Body('authorizeCode') authorizeCode: string,
         @Body('provider') provider: OauthProvider,
+        @Body('redirectURI') redirectURI: string,
         @Res({ passthrough: true }) response: Response
     ): Promise<loginResponse> {
-        const { accessToken, refreshToken } = await this.authService.login(authorizeCode, provider);
+        const { accessToken, refreshToken } = await this.authService.login(authorizeCode, provider, redirectURI);
 
         response.cookie('refreshToken', refreshToken, {
             httpOnly: true,
