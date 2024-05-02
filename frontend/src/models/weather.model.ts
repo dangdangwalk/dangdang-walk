@@ -24,3 +24,24 @@ export interface WeatherData {
     nx: number;
     ny: number;
 }
+
+export interface SunsetSunrise {
+    aste: string;
+    astm: string;
+    civile: string;
+    civilm: string;
+    latitude: string;
+    latitudeNum: number;
+    location: string;
+    locdate: string;
+    longitude: string;
+    longitudeNum: number;
+    moonrise: string;
+    moonset: string;
+    moontransit: string;
+    naute: string;
+    nautm: string;
+    sunrise: string;
+    sunset: string;
+    suntransit: string;
+}
