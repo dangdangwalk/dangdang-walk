@@ -6,6 +6,8 @@ import { TokenService } from './token/token.service';
 import { OauthModule } from './oauth/oauth.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { AuthGuard } from './guards/auth.guard';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
     imports: [
@@ -20,6 +22,13 @@ import { AuthService } from './auth.service';
         OauthModule,
     ],
     controllers: [AuthController],
-    providers: [AuthService, TokenService],
+    providers: [
+        AuthService,
+        TokenService,
+        {
+            provide: APP_GUARD,
+            useClass: AuthGuard,
+        },
+    ],
 })
 export class AuthModule {}
