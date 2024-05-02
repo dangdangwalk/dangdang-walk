@@ -49,7 +49,6 @@ services:
     build:
       context: frontend
       dockerfile: Dockerfile
-      target: dev
     volumes:
       - ./frontend:/app
       - /app/node_modules
