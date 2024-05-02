@@ -40,6 +40,13 @@ export class AuthService {
         return { accessToken, refreshToken };
     }
 
+    async logout(userId: number, provider: OauthProvider): Promise<void> {
+        if (provider !== 'google') {
+            const { oauthAccessToken } = await this.usersService.findOne(userId);
+            await this[`${provider}Service`].requestLogout(oauthAccessToken);
+        }
+    }
+
     async deactivate(userId: number): Promise<void> {
         await this.usersService.remove(userId);
     }
@@ -54,7 +61,7 @@ export class AuthService {
     }
 
     async validateRefreshToken(token: string, oauthId: string): Promise<boolean> {
-        const { refreshToken } = await this.usersService.findOneWithOauthID(oauthId);
+        const { refreshToken } = await this.usersService.findOneWithOauthId(oauthId);
 
         return refreshToken === token;
     }
@@ -63,7 +70,7 @@ export class AuthService {
         oauthId: string,
         provider: OauthProvider
     ): Promise<{ accessToken: string; refreshToken: string }> {
-        const { id: userId } = await this.usersService.findOneWithOauthID(oauthId);
+        const { id: userId } = await this.usersService.findOneWithOauthId(oauthId);
 
         const accessToken = this.tokenService.signAccessToken(userId, provider);
         const refreshToken = this.tokenService.signRefreshToken(oauthId, provider);

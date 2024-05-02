@@ -44,7 +44,9 @@ export class AuthController {
 
     @Post('logout')
     @UseGuards(AuthGuard)
-    async logout(@Res({ passthrough: true }) response: Response) {
+    async logout(@User() { userId, provider }: AccessTokenPayload, @Res({ passthrough: true }) response: Response) {
+        await this.authService.logout(userId, provider);
+
         response.clearCookie('refreshToken');
     }
 
