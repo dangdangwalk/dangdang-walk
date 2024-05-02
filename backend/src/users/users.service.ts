@@ -58,7 +58,7 @@ export class UsersService {
         return this.userRepo.remove(user);
     }
 
-    async findOneWithOauthID(oauthId: string) {
+    async findOneWithOauthId(oauthId: string) {
         const user = await this.userRepo.findOne({ where: { oauthId } });
         if (!user) throw new NotFoundException('User not found');
         return user;
