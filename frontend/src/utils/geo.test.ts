@@ -1,4 +1,4 @@
-import { gpsToGrid } from './geo';
+import { getSidoCode, gpsToGrid } from './geo';
 import { describe, expect, it } from 'vitest';
 
 const result = [
@@ -19,5 +19,15 @@ describe('위치 정보 관환 테스트', () => {
         grid.forEach((g, i) => {
             expect(g).toStrictEqual(result[i]);
         });
+    });
+    it('시도 코드 가져오기', () => {
+        const seoul = getSidoCode('서울특별시');
+        const chung = getSidoCode('충청북도');
+
+        const undifine = getSidoCode('');
+
+        expect(seoul).toBe('서울');
+        expect(chung).toBe('충북');
+        expect(undifine).toBe('전국');
     });
 });
