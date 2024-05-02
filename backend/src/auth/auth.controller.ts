@@ -51,8 +51,8 @@ export class AuthController {
     }
 
     @Delete('deactivate')
-    async deactivate(@User() { userId }: AccessTokenPayload, @Res({ passthrough: true }) response: Response) {
-        await this.authService.deactivate(userId);
+    async deactivate(@User() { userId, provider }: AccessTokenPayload, @Res({ passthrough: true }) response: Response) {
+        await this.authService.deactivate(userId, provider);
 
         response.clearCookie('refreshToken');
     }
