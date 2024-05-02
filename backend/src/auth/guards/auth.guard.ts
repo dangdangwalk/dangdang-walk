@@ -2,15 +2,25 @@ import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from
 import { Request } from 'express';
 import { AccessTokenPayload, TokenService } from '../token/token.service';
 import { AuthService } from '../auth.service';
+import { Reflector } from '@nestjs/core';
+import { SKIP } from '../decorators/public.decorator';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
     constructor(
         private tokenService: TokenService,
-        private authService: AuthService
+        private authService: AuthService,
+        private reflector: Reflector
     ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
+        const skipAuthGuard = this.reflector.getAllAndOverride<boolean>(SKIP, [
+            context.getHandler(),
+            context.getClass(),
+        ]);
+
+        if (skipAuthGuard) return true;
+
         const request = context.switchToHttp().getRequest();
         const token = this.extractTokenFromHeader(request);
 
