@@ -29,6 +29,7 @@ export class AuthController {
         @Body('redirectURI') redirectURI: string,
         @Res({ passthrough: true }) response: Response
     ): Promise<loginResponse> {
+        redirectURI = `${this.configService.get<string>('CORS_ORIGIN')}${redirectURI}`;
         const { accessToken, refreshToken } = await this.authService.login(authorizeCode, provider, redirectURI);
 
         response.cookie('refreshToken', refreshToken, {
