@@ -5,6 +5,8 @@ import { BreedService } from 'src/breed/breed.service';
 import { DogWalkDayService } from 'src/dog-walk-day/dog-walk-day.service';
 import { DogStatisticDto } from './dto/dog-statistic.dto';
 import { Serialize } from 'src/common/interceptor/serialize.interceptor';
+import { User } from 'src/users/decorators/user.decorator';
+import { AccessTokenPayload } from 'src/auth/token/token.service';
 
 export type DogProfile = {
     id: number;
@@ -20,14 +22,14 @@ export class DogsController {
     ) {}
 
     @Get('/walk-available')
-    async getAvailableDogs(): Promise<DogProfile[]> {
-        const ownDogs = await this.usersService.getDogsList(1);
+    async getAvailableDogs(@User() user: AccessTokenPayload): Promise<DogProfile[]> {
+        const ownDogs = await this.usersService.getDogsList(user.userId);
         return await this.dogsService.truncateNotAvaialableDog(ownDogs);
     }
 
     @Serialize(DogStatisticDto)
     @Get('/statistics')
-    async getDogsStatistics() {
-        return this.dogsService.getDogsStatistics();
+    async getDogsStatistics(@User() user: AccessTokenPayload) {
+        return this.dogsService.getDogsStatistics(user.userId);
     }
 }

@@ -106,8 +106,10 @@ export class UsersService {
     }
 
     async getDogsList(userId: number): Promise<number[]> {
-        const foundDogs = await this.usersDogsRepo.find({ where: { userId: 1 } });
-
-        return [1, 2, 3];
+        const foundDogs = await this.usersDogsRepo.find({ where: { userId } });
+        if (!foundDogs) {
+            throw new NotFoundException();
+        }
+        return foundDogs.map((cur) => cur.dogId);
     }
 }
