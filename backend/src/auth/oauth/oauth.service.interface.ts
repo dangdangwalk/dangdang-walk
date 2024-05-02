@@ -1,5 +1,8 @@
 export interface OauthService {
-    requestToken(authorizeCode: string): Promise<{
+    requestToken(
+        authorizeCode: string,
+        redirectURI?: string
+    ): Promise<{
         access_token: string;
         refresh_token: string;
         [key: string]: any;

@@ -18,10 +18,12 @@ export class AuthService {
 
     async login(
         authorizeCode: string,
-        provider: OauthProvider
+        provider: OauthProvider,
+        redirectURI: string
     ): Promise<{ accessToken: string; refreshToken: string }> {
-        const { access_token: oauthAccessToken, refresh_token: oauthRefreshToken } =
-            await this[`${provider}Service`].requestToken(authorizeCode);
+        const { access_token: oauthAccessToken, refresh_token: oauthRefreshToken } = await this[
+            `${provider}Service`
+        ].requestToken(authorizeCode, redirectURI);
         const oauthId = await this[`${provider}Service`].requestUserId(oauthAccessToken);
 
         const refreshToken = this.tokenService.signRefreshToken(oauthId, provider);
