@@ -68,7 +68,7 @@ export class KakaoService implements OauthService {
         return data.id.toString();
     }
 
-    async requestLogout(accessToken: string) {
+    async requestTokenExpiration(accessToken: string) {
         await firstValueFrom(
             this.httpService.post<requestLogoutResponse>(
                 'https://kapi.kakao.com/v1/user/logout',

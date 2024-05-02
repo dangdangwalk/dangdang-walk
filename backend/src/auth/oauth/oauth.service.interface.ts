@@ -10,5 +10,5 @@ export interface OauthService {
 
     requestUserId(accessToken: string): Promise<string>;
 
-    requestLogout?(accessToken: string): Promise<void>;
+    requestTokenExpiration(accessToken: string): Promise<void>;
 }
