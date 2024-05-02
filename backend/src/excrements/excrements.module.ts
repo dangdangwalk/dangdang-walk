@@ -1,4 +1,7 @@
 import { Module } from '@nestjs/common';
+import { ExcrementsService } from './excrements.service';
 
-@Module({})
+@Module({
+    providers: [ExcrementsService],
+})
 export class ExcrementsModule {}
