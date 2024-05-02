@@ -20,10 +20,6 @@ interface requestUserInfoResponse {
     app_id: number;
 }
 
-interface requestLogoutResponse {
-    id: number;
-}
-
 @Injectable()
 export class KakaoService implements OauthService {
     constructor(
@@ -70,8 +66,23 @@ export class KakaoService implements OauthService {
 
     async requestTokenExpiration(accessToken: string) {
         await firstValueFrom(
-            this.httpService.post<requestLogoutResponse>(
+            this.httpService.post<{ id: number }>(
                 'https://kapi.kakao.com/v1/user/logout',
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                }
+            )
+        );
+    }
+
+    async requestUnlink(accessToken: string) {
+        await firstValueFrom(
+            this.httpService.post<{ id: number }>(
+                'https://kapi.kakao.com/v1/user/unlink',
                 {},
                 {
                     headers: {

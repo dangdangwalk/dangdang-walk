@@ -46,7 +46,15 @@ export class AuthService {
         await this[`${provider}Service`].requestTokenExpiration(oauthAccessToken);
     }
 
-    async deactivate(userId: number): Promise<void> {
+    async deactivate(userId: number, provider: OauthProvider): Promise<void> {
+        const { oauthAccessToken } = await this.usersService.findOne(userId);
+
+        if (provider === 'kakao') {
+            await this[`${provider}Service`].requestUnlink(oauthAccessToken);
+        } else {
+            await this[`${provider}Service`].requestTokenExpiration(oauthAccessToken);
+        }
+
         await this.usersService.remove(userId);
     }
 
