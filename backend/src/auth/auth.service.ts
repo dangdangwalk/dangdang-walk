@@ -41,10 +41,9 @@ export class AuthService {
     }
 
     async logout(userId: number, provider: OauthProvider): Promise<void> {
-        if (provider !== 'google') {
-            const { oauthAccessToken } = await this.usersService.findOne(userId);
-            await this[`${provider}Service`].requestLogout(oauthAccessToken);
-        }
+        const { oauthAccessToken } = await this.usersService.findOne(userId);
+
+        await this[`${provider}Service`].requestTokenExpiration(oauthAccessToken);
     }
 
     async deactivate(userId: number): Promise<void> {

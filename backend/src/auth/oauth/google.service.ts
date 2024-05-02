@@ -56,4 +56,18 @@ export class GoogleService implements OauthService {
 
         return data.sub;
     }
+
+    async requestTokenExpiration(accessToken: string) {
+        await firstValueFrom(
+            this.httpService.post(
+                `https://oauth2.googleapis.com/revoke?token=${accessToken}`,
+                {},
+                {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                }
+            )
+        );
+    }
 }
