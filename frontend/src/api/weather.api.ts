@@ -1,3 +1,4 @@
+import { WeatherData } from '@/models/weather.model';
 import { createClient } from './http';
 
 const REACT_APP_WEATHER_URL = process.env.REACT_APP_WEATHER_URL;
@@ -10,18 +11,30 @@ const weatherClient = createClient({
     withCredentials: false,
 });
 
-interface FetchWeatherParams {
+interface WeatherParams {
     date: string;
-    time: string;
     nx: number;
     ny: number;
 }
+interface WeatherResponse {
+    response: {
+        header: {
+            resultCode: string;
+            resultMsg: string;
+        };
+        body: {
+            items: {
+                item: WeatherData[];
+            };
+        };
+    };
+}
 
-export const fetchCurrentWeather = async ({ date, time, nx, ny }: FetchWeatherParams) => {
+export const fetchCurrentWeather = async ({ date, nx, ny }: WeatherParams) => {
     try {
         const response = (
-            await weatherClient.get(
-                `/getVilageFcst?serviceKey=${REACT_APP_WEATHER_KEY}&dataType=JSON&numOfRows=10&pageNo=1&base_date=${date}&base_time=${time}&nx=${nx}&ny=${ny}`
+            await weatherClient.get<WeatherResponse>(
+                `/getVilageFcst?serviceKey=${REACT_APP_WEATHER_KEY}&dataType=JSON&numOfRows=260&pageNo=1&base_date=${date}&base_time=0200&nx=${nx}&ny=${ny}`
             )
         ).data.response;
 

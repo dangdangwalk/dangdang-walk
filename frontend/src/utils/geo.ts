@@ -14,7 +14,11 @@ const slat2 = SLAT2 * DEGRAD;
 const olon = OLON * DEGRAD;
 const olat = OLAT * DEGRAD;
 
-export const gpsToGrid = (lat: number, lng: number) => {
+interface Grid {
+    nx: number;
+    ny: number;
+}
+export const gpsToGrid = (lat: number, lng: number): Grid => {
     let sn = Math.tan(Math.PI * 0.25 + slat2 * 0.5) / Math.tan(Math.PI * 0.25 + slat1 * 0.5);
     sn = Math.log(Math.cos(slat1) / Math.cos(slat2)) / Math.log(sn);
     let sf = Math.tan(Math.PI * 0.25 + slat1 * 0.5);
