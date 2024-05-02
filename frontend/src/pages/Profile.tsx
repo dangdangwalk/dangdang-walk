@@ -7,19 +7,18 @@ function Profile() {
     const navigate = useNavigate();
     const { search } = useLocation();
     const params = new URLSearchParams(search);
-    const code = params.get('code');
+    const authorizeCode = params.get('code');
     const { userLogin } = useAuth();
-    console.log(code);
+    const currentURL = window.location.pathname;
     const provider = localStorage.getItem('provider');
-    if (code && provider) {
-        console.log(code);
+    if (authorizeCode && provider) {
+        console.log(authorizeCode);
         console.log(provider);
 
-        userLogin(code, provider);
+        userLogin(authorizeCode, provider, currentURL);
         return <Navigate to="/profile" />;
     }
     const handleLogin = () => {
-        const currentURL = window.location.pathname;
         navigate('/login', { state: { currentURL } });
     };
 

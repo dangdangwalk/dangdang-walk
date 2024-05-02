@@ -13,6 +13,7 @@ const getAccessToken = async (): Promise<ResponseToken> => {
 interface LoginParams {
     authorizeCode: string;
     provider: string;
+    redirectURI: string;
 }
 const login = async (params: LoginParams) => {
     const { data } = await httpClient.post('/auth/login', params);
