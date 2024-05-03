@@ -9,7 +9,6 @@ export default function WeatherInfo() {
     const [skyStatus, setSkyStatus] = useState<SkyStatus>();
 
     useEffect(() => {
-        console.log(weather);
         setSkyStatus(getSkyGrade({ ...weather, time: getCurrentTime(new Date()) }));
     }, [weather]);
 
