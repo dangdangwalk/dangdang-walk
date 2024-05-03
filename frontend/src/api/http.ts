@@ -1,5 +1,4 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-// import { getToken, removeToken } from '../store/authStore';
 
 const { REACT_APP_NEST_BASE_URL } = process.env;
 const DEFAULT_TIMEOUT = 30000;
@@ -12,21 +11,24 @@ export const createClient = (config?: AxiosRequestConfig): AxiosInstance => {
         headers: {
             'Content-Type': `application/json;charset=UTF-8`,
             Accept: 'application/json',
-            // Authorization: getToken() ? `Bearer ${getToken()}` : '',
         },
         withCredentials: true,
         ...config,
     });
+    axiosInstance.interceptors.request.use(
+        (request) => {
+            return request;
+        },
+        (error) => {
+            return Promise.reject(error);
+        }
+    );
 
     axiosInstance.interceptors.response.use(
         (response) => {
             return response;
         },
         (error) => {
-            if (error.response.status === 401) {
-                // removeToken();
-                window.location.href = '/';
-            }
             return Promise.reject(error);
         }
     );
