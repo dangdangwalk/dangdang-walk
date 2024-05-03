@@ -1,16 +1,82 @@
-import { fetchCurrentWeather } from '@/api/weather.api';
+import { fetchAddress } from '@/api/map.api';
+import { fetchAirGrade, fetchCurrentWeather, fetchSunsetSunrise } from '@/api/weather.api';
+import { DEFAULT_ADDRESS } from '@/constants/location';
+import useGeolocation from '@/hooks/useGeolocation';
+import { Weather } from '@/models/weather.model';
 import { getCurrentDate, getHours } from '@/utils/date';
-import { useQuery } from '@tanstack/react-query';
+import { getSidoCode, gpsToGrid } from '@/utils/geo';
+// import { useQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 
-export const useWeather = ({ nx, ny }: { nx: number; ny: number }) => {
+export const useWeather = () => {
+    const { lat, lng } = useGeolocation();
     const date = getCurrentDate(new Date());
-
-    const { isLoading, error, data } = useQuery({
-        queryKey: ['weather'],
-        queryFn: fetchCurrentWeather(date, nx, ny),
+    const [weather, setWeather] = useState<Weather>({
+        maxTemperature: undefined,
+        minTemperature: undefined,
+        sky: undefined,
+        sunrise: undefined,
+        sunset: undefined,
+        temperature: undefined,
+        airGrade: 1,
+        precipitation: undefined,
     });
+    const [address, setAdress] = useState<string>(DEFAULT_ADDRESS);
 
-    // const weatherList = data?.filter((d) => d.baseDate === date);
-    // const maxTemperature = weatherList?.find((w) => w.category === 'TMX')?.fcstValue;
-    // const minTemperature = weatherList?.find((w) => w.category === 'TMN')?.fcstValue;
+    useEffect(() => {
+        const { nx, ny } = gpsToGrid(lat, lng);
+        fetchCurrentWeather(date, nx, ny).then((weatherList) => {
+            const newWeatherList = weatherList?.filter((weather) => weather.baseDate === date);
+            let maxTemperature, minTemperature, temperature, sky, precipitation;
+            const hour = getHours(new Date());
+
+            newWeatherList?.forEach((w) => {
+                if (hour === w.fcstTime.slice(0, 2)) {
+                    if (w.category === 'TMP') {
+                        temperature = w.fcstValue;
+                    }
+                    if (w.category === 'SKY') {
+                        sky = w.fcstValue;
+                    }
+                    if (w.category === 'PTY') {
+                        precipitation = w.fcstValue;
+                    }
+                }
+                if (w.category === 'TMN') {
+                    minTemperature = w.fcstValue;
+                }
+                if (w.category === 'TMX') {
+                    maxTemperature = w.fcstValue;
+                }
+            });
+            setWeather({
+                ...weather,
+                maxTemperature,
+                minTemperature,
+                temperature,
+                precipitation,
+                sky,
+            });
+        });
+        fetchSunsetSunrise(date, Math.floor(lat * 100), Math.floor(lng * 100)).then((sun) => {
+            //Promise<Sunset>
+            setWeather({
+                ...weather,
+                sunrise: sun?.sunrise,
+                sunset: sun?.sunset,
+            });
+        });
+        // fetchAddress(lat, lng).then((add) => {
+        //     const sido = getSidoCode(add?.region_1depth_name ?? '');
+        //     fetchAirGrade(sido).then((grade) => {
+        //         setWeather({
+        //             ...weather,
+        //             airGrade: grade?.khaiGrade ?? 2,
+        //         });
+        //         setAdress(add?.region_3depth_name ?? DEFAULT_ADDRESS);
+        //     });
+        // });
+    }, []);
+
+    return { weather, address };
 };
