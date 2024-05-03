@@ -1,20 +1,22 @@
+import { Weather } from '@/models/weather.model';
+
 export const airGrade = ['', '좋음', '보통', '나쁨', '매우나쁨'];
 
-type Sky = 'dayclear' | 'daycloudy' | 'cloudy' | 'nightclear' | 'nightcloudy' | 'rain' | 'snow';
+export type SkyStatus = 'dayclear' | 'daycloudy' | 'cloudy' | 'nightclear' | 'nightcloudy' | 'rain' | 'snow';
 
-export const getSkyGrade = ({
-    sky,
-    sunrise,
-    sunset,
-    precipitation,
-    time,
-}: {
+interface SkyParams {
+    maxTemperature?: number;
+    minTemperature?: number;
     sky: number;
-    sunrise: string;
-    sunset: string;
+    sunrise: string | undefined;
+    sunset: string | undefined;
+    temperature?: number;
+    airGrade?: number;
     precipitation: number;
     time: string;
-}): Sky => {
+}
+
+export const getSkyGrade = ({ sky, sunrise, sunset, precipitation, time }: SkyParams): SkyStatus => {
     if (precipitation) {
         return precipitation === 1 || precipitation === 5 ? 'rain' : 'snow';
     }

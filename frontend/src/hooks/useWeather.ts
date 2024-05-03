@@ -12,14 +12,14 @@ export const useWeather = () => {
     const { lat, lng } = useGeolocation();
     const date = getCurrentDate(new Date());
     const [weather, setWeather] = useState<Weather>({
-        maxTemperature: undefined,
-        minTemperature: undefined,
-        sky: undefined,
-        sunrise: undefined,
-        sunset: undefined,
-        temperature: undefined,
+        maxTemperature: 28,
+        minTemperature: 0,
+        sky: 1,
+        sunrise: '0600',
+        sunset: '1700',
+        temperature: 15,
         airGrade: 1,
-        precipitation: undefined,
+        precipitation: 0,
     });
     const [address, setAdress] = useState<string>(DEFAULT_ADDRESS);
 
@@ -51,11 +51,11 @@ export const useWeather = () => {
             });
             setWeather({
                 ...weather,
-                maxTemperature,
-                minTemperature,
-                temperature,
-                precipitation,
-                sky,
+                maxTemperature: maxTemperature ?? 28,
+                minTemperature: minTemperature ?? 0,
+                temperature: temperature ?? 15,
+                precipitation: precipitation ?? 0,
+                sky: sky ?? 1,
             });
         });
         fetchSunsetSunrise(date, Math.floor(lat * 100), Math.floor(lng * 100)).then((sun) => {

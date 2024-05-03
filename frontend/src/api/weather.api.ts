@@ -10,6 +10,8 @@ const weatherClient = createClient({
     withCredentials: false,
 });
 
+// TODO: error 코드 처리
+
 export const fetchCurrentWeather = async (date: string, nx: number, ny: number): Promise<WeatherData[] | undefined> => {
     try {
         const response = (

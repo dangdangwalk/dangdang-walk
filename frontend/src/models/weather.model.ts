@@ -73,12 +73,12 @@ export interface AirPolution {
 }
 
 export interface Weather {
-    maxTemperature: number | undefined;
-    minTemperature: number | undefined;
-    sky: number | undefined;
+    maxTemperature: number;
+    minTemperature: number;
+    sky: number;
     sunrise: string | undefined;
     sunset: string | undefined;
-    temperature: number | undefined;
-    airGrade: number | undefined;
-    precipitation: number | undefined;
+    temperature: number;
+    airGrade: number;
+    precipitation: number;
 }
