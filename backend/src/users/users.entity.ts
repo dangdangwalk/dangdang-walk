@@ -24,7 +24,7 @@ export class Users {
     @Column({ name: 'main_dog_id', nullable: true })
     mainDogId: number;
 
-    @Column({ name: 'oauth_id' })
+    @Column({ name: 'oauth_id', unique: true })
     oauthId: string;
 
     @Column({ name: 'oauth_access_token' })
