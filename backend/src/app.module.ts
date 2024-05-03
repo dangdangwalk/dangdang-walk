@@ -17,6 +17,7 @@ import { DogWalkDayModule } from './dog-walk-day/dog-walk-day.module';
 import { JournalModule } from './journals/journals.module';
 import { ExcrementsModule } from './excrements/excrements.module';
 import { WalkLogPhotosModule } from './walk-log-photos/walk-log-photos.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
     imports: [
@@ -56,6 +57,7 @@ import { WalkLogPhotosModule } from './walk-log-photos/walk-log-photos.module';
                 };
             },
         }),
+        AuthModule,
         UsersModule,
         ConfigModule,
         DogsModule,
