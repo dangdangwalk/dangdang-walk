@@ -11,4 +11,12 @@ export interface OauthService {
     requestUserId(accessToken: string): Promise<string>;
 
     requestTokenExpiration(accessToken: string): Promise<void>;
+
+    requestUnlink?(accessToken: string): Promise<void>;
+
+    requestTokenRefresh(refreshToken: string): Promise<{
+        access_token: string;
+        refresh_token?: string;
+        [key: string]: any;
+    }>;
 }

@@ -5,6 +5,7 @@ import { OauthProvider } from './auth.controller';
 import { KakaoService } from './oauth/kakao.service';
 import { NaverService } from './oauth/naver.service';
 import { GoogleService } from './oauth/google.service';
+import { Users } from 'src/users/users.entity';
 
 @Injectable()
 export class AuthService {
@@ -77,13 +78,20 @@ export class AuthService {
         oauthId: string,
         provider: OauthProvider
     ): Promise<{ accessToken: string; refreshToken: string }> {
-        const { id: userId } = await this.usersService.findOneWithOauthId(oauthId);
+        const { id: userId, oauthRefreshToken } = await this.usersService.findOneWithOauthId(oauthId);
 
-        const accessToken = this.tokenService.signAccessToken(userId, provider);
-        const refreshToken = this.tokenService.signRefreshToken(oauthId, provider);
+        const { access_token: newOauthAccessToken, refresh_token: newOauthRefreshToken } =
+            await this[`${provider}Service`].requestTokenRefresh(oauthRefreshToken);
 
-        this.usersService.update(userId, { refreshToken });
+        const newAccessToken = this.tokenService.signAccessToken(userId, provider);
+        const newRefreshToken = this.tokenService.signRefreshToken(oauthId, provider);
 
-        return { accessToken, refreshToken };
+        const attr: Partial<Users> = { oauthAccessToken: newOauthAccessToken, refreshToken: newRefreshToken };
+
+        if (newOauthRefreshToken) attr.oauthRefreshToken = newOauthRefreshToken;
+
+        this.usersService.update(userId, attr);
+
+        return { accessToken: newAccessToken, refreshToken: newRefreshToken };
     }
 }
