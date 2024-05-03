@@ -21,8 +21,8 @@ export const useWeather = () => {
         airGrade: 1,
         precipitation: 0,
     });
-    // const [address, setAdress] = useState<string>(DEFAULT_ADDRESS);
-    const address = DEFAULT_ADDRESS;
+    const [address, setAdress] = useState<string>(DEFAULT_ADDRESS);
+    // const address = DEFAULT_ADDRESS;
 
     //TODO 실시간으로 가져오는 GPS 한번만 가져오게 하기 필요
     useEffect(() => {
@@ -30,21 +30,20 @@ export const useWeather = () => {
         const req1 = fetchCurrentWeather(date, nx, ny);
         const req2 = fetchSunsetSunrise(date, Math.floor(lat * 100), Math.floor(lng * 100));
 
-        // fetchAddress(lat, lng).then((add) => {
-        //     const sido = getSidoCode(add?.region_1depth_name ?? '');
-        //     fetchAirGrade(sido).then((grade) => {
-        //         const airGrade = Number(grade?.khaiGrade ?? 2);
-
-        //         setWeather({
-        //             ...weather,
-        //             airGrade,
-        //         });
-        //         setAdress(add?.region_3depth_name ?? DEFAULT_ADDRESS);
-        //     });
-        // });
+        fetchAddress(lat, lng).then((add) => {
+            const sido = getSidoCode(add?.region_1depth_name ?? '');
+            setAdress(add?.region_3depth_name ?? DEFAULT_ADDRESS);
+            fetchAirGrade(sido).then((grade) => {
+                const airGrade = Number(grade?.khaiGrade ?? 2);
+                setWeather({
+                    ...weather,
+                    airGrade,
+                });
+                setAdress(add?.region_3depth_name ?? DEFAULT_ADDRESS);
+            });
+        });
 
         Promise.allSettled([req1, req2]).then((res) => {
-            console.log(res);
             const newWeatherList =
                 res[0].status === 'fulfilled' ? res[0].value?.filter((w) => w.baseDate === date) : [];
 

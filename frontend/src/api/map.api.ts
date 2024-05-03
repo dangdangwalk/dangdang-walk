@@ -2,7 +2,6 @@ import { createClient } from '@/api/http';
 
 const KAKAO_CLIENT_ID = process.env.REACT_APP_KAKAO_CLIENT_ID;
 const KAKAO_MAP_URL = process.env.REACT_APP_KAKAO_MAP_URL;
-console.log(KAKAO_CLIENT_ID, KAKAO_MAP_URL);
 
 const mapClient = createClient({
     headers: {
@@ -11,7 +10,7 @@ const mapClient = createClient({
         Authorization: `KakaoAK ${KAKAO_CLIENT_ID}`,
     },
     baseURL: KAKAO_MAP_URL,
-    withCredentials: true,
+    withCredentials: false,
 });
 
 interface KakaoResponseAddress {
