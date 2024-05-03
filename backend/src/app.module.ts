@@ -9,7 +9,6 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { PrometheusInterceptor } from './common/interceptor/prometheus.interceptor';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { WinstonLoggerModule } from './common/logger/winstonLogger.module';
-import { AuthModule } from './auth/auth.module';
 import { FakeModule } from './fake/fake.module';
 import { DogsModule } from './dogs/dogs.module';
 import { WalkModule } from './walk/walk.module';
@@ -59,7 +58,6 @@ import { WalkLogPhotosModule } from './walk-log-photos/walk-log-photos.module';
         }),
         UsersModule,
         ConfigModule,
-        AuthModule,
         DogsModule,
         WalkModule,
         BreedModule,
