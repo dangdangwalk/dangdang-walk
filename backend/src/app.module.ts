@@ -15,6 +15,9 @@ import { DogsModule } from './dogs/dogs.module';
 import { WalkModule } from './walk/walk.module';
 import { BreedModule } from './breed/breed.module';
 import { DogWalkDayModule } from './dog-walk-day/dog-walk-day.module';
+import { JournalModule } from './journals/journals.module';
+import { ExcrementsModule } from './excrements/excrements.module';
+import { WalkLogPhotosModule } from './walk-log-photos/walk-log-photos.module';
 
 @Module({
     imports: [
@@ -61,6 +64,9 @@ import { DogWalkDayModule } from './dog-walk-day/dog-walk-day.module';
         WalkModule,
         BreedModule,
         DogWalkDayModule,
+        JournalModule,
+        ExcrementsModule,
+        WalkLogPhotosModule,
     ],
     controllers: [AppController, HealthController],
     providers: [
