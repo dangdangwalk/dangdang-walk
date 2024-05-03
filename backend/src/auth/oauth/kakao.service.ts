@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
 import { OauthService } from './oauth.service.interface';
 
-interface requestTokenResponse {
+interface TokenResponse {
     token_type: string;
     access_token: string;
     id_token?: string;
@@ -14,13 +14,13 @@ interface requestTokenResponse {
     scope?: string;
 }
 
-interface requestUserInfoResponse {
+interface UserInfoResponse {
     id: number;
     expires_in: number;
     app_id: number;
 }
 
-interface requestTokenRefreshResponse {
+interface TokenRefreshResponse {
     token_type: string;
     access_token: string;
     expires_in: number;
@@ -37,11 +37,15 @@ export class KakaoService implements OauthService {
 
     private readonly CLIENT_ID = this.configService.get<string>('KAKAO_CLIENT_ID');
     private readonly CLIENT_SECRET = this.configService.get<string>('KAKAO_CLIENT_SECRET');
+    private readonly TOKEN_API = this.configService.get<string>('KAKAO_TOKEN_API')!;
+    private readonly TOKEN_INFO_API = this.configService.get<string>('KAKAO_TOKEN_INFO_API')!;
+    private readonly LOGOUT_API = this.configService.get<string>('KAKAO_LOGOUT_API')!;
+    private readonly UNLINK_API = this.configService.get<string>('KAKAO_UNLINK_API')!;
 
     async requestToken(authorizeCode: string, redirectURI: string) {
         const { data } = await firstValueFrom(
-            this.httpService.post<requestTokenResponse>(
-                'https://kauth.kakao.com/oauth/token',
+            this.httpService.post<TokenResponse>(
+                this.TOKEN_API,
                 {
                     code: authorizeCode,
                     grant_type: 'authorization_code',
@@ -62,7 +66,7 @@ export class KakaoService implements OauthService {
 
     async requestUserId(accessToken: string) {
         const { data } = await firstValueFrom(
-            this.httpService.get<requestUserInfoResponse>('https://kapi.kakao.com/v1/user/access_token_info', {
+            this.httpService.get<UserInfoResponse>(this.TOKEN_INFO_API, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 },
@@ -75,7 +79,7 @@ export class KakaoService implements OauthService {
     async requestTokenExpiration(accessToken: string) {
         await firstValueFrom(
             this.httpService.post<{ id: number }>(
-                'https://kapi.kakao.com/v1/user/logout',
+                this.LOGOUT_API,
                 {},
                 {
                     headers: {
@@ -90,7 +94,7 @@ export class KakaoService implements OauthService {
     async requestUnlink(accessToken: string) {
         await firstValueFrom(
             this.httpService.post<{ id: number }>(
-                'https://kapi.kakao.com/v1/user/unlink',
+                this.UNLINK_API,
                 {},
                 {
                     headers: {
@@ -104,8 +108,8 @@ export class KakaoService implements OauthService {
 
     async requestTokenRefresh(refreshToken: string) {
         const { data } = await firstValueFrom(
-            this.httpService.post<requestTokenRefreshResponse>(
-                'https://kauth.kakao.com/oauth/token',
+            this.httpService.post<TokenRefreshResponse>(
+                this.TOKEN_API,
                 {
                     grant_type: 'refresh_token',
                     client_id: this.CLIENT_ID,
