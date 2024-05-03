@@ -17,14 +17,22 @@ export class AuthService {
         private readonly naverService: NaverService
     ) {}
 
+    async isMember(oauthAccessToken: string, provider: OauthProvider): Promise<boolean> {
+        const oauthId = await this[`${provider}Service`].requestUserId(oauthAccessToken);
+
+        try {
+            await this.usersService.findOneWithOauthId(oauthId);
+            return true;
+        } catch {
+            return false;
+        }
+    }
+
     async login(
-        authorizeCode: string,
-        provider: OauthProvider,
-        redirectURI: string
+        oauthAccessToken: string,
+        oauthRefreshToken: string,
+        provider: OauthProvider
     ): Promise<{ accessToken: string; refreshToken: string }> {
-        const { access_token: oauthAccessToken, refresh_token: oauthRefreshToken } = await this[
-            `${provider}Service`
-        ].requestToken(authorizeCode, redirectURI);
         const oauthId = await this[`${provider}Service`].requestUserId(oauthAccessToken);
 
         const refreshToken = this.tokenService.signRefreshToken(oauthId, provider);

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Post, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { ConfigService } from '@nestjs/config';
@@ -9,7 +9,7 @@ import { SkipAuthGuard } from './decorators/public.decorator';
 
 export type OauthProvider = 'google' | 'kakao' | 'naver';
 
-interface loginResponse {
+interface accessTokenResponse {
     accessToken: string;
     expiresIn: number; // [s]
 }
@@ -21,16 +21,31 @@ export class AuthController {
         private authService: AuthService
     ) {}
 
+    @Post('is-member')
+    @HttpCode(200)
+    @SkipAuthGuard()
+    async isMember(
+        @Body('oauthAccessToken') oauthAccessToken: string,
+        @Body('provider') provider: OauthProvider
+    ): Promise<{ isMember: boolean }> {
+        const isMember = await this.authService.isMember(oauthAccessToken, provider);
+
+        return { isMember };
+    }
+
     @Post('login')
     @SkipAuthGuard()
     async login(
-        @Body('authorizeCode') authorizeCode: string,
+        @Body('oauthAccessToken') oauthAccessToken: string,
+        @Body('oauthRefreshToken') oauthRefreshToken: string,
         @Body('provider') provider: OauthProvider,
-        @Body('redirectURI') redirectURI: string,
         @Res({ passthrough: true }) response: Response
-    ): Promise<loginResponse> {
-        redirectURI = `${this.configService.get<string>('CORS_ORIGIN')}${redirectURI}`;
-        const { accessToken, refreshToken } = await this.authService.login(authorizeCode, provider, redirectURI);
+    ): Promise<accessTokenResponse> {
+        const { accessToken, refreshToken } = await this.authService.login(
+            oauthAccessToken,
+            oauthRefreshToken,
+            provider
+        );
 
         response.cookie('refreshToken', refreshToken, {
             httpOnly: true,
@@ -45,6 +60,7 @@ export class AuthController {
     }
 
     @Post('logout')
+    @HttpCode(200)
     async logout(@User() { userId, provider }: AccessTokenPayload, @Res({ passthrough: true }) response: Response) {
         await this.authService.logout(userId, provider);
 
@@ -61,7 +77,10 @@ export class AuthController {
     @Get('token')
     @SkipAuthGuard()
     @UseGuards(RefreshTokenGuard)
-    async token(@User() { oauthId, provider }: RefreshTokenPayload, @Res({ passthrough: true }) response: Response) {
+    async token(
+        @User() { oauthId, provider }: RefreshTokenPayload,
+        @Res({ passthrough: true }) response: Response
+    ): Promise<accessTokenResponse> {
         const { accessToken, refreshToken } = await this.authService.reissueTokens(oauthId, provider);
 
         response.cookie('refreshToken', refreshToken, {
