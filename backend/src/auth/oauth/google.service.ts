@@ -56,9 +56,11 @@ export class GoogleService implements OauthService {
 
     async requestUserId(accessToken: string) {
         const { data } = await firstValueFrom(
-            this.httpService.get<requestUserInfoResponse>(
-                `https://oauth2.googleapis.com/tokeninfo?access_token=${accessToken}`
-            )
+            this.httpService.get<requestUserInfoResponse>('https://oauth2.googleapis.com/tokeninfo', {
+                params: {
+                    access_token: accessToken,
+                },
+            })
         );
 
         return data.sub;
@@ -67,11 +69,14 @@ export class GoogleService implements OauthService {
     async requestTokenExpiration(accessToken: string) {
         await firstValueFrom(
             this.httpService.post(
-                `https://oauth2.googleapis.com/revoke?token=${accessToken}`,
+                'https://oauth2.googleapis.com/revoke',
                 {},
                 {
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    params: {
+                        token: accessToken,
                     },
                 }
             )

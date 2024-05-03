@@ -38,9 +38,15 @@ export class NaverService implements OauthService {
 
     async requestToken(authorizeCode: string) {
         const { data } = await firstValueFrom(
-            this.httpService.get<requestTokenResponse>(
-                `https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id=${this.CLIENT_ID}&client_secret=${this.CLIENT_SECRET}&code=${authorizeCode}&state=naverLoginState`
-            )
+            this.httpService.get<requestTokenResponse>('https://nid.naver.com/oauth2.0/token', {
+                params: {
+                    grant_type: 'authorization_code',
+                    client_id: this.CLIENT_ID,
+                    client_secret: this.CLIENT_SECRET,
+                    code: authorizeCode,
+                    state: 'naverLoginState',
+                },
+            })
         );
 
         return data;
@@ -60,9 +66,15 @@ export class NaverService implements OauthService {
 
     async requestTokenExpiration(accessToken: string) {
         await firstValueFrom(
-            this.httpService.get<{ access_token: string; result: string }>(
-                `https://nid.naver.com/oauth2.0/token?grant_type=delete&client_id=${this.CLIENT_ID}&client_secret=${this.CLIENT_SECRET}&access_token=${accessToken}&service_provider=NAVER`
-            )
+            this.httpService.get<{ access_token: string; result: string }>(`https://nid.naver.com/oauth2.0/token`, {
+                params: {
+                    grant_type: 'delete',
+                    client_id: this.CLIENT_ID,
+                    client_secret: this.CLIENT_SECRET,
+                    access_token: accessToken,
+                    service_provider: 'NAVER',
+                },
+            })
         );
     }
 
@@ -72,9 +84,14 @@ export class NaverService implements OauthService {
         [key: string]: any;
     }> {
         const { data } = await firstValueFrom(
-            this.httpService.get<requestTokenRefreshResponse>(
-                `https://nid.naver.com/oauth2.0/token?grant_type=refresh_token&client_id=${this.CLIENT_ID}&client_secret=${this.CLIENT_SECRET}&refresh_token=${refreshToken}`
-            )
+            this.httpService.get<requestTokenRefreshResponse>(`https://nid.naver.com/oauth2.0/token`, {
+                params: {
+                    grant_type: 'refresh_token',
+                    client_id: this.CLIENT_ID,
+                    client_secret: this.CLIENT_SECRET,
+                    refresh_token: refreshToken,
+                },
+            })
         );
 
         return data;
