@@ -47,27 +47,38 @@ export interface SunsetSunrise {
 }
 
 export interface AirPolution {
-    so2Grade: string;
+    so2Grade: number;
     coFlag: string;
     khaiValue: string;
     so2Value: string;
     coValue: string;
     pm25Flag: string;
     pm10Flag: string;
-    o3Grade: string;
+    o3Grade: number;
     pm10Value: string;
-    khaiGrade: string;
+    khaiGrade: number;
     pm25Value: string;
     sidoName: string;
     no2Flag: string;
-    no2Grade: string;
+    no2Grade: number;
     o3Flag: string;
-    pm25Grade: string;
+    pm25Grade: number;
     so2Flag: string;
     dataTime: string;
-    coGrade: string;
+    coGrade: number;
     no2Value: string;
     stationName: string;
-    pm10Grade: string;
+    pm10Grade: number;
     o3Value: string;
+}
+
+export interface Weather {
+    maxTemperature: number;
+    minTemperature: number;
+    sky: number;
+    sunrise: string | undefined;
+    sunset: string | undefined;
+    temperature: number;
+    airGrade: number;
+    precipitation: number;
 }
