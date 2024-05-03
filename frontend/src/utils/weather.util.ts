@@ -1,5 +1,3 @@
-import { Weather } from '@/models/weather.model';
-
 export const airGrade = ['', '좋음', '보통', '나쁨', '매우나쁨'];
 
 export type SkyStatus = 'dayclear' | 'daycloudy' | 'cloudy' | 'nightclear' | 'nightcloudy' | 'rain' | 'snow';

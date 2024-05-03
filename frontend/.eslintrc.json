@@ -20,7 +20,9 @@
         "react/react-in-jsx-scope": 0,
         "react/prefer-stateless-function": 0,
         "react/jsx-filename-extension": 0,
-        "react/jsx-one-expression-per-line": 0
+        "react/jsx-one-expression-per-line": 0,
+        // useEffect 변경시 모두 추가해야되는거 제거
+        "react-hooks/exhaustive-deps": 0
     },
     "ignorePatterns": ["vitest.config.ts"]
 }

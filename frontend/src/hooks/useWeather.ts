@@ -1,10 +1,9 @@
-import { fetchAddress } from '@/api/map.api';
-import { fetchAirGrade, fetchCurrentWeather, fetchSunsetSunrise } from '@/api/weather.api';
+import { fetchCurrentWeather, fetchSunsetSunrise } from '@/api/weather.api';
 import { DEFAULT_ADDRESS } from '@/constants/location';
 import useGeolocation from '@/hooks/useGeolocation';
 import { Weather } from '@/models/weather.model';
 import { getCurrentDate, getHours } from '@/utils/date';
-import { getSidoCode, gpsToGrid } from '@/utils/geo';
+import { gpsToGrid } from '@/utils/geo';
 // import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
@@ -21,8 +20,10 @@ export const useWeather = () => {
         airGrade: 1,
         precipitation: 0,
     });
-    const [address, setAdress] = useState<string>(DEFAULT_ADDRESS);
+    // const [address, setAdress] = useState<string>(DEFAULT_ADDRESS);
+    const address = DEFAULT_ADDRESS;
 
+    //TODO 실시간으로 가져오는 GPS 한번만 가져오게 하기 필요
     useEffect(() => {
         const { nx, ny } = gpsToGrid(lat, lng);
         fetchCurrentWeather(date, nx, ny).then((weatherList) => {
