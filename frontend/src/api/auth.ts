@@ -1,6 +1,6 @@
 import { httpClient } from './http';
 
-type ResponseToken = {
+export type ResponseToken = {
     accessToken: string;
     expiresIn: number;
 };

@@ -1,7 +1,7 @@
 import LoginAlertModal from '@/components/LoginAlertModal';
 import { useAuth } from '@/hooks/useAuth';
-import { useAuthStore } from '@/store/authStore';
-import { getStorage } from '@/utils/storage';
+import { getStorage, setStorage } from '@/utils/storage';
+import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 function Profile() {
@@ -9,21 +9,24 @@ function Profile() {
     const { search } = useLocation();
     const params = new URLSearchParams(search);
     const authorizeCode = params.get('code');
-    const redirectURI = window.location.pathname;
     const provider = getStorage('provider');
-    const { isLoggedIn } = useAuthStore();
-    const { userLogin, useLogout } = useAuth();
+    const redirectURI = window.location.pathname;
+    const { loginMutation, isLoggedIn, logoutMutation } = useAuth();
 
-    if (authorizeCode && provider && !isLoggedIn) {
-        userLogin({ authorizeCode, provider, redirectURI });
-    }
+    useEffect(() => {
+        if (authorizeCode && provider && !isLoggedIn) {
+            setStorage('redirect', redirectURI);
+            loginMutation.mutate({ authorizeCode, provider, redirectURI });
+        }
+    }, []);
+
     const handleLogin = () => {
         navigate('/login', { state: { redirectURI } });
     };
 
     return (
         <div>
-            <button onClick={useLogout}>로그아웃</button>
+            <button onClick={() => logoutMutation.mutate(null)}>로그아웃</button>
             <div className={` ${isLoggedIn ? '' : 'blur-sm'}`}>
                 <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
                 <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
