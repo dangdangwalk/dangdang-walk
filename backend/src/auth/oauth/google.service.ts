@@ -2,9 +2,9 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
-import { OauthService } from './oauth.service.interface';
+import { OauthService, RequestTokenRefreshResponse } from './oauth.service.interface';
 
-interface requestTokenResponse {
+interface TokenResponse {
     access_token: string;
     expires_in: number;
     refresh_token: string;
@@ -12,7 +12,7 @@ interface requestTokenResponse {
     token_type: string;
 }
 
-interface requestUserInfoResponse {
+interface UserInfoResponse {
     azp: string;
     aud: string;
     sub: string;
@@ -23,7 +23,7 @@ interface requestUserInfoResponse {
     email_verified: string;
 }
 
-interface requestTokenRefreshResponse {
+interface TokenRefreshResponse {
     access_token: string;
     expires_in: number;
     scope: string;
@@ -39,10 +39,13 @@ export class GoogleService implements OauthService {
 
     private readonly CLIENT_ID = this.configService.get<string>('GOOGLE_CLIENT_ID');
     private readonly CLIENT_SECRET = this.configService.get<string>('GOOGLE_CLIENT_SECRET');
+    private readonly TOKEN_API = this.configService.get<string>('GOOGLE_TOKEN_API')!;
+    private readonly TOKEN_INFO_API = this.configService.get<string>('GOOGLE_TOKEN_INFO_API')!;
+    private readonly REVOKE_API = this.configService.get<string>('GOOGLE_REVOKE_API')!;
 
     async requestToken(authorizeCode: string, redirectURI: string) {
         const { data } = await firstValueFrom(
-            this.httpService.post<requestTokenResponse>(`https://oauth2.googleapis.com/token`, {
+            this.httpService.post<TokenResponse>(this.TOKEN_API, {
                 client_id: this.CLIENT_ID,
                 client_secret: this.CLIENT_SECRET,
                 code: authorizeCode,
@@ -56,7 +59,7 @@ export class GoogleService implements OauthService {
 
     async requestUserId(accessToken: string) {
         const { data } = await firstValueFrom(
-            this.httpService.get<requestUserInfoResponse>('https://oauth2.googleapis.com/tokeninfo', {
+            this.httpService.get<UserInfoResponse>(this.TOKEN_INFO_API, {
                 params: {
                     access_token: accessToken,
                 },
@@ -69,7 +72,7 @@ export class GoogleService implements OauthService {
     async requestTokenExpiration(accessToken: string) {
         await firstValueFrom(
             this.httpService.post(
-                'https://oauth2.googleapis.com/revoke',
+                this.REVOKE_API,
                 {},
                 {
                     headers: {
@@ -83,13 +86,9 @@ export class GoogleService implements OauthService {
         );
     }
 
-    async requestTokenRefresh(refreshToken: string): Promise<{
-        access_token: string;
-        refresh_token?: string;
-        [key: string]: any;
-    }> {
+    async requestTokenRefresh(refreshToken: string): Promise<RequestTokenRefreshResponse> {
         const { data } = await firstValueFrom(
-            this.httpService.post<requestTokenRefreshResponse>(`https://oauth2.googleapis.com/token`, {
+            this.httpService.post<TokenRefreshResponse>(this.TOKEN_API, {
                 client_id: this.CLIENT_ID,
                 client_secret: this.CLIENT_SECRET,
                 grant_type: 'refresh_token',

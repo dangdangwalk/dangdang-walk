@@ -1,12 +1,15 @@
+interface RequestToken {
+    access_token: string;
+    refresh_token: string;
+    [key: string]: any;
+}
+
+export interface RequestTokenRefreshResponse extends Omit<RequestToken, 'refresh_token'> {
+    refresh_token?: string;
+}
+
 export interface OauthService {
-    requestToken(
-        authorizeCode: string,
-        redirectURI?: string
-    ): Promise<{
-        access_token: string;
-        refresh_token: string;
-        [key: string]: any;
-    }>;
+    requestToken(authorizeCode: string, redirectURI?: string): Promise<RequestToken>;
 
     requestUserId(accessToken: string): Promise<string>;
 
@@ -14,9 +17,5 @@ export interface OauthService {
 
     requestUnlink?(accessToken: string): Promise<void>;
 
-    requestTokenRefresh(refreshToken: string): Promise<{
-        access_token: string;
-        refresh_token?: string;
-        [key: string]: any;
-    }>;
+    requestTokenRefresh(refreshToken: string): Promise<RequestTokenRefreshResponse>;
 }

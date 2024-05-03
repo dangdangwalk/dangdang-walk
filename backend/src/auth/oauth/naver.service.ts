@@ -2,16 +2,16 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
-import { OauthService } from './oauth.service.interface';
+import { OauthService, RequestTokenRefreshResponse } from './oauth.service.interface';
 
-interface requestTokenResponse {
+interface TokenResponse {
     access_token: string;
     refresh_token: string;
     token_type: string;
     expires_in: number;
 }
 
-interface requestUserInfoResponse {
+interface UserInfoResponse {
     resultcode: string;
     message: string;
     response: {
@@ -20,7 +20,7 @@ interface requestUserInfoResponse {
     };
 }
 
-interface requestTokenRefreshResponse {
+interface TokenRefreshResponse {
     access_token: string;
     token_type: string;
     expires_in: number;
@@ -35,10 +35,12 @@ export class NaverService implements OauthService {
 
     private readonly CLIENT_ID = this.configService.get<string>('NAVER_CLIENT_ID');
     private readonly CLIENT_SECRET = this.configService.get<string>('NAVER_CLIENT_SECRET');
+    private readonly TOKEN_API = this.configService.get<string>('NAVER_TOKEN_API')!;
+    private readonly USER_INFO_API = this.configService.get<string>('NAVER_USER_INFO_API')!;
 
     async requestToken(authorizeCode: string) {
         const { data } = await firstValueFrom(
-            this.httpService.get<requestTokenResponse>('https://nid.naver.com/oauth2.0/token', {
+            this.httpService.get<TokenResponse>(this.TOKEN_API, {
                 params: {
                     grant_type: 'authorization_code',
                     client_id: this.CLIENT_ID,
@@ -54,7 +56,7 @@ export class NaverService implements OauthService {
 
     async requestUserId(accessToken: string) {
         const { data } = await firstValueFrom(
-            this.httpService.get<requestUserInfoResponse>('https://openapi.naver.com/v1/nid/me', {
+            this.httpService.get<UserInfoResponse>(this.USER_INFO_API, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`,
                 },
@@ -66,7 +68,7 @@ export class NaverService implements OauthService {
 
     async requestTokenExpiration(accessToken: string) {
         await firstValueFrom(
-            this.httpService.get<{ access_token: string; result: string }>(`https://nid.naver.com/oauth2.0/token`, {
+            this.httpService.get<{ access_token: string; result: string }>(this.TOKEN_API, {
                 params: {
                     grant_type: 'delete',
                     client_id: this.CLIENT_ID,
@@ -78,13 +80,9 @@ export class NaverService implements OauthService {
         );
     }
 
-    async requestTokenRefresh(refreshToken: string): Promise<{
-        access_token: string;
-        refresh_token?: string;
-        [key: string]: any;
-    }> {
+    async requestTokenRefresh(refreshToken: string): Promise<RequestTokenRefreshResponse> {
         const { data } = await firstValueFrom(
-            this.httpService.get<requestTokenRefreshResponse>(`https://nid.naver.com/oauth2.0/token`, {
+            this.httpService.get<TokenRefreshResponse>(this.TOKEN_API, {
                 params: {
                     grant_type: 'refresh_token',
                     client_id: this.CLIENT_ID,
