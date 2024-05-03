@@ -1,6 +1,7 @@
 import LoginAlertModal from '@/components/LoginAlertModal';
 import { useAuth } from '@/hooks/useAuth';
-import { Navigate } from 'react-router-dom';
+import { useAuthStore } from '@/store/authStore';
+import { getStorage } from '@/utils/storage';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 function Profile() {
@@ -8,25 +9,22 @@ function Profile() {
     const { search } = useLocation();
     const params = new URLSearchParams(search);
     const authorizeCode = params.get('code');
-    const { userLogin } = useAuth();
-    const currentURL = window.location.pathname;
-    const provider = localStorage.getItem('provider');
-    if (authorizeCode && provider) {
-        console.log(authorizeCode);
-        console.log(provider);
+    const redirectURI = window.location.pathname;
+    const provider = getStorage('provider');
+    const { isLoggedIn } = useAuthStore();
+    const { userLogin, useLogout } = useAuth();
 
-        userLogin(authorizeCode, provider, currentURL);
-        return <Navigate to="/profile" />;
+    if (authorizeCode && provider && !isLoggedIn) {
+        userLogin({ authorizeCode, provider, redirectURI });
     }
     const handleLogin = () => {
-        navigate('/login', { state: { currentURL } });
+        navigate('/login', { state: { redirectURI } });
     };
-
-    const cookie = false;
 
     return (
         <div>
-            <div className={` ${cookie ? '' : 'blur-sm'}`}>
+            <button onClick={useLogout}>로그아웃</button>
+            <div className={` ${isLoggedIn ? '' : 'blur-sm'}`}>
                 <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
                 <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
                 <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
@@ -40,7 +38,7 @@ function Profile() {
                 <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
                 <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
             </div>
-            {!cookie && <LoginAlertModal onClick={handleLogin} />}
+            {!isLoggedIn && <LoginAlertModal onClick={handleLogin} />}
         </div>
     );
 }

@@ -1,9 +1,9 @@
 import OAuthButton from '@/components/OAuthButton';
-import { OAUTH } from '@/constants/oauthList';
+import { OAUTH } from '@/constants';
 import { useLocation } from 'react-router-dom';
 const Login = () => {
     const location = useLocation();
-    const prevURL = location.state.currentURL;
+    const prevURL = location.state.redirectURI;
     return (
         <div>
             <p>로그인 페이지</p>

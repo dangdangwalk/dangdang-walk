@@ -2,7 +2,7 @@ import { httpClient } from './http';
 
 type ResponseToken = {
     accessToken: string;
-    refreshToken: string;
+    expiresIn: number;
 };
 
 const getAccessToken = async (): Promise<ResponseToken> => {
@@ -10,13 +10,17 @@ const getAccessToken = async (): Promise<ResponseToken> => {
     return data;
 };
 
-interface LoginParams {
+export interface LoginParams {
     authorizeCode: string;
     provider: string;
     redirectURI: string;
 }
-const login = async (params: LoginParams) => {
+const requestLogin = async (params: LoginParams) => {
     const { data } = await httpClient.post('/auth/login', params);
     return data;
 };
-export { getAccessToken, login };
+
+const requestLogout = async () => {
+    await httpClient.post('/auth/logout');
+};
+export { getAccessToken, requestLogin, requestLogout };
