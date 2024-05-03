@@ -33,20 +33,20 @@ export const useWeather = () => {
             newWeatherList?.forEach((w) => {
                 if (hour === w.fcstTime.slice(0, 2)) {
                     if (w.category === 'TMP') {
-                        temperature = w.fcstValue;
+                        temperature = Number(w.fcstValue);
                     }
                     if (w.category === 'SKY') {
-                        sky = w.fcstValue;
+                        sky = Number(w.fcstValue);
                     }
                     if (w.category === 'PTY') {
-                        precipitation = w.fcstValue;
+                        precipitation = Number(w.fcstValue);
                     }
                 }
                 if (w.category === 'TMN') {
-                    minTemperature = w.fcstValue;
+                    minTemperature = Number(w.fcstValue);
                 }
                 if (w.category === 'TMX') {
-                    maxTemperature = w.fcstValue;
+                    maxTemperature = Number(w.fcstValue);
                 }
             });
             setWeather({
@@ -69,9 +69,11 @@ export const useWeather = () => {
         // fetchAddress(lat, lng).then((add) => {
         //     const sido = getSidoCode(add?.region_1depth_name ?? '');
         //     fetchAirGrade(sido).then((grade) => {
+        //         const airGrade = Number(grade?.khaiGrade ?? 2);
+
         //         setWeather({
         //             ...weather,
-        //             airGrade: grade?.khaiGrade ?? 2,
+        //             airGrade,
         //         });
         //         setAdress(add?.region_3depth_name ?? DEFAULT_ADDRESS);
         //     });
