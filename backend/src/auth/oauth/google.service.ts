@@ -23,6 +23,13 @@ interface requestUserInfoResponse {
     email_verified: string;
 }
 
+interface requestTokenRefreshResponse {
+    access_token: string;
+    expires_in: number;
+    scope: string;
+    token_type: string;
+}
+
 @Injectable()
 export class GoogleService implements OauthService {
     constructor(
@@ -69,5 +76,22 @@ export class GoogleService implements OauthService {
                 }
             )
         );
+    }
+
+    async requestTokenRefresh(refreshToken: string): Promise<{
+        access_token: string;
+        refresh_token?: string;
+        [key: string]: any;
+    }> {
+        const { data } = await firstValueFrom(
+            this.httpService.post<requestTokenRefreshResponse>(`https://oauth2.googleapis.com/token`, {
+                client_id: this.CLIENT_ID,
+                client_secret: this.CLIENT_SECRET,
+                grant_type: 'refresh_token',
+                refresh_token: refreshToken,
+            })
+        );
+
+        return data;
     }
 }

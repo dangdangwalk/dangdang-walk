@@ -20,6 +20,14 @@ interface requestUserInfoResponse {
     app_id: number;
 }
 
+interface requestTokenRefreshResponse {
+    token_type: string;
+    access_token: string;
+    expires_in: number;
+    refresh_token?: string;
+    refresh_token_expires_in?: number;
+}
+
 @Injectable()
 export class KakaoService implements OauthService {
     constructor(
@@ -92,5 +100,26 @@ export class KakaoService implements OauthService {
                 }
             )
         );
+    }
+
+    async requestTokenRefresh(refreshToken: string) {
+        const { data } = await firstValueFrom(
+            this.httpService.post<requestTokenRefreshResponse>(
+                'https://kauth.kakao.com/oauth/token',
+                {
+                    grant_type: 'refresh_token',
+                    client_id: this.CLIENT_ID,
+                    client_secret: this.CLIENT_SECRET,
+                    refresh_token: refreshToken,
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+                    },
+                }
+            )
+        );
+
+        return data;
     }
 }
