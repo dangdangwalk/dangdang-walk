@@ -21,7 +21,7 @@
         "react/prefer-stateless-function": 0,
         "react/jsx-filename-extension": 0,
         "react/jsx-one-expression-per-line": 0,
-        // useEffect 변경시 모두 추가해야되는거 제거
+        // useEffect 변경시 모두 추가해야되는거 제거 나중에 변경 필요
         "react-hooks/exhaustive-deps": 0
     },
     "ignorePatterns": ["vitest.config.ts"]
