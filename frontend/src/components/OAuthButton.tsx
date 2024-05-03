@@ -1,3 +1,4 @@
+import { setStorage } from '@/utils/storage';
 import React from 'react';
 
 type Props = {
@@ -7,15 +8,14 @@ type Props = {
 };
 const OAuthButton = ({ provider, name, prevURL }: Props) => {
     const handleCallOAuth = (provider: string) => {
-        console.log(provider);
-        localStorage.setItem('provider', provider);
+        setStorage('provider', provider);
         let url = '';
         switch (provider) {
             case 'google':
-                url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_BASE_URL}${prevURL}&response_type=code&access_type=offline&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile`;
+                url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_BASE_URL}${prevURL}&response_type=code&access_type=offline&scope=https://www.googleapis.com/auth/userinfo.email&prompt=select_account`;
                 break;
             case 'kakao':
-                url = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.REACT_APP_KAKAO_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_BASE_URL}${prevURL}&scope=account_email,profile_nickname,profile_image`;
+                url = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.REACT_APP_KAKAO_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_BASE_URL}${prevURL}`;
                 break;
             case 'naver':
                 url = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.REACT_APP_NAVER_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_BASE_URL}${prevURL}&state=naverLoginState`;
