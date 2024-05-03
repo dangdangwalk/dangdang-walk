@@ -22,8 +22,9 @@ export class AuthGuard implements CanActivate {
         if (skipAuthGuard) return true;
 
         const request = context.switchToHttp().getRequest();
-        const token = this.extractTokenFromHeader(request);
+        if (request.url === '/metrics') return true;
 
+        const token = this.extractTokenFromHeader(request);
         if (!token) throw new UnauthorizedException();
 
         try {
