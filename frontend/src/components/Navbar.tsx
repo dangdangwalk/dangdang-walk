@@ -1,8 +1,8 @@
 import { Link, useLocation } from 'react-router-dom';
-import myPageOff from '@/assets/icons/navbar/mypage_off.svg';
-import myPageOn from '@/assets/icons/navbar/mypage_on.svg';
-import WalkOff from '@/assets/icons/navbar/walk_off.svg';
-import WalkOn from '@/assets/icons/navbar/walk_on.svg';
+import myPageOff from '@/assets/icons/btn-mypage-off.svg';
+import myPageOn from '@/assets/icons/btn-mypage-on.svg';
+import WalkOff from '@/assets/icons/btn-walk-off.svg';
+import WalkOn from '@/assets/icons/btn-walk-on.svg';
 
 function Navbar() {
     const location = useLocation();
