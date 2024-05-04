@@ -21,7 +21,7 @@ type TokenExpiryMap = {
 };
 
 export const TOKEN_LIFETIME_MAP: TokenExpiryMap = {
-    access: { expiresIn: '12h', maxAge: 12 * 60 * 60 * 1000 },
+    access: { expiresIn: '1h', maxAge: 1 * 60 * 60 * 1000 },
     refresh: { expiresIn: '14d', maxAge: 14 * 24 * 60 * 60 * 1000 },
 };
 
