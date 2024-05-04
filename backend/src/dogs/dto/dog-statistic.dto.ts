@@ -11,11 +11,11 @@ export class DogStatisticDto {
     photoUrl: string;
 
     @IsNumber()
-    amountOfWalk: number;
+    recommendedDailyWalkAmount: number;
 
     @IsNumber()
-    walkTime: number;
+    dailyWalkAmount: number;
 
     @IsNumber({}, { each: true })
-    weeklyWalkCheck: number[];
+    weeklyWalks: number[];
 }
