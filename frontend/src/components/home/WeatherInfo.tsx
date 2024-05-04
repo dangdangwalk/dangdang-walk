@@ -3,6 +3,23 @@ import { getCurrentTime } from '@/utils/date';
 import { temperFormat } from '@/utils/format';
 import { SkyStatus, airGrade, getSkyGrade, weatherStatus } from '@/utils/weather.util';
 import { useEffect, useState } from 'react';
+import Cloudy from '@/assets/icons/ic-cloudy.svg';
+import Rain from '@/assets/icons/ic-rain.svg';
+import Snow from '@/assets/icons/ic-snow.svg';
+import DayClear from '@/assets/icons/ic-dayclear.svg';
+import NightClear from '@/assets/icons/ic-nightclear.svg';
+import NightCloudy from '@/assets/icons/ic-nightcloudy.svg';
+import DayCloudy from '@/assets/icons/ic-daycloudy.svg';
+
+const statusImage = {
+    rain: Rain,
+    snow: Snow,
+    dayclear: DayClear,
+    daycloudy: DayCloudy,
+    nightclear: NightClear,
+    nightcloudy: NightCloudy,
+    cloudy: Cloudy,
+};
 
 export default function WeatherInfo() {
     const { weather, address } = useWeather();
@@ -36,7 +53,7 @@ export default function WeatherInfo() {
                 </div>
             </div>
             <div className="flex-col justify-start items-center gap-3.5 inline-flex">
-                <img className="w-full" src={`/assets/icons/ic_${skyStatus}.svg`} alt={skyStatus} />
+                <img className="w-full" src={statusImage[skyStatus ?? 'dayclear']} alt={skyStatus} />
                 <div className="text-zinc-500 text-xs font-normal leading-[18px]">{`최고:${temperFormat(weather.maxTemperature)} 최저:${weather.minTemperature}`}</div>
             </div>
         </figure>
