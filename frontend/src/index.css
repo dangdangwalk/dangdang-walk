@@ -11,7 +11,7 @@ body {
     @apply flex flex-col items-center;
 }
 #root {
-    @apply w-full h-full max-w-screen-sm;
+    @apply w-full h-dvh max-w-screen-sm px-5;
 }
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;

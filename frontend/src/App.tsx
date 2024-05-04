@@ -7,9 +7,10 @@ function App() {
     return (
         <QueryClientProvider client={queryClient}>
             <div className="flex flex-col">
-                <div className="bg-yellow-300">
+                <div className="mb-[3.75rem]">
                     <Outlet />
                 </div>
+
                 <Navbar />
             </div>
         </QueryClientProvider>

@@ -10,6 +10,12 @@ module.exports = {
                 'primary-foreground': colors.white,
                 secondary: '#e4e4e4',
                 'secondary-foreground': '#545454',
+                kakao: '#FEE500',
+                google: '#FFFFFF',
+                naver: '#03C75A',
+            },
+            fontFamily: {
+                roboto: ['Roboto'],
             },
         },
     },
