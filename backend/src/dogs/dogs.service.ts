@@ -82,9 +82,9 @@ export class DogsService {
 
     private makeStatisticData(
         dogProfiles: DogProfile[],
-        amountOfWalk: number[],
-        walkTime: number[],
-        weeklyWalkCheck: number[][]
+        recommendedDailyWalkAmount: number[],
+        dailyWalkAmount: number[],
+        weeklyWalks: number[][]
     ): DogStatisticDto[] {
         const result: DogStatisticDto[] = [];
         for (let i = 0; i < dogProfiles.length; i++) {
@@ -92,9 +92,9 @@ export class DogsService {
                 id: dogProfiles[i].id,
                 name: dogProfiles[i].name,
                 photoUrl: dogProfiles[i].photoUrl,
-                amountOfWalk: amountOfWalk[i],
-                walkTime: walkTime[i],
-                weeklyWalkCheck: weeklyWalkCheck[i],
+                recommendedDailyWalkAmount: recommendedDailyWalkAmount[i],
+                dailyWalkAmount: dailyWalkAmount[i],
+                weeklyWalks: weeklyWalks[i],
             });
         }
         return result;
@@ -106,20 +106,20 @@ export class DogsService {
         const dailyWalkTimeIds = await this.getDailyWalkTimeIdList(ownDogIds);
 
         const dogProfiles = await this.getProfileList(ownDogIds);
-        const amountOfWalk = await this.breedService.getActivityList(ownDogIds);
-        const weeklyWalkCheck = await this.dogWalkDayService.getWalkDayList(dogWalkDayIds);
-        const walkTime = await this.dailyWalkTimeService.getWalkTimeList(dailyWalkTimeIds);
+        const recommendedDailyWalkAmount = await this.breedService.getActivityList(ownDogIds);
+        const dailyWalkAmount = await this.dailyWalkTimeService.getWalkTimeList(dailyWalkTimeIds);
+        const weeklyWalks = await this.dogWalkDayService.getWalkDayList(dogWalkDayIds);
 
         const length = ownDogIds.length;
         if (
             dogProfiles.length !== length ||
-            amountOfWalk.length !== length ||
-            weeklyWalkCheck.length !== length ||
-            walkTime.length !== length
+            recommendedDailyWalkAmount.length !== length ||
+            dailyWalkAmount.length !== length ||
+            weeklyWalks.length !== length
         ) {
             throw new NotFoundException();
         }
 
-        return this.makeStatisticData(dogProfiles, amountOfWalk, walkTime, weeklyWalkCheck);
+        return this.makeStatisticData(dogProfiles, recommendedDailyWalkAmount, dailyWalkAmount, weeklyWalks);
     }
 }
