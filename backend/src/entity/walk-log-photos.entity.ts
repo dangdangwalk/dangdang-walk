@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
-import { WalkJournals } from './walk-journals.entity';
+import { WalkJournals } from '../journals/walk-journals.entity';
 
 @Entity('walk_log_photos')
 export class WalkLogPhotos {

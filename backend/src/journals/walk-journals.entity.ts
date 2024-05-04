@@ -29,8 +29,12 @@ export class WalkJournals {
     startedAt: Date;
 
     @Column()
-    duration: string;
+    duration: number;
 
     @Column()
     distance: number;
+
+    constructor(entityData: Partial<WalkJournals>) {
+        Object.assign(this, entityData);
+    }
 }

@@ -1,4 +1,8 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
+import { JournalsService } from './journals.service';
+import { WalkJournals } from './walk-journals.entity';
 
 @Controller('journals')
-export class JournalsController {}
+export class JournalsController {
+    constructor(private readonly journalsService: JournalsService) {}
+}
