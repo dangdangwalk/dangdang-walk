@@ -4,12 +4,12 @@ export type OAuth = {
 };
 export const OAUTH: OAuth[] = [
     {
-        PROVIDER: 'google',
-        NAME: '구글',
-    },
-    {
         PROVIDER: 'kakao',
         NAME: '카카오',
+    },
+    {
+        PROVIDER: 'google',
+        NAME: '구글',
     },
     {
         PROVIDER: 'naver',
