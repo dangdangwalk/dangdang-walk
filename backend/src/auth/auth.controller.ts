@@ -21,16 +21,16 @@ export class AuthController {
         private authService: AuthService
     ) {}
 
-    @Post('is-member')
+    @Post('is-user')
     @HttpCode(200)
     @SkipAuthGuard()
-    async isMember(
+    async isUser(
         @Body('oauthAccessToken') oauthAccessToken: string,
         @Body('provider') provider: OauthProvider
-    ): Promise<{ isMember: boolean }> {
-        const isMember = await this.authService.isMember(oauthAccessToken, provider);
+    ): Promise<{ isUser: boolean }> {
+        const isUser = await this.authService.isUser(oauthAccessToken, provider);
 
-        return { isMember };
+        return { isUser };
     }
 
     @Post('login')

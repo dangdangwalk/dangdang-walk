@@ -17,7 +17,7 @@ export class AuthService {
         private readonly naverService: NaverService
     ) {}
 
-    async isMember(oauthAccessToken: string, provider: OauthProvider): Promise<boolean> {
+    async isUser(oauthAccessToken: string, provider: OauthProvider): Promise<boolean> {
         const oauthId = await this[`${provider}Service`].requestUserId(oauthAccessToken);
 
         try {
