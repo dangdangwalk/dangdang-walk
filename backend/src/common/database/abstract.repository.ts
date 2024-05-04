@@ -1,9 +1,8 @@
-import { DeleteResult, EntityManager, FindOptionsWhere, Repository, UpdateResult } from 'typeorm';
-import { AbstractEntity } from './abstract.entity';
+import { DeleteResult, EntityManager, FindOptionsWhere, ObjectLiteral, Repository, UpdateResult } from 'typeorm';
 import { NotFoundException } from '@nestjs/common';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
-export abstract class AbstractRepository<T extends AbstractEntity<T>> {
+export abstract class AbstractRepository<T extends ObjectLiteral> {
     constructor(
         private readonly entityRepository: Repository<T>,
         private readonly entityManager: EntityManager

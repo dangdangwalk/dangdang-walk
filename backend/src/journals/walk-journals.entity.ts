@@ -1,9 +1,11 @@
-import { AbstractEntity } from 'src/common/database/abstract.entity';
 import { Users } from '../users/users.entity';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('walk_journals')
-export class WalkJournals extends AbstractEntity<WalkJournals> {
+export class WalkJournals {
+    @PrimaryGeneratedColumn()
+    id: number;
+
     @ManyToOne(() => Users, (users) => users.id)
     @JoinColumn({ name: 'user_id' })
     user: Users;
@@ -31,4 +33,8 @@ export class WalkJournals extends AbstractEntity<WalkJournals> {
 
     @Column()
     distance: number;
+
+    constructor(entityData: Partial<WalkJournals>) {
+        Object.assign(this, entityData);
+    }
 }
