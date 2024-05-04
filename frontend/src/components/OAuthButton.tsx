@@ -1,8 +1,8 @@
 import { setStorage } from '@/utils/storage';
 import React from 'react';
-import btnGoogle from '@/assets/icons/btn-login-google.svg';
-import btnKakao from '@/assets/icons/btn-login-kakao.svg';
-import btnNaver from '@/assets/icons/btn-login-naver.svg';
+import icGoogle from '@/assets/icons/ic-google.svg';
+import icKakao from '@/assets/icons/ic-kakao.svg';
+import icNaver from '@/assets/icons/ic-naver.svg';
 
 type Props = {
     provider: string;
@@ -13,11 +13,23 @@ const OAuthButton = ({ provider, name, prevURL }: Props) => {
     const btnLogin = (provider: string) => {
         switch (provider) {
             case 'google':
-                return btnGoogle;
+                return icGoogle;
             case 'kakao':
-                return btnKakao;
+                return icKakao;
             case 'naver':
-                return btnNaver;
+                return icNaver;
+            default:
+                return;
+        }
+    };
+    const bgColor = (provider: string) => {
+        switch (provider) {
+            case 'google':
+                return 'bg-google';
+            case 'kakao':
+                return 'bg-kakao';
+            case 'naver':
+                return 'bg-naver';
             default:
                 return;
         }
@@ -39,8 +51,16 @@ const OAuthButton = ({ provider, name, prevURL }: Props) => {
         window.location.href = url;
     };
     return (
-        <button onClick={() => handleCallOAuth(provider)}>
-            <img src={btnLogin(provider)} alt={`${provider}`} />
+        <button
+            className={`rounded-lg flex justify-center items-center relative w-full h-[3.25rem] ${bgColor(provider)} ${provider === 'google' && 'border border-neutral-200 '}`}
+            onClick={() => handleCallOAuth(provider)}
+        >
+            <img className="absolute left-0 ml-5" src={btnLogin(provider)} alt={`${provider}`} />
+            <p
+                className={`my-auto text-center text-base font-bold font-roboto leading-normal  ${provider === 'kakao' && 'text-opacity-85'} ${provider === 'naver' ? 'text-white' : 'text-black'}`}
+            >
+                {name}로 시작하기
+            </p>
         </button>
     );
 };

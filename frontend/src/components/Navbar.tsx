@@ -6,8 +6,11 @@ import WalkOn from '@/assets/icons/btn-walk-on.svg';
 
 function Navbar() {
     const location = useLocation();
+    const currentPath = window.location.pathname;
+    if (currentPath === '/login') return null;
+
     return (
-        <div className="fixed w-full left-0 bottom-0 border-t border-slate-300 h-15 bg-neutral-50">
+        <div className="fixed w-full h-[60px] left-0 bottom-0 border-t border-neutral-200 px-5">
             <div className="flex justify-around items-center">
                 <Link to="/">
                     {location.pathname === '/' ? (
