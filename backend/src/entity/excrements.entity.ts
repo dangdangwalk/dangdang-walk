@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, Point, PrimaryColumn } from 'typeorm';
-import { WalkJournals } from './walk-journals.entity';
+import { WalkJournals } from '../journals/walk-journals.entity';
 import { Dogs } from '../dogs/dogs.entity';
 
 @Entity('excrements')
