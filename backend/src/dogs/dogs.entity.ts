@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, ManyToOne } from 'typeorm';
 import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
 import { Breed } from '../breed/breed.entity';
 import { Gender } from './dogs-gender.enum';
@@ -26,7 +26,7 @@ export class Dogs {
     @Column()
     name: string;
 
-    @OneToOne(() => Breed, { nullable: false })
+    @ManyToOne(() => Breed, { nullable: false })
     @JoinColumn({ name: 'breed_id' })
     breed: Breed;
 
