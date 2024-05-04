@@ -25,7 +25,11 @@ export abstract class AbstractRepository<T extends ObjectLiteral> {
     }
 
     async update(where: FindOptionsWhere<T>, partialEntity: QueryDeepPartialEntity<T>): Promise<UpdateResult> {
-        return this.entityRepository.update(where, partialEntity);
+        const updateResult = await this.entityRepository.update(where, partialEntity);
+        if (!updateResult.affected) {
+            throw new NotFoundException('Entity not found');
+        }
+        return updateResult;
     }
 
     async delete(where: FindOptionsWhere<T>): Promise<DeleteResult> {
