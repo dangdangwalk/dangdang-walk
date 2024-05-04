@@ -10,6 +10,8 @@ jobs:
       contents: read
       pull-requests: write
     runs-on: ubuntu-latest
+    env:
+      IS_VALID_TRIGGER: ${{ github.event.action == 'opened' || github.event.changes.title.from }}
     steps:
       - name: Add labels to PR
         id: labeler
@@ -18,12 +20,11 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check branch name format
-        if: github.event.action == 'opened' || github.event.changes.title.from
         run: |
           branch_name=$(echo "${{ github.event.pull_request.head.ref }}")
+          echo "branch_name=$branch_name" >> "$GITHUB_ENV"
           if [[ ! $branch_name =~ ^(frontend|backend|infra)\/DANG-[1-9][0-9]*$ ]]; then
             echo "is_invalid_branch_name=true" >> "$GITHUB_ENV"
-            echo "branch_name=$branch_name" >> "$GITHUB_ENV"
           fi
 
       - name: Add comment for invalid branch name
@@ -45,24 +46,27 @@ jobs:
                             "    backend/DANG-2\n" +
                             "    infra/DANG-3\n" +
                             "```";
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.payload.pull_request.number,
-              body: message
-            });
+            const isValidTrigger = process.env.IS_VALID_TRIGGER;
+            if (isValidTrigger) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                body: message
+              });
+            }
 
             core.setFailed("Branch Naming Convention 위반");
 
       - name: Check PR title format
-        if: github.event.action == 'opened' || github.event.changes.title.from
+        env:
+          BRANCH_NAME: ${{ env.branch_name }}
         run: |
-          branch_name=$(echo "${{ github.event.pull_request.head.ref }}")
-          title_regex="^${branch_name}: .+$"
+          title_regex="^${BRANCH_NAME}: .+$"
           pr_title="${{ github.event.pull_request.title }}"
+          echo "pr_title=$pr_title" >> "$GITHUB_ENV"
           if [[ ! $pr_title =~ $title_regex ]]; then
             echo "is_invalid_title=true" >> "$GITHUB_ENV"
-            echo "pr_title=$pr_title" >> "$GITHUB_ENV"
           fi
 
       - name: Add comment for invalid PR title
@@ -84,11 +88,14 @@ jobs:
                             "    backend/DANG-2: PR에서 수행한 작업 간략히 설명\n" +
                             "    infra/DANG-3: PR에서 수행한 작업 간략히 설명\n" +
                             "```";
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.payload.pull_request.number,
-              body: message
-            });
+            const isValidTrigger = process.env.IS_VALID_TRIGGER;
+            if (isValidTrigger) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.pull_request.number,
+                body: message
+              });
+            }
 
             core.setFailed("PR Title Convention 위반");
