@@ -1,11 +1,9 @@
+import { AbstractEntity } from 'src/common/database/abstract.entity';
 import { Users } from '../users/users.entity';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity('walk_journals')
-export class WalkJournals {
-    @PrimaryGeneratedColumn()
-    id: number;
-
+export class WalkJournals extends AbstractEntity<WalkJournals> {
     @ManyToOne(() => Users, (users) => users.id)
     @JoinColumn({ name: 'user_id' })
     user: Users;
@@ -29,7 +27,7 @@ export class WalkJournals {
     startedAt: Date;
 
     @Column()
-    duration: string;
+    duration: number;
 
     @Column()
     distance: number;
