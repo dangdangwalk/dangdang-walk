@@ -1,0 +1,12 @@
+{
+    "useState": {
+        "prefix": "_state",
+        "body": ["const [$1, set$1] = useState<$1>();"],
+        "description": "useState",
+    },
+    "useEffect": {
+        "prefix": "_effect",
+        "body": ["  useEffect(() => {", "    $2;", "  }, [$1]);"],
+        "description": "useEffect",
+    },
+}
