@@ -1,5 +1,5 @@
 import React from 'react';
-import LoginButton from '@/assets/icons/loginButton.svg';
+import LoginButton from '@/assets/icons/btn-login.svg';
 
 export default function LoginAlertModal({ onClick }: { onClick: () => void }) {
     return (
