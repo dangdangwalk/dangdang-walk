@@ -29,7 +29,11 @@ export default function DogCard({ dog }: DogCardProps) {
             </div>
             <div className="flex justify-start items-center gap-2 pl-[15px]">
                 {dog.weeklyWalks.map((walk, index) => {
-                    return walk === 0 ? <DayIcon day={WEEKDAY[index]} /> : <WalkIcon />;
+                    return walk === 0 ? (
+                        <DayIcon key={WEEKDAY[index]} day={WEEKDAY[index]} />
+                    ) : (
+                        <WalkIcon key={WEEKDAY[index]} />
+                    );
                 })}
             </div>
             <div className="p-2.5 pr-[15px] flex flex-col justify-start gap-3">
