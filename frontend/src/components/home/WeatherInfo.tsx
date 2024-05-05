@@ -30,7 +30,7 @@ export default function WeatherInfo() {
     }, [weather]);
 
     return (
-        <figure className=" px-5 py-4 flex justify-between ">
+        <figure className="py-4 flex justify-between ">
             <div className="flex-col justify-between items-start inline-flex ">
                 <div className="text-black font-bold text-[28px] leading-[42px]">
                     {weatherStatus(weather.temperature, weather.precipitation) ? (

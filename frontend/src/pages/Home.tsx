@@ -3,7 +3,7 @@ import WeatherInfo from '@/components/home/WeatherInfo';
 
 function Home() {
     return (
-        <main className="bg-neutral-50">
+        <main className=" px-5 bg-neutral-50">
             <WeatherInfo />
             <DogCardList />
         </main>

@@ -20,7 +20,7 @@ const dogs = [
 ];
 export default function DogCardList() {
     return (
-        <div className="flex-col">
+        <div className="flex py-6 gap-4 justify-start flex-col">
             {dogs.map((dog) => {
                 return <DogCard key={dog.id} dog={dog} />;
             })}
