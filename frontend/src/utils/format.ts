@@ -4,5 +4,7 @@ export const temperFormat = (temper: number): string => {
 
 export const walkPercentFormat = (percent: number): string => {
     if (percent >= 1) return '100';
-    return (percent * 100).toString().padStart(3, '0');
+    return Math.floor(percent * 100)
+        .toString()
+        .padStart(3, '0');
 };
