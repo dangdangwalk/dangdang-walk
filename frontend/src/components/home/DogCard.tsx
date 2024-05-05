@@ -1,9 +1,10 @@
 import { Dog } from '@/models/dog.model';
 import { walkPercentFormat } from '@/utils/format';
 import Ic from '@/assets/icons/ic.svg';
-import Group from '@/assets/icons/walk/group.svg';
 
 import Avatar from '@/components/common/Avatar';
+import WalkIcon from '@/components/home/WalkIcon';
+import DayIcon from '@/components/home/DayIcon';
 
 interface DogStatistic extends Dog {
     recommendedDailyWalkAmount: number;
@@ -18,15 +19,16 @@ interface DogCardProps {
 
 const WEEKDAY = ['월', '화', '수', '목', '금', '토', '일'];
 export default function DogCard({ dog }: DogCardProps) {
+    const onclick = () => {};
     return (
-        <div className="flex-col relative bg-white rounded-lg shadow">
+        <div className="flex-col relative bg-white rounded-lg shadow" onClick={onclick}>
             <div className="flex justify-between pl-[15px] pr-5 pt-[5px]">
                 <Avatar url={dog.photoUrl} name={dog.name} />
                 <img src={Ic} alt="ic" />
             </div>
             <div className="flex justify-start items-center gap-2 pl-[15px]">
                 {dog.weeklyWalks.map((walk, index) => {
-                    return walk === 0 ? <div>{WEEKDAY[index]}</div> : <img src={Group} alt="walk" />;
+                    return walk === 0 ? <DayIcon day={WEEKDAY[index]} /> : <WalkIcon />;
                 })}
             </div>
             <div className="p-2.5 flex flex-col justify-start gap-3">
