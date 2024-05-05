@@ -1,6 +1,6 @@
 import { fetchAddress } from '@/api/map.api';
 import { fetchAirGrade, fetchCurrentWeather, fetchSunsetSunrise } from '@/api/weather.api';
-import { DEFAULT_ADDRESS } from '@/constants/location';
+import { DEFAULT_ADDRESS, DEFAULT_LAT, DEFAULT_LNG } from '@/constants/location';
 import { Weather } from '@/models/weather.model';
 import { getCurrentDate, getHours } from '@/utils/date';
 import { getGeoLocation, getSidoCode, gpsToGrid } from '@/utils/geo';
@@ -82,7 +82,7 @@ export const useWeather = () => {
     };
 
     useEffect(() => {
-        getGeoLocation(onSuccess);
+        getGeoLocation(DEFAULT_LAT, DEFAULT_LNG, onSuccess);
     }, []);
 
     return { weather, address };
