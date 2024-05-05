@@ -5,12 +5,14 @@ import { Repository } from 'typeorm';
 import { Role } from './user-roles.enum';
 import { generateUuid } from '../utils/hash.utils';
 import { UsersDogs } from 'src/users/user-dogs.entity';
+import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
 
 @Injectable()
 export class UsersService {
     constructor(
         @InjectRepository(Users) private userRepo: Repository<Users>,
-        @InjectRepository(UsersDogs) private usersDogsRepo: Repository<UsersDogs>
+        @InjectRepository(UsersDogs) private usersDogsRepo: Repository<UsersDogs>,
+        private logger: WinstonLoggerService
     ) {}
 
     async create(
