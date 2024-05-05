@@ -1,15 +1,13 @@
 import { fetchAddress } from '@/api/map.api';
 import { fetchAirGrade, fetchCurrentWeather, fetchSunsetSunrise } from '@/api/weather.api';
 import { DEFAULT_ADDRESS } from '@/constants/location';
-import useGeolocation from '@/hooks/useGeolocation';
 import { Weather } from '@/models/weather.model';
 import { getCurrentDate, getHours } from '@/utils/date';
-import { getSidoCode, gpsToGrid } from '@/utils/geo';
+import { getGeoLocation, getSidoCode, gpsToGrid } from '@/utils/geo';
 // import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 export const useWeather = () => {
-    const { lat, lng } = useGeolocation();
     const date = getCurrentDate(new Date());
     const [weather, setWeather] = useState<Weather>({
         maxTemperature: 28,
@@ -22,10 +20,9 @@ export const useWeather = () => {
         precipitation: 0,
     });
     const [address, setAdress] = useState<string>(DEFAULT_ADDRESS);
-    // const address = DEFAULT_ADDRESS;
 
-    //TODO 실시간으로 가져오는 GPS 한번만 가져오게 하기 필요
-    useEffect(() => {
+    //TODO react-query 바꾸기, address 시리얼 처리 문제 해결, refacor 필요
+    const onSuccess = async (lat: number, lng: number) => {
         const { nx, ny } = gpsToGrid(lat, lng);
         const req1 = fetchCurrentWeather(date, nx, ny);
         const req2 = fetchSunsetSunrise(date, Math.floor(lat * 100), Math.floor(lng * 100));
@@ -82,6 +79,10 @@ export const useWeather = () => {
                 sunset: sun?.sunset ?? '1900',
             });
         });
+    };
+
+    useEffect(() => {
+        getGeoLocation(onSuccess);
     }, []);
 
     return { weather, address };

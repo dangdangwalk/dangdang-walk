@@ -1,3 +1,5 @@
+import { DEFAULT_LAT, DEFAULT_LNG } from '@/constants/location';
+
 const RE = 6371.00877; // 지구 반경(km)
 const GRID = 5.0; // 격자 간격(km)
 const SLAT1 = 30.0; // 투영 위도1(degree)
@@ -61,4 +63,15 @@ const sidoCode: Map<string, string> = new Map([
 
 export const getSidoCode = (sido: string): string => {
     return sidoCode.get(sido) ?? '전국';
+};
+
+export const getGeoLocation = (onSuccess: any) => {
+    if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition((position) => {
+            const { latitude, longitude } = position.coords;
+            onSuccess(latitude, longitude);
+        });
+    } else {
+        onSuccess(DEFAULT_LAT, DEFAULT_LNG);
+    }
 };
