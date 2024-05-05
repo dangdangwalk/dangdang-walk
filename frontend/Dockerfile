@@ -1,6 +1,36 @@
-FROM node:18-alpine AS base
+FROM node:18-alpine AS dev
 
-FROM base AS prod
+ENV NODE_ENV dev
+
+# Set install apk
+RUN apk add --no-cache libc6-compat && \
+    apk update && \
+    apk add --no-cache --update curl && \
+    rm -rf /var/cache/apk/*
+
+## Set the timezone in Seoul
+RUN apk --no-cache add tzdata && \
+    cp /usr/share/zoneinfo/Asia/Seoul /etc/localtime && \
+    echo "Asia/Seoul" > /etc/timezone
+
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 react
+
+WORKDIR /app
+
+USER root
+
+COPY --chown=react:nodejs . .
+
+RUN npm ci && npm cache clean --force
+
+HEALTHCHECK CMD curl --fail http://localhost:8082/health || exit 1
+
+USER react
+
+FROM node:18-alpine AS prod
+
+ENV NODE_ENV prod
 
 # Set install apk
 RUN apk add --no-cache libc6-compat && \

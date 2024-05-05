@@ -49,6 +49,7 @@ services:
     build:
       context: frontend
       dockerfile: Dockerfile
+      target: dev
     volumes:
       - ./frontend:/app
       - /app/node_modules
@@ -56,7 +57,7 @@ services:
       - 8082:3000
     networks:
       - my_network
-    command: npx next dev
+    command: npm start
 
   swagger:
     container_name: swaggerapi
