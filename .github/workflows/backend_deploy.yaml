@@ -64,7 +64,7 @@ jobs:
     steps:
       - name: Deploy to Amazon EC2
         run : |
-          docker ps -q --filter "name=${{ env.IMAGE }}" | grep -q . && docker stop ${{ env.IMAGE }} && docker rm -fv ${{ env.IMAGE }}
+          docker ps -q --filter "name=${{ env.IMAGE }}" | grep -q . && docker stop ${{ env.IMAGE }} && docker container prune -f
           aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ env.REPO }}
           docker pull ${{ env.REPO }}/${{ env.IMAGE }}:${{ env.TAG }}
           docker run -d --name ${{ env.IMAGE }} --restart always -p 3031:3031 --env-file ./backend/.env.prod ${{ env.REPO }}/${{ env.IMAGE }}:${{ env.TAG }} 
