@@ -10,7 +10,7 @@ function Navbar() {
     if (currentPath === '/login') return null;
 
     return (
-        <div className="fixed w-full h-[60px] left-0 bottom-0 border-t border-neutral-200 px-5">
+        <div className="fixed w-full h-[60px] left-0 bottom-0 border-t border-neutral-200 px-5 bg-white">
             <div className="flex justify-around items-center">
                 <Link to="/">
                     {location.pathname === '/' ? (

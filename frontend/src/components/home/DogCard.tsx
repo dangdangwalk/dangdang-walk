@@ -32,7 +32,7 @@ export default function DogCard({ dog }: DogCardProps) {
                     return walk === 0 ? <DayIcon day={WEEKDAY[index]} /> : <WalkIcon />;
                 })}
             </div>
-            <div className="p-2.5 flex flex-col justify-start gap-3">
+            <div className="p-2.5 pr-[15px] flex flex-col justify-start gap-3">
                 <div className="text-neutral-800 pl-[5px] text-xs font-bold leading-[18px]">
                     {dog.dailyWalkAmount === 0
                         ? '산책하러 나가요!'
@@ -40,7 +40,7 @@ export default function DogCard({ dog }: DogCardProps) {
                           ? '오늘은 만족스러워요😁'
                           : '산책이 모자라요😢'}
                 </div>
-                <div className="flex gap-2 justify-start items-center">
+                <div className="flex gap-2 justify-between items-center">
                     <Progressbar percentage={(dog.dailyWalkAmount / dog.recommendedDailyWalkAmount) * 100} />
                     <span>
                         <span className="text-amber-500 text-sm font-bold leading-[21px]">
