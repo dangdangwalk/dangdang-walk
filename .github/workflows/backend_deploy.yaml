@@ -64,6 +64,10 @@ jobs:
     needs: build
     runs-on: [ self-hosted, label-api ]
     steps:
+      - name: Create .env.file
+        run : |
+          echo "${{ secrets.ENV_TEST_FILE1 }}" >> .env.prod1
+          echo "${{ secrets.ENV_TEST_FILE2 }}" >> .env.prod2
       - name: Deploy to Amazon EC2
         run : | 
           aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ env.REPO }}
