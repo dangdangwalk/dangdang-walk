@@ -5,6 +5,7 @@ import Ic from '@/assets/icons/ic.svg';
 import Avatar from '@/components/common/Avatar';
 import WalkIcon from '@/components/home/WalkIcon';
 import DayIcon from '@/components/home/DayIcon';
+import Progressbar from '@/components/home/Progressbar';
 
 interface DogStatistic extends Dog {
     recommendedDailyWalkAmount: number;
@@ -39,8 +40,8 @@ export default function DogCard({ dog }: DogCardProps) {
                           ? '오늘은 만족스러워요😁'
                           : '산책이 모자라요😢'}
                 </div>
-                <div className="flex gap-2 justify-start">
-                    <span>progress bar</span>
+                <div className="flex gap-2 justify-start items-center">
+                    <Progressbar percentage={(dog.dailyWalkAmount / dog.recommendedDailyWalkAmount) * 100} />
                     <span>
                         <span className="text-amber-500 text-sm font-bold leading-[21px]">
                             {walkPercentFormat(dog.dailyWalkAmount / dog.recommendedDailyWalkAmount)}

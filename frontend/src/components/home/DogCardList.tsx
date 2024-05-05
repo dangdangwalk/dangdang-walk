@@ -17,6 +17,14 @@ const dogs = [
         dailyWalkAmount: 3600, //하루 산책량
         weeklyWalks: [0, 1, 0, 1, 1, 0, 1], // 한 주간 산책 체크
     },
+    {
+        id: 3, // 강아지 id
+        name: '', //강아지 이름
+        photoUrl: '', // 강아지 사진
+        recommendedDailyWalkAmount: 12600, //하루 권장 산책량,
+        dailyWalkAmount: 0, //하루 산책량
+        weeklyWalks: [0, 1, 0, 1, 1, 0, 1], // 한 주간 산책 체크
+    },
 ];
 export default function DogCardList() {
     return (
