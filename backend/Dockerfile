@@ -16,8 +16,7 @@ COPY --chown=nestjs:nodejs . .
 
 RUN npm ci && npm cache clean --force
 
-HEALTHCHECK --interval=5s \
-  CMD curl --fail http://localhost:3333/health || exit 1
+HEALTHCHECK CMD curl --fail http://localhost:3333/health || exit 1
 
 USER nestjs
 
@@ -53,10 +52,16 @@ FROM node:18-alpine AS prod
 
 ENV NODE_ENV prod
 
+# Set install apk
 RUN apk add --no-cache libc6-compat && \
     apk update && \
-    apk add --update curl && \
+    apk add --no-cache --update curl && \
     rm -rf /var/cache/apk/*
+
+## Set the timezone in Seoul
+RUN apk --no-cache add tzdata && \
+    cp /usr/share/zoneinfo/Asia/Seoul /etc/localtime && \
+    echo "Asia/Seoul" > /etc/timezone
 
 USER root
 WORKDIR /app
