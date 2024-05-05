@@ -67,5 +67,5 @@ jobs:
           docker ps -q --filter "name=${{ env.IMAGE }}" | grep -q . && docker stop ${{ env.IMAGE }} && container prune -f
           aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ env.REPO }}
           docker pull ${{ env.REPO }}/${{ env.IMAGE }}:${{ env.TAG }}
-          docker run -d --name ${{ env.IMAGE }} --restart always -p 3000:3000  --env-file ./frontend/.env.prod ${{ env.REPO }}/${{ env.IMAGE }}:${{ env.TAG }}
+          docker run -d --name ${{ env.IMAGE }} --restart always -p 3000:3000 ${{ env.REPO }}/${{ env.IMAGE }}:${{ env.TAG }}
           docker image prune -af
