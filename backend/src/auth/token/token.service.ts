@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { OauthProvider } from '../auth.controller';
+import { parse } from 'src/utils/ms.utils';
 
 export interface AccessTokenPayload {
     userId: number;
@@ -20,9 +21,12 @@ type TokenExpiryMap = {
     };
 };
 
+const ACCESS_TOKEN_LIFETIME = process.env.ACCESS_TOKEN_LIFETIME || '1h';
+const REFRESH_TOKEN_LIFETIME = process.env.REFRESH_TOKEN_LIFETIME || '14d';
+
 export const TOKEN_LIFETIME_MAP: TokenExpiryMap = {
-    access: { expiresIn: '1h', maxAge: 1 * 60 * 60 * 1000 },
-    refresh: { expiresIn: '14d', maxAge: 14 * 24 * 60 * 60 * 1000 },
+    access: { expiresIn: ACCESS_TOKEN_LIFETIME, maxAge: parse(ACCESS_TOKEN_LIFETIME) },
+    refresh: { expiresIn: REFRESH_TOKEN_LIFETIME, maxAge: parse(REFRESH_TOKEN_LIFETIME) },
 };
 
 @Injectable()
