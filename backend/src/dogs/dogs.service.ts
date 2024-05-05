@@ -8,6 +8,7 @@ import { BreedService } from 'src/breed/breed.service';
 import { DogWalkDayService } from 'src/dog-walk-day/dog-walk-day.service';
 import { DailyWalkTimeService } from 'src/daily-walk-time/daily-walk-time.service';
 import { DogStatisticDto } from './dto/dog-statistic.dto';
+import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
 
 @Injectable()
 export class DogsService {
@@ -16,7 +17,8 @@ export class DogsService {
         private readonly usersService: UsersService,
         private readonly breedService: BreedService,
         private readonly dogWalkDayService: DogWalkDayService,
-        private readonly dailyWalkTimeService: DailyWalkTimeService
+        private readonly dailyWalkTimeService: DailyWalkTimeService,
+        private readonly logger: WinstonLoggerService
     ) {}
 
     async update(id: number, attrs: Partial<Dogs>) {

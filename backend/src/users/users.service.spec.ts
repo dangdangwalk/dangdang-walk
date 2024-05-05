@@ -6,6 +6,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { UsersDogs } from './user-dogs.entity';
 import { mockUser } from '../fixture/users.fixture';
 import { NotFoundException } from '@nestjs/common';
+import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
 
 const context = describe;
 
@@ -25,6 +26,10 @@ describe('UsersService', () => {
                 {
                     provide: getRepositoryToken(UsersDogs),
                     useClass: Repository,
+                },
+                {
+                    provide: WinstonLoggerService,
+                    useValue: {},
                 },
             ],
         }).compile();

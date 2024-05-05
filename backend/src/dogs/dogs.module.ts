@@ -13,6 +13,7 @@ import { DogWalkDayService } from 'src/dog-walk-day/dog-walk-day.service';
 import { DailyWalkTime } from 'src/daily-walk-time/daily-walk-time.entity';
 import { DailyWalktimeModule } from 'src/daily-walk-time/daily-walk-time.module';
 import { DailyWalkTimeService } from 'src/daily-walk-time/daily-walk-time.service';
+import { WinstonLoggerModule } from 'src/common/logger/winstonLogger.module';
 
 @Module({
     imports: [
@@ -20,6 +21,7 @@ import { DailyWalkTimeService } from 'src/daily-walk-time/daily-walk-time.servic
         UsersModule,
         BreedModule,
         DailyWalktimeModule,
+        WinstonLoggerModule,
     ],
     providers: [DogsService, UsersService, BreedService, DogWalkDayService, DailyWalkTimeService],
     exports: [TypeOrmModule, DogsService],
