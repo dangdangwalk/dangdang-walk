@@ -58,13 +58,14 @@ jobs:
           docker tag ${{ env.IMAGE }} ${{ env.REPO }}/${{ env.IMAGE }}:${{ env.TAG }}
           docker push ${{ env.REPO }}/${{ env.IMAGE}}:${{ env.TAG }}
   deploy:
+    name: ECR Deploy
     needs: build
     runs-on: [ self-hosted, label-front ]
     steps:
       - name: Deploy to Amazon EC2
         run : |
-          docker ps -q --filter "name=${{ env.IMAGE }}" | grep -q . && docker stop ${{ env.IMAGE }} && docker container prune -f
+          docker ps -q --filter "name=${{ env.IMAGE }}" | grep -q . && docker stop ${{ env.IMAGE }} && && docker rm -fv ${{ env.IMAGE }}
           aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ env.REPO }}
           docker pull ${{ env.REPO }}/${{ env.IMAGE }}:${{ env.TAG }}
           docker run -d --name ${{ env.IMAGE }} --restart always -p 3000:3000 ${{ env.REPO }}/${{ env.IMAGE }}:${{ env.TAG }}
-          docker image prune -a --filter "until=1h" -f
+          docker image prune -af
