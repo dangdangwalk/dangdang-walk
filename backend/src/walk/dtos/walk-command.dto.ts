@@ -1,4 +1,4 @@
-import { IsArray, IsInt } from 'class-validator';
+import { IsArray } from 'class-validator';
 
 export class WalkCommandDto {
     @IsArray()

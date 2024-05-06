@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
+import { DogsModule } from 'src/dogs/dogs.module';
 import { WalkController } from './walk.controller';
 import { WalkService } from './walk.service';
-import { DogsModule } from 'src/dogs/dogs.module';
 
 @Module({
     imports: [DogsModule],

@@ -1,10 +1,10 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { PORT } from './config/settings';
-import * as process from 'node:process';
-import * as cookieParser from 'cookie-parser';
-import { WinstonLoggerService } from './common/logger/winstonLogger.service';
 import { Logger } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
+import * as cookieParser from 'cookie-parser';
+import * as process from 'node:process';
+import { AppModule } from './app.module';
+import { WinstonLoggerService } from './common/logger/winstonLogger.service';
+import { PORT } from './config/settings';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);

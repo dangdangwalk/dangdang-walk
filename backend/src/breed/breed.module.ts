@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { BreedService } from './breed.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Breed } from './breed.entity';
+import { BreedService } from './breed.service';
 
 @Module({
     imports: [TypeOrmModule.forFeature([Breed])],

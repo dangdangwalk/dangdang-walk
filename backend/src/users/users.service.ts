@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Users } from './users.entity';
-import { Repository } from 'typeorm';
-import { Role } from './user-roles.enum';
-import { generateUuid } from '../utils/hash.utils';
-import { UsersDogs } from 'src/users/user-dogs.entity';
 import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
+import { UsersDogs } from 'src/users/user-dogs.entity';
+import { Repository } from 'typeorm';
+import { generateUuid } from '../utils/hash.utils';
+import { Role } from './user-roles.enum';
+import { Users } from './users.entity';
 
 @Injectable()
 export class UsersService {

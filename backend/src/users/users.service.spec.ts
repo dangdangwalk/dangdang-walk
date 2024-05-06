@@ -1,12 +1,12 @@
-import { UsersService } from './users.service';
-import { Repository } from 'typeorm';
-import { Users } from './users.entity';
+import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { UsersDogs } from './user-dogs.entity';
-import { mockUser } from '../fixture/users.fixture';
-import { NotFoundException } from '@nestjs/common';
 import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
+import { Repository } from 'typeorm';
+import { mockUser } from '../fixture/users.fixture';
+import { UsersDogs } from './user-dogs.entity';
+import { Users } from './users.entity';
+import { UsersService } from './users.service';
 
 const context = describe;
 

@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { Users } from './users.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersController } from './users.controller';
-import { WinstonLoggerModule } from '../common/logger/winstonLogger.module';
-import { UsersService } from './users.service';
 import { UsersDogs } from 'src/users/user-dogs.entity';
+import { WinstonLoggerModule } from '../common/logger/winstonLogger.module';
+import { UsersController } from './users.controller';
+import { Users } from './users.entity';
+import { UsersService } from './users.service';
 
 @Module({
     imports: [TypeOrmModule.forFeature([Users, UsersDogs]), WinstonLoggerModule],

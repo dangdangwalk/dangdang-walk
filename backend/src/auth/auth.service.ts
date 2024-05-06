@@ -1,11 +1,11 @@
-import { TokenService } from './token/token.service';
-import { UsersService } from 'src/users/users.service';
 import { Injectable } from '@nestjs/common';
+import { Users } from 'src/users/users.entity';
+import { UsersService } from 'src/users/users.service';
 import { OauthProvider } from './auth.controller';
+import { GoogleService } from './oauth/google.service';
 import { KakaoService } from './oauth/kakao.service';
 import { NaverService } from './oauth/naver.service';
-import { GoogleService } from './oauth/google.service';
-import { Users } from 'src/users/users.entity';
+import { TokenService } from './token/token.service';
 
 @Injectable()
 export class AuthService {

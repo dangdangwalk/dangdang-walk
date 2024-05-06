@@ -1,14 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Dogs } from './dogs.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { BreedService } from 'src/breed/breed.service';
+import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
+import { DailyWalkTimeService } from 'src/daily-walk-time/daily-walk-time.service';
+import { DogWalkDayService } from 'src/dog-walk-day/dog-walk-day.service';
+import { UsersService } from 'src/users/users.service';
 import { In, Repository } from 'typeorm';
 import { DogProfile } from './dogs.controller';
-import { UsersService } from 'src/users/users.service';
-import { BreedService } from 'src/breed/breed.service';
-import { DogWalkDayService } from 'src/dog-walk-day/dog-walk-day.service';
-import { DailyWalkTimeService } from 'src/daily-walk-time/daily-walk-time.service';
+import { Dogs } from './dogs.entity';
 import { DogStatisticDto } from './dto/dog-statistic.dto';
-import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
 
 @Injectable()
 export class DogsService {
@@ -45,8 +45,8 @@ export class DogsService {
         return dogIds;
     }
 
-    //TODO : 한 메소드에 역할이 두개인 느낌
-    async truncateNotAvaialableDog(ownDogIds: number[]): Promise<DogProfile[]> {
+    //TODO : 한 메소드에서 산책 가능한 강아지 목록도 찾고, 그에 대한 프로필 목록도 만들고 있다. 분리를 하던가 메소드 이름을 바꿔야 할듯
+    async truncateNotAvailableDog(ownDogIds: number[]): Promise<DogProfile[]> {
         const availableDogList = await this.repo.find({ where: { id: In(ownDogIds), isWalking: false } });
         const availableDogProfileList = this.makeProfileList(availableDogList);
         return availableDogProfileList;
@@ -67,7 +67,7 @@ export class DogsService {
         return this.makeProfileList(ownDogList);
     }
 
-    //TODO : 중복 코드 제거
+    //TODO : getDogWalkDayIdList와 getDailyWalkTimeIdList는 같은 로직인데 테이블만 다름. 추상 DB에 구현해서 중복 제거
     async getDogWalkDayIdList(ownDogIds: number[]): Promise<number[]> {
         const ownDogList = await this.findDogsList(ownDogIds);
         return ownDogList.map((cur) => {

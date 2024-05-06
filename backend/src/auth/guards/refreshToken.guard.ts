@@ -1,6 +1,6 @@
-import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
-import { RefreshTokenPayload, TokenService } from '../token/token.service';
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from '../auth.service';
+import { RefreshTokenPayload, TokenService } from '../token/token.service';
 
 @Injectable()
 export class RefreshTokenGuard implements CanActivate {
