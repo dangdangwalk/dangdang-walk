@@ -63,7 +63,7 @@ jobs:
     steps:
       - name: Create .env
         env:
-          ENV_FILE: ${{ secrets.ENV_FILE }}
+          ENV_FILE: ${{ secrets.ENV_FILE_FRONTEND }}
         run: |
           echo "$ENV_FILE" >> .env.prod
       - name: Deploy to Amazon EC2
