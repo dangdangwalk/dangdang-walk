@@ -71,10 +71,10 @@ jobs:
       - name: Deploy to Amazon EC2
         run : | 
           aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ env.REPO }}
-          docker ps -q --filter "name=${{ env.CONTAINER_NAME1 }}" | grep -q . && docker stop ${{ env.IMAGE }} && docker rm ${{ env.CONTAINER_NAME1 }}
+          docker ps -q --filter "name=${{ env.CONTAINER_NAME1 }}" | grep -q . && docker stop ${{ env.CONTAINER_NAME1 }} && docker rm ${{ env.CONTAINER_NAME1 }}
           docker pull ${{ env.REPO }}/${{ env.IMAGE }}:${{ env.TAG }}
           docker run -d --name ${{ env.CONTAINER_NAME1 }} --restart always -p 3031:3031 --env-file .env.prod1 ${{ env.REPO }}/${{ env.IMAGE }}:${{ env.TAG }}
-          docker ps -q --filter "name=${{ env.CONTAINER_NAME2 }}" | grep -q . && docker stop ${{ env.IMAGE }} && docker rm ${{ env.CONTAINER_NAME2 }}
+          docker ps -q --filter "name=${{ env.CONTAINER_NAME2 }}" | grep -q . && docker stop ${{ env.CONTAINER_NAME2 }} && docker rm ${{ env.CONTAINER_NAME2 }}
           docker pull ${{ env.REPO }}/${{ env.IMAGE }}:${{ env.TAG }}
           docker run -d --name ${{ env.CONTAINER_NAME2 }} --restart always -p 3032:3032 --env-file .env.prod2 ${{ env.REPO }}/${{ env.IMAGE }}:${{ env.TAG }} 
           docker image prune -af
