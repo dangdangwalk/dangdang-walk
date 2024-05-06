@@ -1,7 +1,7 @@
 import { useWeather } from '@/hooks/useWeather';
 import { getCurrentTime } from '@/utils/date';
 import { temperFormat } from '@/utils/format';
-import { SkyStatus, airGrade, getSkyGrade, weatherStatus } from '@/utils/weather.util';
+import { SkyStatus, airGrade, getSkyGrade, weatherStatus } from '@/utils/weather';
 import { useEffect, useState } from 'react';
 import Cloudy from '@/assets/icons/ic-cloudy.svg';
 import Rain from '@/assets/icons/ic-rain.svg';

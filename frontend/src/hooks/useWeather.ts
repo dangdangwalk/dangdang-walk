@@ -1,5 +1,5 @@
-import { fetchAddress } from '@/api/map.api';
-import { fetchAirGrade, fetchCurrentWeather, fetchSunsetSunrise } from '@/api/weather.api';
+import { fetchAddress } from '@/api/map';
+import { fetchAirGrade, fetchCurrentWeather, fetchSunsetSunrise } from '@/api/weather';
 import { DEFAULT_ADDRESS, DEFAULT_LAT, DEFAULT_LNG } from '@/constants/location';
 import { Weather } from '@/models/weather.model';
 import { getCurrentDate, getHours } from '@/utils/date';
