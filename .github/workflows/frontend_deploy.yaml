@@ -5,7 +5,6 @@ on:
     branches: [ main ]
     paths:
       - "frontend/**"
-
 env:
   IMAGE: dangdang-front
   REPO: 180993267331.dkr.ecr.ap-northeast-2.amazonaws.com
@@ -63,8 +62,10 @@ jobs:
     runs-on: [ self-hosted, label-front ]
     steps:
       - name: Create .env
-        run : |
-          echo ${{ secrets.ENV_FILE }} > .env.prod
+        env:
+          ENV_FILE: ${{ secrets.ENV_FILE }}
+        run: |
+          echo "$ENV_FILE" >> .env.prod
       - name: Deploy to Amazon EC2
         run : |
           docker ps -q --filter "name=${{ env.IMAGE }}" | grep -q . && docker stop ${{ env.IMAGE }} && docker container prune -f
