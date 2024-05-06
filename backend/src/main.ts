@@ -9,7 +9,7 @@ import { PORT } from './config/settings';
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
-    app.useLogger(new WinstonLoggerService(new Logger()));
+    app.useLogger(new WinstonLoggerService());
 
     app.enableCors({
         origin: process.env.CORS_ORIGIN,
@@ -20,9 +20,10 @@ async function bootstrap() {
 
     app.use(cookieParser());
 
+    const logger = app.get(Logger);
     await (async () => {
         await app.listen(PORT, () => {
-            console.log(`Server running at http://${process.env.MYSQL_HOST}:${PORT}`);
+            logger.log(`Server running at http://${process.env.MYSQL_HOST}:${PORT}`);
         });
     })();
 }
