@@ -3,11 +3,11 @@ import Navbar from './components/Navbar';
 import React, { useEffect, useRef } from 'react';
 import queryClient from './api/queryClient';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { useModalStateStore } from './store/modalStateStore';
+import { useLoginModalStateStore } from './store/modalStateStore';
 import LoginModal from '@/components/LoginModal';
 var console;
 function App() {
-    const { isModalOpen, isJoinning, setModalState } = useModalStateStore();
+    const { isLoginModalOpen: isModalOpen, isJoinning, setLoginModalState: setModalState } = useLoginModalStateStore();
     const outletRef = useRef<HTMLDivElement>(null);
     //TODO: 일시적인 배포시 console.log 제거 추가로 환경설정으로 빼줘야함ㄴ
     if (process.env.NODE_ENV === 'production') {

@@ -1,9 +1,9 @@
 import React from 'react';
 import LoginButton from '@/assets/icons/btn-login.svg';
-import { useModalStateStore } from '@/store/modalStateStore';
+import { useLoginModalStateStore } from '@/store/modalStateStore';
 
 export default function LoginAlertModal() {
-    const { isModalOpen, setModalState } = useModalStateStore();
+    const { isLoginModalOpen: isModalOpen, setLoginModalState: setModalState } = useLoginModalStateStore();
     return (
         <div className={`flex flex-col w-full h-dvh fixed ${isModalOpen && 'bg-neutral-800/40'}`}>
             {!isModalOpen && (

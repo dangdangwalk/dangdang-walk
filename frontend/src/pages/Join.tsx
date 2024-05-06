@@ -1,8 +1,8 @@
-import { useModalStateStore } from '@/store/modalStateStore';
+import { useLoginModalStateStore } from '@/store/modalStateStore';
 import React, { useEffect } from 'react';
 
 export default function Join() {
-    const { setJoinningState } = useModalStateStore();
+    const { setJoinningState } = useLoginModalStateStore();
 
     useEffect(() => {
         window.addEventListener('popstate', () => setJoinningState(false));
