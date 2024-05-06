@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, Scope } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { BreedModule } from './breed/breed.module';
 import { DatabaseModule } from './common/database/database.module';
 import { HealthController } from './common/health/health.controller';
+import { LoggingInterceptor } from './common/interceptor/logging.interceptor';
 import { PrometheusInterceptor } from './common/interceptor/prometheus.interceptor';
 import { WinstonLoggerModule } from './common/logger/winstonLogger.module';
 import { DogWalkDayModule } from './dog-walk-day/dog-walk-day.module';
@@ -49,6 +50,11 @@ import { WalkModule } from './walk/walk.module';
         {
             provide: APP_INTERCEPTOR,
             useClass: PrometheusInterceptor,
+        },
+        {
+            provide: APP_INTERCEPTOR,
+            scope: Scope.REQUEST,
+            useClass: LoggingInterceptor,
         },
     ],
 })

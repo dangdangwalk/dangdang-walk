@@ -66,7 +66,7 @@ export class WinstonLoggerService implements LoggerService {
         this.logger.warn(message);
     }
 
-    debug(message: string) {
-        this.logger.debug(message);
+    debug(message: string, ...meta: any[]) {
+        this.logger.debug(message, meta);
     }
 }
