@@ -3,11 +3,11 @@ import Navbar from './components/Navbar';
 import React, { useEffect, useRef } from 'react';
 import queryClient from './api/queryClient';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { useLoginModalStateStore } from './store/modalStateStore';
-import LoginModal from '@/components/LoginModal';
+import { useLoginBottomSheetStateStore } from './store/modalStateStore';
+import LoginBottomSheet from '@/components/LoginBottomSheet';
 var console;
 function App() {
-    const { isLoginModalOpen, isJoinning, setLoginModalState } = useLoginModalStateStore();
+    const { isLoginBottomSheetOpen, isJoinning, setLoginBottomSheetState } = useLoginBottomSheetStateStore();
     const outletRef = useRef<HTMLDivElement>(null);
     //TODO: 일시적인 배포시 console.log 제거 추가로 환경설정으로 빼줘야함ㄴ
     if (process.env.NODE_ENV === 'production') {
@@ -18,15 +18,15 @@ function App() {
     }
     useEffect(() => {
         if (outletRef.current) {
-            outletRef.current.addEventListener('click', () => setLoginModalState(false));
+            outletRef.current.addEventListener('click', () => setLoginBottomSheetState(false));
         }
 
         return () => {
             if (outletRef.current) {
-                outletRef.current.removeEventListener('click', () => setLoginModalState(false));
+                outletRef.current.removeEventListener('click', () => setLoginBottomSheetState(false));
             }
         };
-    }, [setLoginModalState]);
+    }, [setLoginBottomSheetState]);
     return (
         <QueryClientProvider client={queryClient}>
             <div className="flex flex-col">
@@ -40,9 +40,9 @@ function App() {
                 )}
                 {!isJoinning && (
                     <div
-                        className={`fixed z-20 w-full duration-300 ${isLoginModalOpen ? ' translate-y-72' : 'translate-y-full'}`}
+                        className={`fixed z-20 w-full duration-300 ${isLoginBottomSheetOpen ? ' translate-y-72' : 'translate-y-full'}`}
                     >
-                        <LoginModal />
+                        <LoginBottomSheet />
                     </div>
                 )}
             </div>
