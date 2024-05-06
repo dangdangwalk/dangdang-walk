@@ -62,3 +62,14 @@ const sidoCode: Map<string, string> = new Map([
 export const getSidoCode = (sido: string): string => {
     return sidoCode.get(sido) ?? '전국';
 };
+
+export const getGeoLocation = (def_lat: number, def_lng: number, onSuccess: (lat: number, lng: number) => {}) => {
+    if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition((position) => {
+            const { latitude, longitude } = position.coords;
+            onSuccess(latitude, longitude);
+        });
+    } else {
+        onSuccess(def_lat, def_lng);
+    }
+};

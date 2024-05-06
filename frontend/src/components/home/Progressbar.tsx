@@ -1,5 +1,4 @@
 export default function Progressbar({ percentage }: { percentage: number }) {
-    console.log(percentage);
     return (
         <div className="relative w-[235px] h-4 rounded-md border border-neutral-200">
             <div
