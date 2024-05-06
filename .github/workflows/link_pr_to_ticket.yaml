@@ -65,6 +65,11 @@ jobs:
             "properties": {
               "GitHub Pull Requests": {
                 "url": "$PR"
+              },
+              "Status": {
+                "status": {
+                  "name": "Reviewing"
+                }
               }
             }
           }
