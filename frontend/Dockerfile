@@ -30,8 +30,6 @@ USER react
 
 FROM node:18-alpine AS build
 
-ENV NODE_ENV prod
-
 # Set install apk
 RUN apk add --no-cache libc6-compat && \
     apk update && \
