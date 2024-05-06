@@ -8,6 +8,7 @@ import { DailyWalkTime } from 'src/daily-walk-time/daily-walk-time.entity';
 import { DailyWalkTimeModule } from 'src/daily-walk-time/daily-walk-time.module';
 import { DailyWalkTimeService } from 'src/daily-walk-time/daily-walk-time.service';
 import { DogWalkDay } from 'src/dog-walk-day/dog-walk-day.entity';
+import { DogWalkDayModule } from 'src/dog-walk-day/dog-walk-day.module';
 import { DogWalkDayService } from 'src/dog-walk-day/dog-walk-day.service';
 import { UsersModule } from 'src/users/users.module';
 import { UsersService } from 'src/users/users.service';
@@ -23,6 +24,7 @@ import { DogsService } from './dogs.service';
         BreedModule,
         DailyWalkTimeModule,
         WinstonLoggerModule,
+        DogWalkDayModule,
     ],
     providers: [
         DatabaseModule,

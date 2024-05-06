@@ -23,7 +23,7 @@ export class DogsController {
     @Get('/walk-available')
     async getAvailableDogs(@User() user: AccessTokenPayload): Promise<DogProfile[]> {
         const ownDogIds = await this.usersService.getDogsList(user.userId);
-        return await this.dogsService.getProfileList(ownDogIds, { id: In(ownDogIds), isWalking: false });
+        return await this.dogsService.getProfileList({ id: In(ownDogIds), isWalking: false });
     }
 
     @Serialize(DogStatisticDto)
