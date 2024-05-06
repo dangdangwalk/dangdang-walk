@@ -1,9 +1,9 @@
 import React from 'react';
 import LoginButton from '@/assets/icons/btn-login.svg';
-import { useLoginModalStateStore } from '@/store/modalStateStore';
+import { useLoginBottomSheetStateStore } from '@/store/modalStateStore';
 
 export default function LoginAlertModal() {
-    const { isLoginModalOpen, setLoginModalState } = useLoginModalStateStore();
+    const { isLoginBottomSheetOpen: isLoginModalOpen, setLoginBottomSheetState } = useLoginBottomSheetStateStore();
     return (
         <div className={`flex flex-col w-full h-dvh fixed ${isLoginModalOpen && 'bg-neutral-800/40'}`}>
             {!isLoginModalOpen && (
@@ -14,7 +14,7 @@ export default function LoginAlertModal() {
                     <p className="text-stone-500 font-['NanumGothic'] text-xs font-semibold mb-3">
                         댕댕워크 산책기능은 회원에게만 제공됩니다
                     </p>
-                    <button onClick={() => setLoginModalState(true)}>
+                    <button onClick={() => setLoginBottomSheetState(true)}>
                         <img src={LoginButton} alt="Login" />
                     </button>
                 </section>
