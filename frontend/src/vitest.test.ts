@@ -7,4 +7,7 @@ describe('Vitest 확인', () => {
     it('3의 결과값을 리턴해야 한다.', () => {
         expect(2 + 1).toEqual(3);
     });
+    it('4의 결과값을 리턴해야 한다.', () => {
+        expect(2 + 2).toEqual(4);
+    });
 });
