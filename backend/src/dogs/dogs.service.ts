@@ -47,7 +47,7 @@ export class DogsService {
         });
     }
 
-    async getProfileList(dogIds: number[], where: FindOptionsWhere<Dogs>): Promise<DogProfile[]> {
+    async getProfileList(where: FindOptionsWhere<Dogs>): Promise<DogProfile[]> {
         const ownDogList = await this.dogsRepository.find(where);
         return this.makeProfileList(ownDogList);
     }
@@ -93,7 +93,7 @@ export class DogsService {
         const dogWalkDayIds = await this.getRelatedTableIdList(ownDogIds, 'walkDayId');
         const dailyWalkTimeIds = await this.getRelatedTableIdList(ownDogIds, 'dailyWalkTimeId');
 
-        const dogProfiles = await this.getProfileList(ownDogIds, { id: In(ownDogIds) });
+        const dogProfiles = await this.getProfileList({ id: In(ownDogIds) });
         const recommendedDailyWalkAmount = await this.breedService.getActivityList(ownDogIds);
         const dailyWalkAmount = await this.dailyWalkTimeService.getWalkTimeList(dailyWalkTimeIds);
         const weeklyWalks = await this.dogWalkDayService.getWalkDayList(dogWalkDayIds);
