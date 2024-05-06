@@ -1,16 +1,21 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { FindOptionsWhere, In } from 'typeorm';
 import { Breed } from './breed.entity';
+import { BreedRepository } from './breed.repository';
 
 @Injectable()
 export class BreedService {
-    constructor(@InjectRepository(Breed) private breedRepo: Repository<Breed>) {}
+    constructor(private readonly breedRepository: BreedRepository) {}
+
+    async find(where: FindOptionsWhere<Breed>): Promise<Breed[]> {
+        return this.breedRepository.find(where);
+    }
 
     async getActivityList(ownDogs: number[]): Promise<number[]> {
-        const foundBreed = await this.breedRepo.find({ where: { id: In(ownDogs) } });
-        if (!foundBreed) throw NotFoundException;
-
+        const foundBreed = await this.breedRepository.find({ id: In(ownDogs) });
+        if (!foundBreed.length) {
+            throw new NotFoundException();
+        }
         return foundBreed.map((curBreed: Breed) => {
             return curBreed.activity;
         });

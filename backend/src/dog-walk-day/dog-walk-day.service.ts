@@ -1,13 +1,17 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { FindOptionsWhere, In } from 'typeorm';
 import { DogWalkDay } from './dog-walk-day.entity';
+import { DogWalkDayRepository } from './dog-walk-day.repository';
 
 @Injectable()
 export class DogWalkDayService {
-    constructor(@InjectRepository(DogWalkDay) private dogWalkDayRepo: Repository<DogWalkDay>) {}
+    constructor(private readonly dogWalkDayRepository: DogWalkDayRepository) {}
 
-    getValuesOnly(walkDays: any[]) {
+    async find(where: FindOptionsWhere<DogWalkDay>): Promise<DogWalkDay[]> {
+        return this.dogWalkDayRepository.find(where);
+    }
+
+    private getValuesOnly(walkDays: any[]) {
         const daysValues = walkDays.map((curWeek) => {
             const valueArr = [];
             for (const key in curWeek) {
@@ -21,11 +25,10 @@ export class DogWalkDayService {
     }
 
     async getWalkDayList(walkDayIds: number[]): Promise<number[][]> {
-        const foundDays = await this.dogWalkDayRepo.find({ where: { id: In(walkDayIds) } });
-        if (!foundDays) {
+        const foundDays = await this.dogWalkDayRepository.find({ id: In(walkDayIds) });
+        if (!foundDays.length) {
             throw new NotFoundException();
         }
-
         return this.getValuesOnly(foundDays);
     }
 }

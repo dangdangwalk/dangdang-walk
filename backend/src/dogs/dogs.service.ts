@@ -1,19 +1,20 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { BreedService } from 'src/breed/breed.service';
 import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
 import { DailyWalkTimeService } from 'src/daily-walk-time/daily-walk-time.service';
 import { DogWalkDayService } from 'src/dog-walk-day/dog-walk-day.service';
 import { UsersService } from 'src/users/users.service';
-import { In, Repository } from 'typeorm';
+import { FindOptionsWhere, In, UpdateResult } from 'typeorm';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { DogProfile } from './dogs.controller';
 import { Dogs } from './dogs.entity';
+import { DogsRepository } from './dogs.repository';
 import { DogStatisticDto } from './dto/dog-statistic.dto';
 
 @Injectable()
 export class DogsService {
     constructor(
-        @InjectRepository(Dogs) private repo: Repository<Dogs>,
+        private readonly dogsRepository: DogsRepository,
         private readonly usersService: UsersService,
         private readonly breedService: BreedService,
         private readonly dogWalkDayService: DogWalkDayService,
@@ -21,35 +22,19 @@ export class DogsService {
         private readonly logger: WinstonLoggerService
     ) {}
 
-    async update(id: number, attrs: Partial<Dogs>) {
-        const dog = await this.repo.findOne({ where: { id } });
-        if (!dog) {
-            throw new NotFoundException();
-        }
-        Object.assign(dog, attrs);
-        return this.repo.save(dog);
+    async find(where: FindOptionsWhere<Dogs>) {
+        return this.dogsRepository.find(where);
     }
-
-    async findDogsList(ownDogIds: number[]) {
-        const ownDogList = await this.repo.find({ where: { id: In(ownDogIds) } });
-        return ownDogList;
+    async update(where: FindOptionsWhere<Dogs>, partialEntity: QueryDeepPartialEntity<Dogs>): Promise<UpdateResult> {
+        return await this.dogsRepository.update(where, partialEntity);
     }
 
     async updateIsWalking(dogIds: number[], stateToUpdate: boolean) {
         const attrs = {
             isWalking: stateToUpdate,
         };
-        for (const curDogId of dogIds) {
-            await this.update(curDogId, attrs);
-        }
+        await this.update({ id: In(dogIds) }, attrs);
         return dogIds;
-    }
-
-    //TODO : 한 메소드에서 산책 가능한 강아지 목록도 찾고, 그에 대한 프로필 목록도 만들고 있다. 분리를 하던가 메소드 이름을 바꿔야 할듯
-    async truncateNotAvailableDog(ownDogIds: number[]): Promise<DogProfile[]> {
-        const availableDogList = await this.repo.find({ where: { id: In(ownDogIds), isWalking: false } });
-        const availableDogProfileList = this.makeProfileList(availableDogList);
-        return availableDogProfileList;
     }
 
     private makeProfileList(dogs: Dogs[]): DogProfile[] {
@@ -62,24 +47,25 @@ export class DogsService {
         });
     }
 
-    async getProfileList(dogIds: number[]): Promise<DogProfile[]> {
-        const ownDogList = await this.findDogsList(dogIds);
+    async getProfileList(where: FindOptionsWhere<Dogs>): Promise<DogProfile[]> {
+        const ownDogList = await this.dogsRepository.find(where);
         return this.makeProfileList(ownDogList);
     }
 
-    //TODO : getDogWalkDayIdList와 getDailyWalkTimeIdList는 같은 로직인데 테이블만 다름. 추상 DB에 구현해서 중복 제거
-    async getDogWalkDayIdList(ownDogIds: number[]): Promise<number[]> {
-        const ownDogList = await this.findDogsList(ownDogIds);
+    async getRelatedTableIdList(
+        ownDogIds: number[],
+        attributeName: 'walkDayId' | 'dailyWalkTimeId'
+    ): Promise<number[]> {
+        const ownDogList = await this.dogsRepository.find({ id: In(ownDogIds) });
         return ownDogList.map((cur) => {
-            return cur.walkDayId;
+            return cur[attributeName];
         });
     }
 
-    async getDailyWalkTimeIdList(ownDogIds: number[]): Promise<number[]> {
-        const ownDogList = await this.findDogsList(ownDogIds);
-        return ownDogList.map((cur) => {
-            return cur.dailyWalkTimeId;
-        });
+    async getAvailableDogProfileList(ownDogIds: number[]): Promise<DogProfile[]> {
+        const availableDogList = await this.dogsRepository.find({ id: In(ownDogIds), isWalking: false });
+        const availableDogProfileList = this.makeProfileList(availableDogList);
+        return availableDogProfileList;
     }
 
     private makeStatisticData(
@@ -104,10 +90,10 @@ export class DogsService {
 
     async getDogsStatistics(userId: number): Promise<DogStatisticDto[]> {
         const ownDogIds = await this.usersService.getDogsList(userId);
-        const dogWalkDayIds = await this.getDogWalkDayIdList(ownDogIds);
-        const dailyWalkTimeIds = await this.getDailyWalkTimeIdList(ownDogIds);
+        const dogWalkDayIds = await this.getRelatedTableIdList(ownDogIds, 'walkDayId');
+        const dailyWalkTimeIds = await this.getRelatedTableIdList(ownDogIds, 'dailyWalkTimeId');
 
-        const dogProfiles = await this.getProfileList(ownDogIds);
+        const dogProfiles = await this.getProfileList({ id: In(ownDogIds) });
         const recommendedDailyWalkAmount = await this.breedService.getActivityList(ownDogIds);
         const dailyWalkAmount = await this.dailyWalkTimeService.getWalkTimeList(dailyWalkTimeIds);
         const weeklyWalks = await this.dogWalkDayService.getWalkDayList(dogWalkDayIds);

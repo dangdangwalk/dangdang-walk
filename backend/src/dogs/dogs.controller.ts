@@ -3,6 +3,7 @@ import { AccessTokenPayload } from 'src/auth/token/token.service';
 import { Serialize } from 'src/common/interceptor/serialize.interceptor';
 import { User } from 'src/users/decorators/user.decorator';
 import { UsersService } from 'src/users/users.service';
+import { In } from 'typeorm';
 import { DogsService } from './dogs.service';
 import { DogStatisticDto } from './dto/dog-statistic.dto';
 
@@ -21,8 +22,8 @@ export class DogsController {
 
     @Get('/walk-available')
     async getAvailableDogs(@User() user: AccessTokenPayload): Promise<DogProfile[]> {
-        const ownDogs = await this.usersService.getDogsList(user.userId);
-        return await this.dogsService.truncateNotAvailableDog(ownDogs);
+        const ownDogIds = await this.usersService.getDogsList(user.userId);
+        return await this.dogsService.getProfileList({ id: In(ownDogIds), isWalking: false });
     }
 
     @Serialize(DogStatisticDto)

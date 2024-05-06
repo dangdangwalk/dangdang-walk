@@ -20,7 +20,7 @@ export abstract class AbstractRepository<T extends ObjectLiteral> {
         return entity;
     }
 
-    async find(where: FindOptionsWhere<T>) {
+    async find(where: FindOptionsWhere<T>): Promise<T[]> {
         return this.entityRepository.findBy(where);
     }
 
