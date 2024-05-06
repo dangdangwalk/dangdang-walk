@@ -1,4 +1,4 @@
-import { CallHandler, ExecutionContext, Injectable, Logger, NestInterceptor } from '@nestjs/common';
+import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { Observable, tap } from 'rxjs';
 import { generateUuid } from 'src/utils/hash.utils';
 import { WinstonLoggerService } from '../logger/winstonLogger.service';
@@ -6,7 +6,7 @@ import { WinstonLoggerService } from '../logger/winstonLogger.service';
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
     constructor(private readonly logger: WinstonLoggerService) {
-        logger = new WinstonLoggerService(new Logger());
+        logger = new WinstonLoggerService();
     }
 
     intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any> {

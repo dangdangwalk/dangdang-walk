@@ -9,7 +9,7 @@ import { PORT } from './config/settings';
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
-    app.useLogger(new WinstonLoggerService(new Logger()));
+    app.useLogger(new WinstonLoggerService());
 
     app.enableCors({
         origin: process.env.CORS_ORIGIN,

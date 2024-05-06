@@ -1,4 +1,4 @@
-import { Injectable, Logger, LoggerService } from '@nestjs/common';
+import { Injectable, LoggerService } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as winston from 'winston';
@@ -8,15 +8,12 @@ import * as winstonDaily from 'winston-daily-rotate-file';
 export class WinstonLoggerService implements LoggerService {
     private readonly logger: winston.Logger;
 
-    constructor(private readonly nestLogger: Logger) {
-        const isDevelopment = process.env.NODE_ENV != 'production';
+    constructor() {
+        const isDevelopment = process.env.NODE_ENV != 'prod';
         const logDir = path.join(process.cwd(), 'log');
         if (!fs.existsSync(logDir)) {
             fs.mkdirSync(logDir, { recursive: true });
         }
-
-        nestLogger.debug(`logDir :  ${logDir}`);
-        nestLogger.debug(`isDevelopment:  ${isDevelopment}`);
 
         const logFormat = winston.format.printf(({ timestamp, level, message }) => {
             const seoulTimestamp = new Date(timestamp).toLocaleString('ko-KR');
