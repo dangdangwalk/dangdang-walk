@@ -8,4 +8,4 @@ import { DailyWalkTimeService } from './daily-walk-time.service';
     exports: [TypeOrmModule, DailyWalkTimeService],
     providers: [DailyWalkTimeService],
 })
-export class DailyWalktimeModule {}
+export class DailyWalkTimeModule {}

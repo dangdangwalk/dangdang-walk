@@ -6,7 +6,7 @@ import { BreedService } from 'src/breed/breed.service';
 import { DatabaseModule } from 'src/common/database/database.module';
 import { WinstonLoggerModule } from 'src/common/logger/winstonLogger.module';
 import { DailyWalkTime } from 'src/daily-walk-time/daily-walk-time.entity';
-import { DailyWalktimeModule } from 'src/daily-walk-time/daily-walk-time.module';
+import { DailyWalkTimeModule } from 'src/daily-walk-time/daily-walk-time.module';
 import { DailyWalkTimeService } from 'src/daily-walk-time/daily-walk-time.service';
 import { DogWalkDay } from 'src/dog-walk-day/dog-walk-day.entity';
 import { DogWalkDayService } from 'src/dog-walk-day/dog-walk-day.service';
@@ -22,7 +22,7 @@ import { DogsService } from './dogs.service';
         DatabaseModule.forFeature([Dogs, Breed, DogWalkDay, DailyWalkTime]),
         UsersModule,
         BreedModule,
-        DailyWalktimeModule,
+        DailyWalkTimeModule,
         WinstonLoggerModule,
     ],
     providers: [DogsRepository, DogsService, UsersService, BreedService, DogWalkDayService, DailyWalkTimeService],
