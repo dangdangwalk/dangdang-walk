@@ -29,7 +29,7 @@ function App() {
     }, [setLoginBottomSheetState]);
     return (
         <QueryClientProvider client={queryClient}>
-            <div className="flex flex-col">
+            <div className="flex flex-col w-full">
                 <div ref={outletRef}>
                     <Outlet />
                 </div>

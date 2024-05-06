@@ -7,13 +7,15 @@ import React from 'react';
 function Home() {
     const { isLoggedIn } = useAuth();
     return (
-        <main className="flex flex-col px-5 bg-neutral-50">
-            <div className={`${isLoggedIn ? '' : 'blur-sm'}`}>
-                <WeatherInfo />
-                <DogCardList />
-            </div>
+        <>
+            <main className="flex flex-col px-5 bg-neutral-50">
+                <div className={`${isLoggedIn ? '' : 'blur-sm'}`}>
+                    <WeatherInfo />
+                    <DogCardList />
+                </div>
+            </main>
             {!isLoggedIn && <LoginAlertModal />}
-        </main>
+        </>
     );
 }
 
