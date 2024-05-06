@@ -1,0 +1,84 @@
+name: Change Ticket Status to Done
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  change_ticket_status_to_done_if_merged:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Change the status of corresponding Notion Ticket to Done
+        env:
+          DATABASE_ID: 35e838520c274894b2206eb34a198575
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+        run: |
+          check_error() {
+            echo $1 | jq .
+            if [[ $1 == *"error"* ]]; then
+              exit 1
+            fi
+          }
+
+          branch_name="${{ github.event.pull_request.head.ref }}"
+
+          if [[ $branch_name =~ DANG-([0-9]+)$ ]]; then
+            TASK_ID="${BASH_REMATCH[1]}"
+            echo "Task ID number: $TASK_ID"
+          else
+            echo "Branch 이름에서 Task ID number 정보를 찾을 수 없습니다."
+            exit 1
+          fi
+
+          JSON_DATA=$(cat <<EOF
+          {
+            "filter": {
+              "property": "Task ID",
+              "unique_id": {
+                "equals": $TASK_ID
+              }
+            }
+          }
+          EOF
+          )
+
+          response=$(
+            curl -X POST "https://api.notion.com/v1/databases/${DATABASE_ID}/query" \
+            -H "Authorization: Bearer ${NOTION_API_KEY}" \
+            -H "Notion-Version: 2022-06-28" \
+            -H "Content-Type: application/json" \
+            --data "$JSON_DATA"
+          )
+
+          check_error "$response"
+
+          PAGE_ID=$(echo $response | jq -r ".results[0].id")
+
+          if [ "$PAGE_ID" == "null" ]; then
+            echo "$PAGE_ID Ticket이 존재하지 않습니다."
+            exit 1
+          fi
+
+          JSON_DATA=$(cat <<EOF
+          {
+            "properties": {
+              "Status": {
+                "status": {
+                  "name": "Done"
+                }
+              }
+            }
+          }
+          EOF
+          )
+
+          response=$(
+            curl -X PATCH "https://api.notion.com/v1/pages/${PAGE_ID}" \
+            -H "Authorization: Bearer ${NOTION_API_KEY}" \
+            -H "Notion-Version: 2022-06-28" \
+            -H "Content-Type: application/json" \
+            --data "$JSON_DATA"
+          )
+
+          check_error "$response"
