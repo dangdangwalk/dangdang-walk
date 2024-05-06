@@ -1,8 +1,8 @@
 import { Injectable, Logger, LoggerService } from '@nestjs/common';
+import * as fs from 'fs';
+import * as path from 'path';
 import * as winston from 'winston';
 import * as winstonDaily from 'winston-daily-rotate-file';
-import * as path from 'path';
-import * as fs from 'fs';
 
 @Injectable()
 export class WinstonLoggerService implements LoggerService {

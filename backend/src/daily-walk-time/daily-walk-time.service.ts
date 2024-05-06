@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DailyWalkTime } from './daily-walk-time.entity';
 import { In, Repository } from 'typeorm';
+import { DailyWalkTime } from './daily-walk-time.entity';
 
 @Injectable()
 export class DailyWalkTimeService {

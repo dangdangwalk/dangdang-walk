@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtModule } from '@nestjs/jwt';
 import { UsersModule } from 'src/users/users.module';
-import { TokenService } from './token/token.service';
-import { OauthModule } from './oauth/oauth.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { AuthGuard } from './guards/auth.guard';
-import { APP_GUARD } from '@nestjs/core';
+import { OauthModule } from './oauth/oauth.module';
+import { TokenService } from './token/token.service';
 
 @Module({
     imports: [

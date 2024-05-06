@@ -1,5 +1,5 @@
-import { Users } from './users.entity';
 import { mockUser } from '../fixture/users.fixture';
+import { Users } from './users.entity';
 
 describe('User', () => {
     it('user 정보가 주어지면 user 정보를 리턴해야 한다.', () => {

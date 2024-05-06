@@ -1,42 +1,42 @@
 import { Injectable } from '@nestjs/common';
-import { WalkJournalsRepository } from './walk-jorunals.repository';
-import { WalkJournals } from './walk-journals.entity';
 import { DeleteResult, FindOptionsWhere, UpdateResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { CreateJournal } from './types/journal-types';
+import { WalkJournals } from './walk-journals.entity';
+import { WalkJournalsRepository } from './walk-journals.repository';
 
 @Injectable()
 export class JournalsService {
-    constructor(private readonly walkJorunalsRepository: WalkJournalsRepository) {}
+    constructor(private readonly walkJournalsRepository: WalkJournalsRepository) {}
 
     async create(entityData: CreateJournal) {
         const walkJournals = new WalkJournals(entityData);
-        return this.walkJorunalsRepository.create(walkJournals);
+        return this.walkJournalsRepository.create(walkJournals);
     }
 
     async find(where: FindOptionsWhere<WalkJournals>) {
-        return this.walkJorunalsRepository.find(where);
+        return this.walkJournalsRepository.find(where);
     }
 
     async findOne(where: FindOptionsWhere<WalkJournals>): Promise<WalkJournals> {
-        return await this.walkJorunalsRepository.findOne(where);
+        return await this.walkJournalsRepository.findOne(where);
     }
 
     async update(
         where: FindOptionsWhere<WalkJournals>,
         partialEntity: QueryDeepPartialEntity<WalkJournals>
     ): Promise<UpdateResult> {
-        return this.walkJorunalsRepository.update(where, partialEntity);
+        return this.walkJournalsRepository.update(where, partialEntity);
     }
 
     async delete(where: FindOptionsWhere<WalkJournals>): Promise<DeleteResult> {
-        return this.walkJorunalsRepository.delete(where);
+        return this.walkJournalsRepository.delete(where);
     }
 
     async updateAndFindOne(
         where: FindOptionsWhere<WalkJournals>,
         partialEntity: QueryDeepPartialEntity<WalkJournals>
     ): Promise<WalkJournals | null> {
-        return this.walkJorunalsRepository.updateAndFindOne(where, partialEntity);
+        return this.walkJournalsRepository.updateAndFindOne(where, partialEntity);
     }
 }

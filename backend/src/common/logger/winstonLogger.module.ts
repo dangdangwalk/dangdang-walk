@@ -1,4 +1,4 @@
-import { Module, Logger } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { WinstonLoggerService } from './winstonLogger.service';
 @Module({
     providers: [WinstonLoggerService, Logger],

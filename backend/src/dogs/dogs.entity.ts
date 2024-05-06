@@ -1,8 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn, ManyToOne } from 'typeorm';
-import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Breed } from '../breed/breed.entity';
-import { Gender } from './dogs-gender.enum';
 import { DailyWalkTime } from '../daily-walk-time/daily-walk-time.entity';
+import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
+import { Gender } from './dogs-gender.enum';
 
 @Entity('dogs')
 export class Dogs {
