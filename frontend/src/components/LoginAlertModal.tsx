@@ -3,7 +3,7 @@ import LoginButton from '@/assets/icons/btn-login.svg';
 import { useLoginModalStateStore } from '@/store/modalStateStore';
 
 export default function LoginAlertModal() {
-    const { isLoginModalOpen, setLoginModalState: setModalState } = useLoginModalStateStore();
+    const { isLoginModalOpen, setLoginModalState } = useLoginModalStateStore();
     return (
         <div className={`flex flex-col w-full h-dvh fixed ${isLoginModalOpen && 'bg-neutral-800/40'}`}>
             {!isLoginModalOpen && (
@@ -14,7 +14,7 @@ export default function LoginAlertModal() {
                     <p className="text-stone-500 font-['NanumGothic'] text-xs font-semibold mb-3">
                         댕댕워크 산책기능은 회원에게만 제공됩니다
                     </p>
-                    <button onClick={() => setModalState(true)}>
+                    <button onClick={() => setLoginModalState(true)}>
                         <img src={LoginButton} alt="Login" />
                     </button>
                 </section>
