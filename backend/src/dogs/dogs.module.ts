@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { Breed } from 'src/breed/breed.entity';
 import { BreedModule } from 'src/breed/breed.module';
 import { BreedService } from 'src/breed/breed.service';
@@ -25,8 +24,16 @@ import { DogsService } from './dogs.service';
         DailyWalkTimeModule,
         WinstonLoggerModule,
     ],
-    providers: [DogsRepository, DogsService, UsersService, BreedService, DogWalkDayService, DailyWalkTimeService],
-    exports: [DatabaseModule, DogsService],
+    providers: [
+        DatabaseModule,
+        DogsRepository,
+        DogsService,
+        UsersService,
+        BreedService,
+        DogWalkDayService,
+        DailyWalkTimeService,
+    ],
+    exports: [DatabaseModule, DogsRepository, DogsService],
     controllers: [DogsController],
 })
 export class DogsModule {}

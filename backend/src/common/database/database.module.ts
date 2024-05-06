@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { DynamicModule, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
@@ -32,7 +32,7 @@ import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-clas
     ],
 })
 export class DatabaseModule {
-    static forFeature(models: EntityClassOrSchema[]) {
+    static forFeature(models: EntityClassOrSchema[]): DynamicModule {
         return TypeOrmModule.forFeature(models);
     }
 }
