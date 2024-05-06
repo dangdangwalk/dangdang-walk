@@ -26,7 +26,7 @@ import { DogsService } from './dogs.service';
         WinstonLoggerModule,
     ],
     providers: [DogsRepository, DogsService, UsersService, BreedService, DogWalkDayService, DailyWalkTimeService],
-    exports: [TypeOrmModule, DogsService],
+    exports: [DatabaseModule, DogsService],
     controllers: [DogsController],
 })
 export class DogsModule {}
