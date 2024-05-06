@@ -2,10 +2,10 @@ import React from 'react';
 import OAuthButton from '@/components/OAuthButton';
 import { OAUTH } from '@/constants';
 import signupIn3secs from '@/assets/icons/ic-signup-asap.svg';
-import { useLoginBottomSheetStateStore } from '@/store/modalStateStore';
+import { useLoginBottomSheetStateStore } from '@/store/loginBottomSheetStore';
 
 const LoginBottomSheet = () => {
-    const { setLoginBottomSheetState: setModalState } = useLoginBottomSheetStateStore();
+    const { setLoginBottomSheetState } = useLoginBottomSheetStateStore();
     return (
         <div className="flex flex-col h-dvh bg-white rounded-t-xl px-[1.875rem]">
             <div className="flex flex-col gap-2 justify-center mt-10">
@@ -23,7 +23,7 @@ const LoginBottomSheet = () => {
                 </div>
                 <button
                     className="ext-center font-['NanumGothic'] underline text-neutral-400 mt-4 py-[0.9375rem]"
-                    onClick={() => setModalState(false)}
+                    onClick={() => setLoginBottomSheetState(false)}
                 >
                     비회원으로 둘러보기
                 </button>
