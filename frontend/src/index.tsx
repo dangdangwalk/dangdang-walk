@@ -8,6 +8,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import App from './App';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
+import Join from '@/pages/Join';
 const router = createBrowserRouter([
     {
         path: '/',
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
             {
                 path: '/health',
                 element: <Health />,
+            },
+            {
+                path: '/join',
+                element: <Join />,
             },
         ],
     },

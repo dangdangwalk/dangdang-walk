@@ -3,10 +3,9 @@ import LoginAlertModal from '@/components/LoginAlertModal';
 import { useAuth } from '@/hooks/useAuth';
 import { getStorage, setStorage } from '@/utils/storage';
 import { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 function Profile() {
-    const navigate = useNavigate();
     const { search } = useLocation();
     const params = new URLSearchParams(search);
     const authorizeCode = params.get('code');
