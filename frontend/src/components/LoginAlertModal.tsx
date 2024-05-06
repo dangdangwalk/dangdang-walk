@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import LoginButton from '@/assets/icons/btn-login.svg';
 import { useModalStateStore } from '@/store/modalStateStore';
 
