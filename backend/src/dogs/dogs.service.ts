@@ -54,7 +54,7 @@ export class DogsService {
 
     async getRelatedTableIdList(
         ownDogIds: number[],
-        attributeName: 'walkDayId' | 'dailyWalkTimeId'
+        attributeName: 'walkDayId' | 'dailyWalkTimeId' | 'breedId'
     ): Promise<number[]> {
         const ownDogList = await this.dogsRepository.find({ id: In(ownDogIds) });
         return ownDogList.map((cur) => {
@@ -92,9 +92,10 @@ export class DogsService {
         const ownDogIds = await this.usersService.getDogsList(userId);
         const dogWalkDayIds = await this.getRelatedTableIdList(ownDogIds, 'walkDayId');
         const dailyWalkTimeIds = await this.getRelatedTableIdList(ownDogIds, 'dailyWalkTimeId');
+        const breedIds = await this.getRelatedTableIdList(ownDogIds, 'breedId');
 
         const dogProfiles = await this.getProfileList({ id: In(ownDogIds) });
-        const recommendedDailyWalkAmount = await this.breedService.getActivityList(ownDogIds);
+        const recommendedDailyWalkAmount = await this.breedService.getActivityList(breedIds);
         const dailyWalkAmount = await this.dailyWalkTimeService.getWalkTimeList(dailyWalkTimeIds);
         const weeklyWalks = await this.dogWalkDayService.getWalkDayList(dogWalkDayIds);
 
