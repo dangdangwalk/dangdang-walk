@@ -1,13 +1,19 @@
 import { create } from 'zustand';
 
 interface ModalState {
-    isModalOpen: boolean;
-    setModalState: (state: boolean) => void;
+    isLoginBottomSheetOpen: boolean;
+    isJoinning: boolean;
+    setLoginBottomSheetState: (state: boolean) => void;
+    setJoinningState: (state: boolean) => void;
 }
 
-export const useModalStateStore = create<ModalState>((set) => ({
-    isModalOpen: false,
-    setModalState: (state: boolean) => {
-        set({ isModalOpen: state });
+export const useLoginBottomSheetStateStore = create<ModalState>((set) => ({
+    isLoginBottomSheetOpen: false,
+    isJoinning: false,
+    setLoginBottomSheetState: (state: boolean) => {
+        set({ isLoginBottomSheetOpen: state });
+    },
+    setJoinningState: (state: boolean) => {
+        set({ isJoinning: state });
     },
 }));

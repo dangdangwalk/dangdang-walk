@@ -5,10 +5,7 @@ import myPageOn from '@/assets/icons/btn-mypage-on.svg';
 import WalkOff from '@/assets/icons/btn-walk-off.svg';
 import WalkOn from '@/assets/icons/btn-walk-on.svg';
 
-interface Props {
-    isLoginModalOpen: boolean;
-}
-function Navbar({ isLoginModalOpen }: Props) {
+function Navbar() {
     const location = useLocation();
     const currentPath = window.location.pathname;
     if (currentPath === '/login') return null;

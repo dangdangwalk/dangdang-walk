@@ -3,13 +3,17 @@ import React from 'react';
 import icGoogle from '@/assets/icons/ic-google.svg';
 import icKakao from '@/assets/icons/ic-kakao.svg';
 import icNaver from '@/assets/icons/ic-naver.svg';
+import { useNavigate } from 'react-router-dom';
+import { useLoginBottomSheetStateStore } from '@/store/modalStateStore';
 
 type Props = {
     provider: string;
     name: string;
-    prevURL: string;
 };
-const OAuthButton = ({ provider, name, prevURL }: Props) => {
+const OAuthButton = ({ provider, name }: Props) => {
+    const { setLoginBottomSheetState, setJoinningState } = useLoginBottomSheetStateStore();
+    const currentUrl = window.location.pathname;
+    const navigate = useNavigate();
     const btnLogin = (provider: string) => {
         switch (provider) {
             case 'google':
@@ -39,21 +43,28 @@ const OAuthButton = ({ provider, name, prevURL }: Props) => {
         let url = '';
         switch (provider) {
             case 'google':
-                url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_BASE_URL}${prevURL}&response_type=code&access_type=offline&scope=https://www.googleapis.com/auth/userinfo.email&prompt=select_account`;
+                url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_BASE_URL}${currentUrl}&response_type=code&access_type=offline&scope=https://www.googleapis.com/auth/userinfo.email&prompt=select_account`;
                 break;
             case 'kakao':
-                url = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.REACT_APP_KAKAO_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_BASE_URL}${prevURL}`;
+                url = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.REACT_APP_KAKAO_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_BASE_URL}${currentUrl}`;
                 break;
             case 'naver':
-                url = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.REACT_APP_NAVER_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_BASE_URL}${prevURL}&state=naverLoginState`;
+                url = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.REACT_APP_NAVER_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_BASE_URL}${currentUrl}&state=naverLoginState`;
                 break;
         }
-        window.location.href = url;
+        //1. oauthUrl set
+        //2. currentUrl set
+        //3. 동의 페이지로 이동
+        navigate('/join', { state: { oauthUrl: url } });
     };
     return (
         <button
             className={`rounded-lg flex justify-center items-center relative w-full h-[3.25rem] ${bgColor(provider)} ${provider === 'google' && 'border border-neutral-200 '}`}
-            onClick={() => handleCallOAuth(provider)}
+            onClick={() => {
+                handleCallOAuth(provider);
+                setLoginBottomSheetState(false);
+                setJoinningState(true);
+            }}
         >
             <img className="absolute left-0 ml-5" src={btnLogin(provider)} alt={`${provider}`} />
             <div

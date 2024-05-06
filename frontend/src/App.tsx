@@ -1,15 +1,14 @@
 import { Outlet } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import { useState } from 'react';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import queryClient from './api/queryClient';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { useModalStateStore } from './store/modalStateStore';
-import LoginModal from '@/components/LoginModal';
+import { useLoginBottomSheetStateStore } from './store/modalStateStore';
+import LoginBottomSheet from '@/components/LoginBottomSheet';
 var console;
 function App() {
-    const [isLoginModalOpen] = useState(true);
-    const { isModalOpen } = useModalStateStore();
+    const { isLoginBottomSheetOpen, isJoinning, setLoginBottomSheetState } = useLoginBottomSheetStateStore();
+    const outletRef = useRef<HTMLDivElement>(null);
     //TODO: 일시적인 배포시 console.log 제거 추가로 환경설정으로 빼줘야함ㄴ
     if (process.env.NODE_ENV === 'production') {
         console = window.console || {};
@@ -17,19 +16,35 @@ function App() {
         console.warn = function no_console() {};
         console.error = function () {};
     }
+    useEffect(() => {
+        if (outletRef.current) {
+            outletRef.current.addEventListener('click', () => setLoginBottomSheetState(false));
+        }
+
+        return () => {
+            if (outletRef.current) {
+                outletRef.current.removeEventListener('click', () => setLoginBottomSheetState(false));
+            }
+        };
+    }, [setLoginBottomSheetState]);
     return (
         <QueryClientProvider client={queryClient}>
             <div className="flex flex-col">
-                <Outlet />
-                <div className={`fixed z-10`}>
-                    <Navbar isLoginModalOpen={isLoginModalOpen} />
+                <div ref={outletRef}>
+                    <Outlet />
                 </div>
-
-                <div
-                    className={`fixed z-20 w-full duration-300 ${isModalOpen ? 'translate-y-72' : 'translate-y-full'}`}
-                >
-                    <LoginModal />
-                </div>
+                {!isJoinning && (
+                    <div className={`fixed z-10`}>
+                        <Navbar />
+                    </div>
+                )}
+                {!isJoinning && (
+                    <div
+                        className={`fixed z-20 w-full duration-300 ${isLoginBottomSheetOpen ? ' translate-y-72' : 'translate-y-full'}`}
+                    >
+                        <LoginBottomSheet />
+                    </div>
+                )}
             </div>
         </QueryClientProvider>
     );
