@@ -4,14 +4,14 @@ import icGoogle from '@/assets/icons/ic-google.svg';
 import icKakao from '@/assets/icons/ic-kakao.svg';
 import icNaver from '@/assets/icons/ic-naver.svg';
 import { useNavigate } from 'react-router-dom';
-import { useLoginBottomSheetStateStore } from '@/store/modalStateStore';
+import { useLoginBottomSheetStateStore } from '@/store/loginBottomSheetStore';
 
 type Props = {
     provider: string;
     name: string;
 };
 const OAuthButton = ({ provider, name }: Props) => {
-    const { setLoginBottomSheetState, setJoinningState } = useLoginBottomSheetStateStore();
+    const { setLoginBottomSheetState } = useLoginBottomSheetStateStore();
     const currentUrl = window.location.pathname;
     const navigate = useNavigate();
     const btnLogin = (provider: string) => {
@@ -63,7 +63,6 @@ const OAuthButton = ({ provider, name }: Props) => {
             onClick={() => {
                 handleCallOAuth(provider);
                 setLoginBottomSheetState(false);
-                setJoinningState(true);
             }}
         >
             <img className="absolute left-0 ml-5" src={btnLogin(provider)} alt={`${provider}`} />
