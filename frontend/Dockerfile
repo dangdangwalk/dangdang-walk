@@ -1,7 +1,5 @@
 FROM node:18-alpine AS dev
 
-ENV NODE_ENV dev
-
 # Set install apk
 RUN apk add --no-cache libc6-compat && \
     apk update && \
@@ -30,6 +28,8 @@ USER react
 
 FROM node:18-alpine AS build
 
+ENV NODE_ENV prod
+
 # Set install apk
 RUN apk add --no-cache libc6-compat && \
     apk update && \
@@ -47,6 +47,8 @@ RUN addgroup --system --gid 1001 nodejs && \
 WORKDIR /app
 
 USER root
+
+COPY --chown=node:node --from=dev /app/node_modules /app/node_modules
 
 COPY --chown=react:nodejs . .
 
