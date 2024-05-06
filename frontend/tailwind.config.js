@@ -15,7 +15,7 @@ module.exports = {
                 naver: '#03C75A',
             },
             fontFamily: {
-                roboto: ['Roboto'],
+                roboto: ['"Roboto"', 'sans-serif'],
             },
         },
     },

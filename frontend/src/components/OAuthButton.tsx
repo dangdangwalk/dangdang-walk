@@ -56,11 +56,11 @@ const OAuthButton = ({ provider, name, prevURL }: Props) => {
             onClick={() => handleCallOAuth(provider)}
         >
             <img className="absolute left-0 ml-5" src={btnLogin(provider)} alt={`${provider}`} />
-            <p
+            <div
                 className={`my-auto text-center text-base font-bold font-roboto leading-normal  ${provider === 'kakao' && 'text-opacity-85'} ${provider === 'naver' ? 'text-white' : 'text-black'}`}
             >
                 {name}로 시작하기
-            </p>
+            </div>
         </button>
     );
 };
