@@ -7,7 +7,7 @@ import { useLoginModalStateStore } from './store/modalStateStore';
 import LoginModal from '@/components/LoginModal';
 var console;
 function App() {
-    const { isLoginModalOpen: isModalOpen, isJoinning, setLoginModalState: setModalState } = useLoginModalStateStore();
+    const { isLoginModalOpen, isJoinning, setLoginModalState } = useLoginModalStateStore();
     const outletRef = useRef<HTMLDivElement>(null);
     //TODO: 일시적인 배포시 console.log 제거 추가로 환경설정으로 빼줘야함ㄴ
     if (process.env.NODE_ENV === 'production') {
@@ -18,15 +18,15 @@ function App() {
     }
     useEffect(() => {
         if (outletRef.current) {
-            outletRef.current.addEventListener('click', () => setModalState(false));
+            outletRef.current.addEventListener('click', () => setLoginModalState(false));
         }
 
         return () => {
             if (outletRef.current) {
-                outletRef.current.removeEventListener('click', () => setModalState(false));
+                outletRef.current.removeEventListener('click', () => setLoginModalState(false));
             }
         };
-    }, [setModalState]);
+    }, [setLoginModalState]);
     return (
         <QueryClientProvider client={queryClient}>
             <div className="flex flex-col">
@@ -40,7 +40,7 @@ function App() {
                 )}
                 {!isJoinning && (
                     <div
-                        className={`fixed z-20 w-full duration-300 ${isModalOpen ? ' translate-y-72' : 'translate-y-full'}`}
+                        className={`fixed z-20 w-full duration-300 ${isLoginModalOpen ? ' translate-y-72' : 'translate-y-full'}`}
                     >
                         <LoginModal />
                     </div>

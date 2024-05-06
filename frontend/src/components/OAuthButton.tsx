@@ -11,7 +11,7 @@ type Props = {
     name: string;
 };
 const OAuthButton = ({ provider, name }: Props) => {
-    const { setLoginModalState: setModalState, setJoinningState } = useLoginModalStateStore();
+    const { setLoginModalState, setJoinningState } = useLoginModalStateStore();
     const currentUrl = window.location.pathname;
     const navigate = useNavigate();
     const btnLogin = (provider: string) => {
@@ -62,7 +62,7 @@ const OAuthButton = ({ provider, name }: Props) => {
             className={`rounded-lg flex justify-center items-center relative w-full h-[3.25rem] ${bgColor(provider)} ${provider === 'google' && 'border border-neutral-200 '}`}
             onClick={() => {
                 handleCallOAuth(provider);
-                setModalState(false);
+                setLoginModalState(false);
                 setJoinningState(true);
             }}
         >
