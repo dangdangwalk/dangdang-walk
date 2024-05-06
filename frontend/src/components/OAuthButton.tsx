@@ -4,14 +4,14 @@ import icGoogle from '@/assets/icons/ic-google.svg';
 import icKakao from '@/assets/icons/ic-kakao.svg';
 import icNaver from '@/assets/icons/ic-naver.svg';
 import { useNavigate } from 'react-router-dom';
-import { useModalStateStore } from '@/store/modalStateStore';
+import { useLoginModalStateStore } from '@/store/modalStateStore';
 
 type Props = {
     provider: string;
     name: string;
 };
 const OAuthButton = ({ provider, name }: Props) => {
-    const { setModalState, setJoinningState } = useModalStateStore();
+    const { setLoginModalState: setModalState, setJoinningState } = useLoginModalStateStore();
     const currentUrl = window.location.pathname;
     const navigate = useNavigate();
     const btnLogin = (provider: string) => {
