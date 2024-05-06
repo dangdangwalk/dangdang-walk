@@ -1,3 +1,4 @@
+import React from 'react';
 import LoginAlertModal from '@/components/LoginAlertModal';
 import { useAuth } from '@/hooks/useAuth';
 import { getStorage, setStorage } from '@/utils/storage';
@@ -19,15 +20,40 @@ function Profile() {
             loginMutation.mutate({ authorizeCode, provider, redirectURI });
         }
     }, []);
-
-    const handleLogin = () => {
-        navigate('/login', { state: { redirectURI } });
-    };
-
     return (
-        <div>
-            <button onClick={() => logoutMutation.mutate(null)}>로그아웃</button>
-            <div className={` ${isLoggedIn ? '' : 'blur-sm'}`}>
+        <div className="flex flex-col w-full items-center h-full">
+            <div className={`w-full h-full ${isLoggedIn ? '' : 'blur-sm'}`}>
+                <button onClick={() => logoutMutation.mutate(null)}>로그아웃</button>
+                <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
+                <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
+                <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
+                <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
+                <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
+                <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
+                <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
+                <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
+                <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
+                <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
+                <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
+                <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
+                <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
+                <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
+                <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
+                <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
+                <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
+                <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
+                <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
+                <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
+                <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
+                <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
+                <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
+                <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
+                <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
+                <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
+                <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
+                <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
+                <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
+                <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
                 <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
                 <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
                 <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
@@ -41,7 +67,7 @@ function Profile() {
                 <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
                 <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
             </div>
-            {!isLoggedIn && <LoginAlertModal onClick={handleLogin} />}
+            {!isLoggedIn && <LoginAlertModal />}
         </div>
     );
 }

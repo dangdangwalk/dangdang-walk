@@ -1,5 +1,6 @@
 import DogCardList from '@/components/home/DogCardList';
 import WeatherInfo from '@/components/home/WeatherInfo';
+import React from 'react';
 
 function Home() {
     return (
