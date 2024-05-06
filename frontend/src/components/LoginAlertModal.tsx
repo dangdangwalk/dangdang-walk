@@ -3,10 +3,10 @@ import LoginButton from '@/assets/icons/btn-login.svg';
 import { useLoginModalStateStore } from '@/store/modalStateStore';
 
 export default function LoginAlertModal() {
-    const { isLoginModalOpen: isModalOpen, setLoginModalState: setModalState } = useLoginModalStateStore();
+    const { isLoginModalOpen, setLoginModalState: setModalState } = useLoginModalStateStore();
     return (
-        <div className={`flex flex-col w-full h-dvh fixed ${isModalOpen && 'bg-neutral-800/40'}`}>
-            {!isModalOpen && (
+        <div className={`flex flex-col w-full h-dvh fixed ${isLoginModalOpen && 'bg-neutral-800/40'}`}>
+            {!isLoginModalOpen && (
                 <section
                     className={`top-0 left-0 w-full flex flex-col items-center justify-center h-full mb-[3.75rem]`}
                 >
