@@ -3,7 +3,7 @@ import { cn } from '@/utils/tailwind-class';
 import * as SeparatorPrimitive from '@radix-ui/react-separator';
 import * as React from 'react';
 
-const Separator = React.forwardRef<
+const Divider = React.forwardRef<
     React.ElementRef<typeof SeparatorPrimitive.Root>,
     React.ComponentPropsWithoutRef<typeof SeparatorPrimitive.Root>
 >(({ className, orientation = 'horizontal', decorative = true, ...props }, ref) => (
@@ -19,6 +19,6 @@ const Separator = React.forwardRef<
         {...props}
     />
 ));
-Separator.displayName = 'CommonSeparator';
+Divider.displayName = 'CommonDivider';
 
-export { Separator };
+export { Divider };
