@@ -11,6 +11,10 @@ export class BreedService {
         return this.breedRepository.find(where);
     }
 
+    async findOne(where: FindOptionsWhere<Breed>): Promise<Breed> {
+        return this.breedRepository.findOne(where);
+    }
+
     async getActivityList(ownDogs: number[]): Promise<number[]> {
         const foundBreed = await this.breedRepository.find({ id: In(ownDogs) });
         if (!foundBreed.length) {

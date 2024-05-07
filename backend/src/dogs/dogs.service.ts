@@ -10,6 +10,7 @@ import { DogProfile } from './dogs.controller';
 import { Dogs } from './dogs.entity';
 import { DogsRepository } from './dogs.repository';
 import { DogStatisticDto } from './dto/dog-statistic.dto';
+import { DogDto } from './dto/dog.dto';
 
 @Injectable()
 export class DogsService {
@@ -22,9 +23,17 @@ export class DogsService {
         private readonly logger: WinstonLoggerService
     ) {}
 
-    async find(where: FindOptionsWhere<Dogs>) {
-        return this.dogsRepository.find(where);
+    async create(entityData: DogDto) {
+        const { breed: breedName, ...rest } = entityData;
+        const breed = await this.breedService.findOne({ name: breedName });
+        const dog = new Dogs({ breedId: breed.id, ...rest });
+        return this.dogsRepository.create(dog);
     }
+
+    async findOne(where: FindOptionsWhere<Dogs>) {
+        return this.dogsRepository.findOne(where);
+    }
+
     async update(where: FindOptionsWhere<Dogs>, partialEntity: QueryDeepPartialEntity<Dogs>): Promise<UpdateResult> {
         return await this.dogsRepository.update(where, partialEntity);
     }
