@@ -1,8 +1,8 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Users } from '../users/users.entity';
 
-@Entity('walk_journals')
-export class WalkJournals {
+@Entity('journals')
+export class Journals {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -34,7 +34,7 @@ export class WalkJournals {
     @Column()
     distance: number;
 
-    constructor(entityData: Partial<WalkJournals>) {
+    constructor(entityData: Partial<Journals>) {
         Object.assign(this, entityData);
     }
 }
