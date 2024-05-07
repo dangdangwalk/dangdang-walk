@@ -2,10 +2,13 @@ import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
-import { Repository } from 'typeorm';
+import { UsersDogs } from 'src/users-dogs/users-dogs.entity';
+import { UsersDogsRepository } from 'src/users-dogs/users-dogs.repository';
+import { UsersDogsService } from 'src/users-dogs/users-dogs.service';
+import { EntityManager, Repository, UpdateResult } from 'typeorm';
 import { mockUser } from '../fixture/users.fixture';
-import { UsersDogs } from './user-dogs.entity';
 import { Users } from './users.entity';
+import { UsersRepository } from './users.repository';
 import { UsersService } from './users.service';
 
 const context = describe;
@@ -14,11 +17,16 @@ describe('UsersService', () => {
     let service: UsersService;
     let userRepository: Repository<Users>;
     let usersDogsRepository: Repository<UsersDogs>;
+    let usersDogsService: UsersDogsService;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             providers: [
                 UsersService,
+                UsersRepository,
+                UsersDogsService,
+                UsersDogsRepository,
+                EntityManager,
                 {
                     provide: getRepositoryToken(Users),
                     useClass: Repository,
@@ -37,6 +45,7 @@ describe('UsersService', () => {
         service = module.get<UsersService>(UsersService);
         userRepository = module.get<Repository<Users>>(getRepositoryToken(Users));
         usersDogsRepository = module.get<Repository<UsersDogs>>(getRepositoryToken(UsersDogs));
+        usersDogsService = module.get<UsersDogsService>(UsersDogsService);
     });
 
     describe('findOne', () => {
@@ -46,7 +55,7 @@ describe('UsersService', () => {
             });
 
             it('사용자 정보를 리턴해야 한다.', async () => {
-                const res = await service.findOne(mockUser.id);
+                const res = await service.findOne({ id: mockUser.id });
 
                 expect(res).toEqual(mockUser);
             });
@@ -58,7 +67,7 @@ describe('UsersService', () => {
             });
 
             it('NotFoundException 예외를 던져야 한다.', async () => {
-                await expect(service.findOne(1)).rejects.toThrow(NotFoundException);
+                await expect(service.findOne({ id: 1 })).rejects.toThrow(NotFoundException);
             });
         });
     });
@@ -67,7 +76,7 @@ describe('UsersService', () => {
         context('사용자 토큰 정보가 주어지고 사용자가 존재하지 않으면', () => {
             beforeEach(() => {
                 jest.spyOn(userRepository, 'findOne').mockResolvedValue(mockUser);
-                jest.spyOn(userRepository, 'save').mockResolvedValue(mockUser);
+                jest.spyOn(userRepository, 'update').mockResolvedValue({ affected: 1 } as UpdateResult);
                 jest.spyOn(service, 'generateUniqueNickname').mockResolvedValue('unique-nickname');
                 jest.spyOn(service, 'create').mockResolvedValue({ id: 1 } as Users);
             });
@@ -81,8 +90,15 @@ describe('UsersService', () => {
                 );
 
                 expect(res).toBe(1);
-                expect(userRepository.save).toHaveBeenCalledWith({ ...mockUser });
                 expect(userRepository.findOne).toHaveBeenCalledWith({ where: { oauthId: mockUser.oauthId } });
+                expect(userRepository.update).toHaveBeenCalledWith(
+                    { oauthId: mockUser.oauthId },
+                    {
+                        oauthAccessToken: mockUser.oauthAccessToken,
+                        oauthRefreshToken: mockUser.oauthRefreshToken,
+                        refreshToken: mockUser.refreshToken,
+                    }
+                );
             });
         });
     });
