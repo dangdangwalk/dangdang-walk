@@ -21,31 +21,38 @@ export class AuthController {
         private authService: AuthService
     ) {}
 
-    @Post('is-user')
+    @Post('login')
     @HttpCode(200)
     @SkipAuthGuard()
-    async isUser(
-        @Body('oauthAccessToken') oauthAccessToken: string,
-        @Body('provider') provider: OauthProvider
-    ): Promise<{ isUser: boolean }> {
-        const isUser = await this.authService.isUser(oauthAccessToken, provider);
-
-        return { isUser };
-    }
-
-    @Post('login')
-    @SkipAuthGuard()
     async login(
-        @Body('oauthAccessToken') oauthAccessToken: string,
-        @Body('oauthRefreshToken') oauthRefreshToken: string,
+        @Body('authorizeCode') authorizeCode: string,
         @Body('provider') provider: OauthProvider,
+        @Body('redirectURI') redirectURI: string,
         @Res({ passthrough: true }) response: Response
     ): Promise<accessTokenResponse> {
-        const { accessToken, refreshToken } = await this.authService.login(
-            oauthAccessToken,
-            oauthRefreshToken,
-            provider
-        );
+        const { accessToken, refreshToken } = await this.authService.login(authorizeCode, provider, redirectURI);
+
+        response.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: this.configService.get<string>('NODE_ENV') === 'prod' ? true : false,
+            maxAge: TOKEN_LIFETIME_MAP.refresh.maxAge,
+        });
+
+        return {
+            accessToken,
+            expiresIn: TOKEN_LIFETIME_MAP.access.maxAge / 1000,
+        };
+    }
+
+    @Post('signin')
+    @SkipAuthGuard()
+    async signin(
+        @Body('authorizeCode') authorizeCode: string,
+        @Body('provider') provider: OauthProvider,
+        @Body('redirectURI') redirectURI: string,
+        @Res({ passthrough: true }) response: Response
+    ): Promise<accessTokenResponse> {
+        const { accessToken, refreshToken } = await this.authService.signin(authorizeCode, provider, redirectURI);
 
         response.cookie('refreshToken', refreshToken, {
             httpOnly: true,
