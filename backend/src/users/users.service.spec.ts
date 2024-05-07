@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
@@ -72,24 +72,25 @@ describe('UsersService', () => {
         });
     });
 
-    describe('loginOrCreateUser', () => {
-        context('사용자 토큰 정보가 주어지고 사용자가 존재하지 않으면', () => {
+    describe('updateAndFindOne', () => {
+        context('사용자 토큰 정보가 주어지고 사용자가 존재하면', () => {
             beforeEach(() => {
                 jest.spyOn(userRepository, 'findOne').mockResolvedValue(mockUser);
                 jest.spyOn(userRepository, 'update').mockResolvedValue({ affected: 1 } as UpdateResult);
                 jest.spyOn(service, 'generateUniqueNickname').mockResolvedValue('unique-nickname');
-                jest.spyOn(service, 'create').mockResolvedValue({ id: 1 } as Users);
             });
 
-            it('사용자 정보를 저장하고 사용자 id를 리턴해야 한다.', async () => {
-                const res = await service.loginOrCreateUser(
-                    mockUser.oauthId,
-                    mockUser.oauthAccessToken,
-                    mockUser.oauthRefreshToken,
-                    mockUser.refreshToken
+            it('사용자 정보를 업데이트하고 사용자를 리턴해야 한다.', async () => {
+                const res = await service.updateAndFindOne(
+                    { oauthId: mockUser.oauthId },
+                    {
+                        oauthAccessToken: mockUser.oauthAccessToken,
+                        oauthRefreshToken: mockUser.oauthRefreshToken,
+                        refreshToken: mockUser.refreshToken,
+                    }
                 );
 
-                expect(res).toBe(1);
+                expect(res).toBe(mockUser);
                 expect(userRepository.findOne).toHaveBeenCalledWith({ where: { oauthId: mockUser.oauthId } });
                 expect(userRepository.update).toHaveBeenCalledWith(
                     { oauthId: mockUser.oauthId },
@@ -99,6 +100,45 @@ describe('UsersService', () => {
                         refreshToken: mockUser.refreshToken,
                     }
                 );
+            });
+        });
+
+        context('사용자 토큰 정보가 주어지고 사용자가 존재하지 않으면', () => {
+            beforeEach(() => {
+                jest.spyOn(userRepository, 'update').mockResolvedValue({ affected: 0 } as UpdateResult);
+            });
+
+            it('NotFoundException 예외를 던져야 한다.', async () => {
+                await expect(
+                    service.updateAndFindOne(
+                        { oauthId: mockUser.oauthId },
+                        {
+                            oauthAccessToken: mockUser.oauthAccessToken,
+                            oauthRefreshToken: mockUser.oauthRefreshToken,
+                            refreshToken: mockUser.refreshToken,
+                        }
+                    )
+                ).rejects.toThrow(NotFoundException);
+            });
+        });
+    });
+
+    describe('createIfNotExists', () => {
+        context('사용자 토큰 정보가 주어지고 사용자가 존재하면', () => {
+            beforeEach(() => {
+                jest.spyOn(userRepository, 'findOne').mockResolvedValue(mockUser);
+                jest.spyOn(service, 'generateUniqueNickname').mockResolvedValue('unique-nickname');
+            });
+
+            it('ConflictException 예외를 던져야 한다.', async () => {
+                await expect(
+                    service.createIfNotExists(
+                        mockUser.oauthId,
+                        mockUser.oauthAccessToken,
+                        mockUser.oauthRefreshToken,
+                        mockUser.refreshToken
+                    )
+                ).rejects.toThrow(ConflictException);
             });
         });
     });
