@@ -69,9 +69,9 @@ jobs:
           ENV_FILE: ${{ secrets.ENV_FILE_BACKEND }}
         run: |
           if [ ! -d "backend" ]; then 
-            mkdir backend; 
+            mkdir backend;  
           fi
-          echo "$ENV_FILE" >> ./backend/.env.prod
+          echo "$ENV_FILE" > ./backend/.env.prod
       - name: Deploy to Amazon EC2
         run : | 
           aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ env.REPO }}

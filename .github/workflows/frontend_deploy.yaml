@@ -66,9 +66,9 @@ jobs:
           ENV_FILE: ${{ secrets.ENV_FILE_FRONTEND }}
         run: |
           if [ ! -d "frontend" ]; then 
-            mkdir frontend; 
+            mkdir frontend;  
           fi
-          echo "$ENV_FILE" >> ./frontend/.env.prod
+          echo "$ENV_FILE" > ./frontend/.env.prod
       - name: Deploy to Amazon EC2
         run : |
           docker ps -q --filter "name=${{ env.IMAGE }}" | grep -q . && docker stop ${{ env.IMAGE }} && docker container prune -f
