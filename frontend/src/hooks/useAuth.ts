@@ -17,6 +17,11 @@ const useLogin = (mutationOptions?: UseMutationCustomOptions) => {
             setHeader(tokenKeys.AUTHORIZATION, `Bearer ${accessToken}`);
             navigate(url);
         },
+        onError: (error) => {
+            if (error.response && error.response.status === 404) {
+                navigate('/join');
+            }
+        },
         onSettled: () => {
             queryClient.refetchQueries({ queryKey: ['auth', 'getAccessToken'] });
         },
