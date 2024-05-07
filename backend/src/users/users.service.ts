@@ -107,11 +107,15 @@ export class UsersService {
         return nickname;
     }
 
-    async getDogsList(userId: number): Promise<number[]> {
+    async getOwnDogsList(userId: number): Promise<number[]> {
         const foundDogs = await this.usersDogsRepo.find({ where: { userId } });
-        if (!foundDogs) {
-            throw new NotFoundException();
-        }
         return foundDogs.map((cur) => cur.dogId);
+    }
+
+    async checkDogOwnership(userId: number, dogId: number | number[]): Promise<boolean> {
+        const ownDogs = await this.usersDogsRepo.find({ where: { userId } });
+        const myDogIds = ownDogs.map((cur) => cur.dogId);
+
+        return Array.isArray(dogId) ? !dogId.every((id) => myDogIds.includes(id)) : myDogIds.includes(dogId);
     }
 }

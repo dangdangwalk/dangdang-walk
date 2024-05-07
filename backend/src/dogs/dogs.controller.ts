@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, InternalServerErrorException, Param, ParseIntPipe } from '@nestjs/common';
 import { AccessTokenPayload } from 'src/auth/token/token.service';
 import { Serialize } from 'src/common/interceptor/serialize.interceptor';
 import { User } from 'src/users/decorators/user.decorator';
@@ -22,7 +22,7 @@ export class DogsController {
 
     @Get('/walk-available')
     async getAvailableDogs(@User() user: AccessTokenPayload): Promise<DogProfile[]> {
-        const ownDogIds = await this.usersService.getDogsList(user.userId);
+        const ownDogIds = await this.usersService.getOwnDogsList(user.userId);
         return await this.dogsService.getProfileList({ id: In(ownDogIds), isWalking: false });
     }
 
@@ -30,5 +30,14 @@ export class DogsController {
     @Get('/statistics')
     async getDogsStatistics(@User() user: AccessTokenPayload) {
         return this.dogsService.getDogsStatistics(user.userId);
+    }
+
+    @Get('/:id')
+    async getOneProfile(@User() user: AccessTokenPayload, @Param('id', ParseIntPipe) dogId: number) {
+        const owned = await this.usersService.checkDogOwnership(user.userId, dogId);
+        if (!owned) {
+            throw new InternalServerErrorException('주인이 아닌 강아지에 대한 요청 ');
+        }
+        return this.dogsService.getProfile(dogId);
     }
 }
