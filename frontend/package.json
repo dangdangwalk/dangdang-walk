@@ -45,7 +45,7 @@
     "scripts": {
         "start": "craco start",
         "build": "craco build",
-        "build:prod": "FAST_REFRESH=false craco build",
+        "build:prod": "NODE_ENV=production craco build",
         "test": "vitest",
         "eject": "react-scripts eject",
         "typecheck": "tsc --noEmit --skipLibCheck",
