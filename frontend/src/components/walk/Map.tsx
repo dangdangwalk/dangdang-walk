@@ -1,5 +1,24 @@
-import React from 'react';
+import { DEFAULT_LAT, DEFAULT_LNG } from '@/constants/location';
+import { getGeoLocation } from '@/utils/geo';
+import React, { useEffect } from 'react';
 
+declare global {
+    interface Window {
+        kakao: any;
+    }
+}
 export default function Map() {
-    return <div>Map</div>;
+    const onLoad = (lat: number, lng: number): any => {
+        const container = document.getElementById(`map`); // 지도를 담을 영역의 DOM 레퍼런스
+        const options = {
+            center: new window.kakao.maps.LatLng(lat, lng), // 지도 중심 좌표
+            level: 3, // 지도의 레벨(확대, 축소 정도)
+        };
+        new window.kakao.maps.Map(container, options);
+    };
+    useEffect(() => {
+        getGeoLocation(DEFAULT_LAT, DEFAULT_LNG, onLoad);
+    }, []);
+
+    return <div id="map" style={{ width: '100vw', height: '100vh' }} />;
 }

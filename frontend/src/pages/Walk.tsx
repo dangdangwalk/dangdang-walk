@@ -9,7 +9,6 @@ import Avatar from '@/components/common/Avatar';
 import { Divider } from '@/components/common/Divider';
 import AllDogs from '@/assets/icons/walk/frame-5058.svg';
 import DogCheckBox from '@/components/walk/DogCheckBox';
-// import CheckBox from '@/components/common/CheckBox';
 
 const dogs = [
     {
@@ -71,7 +70,7 @@ export default function Walk() {
                 )}
                 {availableDog.map((dog) => (
                     <>
-                        <Divider className="h-0 border border-neutral-200" />
+                        <Divider key={`${dog.id}-divider`} className="h-0 border border-neutral-200" />
                         <li className="flex py-2 justify-between items-center" key={dog.id}>
                             <Avatar url={dog.photoUrl} name={dog.name} />
                             <DogCheckBox id={dog.id} isChecked={dog.isChecked} onChange={handleDogSelect} />
