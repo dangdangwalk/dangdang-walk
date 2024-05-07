@@ -21,7 +21,7 @@ export class AuthService {
         const oauthId = await this[`${provider}Service`].requestUserId(oauthAccessToken);
 
         try {
-            await this.usersService.findOneWithOauthId(oauthId);
+            await this.usersService.findOne({ oauthId });
             return true;
         } catch {
             return false;
@@ -49,14 +49,14 @@ export class AuthService {
         return { accessToken, refreshToken };
     }
 
-    async logout(userId: number, provider: OauthProvider): Promise<void> {
-        const { oauthAccessToken } = await this.usersService.findOne(userId);
+    async logout(id: number, provider: OauthProvider): Promise<void> {
+        const { oauthAccessToken } = await this.usersService.findOne({ id });
 
         await this[`${provider}Service`].requestTokenExpiration(oauthAccessToken);
     }
 
-    async deactivate(userId: number, provider: OauthProvider): Promise<void> {
-        const { oauthAccessToken } = await this.usersService.findOne(userId);
+    async deactivate(id: number, provider: OauthProvider): Promise<void> {
+        const { oauthAccessToken } = await this.usersService.findOne({ id });
 
         if (provider === 'kakao') {
             await this[`${provider}Service`].requestUnlink(oauthAccessToken);
@@ -64,12 +64,12 @@ export class AuthService {
             await this[`${provider}Service`].requestTokenExpiration(oauthAccessToken);
         }
 
-        await this.usersService.remove(userId);
+        await this.usersService.delete({ id });
     }
 
-    async validateAccessToken(userId: number): Promise<boolean> {
+    async validateAccessToken(id: number): Promise<boolean> {
         try {
-            await this.usersService.findOne(userId);
+            await this.usersService.findOne({ id });
             return true;
         } catch (error) {
             return false;
@@ -77,7 +77,7 @@ export class AuthService {
     }
 
     async validateRefreshToken(token: string, oauthId: string): Promise<boolean> {
-        const { refreshToken } = await this.usersService.findOneWithOauthId(oauthId);
+        const { refreshToken } = await this.usersService.findOne({ oauthId });
 
         return refreshToken === token;
     }
@@ -86,7 +86,7 @@ export class AuthService {
         oauthId: string,
         provider: OauthProvider
     ): Promise<{ accessToken: string; refreshToken: string }> {
-        const { id: userId, oauthRefreshToken } = await this.usersService.findOneWithOauthId(oauthId);
+        const { id: userId, oauthRefreshToken } = await this.usersService.findOne({ oauthId });
 
         const { access_token: newOauthAccessToken, refresh_token: newOauthRefreshToken } =
             await this[`${provider}Service`].requestTokenRefresh(oauthRefreshToken);
@@ -98,7 +98,7 @@ export class AuthService {
 
         if (newOauthRefreshToken) attr.oauthRefreshToken = newOauthRefreshToken;
 
-        this.usersService.update(userId, attr);
+        this.usersService.update({ id: userId }, attr);
 
         return { accessToken: newAccessToken, refreshToken: newRefreshToken };
     }
