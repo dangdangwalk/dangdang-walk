@@ -1,3 +1,4 @@
+import { Button } from '@/components/common/Button';
 import CheckBox from '@/components/common/CheckBox';
 import React, { ChangeEvent, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -37,6 +38,10 @@ export default function Join() {
     const backButtonHandler = () => {
         navigate(-1);
     };
+    const handleNextStep = () => {
+        console.log('boo');
+    };
+    const disabled = !agreements.service || !agreements.location || !agreements.personalInfo;
     return (
         <div className="flex">
             <div id="agreement" className="bg-slate-200 w-full">
@@ -96,7 +101,10 @@ export default function Join() {
                         </div>
                     </div>
                 </div>
-                <button>다음 단계로</button>
+                <Button className="w-full" disabled={disabled} color="primary" rounded="none" onClick={handleNextStep}>
+                    다음 단계로
+                </Button>
+                <button></button>
             </div>
 
             {/* <div className="bg-slate-500 ">
