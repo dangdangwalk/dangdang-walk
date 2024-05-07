@@ -3,8 +3,8 @@ import React from 'react';
 import icGoogle from '@/assets/icons/ic-google.svg';
 import icKakao from '@/assets/icons/ic-kakao.svg';
 import icNaver from '@/assets/icons/ic-naver.svg';
-import { useNavigate } from 'react-router-dom';
 import { useLoginBottomSheetStateStore } from '@/store/loginBottomSheetStore';
+import { getAuthorizeCodeCallbackUrl } from '@/utils/oauth';
 
 type Props = {
     provider: string;
@@ -12,8 +12,6 @@ type Props = {
 };
 const OAuthButton = ({ provider, name }: Props) => {
     const { setLoginBottomSheetState } = useLoginBottomSheetStateStore();
-    const currentUrl = window.location.pathname;
-    const navigate = useNavigate();
     const btnLogin = (provider: string) => {
         switch (provider) {
             case 'google':
@@ -40,26 +38,21 @@ const OAuthButton = ({ provider, name }: Props) => {
     };
     const handleCallOAuth = (provider: string) => {
         setStorage('provider', provider);
-        let url = '';
-        switch (provider) {
-            case 'google':
-                url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_BASE_URL}${currentUrl}&response_type=code&access_type=offline&scope=https://www.googleapis.com/auth/userinfo.email&prompt=select_account`;
-                break;
-            case 'kakao':
-                url = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.REACT_APP_KAKAO_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_BASE_URL}${currentUrl}`;
-                break;
-            case 'naver':
-                url = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${process.env.REACT_APP_NAVER_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_BASE_URL}${currentUrl}&state=naverLoginState`;
-                break;
-        }
-        //1. oauthUrl set
-        //2. currentUrl set
-        //3. 동의 페이지로 이동
-        navigate('/join', { state: { oauthUrl: url } });
+        let url = getAuthorizeCodeCallbackUrl(provider);
+        window.location.href = url;
+        /*
+        1. 인가코드 요청
+        2. 인가코드 받고 /auth/login 콜
+        3. 멤버면 바로 로그인
+        4. 아니면 400error나 false 던져줘서 /join 으로 이동
+        5. /join이동 후 가입하면 /auth/join 콜 해서 가입시키고 바로 로그인
+        */
     };
     return (
         <button
-            className={`rounded-lg flex justify-center items-center relative w-full h-[3.25rem] ${bgColor(provider)} ${provider === 'google' && 'border border-neutral-200 '}`}
+            className={`rounded-lg flex justify-center items-center relative w-full h-[3.25rem] ${bgColor(
+                provider
+            )} ${provider === 'google' && 'border border-neutral-200 '}`}
             onClick={() => {
                 handleCallOAuth(provider);
                 setLoginBottomSheetState(false);
@@ -67,7 +60,9 @@ const OAuthButton = ({ provider, name }: Props) => {
         >
             <img className="absolute left-0 ml-5" src={btnLogin(provider)} alt={`${provider}`} />
             <div
-                className={`my-auto text-center text-base font-bold font-roboto leading-normal  ${provider === 'kakao' && 'text-opacity-85'} ${provider === 'naver' ? 'text-white' : 'text-black'}`}
+                className={`my-auto text-center text-base font-bold font-roboto leading-normal  ${
+                    provider === 'kakao' && 'text-opacity-85'
+                } ${provider === 'naver' ? 'text-white' : 'text-black'}`}
             >
                 {name}로 시작하기
             </div>
