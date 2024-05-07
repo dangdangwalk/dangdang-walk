@@ -15,7 +15,7 @@ export abstract class AbstractRepository<T extends ObjectLiteral> {
     async findOne(where: FindOptionsWhere<T>): Promise<T> {
         const entity = await this.entityRepository.findOne({ where });
         if (!entity) {
-            throw new NotFoundException('Entity not found');
+            throw new NotFoundException('fidnOne : Entity not found');
         }
         return entity;
     }
@@ -27,7 +27,7 @@ export abstract class AbstractRepository<T extends ObjectLiteral> {
     async update(where: FindOptionsWhere<T>, partialEntity: QueryDeepPartialEntity<T>): Promise<UpdateResult> {
         const updateResult = await this.entityRepository.update(where, partialEntity);
         if (!updateResult.affected) {
-            throw new NotFoundException('Entity not found');
+            throw new NotFoundException('update : Entity not found');
         }
         return updateResult;
     }
@@ -36,7 +36,7 @@ export abstract class AbstractRepository<T extends ObjectLiteral> {
         const deleteResult = await this.entityRepository.delete(where);
 
         if (!deleteResult.affected) {
-            throw new NotFoundException('Entity not found');
+            throw new NotFoundException('delete : Entity not found');
         }
         return deleteResult;
     }
@@ -44,7 +44,7 @@ export abstract class AbstractRepository<T extends ObjectLiteral> {
     async updateAndFindOne(where: FindOptionsWhere<T>, partialEntity: QueryDeepPartialEntity<T>): Promise<T | null> {
         const updateResult = await this.entityRepository.update(where, partialEntity);
         if (!updateResult.affected) {
-            throw new NotFoundException('Entity not found');
+            throw new NotFoundException('update : Entity not found');
         }
         return this.entityRepository.findOne({ where });
     }
