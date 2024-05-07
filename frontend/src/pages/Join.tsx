@@ -1,9 +1,12 @@
 import CheckBox from '@/components/common/CheckBox';
 import React, { ChangeEvent, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function Join() {
     const navigate = useNavigate();
+    const location = useLocation();
+    const state = location.state;
+    console.log(state);
     const [allAgreed, setAllAgreed] = useState(false);
     const [agreements, setAgreements] = useState({
         service: false,
