@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
 import { DeleteResult, EntityManager, FindOptionsWhere, ObjectLiteral, Repository, UpdateResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
@@ -12,11 +12,29 @@ export abstract class AbstractRepository<T extends ObjectLiteral> {
         return this.entityManager.save(entity);
     }
 
+    async createIfNotExists(where: FindOptionsWhere<T>, entity: T): Promise<T> {
+        const existingEntity = await this.entityRepository.findOne({ where });
+
+        if (existingEntity) {
+            throw new ConflictException('createIfNotExists : Duplicate entry');
+        }
+
+        return this.create(entity);
+    }
+
+    async findOneRaw(where: FindOptionsWhere<T>): Promise<T | null> {
+        const entity = await this.entityRepository.findOne({ where });
+
+        return entity;
+    }
+
     async findOne(where: FindOptionsWhere<T>): Promise<T> {
         const entity = await this.entityRepository.findOne({ where });
+
         if (!entity) {
             throw new NotFoundException('findOne : Entity not found');
         }
+
         return entity;
     }
 
@@ -26,9 +44,11 @@ export abstract class AbstractRepository<T extends ObjectLiteral> {
 
     async update(where: FindOptionsWhere<T>, partialEntity: QueryDeepPartialEntity<T>): Promise<UpdateResult> {
         const updateResult = await this.entityRepository.update(where, partialEntity);
+
         if (!updateResult.affected) {
             throw new NotFoundException('update : Entity not found');
         }
+
         return updateResult;
     }
 
@@ -38,14 +58,17 @@ export abstract class AbstractRepository<T extends ObjectLiteral> {
         if (!deleteResult.affected) {
             throw new NotFoundException('delete : Entity not found');
         }
+
         return deleteResult;
     }
 
-    async updateAndFindOne(where: FindOptionsWhere<T>, partialEntity: QueryDeepPartialEntity<T>): Promise<T | null> {
+    async updateAndFindOne(where: FindOptionsWhere<T>, partialEntity: QueryDeepPartialEntity<T>): Promise<T> {
         const updateResult = await this.entityRepository.update(where, partialEntity);
+
         if (!updateResult.affected) {
             throw new NotFoundException('update : Entity not found');
         }
-        return this.entityRepository.findOne({ where });
+
+        return this.findOne(where);
     }
 }

@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Users } from 'src/users/users.entity';
 import { UsersService } from 'src/users/users.service';
 import { OauthProvider } from './auth.controller';
@@ -14,30 +15,67 @@ export class AuthService {
         private readonly usersService: UsersService,
         private readonly googleService: GoogleService,
         private readonly kakaoService: KakaoService,
-        private readonly naverService: NaverService
+        private readonly naverService: NaverService,
+        private readonly configService: ConfigService
     ) {}
 
-    async isUser(oauthAccessToken: string, provider: OauthProvider): Promise<boolean> {
+    private getFullURI(redirectURI: string) {
+        if (!redirectURI.startsWith('/')) return redirectURI;
+
+        return this.configService.get<string>('CORS_ORIGIN') + redirectURI;
+    }
+
+    private async getOauthData(
+        authorizeCode: string,
+        provider: OauthProvider,
+        redirectURI: string
+    ): Promise<{ oauthAccessToken: string; oauthRefreshToken: string; oauthId: string }> {
+        const { access_token: oauthAccessToken, refresh_token: oauthRefreshToken } = await this[
+            `${provider}Service`
+        ].requestToken(authorizeCode, this.getFullURI(redirectURI));
+
         const oauthId = await this[`${provider}Service`].requestUserId(oauthAccessToken);
 
-        try {
-            await this.usersService.findOne({ oauthId });
-            return true;
-        } catch {
-            return false;
-        }
+        return { oauthAccessToken, oauthRefreshToken, oauthId };
     }
 
     async login(
-        oauthAccessToken: string,
-        oauthRefreshToken: string,
-        provider: OauthProvider
+        authorizeCode: string,
+        provider: OauthProvider,
+        redirectURI: string
     ): Promise<{ accessToken: string; refreshToken: string }> {
-        const oauthId = await this[`${provider}Service`].requestUserId(oauthAccessToken);
+        const { oauthAccessToken, oauthRefreshToken, oauthId } = await this.getOauthData(
+            authorizeCode,
+            provider,
+            redirectURI
+        );
 
         const refreshToken = this.tokenService.signRefreshToken(oauthId, provider);
 
-        const userId = await this.usersService.loginOrCreateUser(
+        const { id: userId } = await this.usersService.updateAndFindOne(
+            { oauthId },
+            { oauthAccessToken, oauthRefreshToken, refreshToken }
+        );
+
+        const accessToken = this.tokenService.signAccessToken(userId, provider);
+
+        return { accessToken, refreshToken };
+    }
+
+    async signin(
+        authorizeCode: string,
+        provider: OauthProvider,
+        redirectURI: string
+    ): Promise<{ accessToken: string; refreshToken: string }> {
+        const { oauthAccessToken, oauthRefreshToken, oauthId } = await this.getOauthData(
+            authorizeCode,
+            provider,
+            redirectURI
+        );
+
+        const refreshToken = this.tokenService.signRefreshToken(oauthId, provider);
+
+        const { id: userId } = await this.usersService.createIfNotExists(
             oauthId,
             oauthAccessToken,
             oauthRefreshToken,

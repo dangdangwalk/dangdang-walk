@@ -22,7 +22,7 @@ export class Users {
     mainDog: Dogs;
 
     @Column({ name: 'main_dog_id', nullable: true })
-    mainDogId: number;
+    mainDogId: number | null;
 
     @Column({ name: 'oauth_id', unique: true })
     oauthId: string;

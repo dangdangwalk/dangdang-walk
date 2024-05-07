@@ -32,43 +32,43 @@ export class UsersService {
         return this.usersRepository.update(where, partialEntity);
     }
 
+    async updateAndFindOne(where: FindOptionsWhere<Users>, partialEntity: QueryDeepPartialEntity<Users>) {
+        return this.usersRepository.updateAndFindOne(where, partialEntity);
+    }
+
     async delete(where: FindOptionsWhere<Users>) {
         return this.usersRepository.delete(where);
     }
 
-    async loginOrCreateUser(
+    async createIfNotExists(
         oauthId: string,
         oauthAccessToken: string,
         oauthRefreshToken: string,
         refreshToken: string
     ) {
-        let user = await this.findOne({ oauthId });
+        const nickname = await this.generateUniqueNickname();
 
-        if (!user) {
-            const nickname = await this.generateUniqueNickname();
-            user = await this.create({
+        return await this.usersRepository.createIfNotExists(
+            { oauthId },
+            new Users({
                 nickname,
                 role: Role.User,
-                mainDogId: undefined,
+                mainDogId: null,
                 oauthId,
                 oauthAccessToken,
                 oauthRefreshToken,
                 refreshToken,
-            });
-        } else {
-            await this.update({ oauthId }, { oauthAccessToken, oauthRefreshToken, refreshToken });
-        }
-
-        return user.id;
+            })
+        );
     }
 
     async generateUniqueNickname(): Promise<string> {
         let nickname = generateUuid();
-        let user = await this.findOne({ nickname });
+        let user = await this.usersRepository.findOneRaw({ nickname });
 
         while (user) {
             nickname = generateUuid();
-            user = await this.findOne({ nickname });
+            user = await this.usersRepository.findOneRaw({ nickname });
         }
 
         return nickname;
