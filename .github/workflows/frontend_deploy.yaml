@@ -38,7 +38,7 @@ jobs:
         if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
         run: npm ci
       - name: Run build
-        run: npm run build
+        run: npm run build:prod
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
