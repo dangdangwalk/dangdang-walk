@@ -1,7 +1,7 @@
 import React from 'react';
 import LoginAlertModal from '@/components/LoginAlertModal';
 import { useAuth } from '@/hooks/useAuth';
-import { getStorage, setStorage } from '@/utils/storage';
+import { getStorage } from '@/utils/storage';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -15,7 +15,6 @@ function Profile() {
 
     useEffect(() => {
         if (authorizeCode && provider && !isLoggedIn) {
-            setStorage('redirect', redirectURI);
             loginMutation.mutate({ authorizeCode, provider, redirectURI });
         }
     }, []);

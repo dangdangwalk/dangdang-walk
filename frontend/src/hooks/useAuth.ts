@@ -1,17 +1,20 @@
-import { ResponseToken, getAccessToken, requestLogin, requestLogout } from '@/api/auth';
+import { ResponseToken, getAccessToken, requestLogin, requestLogout, requestSignin } from '@/api/auth';
 import queryClient from '@/api/queryClient';
 import { tokenKeys } from '@/constants';
 import { UseMutationCustomOptions } from '@/types/common';
 import { removeHeader, setHeader } from '@/utils/header';
-import { getStorage } from '@/utils/storage';
+import { getStorage, removeStorage } from '@/utils/storage';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const useLogin = (mutationOptions?: UseMutationCustomOptions) => {
     const navigate = useNavigate();
+    const isJoinning = getStorage('isJoinning');
+    const fn = isJoinning ? requestSignin : requestLogin;
+    removeStorage('isJoinning');
     return useMutation({
-        mutationFn: requestLogin,
+        mutationFn: fn,
         onSuccess: ({ accessToken, expiresIn }: ResponseToken) => {
             const url = getStorage('redirect') || '';
             setHeader(tokenKeys.AUTHORIZATION, `Bearer ${accessToken}`);
