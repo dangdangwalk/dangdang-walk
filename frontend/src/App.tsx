@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import React, { useEffect, useRef } from 'react';
 import queryClient from './api/queryClient';
@@ -8,6 +8,8 @@ import LoginBottomSheet from '@/components/LoginBottomSheet';
 var console;
 function App() {
     const { isLoginBottomSheetOpen, setLoginBottomSheetState } = useLoginBottomSheetStateStore();
+    const location = useLocation();
+    const currentPage = location.pathname;
     const outletRef = useRef<HTMLDivElement>(null);
     //TODO: 일시적인 배포시 console.log 제거 추가로 환경설정으로 빼줘야함ㄴ
     if (process.env.NODE_ENV === 'production') {
@@ -33,16 +35,18 @@ function App() {
                 <div ref={outletRef}>
                     <Outlet />
                 </div>
-
-                <div className={`fixed z-10`}>
-                    <Navbar />
-                </div>
-
-                <div
-                    className={`fixed z-20 w-full duration-300 ${isLoginBottomSheetOpen ? ' translate-y-72' : 'translate-y-full'}`}
-                >
-                    <LoginBottomSheet />
-                </div>
+                {currentPage !== '/join' && (
+                    <>
+                        <div className={`fixed z-10`}>
+                            <Navbar />
+                        </div>
+                        <div
+                            className={`fixed z-20 w-full duration-300 ${isLoginBottomSheetOpen ? ' translate-y-72' : 'translate-y-full'}`}
+                        >
+                            <LoginBottomSheet />
+                        </div>
+                    </>
+                )}
             </div>
         </QueryClientProvider>
     );
