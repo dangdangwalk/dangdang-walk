@@ -50,4 +50,8 @@ export class Dogs {
 
     @Column({ name: 'is_walking' })
     isWalking: boolean;
+
+    constructor(entityData: Partial<Dogs>) {
+        Object.assign(this, entityData);
+    }
 }
