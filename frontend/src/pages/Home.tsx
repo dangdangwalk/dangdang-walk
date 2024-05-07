@@ -15,10 +15,12 @@ function Home() {
                     <WeatherInfo />
                     <DogCardList />
                 </div>
+
                 <Button
                     color={'primary'}
                     rounded={'medium'}
-                    className={`w-30 h-12 fixed bottom-[${NAV_HEIGHT + 16}px] text-white text-base font-bold leading-normal`}
+                    className={`w-30 h-12 fixed  text-white text-base font-bold leading-normal`}
+                    style={{ bottom: `calc(${NAV_HEIGHT} + 16px)`, left: '50%', translate: '-50%' }}
                 >
                     산책하기
                 </Button>
