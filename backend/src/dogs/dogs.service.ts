@@ -37,6 +37,14 @@ export class DogsService {
         return dogIds;
     }
 
+    private makeProfile(dogInfo: Dogs): DogProfile {
+        return {
+            id: dogInfo.id,
+            name: dogInfo.name,
+            photoUrl: dogInfo.photoUrl,
+        };
+    }
+
     private makeProfileList(dogs: Dogs[]): DogProfile[] {
         return dogs.map((cur) => {
             return {
@@ -48,8 +56,13 @@ export class DogsService {
     }
 
     async getProfileList(where: FindOptionsWhere<Dogs>): Promise<DogProfile[]> {
-        const ownDogList = await this.dogsRepository.find(where);
-        return this.makeProfileList(ownDogList);
+        const dogInfos = await this.dogsRepository.find(where);
+        return this.makeProfileList(dogInfos);
+    }
+
+    async getProfile(dogId: number): Promise<DogProfile> {
+        const dogInfo = await this.dogsRepository.findOne({ id: dogId });
+        return this.makeProfile(dogInfo);
     }
 
     async getRelatedTableIdList(
@@ -89,7 +102,7 @@ export class DogsService {
     }
 
     async getDogsStatistics(userId: number): Promise<DogStatisticDto[]> {
-        const ownDogIds = await this.usersService.getDogsList(userId);
+        const ownDogIds = await this.usersService.getOwnDogsList(userId);
         const dogWalkDayIds = await this.getRelatedTableIdList(ownDogIds, 'walkDayId');
         const dailyWalkTimeIds = await this.getRelatedTableIdList(ownDogIds, 'dailyWalkTimeId');
         const breedIds = await this.getRelatedTableIdList(ownDogIds, 'breedId');
