@@ -10,6 +10,7 @@
         "axios": "^1.6.8",
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.1",
+        "env-cmd": "^10.1.0",
         "husky": "^9.0.11",
         "react": "^18.3.1",
         "react-cookie": "^7.1.4",
@@ -43,9 +44,11 @@
         "vitest": "^1.5.3"
     },
     "scripts": {
-        "start": "craco start",
+        "start": "env-cmd -f .env.local craco start",
         "build": "craco build",
+        "start:dev": "env-cmd -f .env.dev craco start",
         "build:prod": "NODE_ENV=production craco build",
+        "start:prod": "env-cmd -f .env.prod craco start",
         "test": "vitest",
         "eject": "react-scripts eject",
         "typecheck": "tsc --noEmit --skipLibCheck",
