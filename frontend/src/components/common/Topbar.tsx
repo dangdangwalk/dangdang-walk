@@ -8,14 +8,50 @@ export default function Topbar({ children }: { children: React.ReactNode }) {
     );
 }
 
-function Front({ children }: { children?: React.ReactNode }) {
-    return <div>{children}</div>;
+function Front({
+    children,
+    onClick,
+    className,
+}: {
+    children?: React.ReactNode;
+    onClick?: () => void;
+    className?: string;
+}) {
+    return (
+        <div className={className} onClick={onClick}>
+            {children}
+        </div>
+    );
 }
-function Center({ children }: { children?: React.ReactNode }) {
-    return <div>{children}</div>;
+function Center({
+    children,
+    onClick,
+    className,
+}: {
+    children?: React.ReactNode;
+    onClick?: () => void;
+    className?: string;
+}) {
+    return (
+        <div className={className} onClick={onClick}>
+            {children}
+        </div>
+    );
 }
-function Back({ children }: { children?: React.ReactNode }) {
-    return <div>{children}</div>;
+function Back({
+    children,
+    onClick,
+    className,
+}: {
+    children?: React.ReactNode;
+    onClick?: () => void;
+    className?: string;
+}) {
+    return (
+        <div className={className} onClick={onClick}>
+            {children}
+        </div>
+    );
 }
 
 Topbar.Front = Front;
