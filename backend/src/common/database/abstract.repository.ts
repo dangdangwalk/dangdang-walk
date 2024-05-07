@@ -15,7 +15,7 @@ export abstract class AbstractRepository<T extends ObjectLiteral> {
     async findOne(where: FindOptionsWhere<T>): Promise<T> {
         const entity = await this.entityRepository.findOne({ where });
         if (!entity) {
-            throw new NotFoundException('fidnOne : Entity not found');
+            throw new NotFoundException('findOne : Entity not found');
         }
         return entity;
     }
