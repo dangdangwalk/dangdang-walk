@@ -1,4 +1,4 @@
-import { getStorage, setStorage } from '@/utils/storage';
+import { getStorage } from '@/utils/storage';
 
 const getAuthorizeCodeCallbackUrl = (provider: string) => {
     let url = '';
