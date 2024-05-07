@@ -9,6 +9,7 @@ import App from './App';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import Join from '@/pages/Join';
+import Walk from '@/pages/Walk';
 const router = createBrowserRouter([
     {
         path: '/',
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
             {
                 path: '/join',
                 element: <Join />,
+            },
+            {
+                path: '/walk',
+                element: <Walk />,
             },
         ],
     },

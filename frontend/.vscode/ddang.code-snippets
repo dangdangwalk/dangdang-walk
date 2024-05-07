@@ -9,4 +9,15 @@
         "body": ["  useEffect(() => {", "    $2;", "  }, [$1]);"],
         "description": "useEffect",
     },
+    "topbar": {
+        "prefix": "_topbar",
+        "body": [
+            "<Topbar>",
+            "  <Topbar.Front></Topbar.Front>",
+            "  <Topbar.Center></Topbar.Center>",
+            "  <Topbar.Back></Topbar.Back>",
+            "</Topbar>",
+        ],
+        "description": "Topbar",
+    },
 }
