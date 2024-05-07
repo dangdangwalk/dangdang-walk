@@ -13,6 +13,7 @@ const weatherClient = createClient({
 // TODO: error 코드 처리
 
 export const fetchCurrentWeather = async (date: string, nx: number, ny: number): Promise<WeatherData[] | undefined> => {
+    console.log(REACT_APP_WEATHER_KEY);
     try {
         const response = (
             await weatherClient.get(
