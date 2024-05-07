@@ -18,6 +18,7 @@ import { JournalModule } from './journals/journals.module';
 import { UsersModule } from './users/users.module';
 import { WalkLogPhotosModule } from './walk-log-photos/walk-log-photos.module';
 import { WalkModule } from './walk/walk.module';
+import { JournalPhotosModule } from './journal-photos/journal-photos.module';
 
 @Module({
     imports: [
@@ -43,6 +44,7 @@ import { WalkModule } from './walk/walk.module';
         JournalModule,
         ExcrementsModule,
         WalkLogPhotosModule,
+        JournalPhotosModule,
     ],
     controllers: [AppController, HealthController],
     providers: [
