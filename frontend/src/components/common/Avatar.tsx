@@ -1,8 +1,8 @@
 import Ellipse from '@/assets/icons/ellipse-104.svg';
 
 interface AvatarProps {
-    url: string;
-    name: string;
+    url?: string;
+    name?: string;
 }
 
 export default function Avatar({ url, name }: AvatarProps) {
