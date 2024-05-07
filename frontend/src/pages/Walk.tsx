@@ -1,39 +1,85 @@
-import Topbar from '@/components/common/Topbar';
-import { useState } from 'react';
-import Notification from '@/assets/icons/notification.svg';
 import DogBottomSheet from '@/components/walk/DogBottomSheet';
 import WalkInfo from '@/components/walk/WalkInfo';
 import Map from '@/components/walk/Map';
-import Ic from '@/assets/icons/ic.svg';
 import WalkNavbar from '@/components/walk/WalkNavbar';
-import { useNavigate } from 'react-router-dom';
-export default function Walk() {
-    const [isWalk, setIsWalk] = useState<boolean>(true);
-    const navigate = useNavigate();
+import WalkHeader from '@/components/walk/WalkHeader';
+import { useWalkStore } from '@/store/walkStore';
+import { useEffect, useState } from 'react';
+import { Dog } from '@/models/dog.model';
+import Avatar from '@/components/common/Avatar';
+import { Divider } from '@/components/common/Divider';
+import AllDogs from '@/assets/icons/walk/frame-5058.svg';
+import DogCheckBox from '@/components/walk/DogCheckBox';
+// import CheckBox from '@/components/common/CheckBox';
 
-    const goBack = () => {
-        navigate(-1);
+const dogs = [
+    {
+        id: 1, // 강아지 id
+        name: '덕지', //강아지 이름
+        photoUrl: 'https://ai.esmplus.com/pixie2665/001.jpg', // 강아지 사진
+        isChecked: false,
+    },
+    {
+        id: 2, // 강아지 id
+        name: '철도', //강아지 이름
+        photoUrl: 'https://ai.esmplus.com/pixie2665/002.jpg', // 강아지 사진
+        isChecked: true,
+    },
+    {
+        id: 3, // 강아지 id
+        name: '', //강아지 이름
+        photoUrl: '', // 강아지 사진
+        isChecked: false,
+    },
+];
+
+export default function Walk() {
+    const { isWalk } = useWalkStore();
+    const [availableDog, setAvailableDog] = useState(dogs);
+
+    const handleDogSelect = (id: number) => {
+        if (id < 0) {
+            setAvailableDog(availableDog.map((d: any) => ({ ...d, isChecked: !d.isChecked })));
+            return;
+        }
+        setAvailableDog(availableDog.map((d: any) => (d.id === id ? { ...d, isChecked: !d.isChecked } : d)));
+        // setAvailableDog([]);
     };
     return (
-        <div>
+        <>
             {isWalk && (
-                <Topbar>
-                    <Topbar.Front onClick={goBack}>
-                        <img className="rotate-180" src={Ic} alt="back button" />
-                    </Topbar.Front>
-                    <Topbar.Center className="text-center text-black text-lg font-bold leading-[27px]">
-                        산책하기
-                    </Topbar.Center>
-                    <Topbar.Back className="w-12 flex items-center justify-end">
-                        <img src={Notification} alt="Notification" />
-                    </Topbar.Back>
-                </Topbar>
+                <>
+                    <WalkHeader />
+                    <WalkInfo />
+                </>
             )}
-            <WalkInfo />
             <Map />
             <WalkNavbar />
 
-            {isWalk && <DogBottomSheet />}
-        </div>
+            <DogBottomSheet
+                isOpen={!isWalk}
+                onClose={() => {}}
+                disabled={availableDog.find((d) => d.isChecked) ? false : true}
+            >
+                {availableDog.length > 1 && (
+                    <>
+                        <Divider className="h-0 border border-neutral-200" />
+                        <li className="flex py-2 justify-between items-center">
+                            <Avatar url={AllDogs} name={'다함께'} />
+                            <DogCheckBox id={-1} isChecked={false} onChange={handleDogSelect} />
+                        </li>
+                    </>
+                )}
+                {availableDog.map((dog) => (
+                    <>
+                        <Divider className="h-0 border border-neutral-200" />
+                        <li className="flex py-2 justify-between items-center" key={dog.id}>
+                            <Avatar url={dog.photoUrl} name={dog.name} />
+                            <DogCheckBox id={dog.id} isChecked={dog.isChecked} onChange={handleDogSelect} />
+                        </li>
+                    </>
+                ))}
+            </DogBottomSheet>
+        </>
     );
 }
