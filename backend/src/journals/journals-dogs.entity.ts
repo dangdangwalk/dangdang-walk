@@ -1,11 +1,11 @@
 import { Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { Dogs } from '../dogs/dogs.entity';
-import { WalkJournals } from '../journals/walk-journals.entity';
+import { Journals } from './journals.entity';
 
-@Entity('walk_dogs')
-export class WalkDogs {
+@Entity('journals_dogs')
+export class JournalsDogs {
     @PrimaryColumn({ name: 'journal_id' })
-    @ManyToOne(() => WalkJournals, (walkJournals) => walkJournals.id)
+    @ManyToOne(() => Journals, (walkJournals) => walkJournals.id)
     @JoinColumn({ name: 'journal_id' })
     journalId: number;
 

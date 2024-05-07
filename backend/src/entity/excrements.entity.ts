@@ -1,13 +1,13 @@
 import { Column, Entity, JoinColumn, ManyToOne, Point, PrimaryColumn } from 'typeorm';
 import { Dogs } from '../dogs/dogs.entity';
-import { WalkJournals } from '../journals/walk-journals.entity';
+import { Journals } from '../journals/journals.entity';
 
 @Entity('excrements')
 export class Excrements {
     @PrimaryColumn({ name: 'journal_id' })
-    @ManyToOne(() => WalkJournals, (WalkJournals) => WalkJournals.id)
+    @ManyToOne(() => Journals, (WalkJournals) => WalkJournals.id)
     @JoinColumn({ name: 'journal_id' })
-    journal: WalkJournals;
+    journal: Journals;
 
     @PrimaryColumn({ name: 'dog_id' })
     @ManyToOne(() => Dogs, (dog) => dog.id)

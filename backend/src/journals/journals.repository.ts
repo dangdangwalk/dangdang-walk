@@ -2,13 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AbstractRepository } from 'src/common/database/abstract.repository';
 import { EntityManager, Repository } from 'typeorm';
-import { WalkJournals } from './walk-journals.entity';
+import { Journals } from './journals.entity';
 
 @Injectable()
-export class WalkJournalsRepository extends AbstractRepository<WalkJournals> {
+export class WalkJournalsRepository extends AbstractRepository<Journals> {
     constructor(
-        @InjectRepository(WalkJournals)
-        walkJournalRepository: Repository<WalkJournals>,
+        @InjectRepository(Journals)
+        walkJournalRepository: Repository<Journals>,
         entityManager: EntityManager
     ) {
         super(walkJournalRepository, entityManager);
