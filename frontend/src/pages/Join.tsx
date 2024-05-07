@@ -1,12 +1,15 @@
 import { Button } from '@/components/common/Button';
 import CheckBox from '@/components/common/CheckBox';
-import React, { ChangeEvent, useState } from 'react';
+import { getAuthorizeCodeCallbackUrl } from '@/utils/oauth';
+import { getStorage, setStorage } from '@/utils/storage';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function Join() {
     const navigate = useNavigate();
     const location = useLocation();
     const state = location.state;
+    const [option, setOption] = useState('opt1');
     console.log(state);
     const [allAgreed, setAllAgreed] = useState(false);
     const [agreements, setAgreements] = useState({
@@ -15,6 +18,9 @@ export default function Join() {
         personalInfo: false,
         marketing: false,
     });
+    const handleOptionChange = (opt: string) => {
+        setOption(opt);
+    };
     const handleCheck = (event: ChangeEvent<HTMLInputElement>) => {
         const { id, checked } = event.target;
         setAgreements((prev) => ({
@@ -39,12 +45,18 @@ export default function Join() {
         navigate(-1);
     };
     const handleNextStep = () => {
-        console.log('boo');
+        // option ==='opt1' ? '다음페이지' : '바로 가입시켜'
+        const provider = getStorage('provider') || '';
+        const url = getAuthorizeCodeCallbackUrl(provider);
+        window.location.href = url;
     };
     const disabled = !agreements.service || !agreements.location || !agreements.personalInfo;
+    useEffect(() => {
+        setStorage('isJoinning', 'true');
+    }, []);
     return (
-        <div className="flex">
-            <div id="agreement" className="bg-slate-200 w-full">
+        <div className="flex flex-col bg-primary-foreground">
+            <div id="agreement" className=" w-full">
                 <div>
                     <button onClick={backButtonHandler}>뒤로가기버튼</button>
                 </div>
@@ -107,11 +119,64 @@ export default function Join() {
                 <button></button>
             </div>
 
-            {/* <div className="bg-slate-500 ">
-                <div>반려견여부 페이지</div>
-                <div>반려견 기본정보를 알려주세요</div>
-                <div>강아지 세부정보를 알려주세요</div>
-            </div> */}
+            <div className="flex flex-col justify-center mx-auto w-full">
+                <div>topBar</div>
+                <div>procressBar</div>
+                <div className="mx-5">
+                    <div className="">해당되는 항목을 선택해주세요!</div>
+                    <div className="flex flex-col gap-3 mx-[0.625rem] mb-4">
+                        <button
+                            onClick={() => handleOptionChange('opt1')}
+                            className={`border ${
+                                option === 'opt1' ? 'border-primary' : 'border-secondary'
+                            } bg-primary-foreground  rounded-lg w-full flex flex-col items-center justify-center`}
+                        >
+                            <div className="my-6">
+                                <div
+                                    className={`text-base ${
+                                        option === 'opt1' ? 'text-neutral-800' : 'text-stone-500'
+                                    }  font-bold`}
+                                >
+                                    반려견을 키우고 있어요
+                                </div>
+                                <div
+                                    className={`text-xs ${
+                                        option === 'opt1' ? 'text-neutral-800' : 'text-neutral-400'
+                                    }  font-normal`}
+                                >
+                                    나의 반려견 정보 입력하기
+                                </div>
+                            </div>
+                        </button>
+                        <button
+                            onClick={() => handleOptionChange('opt2')}
+                            className={`border ${
+                                option === 'opt2' ? 'border-primary' : 'border-secondary'
+                            } bg-primary-foreground  rounded-lg w-full flex flex-col items-center justify-center`}
+                        >
+                            <div className="my-6">
+                                <div
+                                    className={`text-base ${
+                                        option === 'opt2' ? 'text-neutral-800' : 'text-stone-500'
+                                    }  font-bold`}
+                                >
+                                    반려견을 키우고 있지 않아요
+                                </div>
+                                <div
+                                    className={`text-xs ${
+                                        option === 'opt2' ? 'text-neutral-800' : 'text-neutral-400'
+                                    }  font-normal`}
+                                >
+                                    반려견 등록 없이 간편가입
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+                <Button className="w-full" color="primary" rounded="none" onClick={handleNextStep}>
+                    다음 단계로
+                </Button>
+            </div>
         </div>
     );
 }

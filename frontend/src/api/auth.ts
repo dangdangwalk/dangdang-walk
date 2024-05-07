@@ -23,4 +23,9 @@ const requestLogin = async (params: LoginParams) => {
 const requestLogout = async () => {
     await httpClient.post('/auth/logout');
 };
-export { getAccessToken, requestLogin, requestLogout };
+
+const requestSignin = async (params: LoginParams) => {
+    const { data } = await httpClient.post('/auth/signin', params);
+    return data;
+};
+export { getAccessToken, requestLogin, requestLogout, requestSignin };

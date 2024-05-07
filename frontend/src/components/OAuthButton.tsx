@@ -38,6 +38,7 @@ const OAuthButton = ({ provider, name }: Props) => {
     };
     const handleCallOAuth = (provider: string) => {
         setStorage('provider', provider);
+        setStorage('redirectURI', window.location.pathname);
         let url = getAuthorizeCodeCallbackUrl(provider);
         window.location.href = url;
         /*
