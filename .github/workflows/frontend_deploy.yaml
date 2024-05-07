@@ -65,7 +65,9 @@ jobs:
         env:
           ENV_FILE: ${{ secrets.ENV_FILE_FRONTEND }}
         run: |
-          mkdir frontend
+          if [ ! -d "frontend" ]; then 
+            mkdir frontend; 
+          fi
           echo "$ENV_FILE" >> ./frontend/.env.prod
       - name: Deploy to Amazon EC2
         run : |
