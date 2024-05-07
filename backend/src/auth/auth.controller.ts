@@ -49,7 +49,7 @@ export class AuthController {
 
         response.cookie('refreshToken', refreshToken, {
             httpOnly: true,
-            secure: Boolean(this.configService.get<string>('NODE_ENV', 'test') === 'production'),
+            secure: this.configService.get<string>('NODE_ENV') === 'prod' ? true : false,
             maxAge: TOKEN_LIFETIME_MAP.refresh.maxAge,
         });
 
@@ -85,7 +85,7 @@ export class AuthController {
 
         response.cookie('refreshToken', refreshToken, {
             httpOnly: true,
-            secure: Boolean(this.configService.get<string>('NODE_ENV', 'test') === 'production'),
+            secure: this.configService.get<string>('NODE_ENV') === 'prod' ? true : false,
             maxAge: TOKEN_LIFETIME_MAP.refresh.maxAge,
         });
 
