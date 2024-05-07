@@ -116,6 +116,6 @@ export class UsersService {
         const ownDogs = await this.usersDogsRepo.find({ where: { userId } });
         const myDogIds = ownDogs.map((cur) => cur.dogId);
 
-        return Array.isArray(dogId) ? !dogId.every((id) => myDogIds.includes(id)) : myDogIds.includes(dogId);
+        return Array.isArray(dogId) ? dogId.every((id) => myDogIds.includes(id)) : myDogIds.includes(dogId);
     }
 }
