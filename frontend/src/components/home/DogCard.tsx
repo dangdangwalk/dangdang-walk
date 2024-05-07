@@ -7,7 +7,7 @@ import WalkIcon from '@/components/home/WalkIcon';
 import DayIcon from '@/components/home/DayIcon';
 import Progressbar from '@/components/home/Progressbar';
 
-interface DogStatistic extends Dog {
+export interface DogStatistic extends Dog {
     recommendedDailyWalkAmount: number;
     dailyWalkAmount: number;
     weeklyWalks: number[];
