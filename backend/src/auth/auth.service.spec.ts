@@ -91,13 +91,13 @@ describe('AuthService', () => {
         }
     });
 
-    describe('signin', () => {
+    describe('signup', () => {
         for (let i = 0; i < 3; i++) {
             const provider = providerList[i];
             it(`${provider} 회원가입 후 access token과 refresh token을 반환해야 한다.`, async () => {
                 jest.spyOn(usersService, 'createIfNotExists').mockResolvedValue({ id: 1 } as Users);
 
-                const result = await service.signin(authorizeCode, provider as OauthProvider, '/refresh');
+                const result = await service.signup(authorizeCode, provider as OauthProvider, '/refresh');
 
                 expect(result).toEqual({
                     accessToken: mockUser.refreshToken,
