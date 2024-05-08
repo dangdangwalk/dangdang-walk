@@ -7,9 +7,9 @@ interface Props {
 }
 export default function CheckBox({ id, checked, onChange, content }: Props) {
     return (
-        <>
+        <div className="flex">
             <input type="checkbox" id={id} checked={checked} onChange={onChange} />
             <label htmlFor={id}>{content}</label>
-        </>
+        </div>
     );
 }
