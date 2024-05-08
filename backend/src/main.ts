@@ -12,7 +12,12 @@ async function bootstrap() {
     app.useLogger(new WinstonLoggerService());
 
     app.enableCors({
-        origin: ['http://localhost:3000', 'http://localhost:8080', 'http://dangdang-walk.prgms-fullcycle.com'],
+        origin: [
+            'http://localhost:3000',
+            'http://localhost:8080',
+            'http://dangdang-walk.prgms-fullcycle.com',
+            'http://dangdang-walk.prgms-fullcycle.com:3000',
+        ],
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
         allowedHeaders: ['Content-Type', 'Accept', 'Authorization'],
         credentials: true,
