@@ -41,13 +41,6 @@ const OAuthButton = ({ provider, name }: Props) => {
         setStorage('redirectURI', window.location.pathname);
         let url = getAuthorizeCodeCallbackUrl(provider);
         window.location.href = url;
-        /*
-        1. 인가코드 요청
-        2. 인가코드 받고 /auth/login 콜
-        3. 멤버면 바로 로그인
-        4. 아니면 400error나 false 던져줘서 /join 으로 이동
-        5. /join이동 후 가입하면 /auth/join 콜 해서 가입시키고 바로 로그인
-        */
     };
     return (
         <button
@@ -55,8 +48,10 @@ const OAuthButton = ({ provider, name }: Props) => {
                 provider
             )} ${provider === 'google' && 'border border-neutral-200 '}`}
             onClick={() => {
-                handleCallOAuth(provider);
                 setLoginBottomSheetState(false);
+                setTimeout(() => {
+                    handleCallOAuth(provider);
+                }, 100);
             }}
         >
             <img className="absolute left-0 ml-5" src={btnLogin(provider)} alt={`${provider}`} />
