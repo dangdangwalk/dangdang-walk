@@ -4,7 +4,7 @@ import Map from '@/components/walk/Map';
 import WalkNavbar from '@/components/walk/WalkNavbar';
 import WalkHeader from '@/components/walk/WalkHeader';
 import { useWalkStore } from '@/store/walkStore';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Avatar from '@/components/common/Avatar';
 import { Divider } from '@/components/common/Divider';
 import AllDogs from '@/assets/icons/walk/frame-5058.svg';
@@ -33,7 +33,7 @@ const dogs = [
 ];
 
 export default function Walk() {
-    const { isWalk, walkStart, walkStop } = useWalkStore();
+    const { isWalk, walkStart } = useWalkStore();
     const [availableDog, setAvailableDog] = useState(dogs);
     const { position } = useGeolocation();
     console.log(position);
@@ -46,20 +46,14 @@ export default function Walk() {
         setAvailableDog(availableDog.map((d: any) => (d.id === id ? { ...d, isChecked: !d.isChecked } : d)));
         // setAvailableDog([]);
     };
-    const handleStart = () => {
-        console.log('start');
+    useEffect(() => {
         walkStart(new Date());
-    };
-    const handleStop = () => {
-        console.log('stop');
-        walkStop();
-    };
+    }, []);
     return (
         <>
             <WalkHeader />
             <WalkInfo />
-            <button onClick={handleStart}>시작</button>
-            <button onClick={handleStop}>멈춤</button>
+
             <Map />
             <WalkNavbar />
 
