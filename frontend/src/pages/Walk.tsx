@@ -9,6 +9,7 @@ import Avatar from '@/components/common/Avatar';
 import { Divider } from '@/components/common/Divider';
 import AllDogs from '@/assets/icons/walk/frame-5058.svg';
 import DogCheckBox from '@/components/walk/DogCheckBox';
+import useGeolocation from '@/hooks/useGeolocation';
 
 const dogs = [
     {
@@ -32,8 +33,10 @@ const dogs = [
 ];
 
 export default function Walk() {
-    const { isWalk } = useWalkStore();
+    const { isWalk, walkStart, walkStop } = useWalkStore();
     const [availableDog, setAvailableDog] = useState(dogs);
+    const { position } = useGeolocation();
+    console.log(position);
 
     const handleDogSelect = (id: number) => {
         if (id < 0) {
@@ -43,14 +46,20 @@ export default function Walk() {
         setAvailableDog(availableDog.map((d: any) => (d.id === id ? { ...d, isChecked: !d.isChecked } : d)));
         // setAvailableDog([]);
     };
+    const handleStart = () => {
+        console.log('start');
+        walkStart(new Date());
+    };
+    const handleStop = () => {
+        console.log('stop');
+        walkStop();
+    };
     return (
         <>
-            {isWalk && (
-                <>
-                    <WalkHeader />
-                    <WalkInfo />
-                </>
-            )}
+            <WalkHeader />
+            <WalkInfo />
+            <button onClick={handleStart}>시작</button>
+            <button onClick={handleStop}>멈춤</button>
             <Map />
             <WalkNavbar />
 
