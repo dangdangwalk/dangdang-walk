@@ -1,15 +1,4 @@
-import {
-    Body,
-    Controller,
-    Delete,
-    ForbiddenException,
-    Get,
-    HttpCode,
-    Param,
-    ParseIntPipe,
-    Patch,
-    Post,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
 import { AccessTokenPayload } from 'src/auth/token/token.service';
 import { Serialize } from 'src/common/interceptor/serialize.interceptor';
 import { User } from 'src/users/decorators/user.decorator';
@@ -18,6 +7,7 @@ import { In } from 'typeorm';
 import { DogsService } from './dogs.service';
 import { DogStatisticDto } from './dto/dog-statistic.dto';
 import { DogDto } from './dto/dog.dto';
+import { AuthDogGuard } from './guards/authDog.guard';
 
 export type DogProfile = {
     id: number;
@@ -41,11 +31,8 @@ export class DogsController {
 
     @Delete('/:id')
     @HttpCode(204)
-    async delete(@User() { userId }: AccessTokenPayload, @Param('id') dogId: number) {
-        const owned = await this.usersService.checkDogOwnership(userId, dogId);
-        if (!owned) {
-            throw new ForbiddenException('주인이 아닌 강아지에 대한 요청 ');
-        }
+    @UseGuards(AuthDogGuard)
+    async delete(@User() { userId }: AccessTokenPayload, @Param('id', ParseIntPipe) dogId: number) {
         await this.dogsService.deleteDogFromUser(userId, { id: dogId });
 
         return true;
@@ -53,22 +40,16 @@ export class DogsController {
 
     @Patch('/:id')
     @HttpCode(204)
-    async update(@User() { userId }: AccessTokenPayload, @Param('id') dogId: number, @Body() dogDto: DogDto) {
-        const owned = await this.usersService.checkDogOwnership(userId, dogId);
-        if (!owned) {
-            throw new ForbiddenException('주인이 아닌 강아지에 대한 요청 ');
-        }
+    @UseGuards(AuthDogGuard)
+    async update(@Param('id', ParseIntPipe) dogId: number, @Body() dogDto: DogDto) {
         await this.dogsService.updateDog(dogId, dogDto);
 
         return true;
     }
 
     @Get('/:id')
-    async getOneProfile(@User() { userId }: AccessTokenPayload, @Param('id', ParseIntPipe) dogId: number) {
-        const owned = await this.usersService.checkDogOwnership(userId, dogId);
-        if (!owned) {
-            throw new ForbiddenException('주인이 아닌 강아지에 대한 요청 ');
-        }
+    @UseGuards(AuthDogGuard)
+    async getOneProfile(@Param('id', ParseIntPipe) dogId: number) {
         return this.dogsService.getProfile(dogId);
     }
 
