@@ -17,6 +17,28 @@ module.exports = {
             fontFamily: {
                 roboto: ['"Roboto"', 'sans-serif'],
             },
+            animation: {
+                mainToLeft: 'mainToLeft 0.25s ease-in-out',
+                mainToRight: 'mainToRight 0.25s ease-in-out',
+            },
+            keyframes: {
+                mainToLeft: {
+                    '0%': {
+                        transform: 'translateX(0)',
+                    },
+                    '100%': {
+                        transform: 'translateX(-100%)',
+                    },
+                },
+                mainToRight: {
+                    '0%': {
+                        transform: 'translateX(0)',
+                    },
+                    '100%': {
+                        transform: 'translateX(100%)',
+                    },
+                },
+            },
         },
     },
     plugins: [],
