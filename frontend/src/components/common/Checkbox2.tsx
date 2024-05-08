@@ -36,7 +36,7 @@ function newID() {
     return Math.random().toString(36).slice(2);
 }
 
-interface Props extends ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root> {
+interface Props extends Omit<ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>, 'asChild'> {
     checked: boolean;
     onCheckedChange: (checked: boolean) => void;
     labelText?: string;
