@@ -62,7 +62,7 @@ export class AuthService {
         return { accessToken, refreshToken };
     }
 
-    async signin(
+    async signup(
         authorizeCode: string,
         provider: OauthProvider,
         redirectURI: string

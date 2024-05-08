@@ -25,7 +25,7 @@ const requestLogout = async () => {
 };
 
 const requestSignin = async (params: LoginParams) => {
-    const { data } = await httpClient.post('/auth/signin', params);
+    const { data } = await httpClient.post('/auth/signup', params);
     return data;
 };
 export { getAccessToken, requestLogin, requestLogout, requestSignin };
