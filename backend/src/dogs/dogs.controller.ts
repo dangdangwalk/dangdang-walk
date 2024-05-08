@@ -1,4 +1,4 @@
-import { Controller, ForbiddenException, Get, Param, ParseIntPipe } from '@nestjs/common';
+import { Body, Controller, ForbiddenException, Get, Param, ParseIntPipe, Post } from '@nestjs/common';
 import { AccessTokenPayload } from 'src/auth/token/token.service';
 import { Serialize } from 'src/common/interceptor/serialize.interceptor';
 import { User } from 'src/users/decorators/user.decorator';
@@ -6,6 +6,7 @@ import { UsersService } from 'src/users/users.service';
 import { In } from 'typeorm';
 import { DogsService } from './dogs.service';
 import { DogStatisticDto } from './dto/dog-statistic.dto';
+import { DogDto } from './dto/dog.dto';
 
 export type DogProfile = {
     id: number;
@@ -19,6 +20,13 @@ export class DogsController {
         private readonly usersService: UsersService,
         private readonly dogsService: DogsService
     ) {}
+
+    @Post()
+    async register(@User() { userId }: AccessTokenPayload, @Body() dogDto: DogDto) {
+        this.dogsService.createDogToUser(userId, dogDto);
+
+        return true;
+    }
 
     @Get('/walk-available')
     async getAvailableDogs(@User() user: AccessTokenPayload): Promise<DogProfile[]> {
