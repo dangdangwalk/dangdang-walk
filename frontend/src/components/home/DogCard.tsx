@@ -1,9 +1,7 @@
 import { Dog } from '@/models/dog.model';
 import { walkPercentFormat } from '@/utils/format';
 import Ic from '@/assets/icons/ic.svg';
-
 import Avatar from '@/components/common/Avatar';
-import WalkIcon from '@/components/home/WalkIcon';
 import DayIcon from '@/components/home/DayIcon';
 import Walk from '@/assets/icons/walk/walk.svg';
 import Progressbar from '@/components/home/Progressbar';
