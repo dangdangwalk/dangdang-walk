@@ -32,7 +32,7 @@ const dogs = [
 ];
 
 export default function Walk() {
-    const { isWalk } = useWalkStore();
+    const { isWalk, walkStart, walkStop } = useWalkStore();
     const [availableDog, setAvailableDog] = useState(dogs);
 
     const handleDogSelect = (id: number) => {
@@ -43,10 +43,20 @@ export default function Walk() {
         setAvailableDog(availableDog.map((d: any) => (d.id === id ? { ...d, isChecked: !d.isChecked } : d)));
         // setAvailableDog([]);
     };
+    const handleStart = () => {
+        console.log('start');
+        walkStart(new Date());
+    };
+    const handleStop = () => {
+        console.log('stop');
+        walkStop();
+    };
     return (
         <>
             <WalkHeader />
             <WalkInfo />
+            <button onClick={handleStart}>시작</button>
+            <button onClick={handleStop}>멈춤</button>
             <Map />
             <WalkNavbar />
 
