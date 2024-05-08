@@ -1,11 +1,11 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
-const { REACT_APP_NEST_BASE_URL } = process.env;
+const { REACT_APP_NEST_BASE_URL: NEST_BASE_URL = '' } = window._ENV ?? process.env;
 const DEFAULT_TIMEOUT = 30000;
 
 export const createClient = (config?: AxiosRequestConfig): AxiosInstance => {
     const axiosInstance = axios.create({
-        baseURL: REACT_APP_NEST_BASE_URL,
+        baseURL: NEST_BASE_URL,
         timeout: DEFAULT_TIMEOUT,
         headers: {
             'Content-Type': `application/json;charset=UTF-8`,
