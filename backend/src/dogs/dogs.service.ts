@@ -1,8 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { BreedService } from 'src/breed/breed.service';
 import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
+import { DailyWalkTime } from 'src/daily-walk-time/daily-walk-time.entity';
 import { DailyWalkTimeService } from 'src/daily-walk-time/daily-walk-time.service';
+import { DogWalkDay } from 'src/dog-walk-day/dog-walk-day.entity';
 import { DogWalkDayService } from 'src/dog-walk-day/dog-walk-day.service';
+import { UsersDogsService } from 'src/users-dogs/users-dogs.service';
 import { UsersService } from 'src/users/users.service';
 import { FindOptionsWhere, In, UpdateResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
@@ -16,6 +19,7 @@ import { DogDto } from './dto/dog.dto';
 export class DogsService {
     constructor(
         private readonly dogsRepository: DogsRepository,
+        private readonly usersDogsService: UsersDogsService,
         private readonly usersService: UsersService,
         private readonly breedService: BreedService,
         private readonly dogWalkDayService: DogWalkDayService,
@@ -23,11 +27,21 @@ export class DogsService {
         private readonly logger: WinstonLoggerService
     ) {}
 
-    async create(entityData: DogDto) {
-        const { breed: breedName, ...rest } = entityData;
+    async createDogToUser(userId: number, dogDto: DogDto) {
+        const { breed: breedName, ...otherAttributes } = dogDto;
+
         const breed = await this.breedService.findOne({ name: breedName });
-        const dog = new Dogs({ breedId: breed.id, ...rest });
-        return this.dogsRepository.create(dog);
+
+        const newDog = new Dogs({
+            breed,
+            walkDay: new DogWalkDay(),
+            dailyWalkTime: new DailyWalkTime(),
+            ...otherAttributes,
+        });
+
+        const dog = await this.dogsRepository.create(newDog);
+
+        return this.usersDogsService.create({ userId, dogId: dog.id });
     }
 
     async findOne(where: FindOptionsWhere<Dogs>) {
