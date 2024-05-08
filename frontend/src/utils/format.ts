@@ -8,3 +8,7 @@ export const walkPercentFormat = (percent: number): string => {
         .toString()
         .padStart(3, '0');
 };
+
+export const distanceFormat = (distance: number): string => {
+    return distance.toFixed(2);
+};
