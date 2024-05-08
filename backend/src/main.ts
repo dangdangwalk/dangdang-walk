@@ -12,7 +12,7 @@ async function bootstrap() {
     app.useLogger(new WinstonLoggerService());
 
     app.enableCors({
-        origin: process.env.CORS_ORIGIN,
+        origin: ['http://localhost:3000', 'http://localhost:8080'],
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
         allowedHeaders: ['Content-Type', 'Accept', 'Authorization'],
         credentials: true,
