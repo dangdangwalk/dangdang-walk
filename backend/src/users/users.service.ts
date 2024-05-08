@@ -49,7 +49,6 @@ export class UsersService {
         const nickname = await this.generateUniqueNickname();
 
         return await this.usersRepository.createIfNotExists(
-            { oauthId },
             new Users({
                 nickname,
                 role: Role.User,
@@ -58,7 +57,8 @@ export class UsersService {
                 oauthAccessToken,
                 oauthRefreshToken,
                 refreshToken,
-            })
+            }),
+            'oauthId'
         );
     }
 
