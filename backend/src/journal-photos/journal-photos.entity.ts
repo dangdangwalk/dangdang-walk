@@ -8,9 +8,12 @@ export class JournalPhotos {
 
     @ManyToOne(() => Journals, (journals) => journals.id)
     @JoinColumn({ name: 'journal_id' })
+    journal: Journals;
+
+    @Column({ name: 'journal_id' })
     journalId: number;
 
-    @Column()
+    @Column({ name: 'photo_url' })
     photoUrl: string;
 
     constructor(entityData: Partial<JournalPhotos>) {
