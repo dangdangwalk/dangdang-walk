@@ -1,6 +1,35 @@
+import { Dog } from '@/models/dog.model';
 import { Position } from '@/models/location.model';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
+
+interface WalkingDog extends Dog {
+    isUrineChecked: boolean;
+    isFeceChecked: boolean;
+}
+const dogs = [
+    {
+        id: 1, // 강아지 id
+        name: '덕지', //강아지 이름
+        photoUrl: 'https://ai.esmplus.com/pixie2665/001.jpg', // 강아지 사진
+        isUrineChecked: false,
+        isFeceChecked: false,
+    },
+    {
+        id: 2, // 강아지 id
+        name: '철도', //강아지 이름
+        photoUrl: 'https://ai.esmplus.com/pixie2665/002.jpg', // 강아지 사진
+        isUrineChecked: false,
+        isFeceChecked: false,
+    },
+    {
+        id: 3, // 강아지 id
+        name: '', //강아지 이름
+        photoUrl: '', // 강아지 사진
+        isUrineChecked: false,
+        isFeceChecked: false,
+    },
+];
 
 const WALK_MET = 3;
 const WEIGHT = 70;
@@ -8,7 +37,7 @@ const WEIGHT = 70;
 interface WalkState {
     isWalk: boolean;
     routes: Position[];
-    walkingDogs: [];
+    walkingDogs: WalkingDog[];
     distance: number;
     startedAt: string;
     duration: number;
@@ -37,7 +66,7 @@ export const useWalkStore = create<WalkState & Actions>()(
         distance: 0,
         startedAt: '',
         duration: 0,
-        walkingDogs: [],
+        walkingDogs: [...dogs],
         startPosition: null,
         currentPosition: null,
         calories: 0,
