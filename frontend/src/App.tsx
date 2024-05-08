@@ -41,7 +41,7 @@ function App() {
                             <Navbar />
                         </div>
                         <div
-                            className={`fixed z-20 w-full duration-300 ${isLoginBottomSheetOpen ? ' translate-y-72' : 'translate-y-full'}`}
+                            className={`fixed z-20 w-full duration-200 ${isLoginBottomSheetOpen ? ' translate-y-72' : 'translate-y-full'}`}
                         >
                             <LoginBottomSheet />
                         </div>
