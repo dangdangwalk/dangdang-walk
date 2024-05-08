@@ -10,7 +10,7 @@ export class JournalsDogs {
     journalId: number;
 
     @PrimaryColumn({ name: 'dog_id' })
-    @ManyToOne(() => Dogs, (dog) => dog.id)
+    @ManyToOne(() => Dogs, (dog) => dog.id, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'dog_id' })
     dogId: number;
 }
