@@ -11,6 +11,10 @@ export class DailyWalkTimeService {
         return this.dailyWalkTimeRepository.find(where);
     }
 
+    async delete(where: FindOptionsWhere<DailyWalkTime>) {
+        return this.dailyWalkTimeRepository.delete(where);
+    }
+
     async getWalkTimeList(walkTimeIds: number[]) {
         const walkTimeList = await this.dailyWalkTimeRepository.find({ id: In(walkTimeIds) });
         if (!walkTimeList.length) {
