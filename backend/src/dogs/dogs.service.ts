@@ -1,8 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { BreedService } from 'src/breed/breed.service';
 import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
+import { DailyWalkTime } from 'src/daily-walk-time/daily-walk-time.entity';
 import { DailyWalkTimeService } from 'src/daily-walk-time/daily-walk-time.service';
+import { DogWalkDay } from 'src/dog-walk-day/dog-walk-day.entity';
 import { DogWalkDayService } from 'src/dog-walk-day/dog-walk-day.service';
+import { UsersDogsService } from 'src/users-dogs/users-dogs.service';
 import { UsersService } from 'src/users/users.service';
 import { FindOptionsWhere, In, UpdateResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
@@ -10,11 +13,13 @@ import { DogProfile } from './dogs.controller';
 import { Dogs } from './dogs.entity';
 import { DogsRepository } from './dogs.repository';
 import { DogStatisticDto } from './dto/dog-statistic.dto';
+import { DogDto } from './dto/dog.dto';
 
 @Injectable()
 export class DogsService {
     constructor(
         private readonly dogsRepository: DogsRepository,
+        private readonly usersDogsService: UsersDogsService,
         private readonly usersService: UsersService,
         private readonly breedService: BreedService,
         private readonly dogWalkDayService: DogWalkDayService,
@@ -22,11 +27,47 @@ export class DogsService {
         private readonly logger: WinstonLoggerService
     ) {}
 
-    async find(where: FindOptionsWhere<Dogs>) {
-        return this.dogsRepository.find(where);
+    async createDogToUser(userId: number, dogDto: DogDto) {
+        const { breed: breedName, ...otherAttributes } = dogDto;
+
+        const breed = await this.breedService.findOne({ name: breedName });
+
+        const newDog = new Dogs({
+            breed,
+            walkDay: new DogWalkDay(),
+            dailyWalkTime: new DailyWalkTime(),
+            ...otherAttributes,
+        });
+
+        const dog = await this.dogsRepository.create(newDog);
+
+        return this.usersDogsService.create({ userId, dogId: dog.id });
     }
+
+    async deleteDogFromUser(userId: number, where: FindOptionsWhere<Dogs>) {
+        const dog = await this.findOne(where);
+
+        await this.usersDogsService.delete({ userId, dogId: dog.id });
+        await this.dogWalkDayService.delete({ id: dog.walkDayId });
+        await this.dailyWalkTimeService.delete({ id: dog.dailyWalkTimeId });
+
+        return dog;
+    }
+
+    async findOne(where: FindOptionsWhere<Dogs>) {
+        return this.dogsRepository.findOne(where);
+    }
+
     async update(where: FindOptionsWhere<Dogs>, partialEntity: QueryDeepPartialEntity<Dogs>): Promise<UpdateResult> {
         return await this.dogsRepository.update(where, partialEntity);
+    }
+
+    async updateDog(dogId: number, dogDto: DogDto) {
+        const { breed: breedName, ...otherAttributes } = dogDto;
+
+        const breed = await this.breedService.findOne({ name: breedName });
+
+        return this.update({ id: dogId }, { breed, ...otherAttributes });
     }
 
     async updateIsWalking(dogIds: number[], stateToUpdate: boolean) {

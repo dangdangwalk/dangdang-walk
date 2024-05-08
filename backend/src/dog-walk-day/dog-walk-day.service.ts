@@ -11,6 +11,10 @@ export class DogWalkDayService {
         return this.dogWalkDayRepository.find(where);
     }
 
+    async delete(where: FindOptionsWhere<DogWalkDay>) {
+        return this.dogWalkDayRepository.delete(where);
+    }
+
     private getValuesOnly(walkDays: any[]) {
         const daysValues = walkDays.map((curWeek) => {
             const valueArr = [];

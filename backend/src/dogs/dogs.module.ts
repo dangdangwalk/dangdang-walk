@@ -7,6 +7,7 @@ import { DailyWalkTime } from 'src/daily-walk-time/daily-walk-time.entity';
 import { DailyWalkTimeModule } from 'src/daily-walk-time/daily-walk-time.module';
 import { DogWalkDay } from 'src/dog-walk-day/dog-walk-day.entity';
 import { DogWalkDayModule } from 'src/dog-walk-day/dog-walk-day.module';
+import { UsersDogsModule } from 'src/users-dogs/users-dogs.module';
 import { UsersModule } from 'src/users/users.module';
 import { DogsController } from './dogs.controller';
 import { Dogs } from './dogs.entity';
@@ -17,6 +18,7 @@ import { DogsService } from './dogs.service';
     imports: [
         DatabaseModule.forFeature([Dogs, Breed, DogWalkDay, DailyWalkTime]),
         UsersModule,
+        UsersDogsModule,
         BreedModule,
         DailyWalkTimeModule,
         WinstonLoggerModule,
