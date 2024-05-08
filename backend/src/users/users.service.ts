@@ -64,11 +64,11 @@ export class UsersService {
 
     async generateUniqueNickname(): Promise<string> {
         let nickname = generateUuid();
-        let user = await this.usersRepository.findOneRaw({ nickname });
+        let user = await this.usersRepository.findOneWithNoException({ nickname });
 
         while (user) {
             nickname = generateUuid();
-            user = await this.usersRepository.findOneRaw({ nickname });
+            user = await this.usersRepository.findOneWithNoException({ nickname });
         }
 
         return nickname;
