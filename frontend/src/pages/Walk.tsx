@@ -45,12 +45,8 @@ export default function Walk() {
     };
     return (
         <>
-            {isWalk && (
-                <>
-                    <WalkHeader />
-                    <WalkInfo />
-                </>
-            )}
+            <WalkHeader />
+            <WalkInfo />
             <Map />
             <WalkNavbar />
 
