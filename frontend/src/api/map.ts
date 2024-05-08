@@ -1,7 +1,7 @@
 import { createClient } from '@/api/http';
 
-const KAKAO_CLIENT_ID = process.env.REACT_APP_KAKAO_CLIENT_ID;
-const KAKAO_MAP_URL = process.env.REACT_APP_KAKAO_MAP_URL;
+const { REACT_APP_KAKAO_CLIENT_ID: KAKAO_CLIENT_ID = '', REACT_APP_KAKAO_MAP_URL: KAKAO_MAP_URL = '' } =
+    window._ENV ?? process.env;
 
 const mapClient = createClient({
     headers: {
