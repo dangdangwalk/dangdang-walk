@@ -9,14 +9,14 @@ export class Dogs {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @OneToOne(() => DogWalkDay, { nullable: false })
+    @OneToOne(() => DogWalkDay, { nullable: false, cascade: true, onDelete: 'CASCADE' })
     @JoinColumn({ name: 'walk_day_id' })
     walkDay: DogWalkDay;
 
     @Column({ name: 'walk_day_id' })
     walkDayId: number;
 
-    @OneToOne(() => DailyWalkTime, { nullable: false })
+    @OneToOne(() => DailyWalkTime, { nullable: false, cascade: true, onDelete: 'CASCADE' })
     @JoinColumn({ name: 'daily_walk_time_id' })
     dailyWalkTime: DailyWalkTime;
 
@@ -48,7 +48,7 @@ export class Dogs {
     @Column({ name: 'photo_url' })
     photoUrl: string;
 
-    @Column({ name: 'is_walking' })
+    @Column({ name: 'is_walking', default: false })
     isWalking: boolean;
 
     constructor(entityData: Partial<Dogs>) {

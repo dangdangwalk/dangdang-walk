@@ -5,7 +5,7 @@ export class DailyWalkTime {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({ default: 0 })
     duration: number;
 
     @CreateDateColumn({ name: 'updated_at' })
