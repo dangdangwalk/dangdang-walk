@@ -4,13 +4,14 @@ import { distanceFormat, timeFormat } from '@/utils/format';
 import { useEffect } from 'react';
 
 export default function WalkInfo() {
-    const { isWalk, increaseDuration, duration, distance } = useWalkStore();
+    const { isWalk, increaseDuration, duration, distance, calories, setCalories } = useWalkStore();
 
     useEffect(() => {
         let intervalId: NodeJS.Timeout;
         if (isWalk) {
             intervalId = setInterval(() => {
                 increaseDuration();
+                setCalories();
             }, 1000);
         }
         return () => clearInterval(intervalId);
@@ -24,7 +25,7 @@ export default function WalkInfo() {
             </div>
             <Divider orientation={'vertical'} />
             <div className="flex flex-col w-20 justify-center items-center">
-                <div className="text-amber-500 text-lg font-bold leading-[27px]">129</div>
+                <div className="text-amber-500 text-lg font-bold leading-[27px]">{calories}</div>
                 <div className="text-center text-stone-500 text-xs font-normal leading-[18px]">kcal</div>
             </div>
             <Divider orientation={'vertical'} />

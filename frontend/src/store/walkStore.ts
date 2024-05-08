@@ -2,6 +2,9 @@ import { Position } from '@/models/location.model';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
+const WALK_MET = 3;
+const WEIGHT = 70;
+
 interface WalkState {
     isWalk: boolean;
     routes: Position[];
@@ -11,6 +14,7 @@ interface WalkState {
     duration: number;
     startPosition: Position | null;
     currentPosition: Position | null;
+    calories: number;
 }
 type Actions = {
     addRoutes: (position: Position) => void;
@@ -20,12 +24,12 @@ type Actions = {
     increaseDuration: () => void;
     setStartPosition: (position: Position | null) => void;
     setCurrentPosition: (position: Position | null) => void;
+    setCalories: () => void;
 };
 
 const setStartTime = (date: Date) => {
     localStorage.setItem('startedAt', date.toISOString());
 };
-
 export const useWalkStore = create<WalkState & Actions>()(
     devtools((set) => ({
         isWalk: false,
@@ -36,8 +40,10 @@ export const useWalkStore = create<WalkState & Actions>()(
         walkingDogs: [],
         startPosition: null,
         currentPosition: null,
+        calories: 0,
         addRoutes: (position: Position) => set((state) => ({ routes: [...state.routes, position] })),
         setWalkingDogs: (dogs: []) => set({ walkingDogs: dogs }),
+        setCalories: () => set((state) => ({ calories: Math.round((WALK_MET * WEIGHT * state.duration) / 3600) })),
         increaseDistance: (distance: number) => set((state) => ({ distance: state.distance + distance })),
         increaseDuration: () => set((state) => ({ duration: state.duration + 1 })),
         setStartPosition: (position) => set({ startPosition: position }),
