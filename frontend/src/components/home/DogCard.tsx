@@ -5,6 +5,7 @@ import Ic from '@/assets/icons/ic.svg';
 import Avatar from '@/components/common/Avatar';
 import WalkIcon from '@/components/home/WalkIcon';
 import DayIcon from '@/components/home/DayIcon';
+import Walk from '@/assets/icons/walk/walk.svg';
 import Progressbar from '@/components/home/Progressbar';
 
 export interface DogStatistic extends Dog {
@@ -32,7 +33,7 @@ export default function DogCard({ dog }: DogCardProps) {
                     return walk === 0 ? (
                         <DayIcon key={WEEKDAY[index]} day={WEEKDAY[index]} />
                     ) : (
-                        <WalkIcon key={WEEKDAY[index]} />
+                        <img src={Walk} alt="walk" key={index} />
                     );
                 })}
             </div>
