@@ -17,10 +17,10 @@ export default function Health() {
     );
 
     async function handleClick() {
-        const { REACT_APP_NEST_BASE_URL } = process.env;
+        const { REACT_APP_NEST_BASE_URL: NEST_BASE_URL = '' } = window._ENV ?? process.env;
 
         try {
-            const res = await axios.get(`${REACT_APP_NEST_BASE_URL}/health`);
+            const res = await axios.get(`${NEST_BASE_URL}/health`);
             console.log(res);
 
             setIsSuccess(true);
