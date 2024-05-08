@@ -62,6 +62,14 @@ export class DogsService {
         return await this.dogsRepository.update(where, partialEntity);
     }
 
+    async updateDog(dogId: number, dogDto: DogDto) {
+        const { breed: breedName, ...otherAttributes } = dogDto;
+
+        const breed = await this.breedService.findOne({ name: breedName });
+
+        return this.update({ id: dogId }, { breed, ...otherAttributes });
+    }
+
     async updateIsWalking(dogIds: number[], stateToUpdate: boolean) {
         const attrs = {
             isWalking: stateToUpdate,
