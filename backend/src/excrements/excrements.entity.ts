@@ -1,6 +1,7 @@
-import { Column, Entity, JoinColumn, ManyToOne, Point, PrimaryColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { Dogs } from '../dogs/dogs.entity';
 import { Journals } from '../journals/journals.entity';
+import { ExcrementsType } from './types/excrements.enum';
 
 @Entity('excrements')
 export class Excrements {
@@ -17,12 +18,12 @@ export class Excrements {
     @Column({ name: '' })
     @Column({
         type: 'enum',
-        enum: ['FECES', 'URINE'],
+        enum: ExcrementsType,
     })
-    type: 'FECES' | 'URINE';
+    type: ExcrementsType;
 
     @Column({ type: 'point', spatialFeatureType: 'Point', srid: 4326 })
-    coordinate: Point;
+    coordinate: string;
 
     constructor(entityData: Partial<Excrements>) {
         Object.assign(this, entityData);
