@@ -44,15 +44,15 @@ export class AuthController {
         };
     }
 
-    @Post('signin')
+    @Post('signup')
     @SkipAuthGuard()
-    async signin(
+    async signup(
         @Body('authorizeCode') authorizeCode: string,
         @Body('provider') provider: OauthProvider,
         @Body('redirectURI') redirectURI: string,
         @Res({ passthrough: true }) response: Response
     ): Promise<accessTokenResponse> {
-        const { accessToken, refreshToken } = await this.authService.signin(authorizeCode, provider, redirectURI);
+        const { accessToken, refreshToken } = await this.authService.signup(authorizeCode, provider, redirectURI);
 
         response.cookie('refreshToken', refreshToken, {
             httpOnly: true,
