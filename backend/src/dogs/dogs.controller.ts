@@ -1,4 +1,4 @@
-import { Body, Controller, ForbiddenException, Get, Param, ParseIntPipe, Post } from '@nestjs/common';
+import { Body, Controller, Delete, ForbiddenException, Get, HttpCode, Param, ParseIntPipe, Post } from '@nestjs/common';
 import { AccessTokenPayload } from 'src/auth/token/token.service';
 import { Serialize } from 'src/common/interceptor/serialize.interceptor';
 import { User } from 'src/users/decorators/user.decorator';
@@ -23,9 +23,26 @@ export class DogsController {
 
     @Post()
     async register(@User() { userId }: AccessTokenPayload, @Body() dogDto: DogDto) {
-        this.dogsService.createDogToUser(userId, dogDto);
+        await this.dogsService.createDogToUser(userId, dogDto);
 
         return true;
+    }
+
+    @Delete('/:id')
+    @HttpCode(204)
+    async delete(@User() { userId }: AccessTokenPayload, @Param('id') dogId: number) {
+        await this.dogsService.deleteDogFromUser(userId, { id: dogId });
+
+        return true;
+    }
+
+    @Get('/:id')
+    async getOneProfile(@User() user: AccessTokenPayload, @Param('id', ParseIntPipe) dogId: number) {
+        const owned = await this.usersService.checkDogOwnership(user.userId, dogId);
+        if (!owned) {
+            throw new ForbiddenException('주인이 아닌 강아지에 대한 요청 ');
+        }
+        return this.dogsService.getProfile(dogId);
     }
 
     @Get('/walk-available')
@@ -38,14 +55,5 @@ export class DogsController {
     @Get('/statistics')
     async getDogsStatistics(@User() user: AccessTokenPayload) {
         return this.dogsService.getDogsStatistics(user.userId);
-    }
-
-    @Get('/:id')
-    async getOneProfile(@User() user: AccessTokenPayload, @Param('id', ParseIntPipe) dogId: number) {
-        const owned = await this.usersService.checkDogOwnership(user.userId, dogId);
-        if (!owned) {
-            throw new ForbiddenException('주인이 아닌 강아지에 대한 요청 ');
-        }
-        return this.dogsService.getProfile(dogId);
     }
 }
