@@ -9,6 +9,7 @@ import Avatar from '@/components/common/Avatar';
 import { Divider } from '@/components/common/Divider';
 import AllDogs from '@/assets/icons/walk/frame-5058.svg';
 import DogCheckBox from '@/components/walk/DogCheckBox';
+import useGeolocation from '@/hooks/useGeolocation';
 
 const dogs = [
     {
@@ -34,6 +35,8 @@ const dogs = [
 export default function Walk() {
     const { isWalk, walkStart, walkStop } = useWalkStore();
     const [availableDog, setAvailableDog] = useState(dogs);
+    const { position } = useGeolocation();
+    console.log(position);
 
     const handleDogSelect = (id: number) => {
         if (id < 0) {

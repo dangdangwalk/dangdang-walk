@@ -1,18 +1,16 @@
 import { Divider } from '@/components/common/Divider';
-import useGeolocation from '@/hooks/useGeolocation';
 import { useWalkStore } from '@/store/walkStore';
 import { distanceFormat, timeFormat } from '@/utils/format';
 import { useEffect } from 'react';
 
 export default function WalkInfo() {
-    const { isWalk, setDuration, duration } = useWalkStore();
-    const { distance } = useGeolocation();
+    const { isWalk, increaseDuration, duration, distance } = useWalkStore();
 
     useEffect(() => {
         let intervalId: NodeJS.Timeout;
         if (isWalk) {
             intervalId = setInterval(() => {
-                setDuration(1);
+                increaseDuration();
             }, 1000);
         }
         return () => clearInterval(intervalId);

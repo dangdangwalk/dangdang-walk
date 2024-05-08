@@ -1,16 +1,20 @@
 import { Position } from '@/models/location.model';
+import { useWalkStore } from '@/store/walkStore';
 import { calculateDistance } from '@/utils/geo';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 const useGeolocation = () => {
-    const [startPosition, setStartPosition] = useState<Position | null>(null);
-    const [currentPosition, setCurrentPosition] = useState<Position | null>(null);
-    const [distance, setDistance] = useState<number>(0);
-
+    const { increaseDistance, addRoutes, startPosition, setStartPosition, currentPosition, setCurrentPosition } =
+        useWalkStore();
+    const [prevPosition, setPrevPosition] = useState<Position | null>(null);
     useEffect(() => {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
                 setStartPosition({
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                });
+                setPrevPosition({
                     lat: position.coords.latitude,
                     lng: position.coords.longitude,
                 });
@@ -24,8 +28,11 @@ const useGeolocation = () => {
         if (!startPosition) return;
 
         const watchId = navigator.geolocation.watchPosition((position) => {
-            console.log('changed position', position.coords);
             setCurrentPosition({
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+            });
+            addRoutes({
                 lat: position.coords.latitude,
                 lng: position.coords.longitude,
             });
@@ -37,19 +44,22 @@ const useGeolocation = () => {
     }, [startPosition]);
 
     useEffect(() => {
-        if (!startPosition || !currentPosition) return;
+        if (!startPosition || !currentPosition || !prevPosition) return;
 
-        const distanceInMeters = calculateDistance(
-            startPosition.lat,
-            startPosition.lng,
+        const newDistance = calculateDistance(
+            prevPosition.lat,
+            prevPosition.lng,
             currentPosition.lat,
             currentPosition.lng
         );
-
-        setDistance(distanceInMeters);
+        setPrevPosition({
+            lat: currentPosition.lat,
+            lng: currentPosition.lng,
+        });
+        increaseDistance(newDistance);
     }, [startPosition, currentPosition]);
 
-    return { startPosition, currentPosition, distance };
+    return { position: currentPosition };
 };
 
 export default useGeolocation;
