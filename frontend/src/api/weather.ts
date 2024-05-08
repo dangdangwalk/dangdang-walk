@@ -1,23 +1,20 @@
 import { AirPolution, SunsetSunrise, WeatherData } from '@/models/weather.model';
 import { createClient } from './http';
 
-const REACT_APP_WEATHER_URL = process.env.REACT_APP_WEATHER_URL;
-const REACT_APP_WEATHER_KEY = process.env.REACT_APP_WEATHER_KEY;
+const { REACT_APP_WEATHER_URL: WEATHER_URL = '' } = window._ENV ?? process.env;
+const { REACT_APP_WEATHER_KEY: WEATHER_KEY = '' } = window._ENV ?? process.env;
 
 const weatherClient = createClient({
     headers: { 'Content-Type': `application/json;charset=UTF-8`, Accept: 'application/json' },
-    baseURL: REACT_APP_WEATHER_URL,
+    baseURL: WEATHER_URL,
     withCredentials: false,
 });
 
-// TODO: error 코드 처리
-
 export const fetchCurrentWeather = async (date: string, nx: number, ny: number): Promise<WeatherData[] | undefined> => {
-    console.log(REACT_APP_WEATHER_KEY);
     try {
         const response = (
             await weatherClient.get(
-                `/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=${REACT_APP_WEATHER_KEY}&dataType=JSON&numOfRows=260&pageNo=1&base_date=${date}&base_time=0200&nx=${nx}&ny=${ny}`
+                `/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=${WEATHER_URL}&dataType=JSON&numOfRows=260&pageNo=1&base_date=${date}&base_time=0200&nx=${nx}&ny=${ny}`
             )
         ).data.response;
 
@@ -38,7 +35,7 @@ export const fetchSunsetSunrise = async (
     try {
         const res = (
             await weatherClient.get(
-                `/B090041/openapi/service/RiseSetInfoService/getLCRiseSetInfo?locdate=${date}&longitude=${lng}&latitude=${lat}&dnYn=N&ServiceKey=${REACT_APP_WEATHER_KEY}`
+                `/B090041/openapi/service/RiseSetInfoService/getLCRiseSetInfo?locdate=${date}&longitude=${lng}&latitude=${lat}&dnYn=N&ServiceKey=${WEATHER_KEY}`
             )
         ).request.response;
         const { header, body } = JSON.parse(res).response;
@@ -57,7 +54,7 @@ export const fetchAirGrade = async (sidoName: string): Promise<AirPolution | und
     try {
         const response = (
             await weatherClient.get(
-                `/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=${REACT_APP_WEATHER_KEY}&returnType=json&numOfRows=1&pageNum=1&sidoName=${sidoName}&ver=1.0`
+                `/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=${WEATHER_KEY}&returnType=json&numOfRows=1&pageNum=1&sidoName=${sidoName}&ver=1.0`
             )
         ).data.response;
 
