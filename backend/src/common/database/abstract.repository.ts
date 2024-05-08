@@ -22,7 +22,7 @@ export abstract class AbstractRepository<T extends ObjectLiteral> {
         return this.create(entity);
     }
 
-    async findOneRaw(where: FindOptionsWhere<T>): Promise<T | null> {
+    async findOneWithNoException(where: FindOptionsWhere<T>): Promise<T | null> {
         const entity = await this.entityRepository.findOne({ where });
 
         return entity;
