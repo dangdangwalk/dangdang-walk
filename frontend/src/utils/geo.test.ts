@@ -24,7 +24,7 @@ describe('위치 정보 관환 테스트', () => {
         const seoul = getSidoCode('서울특별시');
         const chung = getSidoCode('충청북도');
 
-        const undifine = getSidoCode('');
+        const undifine = getSidoCode(undefined);
 
         expect(seoul).toBe('서울');
         expect(chung).toBe('충북');

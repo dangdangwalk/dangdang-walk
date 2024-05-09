@@ -1,14 +1,16 @@
 import { fetchAddress } from '@/api/map';
 import { fetchAirGrade, fetchCurrentWeather, fetchSunsetSunrise } from '@/api/weather';
-import { DEFAULT_ADDRESS, DEFAULT_LAT, DEFAULT_LNG } from '@/constants/location';
+import { DEFAULT_ADDRESS } from '@/constants/location';
+import useGeolocation from '@/hooks/useGeolocation2';
 import { Weather } from '@/models/weather.model';
 import { getCurrentDate, getHours } from '@/utils/date';
-import { getGeoLocation, getSidoCode, gpsToGrid } from '@/utils/geo';
+import { getSidoCode, gpsToGrid } from '@/utils/geo';
 // import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 export const useWeather = () => {
     const date = getCurrentDate(new Date());
+    const { position } = useGeolocation();
     const [weather, setWeather] = useState<Weather>({
         maxTemperature: 28,
         minTemperature: 0,
@@ -26,19 +28,6 @@ export const useWeather = () => {
         const { nx, ny } = gpsToGrid(lat, lng);
         const req1 = fetchCurrentWeather(date, nx, ny);
         const req2 = fetchSunsetSunrise(date, Math.floor(lat * 100), Math.floor(lng * 100));
-
-        fetchAddress(lat, lng).then((add) => {
-            const sido = getSidoCode(add?.region_1depth_name ?? '');
-            setAdress(add?.region_3depth_name ?? DEFAULT_ADDRESS);
-            fetchAirGrade(sido).then((grade) => {
-                const airGrade = Number(grade?.khaiGrade ?? 2);
-                setWeather({
-                    ...weather,
-                    airGrade,
-                });
-                setAdress(add?.region_3depth_name ?? DEFAULT_ADDRESS);
-            });
-        });
 
         Promise.allSettled([req1, req2]).then((res) => {
             const newWeatherList =
@@ -79,11 +68,22 @@ export const useWeather = () => {
                 sunset: sun?.sunset ?? '1900',
             });
         });
+
+        const add = await fetchAddress(lat, lng);
+        const sido = getSidoCode(add?.region_1depth_name);
+        const grade = await fetchAirGrade(sido);
+
+        setWeather({
+            ...weather,
+            airGrade: Number(grade?.khaiGrade ?? 2),
+        });
+        setAdress(add?.region_3depth_name ?? DEFAULT_ADDRESS);
     };
 
     useEffect(() => {
-        getGeoLocation(DEFAULT_LAT, DEFAULT_LNG, onSuccess);
-    }, []);
+        if (!position) return;
+        onSuccess(position.lat, position.lng);
+    }, [position]);
 
     return { weather, address };
 };
