@@ -3,6 +3,7 @@ import { NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
+import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
 import { mockUser } from 'src/fixture/users.fixture';
 import { Users } from 'src/users/users.entity';
 import { UsersRepository } from 'src/users/users.repository';
@@ -38,6 +39,7 @@ describe('AuthService', () => {
                 KakaoService,
                 NaverService,
                 ConfigService,
+                WinstonLoggerService,
             ],
         }).compile();
 

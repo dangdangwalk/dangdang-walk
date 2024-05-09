@@ -2,6 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
+import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
 import { OauthService, RequestTokenRefreshResponse } from './oauth.service.interface';
 
 interface TokenResponse {
@@ -30,7 +31,8 @@ interface TokenRefreshResponse {
 export class NaverService implements OauthService {
     constructor(
         private readonly configService: ConfigService,
-        private readonly httpService: HttpService
+        private readonly httpService: HttpService,
+        private readonly logger: WinstonLoggerService
     ) {}
 
     private readonly CLIENT_ID = this.configService.get<string>('NAVER_CLIENT_ID');
@@ -39,6 +41,8 @@ export class NaverService implements OauthService {
     private readonly USER_INFO_API = this.configService.get<string>('NAVER_USER_INFO_API')!;
 
     async requestToken(authorizeCode: string) {
+        this.logger.log(`authorize code: ${authorizeCode}`);
+
         const { data } = await firstValueFrom(
             this.httpService.get<TokenResponse>(this.TOKEN_API, {
                 params: {

@@ -2,6 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
+import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
 import { OauthService, RequestTokenRefreshResponse } from './oauth.service.interface';
 
 interface TokenResponse {
@@ -34,7 +35,8 @@ interface TokenRefreshResponse {
 export class GoogleService implements OauthService {
     constructor(
         private readonly configService: ConfigService,
-        private readonly httpService: HttpService
+        private readonly httpService: HttpService,
+        private readonly logger: WinstonLoggerService
     ) {}
 
     private readonly CLIENT_ID = this.configService.get<string>('GOOGLE_CLIENT_ID');
@@ -44,6 +46,9 @@ export class GoogleService implements OauthService {
     private readonly REVOKE_API = this.configService.get<string>('GOOGLE_REVOKE_API')!;
 
     async requestToken(authorizeCode: string, redirectURI: string) {
+        this.logger.log(`authorize code: ${authorizeCode}`);
+        this.logger.log(`redirect URI: ${redirectURI}`);
+
         const { data } = await firstValueFrom(
             this.httpService.post<TokenResponse>(this.TOKEN_API, {
                 client_id: this.CLIENT_ID,
