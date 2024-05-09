@@ -1,3 +1,5 @@
+import { AirGrade } from '@/utils/weather';
+
 type weatherCategory =
     | 'POP' //강수확률
     | 'PTY' //강수형태  없음(0) , 비(1) , 눈비(2) ,눈(3) , 빗방울(5) , 빗방울눈날림(6) , 눈날림(7)
@@ -56,7 +58,7 @@ export interface AirPolution {
     pm10Flag: string;
     o3Grade: number;
     pm10Value: string;
-    khaiGrade: number;
+    khaiGrade: AirGrade;
     pm25Value: string;
     sidoName: string;
     no2Flag: string;

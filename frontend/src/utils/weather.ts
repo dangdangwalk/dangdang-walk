@@ -1,4 +1,10 @@
-export const airGrade = ['', '좋음', '보통', '나쁨', '매우나쁨'];
+const airStatus = ['', '좋음', '보통', '나쁨', '매우나쁨'];
+export type AirGrade = 1 | 2 | 3 | 4;
+
+export const getAirStatus = (airGrade: AirGrade | undefined) => {
+    if (!airGrade) return airStatus[2];
+    return airStatus[airGrade];
+};
 
 export type SkyStatus = 'dayclear' | 'daycloudy' | 'cloudy' | 'nightclear' | 'nightcloudy' | 'rain' | 'snow';
 

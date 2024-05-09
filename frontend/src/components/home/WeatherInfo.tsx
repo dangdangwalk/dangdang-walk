@@ -1,7 +1,7 @@
 import { useWeather } from '@/hooks/useWeather';
 import { getCurrentTime } from '@/utils/date';
 import { temperFormat } from '@/utils/format';
-import { SkyStatus, airGrade, getSkyGrade, weatherStatus } from '@/utils/weather';
+import { SkyStatus, getAirStatus, getSkyGrade, weatherStatus } from '@/utils/weather';
 import { useEffect, useState } from 'react';
 import Cloudy from '@/assets/icons/ic-cloudy.svg';
 import Rain from '@/assets/icons/ic-rain.svg';
@@ -10,6 +10,7 @@ import DayClear from '@/assets/icons/ic-dayclear.svg';
 import NightClear from '@/assets/icons/ic-nightclear.svg';
 import NightCloudy from '@/assets/icons/ic-nightcloudy.svg';
 import DayCloudy from '@/assets/icons/ic-daycloudy.svg';
+import useAddressAndAirgrade from '@/hooks/useAddressAndAirgrade';
 
 const statusImage = {
     rain: Rain,
@@ -22,8 +23,9 @@ const statusImage = {
 };
 
 export default function WeatherInfo() {
-    const { weather, address } = useWeather();
+    const { weather } = useWeather();
     const [skyStatus, setSkyStatus] = useState<SkyStatus>();
+    const { airGrade, address } = useAddressAndAirgrade();
 
     useEffect(() => {
         setSkyStatus(getSkyGrade({ ...weather, time: getCurrentTime(new Date()) }));
@@ -48,7 +50,7 @@ export default function WeatherInfo() {
                 <div className="pl-1 flex-col justify-between items-start flex">
                     <p className="text-zinc-500 text-xs font-normal leading-[18px]">위치 : {address}</p>
                     <div className="text-[#999999] text-xs font-normal leading-[18px]">
-                        대기질 : {airGrade[weather?.airGrade ?? 0]}
+                        대기질 : {getAirStatus(airGrade)}
                     </div>
                 </div>
             </div>

@@ -1,10 +1,8 @@
-import { fetchAddress } from '@/api/map';
-import { fetchAirGrade, fetchCurrentWeather, fetchSunsetSunrise } from '@/api/weather';
-import { DEFAULT_ADDRESS } from '@/constants/location';
+import { fetchCurrentWeather, fetchSunsetSunrise } from '@/api/weather';
 import useGeolocation from '@/hooks/useGeolocation2';
 import { Weather } from '@/models/weather.model';
 import { getCurrentDate, getHours } from '@/utils/date';
-import { getSidoCode, gpsToGrid } from '@/utils/geo';
+import { gpsToGrid } from '@/utils/geo';
 // import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
@@ -21,7 +19,6 @@ export const useWeather = () => {
         airGrade: 1,
         precipitation: 0,
     });
-    const [address, setAdress] = useState<string>(DEFAULT_ADDRESS);
 
     //TODO react-query 바꾸기, address 시리얼 처리 문제 해결, refacor 필요
     const onSuccess = async (lat: number, lng: number) => {
@@ -68,22 +65,18 @@ export const useWeather = () => {
                 sunset: sun?.sunset ?? '1900',
             });
         });
-
-        const add = await fetchAddress(lat, lng);
-        const sido = getSidoCode(add?.region_1depth_name);
-        const grade = await fetchAirGrade(sido);
-
-        setWeather({
-            ...weather,
-            airGrade: Number(grade?.khaiGrade ?? 2),
-        });
-        setAdress(add?.region_3depth_name ?? DEFAULT_ADDRESS);
     };
+    // useEffect(() => {
+    //     setWeather({
+    //         ...weather,
+    //         airGrade: airGrade ?? 2,
+    //     });
+    // }, [airGrade]);
 
     useEffect(() => {
         if (!position) return;
         onSuccess(position.lat, position.lng);
     }, [position]);
 
-    return { weather, address };
+    return { weather };
 };
