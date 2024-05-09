@@ -14,6 +14,11 @@ export class LoggingInterceptor implements NestInterceptor {
         const userInfo = request.user || '';
         const requestId = generateUuid();
         const { ip, method, path: url } = request;
+
+        if (url === '/metrics') {
+          return next.handle().pipe();
+        }
+
         this.logger.log(
             `[REQUEST][${method} | ${url} | ${ip} | ${userInfo.userId || userInfo.oauthId || 'GUEST'}] ${requestId}`
         );
