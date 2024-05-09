@@ -1,30 +1,48 @@
 import { fetchAddress } from '@/api/map';
 import { fetchAirGrade } from '@/api/weather';
-import { DEFAULT_ADDRESS } from '@/constants/location';
 import useGeolocation from '@/hooks/useGeolocation2';
 import { getSidoCode } from '@/utils/geo';
-import { AirGrade } from '@/utils/weather';
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 const useAddressAndAirgrade = () => {
-    const [airGrade, setAirGrade] = useState<AirGrade | undefined>();
-    const [address, setAddress] = useState<string | undefined>(DEFAULT_ADDRESS);
     const { position } = useGeolocation();
 
-    useEffect(() => {
-        if (!position) return;
-        const onSuccess = async () => {
-            const add = await fetchAddress(position.lat, position.lng);
-            const sido = getSidoCode(add?.region_1depth_name);
-            const grade = await fetchAirGrade(sido);
+    const {
+        data: addressData,
+        error: addressError,
+        isLoading: isAdressLoading,
+    } = useQuery({
+        queryKey: ['address'],
+        queryFn: async () => {
+            if (!position) return;
+            return await fetchAddress(position.lat, position.lng);
+        },
+        enabled: !!position,
+    });
 
-            setAirGrade(grade?.khaiGrade);
-            setAddress(add?.region_3depth_name);
-        };
-        onSuccess();
-    }, [position]);
+    const sidoName = addressData?.region_1depth_name;
+    const {
+        data: airGradeData,
+        isLoading: isAirGradeLoading,
+        error: airGradeError,
+    } = useQuery({
+        queryKey: ['address'],
+        queryFn: async () => {
+            if (!sidoName) return;
+            const sido = getSidoCode(sidoName);
+            return await fetchAirGrade(sido);
+        },
+        enabled: !!sidoName,
+    });
 
-    return { airGrade, address };
+    return {
+        airGrade: airGradeData?.khaiGrade,
+        address: addressData?.region_3depth_name,
+        isAdressLoading,
+        isAirGradeLoading,
+        addressError,
+        airGradeError,
+    };
 };
 
 export default useAddressAndAirgrade;
