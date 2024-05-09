@@ -78,9 +78,6 @@ export interface Weather {
     maxTemperature: number;
     minTemperature: number;
     sky: number;
-    sunrise: string | undefined;
-    sunset: string | undefined;
     temperature: number;
-    airGrade: number;
     precipitation: number;
 }

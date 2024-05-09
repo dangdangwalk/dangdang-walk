@@ -11,6 +11,7 @@ import NightClear from '@/assets/icons/ic-nightclear.svg';
 import NightCloudy from '@/assets/icons/ic-nightcloudy.svg';
 import DayCloudy from '@/assets/icons/ic-daycloudy.svg';
 import useAddressAndAirgrade from '@/hooks/useAddressAndAirgrade';
+import useSunsetSunrise from '@/hooks/useSunsetSunrise';
 
 const statusImage = {
     rain: Rain,
@@ -26,10 +27,14 @@ export default function WeatherInfo() {
     const { weather } = useWeather();
     const [skyStatus, setSkyStatus] = useState<SkyStatus>();
     const { airGrade, address } = useAddressAndAirgrade();
+    const { sunset, sunrise } = useSunsetSunrise();
 
     useEffect(() => {
-        setSkyStatus(getSkyGrade({ ...weather, time: getCurrentTime(new Date()) }));
-    }, [weather]);
+        if (!sunrise || !weather) return;
+        const time = getCurrentTime(new Date());
+        const skyGrade = getSkyGrade({ ...weather, sunrise, sunset, time });
+        setSkyStatus(skyGrade);
+    }, [weather, sunset, sunrise]);
 
     return (
         <figure className="py-4 flex justify-between ">

@@ -12,15 +12,15 @@ interface SkyParams {
     maxTemperature?: number;
     minTemperature?: number;
     sky: number;
-    sunrise: string | undefined;
-    sunset: string | undefined;
     temperature?: number;
     airGrade?: number;
     precipitation: number;
+    sunset: string | undefined;
+    sunrise: string | undefined;
     time: string;
 }
 
-export const getSkyGrade = ({ sky, sunrise, sunset, precipitation, time }: SkyParams): SkyStatus => {
+export const getSkyGrade = ({ sky, precipitation, sunset, sunrise, time }: SkyParams): SkyStatus => {
     if (precipitation) {
         return precipitation === 1 || precipitation === 5 ? 'rain' : 'snow';
     }
