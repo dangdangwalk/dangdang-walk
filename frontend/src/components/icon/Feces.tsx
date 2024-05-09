@@ -13,7 +13,7 @@ function Feces({ color, ...props }: Props) {
     } as const;
 
     return (
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="w-14" {...props}>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" {...props}>
             <circle cx={12} cy={12} r={11.5} className={variants[color].circle} />
             <path
                 className={variants[color].path}
