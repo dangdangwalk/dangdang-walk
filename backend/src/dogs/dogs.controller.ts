@@ -32,8 +32,8 @@ export class DogsController {
     @Delete('/:id')
     @HttpCode(204)
     @UseGuards(AuthDogGuard)
-    async delete(@User() { userId }: AccessTokenPayload, @Param('id', ParseIntPipe) dogId: number) {
-        await this.dogsService.deleteDogFromUser(userId, { id: dogId });
+    async delete(@Param('id', ParseIntPipe) dogId: number) {
+        await this.dogsService.deleteDogFromUser({ id: dogId });
 
         return true;
     }

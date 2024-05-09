@@ -44,10 +44,9 @@ export class DogsService {
         return this.usersDogsService.create({ userId, dogId: dog.id });
     }
 
-    async deleteDogFromUser(userId: number, where: FindOptionsWhere<Dogs>) {
+    async deleteDogFromUser(where: FindOptionsWhere<Dogs>) {
         const dog = await this.findOne(where);
 
-        await this.usersDogsService.delete({ userId, dogId: dog.id });
         await this.dogWalkDayService.delete({ id: dog.walkDayId });
         await this.dailyWalkTimeService.delete({ id: dog.dailyWalkTimeId });
 
