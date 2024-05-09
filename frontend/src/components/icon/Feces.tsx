@@ -23,8 +23,10 @@ function Feces({ color, ...props }: Props) {
     );
 }
 
+type Color = keyof typeof variants;
+
 interface Props extends Omit<SVGProps<SVGSVGElement>, 'color'> {
-    color: 'primary' | 'secondary';
+    color: Color;
 }
 
 export { Feces };
