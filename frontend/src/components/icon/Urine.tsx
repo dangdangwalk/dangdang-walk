@@ -11,4 +11,5 @@ function Urine(props: SVGProps<SVGSVGElement>) {
         </svg>
     );
 }
+
 export { Urine };
