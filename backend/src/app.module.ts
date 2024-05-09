@@ -14,11 +14,12 @@ import { WinstonLoggerModule } from './common/logger/winstonLogger.module';
 import { DogWalkDayModule } from './dog-walk-day/dog-walk-day.module';
 import { DogsModule } from './dogs/dogs.module';
 import { ExcrementsModule } from './excrements/excrements.module';
+import { JournalPhotosModule } from './journal-photos/journal-photos.module';
+import { JournalsDogsModule } from './journals-dogs/journals-dogs.module';
 import { JournalModule } from './journals/journals.module';
 import { UsersModule } from './users/users.module';
 import { WalkLogPhotosModule } from './walk-log-photos/walk-log-photos.module';
 import { WalkModule } from './walk/walk.module';
-import { JournalPhotosModule } from './journal-photos/journal-photos.module';
 
 @Module({
     imports: [
@@ -45,6 +46,7 @@ import { JournalPhotosModule } from './journal-photos/journal-photos.module';
         ExcrementsModule,
         WalkLogPhotosModule,
         JournalPhotosModule,
+        JournalsDogsModule,
     ],
     controllers: [AppController, HealthController],
     providers: [

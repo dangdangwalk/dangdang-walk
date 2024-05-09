@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AbstractRepository } from 'src/common/database/abstract.repository';
-import { JournalsDogs } from 'src/journals/journals-dogs.entity';
+import { JournalsDogs } from 'src/journals-dogs/journals-dogs.entity';
 import { EntityManager, Repository } from 'typeorm';
 
 @Injectable()

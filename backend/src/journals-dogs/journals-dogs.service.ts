@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { JournalsDogs } from 'src/journals/journals-dogs.entity';
+import { JournalsDogs } from 'src/journals-dogs/journals-dogs.entity';
 import { FindOptionsWhere } from 'typeorm';
 import { JournalsDogsRepository } from './journals-dogs.repository';
 
