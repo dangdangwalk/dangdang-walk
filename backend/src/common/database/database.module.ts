@@ -25,7 +25,7 @@ import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-clas
                     password: config.get<string>('MYSQL_ROOT_PASSWORD'),
                     database: config.get<string>('MYSQL_DATABASE'),
                     entities: ['dist/**/*.entity{.ts,.js}'],
-                    synchronize: process.env.NODE_ENV === 'prod' ? false : true,
+                    synchronize: true,
                 };
             },
         }),
