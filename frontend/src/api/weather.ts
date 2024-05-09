@@ -52,16 +52,16 @@ export const fetchSunsetSunrise = async (
 
 export const fetchAirGrade = async (sidoName: string): Promise<AirPolution | undefined> => {
     try {
+        // console.log(sidoName);
         const response = (
             await weatherClient.get(
                 `/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=${WEATHER_KEY}&returnType=json&numOfRows=1&pageNum=1&sidoName=${sidoName}&ver=1.0`
             )
         ).data.response;
-
-        if (response.header.resultCode !== '00') {
+        if (response?.header?.resultCode !== '00') {
             throw new Error(response.header.resultMsg);
         }
-        return response.body.items[0];
+        return response?.body?.items[0];
     } catch (e) {
         console.log(e);
     }

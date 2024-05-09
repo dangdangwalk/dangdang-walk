@@ -35,6 +35,9 @@ export default function WeatherInfo() {
         const skyGrade = getSkyGrade({ ...weather, sunrise, sunset, time });
         setSkyStatus(skyGrade);
     }, [weather, isSunsetSunriseLoading]);
+    useEffect(() => {
+        console.log(address);
+    }, [address]);
 
     return (
         <figure className="py-4 flex justify-between ">
