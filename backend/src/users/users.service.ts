@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UsersDogsService } from 'src/users-dogs/users-dogs.service';
+import { checkIfExistsInArr } from 'src/utils/utilityFUnctions.utils';
 import { FindOptionsWhere } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { generateUuid } from '../utils/hash.utils';
@@ -83,6 +84,7 @@ export class UsersService {
         const ownDogs = await this.usersDogsService.find({ userId });
         const myDogIds = ownDogs.map((cur) => cur.dogId);
 
-        return Array.isArray(dogId) ? dogId.every((id) => myDogIds.includes(id)) : myDogIds.includes(dogId);
+        const result = checkIfExistsInArr(myDogIds, dogId);
+        return result;
     }
 }

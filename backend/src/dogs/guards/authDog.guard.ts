@@ -8,7 +8,7 @@ export class AuthDogGuard implements CanActivate {
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();
         const { userId } = request.user;
-        const { id: dogId } = request.params; // Convert id to number
+        const dogId = parseInt(request.params.id);
 
         const owned = await this.usersService.checkDogOwnership(userId, dogId);
 
