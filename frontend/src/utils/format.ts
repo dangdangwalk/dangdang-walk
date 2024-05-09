@@ -1,4 +1,4 @@
-export const temperFormat = (temper: number): string => {
+export const temperFormat = (temper: number | undefined): string => {
     return `${temper}°C`;
 };
 

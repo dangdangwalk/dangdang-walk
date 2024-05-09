@@ -35,6 +35,6 @@ export const getSkyGrade = ({ sky, precipitation, sunset, sunrise, time }: SkyPa
     return sky <= 2 ? 'nightclear' : 'nightcloudy';
 };
 
-export const weatherStatus = (temperature: number, precipitation: number) => {
-    return precipitation === 0 && temperature >= 0 && temperature <= 28;
+export const weatherStatus = (temperature: number | undefined, precipitation: number | undefined): boolean => {
+    return precipitation === 0 && temperature !== undefined && temperature >= 0 && temperature <= 28;
 };

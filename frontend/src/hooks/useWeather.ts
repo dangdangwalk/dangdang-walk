@@ -1,9 +1,9 @@
 import { fetchCurrentWeather } from '@/api/weather';
 import useGeolocation from '@/hooks/useGeolocation2';
-import { Weather } from '@/models/weather.model';
+import { Weather, WeatherData } from '@/models/weather.model';
 import { getCurrentDate, getHours } from '@/utils/date';
 import { gpsToGrid } from '@/utils/geo';
-// import { useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 export const useWeather = () => {
@@ -17,16 +17,25 @@ export const useWeather = () => {
         precipitation: 0,
     });
 
-    //TODO react-query 바꾸기, address 시리얼 처리 문제 해결, refacor 필요
-    const onSuccess = async (lat: number, lng: number) => {
-        const { nx, ny } = gpsToGrid(lat, lng);
-        const data = await fetchCurrentWeather(date, nx, ny);
+    const queryKey = ['weather', position?.lat, position?.lng];
+    const {
+        data: weatherData,
+        error: weatherError,
+        isLoading: isWeatherLoading,
+    } = useQuery({
+        queryKey,
+        queryFn: async () => {
+            if (!position) return;
+            const { nx, ny } = gpsToGrid(position.lat, position.lng);
+            const date = getCurrentDate(new Date());
+            return await fetchCurrentWeather(date, nx, ny);
+        },
 
-        const newWeatherList = data?.filter((w) => w.baseDate === date);
-
+        enabled: !!position,
+    });
+    const updateWeatherData = (newWeatherList: WeatherData[], hour: string) => {
         let maxTemperature, minTemperature, temperature, sky, precipitation;
-        const hour = getHours(new Date());
-        newWeatherList?.forEach((w) => {
+        newWeatherList.forEach((w) => {
             if (hour === w.fcstTime.slice(0, 2)) {
                 if (w.category === 'TMP') {
                     temperature = Number(w.fcstValue);
@@ -47,7 +56,6 @@ export const useWeather = () => {
         });
 
         setWeather({
-            ...weather,
             maxTemperature: maxTemperature ?? 28,
             minTemperature: minTemperature ?? 0,
             temperature: temperature ?? 15,
@@ -57,9 +65,14 @@ export const useWeather = () => {
     };
 
     useEffect(() => {
-        if (!position) return;
-        onSuccess(position.lat, position.lng);
-    }, [position]);
+        if (weatherError || isWeatherLoading) return;
 
-    return { weather };
+        if (weatherData) {
+            const newWeatherList = weatherData.filter((w) => w.baseDate === date);
+            const hour = getHours(new Date());
+            updateWeatherData(newWeatherList, hour);
+        }
+    }, [weatherData, weatherError, isWeatherLoading]);
+
+    return { weather, weatherError, isWeatherLoading };
 };

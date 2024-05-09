@@ -72,13 +72,13 @@ function Home() {
                     산책하기
                 </Button>
             </main>
-            {!isLoggedIn && (
+            {/* {!isLoggedIn && (
                 <div
                     className="absolute left-0 w-screen h-screen z-1 backdrop-blur-sm"
                     style={{ top: TOP_BAR_HEIGHT }}
                 ></div>
             )}
-            {!isLoggedIn && <LoginAlertModal />}
+            {!isLoggedIn && <LoginAlertModal />} */}
         </>
     );
 }

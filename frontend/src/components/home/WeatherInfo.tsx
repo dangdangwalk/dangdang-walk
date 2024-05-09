@@ -24,23 +24,23 @@ const statusImage = {
 };
 
 export default function WeatherInfo() {
-    const { weather } = useWeather();
+    const { weather, isWeatherLoading } = useWeather();
     const [skyStatus, setSkyStatus] = useState<SkyStatus>();
     const { airGrade, address } = useAddressAndAirgrade();
-    const { sunset, sunrise } = useSunsetSunrise();
+    const { sunset, sunrise, isSunsetSunriseLoading } = useSunsetSunrise();
 
     useEffect(() => {
-        if (!sunrise || !weather) return;
+        if (isSunsetSunriseLoading || isWeatherLoading || !weather) return;
         const time = getCurrentTime(new Date());
         const skyGrade = getSkyGrade({ ...weather, sunrise, sunset, time });
         setSkyStatus(skyGrade);
-    }, [weather, sunset, sunrise]);
+    }, [weather, isSunsetSunriseLoading]);
 
     return (
         <figure className="py-4 flex justify-between ">
             <div className="flex-col justify-between items-start inline-flex ">
                 <div className="text-black font-bold text-[28px] leading-[42px]">
-                    {weatherStatus(weather.temperature, weather.precipitation) ? (
+                    {weatherStatus(weather?.temperature, weather?.precipitation) ? (
                         <div>
                             산책하기 좋은 <br /> 날씨에요
                         </div>
@@ -60,8 +60,8 @@ export default function WeatherInfo() {
                 </div>
             </div>
             <div className="flex-col justify-start items-center gap-3.5 inline-flex">
-                <img className="w-full" src={statusImage[skyStatus ?? 'dayclear']} alt={skyStatus} />
-                <div className="text-zinc-500 text-xs font-normal leading-[18px]">{`최고:${temperFormat(weather.maxTemperature)} 최저:${weather.minTemperature}`}</div>
+                <img src={statusImage[skyStatus ?? 'dayclear']} alt={skyStatus} />
+                <div className="text-zinc-500 text-xs font-normal leading-[18px]">{`최고:${temperFormat(weather?.maxTemperature)} 최저:${weather?.minTemperature}`}</div>
             </div>
         </figure>
     );
