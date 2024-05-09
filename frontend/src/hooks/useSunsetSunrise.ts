@@ -1,27 +1,35 @@
 import { fetchSunsetSunrise } from '@/api/weather';
 import useGeolocation from '@/hooks/useGeolocation2';
 import { getCurrentDate } from '@/utils/date';
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 const useSunsetSunrise = () => {
     const { position } = useGeolocation();
-    const [sunset, setSunset] = useState<string | undefined>();
-    const [sunrise, setSunrise] = useState<string | undefined>();
+    const queryKey = ['sunsetSunrise', position?.lat, position?.lng];
+    const {
+        data: sunsetSunriseData,
+        error: sunsetSunriseError,
+        isLoading: isSunsetSunriseLoading,
+    } = useQuery({
+        queryKey,
+        queryFn: async () => {
+            if (!position) return;
+            return await fetchSunsetSunrise(
+                getCurrentDate(new Date()),
+                Math.floor(position.lat * 100),
+                Math.floor(position.lng * 100)
+            );
+        },
+        enabled: !!position,
+        staleTime: 7200,
+    });
 
-    const onSuccess = async (lat: number, lng: number) => {
-        const date = getCurrentDate(new Date());
-        const data = await fetchSunsetSunrise(date, Math.floor(lat * 100), Math.floor(lng * 100));
-
-        setSunset(data?.sunset);
-        setSunrise(data?.sunrise);
+    return {
+        isSunsetSunriseLoading,
+        sunset: sunsetSunriseData?.sunset,
+        sunsetSunriseError,
+        sunrise: sunsetSunriseData?.sunrise,
     };
-
-    useEffect(() => {
-        if (!position) return;
-        onSuccess(position.lat, position.lng);
-    }, [position]);
-
-    return { sunset, sunrise };
 };
 
 export default useSunsetSunrise;
