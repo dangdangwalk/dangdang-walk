@@ -3,7 +3,7 @@ import queryClient from '@/api/queryClient';
 import { tokenKeys } from '@/constants';
 import { UseMutationCustomOptions } from '@/types/common';
 import { removeHeader, setHeader } from '@/utils/header';
-import { getStorage, removeStorage } from '@/utils/storage';
+import { getStorage, removeStorage, setStorage } from '@/utils/storage';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -18,6 +18,7 @@ const useLogin = (mutationOptions?: UseMutationCustomOptions) => {
         onSuccess: ({ accessToken, expiresIn }: ResponseToken) => {
             const url = getStorage('redirect') || '';
             setHeader(tokenKeys.AUTHORIZATION, `Bearer ${accessToken}`);
+            setStorage(tokenKeys.AUTHORIZATION, accessToken);
             navigate(url);
         },
         onError: (error) => {
@@ -44,12 +45,14 @@ const useGetRefreshToken = () => {
     useEffect(() => {
         if (isSuccess) {
             setHeader(tokenKeys.AUTHORIZATION, `Bearer ${data.accessToken}`);
+            setStorage(tokenKeys.AUTHORIZATION, data.accessToken);
         }
     }, [isSuccess, data]);
 
     useEffect(() => {
         if (isError) {
             removeHeader(tokenKeys.AUTHORIZATION);
+            removeStorage(tokenKeys.AUTHORIZATION);
         }
     }, [isError]);
     return { isSuccess, isError };
@@ -60,9 +63,12 @@ const useLogout = (mutationOptions?: UseMutationCustomOptions) => {
         mutationFn: requestLogout,
         onSuccess: () => {
             removeHeader(tokenKeys.AUTHORIZATION);
+            removeStorage(tokenKeys.AUTHORIZATION);
         },
         onSettled: () => {
             queryClient.invalidateQueries({ queryKey: ['auth'] });
+            removeHeader(tokenKeys.AUTHORIZATION);
+            removeStorage(tokenKeys.AUTHORIZATION);
         },
         ...mutationOptions,
     });
@@ -71,7 +77,7 @@ const useLogout = (mutationOptions?: UseMutationCustomOptions) => {
 export const useAuth = () => {
     const loginMutation = useLogin();
     const logoutMutation = useLogout();
-    const refreshToken = useGetRefreshToken();
-    const isLoggedIn = refreshToken.isSuccess;
+    useGetRefreshToken();
+    const isLoggedIn = getStorage(tokenKeys.AUTHORIZATION) ? true : false;
     return { loginMutation, isLoggedIn, logoutMutation };
 };
