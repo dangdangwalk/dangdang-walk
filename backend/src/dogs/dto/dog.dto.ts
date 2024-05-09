@@ -15,7 +15,7 @@ export class DogDto {
     isNeutered: boolean;
 
     @IsDate()
-    birth: Date | null;
+    birth: Date;
 
     @IsUrl()
     photoUrl: string;
