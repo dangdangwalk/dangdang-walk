@@ -14,7 +14,9 @@ export class LoggingInterceptor implements NestInterceptor {
         const userInfo = request.user || '';
         const requestId = generateUuid();
         const { ip, method, path: url } = request;
-        this.logger.log(`[REQUEST][${method} | ${url} | ${ip} | ${userInfo.userId || 'GUEST'}] ${requestId}`);
+        this.logger.log(
+            `[REQUEST][${method} | ${url} | ${ip} | ${userInfo.userId || userInfo.oauthId || 'GUEST'}] ${requestId}`
+        );
 
         const now = Date.now();
         return next.handle().pipe(
