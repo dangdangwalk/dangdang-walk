@@ -39,8 +39,8 @@ export class Dogs {
     })
     gender: 'MALE' | 'FEMALE';
 
-    @Column()
-    birth: Date;
+    @Column({ nullable: true, default: null })
+    birth: Date | null;
 
     @Column({ name: 'is_neutered' })
     isNeutered: boolean;
