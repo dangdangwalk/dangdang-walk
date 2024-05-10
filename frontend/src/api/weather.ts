@@ -1,12 +1,9 @@
 import { AirPolution, SunsetSunrise, WeatherData } from '@/models/weather.model';
 import { createClient } from './http';
 
-const { REACT_APP_WEATHER_URL: WEATHER_URL = '' } = window._ENV ?? process.env;
-const { REACT_APP_WEATHER_KEY: WEATHER_KEY = '' } = window._ENV ?? process.env;
-console.log(WEATHER_KEY);
 const weatherClient = createClient({
     headers: { 'Content-Type': `application/json;charset=UTF-8`, Accept: 'application/json' },
-    baseURL: WEATHER_URL,
+    baseURL: 'http://apis.data.go.kr',
     withCredentials: false,
 });
 
@@ -14,7 +11,7 @@ export const fetchCurrentWeather = async (date: string, nx: number, ny: number):
     try {
         const response = (
             await weatherClient.get(
-                `/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=${WEATHER_KEY}&dataType=JSON&numOfRows=260&pageNo=1&base_date=${date}&base_time=0200&nx=${nx}&ny=${ny}`
+                `/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=BsF4fSEovKFk0eYc%2FUaRwNlbs9huskqBaHql1e4%2F%2BM25cyEomjKVObFYnhwqnEeLJUz7kfeNLO3zDpzxnd%2Foew%3D%3D&dataType=JSON&numOfRows=260&pageNo=1&base_date=${date}&base_time=0200&nx=${nx}&ny=${ny}`
             )
         ).data.response;
 
@@ -35,7 +32,7 @@ export const fetchSunsetSunrise = async (
     try {
         const res = (
             await weatherClient.get(
-                `/B090041/openapi/service/RiseSetInfoService/getLCRiseSetInfo?locdate=${date}&longitude=${lng}&latitude=${lat}&dnYn=N&ServiceKey=${WEATHER_KEY}`
+                `/B090041/openapi/service/RiseSetInfoService/getLCRiseSetInfo?locdate=${date}&longitude=${lng}&latitude=${lat}&dnYn=N&ServiceKey=BsF4fSEovKFk0eYc%2FUaRwNlbs9huskqBaHql1e4%2F%2BM25cyEomjKVObFYnhwqnEeLJUz7kfeNLO3zDpzxnd%2Foew%3D%3D`
             )
         ).request.response;
         const { header, body } = JSON.parse(res).response;
@@ -55,7 +52,7 @@ export const fetchAirGrade = async (sidoName: string): Promise<AirPolution | und
         // console.log(sidoName);
         const response = (
             await weatherClient.get(
-                `/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=${WEATHER_KEY}&returnType=json&numOfRows=1&pageNum=1&sidoName=${sidoName}&ver=1.0`
+                `/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=BsF4fSEovKFk0eYc%2FUaRwNlbs9huskqBaHql1e4%2F%2BM25cyEomjKVObFYnhwqnEeLJUz7kfeNLO3zDpzxnd%2Foew%3D%3D&returnType=json&numOfRows=1&pageNum=1&sidoName=${sidoName}&ver=1.0`
             )
         ).data.response;
         if (response?.header?.resultCode !== '00') {
