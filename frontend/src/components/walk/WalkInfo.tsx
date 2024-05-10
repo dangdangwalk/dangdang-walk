@@ -1,22 +1,12 @@
 import { Divider } from '@/components/common/Divider';
-import { useWalkStore } from '@/store/walkStore';
 import { distanceFormat, timeFormat } from '@/utils/format';
-import { useEffect } from 'react';
 
-export default function WalkInfo() {
-    const { isWalk, increaseDuration, duration, distance, calories, setCalories } = useWalkStore();
-
-    useEffect(() => {
-        let intervalId: NodeJS.Timeout;
-        if (isWalk) {
-            intervalId = setInterval(() => {
-                increaseDuration();
-                setCalories();
-            }, 1000);
-        }
-        return () => clearInterval(intervalId);
-    }, [isWalk, duration]);
-
+interface WalkInfoProps {
+    duration: number;
+    calories: number;
+    distance: number;
+}
+export default function WalkInfo({ duration, calories, distance }: WalkInfoProps) {
     return (
         <div className="w-full h-16 px-5 mt-4 pb-1 bg-white justify-between items-center gap-2.5 inline-flex ">
             <div className="flex flex-col h-15 w-20 justify-center items-center">

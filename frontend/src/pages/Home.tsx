@@ -79,6 +79,32 @@ function Home() {
                 ></div>
             )}
             {!isLoggedIn && <LoginAlertModal />}
+
+            {/* 
+            <DogBottomSheet
+                isOpen={!isWalk}
+                onClose={() => {}}
+                disabled={availableDog.find((d) => d.isChecked) ? false : true}
+            >
+                {availableDog.length > 1 && (
+                    <>
+                        <Divider className="h-0 border border-neutral-200" />
+                        <li className="flex py-2 justify-between items-center">
+                            <Avatar url={AllDogs} name={'다함께'} />
+                            <DogCheckBox id={-1} isChecked={false} onChange={handleDogSelect} />
+                        </li>
+                    </>
+                )}
+                {availableDog.map((dog) => (
+                    <>
+                        <Divider key={`${dog.id}-divider`} className="h-0 border border-neutral-200" />
+                        <li className="flex py-2 justify-between items-center" key={dog.id}>
+                            <Avatar url={dog.photoUrl} name={dog.name} />
+                            <DogCheckBox id={dog.id} isChecked={dog.isChecked} onChange={handleDogSelect} />
+                        </li>
+                    </>
+                ))}
+            </DogBottomSheet> */}
         </>
     );
 }
