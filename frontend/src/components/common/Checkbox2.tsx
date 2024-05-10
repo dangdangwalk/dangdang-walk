@@ -5,8 +5,9 @@ import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 import { ComponentPropsWithoutRef, ElementRef, forwardRef, useRef } from 'react';
 
 const Checkbox = forwardRef<ElementRef<typeof CheckboxPrimitive.Root>, Props>(
-    ({ checked, labelText, className, ...props }, ref) => {
+    ({ checked, labelText, className, children, ...props }, ref) => {
         const idRef = useRef<string | undefined>(labelText ? newID() : undefined);
+        console.log(children);
 
         return (
             <div className="flex items-center gap-3">
@@ -19,7 +20,7 @@ const Checkbox = forwardRef<ElementRef<typeof CheckboxPrimitive.Root>, Props>(
                     )}
                     {...props}
                 >
-                    <Check color={checked ? 'primary' : 'secondary'} />
+                    {children ?? <Check color={checked ? 'primary' : 'secondary'} />}
                 </CheckboxPrimitive.Root>
                 {labelText && (
                     <label htmlFor={idRef.current} className="text-sm">
