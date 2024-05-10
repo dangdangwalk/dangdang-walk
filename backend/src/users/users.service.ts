@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UsersDogsService } from 'src/users-dogs/users-dogs.service';
-import { checkIfExistsInArr } from 'src/utils/utilityFUnctions.utils';
+import { checkIfExistsInArr } from 'src/utils/manipulate.util';
 import { FindOptionsWhere } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { generateUuid } from '../utils/hash.utils';
