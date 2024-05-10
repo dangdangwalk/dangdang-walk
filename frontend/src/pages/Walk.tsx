@@ -2,7 +2,6 @@ import WalkInfo from '@/components/walk/WalkInfo';
 import Map from '@/components/walk/Map';
 import WalkNavbar from '@/components/walk/WalkNavbar';
 import WalkHeader from '@/components/walk/WalkHeader';
-import { useWalkStore } from '@/store/walkStore';
 import { useEffect, useState } from 'react';
 import Avatar from '@/components/common/Avatar';
 import { Divider } from '@/components/common/Divider';
@@ -10,13 +9,15 @@ import useGeolocation from '@/hooks/useGeolocation';
 import BottomSheet from '@/components/common/BottomSheet';
 import useWalkingDogs from '@/hooks/useWalkingDogs';
 import useClock from '@/hooks/useClock';
+import { DEFAULT_WALK_MET, DEFAULT_WEIGHT } from '@/constants/walk';
 
 export default function Walk() {
     const { distance } = useGeolocation();
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
     const [startedAt, setStartedAt] = useState<string>('');
     const { walkingDogs } = useWalkingDogs();
-    const { duration, isStart: isWalk, setIsStart: setIsWalk, calories } = useClock();
+    const [calories, setCalories] = useState<number>(0);
+    const { duration, isStart: isWalk, setIsStart: setIsWalk } = useClock();
 
     const setStartTime = (date: Date) => {
         console.log(startedAt);
@@ -31,9 +32,11 @@ export default function Walk() {
     //     setAvailableDog(availableDog.map((d: any) => (d.id === id ? { ...d, isChecked: !d.isChecked } : d)));
     //     // setAvailableDog([]);
     // };
+
     const handleBottomSheet = () => {
         setIsDogBottomsheetOpen(!isDogBottomsheetOpen);
     };
+
     const handleWalkStart = (date: Date) => {
         setStartTime(date);
         setStartedAt(date.toISOString());
@@ -44,6 +47,10 @@ export default function Walk() {
             setIsWalk(false);
         }
     };
+
+    useEffect(() => {
+        setCalories(Math.round((DEFAULT_WALK_MET * DEFAULT_WEIGHT * duration) / 3600));
+    }, [duration]);
 
     useEffect(() => {
         handleWalkStart(new Date());
