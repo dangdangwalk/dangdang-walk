@@ -1,4 +1,5 @@
 import { DEFAULT_LAT, DEFAULT_LNG } from '@/constants/location';
+import { NAV_HEIGHT, TOP_BAR_HEIGHT, WALK_INFO_HEIGHT } from '@/constants/style';
 import { getGeoLocation } from '@/utils/geo';
 import React, { useEffect } from 'react';
 
@@ -20,5 +21,10 @@ export default function Map() {
         getGeoLocation(DEFAULT_LAT, DEFAULT_LNG, onLoad);
     }, []);
 
-    return <div id="map" style={{ width: '100vw', height: '100vh' }} />;
+    return (
+        <div
+            id="map"
+            style={{ width: '100vw', height: `calc(100vh - ${NAV_HEIGHT} - ${TOP_BAR_HEIGHT} - ${WALK_INFO_HEIGHT} )` }}
+        />
+    );
 }
