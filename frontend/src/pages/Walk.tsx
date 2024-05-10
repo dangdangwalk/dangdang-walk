@@ -12,7 +12,7 @@ import useClock from '@/hooks/useClock';
 import { DEFAULT_WALK_MET, DEFAULT_WEIGHT } from '@/constants/walk';
 
 export default function Walk() {
-    const { distance } = useGeolocation();
+    const { distance, position } = useGeolocation();
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
     const [startedAt, setStartedAt] = useState<string>('');
     const { walkingDogs } = useWalkingDogs();
@@ -61,7 +61,7 @@ export default function Walk() {
             <WalkHeader />
             <WalkInfo duration={duration} calories={calories} distance={distance} />
 
-            <Map />
+            <Map position={position} />
             <WalkNavbar onOpen={handleBottomSheet} onStop={handleWalkStop} />
 
             <BottomSheet
