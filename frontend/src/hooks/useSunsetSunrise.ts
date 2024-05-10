@@ -1,5 +1,5 @@
 import { fetchSunsetSunrise } from '@/api/weather';
-import useGeolocation from '@/hooks/useGeolocation2';
+import useGeolocation from '@/hooks/useGeolocation';
 import { getCurrentDate } from '@/utils/date';
 import { useQuery } from '@tanstack/react-query';
 

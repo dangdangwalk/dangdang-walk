@@ -1,5 +1,5 @@
 import { fetchCurrentWeather } from '@/api/weather';
-import useGeolocation from '@/hooks/useGeolocation2';
+import useGeolocation from '@/hooks/useGeolocation';
 import { WeatherData } from '@/models/weather.model';
 import { getCurrentDate, getHours } from '@/utils/date';
 import { gpsToGrid } from '@/utils/geo';

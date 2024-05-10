@@ -8,14 +8,15 @@ import Avatar from '@/components/common/Avatar';
 import { Divider } from '@/components/common/Divider';
 import useGeolocation from '@/hooks/useGeolocation';
 import BottomSheet from '@/components/common/BottomSheet';
+import useWalkingDogs from '@/hooks/useWalkingDogs';
 
 export default function Walk() {
-    const { position } = useGeolocation();
+    const { distance } = useGeolocation();
     const [isWalk, setIsWalk] = useState<boolean>(false);
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
     const [startedAt, setStartedAt] = useState<string>('');
-    console.log(position);
-    const { increaseDuration, distance, duration, calories, setCalories, walkingDogs } = useWalkStore();
+    const { walkingDogs } = useWalkingDogs();
+    const { increaseDuration, duration, calories, setCalories } = useWalkStore();
 
     const setStartTime = (date: Date) => {
         console.log(startedAt);

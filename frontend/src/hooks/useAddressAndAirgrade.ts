@@ -1,6 +1,6 @@
 import { fetchAddress } from '@/api/map';
 import { fetchAirGrade } from '@/api/weather';
-import useGeolocation from '@/hooks/useGeolocation2';
+import useGeolocation from '@/hooks/useGeolocation';
 import { getSidoCode } from '@/utils/geo';
 import { useQuery } from '@tanstack/react-query';
 
