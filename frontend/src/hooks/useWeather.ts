@@ -16,6 +16,7 @@ export const useWeather = () => {
     } = useQuery({
         queryKey,
         queryFn: async () => {
+            console.log(position);
             if (!position) return;
             const { nx, ny } = gpsToGrid(position.lat, position.lng);
             const date = getCurrentDate(new Date());
@@ -49,6 +50,7 @@ export const useWeather = () => {
                 maxTemperature = Number(w.fcstValue);
             }
         });
+        console.log(maxTemperature, minTemperature, temperature, sky);
         return {
             maxTemperature: maxTemperature ?? 28,
             minTemperature: minTemperature ?? 0,

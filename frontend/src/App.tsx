@@ -5,19 +5,19 @@ import queryClient from './api/queryClient';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { useLoginBottomSheetStateStore } from './store/loginBottomSheetStore';
 import LoginBottomSheet from '@/components/LoginBottomSheet';
-var console;
+// var console;
 function App() {
     const { isLoginBottomSheetOpen, setLoginBottomSheetState } = useLoginBottomSheetStateStore();
     const location = useLocation();
     const currentPage = location.pathname;
     const outletRef = useRef<HTMLDivElement>(null);
     //TODO: 일시적인 배포시 console.log 제거 추가로 환경설정으로 빼줘야함ㄴ
-    if (process.env.NODE_ENV === 'production') {
-        console = window.console || {};
-        console.log = function no_console() {};
-        console.warn = function no_console() {};
-        console.error = function () {};
-    }
+    // if (process.env.NODE_ENV === 'production') {
+    //     console = window.console || {};
+    //     console.log = function no_console() {};
+    //     console.warn = function no_console() {};
+    //     console.error = function () {};
+    // }
     useEffect(() => {
         if (outletRef.current) {
             outletRef.current.addEventListener('click', () => setLoginBottomSheetState(false));

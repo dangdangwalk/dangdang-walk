@@ -7,7 +7,6 @@ import { ComponentPropsWithoutRef, ElementRef, forwardRef, useRef } from 'react'
 const Checkbox = forwardRef<ElementRef<typeof CheckboxPrimitive.Root>, Props>(
     ({ checked, labelText, className, children, ...props }, ref) => {
         const idRef = useRef<string | undefined>(labelText ? newID() : undefined);
-        console.log(children);
 
         return (
             <div className="flex items-center gap-3">

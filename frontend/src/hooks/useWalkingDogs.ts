@@ -1,4 +1,5 @@
 import { Dog } from '@/models/dog.model';
+import { useState } from 'react';
 
 interface WalkingDog extends Dog {
     isUrineChecked: boolean;
@@ -29,7 +30,9 @@ const dogs: WalkingDog[] = [
 ];
 
 const useWalkingDogs = () => {
-    return { walkingDogs: dogs };
+    const [walkingDogs, setWalkingDogs] = useState<WalkingDog[]>(dogs);
+
+    return { walkingDogs, setWalkingDogs };
 };
 
 export default useWalkingDogs;
