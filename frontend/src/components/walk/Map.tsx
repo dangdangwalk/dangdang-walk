@@ -2,20 +2,18 @@ import { NAV_HEIGHT, TOP_BAR_HEIGHT, WALK_INFO_HEIGHT } from '@/constants/style'
 import { Position } from '@/models/location.model';
 import React, { useEffect } from 'react';
 
-declare global {
-    interface Window {
-        kakao: any;
-    }
-}
+const { REACT_APP_KAKAO_MAP_ID: KAKAO_MAP_ID = '' } = window._ENV ?? process.env;
+
 export default function Map({ position }: { position: Position | null }) {
     useEffect(() => {
         const kakaoScript = document.getElementById('kakao-script');
         if (kakaoScript) return;
         if (!position) return;
+
         const script = document.createElement('script');
         script.id = 'kakao-map';
         script.async = true;
-        script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.REACT_APP_KAKAO_MAP_ID}`;
+        script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_ID}&autoload=false`;
 
         document.head.appendChild(script);
 
@@ -33,10 +31,12 @@ export default function Map({ position }: { position: Position | null }) {
                 marker.setMap(map);
             });
         };
+
         script.addEventListener('load', onLoadKakaoMap);
 
         return () => script.removeEventListener('load', onLoadKakaoMap);
     }, [position]);
+
     return (
         <div
             id="map"
