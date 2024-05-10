@@ -58,7 +58,7 @@ const useGeolocation = (isUseWatch: boolean = false) => {
         setDistance(distance + newDistance);
     }, [startPosition, currentPosition]);
 
-    return { position: startPosition, distance, routes };
+    return { position: startPosition, distance, routes, currentPosition };
 };
 
 export default useGeolocation;
