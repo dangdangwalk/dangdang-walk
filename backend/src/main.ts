@@ -15,8 +15,7 @@ async function bootstrap() {
         origin: [
             'http://localhost:3000',
             'http://localhost:8080',
-            'http://dangdang-walk.prgms-fullcycle.com',
-            'http://dangdang-walk.prgms-fullcycle.com:3000',
+            'https://dangdang-walk.vercel.app'
         ],
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
         allowedHeaders: ['Content-Type', 'Accept', 'Authorization'],
