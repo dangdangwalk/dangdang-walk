@@ -9,11 +9,13 @@ declare global {
 }
 export default function Map({ position }: { position: Position | null }) {
     useEffect(() => {
+        const kakaoScript = document.getElementById('kakao-script');
+        if (kakaoScript) return;
         if (!position) return;
         const script = document.createElement('script');
         script.id = 'kakao-map';
         script.async = true;
-        script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.REACT_APP_KAKAO_MAP_ID}&autoload=false`;
+        script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.REACT_APP_KAKAO_MAP_ID}`;
 
         document.head.appendChild(script);
 
@@ -24,6 +26,11 @@ export default function Map({ position }: { position: Position | null }) {
                     center: new window.kakao.maps.LatLng(position.lat, position.lng),
                 };
                 const map = new window.kakao.maps.Map(container, options);
+                const markerPosition = new window.kakao.maps.LatLng(position.lat, position.lng);
+                const marker = new window.kakao.maps.Marker({
+                    position: markerPosition,
+                });
+                marker.setMap(map);
             });
         };
         script.addEventListener('load', onLoadKakaoMap);
