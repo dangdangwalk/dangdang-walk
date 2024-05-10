@@ -9,35 +9,18 @@ import { Divider } from '@/components/common/Divider';
 import useGeolocation from '@/hooks/useGeolocation';
 import BottomSheet from '@/components/common/BottomSheet';
 import useWalkingDogs from '@/hooks/useWalkingDogs';
+import useClock from '@/hooks/useClock';
 
 export default function Walk() {
     const { distance } = useGeolocation();
-    const [isWalk, setIsWalk] = useState<boolean>(false);
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
     const [startedAt, setStartedAt] = useState<string>('');
     const { walkingDogs } = useWalkingDogs();
-    const { increaseDuration, duration, calories, setCalories } = useWalkStore();
+    const { duration, isStart: isWalk, setIsStart: setIsWalk, calories } = useClock();
 
     const setStartTime = (date: Date) => {
         console.log(startedAt);
         localStorage.setItem('startedAt', date.toISOString());
-    };
-
-    useEffect(() => {
-        let intervalId: NodeJS.Timeout;
-        if (isWalk) {
-            intervalId = setInterval(() => {
-                increaseDuration();
-                setCalories();
-            }, 1000);
-        }
-        return () => clearInterval(intervalId);
-    }, [isWalk, duration]);
-
-    const handleWalkStop = () => {
-        if (isWalk) {
-            setIsWalk(false);
-        }
     };
 
     // const handleDogSelect = (id: number) => {
@@ -56,12 +39,16 @@ export default function Walk() {
         setStartedAt(date.toISOString());
         setIsWalk(true);
     };
+    const handleWalkStop = () => {
+        if (isWalk) {
+            setIsWalk(false);
+        }
+    };
 
     useEffect(() => {
-        // walkStart(new Date());
         handleWalkStart(new Date());
-        setIsWalk(true);
     }, []);
+
     return (
         <>
             <WalkHeader />
