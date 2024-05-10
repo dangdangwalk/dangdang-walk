@@ -2,18 +2,27 @@ import WalkInfo from '@/components/walk/WalkInfo';
 import Map from '@/components/walk/Map';
 import WalkNavbar from '@/components/walk/WalkNavbar';
 import WalkHeader from '@/components/walk/WalkHeader';
-import { useWalkStore } from '@/store/walkStore';
 import { useEffect, useState } from 'react';
 import Avatar from '@/components/common/Avatar';
 import { Divider } from '@/components/common/Divider';
 import useGeolocation from '@/hooks/useGeolocation';
 import BottomSheet from '@/components/common/BottomSheet';
+import useWalkingDogs from '@/hooks/useWalkingDogs';
+import useClock from '@/hooks/useClock';
+import { DEFAULT_WALK_MET, DEFAULT_WEIGHT } from '@/constants/walk';
 
 export default function Walk() {
-    const { walkStart, walkingDogs } = useWalkStore();
-    const { position } = useGeolocation();
+    const { distance } = useGeolocation();
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
-    console.log(position);
+    const [startedAt, setStartedAt] = useState<string>('');
+    const { walkingDogs } = useWalkingDogs();
+    const [calories, setCalories] = useState<number>(0);
+    const { duration, isStart: isWalk, setIsStart: setIsWalk } = useClock();
+
+    const setStartTime = (date: Date) => {
+        console.log(startedAt);
+        localStorage.setItem('startedAt', date.toISOString());
+    };
 
     // const handleDogSelect = (id: number) => {
     //     if (id < 0) {
@@ -23,19 +32,37 @@ export default function Walk() {
     //     setAvailableDog(availableDog.map((d: any) => (d.id === id ? { ...d, isChecked: !d.isChecked } : d)));
     //     // setAvailableDog([]);
     // };
+
     const handleBottomSheet = () => {
         setIsDogBottomsheetOpen(!isDogBottomsheetOpen);
     };
+
+    const handleWalkStart = (date: Date) => {
+        setStartTime(date);
+        setStartedAt(date.toISOString());
+        setIsWalk(true);
+    };
+    const handleWalkStop = () => {
+        if (isWalk) {
+            setIsWalk(false);
+        }
+    };
+
     useEffect(() => {
-        walkStart(new Date());
+        setCalories(Math.round((DEFAULT_WALK_MET * DEFAULT_WEIGHT * duration) / 3600));
+    }, [duration]);
+
+    useEffect(() => {
+        handleWalkStart(new Date());
     }, []);
+
     return (
         <>
             <WalkHeader />
-            <WalkInfo />
+            <WalkInfo duration={duration} calories={calories} distance={distance} />
 
             <Map />
-            <WalkNavbar onOpen={handleBottomSheet} />
+            <WalkNavbar onOpen={handleBottomSheet} onStop={handleWalkStop} />
 
             <BottomSheet
                 isOpen={isDogBottomsheetOpen}
@@ -59,31 +86,6 @@ export default function Walk() {
                 </BottomSheet.Body>
                 <BottomSheet.Footer>산책하기</BottomSheet.Footer>
             </BottomSheet>
-            {/* 
-            <DogBottomSheet
-                isOpen={!isWalk}
-                onClose={() => {}}
-                disabled={availableDog.find((d) => d.isChecked) ? false : true}
-            >
-                {availableDog.length > 1 && (
-                    <>
-                        <Divider className="h-0 border border-neutral-200" />
-                        <li className="flex py-2 justify-between items-center">
-                            <Avatar url={AllDogs} name={'다함께'} />
-                            <DogCheckBox id={-1} isChecked={false} onChange={handleDogSelect} />
-                        </li>
-                    </>
-                )}
-                {availableDog.map((dog) => (
-                    <>
-                        <Divider key={`${dog.id}-divider`} className="h-0 border border-neutral-200" />
-                        <li className="flex py-2 justify-between items-center" key={dog.id}>
-                            <Avatar url={dog.photoUrl} name={dog.name} />
-                            <DogCheckBox id={dog.id} isChecked={dog.isChecked} onChange={handleDogSelect} />
-                        </li>
-                    </>
-                ))}
-            </DogBottomSheet> */}
         </>
     );
 }

@@ -1,3 +1,5 @@
+import { Position } from '@/models/location.model';
+
 export interface Dog {
     id: number;
     name: string;
@@ -6,4 +8,6 @@ export interface Dog {
     birth?: Date;
     breed?: string;
     isNeutered?: boolean;
+    fecesLocations?: Position[];
+    urineLocations?: Position[];
 }

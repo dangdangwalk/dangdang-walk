@@ -1,41 +1,40 @@
+import { DEFAULT_LAT, DEFAULT_LNG } from '@/constants/location';
 import { Position } from '@/models/location.model';
-import { useWalkStore } from '@/store/walkStore';
 import { calculateDistance } from '@/utils/geo';
 import { useEffect, useState } from 'react';
 
-const useGeolocation = () => {
-    const { increaseDistance, addRoutes, startPosition, setStartPosition, currentPosition, setCurrentPosition } =
-        useWalkStore();
+const useGeolocation = (isUseWatch: boolean = false) => {
+    const [startPosition, setStartPosition] = useState<Position | null>(null);
+    const [currentPosition, setCurrentPosition] = useState<Position | null>(null);
+    const [distance, setDistance] = useState<number>(0);
     const [prevPosition, setPrevPosition] = useState<Position | null>(null);
+    const [routes, setRoutes] = useState<Position[]>([]);
+
     useEffect(() => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition((position) => {
-                setStartPosition({
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude,
-                });
-                setPrevPosition({
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude,
-                });
+        if ('geolocation' in navigator) {
+            navigator.geolocation.getCurrentPosition((position: GeolocationPosition) => {
+                const { latitude, longitude } = position.coords;
+                setStartPosition({ lat: latitude, lng: longitude });
+                if (isUseWatch) {
+                    setPrevPosition({ lat: latitude, lng: longitude });
+                }
             });
         } else {
-            console.error('Geolocation is not supported by this browser.');
+            console.log('no geolocation');
+            setStartPosition({ lat: DEFAULT_LAT, lng: DEFAULT_LNG });
         }
     }, []);
 
     useEffect(() => {
-        if (!startPosition) return;
+        if (!startPosition && !isUseWatch) return;
 
         const watchId = navigator.geolocation.watchPosition((position) => {
+            const { latitude, longitude } = position.coords;
             setCurrentPosition({
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
+                lat: latitude,
+                lng: longitude,
             });
-            addRoutes({
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
-            });
+            setRoutes([...routes, { lat: latitude, lng: longitude }]);
         });
 
         return () => {
@@ -56,10 +55,10 @@ const useGeolocation = () => {
             lat: currentPosition.lat,
             lng: currentPosition.lng,
         });
-        increaseDistance(newDistance);
+        setDistance(distance + newDistance);
     }, [startPosition, currentPosition]);
 
-    return { position: currentPosition };
+    return { position: startPosition, distance, routes };
 };
 
 export default useGeolocation;
