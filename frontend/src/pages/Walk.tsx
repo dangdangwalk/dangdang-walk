@@ -11,11 +11,16 @@ import BottomSheet from '@/components/common/BottomSheet';
 
 export default function Walk() {
     const { position } = useGeolocation();
-    // const [isWalk, setIsWalk] = useState<boolean>(false);
+    const [isWalk, setIsWalk] = useState<boolean>(false);
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
+    const [startedAt, setStartedAt] = useState<string>('');
     console.log(position);
-    const { isWalk, increaseDuration, walkStop, distance, duration, calories, setCalories, walkStart, walkingDogs } =
-        useWalkStore();
+    const { increaseDuration, distance, duration, calories, setCalories, walkingDogs } = useWalkStore();
+
+    const setStartTime = (date: Date) => {
+        console.log(startedAt);
+        localStorage.setItem('startedAt', date.toISOString());
+    };
 
     useEffect(() => {
         let intervalId: NodeJS.Timeout;
@@ -30,7 +35,7 @@ export default function Walk() {
 
     const handleWalkStop = () => {
         if (isWalk) {
-            walkStop();
+            setIsWalk(false);
         }
     };
 
@@ -45,8 +50,16 @@ export default function Walk() {
     const handleBottomSheet = () => {
         setIsDogBottomsheetOpen(!isDogBottomsheetOpen);
     };
+    const handleWalkStart = (date: Date) => {
+        setStartTime(date);
+        setStartedAt(date.toISOString());
+        setIsWalk(true);
+    };
+
     useEffect(() => {
-        walkStart(new Date());
+        // walkStart(new Date());
+        handleWalkStart(new Date());
+        setIsWalk(true);
     }, []);
     return (
         <>
