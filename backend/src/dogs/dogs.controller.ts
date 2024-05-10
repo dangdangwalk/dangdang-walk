@@ -47,12 +47,6 @@ export class DogsController {
         return true;
     }
 
-    @Get('/:id')
-    @UseGuards(AuthDogGuard)
-    async getOneProfile(@Param('id', ParseIntPipe) dogId: number) {
-        return this.dogsService.getProfile(dogId);
-    }
-
     @Get('/walk-available')
     async getAvailableDogs(@User() { userId }: AccessTokenPayload): Promise<DogProfile[]> {
         const ownDogIds = await this.usersService.getOwnDogsList(userId);
@@ -63,5 +57,11 @@ export class DogsController {
     @Get('/statistics')
     async getDogsStatistics(@User() { userId }: AccessTokenPayload) {
         return this.dogsService.getDogsStatistics(userId);
+    }
+
+    @Get('/:id')
+    @UseGuards(AuthDogGuard)
+    async getOneProfile(@Param('id', ParseIntPipe) dogId: number) {
+        return this.dogsService.getProfile(dogId);
     }
 }
