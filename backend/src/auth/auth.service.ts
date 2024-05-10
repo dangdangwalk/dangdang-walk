@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Users } from 'src/users/users.entity';
-import { UsersService } from 'src/users/users.service';
+import { Users } from '../users/users.entity';
+import { UsersService } from '../users/users.service';
 import { OauthProvider } from './auth.controller';
 import { GoogleService } from './oauth/google.service';
 import { KakaoService } from './oauth/kakao.service';

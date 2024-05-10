@@ -1,5 +1,5 @@
-import { Dogs } from 'src/dogs/dogs.entity';
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Dogs } from '../dogs/dogs.entity';
 import { Role } from './user-roles.enum';
 
 @Entity()

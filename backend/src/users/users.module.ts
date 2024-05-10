@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { DatabaseModule } from 'src/common/database/database.module';
-import { UsersDogs } from 'src/users-dogs/users-dogs.entity';
-import { UsersDogsModule } from 'src/users-dogs/users-dogs.module';
+import { DatabaseModule } from '../common/database/database.module';
 import { WinstonLoggerModule } from '../common/logger/winstonLogger.module';
+import { UsersDogs } from '../users-dogs/users-dogs.entity';
+import { UsersDogsModule } from '../users-dogs/users-dogs.module';
 import { UsersController } from './users.controller';
 import { Users } from './users.entity';
 import { UsersRepository } from './users.repository';

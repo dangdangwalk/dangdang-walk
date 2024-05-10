@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { DatabaseModule } from 'src/common/database/database.module';
-import { ExcrementsModule } from 'src/excrements/excrements.module';
+import { DatabaseModule } from '../common/database/database.module';
+import { ExcrementsModule } from '../excrements/excrements.module';
 import { JournalsController } from './journals.controller';
 import { Journals } from './journals.entity';
 import { WalkJournalsRepository } from './journals.repository';

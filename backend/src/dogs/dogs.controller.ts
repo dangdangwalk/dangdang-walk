@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
-import { AccessTokenPayload } from 'src/auth/token/token.service';
-import { Serialize } from 'src/common/interceptor/serialize.interceptor';
-import { User } from 'src/users/decorators/user.decorator';
-import { UsersService } from 'src/users/users.service';
 import { In } from 'typeorm';
+import { AccessTokenPayload } from '../auth/token/token.service';
+import { Serialize } from '../common/interceptor/serialize.interceptor';
+import { User } from '../users/decorators/user.decorator';
+import { UsersService } from '../users/users.service';
 import { DogsService } from './dogs.service';
 import { DogStatisticDto } from './dto/dog-statistic.dto';
 import { DogDto } from './dto/dog.dto';

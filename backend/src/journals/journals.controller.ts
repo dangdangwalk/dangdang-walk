@@ -1,5 +1,5 @@
 import { Controller, Post } from '@nestjs/common';
-import { ExcrementsService } from 'src/excrements/excrements.service';
+import { ExcrementsService } from '../excrements/excrements.service';
 import { JournalsService } from './journals.service';
 
 @Controller('journals')

@@ -1,6 +1,6 @@
 import { Body, Controller, Post, UsePipes, ValidationPipe } from '@nestjs/common';
-import { Serialize } from 'src/common/interceptor/serialize.interceptor';
-import { DogsService } from 'src/dogs/dogs.service';
+import { Serialize } from '../common/interceptor/serialize.interceptor';
+import { DogsService } from '../dogs/dogs.service';
 import { WalkCommandDto } from './dtos/walk-command.dto';
 
 @Controller('/walk')
