@@ -64,17 +64,6 @@ export const getSidoCode = (sido: string | undefined): string => {
     return sidoCode.get(sido) ?? '전국';
 };
 
-export const getGeoLocation = (def_lat: number, def_lng: number, onSuccess: (lat: number, lng: number) => {}) => {
-    if ('geolocation' in navigator) {
-        navigator.geolocation.getCurrentPosition((position) => {
-            const { latitude, longitude } = position.coords;
-            onSuccess(latitude, longitude);
-        });
-    } else {
-        onSuccess(def_lat, def_lng);
-    }
-};
-
 export const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
     const R = 6371; // Radius of the Earth in km
     const dLat = deg2rad(lat2 - lat1);
