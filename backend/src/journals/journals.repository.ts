@@ -5,7 +5,7 @@ import { AbstractRepository } from '../common/database/abstract.repository';
 import { Journals } from './journals.entity';
 
 @Injectable()
-export class WalkJournalsRepository extends AbstractRepository<Journals> {
+export class JournalsRepository extends AbstractRepository<Journals> {
     constructor(
         @InjectRepository(Journals)
         walkJournalRepository: Repository<Journals>,
