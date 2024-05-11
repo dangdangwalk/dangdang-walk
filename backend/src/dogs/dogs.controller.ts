@@ -1,18 +1,16 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
 import { In } from 'typeorm';
 import { AccessTokenPayload } from '../auth/token/token.service';
-import { Serialize } from '../common/interceptor/serialize.interceptor';
 import { User } from '../users/decorators/user.decorator';
 import { UsersService } from '../users/users.service';
 import { DogsService } from './dogs.service';
-import { DogStatisticDto } from './dto/dog-statistic.dto';
 import { DogDto } from './dto/dog.dto';
 import { AuthDogGuard } from './guards/authDog.guard';
 
 export type DogProfile = {
     id: number;
     name: string;
-    photoUrl: string;
+    profilePhotoUrl: string;
 };
 
 @Controller('dogs')
@@ -53,10 +51,10 @@ export class DogsController {
         return await this.dogsService.getProfileList({ id: In(ownDogIds), isWalking: false });
     }
 
-    @Serialize(DogStatisticDto)
     @Get('/statistics')
     async getDogsStatistics(@User() { userId }: AccessTokenPayload) {
-        return this.dogsService.getDogsStatistics(userId);
+        const res = await this.dogsService.getDogsStatistics(userId);
+        return res;
     }
 
     @Get('/:id')

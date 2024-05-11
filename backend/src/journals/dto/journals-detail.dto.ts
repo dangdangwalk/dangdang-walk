@@ -20,7 +20,7 @@ export class DogInfoForDetail {
 
     @IsNotEmpty()
     @IsUrl()
-    photoUrl: string;
+    profilePhotoUrl: string;
 
     @IsNotEmpty()
     fecesCnt: number;
@@ -30,7 +30,7 @@ export class DogInfoForDetail {
 
     //TODO : reflect -metadata 사용하도록 변경
     static getKeysForDogTable() {
-        return ['id', 'name', 'photoUrl'];
+        return ['id', 'name', 'profilePhotoUrl'];
     }
 }
 
@@ -42,7 +42,7 @@ export class Companions {
     name: string;
 
     @IsNotEmpty()
-    photoUrl: string;
+    profilePhotoUrl: string;
 }
 
 export class RouteDto {
@@ -61,14 +61,14 @@ export class JournalInfoForDetail {
     distance: number;
 
     @IsNotEmpty()
-    calorie: number;
+    calories: number;
 
     @IsNotEmpty()
     duration: number;
 
     @IsNotEmpty()
     @IsUrl()
-    routeUrl: string;
+    routeImageUrl: string;
 
     @IsNotEmpty()
     memo: string;
@@ -78,7 +78,7 @@ export class JournalInfoForDetail {
     photoUrls: string[];
 
     static getKeysForJournalTable() {
-        return ['title', 'distance', 'calories', 'duration', 'logImageUrl', 'memo'];
+        return ['title', 'distance', 'calories', 'duration', 'routeImageUrl', 'memo'];
     }
     static getKeysForJournalPhotoTable() {
         return ['photoUrls'];
