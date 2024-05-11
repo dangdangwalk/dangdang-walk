@@ -2,9 +2,11 @@ import React from 'react';
 import Male from '@/assets/icons/ic-sex-male.svg';
 import FeMale from '@/assets/icons/ic-sex-femal.svg';
 import { Divider } from '@/components/common/Divider';
+import { Checkbox } from '@/components/common/Checkbox2';
+import { Gender } from '@/models/dog.model';
 interface Props {
-    gender: string;
-    handleGenderChange: (gender: string) => void;
+    gender: Gender;
+    handleGenderChange: (gender: Gender) => void;
 }
 export default function DogRegister2({ gender, handleGenderChange }: Props) {
     return (
@@ -67,8 +69,15 @@ export default function DogRegister2({ gender, handleGenderChange }: Props) {
                 </button>
             </div>
             <div className="mt-2">
-                <input type="checkbox" name="isNeutered" id="isNeutered" />
-                <label htmlFor="isNeutered">중성화 했어요</label>
+                {/* <input type="checkbox" name="isNeutered" id="isNeutered" />
+                <label htmlFor="isNeutered">중성화 했어요</label> */}
+                <Checkbox
+                    checked={true}
+                    onCheckedChange={(checked: boolean) => {
+                        console.log(checked);
+                    }}
+                    labelText="중성화 했어요"
+                />
             </div>
             <div className="mt-8">
                 <div className="py-3 relative">
