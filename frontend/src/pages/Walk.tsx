@@ -38,11 +38,15 @@ export default function Walk() {
             setIsShowAlert(false);
         }, 1000);
     };
+    const stopWalk = () => {
+        stopClock();
+        stopGeo();
+    };
+
     const handleWalkStop = (isStop: boolean) => {
         if (!isWalk) return;
         if (isStop) {
-            stopClock();
-            stopGeo();
+            stopWalk();
         } else {
             showAlert();
         }
@@ -67,7 +71,7 @@ export default function Walk() {
 
             <Map position={startPosition} />
 
-            <StopToast isShow={isShowAlert} />
+            <StopToast isVisible={isShowAlert} />
             <WalkNavbar onOpen={handleBottomSheet} onStop={handleWalkStop} />
 
             <BottomSheet isOpen={isDogBottomsheetOpen} onClose={handleBottomSheet}>
