@@ -63,3 +63,19 @@ export function makeSubObjectsArray(targetArr: any[], attributes: string | strin
     }
     return resArr;
 }
+
+/**
+ * 주어진 타겟 객체에서 지정된 속성만을 포함하는 새 객체를 생성합니다.
+ *
+ * @param target - 속성을 추출할 원본 객체입니다.
+ * @param attributes - 새 객체에 포함할 속성 이름의 배열입니다.
+ * @returns 타겟 객체에서 지정된 속성만을 포함하는 새 객체입니다.
+ *
+ */
+export function makeSubObject(target: any, attributes: string[]): any {
+    const resObj: { [key: string]: any } = {};
+    for (let i = 0; i < attributes.length; i++) {
+        resObj[`${attributes[i]}`] = target[`${attributes[i]}`];
+    }
+    return resObj;
+}
