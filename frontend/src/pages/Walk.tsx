@@ -15,7 +15,7 @@ import { Feces } from '@/components/icon/Feces';
 import { Urine } from '@/components/icon/Urine';
 
 export default function Walk() {
-    const { distance, position: startPosition, currentPosition } = useGeolocation();
+    const { distance, position: startPosition, currentPosition, stopGeo } = useGeolocation();
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
     const { walkingDogs, toggleFeceCheck, toggleUrineCheck, saveFecesAndUriens } = useWalkingDogs();
     const [calories, setCalories] = useState<number>(0);
@@ -27,6 +27,7 @@ export default function Walk() {
 
     const handleWalkStart = (date: Date) => {
         startClock(date);
+        stopGeo();
     };
     const handleWalkStop = () => {
         if (isWalk) {
