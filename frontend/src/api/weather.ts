@@ -3,7 +3,6 @@ import { createClient } from './http';
 
 const { REACT_APP_WEATHER_URL: WEATHER_URL = '' } = window._ENV ?? process.env;
 const { REACT_APP_WEATHER_KEY: WEATHER_KEY = '' } = window._ENV ?? process.env;
-console.log(WEATHER_KEY);
 const weatherClient = createClient({
     headers: { 'Content-Type': `application/json;charset=UTF-8`, Accept: 'application/json' },
     baseURL: WEATHER_URL,
