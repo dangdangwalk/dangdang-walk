@@ -20,3 +20,7 @@ export const getHours = (date: Date) => {
     const hour = date.getHours().toString().padStart(2, '0');
     return hour;
 };
+
+export const getElapsedTime = (start: Date, end: Date) => {
+    return (end.getTime() - start.getTime()) / 1000;
+};

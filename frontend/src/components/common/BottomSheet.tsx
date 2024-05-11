@@ -1,24 +1,19 @@
 import { Button } from '@/components/common/Button';
 import { NAV_HEIGHT } from '@/constants/style';
-import { useContext, createContext } from 'react';
 
 interface BottomSheetProps {
     isOpen: boolean;
     onClose: () => void;
-    disabled: boolean;
     children?: React.ReactNode;
 }
-const BottomSheetContext = createContext({ disabled: true });
-export default function BottomSheet({ isOpen, onClose, children, disabled }: BottomSheetProps) {
+export default function BottomSheet({ isOpen, onClose, children }: BottomSheetProps) {
     return (
-        <BottomSheetContext.Provider value={{ disabled }}>
-            <div className={`fixed inset-0 overflow-hidden z-50 ${isOpen ? 'block' : 'hidden'}`}>
-                <div className="absolute inset-0  bg-neutral-800 opacity-40" onClick={onClose}></div>
-                <div className="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl pt-6 transform transition-transform ease-in-out duration-1000">
-                    {children}
-                </div>
+        <div className={`fixed inset-0 overflow-hidden z-50 ${isOpen ? 'block' : 'hidden'}`}>
+            <div className="absolute inset-0  bg-neutral-800 opacity-40" onClick={onClose}></div>
+            <div className="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl pt-6 transform transition-transform ease-in-out duration-1000">
+                {children}
             </div>
-        </BottomSheetContext.Provider>
+        </div>
     );
 }
 
@@ -29,9 +24,25 @@ function Body({ children }: { children?: React.ReactNode }) {
     return <ul className="flex flex-col px-5 overflow-y-scroll h-[180px]">{children}</ul>;
 }
 function Footer({ children }: { children?: React.ReactNode }) {
-    const { disabled } = useContext(BottomSheetContext);
+    return <div>{children}</div>;
+}
+function ConfirmButton({
+    children,
+    onConfirm,
+    disabled,
+}: {
+    children: React.ReactNode;
+    onConfirm: () => void;
+    disabled: boolean;
+}) {
     return (
-        <Button className="absolue bottom-0 w-full" style={{ height: NAV_HEIGHT }} rounded={'none'} disabled={disabled}>
+        <Button
+            className=" bottom-0 w-full"
+            style={{ height: NAV_HEIGHT }}
+            rounded={'none'}
+            disabled={disabled}
+            onClick={onConfirm}
+        >
             {children}
         </Button>
     );
@@ -40,3 +51,4 @@ function Footer({ children }: { children?: React.ReactNode }) {
 BottomSheet.Header = Header;
 BottomSheet.Body = Body;
 BottomSheet.Footer = Footer;
+BottomSheet.ConfirmButton = ConfirmButton;

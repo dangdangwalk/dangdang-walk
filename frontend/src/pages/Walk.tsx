@@ -15,40 +15,27 @@ import { Feces } from '@/components/icon/Feces';
 import { Urine } from '@/components/icon/Urine';
 
 export default function Walk() {
-    const { distance, position: startPosition } = useGeolocation();
+    const { distance, position: startPosition, currentPosition } = useGeolocation();
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
-    const [startedAt, setStartedAt] = useState<string>('');
-    const { walkingDogs } = useWalkingDogs();
+    const { walkingDogs, toggleFeceCheck, toggleUrineCheck, saveFecesAndUriens } = useWalkingDogs();
     const [calories, setCalories] = useState<number>(0);
-    const { duration, isStart: isWalk, setIsStart: setIsWalk } = useClock();
-
-    const setStartTime = (date: Date) => {
-        console.log(startedAt);
-        localStorage.setItem('startedAt', date.toISOString());
-    };
-
-    // const handleDogSelect = (id: number) => {
-    //     if (id < 0) {
-    //         setAvailableDog(availableDog.map((d: any) => ({ ...d, isChecked: !d.isChecked })));
-    //         return;
-    //     }
-    //     setAvailableDog(availableDog.map((d: any) => (d.id === id ? { ...d, isChecked: !d.isChecked } : d)));
-    //     // setAvailableDog([]);
-    // };
+    const { duration, isStart: isWalk, stopClock, startClock } = useClock();
 
     const handleBottomSheet = () => {
         setIsDogBottomsheetOpen(!isDogBottomsheetOpen);
     };
 
     const handleWalkStart = (date: Date) => {
-        setStartTime(date);
-        setStartedAt(date.toISOString());
-        setIsWalk(true);
+        startClock(date);
     };
     const handleWalkStop = () => {
         if (isWalk) {
-            setIsWalk(false);
+            stopClock();
         }
+    };
+    const handleConfirm = () => {
+        saveFecesAndUriens(currentPosition);
+        handleBottomSheet();
     };
 
     useEffect(() => {
@@ -67,11 +54,7 @@ export default function Walk() {
             <Map position={startPosition} />
             <WalkNavbar onOpen={handleBottomSheet} onStop={handleWalkStop} />
 
-            <BottomSheet
-                isOpen={isDogBottomsheetOpen}
-                onClose={handleBottomSheet}
-                disabled={walkingDogs.find((d) => d.isUrineChecked || d.isFeceChecked) ? false : true}
-            >
+            <BottomSheet isOpen={isDogBottomsheetOpen} onClose={handleBottomSheet}>
                 <BottomSheet.Header> 강아지 선책</BottomSheet.Header>
                 <BottomSheet.Body>
                     {walkingDogs.map((dog) => (
@@ -80,10 +63,20 @@ export default function Walk() {
                             <li className="flex py-2 justify-between items-center" key={dog.id}>
                                 <Avatar url={dog.photoUrl} name={dog.name} />
                                 <div className="flex gap-1">
-                                    <Checkbox checked={dog.isFeceChecked} onCheckedChange={() => {}}>
+                                    <Checkbox
+                                        checked={dog.isFeceChecked}
+                                        onCheckedChange={() => {
+                                            toggleFeceCheck(dog.id);
+                                        }}
+                                    >
                                         <Feces color={dog.isFeceChecked ? 'primary' : 'secondary'} />
                                     </Checkbox>
-                                    <Checkbox checked={dog.isUrineChecked} onCheckedChange={() => {}}>
+                                    <Checkbox
+                                        checked={dog.isUrineChecked}
+                                        onCheckedChange={() => {
+                                            toggleUrineCheck(dog.id);
+                                        }}
+                                    >
                                         <Urine color={dog.isUrineChecked ? 'primary' : 'secondary'} />
                                     </Checkbox>
                                 </div>
@@ -91,7 +84,12 @@ export default function Walk() {
                         </>
                     ))}
                 </BottomSheet.Body>
-                <BottomSheet.Footer>산책하기</BottomSheet.Footer>
+                <BottomSheet.ConfirmButton
+                    onConfirm={handleConfirm}
+                    disabled={walkingDogs.find((d) => d.isUrineChecked || d.isFeceChecked) ? false : true}
+                >
+                    확인
+                </BottomSheet.ConfirmButton>
             </BottomSheet>
         </>
     );
