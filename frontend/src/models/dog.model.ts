@@ -11,3 +11,10 @@ export interface Dog {
     fecesLocations?: Position[];
     urineLocations?: Position[];
 }
+
+export interface WalkingDog extends Dog {
+    isUrineChecked: boolean;
+    isFeceChecked: boolean;
+    fecesLocations: Position[];
+    urineLocations: Position[];
+}

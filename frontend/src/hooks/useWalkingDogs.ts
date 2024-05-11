@@ -1,13 +1,7 @@
-import { Dog } from '@/models/dog.model';
+import { WalkingDog } from '@/models/dog.model';
 import { Position } from '@/models/location.model';
 import { useState } from 'react';
 
-interface WalkingDog extends Dog {
-    isUrineChecked: boolean;
-    isFeceChecked: boolean;
-    fecesLocations: Position[];
-    urineLocations: Position[];
-}
 const dogs: WalkingDog[] = [
     {
         id: 1, // 강아지 id

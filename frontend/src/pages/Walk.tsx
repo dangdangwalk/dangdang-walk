@@ -3,16 +3,13 @@ import Map from '@/components/walk/Map';
 import WalkNavbar from '@/components/walk/WalkNavbar';
 import WalkHeader from '@/components/walk/WalkHeader';
 import { useEffect, useState } from 'react';
-import Avatar from '@/components/common/Avatar';
-import { Divider } from '@/components/common/Divider';
 import useGeolocation from '@/hooks/useGeolocation';
 import BottomSheet from '@/components/common/BottomSheet';
 import useWalkingDogs from '@/hooks/useWalkingDogs';
 import useClock from '@/hooks/useClock';
 import { DEFAULT_WALK_MET, DEFAULT_WEIGHT } from '@/constants/walk';
-import { Checkbox } from '@/components/common/Checkbox2';
-import { Feces } from '@/components/icon/Feces';
-import { Urine } from '@/components/icon/Urine';
+
+import DogFeceAndUrineCheckList from '@/components/walk/DogFeceAndUrineCheckList';
 
 export default function Walk() {
     const { distance, position: startPosition, currentPosition, stopGeo } = useGeolocation();
@@ -59,30 +56,12 @@ export default function Walk() {
                 <BottomSheet.Header> 강아지 선책</BottomSheet.Header>
                 <BottomSheet.Body>
                     {walkingDogs.map((dog) => (
-                        <>
-                            <Divider key={`${dog.id}-divider`} className="h-0 border border-neutral-200" />
-                            <li className="flex py-2 justify-between items-center" key={dog.id}>
-                                <Avatar url={dog.photoUrl} name={dog.name} />
-                                <div className="flex gap-1">
-                                    <Checkbox
-                                        checked={dog.isFeceChecked}
-                                        onCheckedChange={() => {
-                                            toggleFeceCheck(dog.id);
-                                        }}
-                                    >
-                                        <Feces color={dog.isFeceChecked ? 'primary' : 'secondary'} />
-                                    </Checkbox>
-                                    <Checkbox
-                                        checked={dog.isUrineChecked}
-                                        onCheckedChange={() => {
-                                            toggleUrineCheck(dog.id);
-                                        }}
-                                    >
-                                        <Urine color={dog.isUrineChecked ? 'primary' : 'secondary'} />
-                                    </Checkbox>
-                                </div>
-                            </li>
-                        </>
+                        <DogFeceAndUrineCheckList
+                            dog={dog}
+                            toggleFeceCheck={toggleFeceCheck}
+                            toggleUrineCheck={toggleUrineCheck}
+                            key={dog.id}
+                        />
                     ))}
                 </BottomSheet.Body>
                 <BottomSheet.ConfirmButton
