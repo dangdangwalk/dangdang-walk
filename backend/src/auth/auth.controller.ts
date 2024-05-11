@@ -9,11 +9,6 @@ import { AccessTokenPayload, RefreshTokenPayload, TOKEN_LIFETIME_MAP } from './t
 
 export type OauthProvider = 'google' | 'kakao' | 'naver';
 
-interface accessTokenResponse {
-    accessToken: string;
-    expiresIn: number; // [s]
-}
-
 @Controller('auth')
 export class AuthController {
     constructor(
@@ -28,7 +23,7 @@ export class AuthController {
         @Body('authorizeCode') authorizeCode: string,
         @Body('provider') provider: OauthProvider,
         @Res({ passthrough: true }) response: Response
-    ): Promise<accessTokenResponse> {
+    ) {
         const { accessToken, refreshToken } = await this.authService.login(authorizeCode, provider);
 
         response.cookie('refreshToken', refreshToken, {
@@ -37,9 +32,18 @@ export class AuthController {
             maxAge: TOKEN_LIFETIME_MAP.refresh.maxAge,
         });
 
+        response.cookie('isLoggedIn', true, {
+            secure: this.configService.get<string>('NODE_ENV') === 'prod' ? true : false,
+            maxAge: TOKEN_LIFETIME_MAP.access.maxAge,
+        });
+
+        response.cookie('expiresIn', TOKEN_LIFETIME_MAP.access.maxAge, {
+            secure: this.configService.get<string>('NODE_ENV') === 'prod' ? true : false,
+            maxAge: TOKEN_LIFETIME_MAP.refresh.maxAge,
+        });
+
         return {
             accessToken,
-            expiresIn: TOKEN_LIFETIME_MAP.access.maxAge / 1000,
         };
     }
 
@@ -49,7 +53,7 @@ export class AuthController {
         @Body('authorizeCode') authorizeCode: string,
         @Body('provider') provider: OauthProvider,
         @Res({ passthrough: true }) response: Response
-    ): Promise<accessTokenResponse> {
+    ) {
         const { accessToken, refreshToken } = await this.authService.signup(authorizeCode, provider);
 
         response.cookie('refreshToken', refreshToken, {
@@ -58,9 +62,18 @@ export class AuthController {
             maxAge: TOKEN_LIFETIME_MAP.refresh.maxAge,
         });
 
+        response.cookie('isLoggedIn', true, {
+            secure: this.configService.get<string>('NODE_ENV') === 'prod' ? true : false,
+            maxAge: TOKEN_LIFETIME_MAP.access.maxAge,
+        });
+
+        response.cookie('expiresIn', TOKEN_LIFETIME_MAP.access.maxAge, {
+            secure: this.configService.get<string>('NODE_ENV') === 'prod' ? true : false,
+            maxAge: TOKEN_LIFETIME_MAP.refresh.maxAge,
+        });
+
         return {
             accessToken,
-            expiresIn: TOKEN_LIFETIME_MAP.access.maxAge / 1000,
         };
     }
 
@@ -70,6 +83,8 @@ export class AuthController {
         await this.authService.logout(userId, provider);
 
         response.clearCookie('refreshToken');
+        response.clearCookie('isLoggedIn');
+        response.clearCookie('expiresIn');
     }
 
     @Delete('deactivate')
@@ -77,15 +92,14 @@ export class AuthController {
         await this.authService.deactivate(userId, provider);
 
         response.clearCookie('refreshToken');
+        response.clearCookie('isLoggedIn');
+        response.clearCookie('expiresIn');
     }
 
     @Get('token')
     @SkipAuthGuard()
     @UseGuards(RefreshTokenGuard)
-    async token(
-        @User() { oauthId, provider }: RefreshTokenPayload,
-        @Res({ passthrough: true }) response: Response
-    ): Promise<accessTokenResponse> {
+    async token(@User() { oauthId, provider }: RefreshTokenPayload, @Res({ passthrough: true }) response: Response) {
         const { accessToken, refreshToken } = await this.authService.reissueTokens(oauthId, provider);
 
         response.cookie('refreshToken', refreshToken, {
@@ -94,9 +108,18 @@ export class AuthController {
             maxAge: TOKEN_LIFETIME_MAP.refresh.maxAge,
         });
 
+        response.cookie('isLoggedIn', true, {
+            secure: this.configService.get<string>('NODE_ENV') === 'prod' ? true : false,
+            maxAge: TOKEN_LIFETIME_MAP.access.maxAge,
+        });
+
+        response.cookie('expiresIn', TOKEN_LIFETIME_MAP.access.maxAge, {
+            secure: this.configService.get<string>('NODE_ENV') === 'prod' ? true : false,
+            maxAge: TOKEN_LIFETIME_MAP.refresh.maxAge,
+        });
+
         return {
             accessToken,
-            expiresIn: TOKEN_LIFETIME_MAP.access.maxAge / 1000,
         };
     }
 }
