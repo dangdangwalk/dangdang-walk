@@ -18,3 +18,5 @@ export interface WalkingDog extends Dog {
     fecesLocations: Position[];
     urineLocations: Position[];
 }
+
+export type Gender = 'MALE' | 'FEMALE' | null;

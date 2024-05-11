@@ -2,7 +2,6 @@ import { httpClient } from './http';
 
 export type ResponseToken = {
     accessToken: string;
-    expiresIn: number;
 };
 
 const getAccessToken = async (): Promise<ResponseToken> => {
@@ -13,7 +12,6 @@ const getAccessToken = async (): Promise<ResponseToken> => {
 export interface LoginParams {
     authorizeCode: string;
     provider: string;
-    redirectURI: string;
 }
 const requestLogin = async (params: LoginParams) => {
     const { data } = await httpClient.post('/auth/login', params);

@@ -10,6 +10,7 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import Join from '@/pages/Join';
 import Walk from '@/pages/Walk';
+import OauthCallback from '@/pages/OauthCallback';
 const router = createBrowserRouter([
     {
         path: '/',
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
             {
                 path: '/walk',
                 element: <Walk />,
+            },
+            {
+                path: '/callback',
+                element: <OauthCallback />,
             },
         ],
     },
