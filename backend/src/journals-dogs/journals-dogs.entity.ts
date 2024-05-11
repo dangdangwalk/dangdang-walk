@@ -1,6 +1,6 @@
 import { Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 import { Dogs } from '../dogs/dogs.entity';
-import { Journals } from './journals.entity';
+import { Journals } from '../journals/journals.entity';
 
 @Entity('journals_dogs')
 export class JournalsDogs {
