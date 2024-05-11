@@ -10,7 +10,7 @@ interface WalkNavbarProps {
 
 export default function WalkNavbar({ onOpen, onStop }: WalkNavbarProps) {
     return (
-        <nav className="fixed bottom-0 left-0 w-full flex px-[60px] py-3 justify-between bg-white items-center z-30">
+        <nav className="absolute bottom-0 left-0 w-full flex px-[60px] py-3 justify-between bg-white items-center z-40">
             <div onClick={onOpen}>
                 <img src={Poop} alt="배소변 버튼" />
             </div>

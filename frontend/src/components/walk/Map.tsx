@@ -1,10 +1,11 @@
 import { NAV_HEIGHT, TOP_BAR_HEIGHT, WALK_INFO_HEIGHT } from '@/constants/style';
 import { Position } from '@/models/location.model';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const { REACT_APP_KAKAO_MAP_ID: KAKAO_MAP_ID = '' } = window._ENV ?? process.env;
 
 export default function Map({ position }: { position: Position | null }) {
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     useEffect(() => {
         const kakaoScript = document.getElementById('kakao-script');
         if (kakaoScript) return;
@@ -30,6 +31,7 @@ export default function Map({ position }: { position: Position | null }) {
                 });
                 marker.setMap(map);
             });
+            setIsLoading(false);
         };
 
         script.addEventListener('load', onLoadKakaoMap);
@@ -38,9 +40,16 @@ export default function Map({ position }: { position: Position | null }) {
     }, [position]);
 
     return (
-        <div
-            id="map"
-            style={{ width: '100vw', height: `calc(100vh - ${NAV_HEIGHT} - ${TOP_BAR_HEIGHT} - ${WALK_INFO_HEIGHT} )` }}
-        />
+        <>
+            <div
+                id="map"
+                style={{
+                    width: '100vw',
+                    height: `calc(100vh - ${NAV_HEIGHT} - ${TOP_BAR_HEIGHT} - ${WALK_INFO_HEIGHT} )`,
+                }}
+            >
+                {isLoading && <div>isLoading</div>}
+            </div>
+        </>
     );
 }

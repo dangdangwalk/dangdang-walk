@@ -9,10 +9,17 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     /* @apply flex flex-col items-center; */
+    scrollbar-width: 0;
 }
 #root {
     /* @apply w-full h-dvh max-w-screen-sm px-5; */
 }
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+.no-scroll-box {
+    -ms-overflow-style: none;
+}
+.no-scroll-box::-webkit-scrollbar {
+    display: none;
 }
