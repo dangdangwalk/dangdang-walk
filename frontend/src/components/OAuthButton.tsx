@@ -5,6 +5,7 @@ import icKakao from '@/assets/icons/ic-kakao.svg';
 import icNaver from '@/assets/icons/ic-naver.svg';
 import { useLoginBottomSheetStateStore } from '@/store/loginBottomSheetStore';
 import { getAuthorizeCodeCallbackUrl } from '@/utils/oauth';
+import { storageKeys } from '@/constants';
 
 type Props = {
     provider: string;
@@ -37,8 +38,8 @@ const OAuthButton = ({ provider, name }: Props) => {
         }
     };
     const handleCallOAuth = (provider: string) => {
-        setStorage('provider', provider);
-        setStorage('redirectURI', window.location.pathname);
+        setStorage(storageKeys.PROVIDER, provider);
+        setStorage(storageKeys.REDIRECT_URI, window.location.pathname);
         let url = getAuthorizeCodeCallbackUrl(provider);
         window.location.href = url;
     };
