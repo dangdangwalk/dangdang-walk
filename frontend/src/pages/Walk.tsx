@@ -26,9 +26,13 @@ export default function Walk() {
         startClock(date);
         stopGeo();
     };
-    const handleWalkStop = () => {
-        if (isWalk) {
+    const handleWalkStop = (isStop: boolean) => {
+        if (!isWalk) return;
+        if (isStop) {
             stopClock();
+            stopGeo();
+        } else {
+            alert('정지 버튼을 길게 누르면 산책이 종료됩니다');
         }
     };
     const handleConfirm = () => {
