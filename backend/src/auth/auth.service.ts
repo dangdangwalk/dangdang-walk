@@ -19,20 +19,15 @@ export class AuthService {
         private readonly configService: ConfigService
     ) {}
 
-    private getFullURI(redirectURI: string) {
-        if (!redirectURI.startsWith('/')) return redirectURI;
-
-        return this.configService.get<string>('CORS_ORIGIN') + redirectURI;
-    }
+    private readonly redirectURI = this.configService.get<string>('CORS_ORIGIN') + '/callback';
 
     private async getOauthData(
         authorizeCode: string,
-        provider: OauthProvider,
-        redirectURI: string
+        provider: OauthProvider
     ): Promise<{ oauthAccessToken: string; oauthRefreshToken: string; oauthId: string }> {
         const { access_token: oauthAccessToken, refresh_token: oauthRefreshToken } = await this[
             `${provider}Service`
-        ].requestToken(authorizeCode, this.getFullURI(redirectURI));
+        ].requestToken(authorizeCode, this.redirectURI);
 
         const oauthId = await this[`${provider}Service`].requestUserId(oauthAccessToken);
 
@@ -41,14 +36,9 @@ export class AuthService {
 
     async login(
         authorizeCode: string,
-        provider: OauthProvider,
-        redirectURI: string
+        provider: OauthProvider
     ): Promise<{ accessToken: string; refreshToken: string }> {
-        const { oauthAccessToken, oauthRefreshToken, oauthId } = await this.getOauthData(
-            authorizeCode,
-            provider,
-            redirectURI
-        );
+        const { oauthAccessToken, oauthRefreshToken, oauthId } = await this.getOauthData(authorizeCode, provider);
 
         const refreshToken = this.tokenService.signRefreshToken(oauthId, provider);
 
@@ -64,14 +54,9 @@ export class AuthService {
 
     async signup(
         authorizeCode: string,
-        provider: OauthProvider,
-        redirectURI: string
+        provider: OauthProvider
     ): Promise<{ accessToken: string; refreshToken: string }> {
-        const { oauthAccessToken, oauthRefreshToken, oauthId } = await this.getOauthData(
-            authorizeCode,
-            provider,
-            redirectURI
-        );
+        const { oauthAccessToken, oauthRefreshToken, oauthId } = await this.getOauthData(authorizeCode, provider);
 
         const refreshToken = this.tokenService.signRefreshToken(oauthId, provider);
 
