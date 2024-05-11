@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { EntityManager, Repository, UpdateResult } from 'typeorm';
 import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
-import { mockUser } from '../fixture/users.fixture';
+import { mockUser } from '../fixtures/users.fixture';
 import { UsersDogs } from '../users-dogs/users-dogs.entity';
 import { UsersDogsRepository } from '../users-dogs/users-dogs.repository';
 import { UsersDogsService } from '../users-dogs/users-dogs.service';
