@@ -48,7 +48,7 @@ export default function Walk() {
     }, []);
 
     return (
-        <>
+        <div className="overflow-hidden h-screen inset-0">
             <WalkHeader />
             <WalkInfo duration={duration} calories={calories} distance={distance} />
 
@@ -92,6 +92,6 @@ export default function Walk() {
                     확인
                 </BottomSheet.ConfirmButton>
             </BottomSheet>
-        </>
+        </div>
     );
 }

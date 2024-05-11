@@ -10,11 +10,11 @@ export default function BottomSheet({ isOpen, onClose, children }: BottomSheetPr
     return (
         <>
             <div
-                className={`absolute inset-0 z-40  bg-neutral-800 opacity-40 ${isOpen ? 'block' : 'hidden'}`}
+                className={`absolute inset-0 z-20  bg-neutral-800 opacity-40 ${isOpen ? 'block' : 'hidden'}`}
                 onClick={onClose}
             ></div>
             <div
-                className={`absolute bottom-0 left-0 right-0 z-50 bg-white rounded-t-2xl pt-6 transition-transform  ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}
+                className={` bottom-0 left-0 right-0 z-50 bg-white rounded-t-2xl pt-6 transition-transform  ${isOpen ? 'translate-y-0 absolute' : 'translate-y-full'}`}
             >
                 {children}
             </div>
