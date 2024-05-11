@@ -1,6 +1,6 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { Observable, tap } from 'rxjs';
-import { generateUuid } from 'src/utils/hash.utils';
+import { generateUuid } from '../../utils/hash.utils';
 import { WinstonLoggerService } from '../logger/winstonLogger.service';
 
 @Injectable()
@@ -16,7 +16,7 @@ export class LoggingInterceptor implements NestInterceptor {
         const { ip, method, path: url } = request;
 
         if (url === '/metrics') {
-          return next.handle().pipe();
+            return next.handle().pipe();
         }
 
         this.logger.log(

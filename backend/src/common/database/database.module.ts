@@ -8,15 +8,6 @@ import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-clas
         TypeOrmModule.forRootAsync({
             inject: [ConfigService],
             useFactory: (config: ConfigService) => {
-                if (process.env.NODE_ENV === 'test') {
-                    return {
-                        type: 'sqlite',
-                        database: config.get<string>('DB_NAME'),
-                        entities: ['dist/**/*.entity{.ts,.js}'],
-                        synchronize: true,
-                    };
-                }
-
                 return {
                     type: 'mysql',
                     host: config.get<string>('MYSQL_HOST'),

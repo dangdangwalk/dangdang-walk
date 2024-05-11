@@ -1,12 +1,12 @@
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
-import { UsersDogs } from 'src/users-dogs/users-dogs.entity';
-import { UsersDogsRepository } from 'src/users-dogs/users-dogs.repository';
-import { UsersDogsService } from 'src/users-dogs/users-dogs.service';
 import { EntityManager, Repository, UpdateResult } from 'typeorm';
+import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
 import { mockUser } from '../fixture/users.fixture';
+import { UsersDogs } from '../users-dogs/users-dogs.entity';
+import { UsersDogsRepository } from '../users-dogs/users-dogs.repository';
+import { UsersDogsService } from '../users-dogs/users-dogs.service';
 import { Users } from './users.entity';
 import { UsersRepository } from './users.repository';
 import { UsersService } from './users.service';

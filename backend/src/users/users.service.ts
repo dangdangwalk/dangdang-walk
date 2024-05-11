@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { UsersDogsService } from 'src/users-dogs/users-dogs.service';
-import { checkIfExistsInArr } from 'src/utils/manipulate.util';
 import { FindOptionsWhere } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { UsersDogsService } from '../users-dogs/users-dogs.service';
 import { generateUuid } from '../utils/hash.utils';
+import { checkIfExistsInArr } from '../utils/manipulate.util';
 import { CreateUser } from './types/user-types';
 import { Role } from './user-roles.enum';
 import { Users } from './users.entity';

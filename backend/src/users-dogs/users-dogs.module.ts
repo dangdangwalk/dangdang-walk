@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { DatabaseModule } from 'src/common/database/database.module';
+import { DatabaseModule } from '../common/database/database.module';
 import { WinstonLoggerModule } from '../common/logger/winstonLogger.module';
 import { UsersDogs } from './users-dogs.entity';
 import { UsersDogsRepository } from './users-dogs.repository';

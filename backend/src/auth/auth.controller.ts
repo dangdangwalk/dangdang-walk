@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, HttpCode, Post, Res, UseGuards } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
-import { User } from 'src/users/decorators/user.decorator';
+import { User } from '../users/decorators/user.decorator';
 import { AuthService } from './auth.service';
 import { SkipAuthGuard } from './decorators/public.decorator';
 import { RefreshTokenGuard } from './guards/refreshToken.guard';
