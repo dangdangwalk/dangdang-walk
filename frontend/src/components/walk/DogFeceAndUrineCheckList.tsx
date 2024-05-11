@@ -1,9 +1,9 @@
 import Avatar from '@/components/common/Avatar';
+import { Checkbox } from '@/components/common/Checkbox2';
 import { Divider } from '@/components/common/Divider';
 import { Feces } from '@/components/icon/Feces';
 import { Urine } from '@/components/icon/Urine';
 import { WalkingDog } from '@/models/dog.model';
-import { Checkbox } from '@radix-ui/react-checkbox';
 import React from 'react';
 
 interface DogFeceAndUrineCheckListProps {
@@ -12,6 +12,7 @@ interface DogFeceAndUrineCheckListProps {
     toggleUrineCheck: (id: number) => void;
 }
 
+//Refactor 컴포넌트 이름과 divider 위치
 export default function DogFeceAndUrineCheckList({
     dog,
     toggleFeceCheck,
@@ -24,7 +25,7 @@ export default function DogFeceAndUrineCheckList({
                 <Avatar url={dog.photoUrl} name={dog.name} />
                 <div className="flex gap-1">
                     <Checkbox
-                        checked={dog.isFeceChecked}
+                        checked={dog?.isFeceChecked}
                         onCheckedChange={() => {
                             toggleFeceCheck(dog.id);
                         }}
@@ -32,7 +33,7 @@ export default function DogFeceAndUrineCheckList({
                         <Feces color={dog.isFeceChecked ? 'primary' : 'secondary'} />
                     </Checkbox>
                     <Checkbox
-                        checked={dog.isUrineChecked}
+                        checked={dog?.isUrineChecked}
                         onCheckedChange={() => {
                             toggleUrineCheck(dog.id);
                         }}
