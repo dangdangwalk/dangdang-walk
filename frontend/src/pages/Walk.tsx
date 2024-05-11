@@ -2,7 +2,7 @@ import WalkInfo from '@/components/walk/WalkInfo';
 import Map from '@/components/walk/Map';
 import WalkNavbar from '@/components/walk/WalkNavbar';
 import WalkHeader from '@/components/walk/WalkHeader';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import useGeolocation from '@/hooks/useGeolocation';
 import BottomSheet from '@/components/common/BottomSheet';
 import useWalkingDogs from '@/hooks/useWalkingDogs';
@@ -10,6 +10,7 @@ import useClock from '@/hooks/useClock';
 import { DEFAULT_WALK_MET, DEFAULT_WEIGHT } from '@/constants/walk';
 
 import DogFeceAndUrineCheckList from '@/components/walk/DogFeceAndUrineCheckList';
+import StopToast from '@/components/walk/StopToast';
 
 export default function Walk() {
     const { distance, position: startPosition, currentPosition, stopGeo } = useGeolocation();
@@ -17,6 +18,8 @@ export default function Walk() {
     const { walkingDogs, toggleFeceCheck, toggleUrineCheck, saveFecesAndUriens } = useWalkingDogs();
     const [calories, setCalories] = useState<number>(0);
     const { duration, isStart: isWalk, stopClock, startClock } = useClock();
+    const timeoutRef = useRef<number | null>(null);
+    const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
 
     const handleBottomSheet = () => {
         setIsDogBottomsheetOpen(!isDogBottomsheetOpen);
@@ -26,13 +29,22 @@ export default function Walk() {
         startClock(date);
         stopGeo();
     };
+    const showAlert = () => {
+        if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+        }
+        setIsShowAlert(true);
+        timeoutRef.current = window.setTimeout(() => {
+            setIsShowAlert(false);
+        }, 1000);
+    };
     const handleWalkStop = (isStop: boolean) => {
         if (!isWalk) return;
         if (isStop) {
             stopClock();
             stopGeo();
         } else {
-            alert('정지 버튼을 길게 누르면 산책이 종료됩니다');
+            showAlert();
         }
     };
     const handleConfirm = () => {
@@ -54,6 +66,8 @@ export default function Walk() {
             <WalkInfo duration={duration} calories={calories} distance={distance} />
 
             <Map position={startPosition} />
+
+            <StopToast isShow={isShowAlert} />
             <WalkNavbar onOpen={handleBottomSheet} onStop={handleWalkStop} />
 
             <BottomSheet isOpen={isDogBottomsheetOpen} onClose={handleBottomSheet}>
