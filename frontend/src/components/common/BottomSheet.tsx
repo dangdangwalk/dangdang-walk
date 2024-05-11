@@ -8,12 +8,17 @@ interface BottomSheetProps {
 }
 export default function BottomSheet({ isOpen, onClose, children }: BottomSheetProps) {
     return (
-        <div className={`fixed inset-0 overflow-hidden z-50 ${isOpen ? 'block' : 'hidden'}`}>
-            <div className="absolute inset-0  bg-neutral-800 opacity-40" onClick={onClose}></div>
-            <div className="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl pt-6 transform transition-transform ease-in-out duration-1000">
+        <>
+            <div
+                className={`absolute inset-0 z-40  bg-neutral-800 opacity-40 ${isOpen ? 'block' : 'hidden'}`}
+                onClick={onClose}
+            ></div>
+            <div
+                className={`absolute bottom-0 left-0 right-0 z-50 bg-white rounded-t-2xl pt-6 transition-transform  ${isOpen ? 'translate-y-0' : 'translate-y-full'}`}
+            >
                 {children}
             </div>
-        </div>
+        </>
     );
 }
 
