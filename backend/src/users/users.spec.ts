@@ -1,4 +1,4 @@
-import { mockUser } from '../fixture/users.fixture';
+import { mockUser } from '../fixtures/users.fixture';
 import { Users } from './users.entity';
 
 describe('User', () => {

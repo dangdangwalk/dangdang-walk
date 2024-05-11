@@ -3,7 +3,7 @@ import { NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
-import { mockUser } from '../fixture/users.fixture';
+import { mockUser } from '../fixtures/users.fixture';
 import { Users } from '../users/users.entity';
 import { UsersRepository } from '../users/users.repository';
 import { UsersService } from '../users/users.service';
