@@ -10,14 +10,18 @@ import PetOwner from '@/pages/JoinStep/PetOwner';
 import DogRegister1 from '@/pages/JoinStep/DogRegister1';
 import Cancel from '@/assets/icons/ic-top-cancel.svg';
 import DogRegister2 from '@/pages/JoinStep/DogRegister2';
+import { Gender } from '@/models/dog.model';
+import { getAuthorizeCodeCallbackUrl } from '@/utils/oauth';
+import { storageKeys } from '@/constants';
 export default function Join() {
     const navigate = useNavigate();
     const location = useLocation();
     const state = location.state;
-    const backToPathname = getStorage('redirectURI') || '';
+    const backToPathname = getStorage(storageKeys.REDIRECT_URI) || '';
     const [haveADog, sethaveADog] = useState(true);
-    const [gender, setGender] = useState('');
-    const handleGenderChange = (gender: string) => {
+    const [gender, setGender] = useState<Gender>(null);
+    const provider = getStorage(storageKeys.PROVIDER) || '';
+    const handleGenderChange = (gender: Gender) => {
         setGender(gender);
     };
     console.log(state);
@@ -97,8 +101,8 @@ export default function Join() {
     const handleNextStep = () => {
         if (step === 'PetOwner' && !haveADog) {
             //바로 로그인
-            // const url = getAuthorizeCodeCallbackUrl(provider);
-            // window.location.href = url;
+            const url = getAuthorizeCodeCallbackUrl(provider);
+            window.location.href = url;
         }
         switch (step) {
             case 'Agreements':
@@ -127,13 +131,12 @@ export default function Join() {
         }, 250);
     };
     const handleCancel = () => {
-        //바로 로그인
-        // const url = getAuthorizeCodeCallbackUrl(provider);
-        // window.location.href = url;
+        const url = getAuthorizeCodeCallbackUrl(provider);
+        window.location.href = url;
     };
     const disabled = !agreements.service || !agreements.location || !agreements.personalInfo;
     useEffect(() => {
-        setStorage('isJoinning', 'true');
+        setStorage(storageKeys.IS_JOINING, 'true');
     }, []);
     return (
         <div
