@@ -45,8 +45,8 @@ export class Dogs {
     @Column({ name: 'is_neutered' })
     isNeutered: boolean;
 
-    @Column({ name: 'photo_url' })
-    photoUrl: string;
+    @Column({ name: 'profile_photo_url' })
+    profilePhotoUrl: string;
 
     @Column({ name: 'is_walking', default: false })
     isWalking: boolean;

@@ -81,7 +81,7 @@ export class DogsService {
         return {
             id: dogInfo.id,
             name: dogInfo.name,
-            photoUrl: dogInfo.photoUrl,
+            profilePhotoUrl: dogInfo.profilePhotoUrl,
         };
     }
 
@@ -90,7 +90,7 @@ export class DogsService {
             return {
                 id: cur.id,
                 name: cur.name,
-                photoUrl: cur.photoUrl,
+                profilePhotoUrl: cur.profilePhotoUrl,
             };
         });
     }
@@ -132,7 +132,7 @@ export class DogsService {
             result.push({
                 id: dogProfiles[i].id,
                 name: dogProfiles[i].name,
-                photoUrl: dogProfiles[i].photoUrl,
+                profilePhotoUrl: dogProfiles[i].profilePhotoUrl,
                 recommendedDailyWalkAmount: recommendedDailyWalkAmount[i],
                 dailyWalkAmount: dailyWalkAmount[i],
                 weeklyWalks: weeklyWalks[i],

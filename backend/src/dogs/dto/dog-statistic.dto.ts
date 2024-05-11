@@ -8,7 +8,7 @@ export class DogStatisticDto {
     name: string;
 
     @IsString()
-    photoUrl: string;
+    profilePhotoUrl: string;
 
     @IsNumber()
     recommendedDailyWalkAmount: number;

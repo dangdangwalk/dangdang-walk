@@ -18,5 +18,5 @@ export class DogDto {
     birth: Date | null;
 
     @IsUrl()
-    photoUrl: string;
+    profilePhotoUrl: string;
 }

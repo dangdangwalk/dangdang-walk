@@ -16,8 +16,8 @@ export class Journals {
     @Column()
     title: string;
 
-    @Column({ name: 'log_image_url' })
-    logImageUrl: string;
+    @Column({ name: 'route_image_url' })
+    routeImageUrl: string;
 
     @Column()
     calories: number;

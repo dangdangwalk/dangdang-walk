@@ -64,17 +64,19 @@ export class JournalsService {
         return ownJournals.map((cur) => cur.id);
     }
 
-    async getJournalPhotos(journalId: number) {
+    async getJournalPhotos(journalId: number): Promise<string[]> {
         const photoUrlsRaw = await this.journalPhotosService.find({ journalId });
-        const photoUrls = photoUrlsRaw.map((cur) => cur[PhotoUrlDto.getKey() as keyof JournalPhotos]);
-        return photoUrls;
+        const photoUrls = photoUrlsRaw.map((cur) => {
+            return cur[PhotoUrlDto.getKey() as keyof JournalPhotos];
+        });
+        return photoUrls as string[];
     }
 
     async getJournalInfoForDetail(journalId: number): Promise<JournalInfoForDetail> {
         const journalInfoRaw = await this.findOne({ id: journalId });
         const keys = JournalInfoForDetail.getKeysForJournalTable();
         const journalInfo = makeSubObject(journalInfoRaw, keys);
-        journalInfo.photoUrls = this.getJournalPhotos(journalId);
+        journalInfo.photoUrls = await this.getJournalPhotos(journalId);
         return journalInfo;
     }
 
@@ -109,11 +111,10 @@ export class JournalsService {
         return companionsProfile;
     }
 
-    //TODO : 예외처리 제대로 되지 않고 있어 개선 필요
     async getJournalDetail(journalId: number, dogId: number): Promise<JournalDetailDto> {
         try {
             const journalDogs = await this.journalsDogsService.find({ journalId });
-            this.checkDogExistsInJournal(journalDogs, dogId);
+            await this.checkDogExistsInJournal(journalDogs, dogId);
 
             const journalInfo = await this.getJournalInfoForDetail(journalId);
             const dogInfo = await this.getDogInfoForDetail(journalId, dogId);
