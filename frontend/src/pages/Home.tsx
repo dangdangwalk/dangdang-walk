@@ -2,14 +2,12 @@ import LoginAlertModal from '@/components/LoginAlertModal';
 import DogCardList from '@/components/home/DogCardList';
 import WeatherInfo from '@/components/home/WeatherInfo';
 import { useAuth } from '@/hooks/useAuth';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Button } from '@/components/common/Button';
 import { NAV_HEIGHT, TOP_BAR_HEIGHT } from '@/constants/style';
 import { DogStatistic } from '@/components/home/DogCard';
 import Notification from '@/assets/icons/notification.svg';
 import Topbar from '@/components/common/Topbar';
-import { useLocation } from 'react-router-dom';
-import { getStorage } from '@/utils/storage';
 
 const dogs: DogStatistic[] = [
     {
@@ -39,17 +37,7 @@ const dogs: DogStatistic[] = [
 ];
 
 function Home() {
-    const { search } = useLocation();
-    const params = new URLSearchParams(search);
-    const authorizeCode = params.get('code');
-    const provider = getStorage('provider');
-    const redirectURI = window.location.pathname;
-    const { isLoggedIn, loginMutation } = useAuth();
-    useEffect(() => {
-        if (authorizeCode && provider && !isLoggedIn) {
-            loginMutation.mutate({ authorizeCode, provider, redirectURI });
-        }
-    }, []);
+    const { isLoggedIn } = useAuth();
     return (
         <>
             <Topbar>
