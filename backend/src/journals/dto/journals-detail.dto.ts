@@ -1,8 +1,19 @@
 import { Type } from 'class-transformer';
 import { IsNotEmpty, IsUrl, ValidateNested } from 'class-validator';
-export class JournalDetailDogDto {
+
+export class PhotoUrlDto {
     @IsNotEmpty()
-    id: string;
+    @IsUrl()
+    photoUrl: string;
+
+    static getKey() {
+        return 'photoUrl';
+    }
+}
+
+export class DogInfoForDetail {
+    @IsNotEmpty()
+    id: number;
 
     @IsNotEmpty()
     name: string;
@@ -16,6 +27,22 @@ export class JournalDetailDogDto {
 
     @IsNotEmpty()
     urinesCnt: number;
+
+    //TODO : reflect -metadata 사용하도록 변경
+    static getKeysForDogTable() {
+        return ['id', 'name', 'photoUrl'];
+    }
+}
+
+export class Companions {
+    @IsNotEmpty()
+    id: number;
+
+    @IsNotEmpty()
+    name: string;
+
+    @IsNotEmpty()
+    photoUrl: string;
 }
 
 export class RouteDto {
@@ -26,7 +53,7 @@ export class RouteDto {
     y: number;
 }
 
-export class JournalDetailDto {
+export class JournalInfoForDetail {
     @IsNotEmpty()
     title: string;
 
@@ -40,27 +67,42 @@ export class JournalDetailDto {
     duration: number;
 
     @IsNotEmpty()
-    @ValidateNested({ each: true })
-    @Type(() => RouteDto)
-    routes: RouteDto[];
-
-    @IsNotEmpty()
     @IsUrl()
     routeUrl: string;
-
-    @IsNotEmpty()
-    @IsUrl({}, { each: true })
-    photoUrls: string[];
 
     @IsNotEmpty()
     memo: string;
 
     @IsNotEmpty()
+    @IsUrl({}, { each: true })
+    photoUrls: string[];
+
+    static getKeysForJournalTable() {
+        return ['title', 'distance', 'calories', 'duration', 'logImageUrl', 'memo'];
+    }
+    static getKeysForJournalPhotoTable() {
+        return ['photoUrls'];
+    }
+}
+
+export class JournalDetailDto {
+    @IsNotEmpty()
     @ValidateNested()
-    @Type(() => JournalDetailDogDto)
-    dog: JournalDetailDogDto;
+    @Type(() => JournalInfoForDetail)
+    journalInfo: JournalInfoForDetail;
 
     @IsNotEmpty()
-    @IsUrl({}, { each: true })
-    companions: string[];
+    @ValidateNested()
+    @Type(() => DogInfoForDetail)
+    dog: DogInfoForDetail;
+
+    @IsNotEmpty()
+    @Type(() => Companions)
+    companions: Companions[];
+
+    constructor(journalInfo: JournalInfoForDetail, dogInfo: DogInfoForDetail, companions: Companions[]) {
+        this.journalInfo = journalInfo;
+        this.dog = dogInfo;
+        this.companions = companions;
+    }
 }
