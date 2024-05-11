@@ -75,7 +75,9 @@ export class AuthService {
     async logout(id: number, provider: OauthProvider): Promise<void> {
         const { oauthAccessToken } = await this.usersService.findOne({ id });
 
-        await this[`${provider}Service`].requestTokenExpiration(oauthAccessToken);
+        if (provider !== 'naver') {
+            await this[`${provider}Service`].requestTokenExpiration(oauthAccessToken);
+        }
     }
 
     async deactivate(id: number, provider: OauthProvider): Promise<void> {
