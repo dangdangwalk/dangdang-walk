@@ -9,14 +9,11 @@ const Checkbox = forwardRef<ElementRef<typeof CheckboxPrimitive.Root>, Props>(
         const idRef = useRef<string | undefined>(labelText ? newID() : undefined);
 
         return (
-            <div className="flex items-center gap-3">
+            <div className={cn('flex items-center gap-3 h-9', className)}>
                 <CheckboxPrimitive.Root
                     id={idRef.current}
                     ref={ref}
-                    className={cn(
-                        'w-5 h-5 shrink-0 rounded-full ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
-                        className
-                    )}
+                    className="w-5 h-5 shrink-0 rounded-full ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                     {...props}
                 >
                     {children ?? <Check color={checked ? 'primary' : 'secondary'} />}
