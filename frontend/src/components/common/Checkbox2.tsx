@@ -9,7 +9,7 @@ const Checkbox = forwardRef<ElementRef<typeof CheckboxPrimitive.Root>, Props>(
         const idRef = useRef<string | undefined>(labelText ? newID() : undefined);
 
         return (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 h-9">
                 <CheckboxPrimitive.Root
                     id={idRef.current}
                     ref={ref}
