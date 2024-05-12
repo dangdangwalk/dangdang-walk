@@ -13,7 +13,7 @@ const variants = {
     },
 } as const;
 
-function Feces({ color, ...props }: Props) {
+function Feces({ color = 'primary', ...props }: Props) {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" {...props}>
             <circle cx={12} cy={12} r={11.5} className={variants[color].circle1} />
@@ -29,7 +29,7 @@ function Feces({ color, ...props }: Props) {
 type Color = keyof typeof variants;
 
 interface Props extends Omit<SVGProps<SVGSVGElement>, 'color'> {
-    color: Color;
+    color?: Color;
 }
 
 export { Feces };
