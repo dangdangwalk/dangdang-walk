@@ -7,12 +7,14 @@ import { mockUser } from '../fixtures/users.fixture';
 import { Users } from '../users/users.entity';
 import { UsersRepository } from '../users/users.repository';
 import { UsersService } from '../users/users.service';
-import { OauthProvider } from './auth.controller';
-import { AuthService } from './auth.service';
+import { OauthBody } from './auth.controller';
+import { AuthService, OauthData } from './auth.service';
 import { GoogleService } from './oauth/google.service';
 import { KakaoService } from './oauth/kakao.service';
 import { NaverService } from './oauth/naver.service';
 import { TokenService } from './token/token.service';
+
+const context = describe;
 
 describe('AuthService', () => {
     let service: AuthService;
@@ -76,35 +78,62 @@ describe('AuthService', () => {
     const providerList = ['google', 'kakao', 'naver'];
 
     describe('login', () => {
-        for (let i = 0; i < 3; i++) {
-            const provider = providerList[i];
-            it(`${provider} 로그인 후 access token과 refresh token을 반환해야 한다.`, async () => {
-                jest.spyOn(usersService, 'updateAndFindOne').mockResolvedValue({ id: 1 } as Users);
+        context('사용자가 존재하면', () => {
+            for (let i = 0; i < 3; i++) {
+                const provider = providerList[i];
+                it(`${provider} 로그인 후 access token과 refresh token을 반환해야 한다.`, async () => {
+                    jest.spyOn(usersService, 'updateAndFindOne').mockResolvedValue({ id: 1 } as Users);
 
-                const result = await service.login(authorizeCode, provider as OauthProvider);
+                    const result = await service.login({ authorizeCode, provider } as OauthBody);
 
-                expect(result).toEqual({
-                    accessToken: mockUser.refreshToken,
-                    refreshToken: mockUser.refreshToken,
+                    expect(result).toEqual({
+                        accessToken: mockUser.refreshToken,
+                        refreshToken: mockUser.refreshToken,
+                    });
                 });
-            });
-        }
+            }
+        });
+
+        context('사용자가 존재하지 않으면', () => {
+            for (let i = 0; i < 3; i++) {
+                const provider = providerList[i];
+                it(`${provider} 로그인 후 oauth data를 반환해야 한다.`, async () => {
+                    jest.spyOn(usersService, 'updateAndFindOne').mockRejectedValue(new NotFoundException());
+
+                    const result = await service.login({ authorizeCode, provider } as OauthBody);
+
+                    expect(result).toEqual({
+                        oauthAccessToken: mockUser.oauthAccessToken,
+                        oauthRefreshToken: mockUser.oauthRefreshToken,
+                        oauthId: mockUser.oauthId,
+                        provider,
+                    });
+                });
+            }
+        });
     });
 
     describe('signup', () => {
-        for (let i = 0; i < 3; i++) {
-            const provider = providerList[i];
-            it(`${provider} 회원가입 후 access token과 refresh token을 반환해야 한다.`, async () => {
-                jest.spyOn(usersService, 'createIfNotExists').mockResolvedValue({ id: 1 } as Users);
+        context('사용자가 존재하지 않으면', () => {
+            for (let i = 0; i < 3; i++) {
+                const provider = providerList[i];
+                it(`${provider} 회원가입 후 access token과 refresh token을 반환해야 한다.`, async () => {
+                    jest.spyOn(usersService, 'createIfNotExists').mockResolvedValue({ id: 1 } as Users);
 
-                const result = await service.signup(authorizeCode, provider as OauthProvider);
+                    const result = await service.signup({
+                        oauthAccessToken: mockUser.oauthAccessToken,
+                        oauthRefreshToken: mockUser.oauthRefreshToken,
+                        oauthId: mockUser.oauthId,
+                        provider,
+                    } as OauthData);
 
-                expect(result).toEqual({
-                    accessToken: mockUser.refreshToken,
-                    refreshToken: mockUser.refreshToken,
+                    expect(result).toEqual({
+                        accessToken: mockUser.refreshToken,
+                        refreshToken: mockUser.refreshToken,
+                    });
                 });
-            });
-        }
+            }
+        });
     });
 
     describe('validateAccessToken', () => {
