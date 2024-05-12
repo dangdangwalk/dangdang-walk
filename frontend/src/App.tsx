@@ -29,6 +29,15 @@ function App() {
             }
         };
     }, [setLoginBottomSheetState]);
+
+    useEffect(() => {
+        window.oncontextmenu = function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
+        };
+    }, []);
+
     return (
         <QueryClientProvider client={queryClient}>
             <div className="flex flex-col w-full">
