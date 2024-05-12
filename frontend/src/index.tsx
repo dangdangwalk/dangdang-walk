@@ -11,6 +11,8 @@ import reportWebVitals from './reportWebVitals';
 import Join from '@/pages/Join';
 import Walk from '@/pages/Walk';
 import OauthCallback from '@/pages/OauthCallback';
+import { QueryClientProvider } from '@tanstack/react-query';
+import queryClient from '@/api/queryClient';
 const router = createBrowserRouter([
     {
         path: '/',
@@ -49,7 +51,11 @@ const router = createBrowserRouter([
     },
 ]);
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
-root.render(<RouterProvider router={router} />);
+root.render(
+    <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+    </QueryClientProvider>
+);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
