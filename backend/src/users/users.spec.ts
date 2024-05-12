@@ -20,7 +20,7 @@ describe('User', () => {
     });
 
     it('user 정보가 없으면 빈 객체를 리턴해야 한다.', () => {
-        const user = new Users();
+        const user = new Users({});
 
         expect(user).toEqual({});
     });
