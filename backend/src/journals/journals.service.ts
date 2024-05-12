@@ -1,5 +1,6 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { DogsService } from 'src/dogs/dogs.service';
+import { Excrements } from 'src/excrements/excrements.entity';
 import { ExcrementsService } from 'src/excrements/excrements.service';
 import { ExcrementsType } from 'src/excrements/types/excrements.enum';
 import { JournalPhotos } from 'src/journal-photos/journal-photos.entity';
@@ -9,10 +10,11 @@ import { JournalsDogsService } from 'src/journals-dogs/journals-dogs.service';
 import { checkIfExistsInArr, makeSubObject } from 'src/utils/manipulate.util';
 import { DeleteResult, FindOptionsWhere, In, UpdateResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { CreateJournalDto, ExcrementsInfoForCreate, JournalInfoForCreate, Location } from './dto/journals-create.dto';
 import { DogInfoForDetail, JournalDetailDto, JournalInfoForDetail, PhotoUrlDto } from './dto/journals-detail.dto';
 import { Journals } from './journals.entity';
 import { JournalsRepository } from './journals.repository';
-import { CreateJournal } from './types/journal-types';
+import { CreateJournalData } from './types/journal-types';
 
 @Injectable()
 export class JournalsService {
@@ -24,7 +26,7 @@ export class JournalsService {
         private readonly excrementsService: ExcrementsService
     ) {}
 
-    async create(entityData: CreateJournal) {
+    async create(entityData: CreateJournalData): Promise<Journals> {
         const journals = new Journals(entityData);
         return this.journalsRepository.create(journals);
     }
@@ -129,5 +131,86 @@ export class JournalsService {
     async checkJournalOwnership(userId: number, journalIds: number | number[]): Promise<boolean> {
         const myJournalIds = await this.getOwnJournalIds(userId);
         return checkIfExistsInArr(myJournalIds, journalIds);
+    }
+
+    async createNewJournal(userId: number, journalInfo: CreateJournalData) {
+        if (!journalInfo.memo) {
+            journalInfo.memo = '';
+        }
+        journalInfo.userId = userId;
+        return await this.create(journalInfo);
+    }
+
+    async createNewJournalDogs(journalId: number, dogIds: number[]) {
+        for (const curId of dogIds) {
+            await this.journalsDogsService.createIfNotExists(journalId, curId);
+        }
+        return;
+    }
+
+    async createNewPhotoUrls(journalId: number, photoUrls: string[]) {
+        const keys: (keyof JournalPhotos)[] = ['journalId', 'photoUrl'];
+        const data: Partial<JournalPhotos> = {};
+        data.journalId = journalId;
+        for (const curUrl of photoUrls) {
+            data.photoUrl = curUrl;
+            await this.journalPhotosService.createIfNotExists(data, keys);
+        }
+    }
+
+    makeCoordinate(lat: string, lag: string): string {
+        return `POINT(${lat} ${lag})`;
+    }
+
+    async createNewExcrements(
+        journalId: number,
+        dogId: number,
+        type: ExcrementsType,
+        location: Location
+    ): Promise<Excrements> {
+        const coordinate = this.makeCoordinate(location.lat, location.lng);
+        const data: Partial<Excrements> = { journalId, dogId, type, coordinate };
+
+        return this.excrementsService.createIfNotExists(data);
+    }
+
+    async excrementsLoop(journalId: number, excrements: ExcrementsInfoForCreate[]) {
+        let dogId;
+        for (const curExcrements of excrements) {
+            dogId = curExcrements.dogId;
+            for (const curFeces of curExcrements.fecesLocations) {
+                await this.createNewExcrements(journalId, dogId, ExcrementsType.feces, curFeces);
+            }
+            for (const curUrine of curExcrements.urineLocations) {
+                await this.createNewExcrements(journalId, dogId, ExcrementsType.urine, curUrine);
+            }
+        }
+    }
+
+    async createJournal(userId: number, createJournalData: CreateJournalDto) {
+        const dogs = createJournalData.dogs;
+
+        let photoUrls: string[];
+        if (!createJournalData.journalInfo.photoUrls) {
+            photoUrls = [];
+        } else {
+            photoUrls = createJournalData.journalInfo.photoUrls;
+        }
+
+        const journalData: CreateJournalData = makeSubObject(
+            createJournalData.journalInfo,
+            JournalInfoForCreate.getKeysForJournalTable()
+        );
+        journalData.userId = userId;
+        const excrements: ExcrementsInfoForCreate[] = createJournalData.excrements;
+
+        const journalCreateResult = await this.createNewJournal(userId, journalData);
+        await this.createNewJournalDogs(journalCreateResult.id, dogs);
+        if (photoUrls.length) {
+            await this.createNewPhotoUrls(journalCreateResult.id, photoUrls);
+        }
+        if (excrements.length) {
+            await this.excrementsLoop(journalCreateResult.id, excrements);
+        }
     }
 }
