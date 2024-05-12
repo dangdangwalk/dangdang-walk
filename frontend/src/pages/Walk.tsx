@@ -13,7 +13,7 @@ import DogFeceAndUrineCheckList from '@/components/walk/DogFeceAndUrineCheckList
 import StopToast from '@/components/walk/StopToast';
 
 export default function Walk() {
-    const { distance, position: startPosition, currentPosition, stopGeo } = useGeolocation();
+    const { distance, position: startPosition, currentPosition, stopGeo } = useGeolocation(true);
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
     const { walkingDogs, toggleFeceCheck, toggleUrineCheck, saveFecesAndUriens } = useWalkingDogs();
     const [calories, setCalories] = useState<number>(0);
