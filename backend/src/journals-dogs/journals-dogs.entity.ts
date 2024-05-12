@@ -13,4 +13,8 @@ export class JournalsDogs {
     @ManyToOne(() => Dogs, (dog) => dog.id, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'dog_id' })
     dogId: number;
+
+    constructor(entityData: JournalsDogs) {
+        Object.assign(this, entityData);
+    }
 }
