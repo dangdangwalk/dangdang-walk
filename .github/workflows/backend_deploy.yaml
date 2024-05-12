@@ -75,11 +75,6 @@ jobs:
       - name: Deploy to Amazon EC2
         run : | 
           aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ env.REPO }}
-
-          if [ -z "${{ env.TAG }}" ]; then
-            echo "ERROR: Image tag argument is missing."
-            exit 1
-          fi
     
           IS_BLUE_RUNNING=$(docker inspect -f '{{ .State.Status }}' ${{ env.CONTAINER_BLUE }} | grep running)
           
