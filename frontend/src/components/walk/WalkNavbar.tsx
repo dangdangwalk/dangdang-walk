@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState, MouseEvent, TouchEvent } from 'react';
 import Pause from '@/assets/icons/pause.svg';
 import Camera from '@/assets/icons/camera.svg';
 import Poop from '@/assets/icons/poop.svg';
@@ -13,7 +13,10 @@ export default function WalkNavbar({ onOpen, onStop }: WalkNavbarProps) {
     const [isLongPress, setIsLongPress] = useState(false);
     const timeoutRef = useRef<number | null>(null);
 
-    const handleMouseDown = () => {
+    const handleMouseDown = (e: MouseEvent<HTMLElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
+
         timeoutRef.current = window.setTimeout(() => {
             setIsLongPress(true);
         }, LONG_CLICK_TIME);
@@ -33,7 +36,11 @@ export default function WalkNavbar({ onOpen, onStop }: WalkNavbarProps) {
         setIsLongPress(false);
     };
 
-    const handleTouchStart = () => {
+    const handleTouchStart = (e: TouchEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        e.cancelable = true;
+
         timeoutRef.current = window.setTimeout(() => {
             setIsLongPress(true);
         }, LONG_CLICK_TIME);
@@ -58,9 +65,13 @@ export default function WalkNavbar({ onOpen, onStop }: WalkNavbarProps) {
                 <img src={Poop} alt="배소변 버튼" />
             </button>
             <button
-                onMouseDown={handleMouseDown}
+                onMouseDown={(e) => {
+                    handleMouseDown(e);
+                }}
                 onMouseUp={handleMouseUp}
-                onTouchStart={handleTouchStart}
+                onTouchStart={(e) => {
+                    handleTouchStart(e);
+                }}
                 onTouchEnd={handleTouchEnd}
             >
                 <img src={Pause} alt="정지 버튼" />
