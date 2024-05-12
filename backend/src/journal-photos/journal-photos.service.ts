@@ -13,6 +13,11 @@ export class JournalPhotosService {
         return this.journalPhotosRepository.create(newEntity);
     }
 
+    async createIfNotExists(data: Partial<JournalPhotos>, keys: (keyof JournalPhotos)[]): Promise<JournalPhotos> {
+        const newEntity = new JournalPhotos(data);
+        return this.journalPhotosRepository.createIfNotExists(newEntity, keys);
+    }
+
     async findOne(where: FindOptionsWhere<JournalPhotos>): Promise<JournalPhotos> {
         return this.journalPhotosRepository.findOne(where);
     }
