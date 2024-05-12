@@ -16,14 +16,11 @@ export class Journals {
     @Column()
     title: string;
 
-    @Column({ name: 'route_image_url' })
-    routeImageUrl: string;
+    @Column()
+    distance: number;
 
     @Column()
     calories: number;
-
-    @Column({ nullable: true })
-    memo: string;
 
     @Column({ name: 'started_at' })
     startedAt: Date;
@@ -31,8 +28,11 @@ export class Journals {
     @Column()
     duration: number;
 
-    @Column()
-    distance: number;
+    @Column({ name: 'route_image_url' })
+    routeImageUrl: string;
+
+    @Column({ nullable: true })
+    memo: string;
 
     constructor(entityData: Partial<Journals>) {
         Object.assign(this, entityData);

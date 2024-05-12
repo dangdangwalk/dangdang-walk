@@ -20,6 +20,7 @@ export class ExcrementsService {
         return this.excrementsRepository.createIfNotExists(newEntity, [
             'journalId' as keyof Excrements,
             'dogId' as keyof Excrements,
+            'type' as keyof Excrements,
         ]);
     }
 

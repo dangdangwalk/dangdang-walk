@@ -15,11 +15,7 @@ export class Excrements {
     @JoinColumn({ name: 'dog_id' })
     dogId: number;
 
-    @Column({ name: '' })
-    @Column({
-        type: 'enum',
-        enum: ExcrementsType,
-    })
+    @PrimaryColumn({ name: 'type', type: 'enum', enum: ExcrementsType })
     type: ExcrementsType;
 
     @Column({ type: 'point', spatialFeatureType: 'Point', srid: 4326 })

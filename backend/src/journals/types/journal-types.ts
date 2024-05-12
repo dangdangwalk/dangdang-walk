@@ -1,10 +1,10 @@
-export interface CreateJournal {
+export interface CreateJournalData {
     userId: number;
     title: string;
-    logImageUrl: string;
+    distance: number;
     calories: number;
-    memo: string;
     startedAt: Date;
     duration: number;
-    distance: number;
+    routeImageUrl: string;
+    memo?: string;
 }
