@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { makeSubObjectsArray } from 'src/utils/manipulate.util';
 import { FindOptionsWhere, In, UpdateResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { BreedService } from '../breed/breed.service';
@@ -73,7 +74,9 @@ export class DogsService {
         const attrs = {
             isWalking: stateToUpdate,
         };
+
         await this.update({ id: In(dogIds) }, attrs);
+
         return dogIds;
     }
 
@@ -86,13 +89,12 @@ export class DogsService {
     }
 
     private makeProfileList(dogs: Dogs[]): DogProfile[] {
-        return dogs.map((cur) => {
-            return {
-                id: cur.id,
-                name: cur.name,
-                profilePhotoUrl: cur.profilePhotoUrl,
-            };
-        });
+        return makeSubObjectsArray(dogs, ['id', 'name', 'profilePhotoUrl']);
+    }
+
+    async getAvailableDogs(userId: number): Promise<DogProfile[]> {
+        const ownDogIds = await this.usersService.getOwnDogsList(userId);
+        return this.getProfileList({ id: In(ownDogIds), isWalking: false });
     }
 
     async getProfileList(where: FindOptionsWhere<Dogs>): Promise<DogProfile[]> {
