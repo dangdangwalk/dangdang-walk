@@ -1,5 +1,7 @@
+import { DEFAULT_LAT, DEFAULT_LNG } from '@/constants/location';
 import { NAV_HEIGHT, TOP_BAR_HEIGHT, WALK_INFO_HEIGHT } from '@/constants/style';
 import { Position } from '@/models/location.model';
+import { cn } from '@/utils/tailwind-class';
 import React, { useEffect, useState } from 'react';
 
 const { REACT_APP_KAKAO_MAP_ID: KAKAO_MAP_ID = '' } = window._ENV ?? process.env;
@@ -7,6 +9,8 @@ const { REACT_APP_KAKAO_MAP_ID: KAKAO_MAP_ID = '' } = window._ENV ?? process.env
 interface MapProps {
     startPosition: Position | null;
     path: Position[];
+    className?: string;
+    height?: string;
 }
 
 declare global {
@@ -15,7 +19,7 @@ declare global {
     }
 }
 
-export default function Map({ startPosition, path }: MapProps) {
+export default function Map({ startPosition, path, className, height }: MapProps) {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [map, setMap] = useState<any>(null);
     const [polyline, setPolyline] = useState<any>(null);
@@ -24,10 +28,12 @@ export default function Map({ startPosition, path }: MapProps) {
         window.kakao.maps.load(() => {
             const container = document.getElementById('map');
             const options = {
-                center: new window.kakao.maps.LatLng(startPosition?.lat, startPosition?.lng),
+                center: new window.kakao.maps.LatLng(
+                    startPosition?.lat ?? DEFAULT_LAT,
+                    startPosition?.lng ?? DEFAULT_LNG
+                ),
             };
             const map = new window.kakao.maps.Map(container, options);
-
             const polyline = new window.kakao.maps.Polyline({
                 strokeWeight: 3, // 선의 두께 입니다
                 strokeColor: '#E42208', // 선의 색깔입니다
@@ -62,18 +68,20 @@ export default function Map({ startPosition, path }: MapProps) {
     }, [startPosition]);
 
     useEffect(() => {
-        if (!map || !startPosition || !path.length) return;
+        if (!map || !path.length) return;
         polyline.setPath(path.map((position) => new window.kakao.maps.LatLng(position.lat, position.lng)));
         const lastPostion = path[path.length - 1];
         map.setCenter(new window.kakao.maps.LatLng(lastPostion?.lat, lastPostion?.lng));
-    }, [path]);
+    }, [path, map]);
     return (
         <>
             <div
                 id="map"
+                className={cn(`100vdw  ${className}`)}
                 style={{
-                    width: '100vw',
-                    height: `calc(100dvh - ${NAV_HEIGHT} - ${TOP_BAR_HEIGHT} - ${WALK_INFO_HEIGHT} - 16px )`,
+                    height: height
+                        ? height
+                        : `calc(100dvh - ${NAV_HEIGHT} - ${TOP_BAR_HEIGHT} - ${WALK_INFO_HEIGHT} - 16px )`,
                 }}
             >
                 {isLoading && <div>isLoading</div>}
