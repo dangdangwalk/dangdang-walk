@@ -1,7 +1,7 @@
 // import CheckBox from '@/components/common/CheckBox';
 import { Checkbox } from '@/components/common/Checkbox2';
 import { Divider } from '@/components/common/Divider';
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 
 interface AgreementsProps {
     service: boolean;
