@@ -5,13 +5,13 @@ import { buttonVariants } from '@/components/common/Button';
 import { cn } from '@/utils/tailwind-class';
 import { ComponentPropsWithoutRef, ElementRef, HTMLAttributes, forwardRef } from 'react';
 
-const AlertDialog = AlertDialogPrimitive.Root;
+const Modal = AlertDialogPrimitive.Root;
 
-const AlertDialogTrigger = AlertDialogPrimitive.Trigger;
+const ModalTrigger = AlertDialogPrimitive.Trigger;
 
-const AlertDialogPortal = AlertDialogPrimitive.Portal;
+const ModalPortal = AlertDialogPrimitive.Portal;
 
-const AlertDialogOverlay = forwardRef<
+const ModalOverlay = forwardRef<
     ElementRef<typeof AlertDialogPrimitive.Overlay>,
     ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
@@ -24,14 +24,14 @@ const AlertDialogOverlay = forwardRef<
         ref={ref}
     />
 ));
-AlertDialogOverlay.displayName = AlertDialogPrimitive.Overlay.displayName;
+ModalOverlay.displayName = 'CommonModalOverlay';
 
-const AlertDialogContent = forwardRef<
+const ModalContent = forwardRef<
     ElementRef<typeof AlertDialogPrimitive.Content>,
     ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content>
 >(({ className, ...props }, ref) => (
-    <AlertDialogPortal>
-        <AlertDialogOverlay />
+    <ModalPortal>
+        <ModalOverlay />
         <AlertDialogPrimitive.Content
             ref={ref}
             className={cn(
@@ -40,29 +40,29 @@ const AlertDialogContent = forwardRef<
             )}
             {...props}
         />
-    </AlertDialogPortal>
+    </ModalPortal>
 ));
-AlertDialogContent.displayName = AlertDialogPrimitive.Content.displayName;
+ModalContent.displayName = 'CommonModalContent';
 
-const AlertDialogHeader = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
+const ModalHeader = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
     <div className={cn('flex flex-col space-y-2 text-center sm:text-left', className)} {...props} />
 );
-AlertDialogHeader.displayName = 'AlertDialogHeader';
+ModalHeader.displayName = 'CommonModalHeader';
 
-const AlertDialogFooter = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
+const ModalFooter = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
     <div className={cn('flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2', className)} {...props} />
 );
-AlertDialogFooter.displayName = 'AlertDialogFooter';
+ModalFooter.displayName = 'CommonModalFooter';
 
-const AlertDialogTitle = forwardRef<
+const ModalTitle = forwardRef<
     ElementRef<typeof AlertDialogPrimitive.Title>,
     ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Title>
 >(({ className, ...props }, ref) => (
     <AlertDialogPrimitive.Title ref={ref} className={cn('text-lg font-semibold', className)} {...props} />
 ));
-AlertDialogTitle.displayName = AlertDialogPrimitive.Title.displayName;
+ModalTitle.displayName = 'CommonModalTitle';
 
-const AlertDialogDescription = forwardRef<
+const ModalDescription = forwardRef<
     ElementRef<typeof AlertDialogPrimitive.Description>,
     ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Description>
 >(({ className, ...props }, ref) => (
@@ -72,17 +72,17 @@ const AlertDialogDescription = forwardRef<
         {...props}
     />
 ));
-AlertDialogDescription.displayName = AlertDialogPrimitive.Description.displayName;
+ModalDescription.displayName = 'CommonModalDescription';
 
-const AlertDialogAction = forwardRef<
+const ModalAction = forwardRef<
     ElementRef<typeof AlertDialogPrimitive.Action>,
     ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Action>
 >(({ className, ...props }, ref) => (
     <AlertDialogPrimitive.Action ref={ref} className={cn(buttonVariants(), className)} {...props} />
 ));
-AlertDialogAction.displayName = AlertDialogPrimitive.Action.displayName;
+ModalAction.displayName = 'CommonModalAction';
 
-const AlertDialogCancel = forwardRef<
+const ModalCancel = forwardRef<
     ElementRef<typeof AlertDialogPrimitive.Cancel>,
     ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Cancel>
 >(({ className, ...props }, ref) => (
@@ -92,18 +92,18 @@ const AlertDialogCancel = forwardRef<
         {...props}
     />
 ));
-AlertDialogCancel.displayName = AlertDialogPrimitive.Cancel.displayName;
+ModalCancel.displayName = 'CommonModalCancel';
 
 export {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogOverlay,
-    AlertDialogPortal,
-    AlertDialogTitle,
-    AlertDialogTrigger,
+    Modal,
+    ModalAction,
+    ModalCancel,
+    ModalContent,
+    ModalDescription,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay,
+    ModalPortal,
+    ModalTitle,
+    ModalTrigger,
 };
