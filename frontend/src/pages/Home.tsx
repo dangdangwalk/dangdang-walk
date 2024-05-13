@@ -1,10 +1,8 @@
-import LoginAlertModal from '@/components/LoginAlertModal';
 import DogCardList from '@/components/home/DogCardList';
 import WeatherInfo from '@/components/home/WeatherInfo';
-import { useAuth } from '@/hooks/useAuth';
 import React from 'react';
 import { Button } from '@/components/common/Button';
-import { NAV_HEIGHT, TOP_BAR_HEIGHT } from '@/constants/style';
+import { NAV_HEIGHT } from '@/constants/style';
 import { DogStatistic } from '@/components/home/DogCard';
 import Notification from '@/assets/icons/notification.svg';
 import Topbar from '@/components/common/Topbar';
@@ -37,7 +35,6 @@ const dogs: DogStatistic[] = [
 ];
 
 function Home() {
-    const { isLoggedIn } = useAuth();
     return (
         <>
             <Topbar>
@@ -47,7 +44,7 @@ function Home() {
                     <img src={Notification} alt="Notification" />
                 </Topbar.Back>
             </Topbar>
-            <main className="flex flex-col px-5 bg-neutral-50">
+            <main className="flex flex-col px-5 bg-neutral-50 mb-[60px]">
                 <WeatherInfo />
                 <DogCardList dogs={dogs} />
                 <Button
@@ -60,13 +57,6 @@ function Home() {
                     산책하기
                 </Button>
             </main>
-            {!isLoggedIn && (
-                <div
-                    className="absolute left-0 w-screen h-screen z-1 backdrop-blur-sm"
-                    style={{ top: TOP_BAR_HEIGHT }}
-                ></div>
-            )}
-            {!isLoggedIn && <LoginAlertModal />}
 
             {/* 
             <DogBottomSheet

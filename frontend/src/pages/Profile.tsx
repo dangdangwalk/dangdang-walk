@@ -1,5 +1,4 @@
 import React from 'react';
-import LoginAlertModal from '@/components/LoginAlertModal';
 import { useAuth } from '@/hooks/useAuth';
 
 function Profile() {
@@ -51,7 +50,6 @@ function Profile() {
                 <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
                 <div>fdsfdsfdsafdsafdhskafhkdshflds</div>
             </div>
-            {!isLoggedIn && <LoginAlertModal />}
         </div>
     );
 }
