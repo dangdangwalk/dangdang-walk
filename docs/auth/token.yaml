@@ -1,0 +1,25 @@
+get:
+  tags:
+    - 회원
+  summary: access token 및 refresh token 재발급
+  description: cookie에 유효한 refresh token이 들어있는 경우 access token과 refresh token을 재발급해 반환한다.
+  responses:
+    "200":
+      description: cookie에 담긴 refresh token이 유효한 경우
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              accessToken:
+                type: string
+      headers:
+        Set-Cookie:
+          description: refresh token cookie
+          schema:
+            type: string
+            example: "refreshToken=xxxxx.yyyyy.zzzzz;\nisLoggedIn=true;\nexpiresIn=3600000"
+    "401":
+      description: cookie에 refresh token이 없거나 유효한 refresh token이 아닌 경우
+    "404":
+      description: 회원을 찾을 수 없는 경우
