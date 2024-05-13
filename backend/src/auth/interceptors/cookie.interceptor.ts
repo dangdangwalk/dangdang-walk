@@ -43,13 +43,13 @@ export class CookieInterceptor implements NestInterceptor {
         };
 
         const accessCookieOptions: CookieOptions = {
-            ...refreshCookieOptions,
+            secure: this.isProduction,
             maxAge: TOKEN_LIFETIME_MAP.access.maxAge,
         };
 
         response.cookie('refreshToken', refreshToken, refreshCookieOptions);
         response.cookie('isLoggedIn', true, accessCookieOptions);
-        response.cookie('expiresIn', TOKEN_LIFETIME_MAP.access.maxAge, refreshCookieOptions);
+        response.cookie('expiresIn', TOKEN_LIFETIME_MAP.access.maxAge, accessCookieOptions);
     }
 
     private setOauthCookies(
