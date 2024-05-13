@@ -1,4 +1,4 @@
-import { Canvas, Meta } from '@storybook/blocks';
+import { Canvas, Markdown, Meta } from '@storybook/blocks';
 
 import * as ToastStories from './Toast.stories';
 
@@ -20,3 +20,14 @@ const { show } = useToast();
 
 <Button onClick={() => show('산책 기록이 저장되었습니다.')}>저장하기</Button>;
 ```
+
+`useToast`가 반환하는 객체에 있는 것은 토스트를 표시하는 `show` 함수 하나이다. `show`의 매개변수는 다음과 같으며 `text`만 필수이다.
+
+<Markdown>
+    {`
+| 매개변수  | 타입   | 설명                        |
+| --------- | ------ | --------------------------- |
+| text      | string | 토스트에 표시될 텍스트      |
+| duration? | number | 토스트가 표시되는 시간 (ms) |
+`}
+</Markdown>
