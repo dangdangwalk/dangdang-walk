@@ -1,6 +1,7 @@
 import { httpClient } from '@/api/http';
+import { DogStatistic } from '@/components/home/DogCard';
 
-export const fetchDogStatistic = async () => {
+export const fetchDogStatistic = async (): Promise<DogStatistic[]> => {
     const { data } = await httpClient.get('/dog/statistic');
     return data;
 };

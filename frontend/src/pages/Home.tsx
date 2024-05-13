@@ -9,6 +9,7 @@ import BottomSheet from '@/components/common/BottomSheet';
 import { Dog } from '@/models/dog.model';
 import AvailableDogCheckList from '@/components/home/AvailableDogCheckList';
 import useDogStatistic from '@/hooks/useDogStatistic';
+import { useNavigate } from 'react-router-dom';
 
 export interface AvailableDog extends Dog {
     isChecked: boolean;
@@ -35,12 +36,13 @@ const aDogs: AvailableDog[] = [
 ];
 function Home() {
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
-    const [availableDogs, setAvailableDogs] = useState<AvailableDog[]>(aDogs);
+    const [availableDogs, setAvailableDogs] = useState<AvailableDog[] | undefined>(aDogs);
     const { dogs, isDogsLoading } = useDogStatistic();
+    const navigate = useNavigate();
 
     const cancelSelectDogs = () => {
         setAvailableDogs(
-            availableDogs.map((d: AvailableDog) => {
+            availableDogs?.map((d: AvailableDog) => {
                 return {
                     ...d,
                     isChecked: false,
@@ -55,11 +57,16 @@ function Home() {
         }
     };
     const handleToggle = (id: number) => {
-        setAvailableDogs(availableDogs.map((d: AvailableDog) => (d.id === id ? { ...d, isChecked: !d.isChecked } : d)));
+        setAvailableDogs(
+            availableDogs?.map((d: AvailableDog) => (d.id === id ? { ...d, isChecked: !d.isChecked } : d))
+        );
     };
     const handleConfirm = () => {
         cancelSelectDogs();
         setIsDogBottomsheetOpen(false);
+        navigate('/walk', {
+            state: availableDogs?.length === 1 ? availableDogs : availableDogs?.filter((d) => d.isChecked),
+        });
     };
     if (isDogsLoading) return <div>Loading...</div>;
     return (
@@ -89,13 +96,13 @@ function Home() {
             <BottomSheet isOpen={isDogBottomsheetOpen} onClose={handleBottomSheet}>
                 <BottomSheet.Header> 강아지 선책</BottomSheet.Header>
                 <BottomSheet.Body>
-                    {availableDogs.map((dog) => (
+                    {availableDogs?.map((dog) => (
                         <AvailableDogCheckList dog={dog} key={dog.id} onToggle={handleToggle} />
                     ))}
                 </BottomSheet.Body>
                 <BottomSheet.ConfirmButton
                     onConfirm={handleConfirm}
-                    disabled={availableDogs.find((d) => d.isChecked) ? false : true}
+                    disabled={availableDogs?.find((d) => d.isChecked) ? false : true}
                 >
                     확인
                 </BottomSheet.ConfirmButton>
