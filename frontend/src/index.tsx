@@ -13,6 +13,7 @@ import Walk from '@/pages/Walk';
 import OauthCallback from '@/pages/OauthCallback';
 import { QueryClientProvider } from '@tanstack/react-query';
 import queryClient from '@/api/queryClient';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 const router = createBrowserRouter([
     {
         path: '/',
@@ -54,6 +55,7 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
     <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
+        <ReactQueryDevtools />
     </QueryClientProvider>
 );
 
