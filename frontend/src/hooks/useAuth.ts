@@ -5,7 +5,7 @@ import { useAuthStore } from '@/store/authStore';
 import { UseMutationCustomOptions } from '@/types/common';
 import { getCookie } from '@/utils/cookie';
 import { removeHeader } from '@/utils/header';
-import { getStorage, removeStorage } from '@/utils/storage';
+import { getStorage } from '@/utils/storage';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
