@@ -2,12 +2,45 @@ openapi: 3.0.3
 info:
   title: DangDang-Walk API
   version: 1.0.0
+components:
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - Authorization: []
 servers:
-  - url: http://db:3333
+  - url: http://localhost:3333
+    description: local 환경 server
+  - url: https://dangdang-walk.prgms-fullcycle.com/
+    description: production 환경 server
 paths:
   /health:
     get:
-      description: Get a health check
+      summary: health check
+      description: client(frontend)와 server(backend) 간의 연결 상태를 확인한다. Docker health check에도 사용된다.
+      security: []
       responses:
         200:
           description: OK
+
+  /auth/login:
+    $ref: ./auth/login.yaml
+  /auth/signup:
+    $ref: ./auth/signup.yaml
+  /auth/logout:
+    $ref: ./auth/logout.yaml
+  /auth/deactivate:
+    $ref: ./auth/deactivate.yaml
+  /auth/token:
+    $ref: ./auth/token.yaml
+
+  /dogs:
+    $ref: ./dogs/default.yaml
+  /dogs/{id}:
+    $ref: ./dogs/id.yaml
+  /dogs/walk-available:
+    $ref: ./dogs/walk-available.yaml
+  /dogs/statistics:
+    $ref: ./dogs/statistics.yaml

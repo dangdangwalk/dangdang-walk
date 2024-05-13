@@ -1,0 +1,34 @@
+post:
+  tags:
+    - 회원
+  summary: 회원가입
+  description: 사용자가 우리 서비스의 회원이 아니면 회원가입 처리를 하고 access token 및 만료 시간, refresh token, 로그인 여부를 반환한다.
+  security: []
+  parameters:
+    - in: cookie
+      name: OAuth Cookie
+      required: true
+      description: 로그인 실패 시 설정된 사용자의 OAuth 로그인 cookie
+      schema:
+        type: string
+        example: "oauthRefreshToken=xxxxx.yyyyy.zzzzz;\noauthAccessToken=xxxxx.yyyyy.zzzzz;\noauthId=12345;\nprovider=google"
+  responses:
+    "201":
+      description: 회원이 아닌 경우
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              accessToken:
+                type: string
+      headers:
+        Set-Cookie:
+          description: 사용자의 로그인 cookie
+          schema:
+            type: string
+            example: "refreshToken=xxxxx.yyyyy.zzzzz;\nisLoggedIn=true;\nexpiresIn=3600000"
+    "401":
+      description: OAuth 로그인 cookie가 없는 경우
+    "409":
+      description: 회원인 경우

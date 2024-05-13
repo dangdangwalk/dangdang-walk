@@ -1,0 +1,46 @@
+get:
+  tags:
+    - 강아지
+  summary: 강아지 정보 및 일주일 산책 현황
+  description: 강아지 정보와 강아지의 일주일 산책 현황 목록을 조회한다.
+  responses:
+    "200":
+      description: 강아지 정보와 강아지의 일주일 산책 현황 목록 반환
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: number
+                  description: 강아지 id
+                name:
+                  type: string
+                  description: 강아지 이름
+                profilePhotoUrl:
+                  type: string
+                  description: 강아지 사진 URL
+                  example: https://path/to/profile-photo
+                recommendedDailyWalkAmount:
+                  type: number
+                  description: 하루 권장 산책량 [s]
+                  example: 3600
+                dailyWalkAmount:
+                  type: number
+                  description: 하루 산책량
+                  example: 1800
+                weeklyWalks:
+                  type: array
+                  description: 한 주간 산책 횟수 (요일별)
+                  items:
+                    type: number
+                  minItems: 7
+                  maxItems: 7
+                  example: [0, 1, 2, 0, 0, 0, 1]
+
+    "401":
+      description: Authorization header가 없거나 유효한 access token이 아닌 경우
+    "404":
+      description: 회원을 찾을 수 없는 경우

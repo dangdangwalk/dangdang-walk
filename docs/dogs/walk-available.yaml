@@ -1,0 +1,29 @@
+get:
+  tags:
+    - 강아지
+  summary: 산책 가능한 강아지 목록 조회
+  description: 산책 가능한 강아지 목록을 조회한다.
+  responses:
+    "200":
+      description: 산책 가능한 강아지 목록 반환
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: number
+                  description: 강아지 id
+                name:
+                  type: string
+                  description: 강아지 이름
+                profilePhotoUrl:
+                  type: string
+                  description: 강아지 사진 URL
+                  example: https://path/to/profile-photo
+    "401":
+      description: Authorization header가 없거나 유효한 access token이 아닌 경우
+    "404":
+      description: 회원을 찾을 수 없는 경우
