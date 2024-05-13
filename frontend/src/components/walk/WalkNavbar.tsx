@@ -77,7 +77,14 @@ export default function WalkNavbar({ onOpen, onStop }: WalkNavbarProps) {
                 <img src={Pause} alt="정지 버튼" />
             </button>
             <button>
-                <input type="file" id="camera" name="camera" capture="environment" accept="image/*" />
+                <input
+                    className="hidden"
+                    type="file"
+                    id="camera"
+                    name="camera"
+                    capture="environment"
+                    accept="image/*"
+                />
                 <label htmlFor="camera">
                     <img src={Camera} alt="카메라 버튼" />
                 </label>

@@ -1,11 +1,14 @@
 import DogCardList from '@/components/home/DogCardList';
 import WeatherInfo from '@/components/home/WeatherInfo';
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/common/Button';
 import { NAV_HEIGHT } from '@/constants/style';
 import { DogStatistic } from '@/components/home/DogCard';
 import Notification from '@/assets/icons/notification.svg';
 import Topbar from '@/components/common/Topbar';
+import BottomSheet from '@/components/common/BottomSheet';
+import { Dog } from '@/models/dog.model';
+import AvailableDogCheckList from '@/components/home/AvailableDogCheckList';
 
 const dogs: DogStatistic[] = [
     {
@@ -33,8 +36,56 @@ const dogs: DogStatistic[] = [
         weeklyWalks: [0, 1, 0, 1, 1, 0, 1], // 한 주간 산책 체크
     },
 ];
-
+export interface AvailableDog extends Dog {
+    isChecked: boolean;
+}
+const aDogs: AvailableDog[] = [
+    {
+        id: 1, // 강아지 id
+        name: '덕지', //강아지 이름
+        photoUrl: 'https://ai.esmplus.com/pixie2665/001.jpg', // 강아지 사진
+        isChecked: false,
+    },
+    {
+        id: 2, // 강아지 id
+        name: '철도', //강아지 이름
+        photoUrl: 'https://ai.esmplus.com/pixie2665/002.jpg', // 강아지 사진
+        isChecked: false, // 한 주간 산책 체크
+    },
+    {
+        id: 3, // 강아지 id
+        name: '', //강아지 이름
+        photoUrl: '', // 강아지 사진
+        isChecked: false,
+    },
+];
 function Home() {
+    const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
+    const [availableDogs, setAvailableDogs] = useState<AvailableDog[]>(aDogs);
+
+    const cancelSelectDogs = () => {
+        setAvailableDogs(
+            availableDogs.map((d: AvailableDog) => {
+                return {
+                    ...d,
+                    isChecked: false,
+                };
+            })
+        );
+    };
+    const handleBottomSheet = () => {
+        setIsDogBottomsheetOpen(!isDogBottomsheetOpen);
+        if (isDogBottomsheetOpen) {
+            cancelSelectDogs();
+        }
+    };
+    const handleToggle = (id: number) => {
+        setAvailableDogs(availableDogs.map((d: AvailableDog) => (d.id === id ? { ...d, isChecked: !d.isChecked } : d)));
+    };
+    const handleConfirm = () => {
+        cancelSelectDogs();
+        setIsDogBottomsheetOpen(false);
+    };
     return (
         <>
             <Topbar>
@@ -58,31 +109,20 @@ function Home() {
                 </Button>
             </main>
 
-            {/* 
-            <DogBottomSheet
-                isOpen={!isWalk}
-                onClose={() => {}}
-                disabled={availableDog.find((d) => d.isChecked) ? false : true}
-            >
-                {availableDog.length > 1 && (
-                    <>
-                        <Divider className="h-0 border border-neutral-200" />
-                        <li className="flex py-2 justify-between items-center">
-                            <Avatar url={AllDogs} name={'다함께'} />
-                            <DogCheckBox id={-1} isChecked={false} onChange={handleDogSelect} />
-                        </li>
-                    </>
-                )}
-                {availableDog.map((dog) => (
-                    <>
-                        <Divider key={`${dog.id}-divider`} className="h-0 border border-neutral-200" />
-                        <li className="flex py-2 justify-between items-center" key={dog.id}>
-                            <Avatar url={dog.photoUrl} name={dog.name} />
-                            <DogCheckBox id={dog.id} isChecked={dog.isChecked} onChange={handleDogSelect} />
-                        </li>
-                    </>
-                ))}
-            </DogBottomSheet> */}
+            <BottomSheet isOpen={isDogBottomsheetOpen} onClose={handleBottomSheet}>
+                <BottomSheet.Header> 강아지 선책</BottomSheet.Header>
+                <BottomSheet.Body>
+                    {availableDogs.map((dog) => (
+                        <AvailableDogCheckList dog={dog} key={dog.id} onToggle={handleToggle} />
+                    ))}
+                </BottomSheet.Body>
+                <BottomSheet.ConfirmButton
+                    onConfirm={handleConfirm}
+                    disabled={availableDogs.find((d) => d.isChecked) ? false : true}
+                >
+                    확인
+                </BottomSheet.ConfirmButton>
+            </BottomSheet>
         </>
     );
 }

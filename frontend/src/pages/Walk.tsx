@@ -15,7 +15,8 @@ import StopToast from '@/components/walk/StopToast';
 export default function Walk() {
     const { distance, position: startPosition, currentPosition, stopGeo, routes } = useGeolocation(true);
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
-    const { walkingDogs, toggleFeceCheck, toggleUrineCheck, saveFecesAndUriens } = useWalkingDogs();
+    const { walkingDogs, toggleFeceCheck, toggleUrineCheck, saveFecesAndUriens, cancelFecesAndUriens } =
+        useWalkingDogs();
     const [calories, setCalories] = useState<number>(0);
     const { duration, isStart: isWalk, stopClock, startClock } = useClock();
     const timeoutRef = useRef<number | null>(null);
@@ -23,6 +24,9 @@ export default function Walk() {
 
     const handleBottomSheet = () => {
         setIsDogBottomsheetOpen(!isDogBottomsheetOpen);
+        if (isDogBottomsheetOpen) {
+            cancelFecesAndUriens();
+        }
     };
 
     const handleWalkStart = (date: Date) => {

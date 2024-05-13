@@ -58,8 +58,19 @@ const useWalkingDogs = () => {
             })
         );
     };
+    const cancelFecesAndUriens = () => {
+        setWalkingDogs(
+            walkingDogs.map((d: WalkingDog) => {
+                return {
+                    ...d,
+                    isFeceChecked: false,
+                    isUrineChecked: false,
+                };
+            })
+        );
+    };
 
-    return { walkingDogs, setWalkingDogs, toggleFeceCheck, toggleUrineCheck, saveFecesAndUriens };
+    return { walkingDogs, setWalkingDogs, toggleFeceCheck, toggleUrineCheck, saveFecesAndUriens, cancelFecesAndUriens };
 };
 
 export default useWalkingDogs;
