@@ -8,4 +8,10 @@ describe('Journals', () => {
     expect(journals.userId).toEqual(1);
     expect(journals.title).toEqual('오늘 하루 일지');
   });
+
+  it('journals 정보가 없으면 빈 객체를 리턴해야 한다.', () => {
+    const journals = new Journals({});
+
+    expect(journals).toEqual({});
+  });
 });
