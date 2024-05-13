@@ -64,14 +64,11 @@ jobs:
     needs: build
     runs-on: [ self-hosted, label-api ]
     steps:
-#      - name: Create .env
-#        env:
-#          ENV_FILE: ${{ secrets.ENV_FILE_BACKEND }}
-#        run: |
-#          if [ ! -d "backend" ]; then
-#            mkdir backend;
-#          fi
-#          echo ${{ env.ENV_FILE }} > ./backend/.env.prod
+      - name: Create .env
+        env:
+          ENV_FILE: ${{ secrets.ENV_FILE_BACKEND }}
+        run: |
+          echo ${{ env.ENV_FILE }} > .env.prod
       - name: Deploy to Amazon EC2
         run : |
           chmod 777 /home/ubuntu/run-backend.sh
