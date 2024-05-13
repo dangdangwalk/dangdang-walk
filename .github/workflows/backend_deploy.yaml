@@ -71,4 +71,4 @@ jobs:
       - name: Deploy to Amazon EC2
         run : |
           chmod 777 /home/ubuntu/run-backend.sh
-          /home/ubuntu/run-backend.sh ${{ env.TAG }} ${{ env.ENV_FILE }}
+          /home/ubuntu/run-backend.sh ${{ env.TAG }} .env.prod
