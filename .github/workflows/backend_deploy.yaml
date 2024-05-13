@@ -68,7 +68,7 @@ jobs:
         env:
           ENV_FILE: ${{ secrets.ENV_FILE_BACKEND }}
         run: |
-          echo ${{ env.ENV_FILE }} > .env.prod
+          echo ${{ env.ENV_FILE }} > ./backend/.env.prod
       - name: Deploy to Amazon EC2
         run : |
           chmod 777 /home/ubuntu/run-backend.sh
