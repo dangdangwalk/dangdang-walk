@@ -17,7 +17,7 @@ export default function BottomSheet({ isOpen, onClose, children }: BottomSheetPr
                 ></div>
             )}
             <div
-                className={`fixed duration-300 z-40 ${isOpen ? 'bottom-0' : '-bottom-full'} left-0 right-0 bg-slate-200 rounded-t-2xl pt-6 `}
+                className={`fixed duration-300 z-40 ${isOpen ? 'bottom-0' : '-bottom-full'} left-0 right-0 bg-white rounded-t-2xl pt-6 `}
             >
                 {children}
             </div>
