@@ -1,14 +1,37 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import SelectPhoto from '@/assets/icons/ic-select-photo.svg';
 import { Divider } from '@/components/common/Divider';
+import { DogRefInfo } from '@/pages/Join';
 
 export interface DogBasicInfo {
     profilePhotoUrl: string;
     name: string;
     breed: string;
 }
+interface Props {
+    data: DogBasicInfo;
+    setData: Dispatch<SetStateAction<DogRefInfo>>;
+}
 
-export default function DogRegister1() {
+export default function DogRegister1({ data, setData }: Props) {
+    const handleNameChange = (name: string) => {
+        setData((prev) => ({
+            ...prev,
+            dogBasicInfo: {
+                ...prev.dogBasicInfo,
+                name,
+            },
+        }));
+    };
+    const handleBreedChange = (breed: string) => {
+        setData((prev) => ({
+            ...prev,
+            dogBasicInfo: {
+                ...prev.dogBasicInfo,
+                breed,
+            },
+        }));
+    };
     return (
         <div className="flex flex-col bg-white">
             <div>
@@ -27,11 +50,24 @@ export default function DogRegister1() {
             </div>
             <div className="flex flex-col gap-12">
                 <div className="py-3 relative">
-                    <input type="text" placeholder="이름이 궁금해요" className="outline-none" />
+                    <input
+                        type="text"
+                        placeholder="이름이 궁금해요"
+                        className="outline-none w-full"
+                        maxLength={10}
+                        value={data.name}
+                        onChange={(event) => handleNameChange(event.target.value)}
+                    />
                     <Divider className="absolute bottom-0 h-[1px]" />
                 </div>
                 <div className="py-3 relative">
-                    <input type="text" placeholder="견종이 궁금해요" className="outline-none" />
+                    <input
+                        type="text"
+                        placeholder="견종이 궁금해요"
+                        className="outline-none w-full"
+                        value={data.breed}
+                        onChange={(event) => handleBreedChange(event.target.value)}
+                    />
                     <Divider className="absolute bottom-0 h-[1px]" />
                 </div>
             </div>

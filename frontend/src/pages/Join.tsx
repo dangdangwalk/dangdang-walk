@@ -1,7 +1,7 @@
 import Topbar from '@/components/common/Topbar';
 import { getStorage } from '@/utils/storage';
-import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import TopBack from '@/assets/icons/ic-top-back.svg';
 import Agreements from '@/pages/JoinStep/Agreements';
 import { Button } from '@/components/common/Button';
@@ -10,8 +10,6 @@ import PetOwner from '@/pages/JoinStep/PetOwner';
 import DogRegister1, { DogBasicInfo } from '@/pages/JoinStep/DogRegister1';
 import Cancel from '@/assets/icons/ic-top-cancel.svg';
 import DogRegister2, { DogDetailInfo } from '@/pages/JoinStep/DogRegister2';
-import { Gender } from '@/models/dog.model';
-import { getAuthorizeCodeCallbackUrl } from '@/utils/oauth';
 import { storageKeys } from '@/constants';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -22,18 +20,10 @@ export interface DogRefInfo {
 
 export default function Join() {
     const { signupMustation } = useAuth();
-
     const navigate = useNavigate();
-    const location = useLocation();
-    const state = location.state;
     const backToPathname = getStorage(storageKeys.REDIRECT_URI) || '';
     const [haveADog, sethaveADog] = useState(true);
-    const [gender, setGender] = useState<Gender>(null);
-    const provider = getStorage(storageKeys.PROVIDER) || '';
-    const handleGenderChange = (gender: Gender) => {
-        setGender(gender);
-    };
-    console.log(state);
+
     const [allAgreed, setAllAgreed] = useState(false);
     const [agreements, setAgreements] = useState({
         service: false,
@@ -41,7 +31,20 @@ export default function Join() {
         personalInfo: false,
         marketing: false,
     });
-    // const [regusterData, setRegisterData] = useState<DogRefInfo>();
+    const [registerData, setRegisterData] = useState<DogRefInfo>({
+        dogBasicInfo: {
+            profilePhotoUrl: '',
+            name: '',
+            breed: '',
+        },
+        dogDetailInfo: {
+            gender: '',
+            isNeutered: false,
+            birth: '',
+            notSureBday: false,
+            weight: 0,
+        },
+    });
     const [step, setStep] = useState<'Agreements' | 'PetOwner' | 'Dog Registration1' | 'Dog Registration2'>(
         'Agreements'
     );
@@ -136,11 +139,40 @@ export default function Join() {
         }, 250);
     };
     const handleCancel = () => {
-        const url = getAuthorizeCodeCallbackUrl(provider);
-        window.location.href = url;
+        signupMustation.mutate(null);
     };
-    const disabled = !agreements.service || !agreements.location || !agreements.personalInfo;
 
+    const disabled = () => {
+        switch (step) {
+            case 'Agreements':
+                return !agreements.service || !agreements.location || !agreements.personalInfo;
+            case 'Dog Registration1':
+                return !registerData.dogBasicInfo.name || !registerData.dogBasicInfo.breed;
+            case 'Dog Registration2':
+                return (
+                    !registerData.dogDetailInfo.gender ||
+                    !registerData.dogDetailInfo.birth ||
+                    !registerData.dogDetailInfo.weight
+                );
+        }
+    };
+
+    const ButtonText = () => {
+        const buttonText = useMemo(() => {
+            switch (step) {
+                case 'Agreements':
+                    return '다음 단계로';
+                case 'PetOwner':
+                    return haveADog ? '다음 단계로' : '가입 완료';
+                case 'Dog Registration1':
+                    return '다음 단계로';
+                case 'Dog Registration2':
+                    return '가입 완료';
+            }
+        }, [step, haveADog]);
+
+        return buttonText;
+    };
     return (
         <div
             className={`flex flex-col bg-primary-foreground ${switchStep.mainToStep1 ? 'animate-mainToRight' : 'animate-outToMain'}`}
@@ -169,19 +201,19 @@ export default function Join() {
                     />
                 )}
                 {step === 'PetOwner' && <PetOwner haveADog={haveADog} handleHaveADogChange={handleHaveADogChange} />}
-                {step === 'Dog Registration1' && <DogRegister1 />}
-                {step === 'Dog Registration2' && (
-                    <DogRegister2 gender={gender} handleGenderChange={handleGenderChange} />
+                {step === 'Dog Registration1' && (
+                    <DogRegister1 data={registerData?.dogBasicInfo} setData={setRegisterData} />
                 )}
+                {step === 'Dog Registration2' && <DogRegister2 data={registerData} setData={setRegisterData} />}
             </main>
             <Button
                 className="w-full absolute bottom-0"
-                disabled={disabled}
+                disabled={disabled()}
                 color="primary"
                 rounded="none"
                 onClick={handleNextStep}
             >
-                다음 단계로
+                {ButtonText()}
             </Button>
         </div>
     );
