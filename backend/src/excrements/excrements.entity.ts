@@ -6,7 +6,7 @@ import { ExcrementsType } from './types/excrements.enum';
 @Entity('excrements')
 export class Excrements {
     @PrimaryColumn({ name: 'journal_id' })
-    @ManyToOne(() => Journals, (WalkJournals) => WalkJournals.id)
+    @ManyToOne(() => Journals, (WalkJournals) => WalkJournals.id, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'journal_id' })
     journalId: number;
 

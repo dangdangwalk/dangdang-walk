@@ -1,6 +1,18 @@
-import { Body, Controller, ForbiddenException, Get, ParseIntPipe, Post, Query } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    ForbiddenException,
+    Get,
+    Param,
+    ParseIntPipe,
+    Patch,
+    Post,
+    Query,
+} from '@nestjs/common';
 import { AccessTokenPayload } from 'src/auth/token/token.service';
 import { User } from 'src/users/decorators/user.decorator';
+import { UpdateJournalDto } from './dto/journal-update.dto';
 import { CreateJournalDto } from './dto/journals-create.dto';
 import { JournalsService } from './journals.service';
 
@@ -23,5 +35,18 @@ export class JournalsController {
     @Post('/')
     async createJournal(@User() user: AccessTokenPayload, @Body() body: CreateJournalDto) {
         await this.journalsService.createJournal(user.userId, body);
+        return true;
+    }
+
+    @Patch('/:id')
+    async updateJournal(@Param('id', ParseIntPipe) journalId: number, @Body() body: UpdateJournalDto) {
+        await this.journalsService.updateJournal(journalId, body);
+        return true;
+    }
+
+    @Delete('/:id')
+    async deleteJournal(@Param('id', ParseIntPipe) journalId: number) {
+        await this.journalsService.deleteJournal(journalId);
+        return true;
     }
 }
