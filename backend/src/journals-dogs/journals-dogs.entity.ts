@@ -5,7 +5,7 @@ import { Journals } from '../journals/journals.entity';
 @Entity('journals_dogs')
 export class JournalsDogs {
     @PrimaryColumn({ name: 'journal_id' })
-    @ManyToOne(() => Journals, (walkJournals) => walkJournals.id)
+    @ManyToOne(() => Journals, (walkJournals) => walkJournals.id, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'journal_id' })
     journalId: number;
 
