@@ -41,7 +41,7 @@ export default function Join() {
         personalInfo: false,
         marketing: false,
     });
-    const [regusterData, setRegisterData] = useState<DogRefInfo>();
+    // const [regusterData, setRegisterData] = useState<DogRefInfo>();
     const [step, setStep] = useState<'Agreements' | 'PetOwner' | 'Dog Registration1' | 'Dog Registration2'>(
         'Agreements'
     );
