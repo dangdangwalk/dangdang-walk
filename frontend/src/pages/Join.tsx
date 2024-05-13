@@ -1,6 +1,6 @@
 import Topbar from '@/components/common/Topbar';
-import { getStorage, setStorage } from '@/utils/storage';
-import React, { useEffect, useState } from 'react';
+import { getStorage } from '@/utils/storage';
+import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import TopBack from '@/assets/icons/ic-top-back.svg';
 import Agreements from '@/pages/JoinStep/Agreements';
@@ -140,9 +140,7 @@ export default function Join() {
         window.location.href = url;
     };
     const disabled = !agreements.service || !agreements.location || !agreements.personalInfo;
-    useEffect(() => {
-        setStorage(storageKeys.IS_JOINING, 'true');
-    }, []);
+
     return (
         <div
             className={`flex flex-col bg-primary-foreground ${switchStep.mainToStep1 ? 'animate-mainToRight' : 'animate-outToMain'}`}

@@ -13,7 +13,6 @@ const queryKeys = {
 } as const;
 
 const storageKeys = {
-    IS_JOINING: 'isJoining',
     REDIRECT_URI: 'redirectURI',
     PROVIDER: 'provider',
 } as const;
