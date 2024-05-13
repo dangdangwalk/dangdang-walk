@@ -19,7 +19,7 @@ const config: StorybookConfig = {
     docs: {
         autodocs: 'tag',
     },
-    staticDirs: ['..\\public'],
+    staticDirs: ['../public'],
     webpackFinal: async (config) => {
         config.resolve!.plugins!.push(
             new TsconfigPathsPlugin({
