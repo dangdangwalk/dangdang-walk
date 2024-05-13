@@ -37,7 +37,7 @@ function App() {
         <div className="flex flex-col w-full">
             <div>
                 <Outlet />
-                {currentPage !== '/join' && currentPage !== '/walk' && (
+                {(currentPage === '/' || currentPage === '/profile') && (
                     <div>
                         <Navbar />
                         {!isLoggedIn && !isLoginBottomSheetOpen && (
