@@ -1,17 +1,16 @@
 import { Outlet, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import React, { useEffect, useRef } from 'react';
-import { useLoginBottomSheetStateStore } from './store/loginBottomSheetStore';
-// import LoginBottomSheet from '@/components/LoginBottomSheet';
-// import LoginAlertModal from '@/components/LoginAlertModal';
-// import { useAuth } from '@/hooks/useAuth';
+import React, { useEffect, useState } from 'react';
+import LoginAlertModal from '@/components/LoginAlertModal';
+import { useAuth } from '@/hooks/useAuth';
+import BottomSheet from '@/components/common/BottomSheet';
+import OAuthButton from '@/components/OAuthButton';
+import { OAUTH } from '@/constants';
 // var console;
 function App() {
-    const { isLoginBottomSheetOpen, setLoginBottomSheetState } = useLoginBottomSheetStateStore();
     const location = useLocation();
     const currentPage = location.pathname;
-    const outletRef = useRef<HTMLDivElement>(null);
-    // const { isLoggedIn } = useAuth();
+    const { isLoggedIn } = useAuth();
     //TODO: 일시적인 배포시 console.log 제거 추가로 환경설정으로 빼줘야함ㄴ
     // if (process.env.NODE_ENV === 'production') {
     //     console = window.console || {};
@@ -19,17 +18,6 @@ function App() {
     //     console.warn = function no_console() {};
     //     console.error = function () {};
     // }
-    useEffect(() => {
-        if (outletRef.current) {
-            outletRef.current.addEventListener('click', () => setLoginBottomSheetState(false));
-        }
-
-        return () => {
-            if (outletRef.current) {
-                outletRef.current.removeEventListener('click', () => setLoginBottomSheetState(false));
-            }
-        };
-    }, [setLoginBottomSheetState]);
 
     useEffect(() => {
         window.oncontextmenu = function (event) {
@@ -38,25 +26,36 @@ function App() {
             return false;
         };
     }, []);
-
+    const [isLoginBottomSheetOpen, setLoginBottomSheetState] = useState(false);
+    const handleClose = () => {
+        setLoginBottomSheetState(false);
+    };
+    const handleToggle = (toggle: boolean) => {
+        setLoginBottomSheetState(toggle);
+    };
     return (
         <div className="flex flex-col w-full">
-            <div ref={outletRef}>
+            <div>
                 <Outlet />
-            </div>
-            {currentPage !== '/join' && (
-                <>
-                    <div className={`fixed z-10`}>
+                {currentPage !== '/join' && currentPage !== '/walk' && (
+                    <div>
                         <Navbar />
+                        {!isLoggedIn && !isLoginBottomSheetOpen && (
+                            <LoginAlertModal isOpen={isLoginBottomSheetOpen} setToggle={handleToggle} />
+                        )}
+
+                        <BottomSheet isOpen={isLoginBottomSheetOpen} onClose={handleClose}>
+                            <BottomSheet.Body className="h-[230px]">
+                                <div className="flex flex-col items-center gap-3 mx-2 mt-4 mb-5">
+                                    {OAUTH.map((oauth, index) => (
+                                        <OAuthButton key={index} provider={oauth.PROVIDER} name={oauth.NAME} />
+                                    ))}
+                                </div>
+                            </BottomSheet.Body>
+                        </BottomSheet>
                     </div>
-                    <div
-                        className={`fixed z-20 w-full duration-200 ${isLoginBottomSheetOpen ? ' translate-y-72' : 'translate-y-full'}`}
-                    >
-                        {/* {!isLoggedIn && <LoginAlertModal />} */}
-                        {/* <LoginBottomSheet /> */}
-                    </div>
-                </>
-            )}
+                )}
+            </div>
         </div>
     );
 }
