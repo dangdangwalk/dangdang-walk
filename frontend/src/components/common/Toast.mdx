@@ -1,0 +1,22 @@
+import { Canvas, Meta } from '@storybook/blocks';
+
+import * as ToastStories from './Toast.stories';
+
+<Meta of={ToastStories} />
+
+# Toast
+
+일시적으로 표시되는 간결한 메시지이다.
+
+<Canvas of={ToastStories.UsageExample} />
+
+사용 예시 코드는 다음과 같다.
+
+```tsx
+import { Button } from '@/components/common/Button';
+import useToast from '@/hooks/useToast';
+
+const { show } = useToast();
+
+<Button onClick={() => show('산책 기록이 저장되었습니다.')}>저장하기</Button>;
+```
