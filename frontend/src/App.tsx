@@ -1,11 +1,12 @@
+import LoginAlertModal from '@/components/LoginAlertModal';
+import OAuthButton from '@/components/OAuthButton';
+import BottomSheet from '@/components/common/BottomSheet';
+import { Toast } from '@/components/common/Toast';
+import { OAUTH } from '@/constants';
+import { useAuth } from '@/hooks/useAuth';
+import { useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import React, { useEffect, useState } from 'react';
-import LoginAlertModal from '@/components/LoginAlertModal';
-import { useAuth } from '@/hooks/useAuth';
-import BottomSheet from '@/components/common/BottomSheet';
-import OAuthButton from '@/components/OAuthButton';
-import { OAUTH } from '@/constants';
 // var console;
 function App() {
     const location = useLocation();
@@ -56,6 +57,7 @@ function App() {
                     </div>
                 )}
             </div>
+            <Toast />
         </div>
     );
 }
