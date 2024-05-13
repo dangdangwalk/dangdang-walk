@@ -16,6 +16,11 @@ export class CookieInterceptor implements NestInterceptor {
             map((data) => {
                 const response = context.switchToHttp().getResponse<Response>();
 
+                if (!data) {
+                    this.clearAuthCookies(response);
+                    return;
+                }
+
                 if ('accessToken' in data && 'refreshToken' in data) {
                     this.setAuthCookies(response, data);
                     this.clearOauthCookies(response);
@@ -28,8 +33,6 @@ export class CookieInterceptor implements NestInterceptor {
                 ) {
                     this.setOauthCookies(response, data);
                     throw new NotFoundException('회원을 찾을 수 없습니다.');
-                } else {
-                    this.clearAuthCookies(response);
                 }
             })
         );
