@@ -1,6 +1,7 @@
 import { Injectable, LoggerService } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
+import stripAnsi from 'src/utils/ansi.utils';
 import * as winston from 'winston';
 import * as winstonDaily from 'winston-daily-rotate-file';
 
@@ -15,12 +16,23 @@ export class WinstonLoggerService implements LoggerService {
             fs.mkdirSync(logDir, { recursive: true });
         }
 
-        const logFormat = winston.format.printf(({ timestamp, level, message }) => {
+        const consoleLogFormat = winston.format.printf(({ timestamp, level, message }) => {
             const seoulTimestamp = new Date(timestamp).toLocaleString('ko-KR');
-            return `[${level}] [${seoulTimestamp}] : ${message}`;
+            return `${seoulTimestamp} | ${level}| ${message}`;
         });
 
-        const consoleFormat = winston.format.combine(winston.format.colorize(), winston.format.timestamp(), logFormat);
+        const fileLogFormat = winston.format.printf(({ timestamp, level, message }) => {
+            const seoulTimestamp = new Date(timestamp).toLocaleString('ko-KR');
+            return `${seoulTimestamp} | ${level}| ${stripAnsi(message)}`;
+        });
+
+        const consoleFormat = winston.format.combine(
+            winston.format((info) => ({ ...info, level: info.level.toUpperCase().padEnd(7) }))(),
+            winston.format.colorize(),
+            winston.format.prettyPrint(),
+            winston.format.timestamp(),
+            consoleLogFormat
+        );
         const consoleTransport = new winston.transports.Console({ format: consoleFormat });
 
         const fileTransport = new winstonDaily({
@@ -29,7 +41,11 @@ export class WinstonLoggerService implements LoggerService {
             zippedArchive: true,
             maxSize: '20m',
             maxFiles: '14d',
-            format: winston.format.combine(winston.format.timestamp(), logFormat),
+            format: winston.format.combine(
+                winston.format((info) => ({ ...info, level: info.level.toUpperCase().padEnd(7) }))(),
+                winston.format.timestamp(),
+                fileLogFormat
+            ),
         });
 
         const errorFileTransport = new winstonDaily({
@@ -39,7 +55,11 @@ export class WinstonLoggerService implements LoggerService {
             maxSize: '20m',
             maxFiles: '14d',
             level: 'error',
-            format: winston.format.combine(winston.format.timestamp(), logFormat),
+            format: winston.format.combine(
+                winston.format((info) => ({ ...info, level: info.level.toUpperCase().padEnd(7) }))(),
+                winston.format.timestamp(),
+                fileLogFormat
+            ),
         });
 
         this.logger = winston.createLogger({
