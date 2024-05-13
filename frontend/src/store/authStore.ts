@@ -17,7 +17,6 @@ export const useAuthStore = create<StoreState>((set) => ({
         set({ isStoreLogin: getCookie(cookieKeys.IS_LOGGED_IN) });
     },
     storeLogout: () => {
-        set({ isStoreLogin: getCookie(cookieKeys.IS_LOGGED_IN) });
         removeHeader(tokenKeys.AUTHORIZATION);
         removeStorage(storageKeys.REDIRECT_URI);
         removeStorage(storageKeys.PROVIDER);
