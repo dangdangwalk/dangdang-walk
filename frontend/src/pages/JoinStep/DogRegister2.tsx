@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FormEvent } from 'react';
 import Male from '@/assets/icons/ic-sex-male.svg';
 import FeMale from '@/assets/icons/ic-sex-femal.svg';
 import { Divider } from '@/components/common/Divider';
@@ -16,6 +16,12 @@ export interface DogDetailInfo {
     weight: number;
 }
 export default function DogRegister2({ gender, handleGenderChange }: Props) {
+    function maxLengthCheck(event: FormEvent<HTMLInputElement>) {
+        const object = event.currentTarget;
+        if (object.value.length > object.maxLength) {
+            object.value = object.value.slice(0, object.maxLength);
+        }
+    }
     return (
         <div className="flex flex-col bg-white">
             <div>
@@ -99,7 +105,15 @@ export default function DogRegister2({ gender, handleGenderChange }: Props) {
             </div>
             <div className="mt-9">
                 <div className="py-3 relative">
-                    <input type="text" placeholder="이름의 체중이 궁금해요" className="outline-none" />
+                    <input
+                        type="number"
+                        pattern="\d*"
+                        inputMode="decimal"
+                        placeholder="이름의 체중이 궁금해요"
+                        className="outline-none"
+                        maxLength={3}
+                        onInput={(e) => maxLengthCheck(e)}
+                    />
                     <Divider className="absolute bottom-0 h-[1px]" />
                 </div>
             </div>

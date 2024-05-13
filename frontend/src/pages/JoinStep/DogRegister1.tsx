@@ -20,14 +20,17 @@ export default function DogRegister1() {
                 </span>
             </div>
             <div className="mt-8 mb-6 flex justify-center">
-                <img src={SelectPhoto} alt="selectphoto" className="size-[7.5rem]" />
+                <input className="hidden" name="input" id="input-upload" type="file" accept="image/*" />
+                <label htmlFor="input-upload">
+                    <img src={SelectPhoto} alt="selectphoto" className="size-[7.5rem]" />
+                </label>
             </div>
             <div className="flex flex-col gap-12">
                 <div className="py-3 relative">
                     <input type="text" placeholder="이름이 궁금해요" className="outline-none" />
                     <Divider className="absolute bottom-0 h-[1px]" />
                 </div>
-                <div className="py-3 relativeelative">
+                <div className="py-3 relative">
                     <input type="text" placeholder="견종이 궁금해요" className="outline-none" />
                     <Divider className="absolute bottom-0 h-[1px]" />
                 </div>
