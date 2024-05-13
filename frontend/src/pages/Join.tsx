@@ -1,19 +1,28 @@
 import Topbar from '@/components/common/Topbar';
 import { getStorage, setStorage } from '@/utils/storage';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import TopBack from '@/assets/icons/ic-top-back.svg';
 import Agreements from '@/pages/JoinStep/Agreements';
 import { Button } from '@/components/common/Button';
 import { Divider } from '@/components/common/Divider';
 import PetOwner from '@/pages/JoinStep/PetOwner';
-import DogRegister1 from '@/pages/JoinStep/DogRegister1';
+import DogRegister1, { DogBasicInfo } from '@/pages/JoinStep/DogRegister1';
 import Cancel from '@/assets/icons/ic-top-cancel.svg';
-import DogRegister2 from '@/pages/JoinStep/DogRegister2';
+import DogRegister2, { DogDetailInfo } from '@/pages/JoinStep/DogRegister2';
 import { Gender } from '@/models/dog.model';
 import { getAuthorizeCodeCallbackUrl } from '@/utils/oauth';
 import { storageKeys } from '@/constants';
+import { useAuth } from '@/hooks/useAuth';
+
+export interface DogRefInfo {
+    dogBasicInfo: DogBasicInfo;
+    dogDetailInfo: DogDetailInfo;
+}
+
 export default function Join() {
+    const { signupMustation } = useAuth();
+
     const navigate = useNavigate();
     const location = useLocation();
     const state = location.state;
@@ -32,15 +41,14 @@ export default function Join() {
         personalInfo: false,
         marketing: false,
     });
-    // const [regusterData, setRegisterData] = useState();
+    // const [regusterData, setRegisterData] = useState<DogRefInfo>();
     const [step, setStep] = useState<'Agreements' | 'PetOwner' | 'Dog Registration1' | 'Dog Registration2'>(
         'Agreements'
     );
     const handleHaveADogChange = (opt: boolean) => {
         sethaveADog(opt);
     };
-    const handleCheck = (event: ChangeEvent<HTMLInputElement>) => {
-        const { id, checked } = event.target;
+    const handleCheck = (checked: boolean, id: string) => {
         setAgreements((prev) => ({
             ...prev,
             [id]: checked,
@@ -48,8 +56,7 @@ export default function Join() {
         const allChecked = Object.values({ ...agreements, [id]: checked }).every((value) => value === true);
         setAllAgreed(allChecked);
     };
-    const handleAllCheck = (event: ChangeEvent<HTMLInputElement>) => {
-        const { checked } = event.target;
+    const handleAllCheck = (checked: boolean) => {
         setAgreements((prevAgreements) => ({
             ...prevAgreements,
             service: checked,
@@ -100,9 +107,7 @@ export default function Join() {
     });
     const handleNextStep = () => {
         if (step === 'PetOwner' && !haveADog) {
-            //바로 로그인
-            const url = getAuthorizeCodeCallbackUrl(provider);
-            window.location.href = url;
+            signupMustation.mutate(null);
         }
         switch (step) {
             case 'Agreements':
@@ -155,7 +160,7 @@ export default function Join() {
             <Divider
                 className={`bg-primary duration-500 w-0 ease-in-out ${step === 'PetOwner' && 'w-1/3'} ${step === 'Dog Registration1' && 'w-2/3'} ${step === 'Dog Registration2' && 'w-full'}`}
             />
-            <main className="w-full px-5 pt-6">
+            <main className="w-full h-full px-5 pt-6">
                 {step === 'Agreements' && (
                     <Agreements
                         toggle={switchStep.step1ToStep2}
