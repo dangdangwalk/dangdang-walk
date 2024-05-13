@@ -12,7 +12,6 @@ env:
   CONTAINER_BLUE: dangdang-api-blue
   REPO: 180993267331.dkr.ecr.ap-northeast-2.amazonaws.com
   TAG: ${GITHUB_SHA::7}
-  ENV_FILE: .env.prod
 
 jobs:
   build:
