@@ -20,5 +20,6 @@ export const useAuthStore = create<StoreState>((set) => ({
         removeHeader(tokenKeys.AUTHORIZATION);
         removeStorage(storageKeys.REDIRECT_URI);
         removeStorage(storageKeys.PROVIDER);
+        window.location.reload();
     },
 }));
