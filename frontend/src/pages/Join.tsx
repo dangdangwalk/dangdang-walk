@@ -110,7 +110,7 @@ export default function Join() {
     });
     const handleNextStep = () => {
         if (step === 'PetOwner' && !haveADog) {
-            signupMustation.mutate(null);
+            return signupMustation.mutate(null);
         }
         switch (step) {
             case 'Agreements':
@@ -124,22 +124,20 @@ export default function Join() {
                 break;
         }
 
-        setTimeout(() => {
-            switch (step) {
-                case 'Agreements':
-                    setStep('PetOwner');
-                    break;
-                case 'PetOwner':
-                    setStep('Dog Registration1');
-                    break;
-                case 'Dog Registration1':
-                    setStep('Dog Registration2');
-                    break;
-            }
-        }, 250);
+        switch (step) {
+            case 'Agreements':
+                setStep('PetOwner');
+                break;
+            case 'PetOwner':
+                setStep('Dog Registration1');
+                break;
+            case 'Dog Registration1':
+                setStep('Dog Registration2');
+                break;
+        }
     };
     const handleCancel = () => {
-        signupMustation.mutate(null);
+        return signupMustation.mutate(null);
     };
 
     const disabled = () => {
