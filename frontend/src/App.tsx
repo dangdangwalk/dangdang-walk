@@ -1,6 +1,7 @@
 import LoginAlertModal from '@/components/LoginAlertModal';
 import OAuthButton from '@/components/OAuthButton';
 import BottomSheet from '@/components/common/BottomSheet';
+import { Toast } from '@/components/common/Toast';
 import { OAUTH } from '@/constants';
 import { useAuth } from '@/hooks/useAuth';
 import { useEffect, useState } from 'react';
@@ -56,6 +57,7 @@ function App() {
                     </div>
                 )}
             </div>
+            <Toast />
         </div>
     );
 }
