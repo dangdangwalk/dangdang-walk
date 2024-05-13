@@ -2,6 +2,12 @@ import React from 'react';
 import SelectPhoto from '@/assets/icons/ic-select-photo.svg';
 import { Divider } from '@/components/common/Divider';
 
+export interface DogBasicInfo {
+    profilePhotoUrl: string;
+    name: string;
+    breed: string;
+}
+
 export default function DogRegister1() {
     return (
         <div className="flex flex-col bg-white">

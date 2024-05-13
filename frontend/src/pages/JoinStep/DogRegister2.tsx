@@ -8,6 +8,13 @@ interface Props {
     gender: Gender;
     handleGenderChange: (gender: Gender) => void;
 }
+export interface DogDetailInfo {
+    gender: Gender;
+    isNeatered: boolean;
+    birth?: Date;
+    notSureBday: boolean;
+    weight: number;
+}
 export default function DogRegister2({ gender, handleGenderChange }: Props) {
     return (
         <div className="flex flex-col bg-white">
@@ -69,8 +76,6 @@ export default function DogRegister2({ gender, handleGenderChange }: Props) {
                 </button>
             </div>
             <div className="mt-2">
-                {/* <input type="checkbox" name="isNeutered" id="isNeutered" />
-                <label htmlFor="isNeutered">중성화 했어요</label> */}
                 <Checkbox
                     checked={true}
                     onCheckedChange={(checked: boolean) => {
@@ -84,10 +89,13 @@ export default function DogRegister2({ gender, handleGenderChange }: Props) {
                     <input type="text" placeholder="이름의 생일이 궁금해요" className="outline-none" />
                     <Divider className="absolute bottom-0 h-[1px]" />
                 </div>
-                <div className="mt-2">
-                    <input type="checkbox" name="birth" id="birth" />
-                    <label htmlFor="birth">생일을 몰라요</label>
-                </div>
+                <Checkbox
+                    checked={true}
+                    onCheckedChange={(checked: boolean) => {
+                        console.log(checked);
+                    }}
+                    labelText="생일을 몰라요"
+                />
             </div>
             <div className="mt-9">
                 <div className="py-3 relative">

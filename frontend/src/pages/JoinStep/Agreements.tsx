@@ -1,4 +1,5 @@
-import CheckBox from '@/components/common/CheckBox';
+// import CheckBox from '@/components/common/CheckBox';
+import { Checkbox } from '@/components/common/Checkbox2';
 import { Divider } from '@/components/common/Divider';
 import React, { ChangeEvent } from 'react';
 
@@ -11,9 +12,9 @@ interface AgreementsProps {
 interface Props {
     toggle: boolean;
     allAgreed: boolean;
-    handleAllCheck: (event: ChangeEvent<HTMLInputElement>) => void;
+    handleAllCheck: (checked: boolean) => void;
     agreements: AgreementsProps;
-    handleCheck: (event: ChangeEvent<HTMLInputElement>) => void;
+    handleCheck: (checked: boolean, id: string) => void;
 }
 
 export default function AgreementsPage({ toggle, allAgreed, handleAllCheck, agreements, handleCheck }: Props) {
@@ -27,7 +28,11 @@ export default function AgreementsPage({ toggle, allAgreed, handleAllCheck, agre
             </span>
 
             <div className="w-full mt-7">
-                <CheckBox id={'all'} checked={allAgreed} onChange={handleAllCheck} content={'모두 동의합니다.'} />
+                <Checkbox
+                    checked={allAgreed}
+                    onCheckedChange={(checked) => handleAllCheck(checked)}
+                    labelText="모두 동의합니다"
+                />
             </div>
             <Divider className="mt-4" />
 
@@ -35,23 +40,20 @@ export default function AgreementsPage({ toggle, allAgreed, handleAllCheck, agre
                 <div className="flex-col justify-start items-start gap-3 flex">
                     <div className=" text-stone-500 text-xs font-normal leading-[18px]">필수 동의</div>
                     <div className="flex flex-col gap-1">
-                        <CheckBox
-                            id={'service'}
+                        <Checkbox
                             checked={agreements.service}
-                            onChange={handleCheck}
-                            content={'서비스 이용약관'}
+                            onCheckedChange={(checked) => handleCheck(checked, 'service')}
+                            labelText="서비스 이용약관"
                         />
-                        <CheckBox
-                            id={'location'}
+                        <Checkbox
                             checked={agreements.location}
-                            onChange={handleCheck}
-                            content={'위치기반 서비스 이용약관'}
+                            onCheckedChange={(checked) => handleCheck(checked, 'location')}
+                            labelText="위치기반 서비스 이용약관"
                         />
-                        <CheckBox
-                            id={'personalInfo'}
+                        <Checkbox
                             checked={agreements.personalInfo}
-                            onChange={handleCheck}
-                            content={'개인정보 수집과 이용'}
+                            onCheckedChange={(checked) => handleCheck(checked, 'personalInfo')}
+                            labelText="개인정보 수집과 이용"
                         />
                     </div>
                 </div>
@@ -59,11 +61,10 @@ export default function AgreementsPage({ toggle, allAgreed, handleAllCheck, agre
                 <div className="inline-flex flex-col justify-start items-start gap-3">
                     <div className="text-stone-500 text-xs font-normal leading-[18px]">선택 동의</div>
                     <div className="inline-flex flex-col justify-start items-start gap-[3.5px]">
-                        <CheckBox
-                            id={'marketing'}
+                        <Checkbox
                             checked={agreements.marketing}
-                            onChange={handleCheck}
-                            content={'마케팅 정보 수신'}
+                            onCheckedChange={(checked) => handleCheck(checked, 'marketing')}
+                            labelText="마케팅 정보 수신"
                         />
                         <div className="text-stone-500 text-[10px] font-normal leading-[15px]">
                             앱 알림, 문자 메시지, 이메일로
