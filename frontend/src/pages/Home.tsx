@@ -3,39 +3,13 @@ import WeatherInfo from '@/components/home/WeatherInfo';
 import React, { useState } from 'react';
 import { Button } from '@/components/common/Button';
 import { NAV_HEIGHT } from '@/constants/style';
-import { DogStatistic } from '@/components/home/DogCard';
 import Notification from '@/assets/icons/notification.svg';
 import Topbar from '@/components/common/Topbar';
 import BottomSheet from '@/components/common/BottomSheet';
 import { Dog } from '@/models/dog.model';
 import AvailableDogCheckList from '@/components/home/AvailableDogCheckList';
+import useDogStatistic from '@/hooks/useDogStatistic';
 
-const dogs: DogStatistic[] = [
-    {
-        id: 1, // 강아지 id
-        name: '덕지', //강아지 이름
-        photoUrl: 'https://ai.esmplus.com/pixie2665/001.jpg', // 강아지 사진
-        recommendedDailyWalkAmount: 3600, //하루 권장 산책량,
-        dailyWalkAmount: 3600, //하루 산책량
-        weeklyWalks: [0, 1, 2, 0, 0, 0, 1], // 한 주간 산책 체크
-    },
-    {
-        id: 2, // 강아지 id
-        name: '철도', //강아지 이름
-        photoUrl: 'https://ai.esmplus.com/pixie2665/002.jpg', // 강아지 사진
-        recommendedDailyWalkAmount: 12600, //하루 권장 산책량,
-        dailyWalkAmount: 3600, //하루 산책량
-        weeklyWalks: [0, 1, 0, 1, 1, 0, 1], // 한 주간 산책 체크
-    },
-    {
-        id: 3, // 강아지 id
-        name: '', //강아지 이름
-        photoUrl: '', // 강아지 사진
-        recommendedDailyWalkAmount: 12600, //하루 권장 산책량,
-        dailyWalkAmount: 0, //하루 산책량
-        weeklyWalks: [0, 1, 0, 1, 1, 0, 1], // 한 주간 산책 체크
-    },
-];
 export interface AvailableDog extends Dog {
     isChecked: boolean;
 }
@@ -62,6 +36,7 @@ const aDogs: AvailableDog[] = [
 function Home() {
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
     const [availableDogs, setAvailableDogs] = useState<AvailableDog[]>(aDogs);
+    const { dogs, isDogsLoading } = useDogStatistic();
 
     const cancelSelectDogs = () => {
         setAvailableDogs(
@@ -86,6 +61,7 @@ function Home() {
         cancelSelectDogs();
         setIsDogBottomsheetOpen(false);
     };
+    if (isDogsLoading) return <div>Loading...</div>;
     return (
         <>
             <Topbar>
@@ -103,7 +79,8 @@ function Home() {
                     rounded={'medium'}
                     className={`w-[120px] h-12 fixed  text-white text-base font-bold leading-normal`}
                     style={{ bottom: `calc(${NAV_HEIGHT} + 16px)`, left: '50%', translate: '-50%' }}
-                    disabled={dogs.length === 0}
+                    disabled={dogs?.length === 0}
+                    onClick={handleBottomSheet}
                 >
                     산책하기
                 </Button>
