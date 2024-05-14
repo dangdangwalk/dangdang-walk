@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as AWS from 'aws-sdk';
 import { generateUuid } from 'src/utils/hash.utils';
+import { PresignedUrlInfo } from './type/s3.type';
 
 @Injectable()
 export class S3Service {
@@ -14,12 +15,12 @@ export class S3Service {
         return `${userId}/${generateUuid()}.${type}`;
     }
 
-    async createPresignedUrlWithClient(userId: number, type: string): Promise<any> {
+    async createPresignedUrlWithClient(userId: number, type: string): Promise<PresignedUrlInfo> {
         const key = this.makeFileName(userId, type);
         const url = await this.s3Client.getSignedUrlPromise('putObject', {
             Bucket: 'dangdangwalk',
+            ContentType: `image/${type}`,
             Key: key,
-            Body: type,
         });
         return { key, url };
     }
