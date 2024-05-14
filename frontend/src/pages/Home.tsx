@@ -2,7 +2,7 @@ import DogCardList from '@/components/home/DogCardList';
 import WeatherInfo from '@/components/home/WeatherInfo';
 import React, { useState } from 'react';
 import { Button } from '@/components/common/Button';
-import { NAV_HEIGHT } from '@/constants/style';
+import { NAV_HEIGHT, TOP_BAR_HEIGHT } from '@/constants/style';
 import Notification from '@/assets/icons/notification.svg';
 import Topbar from '@/components/common/Topbar';
 import BottomSheet from '@/components/common/BottomSheet';
@@ -71,14 +71,17 @@ function Home() {
     if (isDogsLoading) return <div>Loading...</div>;
     return (
         <>
-            <Topbar>
+            <Topbar className="bg-neutral-50 ">
                 <Topbar.Front></Topbar.Front>
                 <Topbar.Center></Topbar.Center>
                 <Topbar.Back>
                     <img src={Notification} alt="Notification" />
                 </Topbar.Back>
             </Topbar>
-            <main className="flex flex-col px-5 bg-neutral-50 mb-[60px]">
+            <main
+                className="flex flex-col px-5 bg-neutral-50 mb-[60px] min-h-dvh"
+                style={{ minHeight: `calc(100dvh - ${NAV_HEIGHT} - ${TOP_BAR_HEIGHT}  )` }}
+            >
                 <WeatherInfo />
                 <DogCardList dogs={dogs} />
                 <Button
