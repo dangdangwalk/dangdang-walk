@@ -4,8 +4,11 @@ import { Button } from '@/components/common/Button';
 import { Divider } from '@/components/common/Divider';
 import Topbar from '@/components/common/Topbar';
 import WalkInfo from '@/components/walk/WalkInfo';
+import { useRef } from 'react';
 
 export default function CreateForm() {
+    const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
     return (
         <>
             <div className="flex flex-col">
@@ -78,7 +81,7 @@ export default function CreateForm() {
                     <Divider />
                     <div>
                         <h2>메모</h2>
-                        <textarea name="memo" className="w-full" />
+                        <textarea name="memo" className="w-full" ref={textAreaRef} />
                     </div>
                 </div>
                 <Button rounded="none" className="w-full h-16">
