@@ -5,6 +5,7 @@ import Avatar from '@/components/common/Avatar';
 import DayIcon from '@/components/home/DayIcon';
 import Walk from '@/assets/icons/walk/walk.svg';
 import Progressbar from '@/components/home/Progressbar';
+import { useNavigate } from 'react-router-dom';
 
 export interface DogStatistic extends Dog {
     recommendedDailyWalkAmount: number;
@@ -18,8 +19,12 @@ interface DogCardProps {
 }
 
 const WEEKDAY = ['월', '화', '수', '목', '금', '토', '일'];
+//TODO navigator 위치
 export default function DogCard({ dog }: DogCardProps) {
-    const onclick = () => {};
+    const navigate = useNavigate();
+    const onclick = () => {
+        navigate(`/journal/${dog.id}`);
+    };
     return (
         <div className="flex-col relative bg-white rounded-lg shadow" onClick={onclick}>
             <div className="flex justify-between pl-[15px] pr-5 pt-[5px]">

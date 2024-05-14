@@ -1,13 +1,11 @@
 import { fetchCurrentWeather } from '@/api/weather';
-import useGeolocation from '@/hooks/useGeolocation';
+import { Position } from '@/models/location.model';
 import { WeatherData } from '@/models/weather.model';
 import { getCurrentDate, getHours } from '@/utils/date';
 import { gpsToGrid } from '@/utils/geo';
 import { useQuery } from '@tanstack/react-query';
 
-export const useWeather = () => {
-    const { position } = useGeolocation();
-
+export const useWeather = (position: Position | null) => {
     const queryKey = ['weather', position?.lat, position?.lng];
     const {
         data: weatherInfo,
@@ -16,7 +14,6 @@ export const useWeather = () => {
     } = useQuery({
         queryKey,
         queryFn: async () => {
-            console.log(position);
             if (!position) return;
             const { nx, ny } = gpsToGrid(position.lat, position.lng);
             const date = getCurrentDate(new Date());
@@ -50,7 +47,6 @@ export const useWeather = () => {
                 maxTemperature = Number(w.fcstValue);
             }
         });
-        console.log(maxTemperature, minTemperature, temperature, sky);
         return {
             maxTemperature: maxTemperature ?? 28,
             minTemperature: minTemperature ?? 0,

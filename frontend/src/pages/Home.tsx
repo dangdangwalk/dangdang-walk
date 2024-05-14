@@ -44,16 +44,22 @@ function Home() {
             state: availableDogs?.length === 1 ? availableDogs : availableDogs?.filter((d) => d.isChecked),
         });
     };
+    const handleCheckAll = (flag: boolean) => {
+        setAvailableDogs(
+            availableDogs?.map((d: AvailableDog) => {
+                return { ...d, isChecked: flag };
+            })
+        );
+    };
 
     useEffect(() => {
         if (!availableDogsData) return;
         setAvailableDogs(
-            availableDogsData?.map((d) => {
+            availableDogsData?.map((d: AvailableDog) => {
                 return { ...d, isChecked: false };
             })
         );
     }, [availableDogsData]);
-
     return (
         <>
             <Topbar className="bg-neutral-50 ">
@@ -95,10 +101,10 @@ function Home() {
                 <BottomSheet.Body>
                     {isAvailableDogsLoading ? (
                         <Spinner />
+                    ) : availableDogs && availableDogs?.length > 0 ? (
+                        <AvailableDogCheckList dogs={availableDogs} onToggle={handleToggle} checkAll={handleCheckAll} />
                     ) : (
-                        availableDogs?.map((dog) => (
-                            <AvailableDogCheckList dog={dog} key={dog.id} onToggle={handleToggle} />
-                        ))
+                        <div>산책할 강아지가없습니다</div>
                     )}
                 </BottomSheet.Body>
                 <BottomSheet.ConfirmButton
