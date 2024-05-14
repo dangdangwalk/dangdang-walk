@@ -27,9 +27,13 @@ export class JournalsController {
         @Query('dogId', ParseIntPipe) dogId: number
     ) {
         if (!this.journalsService.checkJournalOwnership(user.userId, journalId)) {
-            throw new ForbiddenException('허용되지 않은 접근입니다');
+            throw new ForbiddenException(`User ${user.userId} does not have access to journal ${journalId}`);
         }
-        return this.journalsService.getJournalDetail(journalId, dogId);
+        try {
+            return this.journalsService.getJournalDetail(journalId, dogId);
+        } catch (e) {
+            throw e;
+        }
     }
 
     @Post('/')

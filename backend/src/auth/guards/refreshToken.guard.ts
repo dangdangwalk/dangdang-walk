@@ -1,4 +1,5 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
 import { AuthService } from '../auth.service';
 import { RefreshTokenPayload, TokenService } from '../token/token.service';
 
@@ -6,14 +7,21 @@ import { RefreshTokenPayload, TokenService } from '../token/token.service';
 export class RefreshTokenGuard implements CanActivate {
     constructor(
         private tokenService: TokenService,
-        private authService: AuthService
+        private authService: AuthService,
+        private logger: WinstonLoggerService
     ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();
         const token = request.cookies['refreshToken'];
 
-        if (!token) throw new UnauthorizedException();
+        if (!token) {
+            const e = new UnauthorizedException();
+
+            this.logger.error(`No refreshToken inside cookie`, e.stack ?? 'No Stack');
+
+            throw e;
+        }
 
         try {
             const payload = this.tokenService.verify(token) as RefreshTokenPayload;
@@ -23,7 +31,11 @@ export class RefreshTokenGuard implements CanActivate {
 
             return isValid;
         } catch {
-            throw new UnauthorizedException();
+            const e = new UnauthorizedException();
+
+            this.logger.error(`Invalid RefreshToken`, e.stack ?? 'No Stack');
+
+            throw e;
         }
     }
 }
