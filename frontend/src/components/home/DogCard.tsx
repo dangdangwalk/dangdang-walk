@@ -10,7 +10,7 @@ export interface DogStatistic extends Dog {
     recommendedDailyWalkAmount: number;
     dailyWalkAmount: number;
     weeklyWalks: number[];
-    photoUrl: string;
+    profilePhotoUrl: string;
 }
 
 interface DogCardProps {
