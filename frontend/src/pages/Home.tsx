@@ -60,7 +60,6 @@ function Home() {
             })
         );
     }, [availableDogsData]);
-    console.log(availableDogs);
     return (
         <>
             <Topbar className="bg-neutral-50 ">
@@ -102,8 +101,10 @@ function Home() {
                 <BottomSheet.Body>
                     {isAvailableDogsLoading ? (
                         <Spinner />
-                    ) : (
+                    ) : availableDogs && availableDogs?.length > 0 ? (
                         <AvailableDogCheckList dogs={availableDogs} onToggle={handleToggle} checkAll={handleCheckAll} />
+                    ) : (
+                        <div>산책할 강아지가없습니다</div>
                     )}
                 </BottomSheet.Body>
                 <BottomSheet.ConfirmButton
