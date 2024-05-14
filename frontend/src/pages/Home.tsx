@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import useWalkAvailabeDog from '@/hooks/useWalkAvailabeDog';
 import Spiner from '@/components/common/Spiner';
 import { useAuth } from '@/hooks/useAuth';
+import RegisterCard from '@/components/home/RegisterCard';
 
 export interface AvailableDog extends Dog {
     isChecked: boolean;
@@ -69,7 +70,7 @@ function Home() {
                 style={{ minHeight: `calc(100dvh - ${NAV_HEIGHT} - ${TOP_BAR_HEIGHT}  )` }}
             >
                 <WeatherInfo />
-                {dogs?.length === 0 ? <div>버튼</div> : <DogCardList dogs={dogs} />}
+                {dogs && dogs.length > 0 ? <DogCardList dogs={dogs} /> : <RegisterCard />}
                 {dogs && dogs.length > 0 && (
                     <Button
                         color={'primary'}
