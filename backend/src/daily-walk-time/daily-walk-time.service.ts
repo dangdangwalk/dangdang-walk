@@ -22,8 +22,9 @@ export class DailyWalkTimeService {
     async getWalkTimeList(walkTimeIds: number[]) {
         const walkTimeList = await this.dailyWalkTimeRepository.find({ id: In(walkTimeIds) });
         if (!walkTimeList.length) {
-            const e = new NotFoundException();
-            this.logger.error(`No walkTime in table`, e.stack ?? 'No stack');
+            const error = new NotFoundException(`No walkTime found for the provided IDs: ${walkTimeIds}.`);
+            this.logger.error(`No walkTime found for the provided IDs: ${walkTimeIds}.`, error.stack ?? 'No stack');
+            throw error;
         }
         return walkTimeList.map((cur) => {
             return cur.duration;

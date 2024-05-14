@@ -39,7 +39,7 @@ export class AuthService {
         const { oauthAccessToken, oauthRefreshToken, oauthId } = await this.getOauthData(authorizeCode, provider);
 
         const refreshToken = this.tokenService.signRefreshToken(oauthId, provider);
-        this.logger.log(`Login | refreshToken : ${refreshToken}`);
+        this.logger.log(`login | signRefreshToken: ${refreshToken}`);
 
         try {
             const { id: userId } = await this.usersService.updateAndFindOne(
@@ -48,7 +48,7 @@ export class AuthService {
             );
 
             const accessToken = this.tokenService.signAccessToken(userId, provider);
-            this.logger.log(`Login | accessToken : ${accessToken}`);
+            this.logger.log(`login | signAccessToken: ${accessToken}`);
 
             return { accessToken, refreshToken };
         } catch (error) {
@@ -56,14 +56,13 @@ export class AuthService {
                 return { oauthAccessToken, oauthRefreshToken, oauthId, provider };
             }
             this.logger.error(`Login error`, error.stack ?? 'No stack');
-
             throw error;
         }
     }
 
     async signup({ oauthAccessToken, oauthRefreshToken, oauthId, provider }: OauthData): Promise<AuthData> {
         const refreshToken = this.tokenService.signRefreshToken(oauthId, provider);
-        this.logger.log(`signup | refreshToken : ${refreshToken}`);
+        this.logger.log(`signup | signRefreshToken: ${refreshToken}`);
 
         const { id: userId } = await this.usersService.createIfNotExists(
             oauthId,
@@ -130,10 +129,10 @@ export class AuthService {
     async validateAccessToken(userId: number): Promise<boolean> {
         try {
             const result = await this.usersService.findOne({ id: userId });
-            this.logger.log(`Validate Access Token find User result : ${result}`);
+            this.logger.debug(`validateAccessToken | find User result:\n${JSON.stringify(result, null, 2)}`);
 
             return true;
-        } catch (error) {
+        } catch {
             return false;
         }
     }
