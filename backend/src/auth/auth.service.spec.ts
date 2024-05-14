@@ -3,6 +3,7 @@ import { NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
+import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
 import { mockUser } from '../fixtures/users.fixture';
 import { Users } from '../users/users.entity';
 import { UsersRepository } from '../users/users.repository';
@@ -23,6 +24,7 @@ describe('AuthService', () => {
     let googleService: GoogleService;
     let kakaoService: KakaoService;
     let naverService: NaverService;
+    let loggerService: WinstonLoggerService;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
@@ -40,6 +42,7 @@ describe('AuthService', () => {
                 KakaoService,
                 NaverService,
                 ConfigService,
+                WinstonLoggerService,
             ],
         }).compile();
 
@@ -49,6 +52,7 @@ describe('AuthService', () => {
         googleService = module.get<GoogleService>(GoogleService);
         kakaoService = module.get<KakaoService>(KakaoService);
         naverService = module.get<NaverService>(NaverService);
+        loggerService = module.get<WinstonLoggerService>(WinstonLoggerService);
 
         const oauthServiceList = [googleService, kakaoService, naverService];
 
