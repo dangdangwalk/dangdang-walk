@@ -28,7 +28,6 @@ export default function WeatherInfo() {
     const [skyStatus, setSkyStatus] = useState<SkyStatus>();
     const { airGrade, address } = useAddressAndAirgrade();
     const { sunset, sunrise, isSunsetSunriseLoading } = useSunsetSunrise();
-
     useEffect(() => {
         if (isSunsetSunriseLoading || isWeatherLoading || !weather) return;
         const time = getCurrentTime(new Date());
