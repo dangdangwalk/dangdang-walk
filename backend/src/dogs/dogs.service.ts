@@ -29,20 +29,24 @@ export class DogsService {
     ) {}
 
     async createDogToUser(userId: number, dogDto: DogDto) {
-        const { breed: breedName, ...otherAttributes } = dogDto;
+        try {
+            const { breed: breedName, ...otherAttributes } = dogDto;
 
-        const breed = await this.breedService.findOne({ name: breedName });
+            const breed = await this.breedService.findOne({ name: breedName });
 
-        const newDog = new Dogs({
-            breed,
-            walkDay: new DogWalkDay(),
-            dailyWalkTime: new DailyWalkTime(),
-            ...otherAttributes,
-        });
+            const newDog = new Dogs({
+                breed,
+                walkDay: new DogWalkDay(),
+                dailyWalkTime: new DailyWalkTime(),
+                ...otherAttributes,
+            });
 
-        const dog = await this.dogsRepository.create(newDog);
+            const dog = await this.dogsRepository.create(newDog);
 
-        return this.usersDogsService.create({ userId, dogId: dog.id });
+            return this.usersDogsService.create({ userId, dogId: dog.id });
+        } catch (e) {
+            this.logger.error(`Unknown breed`, e.stack ?? 'No stack');
+        }
     }
 
     async deleteDogFromUser(where: FindOptionsWhere<Dogs>) {
@@ -161,7 +165,9 @@ export class DogsService {
             dailyWalkAmount.length !== length ||
             weeklyWalks.length !== length
         ) {
-            throw new NotFoundException();
+            const e = new NotFoundException(
+                `Data not matched - Check dogs / breed / dog_walk_day / daily_walk_time table for dogId : ${ownDogIds} `
+            );
         }
 
         return this.makeStatisticData(dogProfiles, recommendedDailyWalkAmount, dailyWalkAmount, weeklyWalks);

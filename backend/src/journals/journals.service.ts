@@ -92,7 +92,7 @@ export class JournalsService {
         const journalDogIds = journalDogs.map((cur) => cur.dogId);
 
         if (!checkIfExistsInArr(journalDogIds, dogId)) {
-            throw new ForbiddenException('이 일지에 속하지 않은 강아지에 대한 요청');
+            throw new ForbiddenException(`Dog ${dogId} is not included in current journal `);
         }
         return;
     }

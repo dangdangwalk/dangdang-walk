@@ -1,9 +1,13 @@
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
+import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
 import { UsersService } from '../../users/users.service';
 
 @Injectable()
 export class AuthDogGuard implements CanActivate {
-    constructor(private readonly usersService: UsersService) {}
+    constructor(
+        private readonly usersService: UsersService,
+        private readonly logger: WinstonLoggerService
+    ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();
@@ -13,7 +17,9 @@ export class AuthDogGuard implements CanActivate {
         const owned = await this.usersService.checkDogOwnership(userId, dogId);
 
         if (!owned) {
-            throw new ForbiddenException('주인이 아닌 강아지에 대한 요청');
+            const e = new ForbiddenException(`User ${userId} does not own the dog ${dogId}`);
+            this.logger.error(`User ${userId} does not own the dog ${dogId}`, e.stack ?? 'No stack');
+            throw e;
         }
 
         return true;

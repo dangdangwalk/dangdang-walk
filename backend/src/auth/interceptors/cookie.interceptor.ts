@@ -2,12 +2,16 @@ import { CallHandler, ExecutionContext, Injectable, NestInterceptor, NotFoundExc
 import { ConfigService } from '@nestjs/config';
 import { CookieOptions, Response } from 'express';
 import { Observable, map } from 'rxjs';
+import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
 import { AuthData, OauthData } from '../auth.service';
 import { TOKEN_LIFETIME_MAP } from '../token/token.service';
 
 @Injectable()
 export class CookieInterceptor implements NestInterceptor {
-    constructor(private configService: ConfigService) {}
+    constructor(
+        private configService: ConfigService,
+        private logger: WinstonLoggerService
+    ) {}
 
     private readonly isProduction = this.configService.get<string>('NODE_ENV') === 'prod';
 
@@ -51,7 +55,12 @@ export class CookieInterceptor implements NestInterceptor {
                     'provider' in data
                 ) {
                     this.setOauthCookies(response, data);
-                    throw new NotFoundException('회원을 찾을 수 없습니다.');
+
+                    const e = new NotFoundException('회원을 찾을 수 없습니다.');
+
+                    this.logger.error(`Can't find user`, e.stack ?? 'No Stack');
+
+                    throw e;
                 }
             })
         );
