@@ -17,7 +17,9 @@ export default function CreateForm() {
                         <h1>5월 2일 산책기록</h1>
                     </Topbar.Center>
                     <Topbar.Back className="w-12 flex items-center">
-                        <img src={Cancel} alt="cancel" />
+                        <button>
+                            <img src={Cancel} alt="cancel" />
+                        </button>
                     </Topbar.Back>
                 </Topbar>
                 <div className={`h-[calc(100dvh-3rem-4rem)] overflow-y-auto`}>
