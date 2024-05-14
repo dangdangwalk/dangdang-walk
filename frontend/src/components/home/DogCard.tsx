@@ -23,7 +23,7 @@ export default function DogCard({ dog }: DogCardProps) {
     return (
         <div className="flex-col relative bg-white rounded-lg shadow" onClick={onclick}>
             <div className="flex justify-between pl-[15px] pr-5 pt-[5px]">
-                <Avatar url={dog.photoUrl} name={dog.name} />
+                <Avatar url={dog.profilePhotoUrl} name={dog.name} />
                 <img src={Ic} alt="ic" />
             </div>
             <div className="flex justify-start items-center gap-2 pl-[15px]">
