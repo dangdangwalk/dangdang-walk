@@ -69,7 +69,7 @@ function Home() {
                 style={{ minHeight: `calc(100dvh - ${NAV_HEIGHT} - ${TOP_BAR_HEIGHT}  )` }}
             >
                 <WeatherInfo />
-                <DogCardList dogs={dogs} />
+                {dogs?.length === 0 ? <div>버튼</div> : <DogCardList dogs={dogs} />}
                 {dogs && dogs.length > 0 && (
                     <Button
                         color={'primary'}
