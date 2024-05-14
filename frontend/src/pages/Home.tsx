@@ -84,16 +84,18 @@ function Home() {
             >
                 <WeatherInfo />
                 <DogCardList dogs={dogs} />
-                <Button
-                    color={'primary'}
-                    rounded={'medium'}
-                    className={`w-[120px] h-12 fixed  text-white text-base font-bold leading-normal`}
-                    style={{ bottom: `calc(${NAV_HEIGHT} + 16px)`, left: '50%', translate: '-50%' }}
-                    disabled={dogs?.length === 0}
-                    onClick={handleBottomSheet}
-                >
-                    산책하기
-                </Button>
+                {dogs && dogs.length > 0 && (
+                    <Button
+                        color={'primary'}
+                        rounded={'medium'}
+                        className={`w-[120px] h-12 fixed  text-white text-base font-bold leading-normal`}
+                        style={{ bottom: `calc(${NAV_HEIGHT} + 16px)`, left: '50%', translate: '-50%' }}
+                        disabled={dogs?.length === 0}
+                        onClick={handleBottomSheet}
+                    >
+                        산책하기
+                    </Button>
+                )}
             </main>
 
             <BottomSheet isOpen={isDogBottomsheetOpen} onClose={handleBottomSheet}>
