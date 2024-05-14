@@ -24,7 +24,7 @@ const useAddressAndAirgrade = () => {
     const sidoName = addressData?.region_1depth_name;
     const {
         data: airGradeData,
-        isLoading: isAirGradeLoading,
+        isPending: isAirGradePending,
         error: airGradeError,
     } = useQuery({
         queryKey: ['airGrade', position?.lat, position?.lng],
@@ -42,7 +42,7 @@ const useAddressAndAirgrade = () => {
         airGrade: airGradeData?.khaiGrade,
         address: addressData?.region_3depth_name,
         isAdressLoading,
-        isAirGradeLoading,
+        isAirGradePending,
         addressError,
         airGradeError,
     };

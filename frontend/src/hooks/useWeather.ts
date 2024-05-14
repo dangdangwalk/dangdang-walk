@@ -10,9 +10,9 @@ export const useWeather = () => {
 
     const queryKey = ['weather', position?.lat, position?.lng];
     const {
-        data: weatherData,
+        data: weatherInfo,
         error: weatherError,
-        isLoading: isWeatherLoading,
+        isPending: isWeatherPending,
     } = useQuery({
         queryKey,
         queryFn: async () => {
@@ -20,8 +20,8 @@ export const useWeather = () => {
             if (!position) return;
             const { nx, ny } = gpsToGrid(position.lat, position.lng);
             const date = getCurrentDate(new Date());
-            const weatherData = await fetchCurrentWeather(date, nx, ny);
-            const newWeatherList = weatherData?.filter((w) => w.baseDate === date) ?? [];
+            const data = await fetchCurrentWeather(date, nx, ny);
+            const newWeatherList = data?.filter((w) => w.baseDate === date) ?? [];
             const hour = getHours(new Date());
             return getWeatherData(newWeatherList, hour);
         },
@@ -60,5 +60,5 @@ export const useWeather = () => {
         };
     };
 
-    return { weather: weatherData, weatherError, isWeatherLoading };
+    return { weather: weatherInfo, weatherError, isWeatherPending };
 };
