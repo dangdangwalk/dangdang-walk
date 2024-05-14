@@ -13,6 +13,7 @@ import Walk from '@/pages/Walk';
 import OauthCallback from '@/pages/OauthCallback';
 import { QueryClientProvider } from '@tanstack/react-query';
 import queryClient from '@/api/queryClient';
+import Camera from '@/pages/Camera';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 const router = createBrowserRouter([
     {
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
             {
                 path: '/callback',
                 element: <OauthCallback />,
+            },
+            {
+                path: '/camera',
+                element: <Camera />,
             },
         ],
     },
