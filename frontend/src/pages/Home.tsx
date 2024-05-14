@@ -12,6 +12,7 @@ import useDogStatistic from '@/hooks/useDogStatistic';
 import { useNavigate } from 'react-router-dom';
 import useWalkAvailabeDog from '@/hooks/useWalkAvailabeDog';
 import Spiner from '@/components/common/Spiner';
+import { useAuth } from '@/hooks/useAuth';
 
 export interface AvailableDog extends Dog {
     isChecked: boolean;
@@ -19,8 +20,11 @@ export interface AvailableDog extends Dog {
 function Home() {
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
     const [availableDogs, setAvailableDogs] = useState<AvailableDog[] | undefined>([]);
-    const { dogs, isDogsLoading } = useDogStatistic();
     const { availableDogsData, isAvailableDogsLoading, fetchWalkAvailableDogs } = useWalkAvailabeDog();
+    const { refreshTokenQuery } = useAuth();
+    const { dogs, isDogsLoading } = useDogStatistic({
+        enabled: refreshTokenQuery.isSuccess,
+    });
     const navigate = useNavigate();
 
     const handleBottomSheet = () => {
