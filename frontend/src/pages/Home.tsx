@@ -11,7 +11,7 @@ import AvailableDogCheckList from '@/components/home/AvailableDogCheckList';
 import useDogStatistic from '@/hooks/useDogStatistic';
 import { useNavigate } from 'react-router-dom';
 import useWalkAvailabeDog from '@/hooks/useWalkAvailabeDog';
-import Spiner from '@/components/common/Spiner';
+import Spinner from '@/components/common/Spinner';
 import { useAuth } from '@/hooks/useAuth';
 import RegisterCard from '@/components/home/RegisterCard';
 
@@ -70,7 +70,7 @@ function Home() {
                 <WeatherInfo />
                 {/* TODO : Pending 로직 제외하는 방법ㄴ */}
                 {isDogsPending ? (
-                    <Spiner />
+                    <Spinner />
                 ) : dogs && dogs?.length > 0 ? (
                     <>
                         <DogCardList dogs={dogs} />
@@ -94,7 +94,7 @@ function Home() {
                 <BottomSheet.Header> 강아지 선책</BottomSheet.Header>
                 <BottomSheet.Body>
                     {isAvailableDogsLoading ? (
-                        <Spiner />
+                        <Spinner />
                     ) : (
                         availableDogs?.map((dog) => (
                             <AvailableDogCheckList dog={dog} key={dog.id} onToggle={handleToggle} />
