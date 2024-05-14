@@ -9,7 +9,7 @@ const useSunsetSunrise = () => {
     const {
         data: sunsetSunriseData,
         error: sunsetSunriseError,
-        isLoading: isSunsetSunriseLoading,
+        isPending: isSunsetSunrisePending,
     } = useQuery({
         queryKey,
         queryFn: async () => {
@@ -25,7 +25,7 @@ const useSunsetSunrise = () => {
     });
 
     return {
-        isSunsetSunriseLoading,
+        isSunsetSunrisePending,
         sunset: sunsetSunriseData?.sunset,
         sunsetSunriseError,
         sunrise: sunsetSunriseData?.sunrise,
