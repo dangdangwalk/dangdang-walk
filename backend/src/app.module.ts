@@ -19,6 +19,7 @@ import { JournalsDogsModule } from './journals-dogs/journals-dogs.module';
 import { JournalModule } from './journals/journals.module';
 import { UsersModule } from './users/users.module';
 import { WalkModule } from './walk/walk.module';
+import { S3Module } from './s3/s3.module';
 
 @Module({
     imports: [
@@ -45,6 +46,7 @@ import { WalkModule } from './walk/walk.module';
         ExcrementsModule,
         JournalPhotosModule,
         JournalsDogsModule,
+        S3Module,
     ],
     controllers: [AppController, HealthController],
     providers: [
