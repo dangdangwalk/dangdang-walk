@@ -41,11 +41,13 @@ export class CookieInterceptor implements NestInterceptor {
     private setAuthCookies(response: Response, { refreshToken }: AuthData): void {
         const refreshCookieOptions: CookieOptions = {
             httpOnly: true,
+            sameSite: this.isProduction ? 'none' : 'lax',
             secure: this.isProduction,
             maxAge: TOKEN_LIFETIME_MAP.refresh.maxAge,
         };
 
         const accessCookieOptions: CookieOptions = {
+            sameSite: this.isProduction ? 'none' : 'lax',
             secure: this.isProduction,
             maxAge: TOKEN_LIFETIME_MAP.access.maxAge,
         };
@@ -59,7 +61,11 @@ export class CookieInterceptor implements NestInterceptor {
         response: Response,
         { oauthAccessToken, oauthRefreshToken, oauthId, provider }: OauthData
     ): void {
-        const sessionCookieOptions: CookieOptions = { httpOnly: true, secure: false }; //this.isProduction };
+        const sessionCookieOptions: CookieOptions = {
+            httpOnly: true,
+            sameSite: this.isProduction ? 'none' : 'lax',
+            secure: this.isProduction,
+        };
 
         response.cookie('oauthAccessToken', oauthAccessToken, sessionCookieOptions);
         response.cookie('oauthRefreshToken', oauthRefreshToken, sessionCookieOptions);
