@@ -1,6 +1,6 @@
 import DogCardList from '@/components/home/DogCardList';
 import WeatherInfo from '@/components/home/WeatherInfo';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/common/Button';
 import { NAV_HEIGHT, TOP_BAR_HEIGHT } from '@/constants/style';
 import Notification from '@/assets/icons/notification.svg';
@@ -22,12 +22,11 @@ function Home() {
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
     const [availableDogs, setAvailableDogs] = useState<AvailableDog[] | undefined>([]);
     const { availableDogsData, isAvailableDogsLoading, fetchWalkAvailableDogs } = useWalkAvailabeDog();
-    const { refreshTokenQuery } = useAuth();
-    const { dogs, isDogsLoading } = useDogStatistic({
+    const { refreshTokenQuery, isLoggedIn } = useAuth();
+    const { dogs, isDogsPending } = useDogStatistic(isLoggedIn, {
         enabled: refreshTokenQuery.isSuccess,
     });
     const navigate = useNavigate();
-
     const handleBottomSheet = () => {
         if (!isDogBottomsheetOpen) {
             fetchWalkAvailableDogs();
@@ -47,7 +46,6 @@ function Home() {
     };
 
     useEffect(() => {
-        console.log(availableDogsData);
         if (!availableDogsData) return;
         setAvailableDogs(
             availableDogsData?.map((d) => {
@@ -55,7 +53,7 @@ function Home() {
             })
         );
     }, [availableDogsData]);
-    if (isDogsLoading) return <Spiner />;
+
     return (
         <>
             <Topbar className="bg-neutral-50 ">
@@ -70,18 +68,25 @@ function Home() {
                 style={{ minHeight: `calc(100dvh - ${NAV_HEIGHT} - ${TOP_BAR_HEIGHT}  )` }}
             >
                 <WeatherInfo />
-                {dogs && dogs.length > 0 ? <DogCardList dogs={dogs} /> : <RegisterCard />}
-                {dogs && dogs.length > 0 && (
-                    <Button
-                        color={'primary'}
-                        rounded={'medium'}
-                        className={`w-[120px] h-12 fixed  text-white text-base font-bold leading-normal`}
-                        style={{ bottom: `calc(${NAV_HEIGHT} + 16px)`, left: '50%', translate: '-50%' }}
-                        disabled={dogs?.length === 0}
-                        onClick={handleBottomSheet}
-                    >
-                        산책하기
-                    </Button>
+                {/* TODO : Pending 로직 제외하는 방법ㄴ */}
+                {isDogsPending ? (
+                    <Spiner />
+                ) : dogs && dogs?.length > 0 ? (
+                    <>
+                        <DogCardList dogs={dogs} />
+                        <Button
+                            color={'primary'}
+                            rounded={'medium'}
+                            className={`w-[120px] h-12 fixed  text-white text-base font-bold leading-normal`}
+                            style={{ bottom: `calc(${NAV_HEIGHT} + 16px)`, left: '50%', translate: '-50%' }}
+                            disabled={dogs?.length === 0}
+                            onClick={handleBottomSheet}
+                        >
+                            산책하기
+                        </Button>
+                    </>
+                ) : (
+                    <RegisterCard />
                 )}
             </main>
 
