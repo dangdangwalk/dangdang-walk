@@ -1,12 +1,10 @@
 import { fetchAddress } from '@/api/map';
 import { fetchAirGrade } from '@/api/weather';
-import useGeolocation from '@/hooks/useGeolocation';
+import { Position } from '@/models/location.model';
 import { getSidoCode } from '@/utils/geo';
 import { useQuery } from '@tanstack/react-query';
 
-const useAddressAndAirgrade = () => {
-    const { position } = useGeolocation();
-
+const useAddressAndAirgrade = (position: Position | null) => {
     const {
         data: addressData,
         error: addressError,

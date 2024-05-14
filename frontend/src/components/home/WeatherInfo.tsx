@@ -13,6 +13,7 @@ import DayCloudy from '@/assets/icons/ic-daycloudy.svg';
 import useAddressAndAirgrade from '@/hooks/useAddressAndAirgrade';
 import useSunsetSunrise from '@/hooks/useSunsetSunrise';
 import Spinner from '@/components/common/Spinner';
+import useGeolocation from '@/hooks/useGeolocation';
 
 const statusImage = {
     rain: Rain,
@@ -25,10 +26,11 @@ const statusImage = {
 };
 
 export default function WeatherInfo() {
-    const { weather, isWeatherPending } = useWeather();
+    const { position } = useGeolocation();
+    const { weather, isWeatherPending } = useWeather(position);
     const [skyStatus, setSkyStatus] = useState<SkyStatus>();
-    const { airGrade, address, isAirGradePending } = useAddressAndAirgrade();
-    const { sunset, sunrise, isSunsetSunrisePending } = useSunsetSunrise();
+    const { airGrade, address, isAirGradePending } = useAddressAndAirgrade(position);
+    const { sunset, sunrise, isSunsetSunrisePending } = useSunsetSunrise(position);
     const isLoading = isAirGradePending || isSunsetSunrisePending || isWeatherPending;
     useEffect(() => {
         if (isSunsetSunrisePending || isWeatherPending || !weather) return;
