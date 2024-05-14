@@ -14,9 +14,11 @@ import {
 } from '@/components/common/Modal';
 import Topbar from '@/components/common/Topbar';
 import WalkInfo from '@/components/walk/WalkInfo';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 export default function CreateForm() {
+    const [openModal, setOpenModal] = useState(false);
+
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
     return (
@@ -27,7 +29,7 @@ export default function CreateForm() {
                         <h1>5월 2일 산책기록</h1>
                     </Topbar.Center>
                     <Topbar.Back className="w-12 flex items-center">
-                        <button>
+                        <button onClick={() => setOpenModal(true)}>
                             <img src={Cancel} alt="cancel" />
                         </button>
                     </Topbar.Back>
@@ -100,15 +102,15 @@ export default function CreateForm() {
                     <span className="-translate-y-[5px]">저장하기</span>
                 </Button>
             </div>
-            <Modal>
+            <Modal open={openModal}>
                 <ModalContent>
                     <ModalHeader>
                         <ModalTitle>산책기록삭제</ModalTitle>
                         <ModalDescription>오늘한 산책을 기록에서 삭제할까요?</ModalDescription>
                     </ModalHeader>
                     <ModalFooter>
-                        <ModalCancel>취소</ModalCancel>
-                        <ModalAction>삭제하기</ModalAction>
+                        <ModalCancel onClick={() => setOpenModal(false)}>취소</ModalCancel>
+                        <ModalAction onClick={() => setOpenModal(false)}>삭제하기</ModalAction>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
