@@ -44,16 +44,23 @@ function Home() {
             state: availableDogs?.length === 1 ? availableDogs : availableDogs?.filter((d) => d.isChecked),
         });
     };
+    const handleCheckAll = (flag: boolean) => {
+        setAvailableDogs(
+            availableDogs?.map((d: AvailableDog) => {
+                return { ...d, isChecked: flag };
+            })
+        );
+    };
 
     useEffect(() => {
         if (!availableDogsData) return;
         setAvailableDogs(
-            availableDogsData?.map((d) => {
+            availableDogsData?.map((d: AvailableDog) => {
                 return { ...d, isChecked: false };
             })
         );
     }, [availableDogsData]);
-
+    console.log(availableDogs);
     return (
         <>
             <Topbar className="bg-neutral-50 ">
@@ -96,9 +103,7 @@ function Home() {
                     {isAvailableDogsLoading ? (
                         <Spinner />
                     ) : (
-                        availableDogs?.map((dog) => (
-                            <AvailableDogCheckList dog={dog} key={dog.id} onToggle={handleToggle} />
-                        ))
+                        <AvailableDogCheckList dogs={availableDogs} onToggle={handleToggle} checkAll={handleCheckAll} />
                     )}
                 </BottomSheet.Body>
                 <BottomSheet.ConfirmButton
