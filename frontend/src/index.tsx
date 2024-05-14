@@ -1,20 +1,20 @@
+import queryClient from '@/api/queryClient';
+import Camera from '@/pages/Camera';
 import Health from '@/pages/Health';
 import Home from '@/pages/Home';
+import Join from '@/pages/Join';
+import JournalCreateForm from '@/pages/Journals/CreateForm';
+import OauthCallback from '@/pages/OauthCallback';
 import Profile from '@/pages/Profile';
-import React from 'react';
+import Walk from '@/pages/Walk';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { CookiesProvider } from 'react-cookie';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import App from './App';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import Join from '@/pages/Join';
-import Walk from '@/pages/Walk';
-import OauthCallback from '@/pages/OauthCallback';
-import { QueryClientProvider } from '@tanstack/react-query';
-import queryClient from '@/api/queryClient';
-import Camera from '@/pages/Camera';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 const router = createBrowserRouter([
     {
         path: '/',
@@ -52,6 +52,10 @@ const router = createBrowserRouter([
             {
                 path: '/camera',
                 element: <Camera />,
+            },
+            {
+                path: '/journals/create',
+                element: <JournalCreateForm />,
             },
         ],
     },
