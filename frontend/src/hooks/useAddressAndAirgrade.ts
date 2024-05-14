@@ -32,7 +32,6 @@ const useAddressAndAirgrade = () => {
             if (!sidoName) return;
             const sido = getSidoCode(sidoName);
             const data = await fetchAirGrade(sido);
-            console.log(data);
             return data;
         },
         enabled: !!sidoName,
