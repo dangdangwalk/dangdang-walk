@@ -18,19 +18,19 @@ const aDogs: AvailableDog[] = [
     {
         id: 1, // 강아지 id
         name: '덕지', //강아지 이름
-        photoUrl: 'https://ai.esmplus.com/pixie2665/001.jpg', // 강아지 사진
+        profilePhotoUrl: 'https://ai.esmplus.com/pixie2665/001.jpg', // 강아지 사진
         isChecked: false,
     },
     {
         id: 2, // 강아지 id
         name: '철도', //강아지 이름
-        photoUrl: 'https://ai.esmplus.com/pixie2665/002.jpg', // 강아지 사진
+        profilePhotoUrl: 'https://ai.esmplus.com/pixie2665/002.jpg', // 강아지 사진
         isChecked: false, // 한 주간 산책 체크
     },
     {
         id: 3, // 강아지 id
         name: '', //강아지 이름
-        photoUrl: '', // 강아지 사진
+        profilePhotoUrl: '', // 강아지 사진
         isChecked: false,
     },
 ];
