@@ -1,4 +1,4 @@
-import { fetchDogStatistic } from '@/api/dog';
+import { fetchDogStatistic } from '@/api/dogs';
 import { useQuery } from '@tanstack/react-query';
 
 const useDogStatistic = () => {

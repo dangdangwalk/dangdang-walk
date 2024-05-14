@@ -14,7 +14,7 @@ export default function AvailableDogCheckList({
         <>
             <Divider className="h-0 border border-neutral-200" />
             <li className="flex py-2 justify-between items-center" key={dog.id}>
-                <Avatar url={dog.photoUrl} name={dog.name} />
+                <Avatar url={dog.profilePhotoUrl} name={dog.name} />
                 <Checkbox
                     checked={dog.isChecked}
                     onCheckedChange={() => {
