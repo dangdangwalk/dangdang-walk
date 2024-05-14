@@ -1,0 +1,39 @@
+import { Canvas, Markdown, Meta } from '@storybook/blocks';
+
+import * as ModalStories from './Modal.stories';
+
+<Meta of={ModalStories} />
+
+# Modal
+
+중요한 콘텐츠로 사용자를 가로막고 응답을 기다리는 모달 대화상자이다.
+
+<Canvas of={ModalStories.UsageExample} />
+
+사용 예시 코드는 다음과 같다.
+
+```tsx
+import { Button } from '@/components/common/Button';
+import useToast from '@/hooks/useToast';
+
+const [open, setOpen] = useState(false);
+
+return (
+    <Modal open={open}>
+        <ModalTrigger>
+            <Button onClick={() => setOpen(true)}>산책기록 삭제하기</Button>
+        </ModalTrigger>
+        <ModalContent>
+            <ModalHeader>
+                <ModalTitle>산책기록삭제</ModalTitle>
+                <ModalDescription>오늘한 산책을 기록에서 삭제할까요?</ModalDescription>
+            </ModalHeader>
+            <ModalFooter>
+                <ModalCancel onClick={() => setOpen(false)}>취소</ModalCancel>
+                <ModalAction onClick={() => setOpen(false)}>삭제하기</ModalAction>
+            </ModalFooter>
+        </ModalContent>
+    </Modal>
+```
+
+shadcn/ui에서 가져온 컴포넌트의 스타일만 변경한 것이므로 구체적인 API나 사용법은 [공식 문서](https://ui.shadcn.com/docs/components/alert-dialog)를 참고한다.
