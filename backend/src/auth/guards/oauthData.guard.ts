@@ -11,14 +11,19 @@ export class OauthDataGuard implements CanActivate {
         const oauthId = request.cookies['oauthId'];
         const provider = request.cookies['provider'];
 
-        this.logger.log(`OauthDataGuard request cookies : ${JSON.stringify(request.cookies)}`);
-        this.logger.log(`OauthDataGuard data : ${oauthAccessToken} ${oauthRefreshToken}, ${oauthId} ${provider}`);
-
         if (!oauthAccessToken || !oauthRefreshToken || !oauthId || !provider) {
-            const e = new UnauthorizedException('OauthDataGuard failed');
+            const missingFields = [
+                !oauthAccessToken && 'oauthAccessToken',
+                !oauthRefreshToken && 'oauthRefreshToken',
+                !oauthId && 'oauthId',
+                !provider && 'provider',
+            ]
+                .filter(Boolean)
+                .join(', ');
 
-            this.logger.error(`No data in cookie`, e.stack ?? 'No stack');
-            throw e;
+            const error = new UnauthorizedException(`OAuth data missing in cookies: ${missingFields}.`);
+            this.logger.error(`OAuthDataGuard failed: missing ${missingFields}.`, error.stack ?? 'No stack');
+            throw error;
         }
         request.oauthData = { oauthAccessToken, oauthRefreshToken, oauthId, provider };
 
