@@ -31,7 +31,7 @@ export abstract class AbstractRepository<T extends ObjectLiteral> {
         const existingEntity = await this.entityRepository.findOne({ where });
 
         if (existingEntity) {
-            throw new ConflictException('createIfNotExists : Duplicate entry');
+            throw new ConflictException('createIfNotExists: Duplicate entry');
         }
 
         return this.create(entity);
@@ -47,7 +47,7 @@ export abstract class AbstractRepository<T extends ObjectLiteral> {
         const entity = await this.entityRepository.findOne({ where });
 
         if (!entity) {
-            throw new NotFoundException('findOne : Entity not found');
+            throw new NotFoundException('findOne: Entity not found');
         }
 
         return entity;
@@ -61,7 +61,7 @@ export abstract class AbstractRepository<T extends ObjectLiteral> {
         const updateResult = await this.entityRepository.update(where, partialEntity);
 
         if (!updateResult.affected) {
-            throw new NotFoundException('update : Entity not found');
+            throw new NotFoundException('update: Entity not found');
         }
 
         return updateResult;
@@ -71,7 +71,7 @@ export abstract class AbstractRepository<T extends ObjectLiteral> {
         const deleteResult = await this.entityRepository.delete(where);
 
         if (!deleteResult.affected) {
-            throw new NotFoundException('delete : Entity not found');
+            throw new NotFoundException('delete: Entity not found');
         }
 
         return deleteResult;
@@ -81,7 +81,7 @@ export abstract class AbstractRepository<T extends ObjectLiteral> {
         const updateResult = await this.entityRepository.update(where, partialEntity);
 
         if (!updateResult.affected) {
-            throw new NotFoundException('update : Entity not found');
+            throw new NotFoundException('update: Entity not found');
         }
 
         return this.findOne(where);
