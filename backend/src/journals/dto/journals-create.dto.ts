@@ -9,7 +9,7 @@ import {
     IsUrl,
     ValidateNested,
 } from 'class-validator';
-//TODO : 문자열이면서 숫자 범위를 넘지 않는지 확인하는 custom Validator 만들기..?
+// TODO: 문자열이면서 숫자 범위를 넘지 않는지 확인하는 custom Validator 만들기..?
 export class Location {
     @IsNumber()
     lat: string;
