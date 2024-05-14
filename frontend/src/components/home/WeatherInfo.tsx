@@ -12,6 +12,7 @@ import NightCloudy from '@/assets/icons/ic-nightcloudy.svg';
 import DayCloudy from '@/assets/icons/ic-daycloudy.svg';
 import useAddressAndAirgrade from '@/hooks/useAddressAndAirgrade';
 import useSunsetSunrise from '@/hooks/useSunsetSunrise';
+import Spinner from '@/components/common/Spinner';
 
 const statusImage = {
     rain: Rain,
@@ -24,46 +25,52 @@ const statusImage = {
 };
 
 export default function WeatherInfo() {
-    const { weather, isWeatherLoading } = useWeather();
+    const { weather, isWeatherPending } = useWeather();
     const [skyStatus, setSkyStatus] = useState<SkyStatus>();
-    const { airGrade, address } = useAddressAndAirgrade();
-    const { sunset, sunrise, isSunsetSunriseLoading } = useSunsetSunrise();
-
+    const { airGrade, address, isAirGradePending } = useAddressAndAirgrade();
+    const { sunset, sunrise, isSunsetSunrisePending } = useSunsetSunrise();
+    const isLoading = isAirGradePending || isSunsetSunrisePending || isWeatherPending;
     useEffect(() => {
-        if (isSunsetSunriseLoading || isWeatherLoading || !weather) return;
+        if (isSunsetSunrisePending || isWeatherPending || !weather) return;
         const time = getCurrentTime(new Date());
         const skyGrade = getSkyGrade({ ...weather, sunrise, sunset, time });
         setSkyStatus(skyGrade);
-    }, [weather, isSunsetSunriseLoading]);
+    }, [weather, isSunsetSunrisePending]);
     useEffect(() => {}, [address]);
 
     return (
-        <figure className="py-4 flex justify-between ">
-            <div className="flex-col justify-between items-start inline-flex ">
-                <div className="text-black font-bold text-[28px] leading-[42px]">
-                    {weatherStatus(weather?.temperature, weather?.precipitation) ? (
-                        <div>
-                            산책하기 좋은 <br /> 날씨에요
+        <>
+            {isLoading ? (
+                <Spinner className="h-[164px]" />
+            ) : (
+                <figure className="py-4 flex justify-between ">
+                    <div className="flex-col justify-between items-start inline-flex ">
+                        <div className="text-black font-bold text-[28px] leading-[42px]">
+                            {weatherStatus(weather?.temperature, weather?.precipitation) ? (
+                                <div>
+                                    산책하기 좋은 <br /> 날씨에요
+                                </div>
+                            ) : (
+                                <div>
+                                    오늘은 집에서
+                                    <br />
+                                    쉬고 싶어요!
+                                </div>
+                            )}
                         </div>
-                    ) : (
-                        <div>
-                            오늘은 집에서
-                            <br />
-                            쉬고 싶어요!
+                        <div className="pl-1 flex-col justify-between items-start flex">
+                            <p className="text-zinc-500 text-xs font-normal leading-[18px]">위치 : {address}</p>
+                            <div className="text-[#999999] text-xs font-normal leading-[18px]">
+                                대기질 : {getAirStatus(airGrade)}
+                            </div>
                         </div>
-                    )}
-                </div>
-                <div className="pl-1 flex-col justify-between items-start flex">
-                    <p className="text-zinc-500 text-xs font-normal leading-[18px]">위치 : {address}</p>
-                    <div className="text-[#999999] text-xs font-normal leading-[18px]">
-                        대기질 : {getAirStatus(airGrade)}
                     </div>
-                </div>
-            </div>
-            <div className="flex-col justify-start items-center gap-3.5 inline-flex">
-                <img src={statusImage[skyStatus ?? 'dayclear']} alt={skyStatus} />
-                <div className="text-zinc-500 text-xs font-normal leading-[18px]">{`최고:${temperFormat(weather?.maxTemperature)} 최저:${weather?.minTemperature}`}</div>
-            </div>
-        </figure>
+                    <div className="flex-col justify-start items-center gap-3.5 inline-flex">
+                        <img src={statusImage[skyStatus ?? 'dayclear']} alt={skyStatus} />
+                        <div className="text-zinc-500 text-xs font-normal leading-[18px]">{`최고:${temperFormat(weather?.maxTemperature)} 최저:${weather?.minTemperature}`}</div>
+                    </div>
+                </figure>
+            )}
+        </>
     );
 }

@@ -1,6 +1,6 @@
 import { Dog } from '@/models/dog.model';
 import { walkPercentFormat } from '@/utils/format';
-import Ic from '@/assets/icons/ic.svg';
+import Ic from '@/assets/icons/ic-arrow.svg';
 import Avatar from '@/components/common/Avatar';
 import DayIcon from '@/components/home/DayIcon';
 import Walk from '@/assets/icons/walk/walk.svg';
@@ -10,7 +10,7 @@ export interface DogStatistic extends Dog {
     recommendedDailyWalkAmount: number;
     dailyWalkAmount: number;
     weeklyWalks: number[];
-    photoUrl: string;
+    profilePhotoUrl: string;
 }
 
 interface DogCardProps {
