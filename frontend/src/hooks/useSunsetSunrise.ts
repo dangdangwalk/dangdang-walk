@@ -1,10 +1,9 @@
 import { fetchSunsetSunrise } from '@/api/weather';
-import useGeolocation from '@/hooks/useGeolocation';
+import { Position } from '@/models/location.model';
 import { getCurrentDate } from '@/utils/date';
 import { useQuery } from '@tanstack/react-query';
 
-const useSunsetSunrise = () => {
-    const { position } = useGeolocation();
+const useSunsetSunrise = (position: Position | null) => {
     const queryKey = ['sunsetSunrise', position?.lat, position?.lng];
     const {
         data: sunsetSunriseData,
