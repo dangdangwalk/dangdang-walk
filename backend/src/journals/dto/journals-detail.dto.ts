@@ -28,7 +28,7 @@ export class DogInfoForDetail {
     @IsNotEmpty()
     urinesCnt: number;
 
-    //TODO : reflect -metadata 사용하도록 변경
+    // TODO: reflect -metadata 사용하도록 변경
     static getKeysForDogTable() {
         return ['id', 'name', 'profilePhotoUrl'];
     }

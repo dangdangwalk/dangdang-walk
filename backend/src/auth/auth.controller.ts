@@ -1,5 +1,4 @@
 import { Body, Controller, Delete, Get, HttpCode, Post, UseGuards, UseInterceptors } from '@nestjs/common';
-import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
 import { User } from '../users/decorators/user.decorator';
 import { AuthService, OauthData } from './auth.service';
 import { OauthCookies } from './decorators/oauthData.decorator';
@@ -19,10 +18,7 @@ export interface OauthBody {
 @Controller('auth')
 @UseInterceptors(CookieInterceptor)
 export class AuthController {
-    constructor(
-        private authService: AuthService,
-        private logger: WinstonLoggerService
-    ) {}
+    constructor(private authService: AuthService) {}
 
     @Post('login')
     @HttpCode(200)
@@ -35,9 +31,6 @@ export class AuthController {
     @SkipAuthGuard()
     @UseGuards(OauthDataGuard)
     async signup(@OauthCookies() oauthData: OauthData) {
-        this.logger.log(`Signup Request arrived`);
-        this.logger.log(`Signup | Cookie : ${JSON.stringify(oauthData)}`);
-
         return await this.authService.signup(oauthData);
     }
 
