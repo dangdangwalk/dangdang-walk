@@ -38,13 +38,13 @@ export class JournalsController {
         return true;
     }
 
-    @Patch('/:id')
+    @Patch('/:id(\\d+)')
     async updateJournal(@Param('id', ParseIntPipe) journalId: number, @Body() body: UpdateJournalDto) {
         await this.journalsService.updateJournal(journalId, body);
         return true;
     }
 
-    @Delete('/:id')
+    @Delete('/:id(\\d+)')
     async deleteJournal(@Param('id', ParseIntPipe) journalId: number) {
         await this.journalsService.deleteJournal(journalId);
         return true;
