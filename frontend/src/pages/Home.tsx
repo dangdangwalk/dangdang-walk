@@ -1,6 +1,6 @@
 import DogCardList from '@/components/home/DogCardList';
 import WeatherInfo from '@/components/home/WeatherInfo';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/common/Button';
 import { NAV_HEIGHT, TOP_BAR_HEIGHT } from '@/constants/style';
 import Notification from '@/assets/icons/notification.svg';
@@ -10,51 +10,24 @@ import { Dog } from '@/models/dog.model';
 import AvailableDogCheckList from '@/components/home/AvailableDogCheckList';
 import useDogStatistic from '@/hooks/useDogStatistic';
 import { useNavigate } from 'react-router-dom';
+import useWalkAvailabeDog from '@/hooks/useWalkAvailabeDog';
+import Spiner from '@/components/common/Spiner';
 
 export interface AvailableDog extends Dog {
     isChecked: boolean;
 }
-const aDogs: AvailableDog[] = [
-    {
-        id: 1, // 강아지 id
-        name: '덕지', //강아지 이름
-        profilePhotoUrl: 'https://ai.esmplus.com/pixie2665/001.jpg', // 강아지 사진
-        isChecked: false,
-    },
-    {
-        id: 2, // 강아지 id
-        name: '철도', //강아지 이름
-        profilePhotoUrl: 'https://ai.esmplus.com/pixie2665/002.jpg', // 강아지 사진
-        isChecked: false, // 한 주간 산책 체크
-    },
-    {
-        id: 3, // 강아지 id
-        name: '', //강아지 이름
-        profilePhotoUrl: '', // 강아지 사진
-        isChecked: false,
-    },
-];
 function Home() {
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
-    const [availableDogs, setAvailableDogs] = useState<AvailableDog[] | undefined>(aDogs);
+    const [availableDogs, setAvailableDogs] = useState<AvailableDog[] | undefined>([]);
     const { dogs, isDogsLoading } = useDogStatistic();
+    const { availableDogsData, isAvailableDogsLoading, fetchWalkAvailableDogs } = useWalkAvailabeDog();
     const navigate = useNavigate();
 
-    const cancelSelectDogs = () => {
-        setAvailableDogs(
-            availableDogs?.map((d: AvailableDog) => {
-                return {
-                    ...d,
-                    isChecked: false,
-                };
-            })
-        );
-    };
     const handleBottomSheet = () => {
-        setIsDogBottomsheetOpen(!isDogBottomsheetOpen);
-        if (isDogBottomsheetOpen) {
-            cancelSelectDogs();
+        if (!isDogBottomsheetOpen) {
+            fetchWalkAvailableDogs();
         }
+        setIsDogBottomsheetOpen(!isDogBottomsheetOpen);
     };
     const handleToggle = (id: number) => {
         setAvailableDogs(
@@ -62,13 +35,22 @@ function Home() {
         );
     };
     const handleConfirm = () => {
-        cancelSelectDogs();
         setIsDogBottomsheetOpen(false);
         navigate('/walk', {
             state: availableDogs?.length === 1 ? availableDogs : availableDogs?.filter((d) => d.isChecked),
         });
     };
-    if (isDogsLoading) return <div>Loading...</div>;
+
+    useEffect(() => {
+        console.log(availableDogsData);
+        if (!availableDogsData) return;
+        setAvailableDogs(
+            availableDogsData?.map((d) => {
+                return { ...d, isChecked: false };
+            })
+        );
+    }, [availableDogsData]);
+    if (isDogsLoading) return <Spiner />;
     return (
         <>
             <Topbar className="bg-neutral-50 ">
@@ -101,9 +83,13 @@ function Home() {
             <BottomSheet isOpen={isDogBottomsheetOpen} onClose={handleBottomSheet}>
                 <BottomSheet.Header> 강아지 선책</BottomSheet.Header>
                 <BottomSheet.Body>
-                    {availableDogs?.map((dog) => (
-                        <AvailableDogCheckList dog={dog} key={dog.id} onToggle={handleToggle} />
-                    ))}
+                    {isAvailableDogsLoading ? (
+                        <Spiner />
+                    ) : (
+                        availableDogs?.map((dog) => (
+                            <AvailableDogCheckList dog={dog} key={dog.id} onToggle={handleToggle} />
+                        ))
+                    )}
                 </BottomSheet.Body>
                 <BottomSheet.ConfirmButton
                     onConfirm={handleConfirm}
