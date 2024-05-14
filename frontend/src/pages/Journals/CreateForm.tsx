@@ -2,6 +2,16 @@ import Cancel from '@/assets/icons/ic-top-cancel.svg';
 import Avatar from '@/components/common/Avatar';
 import { Button } from '@/components/common/Button';
 import { Divider } from '@/components/common/Divider';
+import {
+    Modal,
+    ModalAction,
+    ModalCancel,
+    ModalContent,
+    ModalDescription,
+    ModalFooter,
+    ModalHeader,
+    ModalTitle,
+} from '@/components/common/Modal';
 import Topbar from '@/components/common/Topbar';
 import WalkInfo from '@/components/walk/WalkInfo';
 import { useRef } from 'react';
@@ -90,6 +100,18 @@ export default function CreateForm() {
                     <span className="-translate-y-[5px]">저장하기</span>
                 </Button>
             </div>
+            <Modal>
+                <ModalContent>
+                    <ModalHeader>
+                        <ModalTitle>산책기록삭제</ModalTitle>
+                        <ModalDescription>오늘한 산책을 기록에서 삭제할까요?</ModalDescription>
+                    </ModalHeader>
+                    <ModalFooter>
+                        <ModalCancel>취소</ModalCancel>
+                        <ModalAction>삭제하기</ModalAction>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
         </>
     );
 }
