@@ -35,7 +35,7 @@ export class AuthGuard implements CanActivate {
         }
         try {
             const payload = this.tokenService.verify(token) as AccessTokenPayload;
-            this.logger.log(`Payload : ${Object.st}`);
+            this.logger.log(`Payload : ${JSON.stringify(payload)}`);
             const isValid = await this.authService.validateAccessToken(payload.userId);
 
             request.user = payload;
