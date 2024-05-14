@@ -1,4 +1,5 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+import { JsonWebTokenError, TokenExpiredError } from '@nestjs/jwt';
 import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
 import { AuthService } from '../auth.service';
 import { RefreshTokenPayload, TokenService } from '../token/token.service';
@@ -16,11 +17,9 @@ export class RefreshTokenGuard implements CanActivate {
         const token = request.cookies['refreshToken'];
 
         if (!token) {
-            const e = new UnauthorizedException();
-
-            this.logger.error(`No refreshToken inside cookie`, e.stack ?? 'No Stack');
-
-            throw e;
+            const error = new UnauthorizedException('Refresh token not found in cookies.');
+            this.logger.error(`No refreshToken inside cookie.`, error.stack ?? 'No Stack');
+            throw error;
         }
 
         try {
@@ -30,12 +29,14 @@ export class RefreshTokenGuard implements CanActivate {
             request.user = payload;
 
             return isValid;
-        } catch {
-            const e = new UnauthorizedException();
-
-            this.logger.error(`Invalid RefreshToken`, e.stack ?? 'No Stack');
-
-            throw e;
+        } catch (error) {
+            if (error instanceof TokenExpiredError || error instanceof JsonWebTokenError) {
+                throw error;
+            } else {
+                error = new UnauthorizedException('No matching user found.');
+                this.logger.error(`No matching user found`, error.stack ?? 'No stack');
+                throw error;
+            }
         }
     }
 }
