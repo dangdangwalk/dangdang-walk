@@ -13,11 +13,8 @@ import Walk from '@/pages/Walk';
 import OauthCallback from '@/pages/OauthCallback';
 import { QueryClientProvider } from '@tanstack/react-query';
 import queryClient from '@/api/queryClient';
-<<<<<<< HEAD
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-=======
 import Camera from '@/pages/Camera';
->>>>>>> 409f26b (feat: add camera page)
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 const router = createBrowserRouter([
     {
         path: '/',
