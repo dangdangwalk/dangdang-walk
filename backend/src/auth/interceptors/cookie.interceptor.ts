@@ -11,6 +11,25 @@ export class CookieInterceptor implements NestInterceptor {
 
     private readonly isProduction = this.configService.get<string>('NODE_ENV') === 'prod';
 
+    private readonly refreshCookieOptions: CookieOptions = {
+        httpOnly: true,
+        sameSite: this.isProduction ? 'none' : 'lax',
+        secure: this.isProduction,
+        maxAge: TOKEN_LIFETIME_MAP.refresh.maxAge,
+    };
+
+    private readonly accessCookieOptions: CookieOptions = {
+        sameSite: this.isProduction ? 'none' : 'lax',
+        secure: this.isProduction,
+        maxAge: TOKEN_LIFETIME_MAP.access.maxAge,
+    };
+
+    private readonly sessionCookieOptions: CookieOptions = {
+        httpOnly: true,
+        sameSite: this.isProduction ? 'none' : 'lax',
+        secure: this.isProduction,
+    };
+
     intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any> | Promise<Observable<any>> {
         return next.handle().pipe(
             map((data) => {
@@ -39,50 +58,31 @@ export class CookieInterceptor implements NestInterceptor {
     }
 
     private setAuthCookies(response: Response, { refreshToken }: AuthData): void {
-        const refreshCookieOptions: CookieOptions = {
-            httpOnly: true,
-            sameSite: this.isProduction ? 'none' : 'lax',
-            secure: this.isProduction,
-            maxAge: TOKEN_LIFETIME_MAP.refresh.maxAge,
-        };
-
-        const accessCookieOptions: CookieOptions = {
-            sameSite: this.isProduction ? 'none' : 'lax',
-            secure: this.isProduction,
-            maxAge: TOKEN_LIFETIME_MAP.access.maxAge,
-        };
-
-        response.cookie('refreshToken', refreshToken, refreshCookieOptions);
-        response.cookie('isLoggedIn', true, accessCookieOptions);
-        response.cookie('expiresIn', TOKEN_LIFETIME_MAP.access.maxAge, accessCookieOptions);
+        response.cookie('refreshToken', refreshToken, this.refreshCookieOptions);
+        response.cookie('isLoggedIn', true, this.accessCookieOptions);
+        response.cookie('expiresIn', TOKEN_LIFETIME_MAP.access.maxAge, this.accessCookieOptions);
     }
 
     private setOauthCookies(
         response: Response,
         { oauthAccessToken, oauthRefreshToken, oauthId, provider }: OauthData
     ): void {
-        const sessionCookieOptions: CookieOptions = {
-            httpOnly: true,
-            sameSite: this.isProduction ? 'none' : 'lax',
-            secure: this.isProduction,
-        };
-
-        response.cookie('oauthAccessToken', oauthAccessToken, sessionCookieOptions);
-        response.cookie('oauthRefreshToken', oauthRefreshToken, sessionCookieOptions);
-        response.cookie('oauthId', oauthId, sessionCookieOptions);
-        response.cookie('provider', provider, sessionCookieOptions);
+        response.cookie('oauthAccessToken', oauthAccessToken, this.sessionCookieOptions);
+        response.cookie('oauthRefreshToken', oauthRefreshToken, this.sessionCookieOptions);
+        response.cookie('oauthId', oauthId, this.sessionCookieOptions);
+        response.cookie('provider', provider, this.sessionCookieOptions);
     }
 
     private clearAuthCookies(response: Response): void {
-        response.clearCookie('refreshToken');
-        response.clearCookie('isLoggedIn');
-        response.clearCookie('expiresIn');
+        response.clearCookie('refreshToken', this.refreshCookieOptions);
+        response.clearCookie('isLoggedIn', this.accessCookieOptions);
+        response.clearCookie('expiresIn', this.accessCookieOptions);
     }
 
     private clearOauthCookies(response: Response): void {
-        response.clearCookie('oauthAccessToken');
-        response.clearCookie('oauthRefreshToken');
-        response.clearCookie('oauthId');
-        response.clearCookie('provider');
+        response.clearCookie('oauthAccessToken', this.sessionCookieOptions);
+        response.clearCookie('oauthRefreshToken', this.sessionCookieOptions);
+        response.clearCookie('oauthId', this.sessionCookieOptions);
+        response.clearCookie('provider', this.sessionCookieOptions);
     }
 }
