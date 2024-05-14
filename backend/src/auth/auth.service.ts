@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
 import { Users } from '../users/users.entity';
 import { UsersService } from '../users/users.service';
 import { OauthBody, OauthProvider } from './auth.controller';
@@ -28,7 +29,8 @@ export class AuthService {
         private readonly googleService: GoogleService,
         private readonly kakaoService: KakaoService,
         private readonly naverService: NaverService,
-        private readonly configService: ConfigService
+        private readonly configService: ConfigService,
+        private readonly logger: WinstonLoggerService
     ) {}
 
     private readonly redirectURI = this.configService.get<string>('CORS_ORIGIN') + '/callback';
@@ -37,6 +39,7 @@ export class AuthService {
         const { oauthAccessToken, oauthRefreshToken, oauthId } = await this.getOauthData(authorizeCode, provider);
 
         const refreshToken = this.tokenService.signRefreshToken(oauthId, provider);
+        this.logger.log(`Login | refreshToken : ${refreshToken}`);
 
         try {
             const { id: userId } = await this.usersService.updateAndFindOne(
@@ -45,12 +48,14 @@ export class AuthService {
             );
 
             const accessToken = this.tokenService.signAccessToken(userId, provider);
+            this.logger.log(`Login | accessToken : ${accessToken}`);
 
             return { accessToken, refreshToken };
         } catch (error) {
             if (error instanceof NotFoundException) {
                 return { oauthAccessToken, oauthRefreshToken, oauthId, provider };
             }
+            this.logger.error(`Login error`, error.stack ?? 'No stack');
 
             throw error;
         }
@@ -58,6 +63,7 @@ export class AuthService {
 
     async signup({ oauthAccessToken, oauthRefreshToken, oauthId, provider }: OauthData): Promise<AuthData> {
         const refreshToken = this.tokenService.signRefreshToken(oauthId, provider);
+        this.logger.log(`signup | refreshToken : ${refreshToken}`);
 
         const { id: userId } = await this.usersService.createIfNotExists(
             oauthId,
@@ -67,12 +73,14 @@ export class AuthService {
         );
 
         const accessToken = this.tokenService.signAccessToken(userId, provider);
+        this.logger.log(`signup | signAccessToken: ${accessToken}`);
 
         return { accessToken, refreshToken };
     }
 
     async logout({ userId, provider }: AccessTokenPayload): Promise<void> {
         const { oauthAccessToken } = await this.usersService.findOne({ id: userId });
+        this.logger.log(`logout | oauthAccessToken: ${oauthAccessToken}`);
 
         if (provider === 'kakao') {
             await this.kakaoService.requestTokenExpiration(oauthAccessToken);
@@ -121,7 +129,9 @@ export class AuthService {
 
     async validateAccessToken(userId: number): Promise<boolean> {
         try {
-            await this.usersService.findOne({ id: userId });
+            const result = await this.usersService.findOne({ id: userId });
+            this.logger.log(`Validate Access Token find User result : ${result}`);
+
             return true;
         } catch (error) {
             return false;
