@@ -59,7 +59,7 @@ export class CookieInterceptor implements NestInterceptor {
         response: Response,
         { oauthAccessToken, oauthRefreshToken, oauthId, provider }: OauthData
     ): void {
-        const sessionCookieOptions: CookieOptions = { httpOnly: true, secure: this.isProduction };
+        const sessionCookieOptions: CookieOptions = { httpOnly: true, secure: false }; //this.isProduction };
 
         response.cookie('oauthAccessToken', oauthAccessToken, sessionCookieOptions);
         response.cookie('oauthRefreshToken', oauthRefreshToken, sessionCookieOptions);
