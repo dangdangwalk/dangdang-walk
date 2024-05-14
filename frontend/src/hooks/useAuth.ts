@@ -83,10 +83,7 @@ const useLogout = (mutationOptions?: UseMutationCustomOptions) => {
         mutationFn: requestLogout,
         onSuccess: () => {
             storeLogout();
-        },
-        onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: [queryKeys.AUTH] });
-            storeLogout();
+            queryClient.resetQueries({ queryKey: [queryKeys.AUTH] });
         },
         ...mutationOptions,
     });
@@ -98,6 +95,6 @@ export const useAuth = () => {
     const logoutMutation = useLogout();
     const signupMustation = useSignup();
     const isLoggedIn = isStoreLogin;
-    useGetRefreshToken();
-    return { loginMutation, isLoggedIn, logoutMutation, signupMustation };
+    const refreshTokenQuery = useGetRefreshToken();
+    return { loginMutation, isLoggedIn, logoutMutation, signupMustation, refreshTokenQuery };
 };
