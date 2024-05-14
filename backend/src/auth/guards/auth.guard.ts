@@ -1,5 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { JsonWebTokenError, TokenExpiredError } from '@nestjs/jwt';
 import { Request } from 'express';
 import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
 import { AuthService } from '../auth.service';
@@ -28,23 +29,28 @@ export class AuthGuard implements CanActivate {
 
         const token = this.extractTokenFromHeader(request);
         if (!token) {
-            const e = new UnauthorizedException('There is no token in header');
-            this.logger.error(`No token in header`, e.stack ?? 'No stack');
-
-            throw e;
+            const error = new UnauthorizedException('Token does not exist in Authorization header.');
+            this.logger.error(`Authorization header is missing or empty.`, error.stack ?? 'No stack');
+            throw error;
         }
+
         try {
             const payload = this.tokenService.verify(token) as AccessTokenPayload;
-            this.logger.log(`Payload : ${JSON.stringify(payload)}`);
+            this.logger.log(`Payload: ${JSON.stringify(payload)}`);
+
             const isValid = await this.authService.validateAccessToken(payload.userId);
 
             request.user = payload;
 
             return isValid;
-        } catch {
-            const e = new UnauthorizedException('There is no matched user');
-            this.logger.error(`No user matched`, e.stack ?? 'No stack');
-            throw new UnauthorizedException();
+        } catch (error) {
+            if (error instanceof TokenExpiredError || error instanceof JsonWebTokenError) {
+                throw error;
+            } else {
+                error = new UnauthorizedException('No matching user found.');
+                this.logger.error(`No matching user found`, error.stack ?? 'No stack');
+                throw error;
+            }
         }
     }
 

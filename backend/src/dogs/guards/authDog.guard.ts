@@ -17,9 +17,9 @@ export class AuthDogGuard implements CanActivate {
         const owned = await this.usersService.checkDogOwnership(userId, dogId);
 
         if (!owned) {
-            const e = new ForbiddenException(`User ${userId} does not own the dog ${dogId}`);
-            this.logger.error(`User ${userId} does not own the dog ${dogId}`, e.stack ?? 'No stack');
-            throw e;
+            const error = new ForbiddenException(`User ${userId} does not own the dog ${dogId}`);
+            this.logger.error(`User ${userId} does not own the dog ${dogId}`, error.stack ?? 'No stack');
+            throw error;
         }
 
         return true;

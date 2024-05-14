@@ -44,8 +44,9 @@ export class DogsService {
             const dog = await this.dogsRepository.create(newDog);
 
             return this.usersDogsService.create({ userId, dogId: dog.id });
-        } catch (e) {
-            this.logger.error(`Unknown breed`, e.stack ?? 'No stack');
+        } catch (error) {
+            this.logger.error(`Unknown breed.`, error.stack ?? 'No stack');
+            throw error;
         }
     }
 
@@ -165,9 +166,11 @@ export class DogsService {
             dailyWalkAmount.length !== length ||
             weeklyWalks.length !== length
         ) {
-            const e = new NotFoundException(
-                `Data not matched - Check dogs / breed / dog_walk_day / daily_walk_time table for dogId : ${ownDogIds} `
+            const error = new NotFoundException(
+                `Data not matched - Check dogs / breed / dog_walk_day / daily_walk_time table for dogId: ${ownDogIds}.`
             );
+            this.logger.error(`Data not matched for dogId-${ownDogIds}.`, error.stack ?? 'No stack');
+            throw error;
         }
 
         return this.makeStatisticData(dogProfiles, recommendedDailyWalkAmount, dailyWalkAmount, weeklyWalks);
