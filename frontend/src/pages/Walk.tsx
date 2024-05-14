@@ -11,12 +11,15 @@ import { DEFAULT_WALK_MET, DEFAULT_WEIGHT } from '@/constants/walk';
 
 import DogFeceAndUrineCheckList from '@/components/walk/DogFeceAndUrineCheckList';
 import StopToast from '@/components/walk/StopToast';
+import { useLocation } from 'react-router-dom';
 
 export default function Walk() {
+    const location = useLocation();
+    const dogData = location.state;
     const { distance, position: startPosition, currentPosition, stopGeo, routes } = useGeolocation(true);
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
     const { walkingDogs, toggleFeceCheck, toggleUrineCheck, saveFecesAndUriens, cancelFecesAndUriens } =
-        useWalkingDogs();
+        useWalkingDogs(dogData);
     const [calories, setCalories] = useState<number>(0);
     const { duration, isStart: isWalk, stopClock, startClock } = useClock();
     const timeoutRef = useRef<number | null>(null);

@@ -1,8 +1,12 @@
 import { TOP_BAR_HEIGHT } from '@/constants/style';
+import { cn } from '@/utils/tailwind-class';
 
-export default function Topbar({ children }: { children: React.ReactNode }) {
+export default function Topbar({ children, className }: { children: React.ReactNode; className?: string }) {
     return (
-        <header className="flex w-full justify-between items-center px-2" style={{ height: TOP_BAR_HEIGHT }}>
+        <header
+            className={cn(`flex w-full justify-between items-center px-2 ${className}`)}
+            style={{ height: TOP_BAR_HEIGHT }}
+        >
             {children}
         </header>
     );
