@@ -1,5 +1,6 @@
 import { WalkingDog } from '@/models/dog.model';
 import { Position } from '@/models/location.model';
+import { AvailableDog } from '@/pages/Home';
 import { useState } from 'react';
 
 const dogs: WalkingDog[] = [
@@ -32,8 +33,14 @@ const dogs: WalkingDog[] = [
     },
 ];
 
-const useWalkingDogs = () => {
-    const [walkingDogs, setWalkingDogs] = useState<WalkingDog[]>(dogs);
+const useWalkingDogs = (dogData?: AvailableDog[]) => {
+    const [walkingDogs, setWalkingDogs] = useState<WalkingDog[]>(
+        dogData
+            ? dogData.map((d) => {
+                  return { ...d, isUrineChecked: false, isFeceChecked: false, fecesLocations: [], urineLocations: [] };
+              })
+            : dogs
+    );
 
     const toggleUrineCheck = (id: number) => {
         setWalkingDogs(
