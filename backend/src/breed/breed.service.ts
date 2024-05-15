@@ -21,7 +21,7 @@ export class BreedService {
             throw new NotFoundException();
         }
         return foundBreed.map((curBreed: Breed) => {
-            return curBreed.activity;
+            return curBreed.recommendedWalkAmount;
         });
     }
 }
