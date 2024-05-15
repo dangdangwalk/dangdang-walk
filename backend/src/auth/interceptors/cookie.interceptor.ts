@@ -15,17 +15,15 @@ export class CookieInterceptor implements NestInterceptor {
 
     private readonly isProduction = this.configService.get<string>('NODE_ENV') === 'prod';
 
-    private readonly refreshCookieOptions: CookieOptions = {
-        httpOnly: true,
-        sameSite: this.isProduction ? 'none' : 'lax',
-        secure: this.isProduction,
-        maxAge: TOKEN_LIFETIME_MAP.refresh.maxAge,
-    };
-
     private readonly sessionCookieOptions: CookieOptions = {
         httpOnly: true,
         sameSite: this.isProduction ? 'none' : 'lax',
         secure: this.isProduction,
+    };
+
+    private readonly refreshCookieOptions: CookieOptions = {
+        ...this.sessionCookieOptions,
+        maxAge: TOKEN_LIFETIME_MAP.refresh.maxAge,
     };
 
     intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any> | Promise<Observable<any>> {
