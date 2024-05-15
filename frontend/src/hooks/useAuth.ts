@@ -17,8 +17,6 @@ const useLogin = (mutationOptions?: UseMutationCustomOptions) => {
         mutationFn: requestLogin,
         onSuccess: ({ accessToken }: ResponseToken) => {
             const url = getStorage(storageKeys.REDIRECT_URI) || '';
-            console.log(accessToken);
-
             storeLogin(accessToken);
             navigate(url);
         },
@@ -54,8 +52,6 @@ const useSignup = (mutationOptions?: UseMutationCustomOptions) => {
 const useGetRefreshToken = () => {
     const { storeLogin } = useAuthStore();
     const expiresIn = getCookie(cookieKeys.EXPIRES_IN);
-    console.log('expiresIn : ', expiresIn);
-
     const { isSuccess, isError, data } = useQuery({
         queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN],
         queryFn: getAccessToken,
@@ -97,8 +93,6 @@ export const useAuth = () => {
     const logoutMutation = useLogout();
     const signupMustation = useSignup();
     const isLoggedIn = isStoreLogin;
-    console.log('isLoggedIn : ', isLoggedIn);
-
     const refreshTokenQuery = useGetRefreshToken();
     return { loginMutation, isLoggedIn, logoutMutation, signupMustation, refreshTokenQuery };
 };
