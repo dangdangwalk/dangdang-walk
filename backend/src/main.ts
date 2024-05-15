@@ -12,12 +12,8 @@ async function bootstrap() {
     app.useLogger(new WinstonLoggerService());
 
     app.enableCors({
-        origin: [
-            'http://localhost:3000',
-            'http://localhost:8080',
-            'https://dangdang-walk.vercel.app'
-        ],
-        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+        origin: ['http://localhost:3000', 'http://localhost:8080', 'https://dangdang-walk.vercel.app'],
+        methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
         allowedHeaders: ['Content-Type', 'Accept', 'Authorization'],
         credentials: true,
     });

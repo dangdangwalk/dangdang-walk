@@ -22,12 +22,6 @@ export class CookieInterceptor implements NestInterceptor {
         maxAge: TOKEN_LIFETIME_MAP.refresh.maxAge,
     };
 
-    private readonly accessCookieOptions: CookieOptions = {
-        // sameSite: this.isProduction ? 'none' : 'lax',
-        // secure: this.isProduction,
-        maxAge: TOKEN_LIFETIME_MAP.access.maxAge,
-    };
-
     private readonly sessionCookieOptions: CookieOptions = {
         httpOnly: true,
         sameSite: this.isProduction ? 'none' : 'lax',
@@ -47,11 +41,7 @@ export class CookieInterceptor implements NestInterceptor {
                 if ('accessToken' in data && 'refreshToken' in data) {
                     this.setAuthCookies(response, data);
                     this.clearOauthCookies(response);
-                    return {
-                        accessToken: data.accessToken,
-                        isLoggedIn: true,
-                        expiresIn: TOKEN_LIFETIME_MAP.access.maxAge,
-                    };
+                    return { accessToken: data.accessToken };
                 } else if (
                     'oauthAccessToken' in data &&
                     'oauthRefreshToken' in data &&
@@ -70,8 +60,6 @@ export class CookieInterceptor implements NestInterceptor {
 
     private setAuthCookies(response: Response, { refreshToken }: AuthData): void {
         response.cookie('refreshToken', refreshToken, this.refreshCookieOptions);
-        response.cookie('isLoggedIn', true, this.accessCookieOptions);
-        response.cookie('expiresIn', TOKEN_LIFETIME_MAP.access.maxAge, this.accessCookieOptions);
     }
 
     private setOauthCookies(
@@ -86,8 +74,6 @@ export class CookieInterceptor implements NestInterceptor {
 
     private clearAuthCookies(response: Response): void {
         response.clearCookie('refreshToken', this.refreshCookieOptions);
-        response.clearCookie('isLoggedIn', this.accessCookieOptions);
-        response.clearCookie('expiresIn', this.accessCookieOptions);
     }
 
     private clearOauthCookies(response: Response): void {
