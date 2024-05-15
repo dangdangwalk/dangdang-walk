@@ -40,15 +40,9 @@ const useWalkingDogs = () => {
             urineLocations: dog.isUrineChecked ? [...dog.urineLocations, { lat, lng }] : dog.urineLocations,
             isFeceChecked: false,
             isUrineChecked: false,
-            ags: 'dogs',
         }));
-        console.log('update : ', updatedDogs);
         setWalkingDogs(updatedDogs);
     };
-
-    useEffect(() => {
-        console.log('walk : ', walkingDogs);
-    }, [walkingDogs]);
 
     const cancelCheckedAll = () => {
         if (!walkingDogs) return;
