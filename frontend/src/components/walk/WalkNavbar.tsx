@@ -23,7 +23,6 @@ export default function WalkNavbar({ onOpen, onStop }: WalkNavbarProps) {
     };
 
     const handleMouseUp = () => {
-        console.log(isLongPress);
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
             if (isLongPress) {
@@ -37,10 +36,6 @@ export default function WalkNavbar({ onOpen, onStop }: WalkNavbarProps) {
     };
 
     const handleTouchStart = (e: TouchEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-        e.cancelable = true;
-
         timeoutRef.current = window.setTimeout(() => {
             setIsLongPress(true);
         }, LONG_CLICK_TIME);

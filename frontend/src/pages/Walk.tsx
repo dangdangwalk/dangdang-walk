@@ -18,7 +18,7 @@ import { getStorage, removeStorage, setStorage } from '@/utils/storage';
 import { WalkingDog } from '@/models/dog.model';
 import { Position } from '@/models/location.model';
 import { storageKeys } from '@/constants';
-import { walkStartRequest } from '@/api/walk';
+import { walkStartRequest, walkStopRequest } from '@/api/walk';
 
 interface DogWalkData {
     dogs: WalkingDog[];
@@ -57,8 +57,8 @@ export default function Walk() {
 
     const stopWalk = async (dogs: WalkingDog[] | null) => {
         if (!dogs) return;
-        const ok = await walkStartRequest(dogs.map((d) => d.id));
-        if (!ok) {
+        const ok = await walkStopRequest(dogs.map((d) => d.id));
+        if (ok) {
             stopClock();
             stopGeo();
             removeStorage(storageKeys.DOGS);
@@ -74,9 +74,12 @@ export default function Walk() {
             showStopAlert();
         }
     };
-    useEffect(() => {
-        console.log(isWalk);
-    }, [isWalk]);
+    const handleWalkStart = (dogData: DogWalkData) => {
+        setDogs(dogData.dogs);
+        startClock(dogData.startedAt);
+        startGeo(dogData.distance, dogData.routes);
+    };
+
     useEffect(() => {
         setCalories(Math.round((DEFAULT_WALK_MET * DEFAULT_WEIGHT * duration) / 3600));
     }, [duration]);
@@ -100,15 +103,20 @@ export default function Walk() {
             navigate('/');
             return;
         }
-        const requstStart = async () => {
-            const ok = await walkStartRequest(dogData.dogs.map((d) => d.id));
+        const requstWalkStart = async (data: DogWalkData) => {
+            const ok = await walkStartRequest(data.dogs.map((d) => d.id));
             if (ok) {
-                setDogs(dogData.dogs);
-                startClock(dogData.startedAt);
-                startGeo(dogData.distance, dogData.routes);
+                handleWalkStart(data);
+            } else {
+                navigate('/');
+                removeStorage(storageKeys.DOGS);
             }
         };
-        requstStart();
+        if (getStorage(storageKeys.DOGS)) {
+            handleWalkStart(dogData);
+        } else {
+            requstWalkStart(dogData);
+        }
     }, []);
 
     return (
