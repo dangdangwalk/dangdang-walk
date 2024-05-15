@@ -11,7 +11,7 @@ interface StoreState {
 }
 
 export const useAuthStore = create<StoreState>((set) => ({
-    isStoreLogin: getCookie(cookieKeys.IS_LOGGED_IN),
+    isStoreLogin: getCookie(cookieKeys.IS_LOGGED_IN) ? true : false,
     storeLogin: (token: string) => {
         setHeader(tokenKeys.AUTHORIZATION, `Bearer ${token}`);
         set({ isStoreLogin: getCookie(cookieKeys.IS_LOGGED_IN) });
