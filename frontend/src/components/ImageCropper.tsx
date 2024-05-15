@@ -120,25 +120,12 @@ export default function ImageCropper({
                             ref={imgRef}
                             src={prevImg}
                             alt="Upload"
-                            style={{ height: '100%', maxHeight: '86vh' }}
+                            style={{ height: '100%', maxHeight: '75vh' }}
                             onLoad={(event) => onImageLoad(event)}
                             className="w-full h-full"
                         />
                     </ReactCrop>
                 </div>
-            )}
-            {crop && (
-                <canvas
-                    ref={previewCanvasRef}
-                    className=" fixed"
-                    style={{
-                        display: 'none',
-                        border: '1px solid black',
-                        objectFit: 'contain',
-                        width: 120,
-                        height: 120,
-                    }}
-                />
             )}
             <div>
                 <Button className="w-full" color="primary" rounded="none" onClick={handleCrop}>
