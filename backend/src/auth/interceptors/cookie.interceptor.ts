@@ -14,28 +14,24 @@ export class CookieInterceptor implements NestInterceptor {
     ) {}
 
     private readonly isProduction = this.configService.get<string>('NODE_ENV') === 'prod';
-    private readonly cookieDomain = this.isProduction ? '.dangdang-walk.vercel.app' : 'localhost';
 
     private readonly refreshCookieOptions: CookieOptions = {
         httpOnly: true,
         sameSite: this.isProduction ? 'none' : 'lax',
         secure: this.isProduction,
         maxAge: TOKEN_LIFETIME_MAP.refresh.maxAge,
-        domain: this.cookieDomain,
     };
 
     private readonly accessCookieOptions: CookieOptions = {
         sameSite: this.isProduction ? 'none' : 'lax',
         secure: this.isProduction,
         maxAge: TOKEN_LIFETIME_MAP.access.maxAge,
-        domain: this.cookieDomain,
     };
 
     private readonly sessionCookieOptions: CookieOptions = {
         httpOnly: true,
         sameSite: this.isProduction ? 'none' : 'lax',
         secure: this.isProduction,
-        domain: this.cookieDomain,
     };
 
     intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any> | Promise<Observable<any>> {
@@ -51,7 +47,11 @@ export class CookieInterceptor implements NestInterceptor {
                 if ('accessToken' in data && 'refreshToken' in data) {
                     this.setAuthCookies(response, data);
                     this.clearOauthCookies(response);
-                    return { accessToken: data.accessToken };
+                    return {
+                        accessToken: data.accessToken,
+                        isLoggedIn: true,
+                        expiresIn: TOKEN_LIFETIME_MAP.access.maxAge,
+                    };
                 } else if (
                     'oauthAccessToken' in data &&
                     'oauthRefreshToken' in data &&
