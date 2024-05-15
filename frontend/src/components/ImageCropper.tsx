@@ -122,7 +122,6 @@ export default function ImageCropper({
                             alt="Upload"
                             style={{ height: '100%', maxHeight: '75vh' }}
                             onLoad={(event) => onImageLoad(event)}
-                            className="w-full"
                         />
                     </ReactCrop>
                 </div>
