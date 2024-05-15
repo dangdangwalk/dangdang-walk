@@ -14,7 +14,7 @@ export class CookieInterceptor implements NestInterceptor {
     ) {}
 
     private readonly isProduction = this.configService.get<string>('NODE_ENV') === 'prod';
-    private readonly cookieDomain = this.isProduction ? 'dangdang-walk.vercel.app' : 'localhost';
+    private readonly cookieDomain = this.isProduction ? '.dangdang-walk.vercel.app' : 'localhost';
 
     private readonly refreshCookieOptions: CookieOptions = {
         httpOnly: true,
