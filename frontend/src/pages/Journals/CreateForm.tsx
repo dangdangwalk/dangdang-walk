@@ -13,6 +13,7 @@ import {
     ModalTitle,
 } from '@/components/common/Modal';
 import Topbar from '@/components/common/Topbar';
+import ExcrementDisplay from '@/components/journals/ExcrementDisplay';
 import WalkInfo from '@/components/walk/WalkInfo';
 import useToast from '@/hooks/useToast';
 import { useRef, useState } from 'react';
@@ -113,10 +114,10 @@ export default function CreateForm() {
                             {FAKE_EXCREMENTS.map((excrement) => (
                                 <div key={excrement.dogId} className="flex justify-between">
                                     <Avatar />
-                                    <span>
-                                        <span>대변 2</span>
-                                        <span>소변 3</span>
-                                    </span>
+                                    <ExcrementDisplay
+                                        fecesCount={excrement.fecesLocations.length}
+                                        urineCount={excrement.urineLocations.length}
+                                    />
                                 </div>
                             ))}
                         </div>
