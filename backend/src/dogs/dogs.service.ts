@@ -32,7 +32,7 @@ export class DogsService {
         try {
             const { breed: breedName, ...otherAttributes } = dogDto;
 
-            const breed = await this.breedService.findOne({ name: breedName });
+            const breed = await this.breedService.findOne({ koreanName: breedName });
 
             const newDog = new Dogs({
                 breed,
@@ -70,7 +70,7 @@ export class DogsService {
     async updateDog(dogId: number, dogDto: DogDto) {
         const { breed: breedName, ...otherAttributes } = dogDto;
 
-        const breed = await this.breedService.findOne({ name: breedName });
+        const breed = await this.breedService.findOne({ koreanName: breedName });
 
         return this.update({ id: dogId }, { breed, ...otherAttributes });
     }
