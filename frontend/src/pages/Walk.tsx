@@ -14,9 +14,11 @@ import StopToast from '@/components/walk/StopToast';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useToast from '@/hooks/useToast';
 import useStopAlert from '@/hooks/useStopAlert';
-import { getStorage, setStorage } from '@/utils/storage';
+import { getStorage, removeStorage, setStorage } from '@/utils/storage';
 import { WalkingDog } from '@/models/dog.model';
 import { Position } from '@/models/location.model';
+import { storageKeys } from '@/constants';
+import { walkStartRequest } from '@/api/walk';
 
 interface DogWalkData {
     dogs: WalkingDog[];
@@ -31,7 +33,6 @@ export default function Walk() {
 
     const { walkingDogs, toggleFeceCheck, toggleUrineCheck, saveFecesAndUriens, cancelCheckedAll, setDogs } =
         useWalkingDogs();
-
     const { duration, isStart: isWalk, stopClock, startClock, startedAt } = useStopWatch();
     const { distance, position: startPosition, currentPosition, stopGeo, routes, startGeo } = useGeolocation();
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
@@ -54,20 +55,28 @@ export default function Walk() {
         show('용변기록이 저장되었습니다 :)');
     };
 
-    const stopWalk = () => {
-        stopClock();
-        stopGeo();
+    const stopWalk = async (dogs: WalkingDog[] | null) => {
+        if (!dogs) return;
+        const ok = await walkStartRequest(dogs.map((d) => d.id));
+        if (!ok) {
+            stopClock();
+            stopGeo();
+            removeStorage(storageKeys.DOGS);
+            navigate('/journals/create', { state: { dogs, distance, duration, calories, startedAt, routes } });
+        }
     };
 
     const handleWalkStop = (isStop: boolean) => {
         if (!isWalk) return;
         if (isStop) {
-            stopWalk();
+            stopWalk(walkingDogs);
         } else {
             showStopAlert();
         }
     };
-
+    useEffect(() => {
+        console.log(isWalk);
+    }, [isWalk]);
     useEffect(() => {
         setCalories(Math.round((DEFAULT_WALK_MET * DEFAULT_WEIGHT * duration) / 3600));
     }, [duration]);
@@ -80,18 +89,26 @@ export default function Walk() {
             distance: distance,
             routes: routes,
         };
-        setStorage('dogs', JSON.stringify(walkDogData));
+        setStorage(storageKeys.DOGS, JSON.stringify(walkDogData));
     }, [walkingDogs]);
 
     useEffect(() => {
-        const dogData = (getStorage('dogs') ? JSON.parse(getStorage('dogs') ?? '') : location.state) as DogWalkData;
+        const dogData = (
+            getStorage(storageKeys.DOGS) ? JSON.parse(getStorage(storageKeys.DOGS) ?? '') : location.state
+        ) as DogWalkData;
         if (!dogData) {
             navigate('/');
             return;
         }
-        setDogs(dogData.dogs);
-        startClock(dogData.startedAt);
-        startGeo(dogData.distance, dogData.routes);
+        const requstStart = async () => {
+            const ok = await walkStartRequest(dogData.dogs.map((d) => d.id));
+            if (ok) {
+                setDogs(dogData.dogs);
+                startClock(dogData.startedAt);
+                startGeo(dogData.distance, dogData.routes);
+            }
+        };
+        requstStart();
     }, []);
 
     return (

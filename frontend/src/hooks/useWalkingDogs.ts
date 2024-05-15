@@ -1,6 +1,6 @@
 import { WalkingDog } from '@/models/dog.model';
 import { Position } from '@/models/location.model';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const useWalkingDogs = () => {
     const [walkingDogs, setWalkingDogs] = useState<WalkingDog[] | null>(null);
