@@ -1,6 +1,6 @@
 import { WalkingDog } from '@/models/dog.model';
 import { Position } from '@/models/location.model';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const useWalkingDogs = () => {
     const [walkingDogs, setWalkingDogs] = useState<WalkingDog[] | null>(null);
@@ -8,32 +8,52 @@ const useWalkingDogs = () => {
     const toggleUrineCheck = (id: number) => {
         if (!walkingDogs) return;
         setWalkingDogs(
-            walkingDogs.map((d: WalkingDog) => (d.id === id ? { ...d, isUrineChecked: !d.isUrineChecked } : d))
+            walkingDogs.map((d: WalkingDog) =>
+                d.id === id
+                    ? {
+                          ...d,
+                          isUrineChecked: !d.isUrineChecked,
+                      }
+                    : d
+            )
         );
     };
     const toggleFeceCheck = (id: number) => {
         if (!walkingDogs) return;
-        setWalkingDogs(walkingDogs?.map((d: any) => (d.id === id ? { ...d, isFeceChecked: !d.isFeceChecked } : d)));
+        setWalkingDogs(
+            walkingDogs.map((d: any) =>
+                d.id === id
+                    ? {
+                          ...d,
+                          isFeceChecked: !d.isFeceChecked,
+                      }
+                    : d
+            )
+        );
     };
     const saveFecesAndUriens = (position: Position | null) => {
         if (!position || !walkingDogs) return;
         const { lat, lng } = position;
-        setWalkingDogs(
-            walkingDogs?.map((d: WalkingDog) => {
-                return {
-                    ...d,
-                    isFeceChecked: false,
-                    isUrineChecked: false,
-                    fecesLocations: d.isFeceChecked ? [...d.fecesLocations, { lat, lng }] : d.fecesLocations,
-                    urineLocations: d.isUrineChecked ? [...d.urineLocations, { lat: lat, lng: lng }] : d.urineLocations,
-                };
-            })
-        );
+        const updatedDogs = walkingDogs.map((dog: WalkingDog) => ({
+            ...dog,
+            fecesLocations: dog.isFeceChecked ? [...dog.fecesLocations, { lat, lng }] : dog.fecesLocations,
+            urineLocations: dog.isUrineChecked ? [...dog.urineLocations, { lat, lng }] : dog.urineLocations,
+            isFeceChecked: false,
+            isUrineChecked: false,
+            ags: 'dogs',
+        }));
+        console.log('update : ', updatedDogs);
+        setWalkingDogs(updatedDogs);
     };
-    const cancelFecesAndUriens = () => {
+
+    useEffect(() => {
+        console.log('walk : ', walkingDogs);
+    }, [walkingDogs]);
+
+    const cancelCheckedAll = () => {
         if (!walkingDogs) return;
         setWalkingDogs(
-            walkingDogs?.map((d: WalkingDog) => {
+            walkingDogs.map((d: WalkingDog) => {
                 return {
                     ...d,
                     isFeceChecked: false,
@@ -49,8 +69,8 @@ const useWalkingDogs = () => {
                     ...d,
                     isFeceChecked: false,
                     isUrineChecked: false,
-                    fecesLocations: d.urineLocations ? d.urineLocations : [],
-                    urineLocations: d.fecesLocations ? d.fecesLocations : [],
+                    fecesLocations: d.fecesLocations ? d.fecesLocations : [],
+                    urineLocations: d.urineLocations ? d.urineLocations : [],
                 };
             })
         );
@@ -62,7 +82,7 @@ const useWalkingDogs = () => {
         toggleFeceCheck,
         toggleUrineCheck,
         saveFecesAndUriens,
-        cancelFecesAndUriens,
+        cancelCheckedAll,
         setDogs,
     };
 };

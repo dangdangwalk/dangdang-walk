@@ -29,7 +29,7 @@ export default function Walk() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const { walkingDogs, toggleFeceCheck, toggleUrineCheck, saveFecesAndUriens, cancelFecesAndUriens, setDogs } =
+    const { walkingDogs, toggleFeceCheck, toggleUrineCheck, saveFecesAndUriens, cancelCheckedAll, setDogs } =
         useWalkingDogs();
 
     const { duration, isStart: isWalk, stopClock, startClock, startedAt } = useStopWatch();
@@ -44,13 +44,14 @@ export default function Walk() {
     const handleBottomSheet = () => {
         setIsDogBottomsheetOpen(!isDogBottomsheetOpen);
         if (isDogBottomsheetOpen) {
-            cancelFecesAndUriens();
+            cancelCheckedAll();
         }
     };
 
-    const handleWalkStart = (date: Date) => {
-        startClock(date);
-        stopGeo();
+    const handleConfirm = () => {
+        saveFecesAndUriens(currentPosition);
+        setIsDogBottomsheetOpen(false);
+        show('용변기록이 저장되었습니다 :)');
     };
 
     const stopWalk = () => {
@@ -66,11 +67,6 @@ export default function Walk() {
             showStopAlert();
         }
     };
-    const handleConfirm = () => {
-        saveFecesAndUriens(currentPosition);
-        handleBottomSheet();
-        show('용변기록이 저장되었습니다 :)');
-    };
 
     useEffect(() => {
         setCalories(Math.round((DEFAULT_WALK_MET * DEFAULT_WEIGHT * duration) / 3600));
@@ -78,22 +74,23 @@ export default function Walk() {
 
     useEffect(() => {
         if (!routes || !startedAt || !walkingDogs) return;
-        const walkDogData = {
+        const walkDogData: DogWalkData = {
             dogs: walkingDogs,
             startedAt: startedAt,
             distance: distance,
             routes: routes,
         };
         setStorage('dogs', JSON.stringify(walkDogData));
-    }, [routes, walkingDogs, startedAt, distance]);
+    }, [walkingDogs]);
 
     useEffect(() => {
-        const dogData = (getStorage('dogs') || location.state) as DogWalkData;
+        const dogData = (getStorage('dogs') ? JSON.parse(getStorage('dogs') ?? '') : location.state) as DogWalkData;
         if (!dogData) {
             navigate('/');
+            return;
         }
         setDogs(dogData.dogs);
-        handleWalkStart(dogData.startedAt ? new Date(dogData.startedAt) : new Date());
+        startClock(dogData.startedAt);
         startGeo(dogData.distance, dogData.routes);
     }, []);
 

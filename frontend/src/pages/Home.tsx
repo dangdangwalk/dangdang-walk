@@ -41,7 +41,7 @@ function Home() {
     const handleConfirm = () => {
         setIsDogBottomsheetOpen(false);
         navigate('/walk', {
-            state: availableDogs?.length === 1 ? availableDogs : availableDogs?.filter((d) => d.isChecked),
+            state: { dogs: availableDogs?.length === 1 ? availableDogs : availableDogs?.filter((d) => d.isChecked) },
         });
     };
     const handleCheckAll = (flag: boolean) => {
