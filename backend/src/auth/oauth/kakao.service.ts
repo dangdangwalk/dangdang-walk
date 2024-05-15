@@ -1,6 +1,7 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import axios from 'axios';
 import { firstValueFrom } from 'rxjs';
 import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
 import { OauthService } from './oauth.service.interface';
@@ -66,7 +67,13 @@ export class KakaoService implements OauthService {
 
             return data;
         } catch (error) {
-            this.logger.error('Kakao: Failed to request token.', error.stack ?? 'No stack');
+            if (axios.isAxiosError(error) && error.response) {
+                this.logger.error(
+                    `Kakao: Failed to request token. ${JSON.stringify(error.response.data)}`,
+                    error.stack ?? 'No stack'
+                );
+                error = new BadRequestException('Kakao: Failed to request token.');
+            }
             throw error;
         }
     }
@@ -83,7 +90,13 @@ export class KakaoService implements OauthService {
 
             return data.id.toString();
         } catch (error) {
-            this.logger.error('Kakao: Failed to request oauthId.', error.stack ?? 'No stack');
+            if (axios.isAxiosError(error) && error.response) {
+                this.logger.error(
+                    `Kakao: Failed to request oauthId. ${JSON.stringify(error.response.data)}`,
+                    error.stack ?? 'No stack'
+                );
+                error = new BadRequestException('Kakao: Failed to request oauthId.');
+            }
             throw error;
         }
     }
@@ -103,7 +116,13 @@ export class KakaoService implements OauthService {
                 )
             );
         } catch (error) {
-            this.logger.error('Kakao: Failed to request token expiration.', error.stack ?? 'No stack');
+            if (axios.isAxiosError(error) && error.response) {
+                this.logger.error(
+                    `Kakao: Failed to request token expiration. ${JSON.stringify(error.response.data)}`,
+                    error.stack ?? 'No stack'
+                );
+                error = new BadRequestException('Kakao: Failed to request token expiration.');
+            }
             throw error;
         }
     }
@@ -123,7 +142,13 @@ export class KakaoService implements OauthService {
                 )
             );
         } catch (error) {
-            this.logger.error('Kakao: Failed to request unlink.', error.stack ?? 'No stack');
+            if (axios.isAxiosError(error) && error.response) {
+                this.logger.error(
+                    `Kakao: Failed to request unlink. ${JSON.stringify(error.response.data)}`,
+                    error.stack ?? 'No stack'
+                );
+                error = new BadRequestException('Kakao: Failed to request unlink.');
+            }
             throw error;
         }
     }
@@ -149,7 +174,13 @@ export class KakaoService implements OauthService {
 
             return data;
         } catch (error) {
-            this.logger.error('Kakao: Failed to request token refresh.', error.stack ?? 'No stack');
+            if (axios.isAxiosError(error) && error.response) {
+                this.logger.error(
+                    `Kakao: Failed to request token refresh. ${JSON.stringify(error.response.data)}`,
+                    error.stack ?? 'No stack'
+                );
+                error = new BadRequestException('Kakao: Failed to request token refresh.');
+            }
             throw error;
         }
     }

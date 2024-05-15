@@ -1,6 +1,7 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import axios from 'axios';
 import { firstValueFrom } from 'rxjs';
 import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
 import { OauthService, RequestTokenRefreshResponse } from './oauth.service.interface';
@@ -56,7 +57,13 @@ export class NaverService implements OauthService {
 
             return data;
         } catch (error) {
-            this.logger.error('Naver: Failed to request token.', error.stack ?? 'No stack');
+            if (axios.isAxiosError(error) && error.response) {
+                this.logger.error(
+                    `Naver: Failed to request token. ${JSON.stringify(error.response.data)}`,
+                    error.stack ?? 'No stack'
+                );
+                error = new BadRequestException('Naver: Failed to request token.');
+            }
             throw error;
         }
     }
@@ -73,7 +80,13 @@ export class NaverService implements OauthService {
 
             return data.response.id;
         } catch (error) {
-            this.logger.error('Naver: Failed to request oauthId.', error.stack ?? 'No stack');
+            if (axios.isAxiosError(error) && error.response) {
+                this.logger.error(
+                    `Naver: Failed to request oauthId. ${JSON.stringify(error.response.data)}`,
+                    error.stack ?? 'No stack'
+                );
+                error = new BadRequestException('Naver: Failed to request oauthId.');
+            }
             throw error;
         }
     }
@@ -92,7 +105,13 @@ export class NaverService implements OauthService {
                 })
             );
         } catch (error) {
-            this.logger.error('Naver: Failed to request token expiration.', error.stack ?? 'No stack');
+            if (axios.isAxiosError(error) && error.response) {
+                this.logger.error(
+                    `Naver: Failed to request token expiration. ${JSON.stringify(error.response.data)}`,
+                    error.stack ?? 'No stack'
+                );
+                error = new BadRequestException('Naver: Failed to request token expiration.');
+            }
             throw error;
         }
     }
@@ -112,7 +131,13 @@ export class NaverService implements OauthService {
 
             return data;
         } catch (error) {
-            this.logger.error('Naver: Failed to request token refresh.', error.stack ?? 'No stack');
+            if (axios.isAxiosError(error) && error.response) {
+                this.logger.error(
+                    `Naver: Failed to request token refresh. ${JSON.stringify(error.response.data)}`,
+                    error.stack ?? 'No stack'
+                );
+                error = new BadRequestException('Naver: Failed to request token refresh.');
+            }
             throw error;
         }
     }
