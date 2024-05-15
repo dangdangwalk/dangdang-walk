@@ -14,9 +14,14 @@ import {
 } from '@/components/common/Modal';
 import Topbar from '@/components/common/Topbar';
 import WalkInfo from '@/components/walk/WalkInfo';
+import useToast from '@/hooks/useToast';
 import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function CreateForm() {
+    const navigate = useNavigate();
+    const { show: showToast } = useToast();
+
     const [openModal, setOpenModal] = useState(false);
 
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -110,10 +115,16 @@ export default function CreateForm() {
                     </ModalHeader>
                     <ModalFooter>
                         <ModalCancel onClick={() => setOpenModal(false)}>취소</ModalCancel>
-                        <ModalAction onClick={() => setOpenModal(false)}>삭제하기</ModalAction>
+                        <ModalAction onClick={handleDeleteSave}>삭제하기</ModalAction>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
         </>
     );
+
+    function handleDeleteSave() {
+        showToast('산책 기록이 삭제되었습니다.');
+
+        navigate('/');
+    }
 }
