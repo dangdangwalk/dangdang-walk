@@ -1,7 +1,7 @@
 import { getElapsedTime } from '@/utils/date';
 import { useEffect, useState } from 'react';
 
-const useClock = () => {
+const useStopWatch = () => {
     const [startedAt, setStartedAt] = useState<string>('');
     const [duration, setDuration] = useState<number>(0);
     const [isStart, setIsStart] = useState<boolean>(false);
@@ -45,4 +45,4 @@ const useClock = () => {
     return { isStart, duration, stopClock, startClock, startedAt };
 };
 
-export default useClock;
+export default useStopWatch;

@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import useGeolocation from '@/hooks/useGeolocation';
 import BottomSheet from '@/components/common/BottomSheet';
 import useWalkingDogs from '@/hooks/useWalkingDogs';
-import useClock from '@/hooks/useClock';
+import useStopWatch from '@/hooks/useStopWatch';
 import { DEFAULT_WALK_MET, DEFAULT_WEIGHT } from '@/constants/walk';
 
 import DogFeceAndUrineCheckList from '@/components/walk/DogFeceAndUrineCheckList';
@@ -22,9 +22,9 @@ export default function Walk() {
     const { walkingDogs, toggleFeceCheck, toggleUrineCheck, saveFecesAndUriens, cancelFecesAndUriens } =
         useWalkingDogs(dogData);
     const [calories, setCalories] = useState<number>(0);
-    const { duration, isStart: isWalk, stopClock, startClock } = useClock();
+    const { duration, isStart: isWalk, stopClock, startClock } = useStopWatch();
     const timeoutRef = useRef<number | null>(null);
-    const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
+    const [isShowStopAlert, setIsShowStopAlert] = useState<boolean>(false);
     const { show } = useToast();
 
     const handleBottomSheet = () => {
@@ -42,9 +42,9 @@ export default function Walk() {
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
         }
-        setIsShowAlert(true);
+        setIsShowStopAlert(true);
         timeoutRef.current = window.setTimeout(() => {
-            setIsShowAlert(false);
+            setIsShowStopAlert(false);
         }, 1000);
     };
     const stopWalk = () => {
@@ -81,7 +81,7 @@ export default function Walk() {
 
             <Map startPosition={startPosition} path={routes} />
 
-            <StopToast isVisible={isShowAlert} />
+            <StopToast isVisible={isShowStopAlert} />
             <WalkNavbar onOpen={handleBottomSheet} onStop={handleWalkStop} />
 
             <BottomSheet isOpen={isDogBottomsheetOpen} onClose={handleBottomSheet}>
