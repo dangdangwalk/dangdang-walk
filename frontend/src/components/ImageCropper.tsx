@@ -120,9 +120,9 @@ export default function ImageCropper({
                             ref={imgRef}
                             src={prevImg}
                             alt="Upload"
-                            style={{ height: '100%', maxHeight: '86vh' }}
+                            style={{ height: '100%', maxHeight: '75vh' }}
                             onLoad={(event) => onImageLoad(event)}
-                            className="w-full h-full"
+                            className="w-full"
                         />
                     </ReactCrop>
                 </div>
