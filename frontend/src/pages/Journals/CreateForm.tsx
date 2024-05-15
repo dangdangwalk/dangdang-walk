@@ -115,14 +115,14 @@ export default function CreateForm() {
                     </ModalHeader>
                     <ModalFooter>
                         <ModalCancel onClick={() => setOpenModal(false)}>취소</ModalCancel>
-                        <ModalAction onClick={handleDeleteSave}>삭제하기</ModalAction>
+                        <ModalAction onClick={handleCancelSave}>삭제하기</ModalAction>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
         </>
     );
 
-    function handleDeleteSave() {
+    function handleCancelSave() {
         showToast('산책 기록이 삭제되었습니다.');
 
         navigate('/');
