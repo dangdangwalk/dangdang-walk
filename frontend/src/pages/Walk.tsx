@@ -12,6 +12,7 @@ import { DEFAULT_WALK_MET, DEFAULT_WEIGHT } from '@/constants/walk';
 import DogFeceAndUrineCheckList from '@/components/walk/DogFeceAndUrineCheckList';
 import StopToast from '@/components/walk/StopToast';
 import { useLocation } from 'react-router-dom';
+import useToast from '@/hooks/useToast';
 
 export default function Walk() {
     const location = useLocation();
@@ -24,6 +25,7 @@ export default function Walk() {
     const { duration, isStart: isWalk, stopClock, startClock } = useClock();
     const timeoutRef = useRef<number | null>(null);
     const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
+    const { show } = useToast();
 
     const handleBottomSheet = () => {
         setIsDogBottomsheetOpen(!isDogBottomsheetOpen);
@@ -61,6 +63,7 @@ export default function Walk() {
     const handleConfirm = () => {
         saveFecesAndUriens(currentPosition);
         handleBottomSheet();
+        show('용변기록이 저장되었습니다 :)');
     };
 
     useEffect(() => {
