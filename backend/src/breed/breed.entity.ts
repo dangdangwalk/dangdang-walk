@@ -6,8 +6,11 @@ export class Breed {
     id: number;
 
     @Column()
-    name: string;
+    koreanName: string;
 
     @Column()
-    activity: number;
+    englishName: string;
+
+    @Column()
+    recommendedWalkAmount: number;
 }
