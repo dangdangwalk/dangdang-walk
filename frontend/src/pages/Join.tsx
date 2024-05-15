@@ -1,6 +1,6 @@
 import Topbar from '@/components/common/Topbar';
 import { getStorage } from '@/utils/storage';
-import React, { useMemo, useState } from 'react';
+import React, { ChangeEvent, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TopBack from '@/assets/icons/ic-top-back.svg';
 import Agreements from '@/pages/JoinStep/Agreements';
@@ -12,7 +12,11 @@ import Cancel from '@/assets/icons/ic-top-cancel.svg';
 import DogRegister2, { DogDetailInfo } from '@/pages/JoinStep/DogRegister2';
 import { storageKeys } from '@/constants';
 import { useAuth } from '@/hooks/useAuth';
-
+import 'react-image-crop/dist/ReactCrop.css';
+import ImageCropper from '@/components/ImageCropper';
+import CropperModal from '@/components/CropperModal';
+import { PercentCrop } from 'react-image-crop';
+import { MIN_DIMENSION } from '@/constants/cropper';
 export interface DogRefInfo {
     dogBasicInfo: DogBasicInfo;
     dogDetailInfo: DogDetailInfo;
@@ -171,9 +175,45 @@ export default function Join() {
 
         return buttonText;
     };
+
+    const [cropperToggle, setCropperToggle] = useState(false);
+    const [cropError, setCropError] = useState(false);
+    const [prevImg, setPrevImg] = useState('');
+    const onSelectFile = (e: ChangeEvent<HTMLInputElement>) => {
+        setPrevImg('');
+        const files = e.target.files?.[0];
+
+        if (!files) return;
+
+        const reader = new FileReader();
+        reader.addEventListener('load', () => {
+            const imageElement = new Image();
+            const imageUrl = reader.result?.toString() || '';
+            imageElement.src = imageUrl;
+
+            imageElement.addEventListener('load', (e) => {
+                if (cropError) setCropError(false);
+                const { naturalWidth, naturalHeight } = e.currentTarget as HTMLImageElement;
+                if (naturalWidth < MIN_DIMENSION || naturalHeight < MIN_DIMENSION) {
+                    setCropError(true);
+                    setCropperToggle(false);
+                    setCrop(undefined);
+                    return;
+                } else {
+                    setPrevImg(imageUrl);
+                    setCropperToggle(true);
+                }
+            });
+        });
+
+        reader.readAsDataURL(files);
+        e.currentTarget.value = '';
+    };
+    const [crop, setCrop] = useState<PercentCrop>();
+    const fileInputRef = useRef(null);
     return (
         <div
-            className={`flex flex-col bg-primary-foreground ${switchStep.mainToStep1 ? 'animate-mainToRight' : 'animate-outToMain'}`}
+            className={`relative flex flex-col w-full h-dvh bg-primary-foreground ${switchStep.mainToStep1 ? 'animate-mainToRight' : 'animate-outToMain'}`}
         >
             <Topbar>
                 <Topbar.Front className="pl-3">
@@ -188,6 +228,7 @@ export default function Join() {
             <Divider
                 className={`bg-primary duration-500 w-0 ease-in-out ${step === 'PetOwner' && 'w-1/3'} ${step === 'Dog Registration1' && 'w-2/3'} ${step === 'Dog Registration2' && 'w-full'}`}
             />
+
             <main className="w-full h-full px-5 pt-6">
                 {step === 'Agreements' && (
                     <Agreements
@@ -200,19 +241,38 @@ export default function Join() {
                 )}
                 {step === 'PetOwner' && <PetOwner haveADog={haveADog} handleHaveADogChange={handleHaveADogChange} />}
                 {step === 'Dog Registration1' && (
-                    <DogRegister1 data={registerData?.dogBasicInfo} setData={setRegisterData} />
+                    <DogRegister1
+                        fileInputRef={fileInputRef}
+                        data={registerData?.dogBasicInfo}
+                        setData={setRegisterData}
+                        setCropperToggle={setCropperToggle}
+                        onSelectFile={onSelectFile}
+                    />
                 )}
                 {step === 'Dog Registration2' && <DogRegister2 data={registerData} setData={setRegisterData} />}
             </main>
-            <Button
-                className="w-full absolute bottom-0"
-                disabled={disabled()}
-                color="primary"
-                rounded="none"
-                onClick={handleNextStep}
-            >
-                {ButtonText()}
-            </Button>
+            <div className="absolute bottom-0 w-full">
+                <Button
+                    className="w-full "
+                    disabled={disabled()}
+                    color="primary"
+                    rounded="none"
+                    onClick={handleNextStep}
+                >
+                    {ButtonText()}
+                </Button>
+            </div>
+            <ImageCropper
+                prevImg={prevImg}
+                setPrevImg={setPrevImg}
+                crop={crop}
+                setCrop={setCrop}
+                cropperToggle={cropperToggle}
+                setCropperToggle={setCropperToggle}
+                setRegisterData={setRegisterData}
+                onSelectFile={onSelectFile}
+            />
+            {cropError && <CropperModal setCropError={setCropError} setCrop={setCrop} fileInputRef={fileInputRef} />}
         </div>
     );
 }
