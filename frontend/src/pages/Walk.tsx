@@ -2,65 +2,82 @@ import WalkInfo from '@/components/walk/WalkInfo';
 import Map from '@/components/walk/Map';
 import WalkNavbar from '@/components/walk/WalkNavbar';
 import WalkHeader from '@/components/walk/WalkHeader';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import useGeolocation from '@/hooks/useGeolocation';
 import BottomSheet from '@/components/common/BottomSheet';
 import useWalkingDogs from '@/hooks/useWalkingDogs';
-import useClock from '@/hooks/useClock';
+import useStopWatch from '@/hooks/useStopWatch';
 import { DEFAULT_WALK_MET, DEFAULT_WEIGHT } from '@/constants/walk';
 
 import DogFeceAndUrineCheckList from '@/components/walk/DogFeceAndUrineCheckList';
 import StopToast from '@/components/walk/StopToast';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import useToast from '@/hooks/useToast';
+import useStopAlert from '@/hooks/useStopAlert';
+import { getStorage, removeStorage, setStorage } from '@/utils/storage';
+import { WalkingDog } from '@/models/dog.model';
+import { Position } from '@/models/location.model';
+import { storageKeys } from '@/constants';
+import { walkStartRequest, walkStopRequest } from '@/api/walk';
+
+interface DogWalkData {
+    dogs: WalkingDog[];
+    startedAt: string;
+    distance: number;
+    routes: Position[];
+}
 
 export default function Walk() {
     const location = useLocation();
-    const dogData = location.state;
-    const { distance, position: startPosition, currentPosition, stopGeo, routes } = useGeolocation(true);
+    const navigate = useNavigate();
+
+    const { walkingDogs, toggleFeceCheck, toggleUrineCheck, saveFecesAndUriens, cancelCheckedAll, setDogs } =
+        useWalkingDogs();
+    const { duration, isStart: isWalk, stopClock, startClock, startedAt } = useStopWatch();
+    const { distance, position: startPosition, currentPosition, stopGeo, routes, startGeo } = useGeolocation();
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
-    const { walkingDogs, toggleFeceCheck, toggleUrineCheck, saveFecesAndUriens, cancelFecesAndUriens } =
-        useWalkingDogs(dogData);
+
     const [calories, setCalories] = useState<number>(0);
-    const { duration, isStart: isWalk, stopClock, startClock } = useClock();
-    const timeoutRef = useRef<number | null>(null);
-    const [isShowAlert, setIsShowAlert] = useState<boolean>(false);
+
+    const { showStopAlert, isShowStopAlert } = useStopAlert();
+    const { show } = useToast();
 
     const handleBottomSheet = () => {
         setIsDogBottomsheetOpen(!isDogBottomsheetOpen);
         if (isDogBottomsheetOpen) {
-            cancelFecesAndUriens();
+            cancelCheckedAll();
         }
     };
 
-    const handleWalkStart = (date: Date) => {
-        startClock(date);
-        stopGeo();
+    const handleConfirm = () => {
+        saveFecesAndUriens(currentPosition);
+        setIsDogBottomsheetOpen(false);
+        show('용변기록이 저장되었습니다 :)');
     };
-    const showAlert = () => {
-        if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current);
+
+    const stopWalk = async (dogs: WalkingDog[] | null) => {
+        if (!dogs) return;
+        const ok = await walkStopRequest(dogs.map((d) => d.id));
+        if (ok) {
+            stopClock();
+            stopGeo();
+            removeStorage(storageKeys.DOGS);
+            navigate('/journals/create', { state: { dogs, distance, duration, calories, startedAt, routes } });
         }
-        setIsShowAlert(true);
-        timeoutRef.current = window.setTimeout(() => {
-            setIsShowAlert(false);
-        }, 1000);
-    };
-    const stopWalk = () => {
-        stopClock();
-        stopGeo();
     };
 
     const handleWalkStop = (isStop: boolean) => {
         if (!isWalk) return;
         if (isStop) {
-            stopWalk();
+            stopWalk(walkingDogs);
         } else {
-            showAlert();
+            showStopAlert();
         }
     };
-    const handleConfirm = () => {
-        saveFecesAndUriens(currentPosition);
-        handleBottomSheet();
+    const handleWalkStart = (dogData: DogWalkData) => {
+        setDogs(dogData.dogs);
+        startClock(dogData.startedAt);
+        startGeo(dogData.distance, dogData.routes);
     };
 
     useEffect(() => {
@@ -68,7 +85,38 @@ export default function Walk() {
     }, [duration]);
 
     useEffect(() => {
-        handleWalkStart(new Date());
+        if (!routes || !startedAt || !walkingDogs) return;
+        const walkDogData: DogWalkData = {
+            dogs: walkingDogs,
+            startedAt: startedAt,
+            distance: distance,
+            routes: routes,
+        };
+        setStorage(storageKeys.DOGS, JSON.stringify(walkDogData));
+    }, [walkingDogs]);
+
+    useEffect(() => {
+        const dogData = (
+            getStorage(storageKeys.DOGS) ? JSON.parse(getStorage(storageKeys.DOGS) ?? '') : location.state
+        ) as DogWalkData;
+        if (!dogData) {
+            navigate('/');
+            return;
+        }
+        const requstWalkStart = async (data: DogWalkData) => {
+            const ok = await walkStartRequest(data.dogs.map((d) => d.id));
+            if (ok) {
+                handleWalkStart(data);
+            } else {
+                navigate('/');
+                removeStorage(storageKeys.DOGS);
+            }
+        };
+        if (getStorage(storageKeys.DOGS)) {
+            handleWalkStart(dogData);
+        } else {
+            requstWalkStart(dogData);
+        }
     }, []);
 
     return (
@@ -78,13 +126,13 @@ export default function Walk() {
 
             <Map startPosition={startPosition} path={routes} />
 
-            <StopToast isVisible={isShowAlert} />
+            <StopToast isVisible={isShowStopAlert} />
             <WalkNavbar onOpen={handleBottomSheet} onStop={handleWalkStop} />
 
             <BottomSheet isOpen={isDogBottomsheetOpen} onClose={handleBottomSheet}>
                 <BottomSheet.Header> 강아지 선책</BottomSheet.Header>
                 <BottomSheet.Body>
-                    {walkingDogs.map((dog) => (
+                    {walkingDogs?.map((dog) => (
                         <DogFeceAndUrineCheckList
                             dog={dog}
                             toggleFeceCheck={toggleFeceCheck}
@@ -95,7 +143,7 @@ export default function Walk() {
                 </BottomSheet.Body>
                 <BottomSheet.ConfirmButton
                     onConfirm={handleConfirm}
-                    disabled={walkingDogs.find((d) => d.isUrineChecked || d.isFeceChecked) ? false : true}
+                    disabled={walkingDogs?.find((d) => d.isUrineChecked || d.isFeceChecked) ? false : true}
                 >
                     확인
                 </BottomSheet.ConfirmButton>

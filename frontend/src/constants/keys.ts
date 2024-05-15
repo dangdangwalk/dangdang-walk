@@ -15,6 +15,7 @@ const queryKeys = {
 const storageKeys = {
     REDIRECT_URI: 'redirectURI',
     PROVIDER: 'provider',
+    DOGS: 'dogs',
 } as const;
 
 export { tokenKeys, cookieKeys, queryKeys, storageKeys };

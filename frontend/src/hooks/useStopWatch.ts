@@ -1,25 +1,25 @@
 import { getElapsedTime } from '@/utils/date';
 import { useEffect, useState } from 'react';
 
-const useClock = () => {
+const useStopWatch = () => {
     const [startedAt, setStartedAt] = useState<string>('');
     const [duration, setDuration] = useState<number>(0);
     const [isStart, setIsStart] = useState<boolean>(false);
-
-    const setStartTime = (date: Date) => {
-        const startTime = localStorage.getItem('startedAt');
-        if (startTime) return;
-        localStorage.setItem('startedAt', date.toISOString());
-        setStartedAt(date.toISOString());
-    };
 
     const stopClock = () => {
         setIsStart(false);
         localStorage.removeItem('startedAt');
     };
 
-    const startClock = (date: Date) => {
-        setStartTime(date);
+    const startClock = (startTime: string | undefined) => {
+        if (startTime) {
+            const timeDiff = getElapsedTime(new Date(startTime), new Date());
+            setStartedAt(startTime);
+            setDuration(timeDiff);
+        } else {
+            setStartedAt(new Date().toString());
+        }
+
         setIsStart(true);
     };
 
@@ -36,13 +36,9 @@ const useClock = () => {
     useEffect(() => {
         const startTime = localStorage.getItem('startedAt');
         if (!startTime) return;
-
-        const timeDiff = getElapsedTime(new Date(startTime), new Date());
-        setStartedAt(startTime);
-        setDuration(timeDiff);
     }, []);
 
     return { isStart, duration, stopClock, startClock, startedAt };
 };
 
-export default useClock;
+export default useStopWatch;

@@ -28,10 +28,13 @@ const statusImage = {
 export default function WeatherInfo() {
     const { position } = useGeolocation();
     const { weather, isWeatherPending } = useWeather(position);
-    const [skyStatus, setSkyStatus] = useState<SkyStatus>();
     const { airGrade, address, isAirGradePending } = useAddressAndAirgrade(position);
     const { sunset, sunrise, isSunsetSunrisePending } = useSunsetSunrise(position);
+
+    const [skyStatus, setSkyStatus] = useState<SkyStatus>();
+
     const isLoading = isAirGradePending || isSunsetSunrisePending || isWeatherPending;
+
     useEffect(() => {
         if (isSunsetSunrisePending || isWeatherPending || !weather) return;
         const time = getCurrentTime(new Date());
