@@ -2,6 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
+import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
 import { OauthService, RequestTokenRefreshResponse } from './oauth.service.interface';
 
 interface TokenResponse {
@@ -34,7 +35,8 @@ interface TokenRefreshResponse {
 export class GoogleService implements OauthService {
     constructor(
         private readonly configService: ConfigService,
-        private readonly httpService: HttpService
+        private readonly httpService: HttpService,
+        private readonly logger: WinstonLoggerService
     ) {}
 
     private readonly CLIENT_ID = this.configService.get<string>('GOOGLE_CLIENT_ID');
@@ -44,58 +46,78 @@ export class GoogleService implements OauthService {
     private readonly REVOKE_API = this.configService.get<string>('GOOGLE_REVOKE_API')!;
 
     async requestToken(authorizeCode: string, redirectURI: string) {
-        const { data } = await firstValueFrom(
-            this.httpService.post<TokenResponse>(this.TOKEN_API, {
-                client_id: this.CLIENT_ID,
-                client_secret: this.CLIENT_SECRET,
-                code: authorizeCode,
-                grant_type: 'authorization_code',
-                redirect_uri: redirectURI,
-            })
-        );
+        try {
+            const { data } = await firstValueFrom(
+                this.httpService.post<TokenResponse>(this.TOKEN_API, {
+                    client_id: this.CLIENT_ID,
+                    client_secret: this.CLIENT_SECRET,
+                    code: authorizeCode,
+                    grant_type: 'authorization_code',
+                    redirect_uri: redirectURI,
+                })
+            );
 
-        return data;
+            return data;
+        } catch (error) {
+            this.logger.error('Google: Failed to request token.', error.stack ?? 'No stack');
+            throw error;
+        }
     }
 
     async requestUserId(accessToken: string) {
-        const { data } = await firstValueFrom(
-            this.httpService.get<UserInfoResponse>(this.TOKEN_INFO_API, {
-                params: {
-                    access_token: accessToken,
-                },
-            })
-        );
+        try {
+            const { data } = await firstValueFrom(
+                this.httpService.get<UserInfoResponse>(this.TOKEN_INFO_API, {
+                    params: {
+                        access_token: accessToken,
+                    },
+                })
+            );
 
-        return data.sub;
+            return data.sub;
+        } catch (error) {
+            this.logger.error('Google: Failed to request oauthId.', error.stack ?? 'No stack');
+            throw error;
+        }
     }
 
     async requestTokenExpiration(accessToken: string) {
-        await firstValueFrom(
-            this.httpService.post(
-                this.REVOKE_API,
-                {},
-                {
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    params: {
-                        token: accessToken,
-                    },
-                }
-            )
-        );
+        try {
+            await firstValueFrom(
+                this.httpService.post(
+                    this.REVOKE_API,
+                    {},
+                    {
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        params: {
+                            token: accessToken,
+                        },
+                    }
+                )
+            );
+        } catch (error) {
+            this.logger.error('Google: Failed to request token expiration.', error.stack ?? 'No stack');
+            throw error;
+        }
     }
 
     async requestTokenRefresh(refreshToken: string): Promise<RequestTokenRefreshResponse> {
-        const { data } = await firstValueFrom(
-            this.httpService.post<TokenRefreshResponse>(this.TOKEN_API, {
-                client_id: this.CLIENT_ID,
-                client_secret: this.CLIENT_SECRET,
-                grant_type: 'refresh_token',
-                refresh_token: refreshToken,
-            })
-        );
+        try {
+            const { data } = await firstValueFrom(
+                this.httpService.post<TokenRefreshResponse>(this.TOKEN_API, {
+                    client_id: this.CLIENT_ID,
+                    client_secret: this.CLIENT_SECRET,
+                    grant_type: 'refresh_token',
+                    refresh_token: refreshToken,
+                })
+            );
 
-        return data;
+            return data;
+        } catch (error) {
+            this.logger.error('Google: Failed to request token refresh.', error.stack ?? 'No stack');
+            throw error;
+        }
     }
 }

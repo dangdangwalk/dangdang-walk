@@ -2,6 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
+import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
 import { OauthService } from './oauth.service.interface';
 
 interface TokenResponse {
@@ -32,7 +33,8 @@ interface TokenRefreshResponse {
 export class KakaoService implements OauthService {
     constructor(
         private readonly configService: ConfigService,
-        private readonly httpService: HttpService
+        private readonly httpService: HttpService,
+        private readonly logger: WinstonLoggerService
     ) {}
 
     private readonly CLIENT_ID = this.configService.get<string>('KAKAO_CLIENT_ID');
@@ -43,87 +45,112 @@ export class KakaoService implements OauthService {
     private readonly UNLINK_API = this.configService.get<string>('KAKAO_UNLINK_API')!;
 
     async requestToken(authorizeCode: string, redirectURI: string) {
-        const { data } = await firstValueFrom(
-            this.httpService.post<TokenResponse>(
-                this.TOKEN_API,
-                {
-                    code: authorizeCode,
-                    grant_type: 'authorization_code',
-                    client_id: this.CLIENT_ID,
-                    client_secret: this.CLIENT_SECRET,
-                    redirect_uri: redirectURI,
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+        try {
+            const { data } = await firstValueFrom(
+                this.httpService.post<TokenResponse>(
+                    this.TOKEN_API,
+                    {
+                        code: authorizeCode,
+                        grant_type: 'authorization_code',
+                        client_id: this.CLIENT_ID,
+                        client_secret: this.CLIENT_SECRET,
+                        redirect_uri: redirectURI,
                     },
-                }
-            )
-        );
+                    {
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+                        },
+                    }
+                )
+            );
 
-        return data;
+            return data;
+        } catch (error) {
+            this.logger.error('Kakao: Failed to request token.', error.stack ?? 'No stack');
+            throw error;
+        }
     }
 
     async requestUserId(accessToken: string) {
-        const { data } = await firstValueFrom(
-            this.httpService.get<UserInfoResponse>(this.TOKEN_INFO_API, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            })
-        );
+        try {
+            const { data } = await firstValueFrom(
+                this.httpService.get<UserInfoResponse>(this.TOKEN_INFO_API, {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                })
+            );
 
-        return data.id.toString();
+            return data.id.toString();
+        } catch (error) {
+            this.logger.error('Kakao: Failed to request oauthId.', error.stack ?? 'No stack');
+            throw error;
+        }
     }
 
     async requestTokenExpiration(accessToken: string) {
-        await firstValueFrom(
-            this.httpService.post<{ id: number }>(
-                this.LOGOUT_API,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                }
-            )
-        );
+        try {
+            await firstValueFrom(
+                this.httpService.post<{ id: number }>(
+                    this.LOGOUT_API,
+                    {},
+                    {
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`,
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                    }
+                )
+            );
+        } catch (error) {
+            this.logger.error('Kakao: Failed to request token expiration.', error.stack ?? 'No stack');
+            throw error;
+        }
     }
 
     async requestUnlink(accessToken: string) {
-        await firstValueFrom(
-            this.httpService.post<{ id: number }>(
-                this.UNLINK_API,
-                {},
-                {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                }
-            )
-        );
+        try {
+            await firstValueFrom(
+                this.httpService.post<{ id: number }>(
+                    this.UNLINK_API,
+                    {},
+                    {
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`,
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                    }
+                )
+            );
+        } catch (error) {
+            this.logger.error('Kakao: Failed to request unlink.', error.stack ?? 'No stack');
+            throw error;
+        }
     }
 
     async requestTokenRefresh(refreshToken: string) {
-        const { data } = await firstValueFrom(
-            this.httpService.post<TokenRefreshResponse>(
-                this.TOKEN_API,
-                {
-                    grant_type: 'refresh_token',
-                    client_id: this.CLIENT_ID,
-                    client_secret: this.CLIENT_SECRET,
-                    refresh_token: refreshToken,
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+        try {
+            const { data } = await firstValueFrom(
+                this.httpService.post<TokenRefreshResponse>(
+                    this.TOKEN_API,
+                    {
+                        grant_type: 'refresh_token',
+                        client_id: this.CLIENT_ID,
+                        client_secret: this.CLIENT_SECRET,
+                        refresh_token: refreshToken,
                     },
-                }
-            )
-        );
+                    {
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+                        },
+                    }
+                )
+            );
 
-        return data;
+            return data;
+        } catch (error) {
+            this.logger.error('Kakao: Failed to request token refresh.', error.stack ?? 'No stack');
+            throw error;
+        }
     }
 }
