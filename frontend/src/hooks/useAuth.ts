@@ -1,26 +1,22 @@
 import { ResponseToken, getAccessToken, requestLogin, requestLogout, requestSignup } from '@/api/auth';
 import queryClient from '@/api/queryClient';
 import { queryKeys, storageKeys, tokenKeys } from '@/constants';
-import useCookie from '@/hooks/useCookie';
 import { useAuthStore } from '@/store/authStore';
 import { UseMutationCustomOptions } from '@/types/common';
-import { removeHeader } from '@/utils/header';
+import { removeHeader, setHeader } from '@/utils/header';
 import { getStorage } from '@/utils/storage';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const useLogin = (mutationOptions?: UseMutationCustomOptions) => {
-    const { storeLogin } = useAuthStore();
     const navigate = useNavigate();
-    const { isLoggedIn, newExpiresIn } = useCookie();
     return useMutation({
         mutationFn: requestLogin,
         onSuccess: ({ accessToken }: ResponseToken) => {
             const url = getStorage(storageKeys.REDIRECT_URI) || '';
-            console.log('login.isLoggedIn : ', isLoggedIn);
 
-            storeLogin(accessToken, isLoggedIn, newExpiresIn);
+            setHeader(tokenKeys.AUTHORIZATION, `Bearer ${accessToken}`);
             navigate(url);
         },
         onError: (error) => {
@@ -36,15 +32,12 @@ const useLogin = (mutationOptions?: UseMutationCustomOptions) => {
 };
 
 const useSignup = (mutationOptions?: UseMutationCustomOptions) => {
-    const { storeLogin } = useAuthStore();
     const navigate = useNavigate();
-    const { isLoggedIn, newExpiresIn } = useCookie();
     return useMutation({
         mutationFn: requestSignup,
         onSuccess: ({ accessToken }: ResponseToken) => {
             const url = getStorage(storageKeys.REDIRECT_URI) || '';
-
-            storeLogin(accessToken, isLoggedIn, newExpiresIn);
+            setHeader(tokenKeys.AUTHORIZATION, `Bearer ${accessToken}`);
             navigate(url);
         },
         onSettled: () => {
@@ -55,9 +48,7 @@ const useSignup = (mutationOptions?: UseMutationCustomOptions) => {
 };
 
 const useGetRefreshToken = () => {
-    const { storeLogin, expiresIn } = useAuthStore();
-    const { isLoggedIn, newExpiresIn } = useCookie();
-    console.log('useGetRefreshToken.isLoggedIn: ', isLoggedIn);
+    const { expiresIn } = useAuthStore();
 
     const { isSuccess, isError, data } = useQuery({
         queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN],
@@ -70,7 +61,7 @@ const useGetRefreshToken = () => {
     });
     useEffect(() => {
         if (isSuccess) {
-            storeLogin(data.accessToken, isLoggedIn, newExpiresIn);
+            setHeader(tokenKeys.AUTHORIZATION, `Bearer ${data.accessToken}`);
         }
     }, [isSuccess, data]);
 
@@ -79,7 +70,7 @@ const useGetRefreshToken = () => {
             removeHeader(tokenKeys.AUTHORIZATION);
         }
     }, [isError]);
-    return { isSuccess, isError, isLoggedIn };
+    return { isSuccess, isError };
 };
 
 const useLogout = (mutationOptions?: UseMutationCustomOptions) => {
@@ -95,14 +86,13 @@ const useLogout = (mutationOptions?: UseMutationCustomOptions) => {
 };
 
 export const useAuth = () => {
-    // const { isStoreLogin } = useAuthStore();
     const loginMutation = useLogin();
     const logoutMutation = useLogout();
     const signupMustation = useSignup();
     const refreshTokenQuery = useGetRefreshToken();
     return {
         loginMutation,
-        isLoggedIn: refreshTokenQuery.isLoggedIn,
+        isLoggedIn: refreshTokenQuery.isSuccess,
         logoutMutation,
         signupMustation,
         refreshTokenQuery,

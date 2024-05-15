@@ -4,25 +4,19 @@ import { removeStorage } from '@/utils/storage';
 import { create } from 'zustand';
 
 interface StoreState {
-    isStoreLogin: boolean;
     expiresIn: number;
-    storeLogin: (token: string, isLoggedIn: boolean, expiresIn: number) => void;
+    storeLogin: (token: string) => void;
     storeLogout: () => void;
 }
 
 export const useAuthStore = create<StoreState>((set) => ({
-    isStoreLogin: false,
-    expiresIn: 0,
-    storeLogin: (token: string, isLoggedIn: boolean, expiresIn: number) => {
+    expiresIn: 1000 * 60 * 60,
+    storeLogin: (token: string) => {
         setHeader(tokenKeys.AUTHORIZATION, `Bearer ${token}`);
-        set({ isStoreLogin: isLoggedIn });
-        set({ expiresIn });
     },
     storeLogout: () => {
         removeHeader(tokenKeys.AUTHORIZATION);
         removeStorage(storageKeys.REDIRECT_URI);
         removeStorage(storageKeys.PROVIDER);
-        set({ isStoreLogin: false });
-        window.location.reload();
     },
 }));
