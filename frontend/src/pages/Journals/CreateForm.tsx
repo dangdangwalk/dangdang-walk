@@ -13,6 +13,7 @@ import {
     ModalTitle,
 } from '@/components/common/Modal';
 import Topbar from '@/components/common/Topbar';
+import ExcrementDisplay from '@/components/journals/ExcrementDisplay';
 import WalkInfo from '@/components/walk/WalkInfo';
 import useToast from '@/hooks/useToast';
 import { useRef, useState } from 'react';
@@ -25,6 +26,113 @@ export default function CreateForm() {
     const [openModal, setOpenModal] = useState(false);
 
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+    const FAKE_EXCREMENTS: Array<Excrement> = [
+        {
+            dogId: 1,
+            fecesLocations: [
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+            ],
+            urineLocations: [
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+            ],
+        },
+        {
+            dogId: 2,
+            fecesLocations: [{ lat: 123.45435435, lng: 456.3463465 }],
+            urineLocations: [
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+            ],
+        },
+        {
+            dogId: 3,
+            fecesLocations: [{ lat: 8568.45435435, lng: 456.3463465 }],
+            urineLocations: [
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+            ],
+        },
+        {
+            dogId: 4,
+            fecesLocations: [],
+            urineLocations: [
+                { lat: 456.45435435, lng: 32555.3463465 },
+                { lat: 7477.45435435, lng: 346346.3463465 },
+            ],
+        },
+        {
+            dogId: 5,
+            fecesLocations: [],
+            urineLocations: [],
+        },
+        {
+            dogId: 6,
+            fecesLocations: [{ lat: 8568.45435435, lng: 456.3463465 }],
+            urineLocations: [
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+            ],
+        },
+        {
+            dogId: 7,
+            fecesLocations: [{ lat: 8568.45435435, lng: 456.3463465 }],
+            urineLocations: [
+                { lat: 123.45435435, lng: 456.3463465 },
+                { lat: 123.45435435, lng: 456.3463465 },
+            ],
+        },
+        {
+            dogId: 8,
+            fecesLocations: [{ lat: 8568.45435435, lng: 456.3463465 }],
+            urineLocations: [],
+        },
+    ];
 
     return (
         <>
@@ -46,41 +154,15 @@ export default function CreateForm() {
                     <div>
                         <h2>함께한 댕댕이</h2>
                         <div className="flex flex-col">
-                            <div className="flex justify-between">
-                                <Avatar />
-                                <span>
-                                    <span>대변 2</span>
-                                    <span>소변 3</span>
-                                </span>
-                            </div>
-                            <div className="flex justify-between">
-                                <Avatar />
-                                <span>
-                                    <span>대변 2</span>
-                                    <span>소변 3</span>
-                                </span>
-                            </div>
-                            <div className="flex justify-between">
-                                <Avatar />
-                                <span>
-                                    <span>대변 2</span>
-                                    <span>소변 3</span>
-                                </span>
-                            </div>
-                            <div className="flex justify-between">
-                                <Avatar />
-                                <span>
-                                    <span>대변 2</span>
-                                    <span>소변 3</span>
-                                </span>
-                            </div>
-                            <div className="flex justify-between">
-                                <Avatar />
-                                <span>
-                                    <span>대변 2</span>
-                                    <span>소변 3</span>
-                                </span>
-                            </div>
+                            {FAKE_EXCREMENTS.map((excrement) => (
+                                <div key={excrement.dogId} className="flex justify-between">
+                                    <Avatar />
+                                    <ExcrementDisplay
+                                        fecesCount={excrement.fecesLocations.length}
+                                        urineCount={excrement.urineLocations.length}
+                                    />
+                                </div>
+                            ))}
                         </div>
                     </div>
                     <Divider />
@@ -127,4 +209,15 @@ export default function CreateForm() {
 
         navigate('/');
     }
+}
+
+interface Location {
+    lat: number;
+    lng: number;
+}
+
+interface Excrement {
+    dogId: number;
+    fecesLocations: Array<Location>;
+    urineLocations: Array<Location>;
 }
