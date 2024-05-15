@@ -18,6 +18,7 @@ const useLogin = (mutationOptions?: UseMutationCustomOptions) => {
         mutationFn: requestLogin,
         onSuccess: ({ accessToken }: ResponseToken) => {
             const url = getStorage(storageKeys.REDIRECT_URI) || '';
+            console.log('login.isLoggedIn : ', isLoggedIn);
 
             storeLogin(accessToken, isLoggedIn, newExpiresIn);
             navigate(url);
@@ -56,7 +57,7 @@ const useSignup = (mutationOptions?: UseMutationCustomOptions) => {
 const useGetRefreshToken = () => {
     const { storeLogin, expiresIn } = useAuthStore();
     const { isLoggedIn, newExpiresIn } = useCookie();
-    console.log('expiresIn: ', expiresIn);
+    console.log('useGetRefreshToken.isLoggedIn: ', isLoggedIn);
 
     const { isSuccess, isError, data } = useQuery({
         queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN],
@@ -78,7 +79,7 @@ const useGetRefreshToken = () => {
             removeHeader(tokenKeys.AUTHORIZATION);
         }
     }, [isError]);
-    return { isSuccess, isError };
+    return { isSuccess, isError, isLoggedIn };
 };
 
 const useLogout = (mutationOptions?: UseMutationCustomOptions) => {
@@ -94,10 +95,16 @@ const useLogout = (mutationOptions?: UseMutationCustomOptions) => {
 };
 
 export const useAuth = () => {
-    const { isStoreLogin } = useAuthStore();
+    // const { isStoreLogin } = useAuthStore();
     const loginMutation = useLogin();
     const logoutMutation = useLogout();
     const signupMustation = useSignup();
     const refreshTokenQuery = useGetRefreshToken();
-    return { loginMutation, isLoggedIn: isStoreLogin, logoutMutation, signupMustation, refreshTokenQuery };
+    return {
+        loginMutation,
+        isLoggedIn: refreshTokenQuery.isLoggedIn,
+        logoutMutation,
+        signupMustation,
+        refreshTokenQuery,
+    };
 };
