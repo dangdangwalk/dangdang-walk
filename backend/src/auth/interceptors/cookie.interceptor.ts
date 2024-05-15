@@ -23,8 +23,8 @@ export class CookieInterceptor implements NestInterceptor {
     };
 
     private readonly accessCookieOptions: CookieOptions = {
-        sameSite: this.isProduction ? 'none' : 'lax',
-        secure: this.isProduction,
+        // sameSite: this.isProduction ? 'none' : 'lax',
+        // secure: this.isProduction,
         maxAge: TOKEN_LIFETIME_MAP.access.maxAge,
     };
 
