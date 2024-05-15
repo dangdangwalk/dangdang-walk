@@ -1,0 +1,4 @@
+const ASPECT_RATIO = 1;
+const MIN_DIMENSION = 120;
+
+export { ASPECT_RATIO, MIN_DIMENSION };

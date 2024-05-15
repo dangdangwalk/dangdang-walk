@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { ChangeEvent, Dispatch, MutableRefObject, SetStateAction } from 'react';
 import SelectPhoto from '@/assets/icons/ic-select-photo.svg';
 import { Divider } from '@/components/common/Divider';
 import { DogRefInfo } from '@/pages/Join';
@@ -11,9 +11,12 @@ export interface DogBasicInfo {
 interface Props {
     data: DogBasicInfo;
     setData: Dispatch<SetStateAction<DogRefInfo>>;
+    setCropperToggle: (check: boolean) => void;
+    onSelectFile: (e: ChangeEvent<HTMLInputElement>) => void;
+    fileInputRef: MutableRefObject<null>;
 }
 
-export default function DogRegister1({ data, setData }: Props) {
+export default function DogRegister1({ data, setData, setCropperToggle, onSelectFile, fileInputRef }: Props) {
     const handleNameChange = (name: string) => {
         setData((prev) => ({
             ...prev,
@@ -33,7 +36,7 @@ export default function DogRegister1({ data, setData }: Props) {
         }));
     };
     return (
-        <div className="flex flex-col bg-white">
+        <div className="flex flex-col bg-white ">
             <div>
                 <span className="text-amber-500 text-xl font-semibold leading-[30px]">반려견의 기본 정보</span>
                 <span className="text-neutral-800 text-xl font-semibold leading-[30px]">
@@ -43,9 +46,20 @@ export default function DogRegister1({ data, setData }: Props) {
                 </span>
             </div>
             <div className="mt-8 mb-6 flex justify-center">
-                <input className="hidden" name="input" id="input-upload" type="file" accept="image/*" />
-                <label htmlFor="input-upload">
-                    <img src={SelectPhoto} alt="selectphoto" className="size-[7.5rem]" />
+                <label htmlFor="input-upload" ref={fileInputRef}>
+                    <input
+                        className="hidden"
+                        name="input"
+                        id="input-upload"
+                        type="file"
+                        accept="image/*"
+                        onChange={onSelectFile}
+                    />
+                    <img
+                        src={data.profilePhotoUrl ? data.profilePhotoUrl : SelectPhoto}
+                        alt="selectphoto"
+                        className="size-[7.5rem] rounded-full"
+                    />
                 </label>
             </div>
             <div className="flex flex-col gap-12">
