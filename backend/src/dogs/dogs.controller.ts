@@ -39,7 +39,7 @@ export class DogsController {
     @HttpCode(204)
     @UseGuards(AuthDogGuard)
     async delete(@Param('id', ParseIntPipe) dogId: number) {
-        await this.dogsService.deleteDogFromUser({ id: dogId });
+        await this.dogsService.deleteDogFromUser(dogId);
         return true;
     }
 
