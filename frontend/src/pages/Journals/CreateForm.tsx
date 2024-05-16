@@ -17,7 +17,7 @@ import Topbar from '@/components/common/Topbar';
 import ExcrementDisplay from '@/components/journals/ExcrementDisplay';
 import WalkInfo from '@/components/walk/WalkInfo';
 import useToast from '@/hooks/useToast';
-import { useRef, useState } from 'react';
+import { FormEvent, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function CreateForm() {
@@ -25,6 +25,8 @@ export default function CreateForm() {
     const { show: showToast } = useToast();
 
     const [openModal, setOpenModal] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [images, setImages] = useState<Array<Image>>([]);
 
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -180,7 +182,13 @@ export default function CreateForm() {
                             <span className="inline-block min-w-[104px] h-[104px] bg-[#F1F1F1] rounded-lg">
                                 <button className="block w-full h-full">
                                     <label className="block w-full h-full pt-[30px]">
-                                        <input type="file" accept="image/*" multiple className="hidden" />
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            multiple
+                                            className="hidden"
+                                            onChange={handleAddPhotos}
+                                        />
                                         <span className="flex justify-center">
                                             <img src={Plus} alt="더하기" className="w-6" />
                                         </span>
@@ -220,6 +228,22 @@ export default function CreateForm() {
 
         navigate('/');
     }
+
+    function handleAddPhotos(e: FormEvent<HTMLInputElement>) {
+        const files = e.currentTarget.files;
+
+        if (files === null) return;
+        const images = Array.from(files).map<Image>((file) => {
+            return { url: URL.createObjectURL(file), name: removeFilenameExtension(file.name) };
+        });
+        setTimeout(() => {
+            setImages(images);
+        }, 2000);
+    }
+
+    function removeFilenameExtension(fileName: string) {
+        return fileName.replace(/.[^.\\/:*?"<>|\r\n]+$/, '');
+    }
 }
 
 interface Location {
@@ -231,4 +255,9 @@ interface Excrement {
     dogId: number;
     fecesLocations: Array<Location>;
     urineLocations: Array<Location>;
+}
+
+interface Image {
+    url: string;
+    name: string;
 }
