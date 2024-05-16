@@ -45,6 +45,8 @@ export class AuthGuard implements CanActivate {
             return isValid;
         } catch (error) {
             if (error instanceof TokenExpiredError || error instanceof JsonWebTokenError) {
+                error = new UnauthorizedException(error.message);
+                this.logger.error(error.message, error.stack ?? 'No stack');
                 throw error;
             } else {
                 error = new UnauthorizedException('No matching user found.');
