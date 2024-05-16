@@ -15,13 +15,13 @@ export class BreedService {
         return this.breedRepository.findOne(where);
     }
 
-    async getActivityList(ownDogs: number[]): Promise<number[]> {
-        const foundBreed = await this.breedRepository.find({ id: In(ownDogs) });
-        if (!foundBreed.length) {
+    async getRecommendedWalkAmountList(ownDogs: number[]): Promise<number[]> {
+        const breeds = await this.breedRepository.find({ id: In(ownDogs) });
+        if (!breeds.length) {
             throw new NotFoundException();
         }
-        return foundBreed.map((curBreed: Breed) => {
-            return curBreed.recommendedWalkAmount;
+        return breeds.map((breed: Breed) => {
+            return breed.recommendedWalkAmount;
         });
     }
 }
