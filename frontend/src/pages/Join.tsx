@@ -17,7 +17,7 @@ import ImageCropper from '@/components/ImageCropper';
 import CropperModal from '@/components/CropperModal';
 import { PercentCrop } from 'react-image-crop';
 import { MIN_DIMENSION } from '@/constants/cropper';
-export interface DogRefInfo {
+export interface DogRegInfo {
     dogBasicInfo: DogBasicInfo;
     dogDetailInfo: DogDetailInfo;
 }
@@ -35,7 +35,7 @@ export default function Join() {
         personalInfo: false,
         marketing: false,
     });
-    const [registerData, setRegisterData] = useState<DogRefInfo>({
+    const [registerData, setRegisterData] = useState<DogRegInfo>({
         dogBasicInfo: {
             profilePhotoUrl: '',
             name: '',

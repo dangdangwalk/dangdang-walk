@@ -1,7 +1,7 @@
 import { Button } from '@/components/common/Button';
 import Topbar from '@/components/common/Topbar';
 import { ASPECT_RATIO, MIN_DIMENSION } from '@/constants/cropper';
-import { DogRefInfo } from '@/pages/Join';
+import { DogRegInfo } from '@/pages/Join';
 import setCanvasPreview from '@/utils/canvas-preview';
 import React, { ChangeEvent, Dispatch, SetStateAction, SyntheticEvent, useRef } from 'react';
 import ReactCrop, { PercentCrop, centerCrop, convertToPixelCrop, makeAspectCrop } from 'react-image-crop';
@@ -13,7 +13,7 @@ interface Props {
     setCrop: Dispatch<SetStateAction<PercentCrop | undefined>>;
     cropperToggle: boolean;
     setCropperToggle: (state: boolean) => void;
-    setRegisterData: Dispatch<SetStateAction<DogRefInfo>>;
+    setRegisterData: Dispatch<SetStateAction<DogRegInfo>>;
     onSelectFile: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
