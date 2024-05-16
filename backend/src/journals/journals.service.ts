@@ -248,4 +248,8 @@ export class JournalsService {
     async deleteJournal(journalId: number) {
         console.log(await this.delete(journalId));
     }
+
+    async getDogMonthlyJournals(userId: number, dogId: number, date: string) {
+        console.log(userId, dogId, date);
+    }
 }
