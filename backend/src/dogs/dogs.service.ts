@@ -167,16 +167,18 @@ export class DogsService {
         const weeklyWalks = await this.dogWalkDayService.getWalkDayList(dogWalkDayIds);
 
         const length = ownDogIds.length;
-        if (
-            dogProfiles.length !== length ||
-            recommendedWalkAmount.length !== length ||
-            todayWalkAmount.length !== length ||
-            weeklyWalks.length !== length
-        ) {
-            const error = new NotFoundException(
-                `Data not matched - Check dogs / breed / dog_walk_day / daily_walk_time table for dogId: ${ownDogIds}.`
+        const mismatchedLengths = [
+            dogProfiles.length !== length && `dogProfiles.length = ${dogProfiles.length}`,
+            recommendedWalkAmount.length !== length && `recommendedWalkAmount.length = ${recommendedWalkAmount.length}`,
+            todayWalkAmount.length !== length && `todayWalkAmount.length = ${todayWalkAmount.length}`,
+            weeklyWalks.length !== length && `weeklyWalks.length = ${weeklyWalks.length}`,
+        ].filter(Boolean);
+        if (mismatchedLengths.length > 0) {
+            const error = new NotFoundException(`Data missing or mismatched for dogId: ${ownDogIds}.`);
+            this.logger.error(
+                `Data missing or mismatched for dogId: ${ownDogIds}. Expected length: ${length}. Mismatched data: ${mismatchedLengths.join(', ')}`,
+                error.stack ?? 'No stack'
             );
-            this.logger.error(`Data not matched for dogId-${ownDogIds}.`, error.stack ?? 'No stack');
             throw error;
         }
 
