@@ -1,8 +1,8 @@
-frontend:
+🖥️frontend:
   - head-branch: ["^frontend"]
 
-backend:
+💾backend:
   - head-branch: ["^backend"]
 
-infra:
+🌿infra:
   - head-branch: ["^infra"]
