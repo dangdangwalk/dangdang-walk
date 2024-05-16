@@ -131,7 +131,7 @@ export class DogsService {
     private makeStatisticData(
         dogProfiles: DogProfile[],
         recommendedWalkAmount: number[],
-        dailyWalkAmount: number[],
+        todayWalkAmount: number[],
         weeklyWalks: number[][]
     ): DogStatisticDto[] {
         const result: DogStatisticDto[] = [];
@@ -141,7 +141,7 @@ export class DogsService {
                 name: dogProfiles[i].name,
                 profilePhotoUrl: dogProfiles[i].profilePhotoUrl,
                 recommendedWalkAmount: recommendedWalkAmount[i],
-                dailyWalkAmount: dailyWalkAmount[i],
+                todayWalkAmount: todayWalkAmount[i],
                 weeklyWalks: weeklyWalks[i],
             });
         }
@@ -163,14 +163,14 @@ export class DogsService {
 
         const dogProfiles = await this.getProfileList({ id: In(ownDogIds) });
         const recommendedWalkAmount = await this.breedService.getRecommendedWalkAmountList(breedIds);
-        const dailyWalkAmount = await this.dailyWalkTimeService.getWalkTimeList(dailyWalkTimeIds);
+        const todayWalkAmount = await this.dailyWalkTimeService.getWalkTimeList(dailyWalkTimeIds);
         const weeklyWalks = await this.dogWalkDayService.getWalkDayList(dogWalkDayIds);
 
         const length = ownDogIds.length;
         if (
             dogProfiles.length !== length ||
             recommendedWalkAmount.length !== length ||
-            dailyWalkAmount.length !== length ||
+            todayWalkAmount.length !== length ||
             weeklyWalks.length !== length
         ) {
             const error = new NotFoundException(
@@ -180,6 +180,6 @@ export class DogsService {
             throw error;
         }
 
-        return this.makeStatisticData(dogProfiles, recommendedWalkAmount, dailyWalkAmount, weeklyWalks);
+        return this.makeStatisticData(dogProfiles, recommendedWalkAmount, todayWalkAmount, weeklyWalks);
     }
 }

@@ -14,7 +14,7 @@ export class DogStatisticDto {
     recommendedWalkAmount: number;
 
     @IsNumber()
-    dailyWalkAmount: number;
+    todayWalkAmount: number;
 
     @IsNumber({}, { each: true })
     weeklyWalks: number[];
