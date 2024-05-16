@@ -1,12 +1,10 @@
 import { getUploadUrl, uploadImage } from '@/api/upload';
 import { ChangeEvent, useEffect, useState } from 'react';
 
-const { REACT_APP_BASE_IMAGE_URL = '' } = window._ENV ?? process.env;
-
 //TODO: react-query 적용 and 멀티 이미지 업로드
 const useImageUpload = () => {
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-    const [uploadedImageUrls, setUploadedImageUrls] = useState<string[] | null>([]);
+    const [uploadedImageUrls, setUploadedImageUrls] = useState<string[]>([]);
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (event.target.files) {
@@ -18,11 +16,7 @@ const useImageUpload = () => {
         if (selectedFiles && selectedFiles[0]) {
             const data = await getUploadUrl(selectedFiles[0].type);
             await uploadImage(selectedFiles[0], data.url);
-            setUploadedImageUrls(
-                uploadedImageUrls
-                    ? [...uploadedImageUrls, `${REACT_APP_BASE_IMAGE_URL}/${data.filename}`]
-                    : [`${REACT_APP_BASE_IMAGE_URL}/${data.filename}`]
-            );
+            setUploadedImageUrls(uploadedImageUrls ? [...uploadedImageUrls, data.filename] : [data.filename]);
             setSelectedFiles([]);
         }
     };
@@ -30,7 +24,7 @@ const useImageUpload = () => {
         handleUpload();
     }, [selectedFiles]);
 
-    return { selectedFiles, uploadedImageUrls, handleFileChange, handleUpload };
+    return { selectedFiles, handleUpload, uploadedImageUrls, handleFileChange, setUploadedImageUrls };
 };
 
 export default useImageUpload;
