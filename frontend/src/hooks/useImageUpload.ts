@@ -19,8 +19,8 @@ const useImageUpload = () => {
             await uploadImage(selectedFile, data.url);
             setUploadedImageUrls(
                 uploadedImageUrls
-                    ? [...uploadedImageUrls, `${REACT_APP_BASE_IMAGE_URL}/${data.key}`]
-                    : [`${REACT_APP_BASE_IMAGE_URL}/${data.key}`]
+                    ? [...uploadedImageUrls, `${REACT_APP_BASE_IMAGE_URL}/${data.filename}`]
+                    : [`${REACT_APP_BASE_IMAGE_URL}/${data.filename}`]
             );
             setSelectedFile(null);
         }

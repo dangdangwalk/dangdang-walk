@@ -2,7 +2,7 @@ import { createClient, httpClient } from '@/api/http';
 
 interface UploadUrlResponse {
     url: string; // Adjust this according to your API response
-    key: string;
+    filename: string;
 }
 
 export const getUploadUrl = async (type: string): Promise<UploadUrlResponse> => {
@@ -12,7 +12,11 @@ export const getUploadUrl = async (type: string): Promise<UploadUrlResponse> => 
 };
 
 const uploadClient = createClient({
-    headers: { 'Content-Type': `application/json;charset=UTF-8`, Accept: 'application/json' },
+    headers: {
+        Accept: 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'PUT, GET',
+    },
     withCredentials: false,
 });
 
