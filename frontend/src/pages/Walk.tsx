@@ -19,12 +19,14 @@ import { WalkingDog } from '@/models/dog.model';
 import { Position } from '@/models/location.model';
 import { storageKeys } from '@/constants';
 import { walkStartRequest, walkStopRequest } from '@/api/walk';
+import useImageUpload from '@/hooks/useImageUpload';
 
 interface DogWalkData {
     dogs: WalkingDog[];
     startedAt: string;
     distance: number;
     routes: Position[];
+    photoUrls: string[];
 }
 
 export default function Walk() {
@@ -38,7 +40,7 @@ export default function Walk() {
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
 
     const [calories, setCalories] = useState<number>(0);
-
+    const { uploadedImageUrls: photoUrls, handleFileChange, setUploadedImageUrls: setPhotoUrls } = useImageUpload();
     const { showStopAlert, isShowStopAlert } = useStopAlert();
     const { show } = useToast();
 
@@ -62,7 +64,9 @@ export default function Walk() {
             stopClock();
             stopGeo();
             removeStorage(storageKeys.DOGS);
-            navigate('/journals/create', { state: { dogs, distance, duration, calories, startedAt, routes } });
+            navigate('/journals/create', {
+                state: { dogs, distance, duration, calories, startedAt, routes, photoUrls },
+            });
         }
     };
 
@@ -78,6 +82,7 @@ export default function Walk() {
         setDogs(dogData.dogs);
         startClock(dogData.startedAt);
         startGeo(dogData.distance, dogData.routes);
+        setPhotoUrls(dogData.photoUrls ?? []);
     };
 
     useEffect(() => {
@@ -91,9 +96,10 @@ export default function Walk() {
             startedAt: startedAt,
             distance: distance,
             routes: routes,
+            photoUrls: photoUrls,
         };
         setStorage(storageKeys.DOGS, JSON.stringify(walkDogData));
-    }, [walkingDogs]);
+    }, [walkingDogs, startedAt, distance, routes, photoUrls]);
 
     useEffect(() => {
         const dogData = (
@@ -127,7 +133,7 @@ export default function Walk() {
             <Map startPosition={startPosition} path={routes} />
 
             <StopToast isVisible={isShowStopAlert} />
-            <WalkNavbar onOpen={handleBottomSheet} onStop={handleWalkStop} />
+            <WalkNavbar onOpen={handleBottomSheet} onStop={handleWalkStop} onChange={handleFileChange} />
 
             <BottomSheet isOpen={isDogBottomsheetOpen} onClose={handleBottomSheet}>
                 <BottomSheet.Header> 강아지 선책</BottomSheet.Header>

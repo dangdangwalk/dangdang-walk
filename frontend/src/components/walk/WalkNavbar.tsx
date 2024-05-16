@@ -1,4 +1,4 @@
-import { useRef, useState, MouseEvent, TouchEvent } from 'react';
+import { useRef, useState, MouseEvent, TouchEvent, ChangeEvent } from 'react';
 import Pause from '@/assets/icons/pause.svg';
 import Camera from '@/assets/icons/camera.svg';
 import Poop from '@/assets/icons/poop.svg';
@@ -6,10 +6,11 @@ import Poop from '@/assets/icons/poop.svg';
 interface WalkNavbarProps {
     onOpen: () => void;
     onStop: (isStop: boolean) => void;
+    onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 const LONG_CLICK_TIME = 1000;
 //refactor onStop 네이밍 TODO
-export default function WalkNavbar({ onOpen, onStop }: WalkNavbarProps) {
+export default function WalkNavbar({ onOpen, onStop, onChange }: WalkNavbarProps) {
     const [isLongPress, setIsLongPress] = useState(false);
     const timeoutRef = useRef<number | null>(null);
 
@@ -79,6 +80,7 @@ export default function WalkNavbar({ onOpen, onStop }: WalkNavbarProps) {
                     name="camera"
                     capture="environment"
                     accept="image/*"
+                    onChange={onChange}
                 />
                 <label htmlFor="camera">
                     <img src={Camera} alt="카메라 버튼" />

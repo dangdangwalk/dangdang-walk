@@ -1,7 +1,7 @@
 import useImageUpload from '@/hooks/useImageUpload';
-
+const { REACT_APP_BASE_IMAGE_URL = '' } = window._ENV ?? process.env;
 export default function Camera() {
-    const { selectedFile, uploadedImageUrls, handleFileChange, handleUpload } = useImageUpload();
+    const { selectedFiles, uploadedImageUrls, handleFileChange, handleUpload } = useImageUpload();
 
     return (
         <div>
@@ -13,7 +13,10 @@ export default function Camera() {
                 accept="image/*"
                 onChange={handleFileChange}
             />
-            {selectedFile && <p>Selected file: {selectedFile.name}</p>}
+            {selectedFiles &&
+                selectedFiles.map((file: File) => {
+                    return file.name;
+                })}
             <button onClick={handleUpload}>
                 {/* {mutation.isPending ? 'Uploading...' : 'Upload'} */}
                 upload
@@ -25,7 +28,7 @@ export default function Camera() {
                 <div>
                     <p>Uploaded Image:</p>
                     {uploadedImageUrls.map((url) => (
-                        <img key={url} src={url} alt="Uploaded" />
+                        <img key={url} src={`${REACT_APP_BASE_IMAGE_URL}/${url}`} alt="Uploaded" />
                     ))}
                 </div>
             )}
