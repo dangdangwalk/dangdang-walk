@@ -1,5 +1,5 @@
 import { httpClient } from '@/api/http';
-import { DogStatistic } from '@/components/home/DogCard';
+import { DogStatistic } from '@/models/dog.model';
 import { AvailableDog } from '@/pages/Home';
 import { DogRegInfo } from '@/pages/Join';
 

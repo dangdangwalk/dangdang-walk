@@ -1,4 +1,5 @@
-import DogCard, { DogStatistic } from '@/components/home/DogCard';
+import DogCard from '@/components/home/DogCard';
+import { DogStatistic } from '@/models/dog.model';
 
 export default function DogCardList({ dogs }: { dogs: DogStatistic[] | undefined }) {
     return (
