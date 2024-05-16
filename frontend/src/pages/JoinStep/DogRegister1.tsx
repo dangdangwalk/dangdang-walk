@@ -27,15 +27,6 @@ export default function DogRegister1({ data, setData, setCropperToggle, onSelect
             },
         }));
     };
-    const handleBreedChange = (breed: string) => {
-        setData((prev) => ({
-            ...prev,
-            dogBasicInfo: {
-                ...prev.dogBasicInfo,
-                breed,
-            },
-        }));
-    };
     const [isOpen, setIsOpen] = useState(false);
     return (
         <>
