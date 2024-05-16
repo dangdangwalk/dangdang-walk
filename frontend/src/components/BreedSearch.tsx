@@ -17,10 +17,7 @@ export default function BreedSearch({ isOpen, setIsOpen, setData }: Props) {
 
         setData((prev) => ({
             ...prev,
-            dogBasicInfo: {
-                ...prev.dogBasicInfo,
-                breed: item,
-            },
+            breed: item,
         }));
         setIsOpen(false);
     };
