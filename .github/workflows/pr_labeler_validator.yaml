@@ -23,6 +23,11 @@ jobs:
         run: |
           branch_name=$(echo "${{ github.event.pull_request.head.ref }}")
           echo "branch_name=$branch_name" >> "$GITHUB_ENV"
+
+          if [[ $branch_name =~ ^revert ]]; then
+            exit 0
+          fi
+
           if [[ ! $branch_name =~ ^(frontend|backend|infra)\/DANG-[1-9][0-9]*$ ]]; then
             echo "is_invalid_branch_name=true" >> "$GITHUB_ENV"
           fi
