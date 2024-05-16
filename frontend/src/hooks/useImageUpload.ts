@@ -1,4 +1,4 @@
-import { getUploadUrl, uploadImage } from '@/api/upload';
+// import { getUploadUrl, uploadImage } from '@/api/upload';
 import { ChangeEvent, useEffect, useState } from 'react';
 
 //TODO: react-query 적용 and 멀티 이미지 업로드
@@ -13,12 +13,12 @@ const useImageUpload = () => {
     };
 
     const handleUpload = async () => {
-        if (selectedFiles && selectedFiles[0]) {
-            const data = await getUploadUrl(selectedFiles[0].type);
-            await uploadImage(selectedFiles[0], data.url);
-            setUploadedImageUrls(uploadedImageUrls ? [...uploadedImageUrls, data.filename] : [data.filename]);
-            setSelectedFiles([]);
-        }
+        // if (selectedFiles && selectedFiles[0]) {
+        //     // const data = await getUploadUrl(selectedFiles[0].type);
+        //     // await uploadImage(selectedFiles[0], data.url);
+        //     setUploadedImageUrls(uploadedImageUrls ? [...uploadedImageUrls, data.filename] : [data.filename]);
+        //     setSelectedFiles([]);
+        // }
     };
     useEffect(() => {
         handleUpload();
