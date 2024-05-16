@@ -17,10 +17,7 @@ import ImageCropper from '@/components/ImageCropper';
 import CropperModal from '@/components/CropperModal';
 import { PercentCrop } from 'react-image-crop';
 import { MIN_DIMENSION } from '@/constants/cropper';
-export interface DogRegInfo {
-    dogBasicInfo: DogBasicInfo;
-    dogDetailInfo: DogDetailInfo;
-}
+export interface DogRegInfo extends DogBasicInfo, DogDetailInfo {}
 
 export default function Join() {
     const { signupMustation } = useAuth();
@@ -36,16 +33,12 @@ export default function Join() {
         marketing: false,
     });
     const [registerData, setRegisterData] = useState<DogRegInfo>({
-        dogBasicInfo: {
-            name: '',
-            breed: '',
-        },
-        dogDetailInfo: {
-            gender: '',
-            isNeutered: false,
-            birth: null,
-            weight: 0,
-        },
+        name: '',
+        breed: '',
+        gender: '',
+        isNeutered: false,
+        birth: null,
+        weight: 0,
     });
     const [dogPhotoFile, setDogPhotoFile] = useState<File | null>(null);
     const [step, setStep] = useState<'Agreements' | 'PetOwner' | 'Dog Registration1' | 'Dog Registration2'>(
@@ -116,8 +109,7 @@ export default function Join() {
             return signupMustation.mutate(null);
         }
         if (step === 'Dog Registration2') {
-            const data = { ...registerData.dogBasicInfo, ...registerData.dogDetailInfo };
-            console.log(data);
+            console.log(registerData);
             console.log(dogPhotoFile);
         }
         // switch (step) {
@@ -153,9 +145,9 @@ export default function Join() {
             case 'Agreements':
                 return !agreements.service || !agreements.location || !agreements.personalInfo;
             case 'Dog Registration1':
-                return !registerData.dogBasicInfo.name || !registerData.dogBasicInfo.breed;
+                return !registerData.name || !registerData.breed;
             case 'Dog Registration2':
-                return !registerData.dogDetailInfo.gender || !registerData.dogDetailInfo.weight;
+                return !registerData.gender || !registerData.weight;
         }
     };
 
@@ -246,7 +238,7 @@ export default function Join() {
                     <DogRegister1
                         dogImgUrl={dogImgUrl}
                         fileInputRef={fileInputRef}
-                        data={registerData?.dogBasicInfo}
+                        data={registerData}
                         setData={setRegisterData}
                         setCropperToggle={setCropperToggle}
                         onSelectFile={onSelectFile}

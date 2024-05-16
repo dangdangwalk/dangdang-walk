@@ -21,10 +21,7 @@ export default function DogRegister1({ data, setData, dogImgUrl, onSelectFile, f
     const handleNameChange = (name: string) => {
         setData((prev) => ({
             ...prev,
-            dogBasicInfo: {
-                ...prev.dogBasicInfo,
-                name,
-            },
+            name,
         }));
     };
     const [isOpen, setIsOpen] = useState(false);

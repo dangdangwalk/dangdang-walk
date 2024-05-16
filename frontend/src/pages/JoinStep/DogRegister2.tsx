@@ -24,28 +24,19 @@ export default function DogRegister2({ data, setData }: Props) {
     const handleGenderChange = (gender: string) => {
         setData((prev) => ({
             ...prev,
-            dogDetailInfo: {
-                ...prev.dogDetailInfo,
-                gender,
-            },
+            gender,
         }));
     };
     const handleWeightChange = (weight: string) => {
         setData((prev) => ({
             ...prev,
-            dogDetailInfo: {
-                ...prev.dogDetailInfo,
-                weight: Number(weight),
-            },
+            weight: Number(weight),
         }));
     };
     const handleBirthChange = (birth: string) => {
         setData((prev) => ({
             ...prev,
-            dogDetailInfo: {
-                ...prev.dogDetailInfo,
-                birth,
-            },
+            birth,
         }));
     };
 
@@ -53,9 +44,7 @@ export default function DogRegister2({ data, setData }: Props) {
     return (
         <div className="flex flex-col bg-white">
             <div>
-                <span className="text-amber-500 text-xl font-semibold leading-[30px]">
-                    {data.dogBasicInfo.name}의 세부 정보
-                </span>
+                <span className="text-amber-500 text-xl font-semibold leading-[30px]">{data.name}의 세부 정보</span>
                 <span className="text-neutral-800 text-xl font-semibold leading-[30px]">
                     를
                     <br />
@@ -67,20 +56,20 @@ export default function DogRegister2({ data, setData }: Props) {
                 <button
                     onClick={() => handleGenderChange('MALE')}
                     className={`border ${
-                        data.dogDetailInfo.gender === 'MALE' ? 'border-primary' : 'border-secondary'
+                        data.gender === 'MALE' ? 'border-primary' : 'border-secondary'
                     } bg-primary-foreground  rounded-lg w-full flex flex-col items-center justify-center`}
                 >
                     <div className="flex flex-col justify-center items-center gap-1 my-5 mx-6">
                         <div
                             className={`text-base ${
-                                data.dogDetailInfo.gender === 'MALE' ? 'text-neutral-800' : 'text-stone-500'
+                                data.gender === 'MALE' ? 'text-neutral-800' : 'text-stone-500'
                             }  font-bold`}
                         >
                             <img src={Male} alt="male" />
                         </div>
                         <div
                             className={`text-xs ${
-                                data.dogDetailInfo.gender === 'MALE' ? 'text-neutral-800' : 'text-neutral-400'
+                                data.gender === 'MALE' ? 'text-neutral-800' : 'text-neutral-400'
                             }  font-normal`}
                         >
                             남아
@@ -90,20 +79,20 @@ export default function DogRegister2({ data, setData }: Props) {
                 <button
                     onClick={() => handleGenderChange('FEMALE')}
                     className={`border ${
-                        data.dogDetailInfo.gender === 'FEMALE' ? 'border-primary' : 'border-secondary'
+                        data.gender === 'FEMALE' ? 'border-primary' : 'border-secondary'
                     } bg-primary-foreground  rounded-lg w-full flex flex-col items-center justify-center`}
                 >
                     <div className="flex flex-col justify-center items-center gap-1 my-5 mx-6">
                         <div
                             className={`text-base ${
-                                data.dogDetailInfo.gender === 'FEMALE' ? 'text-neutral-800' : 'text-stone-500'
+                                data.gender === 'FEMALE' ? 'text-neutral-800' : 'text-stone-500'
                             }  font-bold`}
                         >
                             <img src={FeMale} alt="female" />
                         </div>
                         <div
                             className={`text-xs ${
-                                data.dogDetailInfo.gender === 'FEMALE' ? 'text-neutral-800' : 'text-neutral-400'
+                                data.gender === 'FEMALE' ? 'text-neutral-800' : 'text-neutral-400'
                             }  font-normal`}
                         >
                             여아
@@ -113,14 +102,11 @@ export default function DogRegister2({ data, setData }: Props) {
             </div>
             <div className="mt-2">
                 <Checkbox
-                    checked={data.dogDetailInfo.isNeutered}
+                    checked={data.isNeutered}
                     onCheckedChange={(checked: boolean) => {
                         setData((prev) => ({
                             ...prev,
-                            dogDetailInfo: {
-                                ...prev.dogDetailInfo,
-                                isNeutered: checked,
-                            },
+                            isNeutered: checked,
                         }));
                     }}
                     labelText="중성화 했어요"
@@ -132,7 +118,7 @@ export default function DogRegister2({ data, setData }: Props) {
                         <>
                             <input
                                 type="date"
-                                placeholder={`${data.dogBasicInfo.name}의 생일이 궁금해요`}
+                                placeholder={`${data.name}의 생일이 궁금해요`}
                                 className="outline-none w-full"
                                 onChange={(event) => handleBirthChange(event.target.value)}
                             />
@@ -147,10 +133,7 @@ export default function DogRegister2({ data, setData }: Props) {
 
                         setData((prev) => ({
                             ...prev,
-                            dogDetailInfo: {
-                                ...prev.dogDetailInfo,
-                                birth: null,
-                            },
+                            birth: null,
                         }));
                     }}
                     labelText="생일을 몰라요"
@@ -162,7 +145,7 @@ export default function DogRegister2({ data, setData }: Props) {
                         type="number"
                         pattern="\d*"
                         inputMode="numeric"
-                        placeholder={`${data.dogBasicInfo.name}의 체중이 궁금해요`}
+                        placeholder={`${data.name}의 체중이 궁금해요`}
                         className="outline-none"
                         maxLength={3}
                         onInput={(e) => maxLengthCheck(e)}
