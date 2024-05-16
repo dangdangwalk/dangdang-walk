@@ -10,6 +10,8 @@ const cookieKeys = {
 const queryKeys = {
     AUTH: 'auth',
     GET_ACCESS_TOKEN: 'getAccessToken',
+    GET_IMAGE_URL: 'getImageURL',
+    WALK_AVAILABLE_DOGS: 'walkAvailableDogs',
 } as const;
 
 const storageKeys = {

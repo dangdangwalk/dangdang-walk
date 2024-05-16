@@ -3,42 +3,26 @@ import { ChangeEvent, useState } from 'react';
 
 const { REACT_APP_BASE_IMAGE_URL = '' } = window._ENV ?? process.env;
 
+//TODO: react-query 적용 and 멀티 이미지 업로드
 const useImageUpload = () => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [uploadedImageUrls, setUploadedImageUrls] = useState<string[] | null>([]);
-
-    // const mutation = useMutation({
-    //     mutationFn: async (file, url) => {
-    //         await uploadImage(file, url);
-    //     },
-    //     onSuccess: (data) => {
-    //         console.log(data);
-    //         // setUploadedImageUrl(uploadedImageUrl ? [...uploadedImageUrl, data] : [data]);
-    //     },
-    //     onError: (error) => {
-    //         console.error('Upload failed:', error);
-    //     },
-    // });
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
             setSelectedFile(event.target.files[0]);
         }
     };
-    const handleUpload = () => {
+    const handleUpload = async () => {
         if (selectedFile) {
-            // mutation.mutate(selectedFile);
-            getUploadUrl(selectedFile.type).then((data) => {
-                // mutation.mutate(selectedFile, data.url);
-                uploadImage(selectedFile, data.url).then(() => {
-                    setUploadedImageUrls(
-                        uploadedImageUrls
-                            ? [...uploadedImageUrls, `${REACT_APP_BASE_IMAGE_URL}/${data.key}`]
-                            : [`${REACT_APP_BASE_IMAGE_URL}/${data.key}`]
-                    );
-                });
-                // setSelectedFile(null);
-            });
+            const data = await getUploadUrl(selectedFile.type);
+            await uploadImage(selectedFile, data.url);
+            setUploadedImageUrls(
+                uploadedImageUrls
+                    ? [...uploadedImageUrls, `${REACT_APP_BASE_IMAGE_URL}/${data.key}`]
+                    : [`${REACT_APP_BASE_IMAGE_URL}/${data.key}`]
+            );
+            setSelectedFile(null);
         }
     };
 
