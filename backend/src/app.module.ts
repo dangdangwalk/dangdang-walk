@@ -18,6 +18,7 @@ import { JournalPhotosModule } from './journal-photos/journal-photos.module';
 import { JournalsDogsModule } from './journals-dogs/journals-dogs.module';
 import { JournalsModule } from './journals/journals.module';
 import { S3Module } from './s3/s3.module';
+import { StatisticsModule } from './statistics/statistics.module';
 import { UsersModule } from './users/users.module';
 import { WalkModule } from './walk/walk.module';
 
@@ -47,6 +48,7 @@ import { WalkModule } from './walk/walk.module';
         JournalPhotosModule,
         JournalsDogsModule,
         S3Module,
+        StatisticsModule,
     ],
     controllers: [AppController, HealthController],
     providers: [
