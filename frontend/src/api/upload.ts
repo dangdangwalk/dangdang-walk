@@ -5,8 +5,8 @@ interface UploadUrlResponse {
     filename: string;
 }
 
-export const getUploadUrl = async (type: string): Promise<UploadUrlResponse> => {
-    const { data } = await httpClient.get(`/api/upload?type=${type}`);
+export const getUploadUrl = async (type: string[]): Promise<UploadUrlResponse[]> => {
+    const { data } = await httpClient.post(`/api/upload`, type);
 
     return data;
 };
