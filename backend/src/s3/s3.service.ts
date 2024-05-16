@@ -17,12 +17,12 @@ export class S3Service {
 
     //TODO: 이 로그 지우기
     async createPresignedUrlWithClient(userId: number, type: string): Promise<PresignedUrlInfo> {
-        const key = this.makeFileName(userId, type);
+        const filename = this.makeFileName(userId, type);
         const url = await this.s3Client.getSignedUrlPromise('putObject', {
             Bucket: 'dangdangwalk',
             ContentType: `image/${type}`,
-            Key: key,
+            Key: filename,
         });
-        return { key, url };
+        return { filename, url };
     }
 }

@@ -1,4 +1,4 @@
 export interface PresignedUrlInfo {
-    key: string;
+    filename: string;
     url: string;
 }
