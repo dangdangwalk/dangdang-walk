@@ -27,7 +27,7 @@ get:
                   type: number
                   description: 하루 권장 산책량 [s]
                   example: 3600
-                dailyWalkAmount:
+                todayWalkAmount:
                   type: number
                   description: 하루 산책량
                   example: 1800
