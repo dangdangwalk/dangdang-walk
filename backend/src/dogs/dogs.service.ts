@@ -50,8 +50,8 @@ export class DogsService {
         }
     }
 
-    async deleteDogFromUser(where: FindOptionsWhere<Dogs>) {
-        const dog = await this.findOne(where);
+    async deleteDogFromUser(dogId: number) {
+        const dog = await this.findOne({ id: dogId });
 
         await this.dogWalkDayService.delete({ id: dog.walkDayId });
         await this.dailyWalkTimeService.delete({ id: dog.dailyWalkTimeId });
@@ -146,6 +146,13 @@ export class DogsService {
             });
         }
         return result;
+    }
+
+    async getDogStatistics(userId: number, dogId: number, date: string) {
+        const dog = await this.findOne({ id: dogId });
+        // this.journalsService.getDogMonthlyJournals(userId, dogId, date);
+
+        return { recommendedWalkAmount: dog.breed.recommendedWalkAmount };
     }
 
     async getDogsStatistics(userId: number): Promise<DogStatisticDto[]> {
