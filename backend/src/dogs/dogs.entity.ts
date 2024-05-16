@@ -26,7 +26,7 @@ export class Dogs {
     @Column()
     name: string;
 
-    @ManyToOne(() => Breed, { nullable: false })
+    @ManyToOne(() => Breed, { nullable: false, eager: true })
     @JoinColumn({ name: 'breed_id' })
     breed: Breed;
 

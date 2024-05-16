@@ -1,9 +1,22 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    HttpCode,
+    Param,
+    ParseIntPipe,
+    Patch,
+    Post,
+    Query,
+    UseGuards,
+} from '@nestjs/common';
 import { AccessTokenPayload } from '../auth/token/token.service';
 import { User } from '../users/decorators/user.decorator';
 import { DogsService } from './dogs.service';
 import { DogDto } from './dto/dog.dto';
 import { AuthDogGuard } from './guards/authDog.guard';
+import { DateValidationPipe } from './pipes/dateValidation.pipe';
 
 export type DogProfile = {
     id: number;
@@ -26,7 +39,7 @@ export class DogsController {
     @HttpCode(204)
     @UseGuards(AuthDogGuard)
     async delete(@Param('id', ParseIntPipe) dogId: number) {
-        await this.dogsService.deleteDogFromUser({ id: dogId });
+        await this.dogsService.deleteDogFromUser(dogId);
         return true;
     }
 
@@ -44,9 +57,14 @@ export class DogsController {
         return this.dogsService.getProfile(dogId);
     }
 
-    @Get('/walk-available')
-    async getAvailableDogs(@User() { userId }: AccessTokenPayload): Promise<DogProfile[]> {
-        return await this.dogsService.getAvailableDogs(userId);
+    @Get('/:id(\\d+)/statistics')
+    @UseGuards(AuthDogGuard)
+    async getDogStatistics(
+        @User() { userId }: AccessTokenPayload,
+        @Param('id', ParseIntPipe) dogId: number,
+        @Query('date', DateValidationPipe) date: string
+    ) {
+        return await this.dogsService.getDogStatistics(userId, dogId, date);
     }
 
     @Get('/statistics')
@@ -54,4 +72,8 @@ export class DogsController {
         return await this.dogsService.getDogsStatistics(userId);
     }
 
+    @Get('/walk-available')
+    async getAvailableDogs(@User() { userId }: AccessTokenPayload): Promise<DogProfile[]> {
+        return await this.dogsService.getAvailableDogs(userId);
+    }
 }
