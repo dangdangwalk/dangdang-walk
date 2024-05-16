@@ -1,3 +1,4 @@
+import Plus from '@/assets/icons/ic-plus.svg';
 import Cancel from '@/assets/icons/ic-top-cancel.svg';
 import Avatar from '@/components/common/Avatar';
 import { Button } from '@/components/common/Button';
@@ -176,7 +177,17 @@ export default function CreateForm() {
                             <span className="inline-block min-w-[104px] h-[104px] bg-slate-300">강아지 이미지</span>
                             <span className="inline-block min-w-[104px] h-[104px] bg-slate-300">강아지 이미지</span>
                             <span className="inline-block min-w-[104px] h-[104px] bg-slate-300">강아지 이미지</span>
-                            <span className="inline-block min-w-[104px] h-[104px] bg-slate-300">강아지 이미지</span>
+                            <span className="inline-block min-w-[104px] h-[104px] bg-[#F1F1F1] rounded-lg">
+                                <button className="block w-full h-full">
+                                    <label className="block w-full h-full pt-[30px]">
+                                        <input type="file" accept="image/*" multiple className="hidden" />
+                                        <span className="flex justify-center">
+                                            <img src={Plus} alt="더하기" className="w-6" />
+                                        </span>
+                                        <span className="mt-2.5 text-[#BABABA] text-xs font-semibold">사진추가</span>
+                                    </label>
+                                </button>
+                            </span>
                         </div>
                     </div>
                     <Divider />
