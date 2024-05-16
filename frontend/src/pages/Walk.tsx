@@ -20,6 +20,7 @@ import { Position } from '@/models/location.model';
 import { storageKeys } from '@/constants';
 import { walkStartRequest, walkStopRequest } from '@/api/walk';
 import useImageUpload from '@/hooks/useImageUpload';
+import { useSpinnerStore } from '@/store/spinnerStore';
 
 interface DogWalkData {
     dogs: WalkingDog[];
@@ -43,6 +44,7 @@ export default function Walk() {
     const { uploadedImageUrls: photoUrls, handleFileChange, setUploadedImageUrls: setPhotoUrls } = useImageUpload();
     const { showStopAlert, isShowStopAlert } = useStopAlert();
     const { show } = useToast();
+    const { spinnerAdd, spinnerRemove } = useSpinnerStore();
 
     const handleBottomSheet = () => {
         setIsDogBottomsheetOpen(!isDogBottomsheetOpen);
@@ -59,6 +61,7 @@ export default function Walk() {
 
     const stopWalk = async (dogs: WalkingDog[] | null) => {
         if (!dogs) return;
+        spinnerAdd();
         const ok = await walkStopRequest(dogs.map((d) => d.id));
         if (ok) {
             stopClock();
@@ -68,6 +71,7 @@ export default function Walk() {
                 state: { dogs, distance, duration, calories, startedAt, routes, photoUrls },
             });
         }
+        spinnerRemove();
     };
 
     const handleWalkStop = (isStop: boolean) => {
