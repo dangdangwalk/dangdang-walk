@@ -3,10 +3,10 @@ import Male from '@/assets/icons/ic-sex-male.svg';
 import FeMale from '@/assets/icons/ic-sex-femal.svg';
 import { Divider } from '@/components/common/Divider';
 import { Checkbox } from '@/components/common/Checkbox2';
-import { DogRefInfo } from '@/pages/Join';
+import { DogRegInfo } from '@/pages/Join';
 interface Props {
-    data: DogRefInfo;
-    setData: Dispatch<SetStateAction<DogRefInfo>>;
+    data: DogRegInfo;
+    setData: Dispatch<SetStateAction<DogRegInfo>>;
 }
 export interface DogDetailInfo {
     gender: string;
