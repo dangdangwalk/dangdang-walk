@@ -187,7 +187,7 @@ export default function CreateForm() {
                                             accept="image/*"
                                             multiple
                                             className="hidden"
-                                            onChange={handleAddPhotos}
+                                            onChange={handleAddImages}
                                         />
                                         <span className="flex justify-center">
                                             <img src={Plus} alt="더하기" className="w-6" />
@@ -229,7 +229,7 @@ export default function CreateForm() {
         navigate('/');
     }
 
-    function handleAddPhotos(e: FormEvent<HTMLInputElement>) {
+    function handleAddImages(e: FormEvent<HTMLInputElement>) {
         const files = e.currentTarget.files;
 
         if (files === null) return;
