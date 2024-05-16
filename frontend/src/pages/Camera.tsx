@@ -1,7 +1,7 @@
 import useImageUpload from '@/hooks/useImageUpload';
 
 export default function Camera() {
-    const { selectedFile, uploadedImageUrls, handleFileChange, handleUpload } = useImageUpload();
+    const { selectedFiles, uploadedImageUrls, handleFileChange, handleUpload } = useImageUpload();
 
     return (
         <div>
@@ -13,7 +13,10 @@ export default function Camera() {
                 accept="image/*"
                 onChange={handleFileChange}
             />
-            {selectedFile && <p>Selected file: {selectedFile.name}</p>}
+            {selectedFiles &&
+                selectedFiles.map((file: File) => {
+                    return file.name;
+                })}
             <button onClick={handleUpload}>
                 {/* {mutation.isPending ? 'Uploading...' : 'Upload'} */}
                 upload
