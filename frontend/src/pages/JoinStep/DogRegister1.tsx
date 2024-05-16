@@ -70,7 +70,7 @@ export default function DogRegister1({ data, setData, setCropperToggle, onSelect
                     </div>
                     <div className="py-3 relative">
                         <div
-                            className="text-neutral-400 text-base font-normal font-['NanumGothic'] leading-normal"
+                            className={`${data.breed ? 'text-black' : 'text-neutral-400'} text-base font-normal font-['NanumGothic'] leading-normal`}
                             onClick={() => setIsOpen(true)}
                         >
                             {data.breed ? data.breed : '견종이 궁금해요'}
