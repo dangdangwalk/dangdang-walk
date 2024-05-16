@@ -15,13 +15,23 @@ export class BreedService {
         return this.breedRepository.findOne(where);
     }
 
-    async getRecommendedWalkAmountList(ownDogs: number[]): Promise<number[]> {
-        const breeds = await this.breedRepository.find({ id: In(ownDogs) });
+    async getRecommendedWalkAmountList(breedIds: number[]): Promise<number[]> {
+        const breeds = await this.breedRepository.find({ id: In(breedIds) });
+
         if (!breeds.length) {
             throw new NotFoundException();
         }
-        return breeds.map((breed: Breed) => {
-            return breed.recommendedWalkAmount;
+
+        const breedMap = new Map(breeds.map((breed: Breed) => [breed.id, breed.recommendedWalkAmount]));
+
+        return breedIds.map((breedId: number) => {
+            const recommendedWalkAmount = breedMap.get(breedId);
+
+            if (!recommendedWalkAmount) {
+                throw new NotFoundException(`Recommended walk amount not found for breedId: ${breedId}.`);
+            }
+
+            return recommendedWalkAmount;
         });
     }
 }
