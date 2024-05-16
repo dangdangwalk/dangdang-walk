@@ -1,4 +1,4 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class DogStatisticDto {
     @IsNumber()
@@ -8,7 +8,8 @@ export class DogStatisticDto {
     name: string;
 
     @IsString()
-    profilePhotoUrl: string;
+    @IsOptional()
+    profilePhotoUrl: string | null;
 
     @IsNumber()
     recommendedWalkAmount: number;
