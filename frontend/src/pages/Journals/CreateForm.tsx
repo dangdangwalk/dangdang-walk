@@ -13,6 +13,7 @@ import {
     ModalHeader,
     ModalTitle,
 } from '@/components/common/Modal';
+import Spinner from '@/components/common/Spinner';
 import Topbar from '@/components/common/Topbar';
 import ExcrementDisplay from '@/components/journals/ExcrementDisplay';
 import WalkInfo from '@/components/walk/WalkInfo';
@@ -27,6 +28,7 @@ export default function CreateForm() {
     const [openModal, setOpenModal] = useState(false);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [images, setImages] = useState<Array<Image>>([]);
+    const [isUploading, setIsUploading] = useState(false);
 
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -180,21 +182,27 @@ export default function CreateForm() {
                             <span className="inline-block min-w-[104px] h-[104px] bg-slate-300">강아지 이미지</span>
                             <span className="inline-block min-w-[104px] h-[104px] bg-slate-300">강아지 이미지</span>
                             <span className="inline-block min-w-[104px] h-[104px] bg-[#F1F1F1] rounded-lg">
-                                <button className="block w-full h-full">
-                                    <label className="block w-full h-full pt-[30px]">
-                                        <input
-                                            type="file"
-                                            accept="image/*"
-                                            multiple
-                                            className="hidden"
-                                            onChange={handleAddImages}
-                                        />
-                                        <span className="flex justify-center">
-                                            <img src={Plus} alt="더하기" className="w-6" />
-                                        </span>
-                                        <span className="mt-2.5 text-[#BABABA] text-xs font-semibold">사진추가</span>
-                                    </label>
-                                </button>
+                                {isUploading ? (
+                                    <Spinner />
+                                ) : (
+                                    <button className="block w-full h-full">
+                                        <label className="block w-full h-full pt-[30px]">
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                multiple
+                                                className="hidden"
+                                                onChange={handleAddImages}
+                                            />
+                                            <span className="flex justify-center">
+                                                <img src={Plus} alt="더하기" className="w-6" />
+                                            </span>
+                                            <span className="mt-2.5 text-[#BABABA] text-xs font-semibold">
+                                                사진추가
+                                            </span>
+                                        </label>
+                                    </button>
+                                )}
                             </span>
                         </div>
                     </div>
@@ -233,11 +241,14 @@ export default function CreateForm() {
         const files = e.currentTarget.files;
 
         if (files === null) return;
+        setIsUploading(true);
+
         const images = Array.from(files).map<Image>((file) => {
             return { url: URL.createObjectURL(file), name: removeFilenameExtension(file.name) };
         });
         setTimeout(() => {
             setImages(images);
+            setIsUploading(false);
         }, 2000);
     }
 
