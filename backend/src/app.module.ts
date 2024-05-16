@@ -16,10 +16,10 @@ import { DogsModule } from './dogs/dogs.module';
 import { ExcrementsModule } from './excrements/excrements.module';
 import { JournalPhotosModule } from './journal-photos/journal-photos.module';
 import { JournalsDogsModule } from './journals-dogs/journals-dogs.module';
-import { JournalModule } from './journals/journals.module';
+import { JournalsModule } from './journals/journals.module';
+import { S3Module } from './s3/s3.module';
 import { UsersModule } from './users/users.module';
 import { WalkModule } from './walk/walk.module';
-import { S3Module } from './s3/s3.module';
 
 @Module({
     imports: [
@@ -42,7 +42,7 @@ import { S3Module } from './s3/s3.module';
         WalkModule,
         BreedModule,
         DogWalkDayModule,
-        JournalModule,
+        JournalsModule,
         ExcrementsModule,
         JournalPhotosModule,
         JournalsDogsModule,
