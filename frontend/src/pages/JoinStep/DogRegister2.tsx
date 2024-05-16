@@ -11,8 +11,7 @@ interface Props {
 export interface DogDetailInfo {
     gender: string;
     isNeutered: boolean;
-    birth?: string;
-    notSureBday: boolean;
+    birth: string | null;
     weight: number;
 }
 export default function DogRegister2({ data, setData }: Props) {
@@ -145,6 +144,14 @@ export default function DogRegister2({ data, setData }: Props) {
                     checked={birthCheck}
                     onCheckedChange={(checked: boolean) => {
                         setBirthCheck(checked);
+
+                        setData((prev) => ({
+                            ...prev,
+                            dogDetailInfo: {
+                                ...prev.dogDetailInfo,
+                                birth: null,
+                            },
+                        }));
                     }}
                     labelText="생일을 몰라요"
                 />

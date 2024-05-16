@@ -5,11 +5,11 @@ import { DogRegInfo } from '@/pages/Join';
 import BreedSearch from '@/components/BreedSearch';
 
 export interface DogBasicInfo {
-    profilePhotoUrl: string;
     name: string;
     breed: string;
 }
 interface Props {
+    dogImgUrl: string;
     data: DogBasicInfo;
     setData: Dispatch<SetStateAction<DogRegInfo>>;
     setCropperToggle: (check: boolean) => void;
@@ -17,7 +17,7 @@ interface Props {
     fileInputRef: MutableRefObject<null>;
 }
 
-export default function DogRegister1({ data, setData, setCropperToggle, onSelectFile, fileInputRef }: Props) {
+export default function DogRegister1({ data, setData, dogImgUrl, onSelectFile, fileInputRef }: Props) {
     const handleNameChange = (name: string) => {
         setData((prev) => ({
             ...prev,
@@ -50,7 +50,7 @@ export default function DogRegister1({ data, setData, setCropperToggle, onSelect
                             onChange={onSelectFile}
                         />
                         <img
-                            src={data.profilePhotoUrl ? data.profilePhotoUrl : SelectPhoto}
+                            src={dogImgUrl ? dogImgUrl : SelectPhoto}
                             alt="selectphoto"
                             className="size-[7.5rem] rounded-full"
                         />

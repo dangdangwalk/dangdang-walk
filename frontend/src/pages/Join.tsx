@@ -37,18 +37,17 @@ export default function Join() {
     });
     const [registerData, setRegisterData] = useState<DogRegInfo>({
         dogBasicInfo: {
-            profilePhotoUrl: '',
             name: '',
             breed: '',
         },
         dogDetailInfo: {
             gender: '',
             isNeutered: false,
-            birth: '',
-            notSureBday: false,
+            birth: null,
             weight: 0,
         },
     });
+    const [dogPhotoFile, setDogPhotoFile] = useState<File | null>(null);
     const [step, setStep] = useState<'Agreements' | 'PetOwner' | 'Dog Registration1' | 'Dog Registration2'>(
         'Agreements'
     );
@@ -116,6 +115,11 @@ export default function Join() {
         if (step === 'PetOwner' && !haveADog) {
             return signupMustation.mutate(null);
         }
+        if (step === 'Dog Registration2') {
+            const data = { ...registerData.dogBasicInfo, ...registerData.dogDetailInfo };
+            console.log(data);
+            console.log(dogPhotoFile);
+        }
         // switch (step) {
         //     case 'Agreements':
         //         setSwitchStep({ ...switchStep, step1ToStep2: true });
@@ -149,17 +153,9 @@ export default function Join() {
             case 'Agreements':
                 return !agreements.service || !agreements.location || !agreements.personalInfo;
             case 'Dog Registration1':
-                return (
-                    !registerData.dogBasicInfo.name ||
-                    !registerData.dogBasicInfo.breed ||
-                    !registerData.dogBasicInfo.profilePhotoUrl
-                );
+                return !registerData.dogBasicInfo.name || !registerData.dogBasicInfo.breed;
             case 'Dog Registration2':
-                return (
-                    !registerData.dogDetailInfo.gender ||
-                    !registerData.dogDetailInfo.birth ||
-                    !registerData.dogDetailInfo.weight
-                );
+                return !registerData.dogDetailInfo.gender || !registerData.dogDetailInfo.weight;
         }
     };
 
@@ -214,6 +210,7 @@ export default function Join() {
         e.currentTarget.value = '';
     };
     const [crop, setCrop] = useState<PercentCrop>();
+    const [dogImgUrl, setDogImgUrl] = useState('');
     const fileInputRef = useRef(null);
 
     return (
@@ -247,6 +244,7 @@ export default function Join() {
                 {step === 'PetOwner' && <PetOwner haveADog={haveADog} handleHaveADogChange={handleHaveADogChange} />}
                 {step === 'Dog Registration1' && (
                     <DogRegister1
+                        dogImgUrl={dogImgUrl}
                         fileInputRef={fileInputRef}
                         data={registerData?.dogBasicInfo}
                         setData={setRegisterData}
@@ -268,6 +266,7 @@ export default function Join() {
                 </Button>
             </div>
             <ImageCropper
+                setDogPhotoFile={setDogPhotoFile}
                 prevImg={prevImg}
                 setPrevImg={setPrevImg}
                 crop={crop}
@@ -276,6 +275,7 @@ export default function Join() {
                 setCropperToggle={setCropperToggle}
                 setRegisterData={setRegisterData}
                 onSelectFile={onSelectFile}
+                setDogImgUrl={setDogImgUrl}
             />
             {cropError && <CropperModal setCropError={setCropError} setCrop={setCrop} fileInputRef={fileInputRef} />}
         </div>
