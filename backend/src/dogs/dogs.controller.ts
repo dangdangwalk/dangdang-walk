@@ -21,7 +21,7 @@ import { DateValidationPipe } from './pipes/dateValidation.pipe';
 export type DogProfile = {
     id: number;
     name: string;
-    profilePhotoUrl: string;
+    profilePhotoUrl: string | null;
 };
 
 @Controller('dogs')

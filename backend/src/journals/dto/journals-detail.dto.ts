@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsNotEmpty, IsUrl, ValidateNested } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, IsUrl, ValidateNested } from 'class-validator';
 
 export class PhotoUrlDto {
     @IsNotEmpty()
@@ -18,9 +18,9 @@ export class DogInfoForDetail {
     @IsNotEmpty()
     name: string;
 
-    @IsNotEmpty()
-    @IsUrl()
-    profilePhotoUrl: string;
+    @IsString()
+    @IsOptional()
+    profilePhotoUrl: string | null;
 
     @IsNotEmpty()
     fecesCnt: number;
@@ -41,8 +41,7 @@ export class Companions {
     @IsNotEmpty()
     name: string;
 
-    @IsNotEmpty()
-    profilePhotoUrl: string;
+    profilePhotoUrl: string | null;
 }
 
 export class RouteDto {

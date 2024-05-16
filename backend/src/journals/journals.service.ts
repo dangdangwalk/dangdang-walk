@@ -134,8 +134,8 @@ export class JournalsService {
             const companionsProfile = await this.getCompanionsProfile(journalDogs, dogId);
 
             return new JournalDetailDto(journalInfo, dogInfo, companionsProfile);
-        } catch (e) {
-            throw e;
+        } catch (error) {
+            throw error;
         }
     }
 
