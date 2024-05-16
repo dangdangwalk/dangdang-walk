@@ -23,7 +23,7 @@ get:
                   type: string
                   description: 강아지 사진 URL
                   example: https://path/to/profile-photo
-                recommendedDailyWalkAmount:
+                recommendedWalkAmount:
                   type: number
                   description: 하루 권장 산책량 [s]
                   example: 3600

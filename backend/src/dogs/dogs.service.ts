@@ -130,7 +130,7 @@ export class DogsService {
 
     private makeStatisticData(
         dogProfiles: DogProfile[],
-        recommendedDailyWalkAmount: number[],
+        recommendedWalkAmount: number[],
         dailyWalkAmount: number[],
         weeklyWalks: number[][]
     ): DogStatisticDto[] {
@@ -140,7 +140,7 @@ export class DogsService {
                 id: dogProfiles[i].id,
                 name: dogProfiles[i].name,
                 profilePhotoUrl: dogProfiles[i].profilePhotoUrl,
-                recommendedDailyWalkAmount: recommendedDailyWalkAmount[i],
+                recommendedWalkAmount: recommendedWalkAmount[i],
                 dailyWalkAmount: dailyWalkAmount[i],
                 weeklyWalks: weeklyWalks[i],
             });
@@ -162,14 +162,14 @@ export class DogsService {
         const breedIds = await this.getRelatedTableIdList(ownDogIds, 'breedId');
 
         const dogProfiles = await this.getProfileList({ id: In(ownDogIds) });
-        const recommendedDailyWalkAmount = await this.breedService.getActivityList(breedIds);
+        const recommendedWalkAmount = await this.breedService.getRecommendedWalkAmountList(breedIds);
         const dailyWalkAmount = await this.dailyWalkTimeService.getWalkTimeList(dailyWalkTimeIds);
         const weeklyWalks = await this.dogWalkDayService.getWalkDayList(dogWalkDayIds);
 
         const length = ownDogIds.length;
         if (
             dogProfiles.length !== length ||
-            recommendedDailyWalkAmount.length !== length ||
+            recommendedWalkAmount.length !== length ||
             dailyWalkAmount.length !== length ||
             weeklyWalks.length !== length
         ) {
@@ -180,6 +180,6 @@ export class DogsService {
             throw error;
         }
 
-        return this.makeStatisticData(dogProfiles, recommendedDailyWalkAmount, dailyWalkAmount, weeklyWalks);
+        return this.makeStatisticData(dogProfiles, recommendedWalkAmount, dailyWalkAmount, weeklyWalks);
     }
 }

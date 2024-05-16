@@ -11,7 +11,7 @@ export class DogStatisticDto {
     profilePhotoUrl: string;
 
     @IsNumber()
-    recommendedDailyWalkAmount: number;
+    recommendedWalkAmount: number;
 
     @IsNumber()
     dailyWalkAmount: number;
