@@ -1,7 +1,9 @@
 import { Controller, Get } from '@nestjs/common';
+import { SkipAuthGuard } from 'src/auth/decorators/public.decorator';
 
 @Controller('breeds')
 export class BreedController {
+    @SkipAuthGuard()
     @Get('/')
     async getBreedData() {
         //TODO : 데이터 확정 후에는 DB에서 가져오는걸로 바꾸기..
