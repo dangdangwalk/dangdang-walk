@@ -20,10 +20,10 @@ import { JournalsService } from './journals.service';
 export class JournalsController {
     constructor(private readonly journalsService: JournalsService) {}
 
-    @Get('/')
+    @Get('/:id(\\d+)')
     getJournalDetail(
         @User() user: AccessTokenPayload,
-        @Query('journalId', ParseIntPipe) journalId: number,
+        @Param('id', ParseIntPipe) journalId: number,
         @Query('dogId', ParseIntPipe) dogId: number
     ) {
         if (!this.journalsService.checkJournalOwnership(user.userId, journalId)) {
