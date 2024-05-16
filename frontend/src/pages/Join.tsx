@@ -116,17 +116,17 @@ export default function Join() {
         if (step === 'PetOwner' && !haveADog) {
             return signupMustation.mutate(null);
         }
-        switch (step) {
-            case 'Agreements':
-                setSwitchStep({ ...switchStep, step1ToStep2: true });
-                break;
-            case 'PetOwner':
-                setSwitchStep({ ...switchStep, step2ToStep3: true });
-                break;
-            case 'Dog Registration1':
-                setSwitchStep({ ...switchStep, step3ToStep4: true });
-                break;
-        }
+        // switch (step) {
+        //     case 'Agreements':
+        //         setSwitchStep({ ...switchStep, step1ToStep2: true });
+        //         break;
+        //     case 'PetOwner':
+        //         setSwitchStep({ ...switchStep, step2ToStep3: true });
+        //         break;
+        //     case 'Dog Registration1':
+        //         setSwitchStep({ ...switchStep, step3ToStep4: true });
+        //         break;
+        // }
 
         switch (step) {
             case 'Agreements':
@@ -149,7 +149,11 @@ export default function Join() {
             case 'Agreements':
                 return !agreements.service || !agreements.location || !agreements.personalInfo;
             case 'Dog Registration1':
-                return !registerData.dogBasicInfo.name || !registerData.dogBasicInfo.breed;
+                return (
+                    !registerData.dogBasicInfo.name ||
+                    !registerData.dogBasicInfo.breed ||
+                    !registerData.dogBasicInfo.profilePhotoUrl
+                );
             case 'Dog Registration2':
                 return (
                     !registerData.dogDetailInfo.gender ||
@@ -211,6 +215,7 @@ export default function Join() {
     };
     const [crop, setCrop] = useState<PercentCrop>();
     const fileInputRef = useRef(null);
+
     return (
         <div
             className={`relative flex flex-col w-full h-dvh bg-primary-foreground ${switchStep.mainToStep1 ? 'animate-mainToRight' : 'animate-outToMain'}`}

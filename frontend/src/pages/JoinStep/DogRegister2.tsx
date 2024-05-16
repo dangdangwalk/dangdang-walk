@@ -1,4 +1,4 @@
-import React, { Dispatch, FormEvent, SetStateAction } from 'react';
+import React, { Dispatch, FormEvent, SetStateAction, useState } from 'react';
 import Male from '@/assets/icons/ic-sex-male.svg';
 import FeMale from '@/assets/icons/ic-sex-femal.svg';
 import { Divider } from '@/components/common/Divider';
@@ -49,6 +49,8 @@ export default function DogRegister2({ data, setData }: Props) {
             },
         }));
     };
+
+    const [birthCheck, setBirthCheck] = useState(false);
     return (
         <div className="flex flex-col bg-white">
             <div>
@@ -112,27 +114,37 @@ export default function DogRegister2({ data, setData }: Props) {
             </div>
             <div className="mt-2">
                 <Checkbox
-                    checked={true}
+                    checked={data.dogDetailInfo.isNeutered}
                     onCheckedChange={(checked: boolean) => {
-                        console.log(checked);
+                        setData((prev) => ({
+                            ...prev,
+                            dogDetailInfo: {
+                                ...prev.dogDetailInfo,
+                                isNeutered: checked,
+                            },
+                        }));
                     }}
                     labelText="중성화 했어요"
                 />
             </div>
-            <div className="mt-8">
-                <div className="py-3 relative">
-                    <input
-                        type="text"
-                        placeholder={`${data.dogBasicInfo.name}의 생일이 궁금해요`}
-                        className="outline-none w-full"
-                        onChange={(event) => handleBirthChange(event.target.value)}
-                    />
-                    <Divider className="absolute bottom-0 h-[1px]" />
+            <div className={`${birthCheck ? 'mt-4' : 'mt-8'}`}>
+                <div className={`${birthCheck ? '' : 'py-3 relative'} `}>
+                    {!birthCheck && (
+                        <>
+                            <input
+                                type="date"
+                                placeholder={`${data.dogBasicInfo.name}의 생일이 궁금해요`}
+                                className="outline-none w-full"
+                                onChange={(event) => handleBirthChange(event.target.value)}
+                            />
+                            <Divider className="absolute bottom-0 h-[1px]" />
+                        </>
+                    )}
                 </div>
                 <Checkbox
-                    checked={true}
+                    checked={birthCheck}
                     onCheckedChange={(checked: boolean) => {
-                        console.log(checked);
+                        setBirthCheck(checked);
                     }}
                     labelText="생일을 몰라요"
                 />
@@ -144,11 +156,12 @@ export default function DogRegister2({ data, setData }: Props) {
                         pattern="\d*"
                         inputMode="numeric"
                         placeholder={`${data.dogBasicInfo.name}의 체중이 궁금해요`}
-                        className="outline-none w-full"
+                        className="outline-none"
                         maxLength={3}
                         onInput={(e) => maxLengthCheck(e)}
                         onChange={(event) => handleWeightChange(event.target.value)}
                     />
+                    kg
                     <Divider className="absolute bottom-0 h-[1px]" />
                 </div>
             </div>
