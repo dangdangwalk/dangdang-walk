@@ -15,7 +15,6 @@ export class S3Service {
         return `${userId}/${generateUuid()}.${type}`;
     }
 
-    //TODO: 이 로그 지우기
     async createPresignedUrlWithClient(userId: number, type: string): Promise<PresignedUrlInfo> {
         const filename = this.makeFileName(userId, type);
         const url = await this.s3Client.getSignedUrlPromise('putObject', {
