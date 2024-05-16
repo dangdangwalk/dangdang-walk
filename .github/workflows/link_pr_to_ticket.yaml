@@ -14,13 +14,6 @@ jobs:
           DATABASE_ID: 35e838520c274894b2206eb34a198575
           NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
         run: |
-          check_error() {
-            echo $1 | jq .
-            if [[ $1 == *"error"* ]]; then
-              exit 1
-            fi
-          }
-
           branch_name="${{ github.event.pull_request.head.ref }}"
 
           if [[ $branch_name =~ DANG-([0-9]+)$ ]]; then
@@ -51,7 +44,7 @@ jobs:
             --data "$JSON_DATA"
           )
 
-          check_error "$response"
+          echo "$response" | jq .
 
           PAGE_ID=$(echo $response | jq -r ".results[0].id")
 
@@ -84,4 +77,4 @@ jobs:
             --data "$JSON_DATA"
           )
 
-          check_error "$response"
+          echo "$response" | jq .
