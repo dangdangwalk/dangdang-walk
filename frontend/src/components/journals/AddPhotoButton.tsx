@@ -9,7 +9,7 @@ export default function AddPhotoButton({ isLoading, onChange }: Props) {
         <span className="inline-block min-w-[104px] h-[104px] bg-[#F1F1F1] rounded-lg">
             <>
                 <button
-                    className="flex w-full h-full flex-col items-center pt-[30px] gap-[10px]"
+                    className="flex w-full h-full flex-col items-center gap-[10px]"
                     disabled={isLoading}
                     onClick={handleClick}
                 >
@@ -17,7 +17,7 @@ export default function AddPhotoButton({ isLoading, onChange }: Props) {
                         <Spinner />
                     ) : (
                         <>
-                            <span className="flex justify-center">
+                            <span className="flex justify-center mt-[30px]">
                                 <img src={Plus} alt="더하기" className="w-6" />
                             </span>
                             <span className="text-[#BABABA] text-xs font-semibold">사진추가</span>
