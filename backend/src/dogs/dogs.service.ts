@@ -68,10 +68,15 @@ export class DogsService {
 
     async updateDog(dogId: number, dogDto: DogDto) {
         const { breed: breedName, ...otherAttributes } = dogDto;
+        let breed;
 
-        const breed = await this.breedService.findOne({ koreanName: breedName });
+        if (breedName) {
+            breed = await this.breedService.findOne({ koreanName: breedName });
+        }
 
-        return this.update({ id: dogId }, { breed, ...otherAttributes });
+        const updateData = breedName ? { breed, ...otherAttributes } : otherAttributes;
+
+        return this.update({ id: dogId }, updateData);
     }
 
     async updateIsWalking(dogIds: number[], stateToUpdate: boolean) {
