@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Breed } from '../breed/breed.entity';
-import { DailyWalkTime } from '../daily-walk-time/daily-walk-time.entity';
+import { TodayWalkTime } from '../daily-walk-time/daily-walk-time.entity';
 import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
 import { Gender } from './dogs-gender.enum';
 
@@ -16,9 +16,9 @@ export class Dogs {
     @Column({ name: 'walk_day_id' })
     walkDayId: number;
 
-    @OneToOne(() => DailyWalkTime, { nullable: false, cascade: true, onDelete: 'CASCADE' })
+    @OneToOne(() => TodayWalkTime, { nullable: false, cascade: true, onDelete: 'CASCADE' })
     @JoinColumn({ name: 'daily_walk_time_id' })
-    dailyWalkTime: DailyWalkTime;
+    dailyWalkTime: TodayWalkTime;
 
     @Column({ name: 'daily_walk_time_id' })
     dailyWalkTimeId: number;
