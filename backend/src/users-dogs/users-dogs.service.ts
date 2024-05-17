@@ -14,7 +14,7 @@ export class UsersDogsService {
     }
 
     async find(where: FindOptionsWhere<UsersDogs>) {
-        return this.usersDogsRepository.find(where);
+        return this.usersDogsRepository.find({ where });
     }
 
     async findOne(where: FindOptionsWhere<UsersDogs>) {

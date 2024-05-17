@@ -1,5 +1,13 @@
 import { ConflictException, NotFoundException } from '@nestjs/common';
-import { DeleteResult, EntityManager, FindOptionsWhere, ObjectLiteral, Repository, UpdateResult } from 'typeorm';
+import {
+    DeleteResult,
+    EntityManager,
+    FindManyOptions,
+    FindOptionsWhere,
+    ObjectLiteral,
+    Repository,
+    UpdateResult,
+} from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 export abstract class AbstractRepository<T extends ObjectLiteral> {
@@ -53,8 +61,8 @@ export abstract class AbstractRepository<T extends ObjectLiteral> {
         return entity;
     }
 
-    async find(where: FindOptionsWhere<T>): Promise<T[]> {
-        return this.entityRepository.findBy(where);
+    async find(where: FindManyOptions<T>): Promise<T[]> {
+        return this.entityRepository.find(where);
     }
 
     async update(where: FindOptionsWhere<T>, partialEntity: QueryDeepPartialEntity<T>): Promise<UpdateResult> {

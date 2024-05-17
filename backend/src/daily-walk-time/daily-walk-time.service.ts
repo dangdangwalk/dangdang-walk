@@ -12,7 +12,7 @@ export class DailyWalkTimeService {
     ) {}
 
     async find(where: FindOptionsWhere<TodayWalkTime>): Promise<TodayWalkTime[]> {
-        return this.dailyWalkTimeRepository.find(where);
+        return this.dailyWalkTimeRepository.find({ where });
     }
 
     async delete(where: FindOptionsWhere<TodayWalkTime>) {
@@ -20,7 +20,7 @@ export class DailyWalkTimeService {
     }
 
     async getWalkTimeList(walkTimeIds: number[]) {
-        const walkTimeList = await this.dailyWalkTimeRepository.find({ id: In(walkTimeIds) });
+        const walkTimeList = await this.dailyWalkTimeRepository.find({ where: { id: In(walkTimeIds) } });
         if (!walkTimeList.length) {
             const error = new NotFoundException(`No walkTime found for the provided IDs: ${walkTimeIds}.`);
             this.logger.error(`No walkTime found for the provided IDs: ${walkTimeIds}.`, error.stack ?? 'No stack');
