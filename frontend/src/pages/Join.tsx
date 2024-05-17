@@ -82,7 +82,7 @@ export default function Join() {
                 setSwitchStep({ ...switchStep, step1ToStep2: false });
                 break;
             case 'Dog Registration1':
-                setSwitchStep({ ...switchStep, step2ToStep3: false });
+                currentPage ? navigate('/') : setSwitchStep({ ...switchStep, step2ToStep3: false });
                 break;
             case 'Dog Registration2':
                 setSwitchStep({ ...switchStep, step3ToStep4: false });
@@ -239,7 +239,7 @@ export default function Join() {
                 )}
             </Topbar>
             <Divider
-                className={`bg-primary duration-500 w-0 ease-in-out ${step === 'PetOwner' && 'w-1/3'} ${step === 'Dog Registration1' && 'w-2/3'} ${step === 'Dog Registration2' && 'w-full'}`}
+                className={`bg-primary duration-500 w-0 ease-in-out ${step === 'PetOwner' && 'w-1/3'} ${step === 'Dog Registration1' && (currentPage ? 'w-1/2' : 'w-2/3')} ${step === 'Dog Registration2' && 'w-full'}`}
             />
 
             <main className="w-full h-full px-5 pt-6">
