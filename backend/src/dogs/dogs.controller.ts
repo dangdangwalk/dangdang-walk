@@ -18,7 +18,6 @@ export class DogsController {
     @Post()
     async register(@User() { userId }: AccessTokenPayload, @Body() dogDto: DogDto) {
         await this.dogsService.createDogToUser(userId, dogDto);
-
         return true;
     }
 
