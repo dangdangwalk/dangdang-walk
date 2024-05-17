@@ -22,6 +22,6 @@ export class JournalsDogsService {
     }
 
     async find(where: FindOptionsWhere<JournalsDogs>): Promise<JournalsDogs[]> {
-        return this.journalsDogsRepository.find(where);
+        return this.journalsDogsRepository.find({ where });
     }
 }

@@ -23,7 +23,7 @@ export class JournalPhotosService {
     }
 
     async find(where: FindOptionsWhere<JournalPhotos>): Promise<JournalPhotos[]> {
-        return this.journalPhotosRepository.find(where);
+        return this.journalPhotosRepository.find({ where });
     }
 
     async update(

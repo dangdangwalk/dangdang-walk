@@ -25,7 +25,7 @@ export class ExcrementsService {
     }
 
     async find(where: FindOptionsWhere<Excrements>): Promise<Excrements[]> {
-        return this.excrementsRepository.find(where);
+        return this.excrementsRepository.find({ where });
     }
 
     async findOne(where: FindOptionsWhere<Excrements>): Promise<Excrements> {

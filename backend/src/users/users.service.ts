@@ -22,7 +22,7 @@ export class UsersService {
     }
 
     async find(where: FindOptionsWhere<Users>) {
-        return this.usersRepository.find(where);
+        return this.usersRepository.find({ where });
     }
 
     async findOne(where: FindOptionsWhere<Users>) {

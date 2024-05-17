@@ -8,7 +8,7 @@ export class BreedService {
     constructor(private readonly breedRepository: BreedRepository) {}
 
     async find(where: FindOptionsWhere<Breed>): Promise<Breed[]> {
-        return this.breedRepository.find(where);
+        return this.breedRepository.find({ where });
     }
 
     async findOne(where: FindOptionsWhere<Breed>): Promise<Breed> {
@@ -16,7 +16,7 @@ export class BreedService {
     }
 
     async getRecommendedWalkAmountList(breedIds: number[]): Promise<number[]> {
-        const breeds = await this.breedRepository.find({ id: In(breedIds) });
+        const breeds = await this.breedRepository.find({ where: { id: In(breedIds) } });
 
         if (!breeds.length) {
             throw new NotFoundException();

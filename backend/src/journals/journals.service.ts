@@ -33,7 +33,7 @@ export class JournalsService {
     }
 
     async find(where: FindOptionsWhere<Journals>) {
-        return this.journalsRepository.find(where);
+        return this.journalsRepository.find({ where });
     }
 
     async findOne(where: FindOptionsWhere<Journals>): Promise<Journals> {
@@ -60,11 +60,11 @@ export class JournalsService {
     }
 
     async getOwnJournals(userId: number): Promise<Journals[]> {
-        return this.journalsRepository.find({ id: userId });
+        return this.journalsRepository.find({ where: { id: userId } });
     }
 
     async getOwnJournalIds(userId: number): Promise<number[]> {
-        const ownJournals = await this.journalsRepository.find({ id: userId });
+        const ownJournals = await this.journalsRepository.find({ where: { id: userId } });
 
         return ownJournals.map((cur) => cur.id);
     }
