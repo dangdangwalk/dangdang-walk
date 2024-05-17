@@ -182,7 +182,7 @@ export default function CreateForm() {
                         <textarea name="memo" className="w-full" ref={textAreaRef} />
                     </div>
                 </div>
-                <Button rounded="none" className="w-full h-16">
+                <Button rounded="none" className="w-full h-16" onClick={handleSave}>
                     <span className="-translate-y-[5px]">저장하기</span>
                 </Button>
             </div>
@@ -200,6 +200,14 @@ export default function CreateForm() {
             </Modal>
         </>
     );
+
+    function handleSave() {
+        setTimeout(() => {
+            showToast('산책 기록이 저장되었습니다.');
+
+            navigate('/');
+        }, 2000);
+    }
 
     function handleCancelSave() {
         showToast('산책 기록이 삭제되었습니다.');
