@@ -14,6 +14,7 @@ import {
 } from '@/components/common/Modal';
 import Topbar from '@/components/common/Topbar';
 import AddPhotoButton from '@/components/journals/AddPhotoButton';
+import DogImages from '@/components/journals/DogImages';
 import ExcrementDisplay from '@/components/journals/ExcrementDisplay';
 import WalkInfo from '@/components/walk/WalkInfo';
 import useToast from '@/hooks/useToast';
@@ -25,7 +26,6 @@ export default function CreateForm() {
     const { show: showToast } = useToast();
 
     const [openModal, setOpenModal] = useState(false);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [images, setImages] = useState<Array<Image>>([]);
     const [isUploading, setIsUploading] = useState(false);
 
@@ -172,16 +172,9 @@ export default function CreateForm() {
                     <Divider />
                     <div>
                         <h2>사진</h2>
-                        <div className="flex flex-row gap-1 overflow-x-auto">
-                            <span className="inline-block min-w-[104px] h-[104px] bg-slate-300">강아지 이미지</span>
-                            <span className="inline-block min-w-[104px] h-[104px] bg-slate-300">강아지 이미지</span>
-                            <span className="inline-block min-w-[104px] h-[104px] bg-slate-300">강아지 이미지</span>
-                            <span className="inline-block min-w-[104px] h-[104px] bg-slate-300">강아지 이미지</span>
-                            <span className="inline-block min-w-[104px] h-[104px] bg-slate-300">강아지 이미지</span>
-                            <span className="inline-block min-w-[104px] h-[104px] bg-slate-300">강아지 이미지</span>
-                            <span className="inline-block min-w-[104px] h-[104px] bg-slate-300">강아지 이미지</span>
+                        <DogImages images={images}>
                             <AddPhotoButton isLoading={isUploading} onChange={handleAddImages} />
-                        </div>
+                        </DogImages>
                     </div>
                     <Divider />
                     <div>
@@ -245,7 +238,7 @@ interface Excrement {
     urineLocations: Array<Location>;
 }
 
-interface Image {
+export interface Image {
     url: string;
     name: string;
 }
