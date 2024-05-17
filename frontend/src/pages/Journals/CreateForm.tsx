@@ -18,6 +18,7 @@ import DogImages from '@/components/journals/DogImages';
 import ExcrementDisplay from '@/components/journals/ExcrementDisplay';
 import WalkInfo from '@/components/walk/WalkInfo';
 import useToast from '@/hooks/useToast';
+import { useSpinnerStore } from '@/store/spinnerStore';
 import { FormEvent, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -25,9 +26,13 @@ export default function CreateForm() {
     const navigate = useNavigate();
     const { show: showToast } = useToast();
 
+    const addSpinner = useSpinnerStore((state) => state.spinnerAdd);
+    const removeSpinner = useSpinnerStore((state) => state.spinnerRemove);
+
     const [openModal, setOpenModal] = useState(false);
     const [images, setImages] = useState<Array<Image>>([]);
     const [isUploading, setIsUploading] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
 
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -182,7 +187,7 @@ export default function CreateForm() {
                         <textarea name="memo" className="w-full" ref={textAreaRef} />
                     </div>
                 </div>
-                <Button rounded="none" className="w-full h-16" onClick={handleSave}>
+                <Button rounded="none" className="w-full h-16" disabled={isSaving} onClick={handleSave}>
                     <span className="-translate-y-[5px]">저장하기</span>
                 </Button>
             </div>
@@ -202,7 +207,12 @@ export default function CreateForm() {
     );
 
     function handleSave() {
+        setIsSaving(true);
+        addSpinner();
+
         setTimeout(() => {
+            setIsSaving(false);
+            removeSpinner();
             showToast('산책 기록이 저장되었습니다.');
 
             navigate('/');
