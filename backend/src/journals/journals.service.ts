@@ -7,8 +7,9 @@ import { JournalPhotos } from 'src/journal-photos/journal-photos.entity';
 import { JournalPhotosService } from 'src/journal-photos/journal-photos.service';
 import { JournalsDogs } from 'src/journals-dogs/journals-dogs.entity';
 import { JournalsDogsService } from 'src/journals-dogs/journals-dogs.service';
+import { getWeek } from 'src/utils/date.utils';
 import { checkIfExistsInArr, makeSubObject } from 'src/utils/manipulate.util';
-import { DeleteResult, FindOptionsWhere, In, UpdateResult } from 'typeorm';
+import { DeleteResult, EntityManager, FindOptionsWhere, In, UpdateResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { UpdateJournalDto } from './dto/journal-update.dto';
 import { CreateJournalDto, ExcrementsInfoForCreate, JournalInfoForCreate, Location } from './dto/journals-create.dto';
@@ -24,7 +25,8 @@ export class JournalsService {
         private readonly journalsDogsService: JournalsDogsService,
         private readonly dogsService: DogsService,
         private readonly journalPhotosService: JournalPhotosService,
-        private readonly excrementsService: ExcrementsService
+        private readonly excrementsService: ExcrementsService,
+        private readonly entityManager: EntityManager
     ) {}
 
     async create(entityData: CreateJournalData): Promise<Journals> {
@@ -249,7 +251,50 @@ export class JournalsService {
         console.log(await this.delete(journalId));
     }
 
-    async getDogMonthlyJournals(userId: number, dogId: number, date: string) {
-        console.log(userId, dogId, date);
+    async aggregateJournalsByWeek(
+        journals: Journals[],
+        startDate: Date
+    ): Promise<{
+        journalCntAMonth: number[];
+        distance: number[];
+        durations: number[];
+    }> {
+        if (journals.length === 0) {
+            return { journalCntAMonth: [], distance: [], durations: [] };
+        }
+
+        const lastDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0);
+        const totalWeeks = getWeek(lastDate);
+
+        const journalCntAMonth = new Array(totalWeeks).fill(0);
+        const distance = new Array(totalWeeks).fill(0);
+        const durations = new Array(totalWeeks).fill(0);
+
+        journals.forEach((journal) => {
+            const weekIndex = getWeek(new Date(journal.startedAt)) - 1;
+            journalCntAMonth[weekIndex]++;
+            distance[weekIndex] += journal.distance;
+            durations[weekIndex] += journal.duration;
+        });
+
+        return { journalCntAMonth, distance, durations };
+    }
+
+    async getDogStatistics(userId: number, dogId: number, date: string) {
+        const startDate = new Date(date);
+        startDate.setDate(1);
+        const endDate = new Date(startDate);
+        endDate.setMonth(endDate.getMonth() + 1);
+
+        const dogJournals = await this.entityManager
+            .createQueryBuilder(Journals, 'journals')
+            .innerJoin(JournalsDogs, 'journals_dogs', 'journals.id = journals_dogs.journal_id')
+            .where('journals.user_id = :userId', { userId })
+            .andWhere('journals_dogs.dog_id = :dogId', { dogId })
+            .andWhere('journals.started_at >= :startDate', { startDate })
+            .andWhere('journals.started_at < :endDate', { endDate })
+            .getMany();
+
+        return this.aggregateJournalsByWeek(dogJournals, startDate);
     }
 }
