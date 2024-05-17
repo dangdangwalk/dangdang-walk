@@ -217,7 +217,7 @@ export default function CreateForm() {
             return { url: URL.createObjectURL(file), name: removeFilenameExtension(file.name) };
         });
         setTimeout(() => {
-            setImages(images);
+            setImages((prevImages) => [...prevImages, ...images]);
             setIsUploading(false);
         }, 2000);
     }
