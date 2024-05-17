@@ -2,6 +2,7 @@ import { fetchDogStatistic } from '@/api/dogs';
 import { DogStatistic } from '@/models/dog.model';
 import { UseQueryCustomOptions } from '@/types/common';
 import { useQuery } from '@tanstack/react-query';
+const { REACT_APP_BASE_IMAGE_URL = '' } = window._ENV ?? process.env;
 
 const defaultDpgs: DogStatistic[] = [
     {
@@ -25,7 +26,15 @@ const defaultDpgs: DogStatistic[] = [
 const useDogStatistic = (isLoggedIn: boolean, queryOptions?: UseQueryCustomOptions) => {
     const { data, isPending } = useQuery({
         queryKey: ['dog-statistic'],
-        queryFn: fetchDogStatistic,
+        queryFn: async () => {
+            const data = await fetchDogStatistic();
+            return data.map((d: DogStatistic) => {
+                return {
+                    ...d,
+                    profilePhotoUrl: `${REACT_APP_BASE_IMAGE_URL}/${d.profilePhotoUrl}`,
+                };
+            });
+        },
         ...queryOptions,
     });
     if (!isLoggedIn) {

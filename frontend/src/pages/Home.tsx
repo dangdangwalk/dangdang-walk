@@ -6,7 +6,7 @@ import { NAV_HEIGHT, TOP_BAR_HEIGHT } from '@/constants/style';
 import Notification from '@/assets/icons/notification.svg';
 import Topbar from '@/components/common/Topbar';
 import BottomSheet from '@/components/common/BottomSheet';
-import { Dog } from '@/models/dog.model';
+import { AvailableDog, Dog } from '@/models/dog.model';
 import AvailableDogCheckList from '@/components/home/AvailableDogCheckList';
 import useDogStatistic from '@/hooks/useDogStatistic';
 import { useNavigate } from 'react-router-dom';
@@ -15,9 +15,6 @@ import Spinner from '@/components/common/Spinner';
 import { useAuth } from '@/hooks/useAuth';
 import RegisterCard from '@/components/home/RegisterCard';
 
-export interface AvailableDog extends Dog {
-    isChecked: boolean;
-}
 function Home() {
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
     const [availableDogs, setAvailableDogs] = useState<AvailableDog[] | undefined>([]);
@@ -52,14 +49,6 @@ function Home() {
         );
     };
 
-    useEffect(() => {
-        if (!availableDogsData) return;
-        setAvailableDogs(
-            availableDogsData?.map((d: AvailableDog) => {
-                return { ...d, isChecked: false };
-            })
-        );
-    }, [availableDogsData]);
     return (
         <>
             <Topbar className="bg-neutral-50 ">

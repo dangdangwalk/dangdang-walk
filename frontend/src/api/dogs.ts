@@ -1,7 +1,6 @@
 import { httpClient } from '@/api/http';
-import { DogStatistic } from '@/models/dog.model';
-import { AvailableDog } from '@/pages/Home';
 import { DogRegInfo } from '@/pages/Join';
+import { AvailableDog, DogStatistic } from '@/models/dog.model';
 
 export const fetchDogStatistic = async (): Promise<DogStatistic[]> => {
     const { data } = await httpClient.get('/dogs/statistics');

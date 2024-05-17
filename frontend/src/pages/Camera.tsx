@@ -1,28 +1,34 @@
-import Map from '@/components/walk/Map';
-import { DEFAULT_LAT, DEFAULT_LNG } from '@/constants/location';
 import useImageUpload from '@/hooks/useImageUpload';
 import html2canvas from 'html2canvas';
 const { REACT_APP_BASE_IMAGE_URL = '' } = window._ENV ?? process.env;
-
-const position = { lat: DEFAULT_LAT, lng: DEFAULT_LNG };
+declare global {
+    interface Window {
+        kakao: any;
+    }
+}
 export default function Camera() {
     const { selectedFiles, uploadedImageUrls, handleFileChange, handleUpload } = useImageUpload();
+
     const saveAsImageHandler = async () => {
         const target = document.getElementById('map');
         if (!target) {
             return alert('결과 저장에 실패했습니다.');
         }
-        html2canvas(target, {}).then((canvas) => {
+        html2canvas(target, {
+            useCORS: true,
+            proxy: '/html2canvas-proxy',
+        }).then((canvas) => {
             document.body.appendChild(canvas);
-            // const link = document.createElement('a');
-            // document.body.appendChild(link);
-            // link.href = canvas.toDataURL('image/png');
-            // link.download = 'result.png';
-            // console.log(canvas);
-            // link.click();
-            // document.body.removeChild(link);
+            const link = document.createElement('a');
+            document.body.appendChild(link);
+            link.href = canvas.toDataURL('image/png');
+            link.download = 'result.png';
+            console.log(canvas);
+            link.click();
+            document.body.removeChild(link);
         });
     };
+
     return (
         <>
             <div>
@@ -55,7 +61,6 @@ export default function Camera() {
                 )}
             </div>
             <button onClick={saveAsImageHandler}>클릭</button>
-            <Map startPosition={position} path={[position]} />
         </>
     );
 }

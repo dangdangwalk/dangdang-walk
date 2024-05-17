@@ -27,3 +27,7 @@ export interface DogStatistic extends Dog {
     weeklyWalks: number[];
     profilePhotoUrl: string;
 }
+
+export interface AvailableDog extends Dog {
+    isChecked: boolean;
+}
