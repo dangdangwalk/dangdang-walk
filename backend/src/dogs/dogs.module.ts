@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { JournalsDogsModule } from 'src/journals-dogs/journals-dogs.module';
 import { Breed } from '../breed/breed.entity';
 import { BreedModule } from '../breed/breed.module';
 import { DatabaseModule } from '../common/database/database.module';
@@ -23,6 +24,7 @@ import { DogsService } from './dogs.service';
         DailyWalkTimeModule,
         WinstonLoggerModule,
         DogWalkDayModule,
+        JournalsDogsModule,
     ],
     providers: [DogsRepository, DogsService],
     exports: [DogsService],

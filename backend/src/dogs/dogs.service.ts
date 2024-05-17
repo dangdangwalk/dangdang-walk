@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { JournalsDogsService } from 'src/journals-dogs/journals-dogs.service';
 import { makeSubObjectsArray } from 'src/utils/manipulate.util';
 import { FindOptionsWhere, In, UpdateResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
@@ -24,6 +25,7 @@ export class DogsService {
         private readonly breedService: BreedService,
         private readonly dogWalkDayService: DogWalkDayService,
         private readonly dailyWalkTimeService: DailyWalkTimeService,
+        private readonly journalsDogsService: JournalsDogsService,
         private readonly logger: WinstonLoggerService
     ) {}
 
@@ -103,6 +105,8 @@ export class DogsService {
 
     async getAvailableDogs(userId: number): Promise<DogProfile[]> {
         const ownDogIds = await this.usersService.getOwnDogsList(userId);
+        const recentJournalIds = await this.journalsDogsService.getRecentJournalId(ownDogIds);
+
         return this.getProfileList({ id: In(ownDogIds), isWalking: false });
     }
 
