@@ -44,9 +44,9 @@ export class StatisticsService {
 
     async getDogStatistics(userId: number, dogId: number, date: string) {
         const dog = await this.dogsService.findOne({ id: dogId });
-        this.journalsService.getDogMonthlyJournals(userId, dogId, date);
+        const dogStatistics = await this.journalsService.getDogStatistics(userId, dogId, date);
 
-        return { recommendedWalkAmount: dog.breed.recommendedWalkAmount };
+        return { ...dogStatistics, recommendedWalkAmount: dog.breed.recommendedWalkAmount };
     }
 
     async getDogsStatistics(userId: number): Promise<DogStatisticDto[]> {
