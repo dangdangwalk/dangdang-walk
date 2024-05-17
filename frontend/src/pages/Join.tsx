@@ -126,7 +126,8 @@ export default function Join() {
             if (!fileName || !photoUrl) return;
             const file = dataURLtoFile(dataUrl, fileName);
             await uploadImg(file, photoUrl).then(() => {
-                registerDogMutation.mutate({ ...registerData, profilePhotoUrl: photoUrl });
+                const newPhotoUrl = photoUrl.replace('https://dangdangwalk.s3.ap-northeast-2.amazonaws.com/', '');
+                registerDogMutation.mutate({ ...registerData, profilePhotoUrl: newPhotoUrl });
             });
         }
         // switch (step) {
