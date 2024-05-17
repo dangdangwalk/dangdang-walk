@@ -26,7 +26,6 @@ export default function CreateForm() {
     const { show: showToast } = useToast();
 
     const [openModal, setOpenModal] = useState(false);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [images, setImages] = useState<Array<Image>>([]);
     const [isUploading, setIsUploading] = useState(false);
 
@@ -173,7 +172,7 @@ export default function CreateForm() {
                     <Divider />
                     <div>
                         <h2>사진</h2>
-                        <DogImages>
+                        <DogImages images={images}>
                             <AddPhotoButton isLoading={isUploading} onChange={handleAddImages} />
                         </DogImages>
                     </div>
@@ -239,7 +238,7 @@ interface Excrement {
     urineLocations: Array<Location>;
 }
 
-interface Image {
+export interface Image {
     url: string;
     name: string;
 }
