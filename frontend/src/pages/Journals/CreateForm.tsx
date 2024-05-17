@@ -13,10 +13,11 @@ import {
     ModalTitle,
 } from '@/components/common/Modal';
 import Topbar from '@/components/common/Topbar';
+import AddPhotoButton from '@/components/journals/AddPhotoButton';
 import ExcrementDisplay from '@/components/journals/ExcrementDisplay';
 import WalkInfo from '@/components/walk/WalkInfo';
 import useToast from '@/hooks/useToast';
-import { useRef, useState } from 'react';
+import { FormEvent, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function CreateForm() {
@@ -24,6 +25,9 @@ export default function CreateForm() {
     const { show: showToast } = useToast();
 
     const [openModal, setOpenModal] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [images, setImages] = useState<Array<Image>>([]);
+    const [isUploading, setIsUploading] = useState(false);
 
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -176,7 +180,7 @@ export default function CreateForm() {
                             <span className="inline-block min-w-[104px] h-[104px] bg-slate-300">강아지 이미지</span>
                             <span className="inline-block min-w-[104px] h-[104px] bg-slate-300">강아지 이미지</span>
                             <span className="inline-block min-w-[104px] h-[104px] bg-slate-300">강아지 이미지</span>
-                            <span className="inline-block min-w-[104px] h-[104px] bg-slate-300">강아지 이미지</span>
+                            <AddPhotoButton isLoading={isUploading} onChange={handleAddImages} />
                         </div>
                     </div>
                     <Divider />
@@ -209,6 +213,25 @@ export default function CreateForm() {
 
         navigate('/');
     }
+
+    function handleAddImages(e: FormEvent<HTMLInputElement>) {
+        const files = e.currentTarget.files;
+
+        if (files === null) return;
+        setIsUploading(true);
+
+        const images = Array.from(files).map<Image>((file) => {
+            return { url: URL.createObjectURL(file), name: removeFilenameExtension(file.name) };
+        });
+        setTimeout(() => {
+            setImages(images);
+            setIsUploading(false);
+        }, 2000);
+    }
+
+    function removeFilenameExtension(fileName: string) {
+        return fileName.replace(/.[^.\\/:*?"<>|\r\n]+$/, '');
+    }
 }
 
 interface Location {
@@ -220,4 +243,9 @@ interface Excrement {
     dogId: number;
     fecesLocations: Array<Location>;
     urineLocations: Array<Location>;
+}
+
+interface Image {
+    url: string;
+    name: string;
 }
