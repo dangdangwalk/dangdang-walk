@@ -22,7 +22,7 @@ export default function AvailableDogCheckList({
     return (
         <>
             <li className="flex py-2 justify-between items-center">
-                <Avatar url={AllDogs} name={'다함꼐'} />
+                <Avatar url={AllDogs} name={'다 함께'} />
                 <Checkbox
                     checked={isCheckedAll}
                     onCheckedChange={() => {

@@ -97,7 +97,7 @@ function Home() {
             </main>
 
             <BottomSheet isOpen={isDogBottomsheetOpen} onClose={handleBottomSheet}>
-                <BottomSheet.Header> 강아지 선책</BottomSheet.Header>
+                <BottomSheet.Header> 강아지 산책</BottomSheet.Header>
                 <BottomSheet.Body>
                     {isAvailableDogsLoading ? (
                         <Spinner />
