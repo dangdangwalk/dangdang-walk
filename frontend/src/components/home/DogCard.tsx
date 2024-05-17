@@ -6,6 +6,7 @@ import DayIcon from '@/components/home/DayIcon';
 import Walk from '@/assets/icons/walk/walk.svg';
 import Progressbar from '@/components/home/Progressbar';
 import { useNavigate } from 'react-router-dom';
+import { queryStringKeys } from '@/constants';
 
 interface DogCardProps {
     dog: DogStatistic;
@@ -16,7 +17,7 @@ const WEEKDAY = ['월', '화', '수', '목', '금', '토', '일'];
 export default function DogCard({ dog }: DogCardProps) {
     const navigate = useNavigate();
     const onclick = () => {
-        navigate(`/journal/${dog.id}`);
+        navigate(`/journals?${queryStringKeys.DOGID}=${dog.id}`);
     };
     return (
         <div className="flex-col relative bg-white rounded-lg shadow" onClick={onclick}>

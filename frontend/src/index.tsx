@@ -15,6 +15,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import App from './App';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
+import Journals from '@/pages/Journals/Journals';
 const router = createBrowserRouter([
     {
         path: '/',
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
             {
                 path: '/journals/create',
                 element: <JournalCreateForm />,
+            },
+            {
+                path: '/journals',
+                element: <Journals />,
             },
         ],
     },
