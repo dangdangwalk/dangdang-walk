@@ -32,13 +32,10 @@ const useLogin = (mutationOptions?: UseMutationCustomOptions) => {
 };
 
 const useSignup = (mutationOptions?: UseMutationCustomOptions) => {
-    const navigate = useNavigate();
     return useMutation({
         mutationFn: requestSignup,
         onSuccess: ({ accessToken }: ResponseToken) => {
-            const url = getStorage(storageKeys.REDIRECT_URI) || '';
             setHeader(tokenKeys.AUTHORIZATION, `Bearer ${accessToken}`);
-            navigate(url);
         },
         onSettled: () => {
             queryClient.refetchQueries({ queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN] });

@@ -17,7 +17,12 @@ import ImageCropper from '@/components/ImageCropper';
 import CropperModal from '@/components/CropperModal';
 import { PercentCrop } from 'react-image-crop';
 import { MIN_DIMENSION } from '@/constants/cropper';
-export interface DogRegInfo extends DogBasicInfo, DogDetailInfo {}
+import { uploadImg, useDog } from '@/hooks/useDog';
+import { dataURLtoFile } from '@/utils/dataUrlToFile';
+import { getUploadUrl } from '@/api/upload';
+export interface DogRegInfo extends DogBasicInfo, DogDetailInfo {
+    profilePhotoUrl: string | null;
+}
 
 export default function Join() {
     const { signupMustation } = useAuth();
@@ -39,8 +44,8 @@ export default function Join() {
         isNeutered: false,
         birth: null,
         weight: 0,
+        profilePhotoUrl: null,
     });
-    const [dogPhotoFile, setDogPhotoFile] = useState<File | null>(null);
     const [step, setStep] = useState<'Agreements' | 'PetOwner' | 'Dog Registration1' | 'Dog Registration2'>(
         'Agreements'
     );
@@ -104,13 +109,22 @@ export default function Join() {
         step2ToStep3: false,
         step3ToStep4: false,
     });
-    const handleNextStep = () => {
-        if (step === 'PetOwner' && !haveADog) {
-            return signupMustation.mutate(null);
+    const { registerDogMutation } = useDog();
+    const handleNextStep = async () => {
+        if (step === 'PetOwner') {
+            signupMustation.mutate(null, { onSettled: () => !haveADog && navigate('/') });
         }
         if (step === 'Dog Registration2') {
-            console.log(registerData);
-            console.log(dogPhotoFile);
+            const urlData = await getUploadUrl(['png']);
+            const fileName = urlData[0]?.filename;
+            const photoUrl = urlData[0]?.url;
+            const dataUrl = getStorage('dataUrl') || '';
+
+            if (!fileName || !photoUrl) return;
+            const file = dataURLtoFile(dataUrl, fileName);
+            await uploadImg(file, photoUrl).then(() => {
+                registerDogMutation.mutate({ ...registerData, profilePhotoUrl: photoUrl });
+            });
         }
         // switch (step) {
         //     case 'Agreements':
@@ -258,7 +272,6 @@ export default function Join() {
                 </Button>
             </div>
             <ImageCropper
-                setDogPhotoFile={setDogPhotoFile}
                 prevImg={prevImg}
                 setPrevImg={setPrevImg}
                 crop={crop}

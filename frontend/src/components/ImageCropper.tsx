@@ -3,6 +3,7 @@ import Topbar from '@/components/common/Topbar';
 import { ASPECT_RATIO, MIN_DIMENSION } from '@/constants/cropper';
 import { DogRegInfo } from '@/pages/Join';
 import setCanvasPreview from '@/utils/canvas-preview';
+import { setStorage } from '@/utils/storage';
 import React, { ChangeEvent, Dispatch, SetStateAction, SyntheticEvent, useRef } from 'react';
 import ReactCrop, { PercentCrop, centerCrop, convertToPixelCrop, makeAspectCrop } from 'react-image-crop';
 
@@ -16,7 +17,6 @@ interface Props {
     setRegisterData: Dispatch<SetStateAction<DogRegInfo>>;
     onSelectFile: (e: ChangeEvent<HTMLInputElement>) => void;
     setDogImgUrl: (url: string) => void;
-    setDogPhotoFile: (file: File) => void;
 }
 
 export default function ImageCropper({
@@ -28,39 +28,8 @@ export default function ImageCropper({
     crop,
     setCrop,
     setDogImgUrl,
-    setDogPhotoFile,
 }: Props) {
-    const dataURLtoFile = (dataurl: string, fileName: string): File | null => {
-        // 데이터 URL 문자열 분리
-        const arr = dataurl.split(',');
-
-        if (!arr || !arr[0] || !arr[1]) {
-            console.error('Invalid data URL format');
-            return null; // 또는 다른 에러 처리 로직
-        }
-
-        // MIME 타입 추출
-        const mime = arr[0].match(/:(.*?);/)![1];
-        // Base64 디코딩 전에 arr[1]이 undefined인지 확인
-        if (!arr[1]) {
-            console.error('Base64 data is missing');
-            return null; // 또는 다른 에러 처리 로직
-        }
-        // Base64 디코딩
-        let bstr = atob(arr[1]);
-        const n = bstr.length;
-        // Uint8Array 생성 및 채우기
-        const u8arr = new Uint8Array(n);
-
-        for (let i = 0; i < n; i++) {
-            u8arr[i] = bstr.charCodeAt(i);
-        }
-
-        // File 객체 반환
-        return new File([u8arr.buffer], fileName, { type: mime });
-    };
-
-    const handleCrop = () => {
+    const handleCrop = async () => {
         if (imgRef.current && previewCanvasRef.current && crop) {
             setCanvasPreview(
                 imgRef.current,
@@ -68,12 +37,15 @@ export default function ImageCropper({
                 convertToPixelCrop(crop, imgRef.current?.width, imgRef.current?.height)
             );
             const dataUrl = previewCanvasRef.current.toDataURL();
-            const date = new Date();
-            const fileName = date.valueOf();
-            const file = dataURLtoFile(dataUrl, fileName.toString());
-            console.log(file);
-            if (file !== null) setDogPhotoFile(file);
-
+            // const urlData = await getUploadUrl(['png']);
+            setStorage('dataUrl', dataUrl);
+            // const fileName = urlData[0]?.filename;
+            // const photoUrl = urlData[0]?.url;
+            // if (!fileName || !photoUrl) return;
+            // const file = dataURLtoFile(dataUrl, fileName);
+            // console.log(file);
+            // if (file !== null) setDogPhotoFile(file);
+            // setDogPhotoUrl(photoUrl);
             setDogImgUrl(dataUrl);
 
             setCropperToggle(false);
