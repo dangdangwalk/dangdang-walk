@@ -20,6 +20,7 @@ import { MIN_DIMENSION } from '@/constants/cropper';
 import { uploadImg, useDog } from '@/hooks/useDog';
 import { dataURLtoFile } from '@/utils/dataUrlToFile';
 import { getUploadUrl } from '@/api/upload';
+import CancelRegModal from '@/components/CancelRegModal';
 export interface DogRegInfo extends DogBasicInfo, DogDetailInfo {
     profilePhotoUrl: string | null;
 }
@@ -151,7 +152,7 @@ export default function Join() {
         }
     };
     const handleCancel = () => {
-        return signupMustation.mutate(null);
+        setCancelReg(true);
     };
 
     const disabled = () => {
@@ -219,6 +220,7 @@ export default function Join() {
     const [dogImgUrl, setDogImgUrl] = useState('');
     const fileInputRef = useRef(null);
 
+    const [cancelReg, setCancelReg] = useState(false);
     return (
         <div
             className={`relative flex flex-col w-full h-dvh bg-primary-foreground ${switchStep.mainToStep1 ? 'animate-mainToRight' : 'animate-outToMain'}`}
@@ -283,6 +285,7 @@ export default function Join() {
                 setDogImgUrl={setDogImgUrl}
             />
             {cropError && <CropperModal setCropError={setCropError} setCrop={setCrop} fileInputRef={fileInputRef} />}
+            {cancelReg && <CancelRegModal setCancelReg={setCancelReg} />}
         </div>
     );
 }
