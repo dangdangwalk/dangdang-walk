@@ -1,7 +1,7 @@
 import Topbar from '@/components/common/Topbar';
 import { getStorage } from '@/utils/storage';
 import React, { ChangeEvent, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import TopBack from '@/assets/icons/ic-top-back.svg';
 import Agreements from '@/pages/JoinStep/Agreements';
 import { Button } from '@/components/common/Button';
@@ -26,6 +26,8 @@ export interface DogRegInfo extends DogBasicInfo, DogDetailInfo {
 }
 
 export default function Join() {
+    const location = useLocation();
+    const currentPage = location.state;
     const { signupMustation } = useAuth();
     const navigate = useNavigate();
     const backToPathname = getStorage(storageKeys.REDIRECT_URI) || '';
@@ -48,7 +50,7 @@ export default function Join() {
         profilePhotoUrl: null,
     });
     const [step, setStep] = useState<'Agreements' | 'PetOwner' | 'Dog Registration1' | 'Dog Registration2'>(
-        'Agreements'
+        currentPage ?? 'Agreements'
     );
     const handleHaveADogChange = (opt: boolean) => {
         sethaveADog(opt);
