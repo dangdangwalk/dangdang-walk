@@ -1,12 +1,11 @@
 import DogCardList from '@/components/home/DogCardList';
 import WeatherInfo from '@/components/home/WeatherInfo';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/common/Button';
 import { NAV_HEIGHT, TOP_BAR_HEIGHT } from '@/constants/style';
 import Notification from '@/assets/icons/notification.svg';
 import Topbar from '@/components/common/Topbar';
 import BottomSheet from '@/components/common/BottomSheet';
-import { AvailableDog, Dog } from '@/models/dog.model';
 import AvailableDogCheckList from '@/components/home/AvailableDogCheckList';
 import useDogStatistic from '@/hooks/useDogStatistic';
 import { useNavigate } from 'react-router-dom';
@@ -17,8 +16,13 @@ import RegisterCard from '@/components/home/RegisterCard';
 
 function Home() {
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
-    const [availableDogs, setAvailableDogs] = useState<AvailableDog[] | undefined>([]);
-    const { availableDogsData, isAvailableDogsLoading, fetchWalkAvailableDogs } = useWalkAvailabeDog();
+    const {
+        isAvailableDogsLoading,
+        fetchWalkAvailableDogs,
+        availableDogs,
+        toggleCheck: handleToggle,
+        changeCheckAll: handleCheckAll,
+    } = useWalkAvailabeDog();
     const { refreshTokenQuery, isLoggedIn } = useAuth();
     const { dogs, isDogsPending } = useDogStatistic(isLoggedIn, {
         enabled: refreshTokenQuery.isSuccess,
@@ -30,23 +34,12 @@ function Home() {
         }
         setIsDogBottomsheetOpen(!isDogBottomsheetOpen);
     };
-    const handleToggle = (id: number) => {
-        setAvailableDogs(
-            availableDogs?.map((d: AvailableDog) => (d.id === id ? { ...d, isChecked: !d.isChecked } : d))
-        );
-    };
+
     const handleConfirm = () => {
         setIsDogBottomsheetOpen(false);
         navigate('/walk', {
             state: { dogs: availableDogs?.length === 1 ? availableDogs : availableDogs?.filter((d) => d.isChecked) },
         });
-    };
-    const handleCheckAll = (flag: boolean) => {
-        setAvailableDogs(
-            availableDogs?.map((d: AvailableDog) => {
-                return { ...d, isChecked: flag };
-            })
-        );
     };
 
     return (
