@@ -20,3 +20,14 @@ export interface WalkingDog extends Dog {
 }
 
 export type Gender = 'MALE' | 'FEMALE' | '';
+
+export interface DogStatistic extends Dog {
+    recommendedWalkAmount: number;
+    todayWalkAmount: number;
+    weeklyWalks: number[];
+    profilePhotoUrl: string;
+}
+
+export interface AvailableDog extends Dog {
+    isChecked: boolean;
+}

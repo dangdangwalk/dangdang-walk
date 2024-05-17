@@ -1,4 +1,4 @@
-import { Dog } from '@/models/dog.model';
+import { DogStatistic } from '@/models/dog.model';
 import { walkPercentFormat } from '@/utils/format';
 import Ic from '@/assets/icons/ic-arrow.svg';
 import Avatar from '@/components/common/Avatar';
@@ -6,13 +6,6 @@ import DayIcon from '@/components/home/DayIcon';
 import Walk from '@/assets/icons/walk/walk.svg';
 import Progressbar from '@/components/home/Progressbar';
 import { useNavigate } from 'react-router-dom';
-
-export interface DogStatistic extends Dog {
-    recommendedDailyWalkAmount: number;
-    dailyWalkAmount: number;
-    weeklyWalks: number[];
-    profilePhotoUrl: string;
-}
 
 interface DogCardProps {
     dog: DogStatistic;
@@ -42,17 +35,17 @@ export default function DogCard({ dog }: DogCardProps) {
             </div>
             <div className="p-2.5 pr-[15px] flex flex-col justify-start gap-3">
                 <div className="text-neutral-800 pl-[5px] text-xs font-bold leading-[18px]">
-                    {dog.dailyWalkAmount === 0
+                    {dog.todayWalkAmount === 0
                         ? '산책하러 나가요!'
-                        : dog.dailyWalkAmount >= dog.recommendedDailyWalkAmount
+                        : dog.todayWalkAmount >= dog.recommendedWalkAmount
                           ? '오늘은 만족스러워요😁'
                           : '산책이 모자라요😢'}
                 </div>
                 <div className="flex gap-2 justify-between items-center">
-                    <Progressbar percentage={(dog.dailyWalkAmount / dog.recommendedDailyWalkAmount) * 100} />
+                    <Progressbar percentage={(dog.todayWalkAmount / dog.recommendedWalkAmount) * 100} />
                     <span>
                         <span className="text-amber-500 text-sm font-bold leading-[21px]">
-                            {walkPercentFormat(dog.dailyWalkAmount / dog.recommendedDailyWalkAmount)}
+                            {walkPercentFormat(Number(dog.todayWalkAmount) / Number(dog.recommendedWalkAmount))}
                         </span>
                         <span className="text-neutral-400 text-sm font-bold leading-[18px]">/100</span>
                     </span>

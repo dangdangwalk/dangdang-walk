@@ -7,11 +7,14 @@ import { useAuth } from '@/hooks/useAuth';
 import { useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
+import { useSpinnerStore } from '@/store/spinnerStore';
+import Spinner from '@/components/common/Spinner';
 // var console;
 function App() {
     const location = useLocation();
     const currentPage = location.pathname;
     const { isLoggedIn } = useAuth();
+    const { spinner } = useSpinnerStore();
     //TODO: 일시적인 배포시 console.log 제거 추가로 환경설정으로 빼줘야함ㄴ
     // if (process.env.NODE_ENV === 'production') {
     //     console = window.console || {};
@@ -64,6 +67,8 @@ function App() {
                     </div>
                 )}
             </div>
+            {spinner && <Spinner className="absolute bg-neutral-800/40 z-40" />}
+
             <Toast />
         </div>
     );

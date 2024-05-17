@@ -1,14 +1,64 @@
 import { fetchWalkAvailableDogs } from '@/api/dogs';
 import { queryKeys } from '@/constants';
+import { AvailableDog } from '@/models/dog.model';
 import { useQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
+const { REACT_APP_BASE_IMAGE_URL = '' } = window._ENV ?? process.env;
 
 const useWalkAvailabeDog = () => {
-    const { data, isLoading, refetch } = useQuery({
+    const [availableDogs, setAvailableDogs] = useState<AvailableDog[] | undefined>([]);
+
+    const {
+        data: aavailablDogData,
+        isLoading,
+        refetch,
+    } = useQuery({
         queryKey: [queryKeys.WALK_AVAILABLE_DOGS],
-        queryFn: fetchWalkAvailableDogs,
+        queryFn: async () => {
+            const data = await fetchWalkAvailableDogs();
+
+            return data.map((d: AvailableDog) => {
+                return {
+                    ...d,
+                    profilePhotoUrl: `${REACT_APP_BASE_IMAGE_URL}/${d.profilePhotoUrl}`,
+                };
+            });
+        },
         enabled: false,
     });
-    return { availableDogsData: data, isAvailableDogsLoading: isLoading, fetchWalkAvailableDogs: refetch };
+    const toggleCheck = (id: number) => {
+        setAvailableDogs(
+            availableDogs?.map((d: AvailableDog) => (d.id === id ? { ...d, isChecked: !d.isChecked } : d))
+        );
+    };
+    const changeCheckAll = (flag: boolean) => {
+        setAvailableDogs(
+            availableDogs?.map((d: AvailableDog) => {
+                return { ...d, isChecked: flag };
+            })
+        );
+    };
+
+    useEffect(() => {
+        if (!aavailablDogData) return;
+        setAvailableDogs(
+            aavailablDogData.map((d: AvailableDog) => {
+                return {
+                    ...d,
+                    isChecked: false,
+                };
+            })
+        );
+    }, [aavailablDogData]);
+
+    return {
+        availableDogs,
+        setAvailableDogs,
+        isAvailableDogsLoading: isLoading,
+        fetchWalkAvailableDogs: refetch,
+        toggleCheck,
+        changeCheckAll,
+    };
 };
 
 export default useWalkAvailabeDog;

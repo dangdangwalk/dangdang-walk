@@ -1,13 +1,14 @@
 import { Button } from '@/components/common/Button';
-import DogCard, { DogStatistic } from '@/components/home/DogCard';
+import DogCard from '@/components/home/DogCard';
+import { DogStatistic } from '@/models/dog.model';
 import { useNavigate } from 'react-router-dom';
 
 const defaultDpg: DogStatistic = {
     id: 0,
     name: '덕지',
     profilePhotoUrl: '',
-    recommendedDailyWalkAmount: 1800,
-    dailyWalkAmount: 0,
+    recommendedWalkAmount: 1800,
+    todayWalkAmount: 0,
     weeklyWalks: [0, 0, 0, 0, 0, 0, 0],
 };
 

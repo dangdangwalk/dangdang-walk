@@ -1,7 +1,7 @@
 import { createClient, httpClient } from '@/api/http';
 
 interface UploadUrlResponse {
-    url: string; // Adjust this according to your API response
+    url: string;
     filename: string;
 }
 
@@ -20,7 +20,8 @@ const uploadClient = createClient({
     withCredentials: false,
 });
 
-export const uploadImage = async (file: File, url: string): Promise<any | undefined> => {
+export const uploadImage = async (file: File, url: string | undefined): Promise<any> => {
+    if (!url || !file) return;
     const { data } = await uploadClient.put(url, file, { headers: { 'Content-Type': file.type } });
     return data;
 };

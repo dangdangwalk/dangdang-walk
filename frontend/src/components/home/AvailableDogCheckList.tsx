@@ -1,9 +1,9 @@
 import Avatar from '@/components/common/Avatar';
 import { Checkbox } from '@/components/common/Checkbox2';
 import { AvailableDogCheck } from '@/components/home/AvailableDogCheck';
-import { AvailableDog } from '@/pages/Home';
 import { useState } from 'react';
 import AllDogs from '@/assets/icons/walk/frame-5058.svg';
+import { AvailableDog } from '@/models/dog.model';
 
 export default function AvailableDogCheckList({
     dogs,
@@ -22,7 +22,7 @@ export default function AvailableDogCheckList({
     return (
         <>
             <li className="flex py-2 justify-between items-center">
-                <Avatar url={AllDogs} name={'다함꼐'} />
+                <Avatar url={AllDogs} name={'다 함께'} />
                 <Checkbox
                     checked={isCheckedAll}
                     onCheckedChange={() => {
