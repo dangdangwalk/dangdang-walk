@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
 import { FindOptionsWhere, In } from 'typeorm';
-import { DailyWalkTime } from './daily-walk-time.entity';
+import { TodayWalkTime } from './daily-walk-time.entity';
 import { DailyWalkTimeRepository } from './daily-walk-time.repository';
 
 @Injectable()
@@ -11,11 +11,11 @@ export class DailyWalkTimeService {
         private readonly logger: WinstonLoggerService
     ) {}
 
-    async find(where: FindOptionsWhere<DailyWalkTime>): Promise<DailyWalkTime[]> {
+    async find(where: FindOptionsWhere<TodayWalkTime>): Promise<TodayWalkTime[]> {
         return this.dailyWalkTimeRepository.find(where);
     }
 
-    async delete(where: FindOptionsWhere<DailyWalkTime>) {
+    async delete(where: FindOptionsWhere<TodayWalkTime>) {
         return this.dailyWalkTimeRepository.delete(where);
     }
 

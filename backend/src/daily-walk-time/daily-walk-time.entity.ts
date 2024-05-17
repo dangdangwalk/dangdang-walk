@@ -1,7 +1,7 @@
 import { BeforeUpdate, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('daily_walk_time')
-export class DailyWalkTime {
+@Entity('today_walk_time')
+export class TodayWalkTime {
     @PrimaryGeneratedColumn()
     id: number;
 

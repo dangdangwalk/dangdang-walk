@@ -4,7 +4,7 @@ import { FindOptionsWhere, In, UpdateResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { BreedService } from '../breed/breed.service';
 import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
-import { DailyWalkTime } from '../daily-walk-time/daily-walk-time.entity';
+import { TodayWalkTime } from '../daily-walk-time/daily-walk-time.entity';
 import { DailyWalkTimeService } from '../daily-walk-time/daily-walk-time.service';
 import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
 import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
@@ -36,7 +36,7 @@ export class DogsService {
             const newDog = new Dogs({
                 breed,
                 walkDay: new DogWalkDay(),
-                dailyWalkTime: new DailyWalkTime(),
+                todayWalkTime: new TodayWalkTime(),
                 ...otherAttributes,
             });
 
@@ -53,7 +53,7 @@ export class DogsService {
         const dog = await this.findOne({ id: dogId });
 
         await this.dogWalkDayService.delete({ id: dog.walkDayId });
-        await this.dailyWalkTimeService.delete({ id: dog.dailyWalkTimeId });
+        await this.dailyWalkTimeService.delete({ id: dog.todayWalkTimeId });
 
         return dog;
     }
@@ -113,7 +113,7 @@ export class DogsService {
 
     async getRelatedTableIdList(
         ownDogIds: number[],
-        attributeName: 'walkDayId' | 'dailyWalkTimeId' | 'breedId'
+        attributeName: 'walkDayId' | 'todayWalkTimeId' | 'breedId'
     ): Promise<number[]> {
         const ownDogList = await this.dogsRepository.find({ id: In(ownDogIds) });
         return ownDogList.map((cur) => {

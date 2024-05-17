@@ -52,7 +52,7 @@ export class StatisticsService {
     async getDogsStatistics(userId: number): Promise<DogStatisticDto[]> {
         const ownDogIds = await this.usersService.getOwnDogsList(userId);
         const dogWalkDayIds = await this.dogsService.getRelatedTableIdList(ownDogIds, 'walkDayId');
-        const dailyWalkTimeIds = await this.dogsService.getRelatedTableIdList(ownDogIds, 'dailyWalkTimeId');
+        const dailyWalkTimeIds = await this.dogsService.getRelatedTableIdList(ownDogIds, 'todayWalkTimeId');
         const breedIds = await this.dogsService.getRelatedTableIdList(ownDogIds, 'breedId');
 
         const dogProfiles = await this.dogsService.getProfileList({ id: In(ownDogIds) });
