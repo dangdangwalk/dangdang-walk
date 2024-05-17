@@ -36,7 +36,7 @@ export class DogsService {
             const newDog = new Dogs({
                 breed,
                 walkDay: new DogWalkDay(),
-                dailyWalkTime: new TodayWalkTime(),
+                todayWalkTime: new TodayWalkTime(),
                 ...otherAttributes,
             });
 
@@ -53,7 +53,7 @@ export class DogsService {
         const dog = await this.findOne({ id: dogId });
 
         await this.dogWalkDayService.delete({ id: dog.walkDayId });
-        await this.dailyWalkTimeService.delete({ id: dog.dailyWalkTimeId });
+        await this.dailyWalkTimeService.delete({ id: dog.todayWalkTimeId });
 
         return dog;
     }
@@ -113,7 +113,7 @@ export class DogsService {
 
     async getRelatedTableIdList(
         ownDogIds: number[],
-        attributeName: 'walkDayId' | 'dailyWalkTimeId' | 'breedId'
+        attributeName: 'walkDayId' | 'todayWalkTimeId' | 'breedId'
     ): Promise<number[]> {
         const ownDogList = await this.dogsRepository.find({ id: In(ownDogIds) });
         return ownDogList.map((cur) => {

@@ -17,11 +17,11 @@ export class Dogs {
     walkDayId: number;
 
     @OneToOne(() => TodayWalkTime, { nullable: false, cascade: true, onDelete: 'CASCADE' })
-    @JoinColumn({ name: 'daily_walk_time_id' })
-    dailyWalkTime: TodayWalkTime;
+    @JoinColumn({ name: 'today_walk_time_id' })
+    todayWalkTime: TodayWalkTime;
 
-    @Column({ name: 'daily_walk_time_id' })
-    dailyWalkTimeId: number;
+    @Column({ name: 'today_walk_time_id' })
+    todayWalkTimeId: number;
 
     @Column()
     name: string;
