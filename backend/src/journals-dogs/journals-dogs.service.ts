@@ -32,7 +32,7 @@ export class JournalsDogsService {
                 order: { journalId: 'DESC' },
                 take: 1,
             });
-            return journal ? journal[0].journalId : undefined;
+            return journal.length ? journal[0].journalId : undefined;
         });
         return Promise.all(result);
     }
