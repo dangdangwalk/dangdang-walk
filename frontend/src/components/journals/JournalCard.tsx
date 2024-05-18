@@ -1,4 +1,4 @@
-import NoProfileImage from '@/components/common/NoProfileImage';
+import DefaultProfileImage from '@/components/common/DefaultProfileImage';
 import WalkInfo from '@/components/walk/WalkInfo';
 import { Dog } from '@/models/dog.model';
 import { Journal } from '@/models/journals';
@@ -11,7 +11,7 @@ export default function JournalCard({ journal, dog }: { journal: Journal; dog: D
                     {dog.profilePhotoUrl ? (
                         <img className="w-12 h-12" src={dog.profilePhotoUrl} alt={dog.name} />
                     ) : (
-                        <NoProfileImage />
+                        <DefaultProfileImage />
                     )}
                 </div>
                 <div className="flex flex-col gap-1">
