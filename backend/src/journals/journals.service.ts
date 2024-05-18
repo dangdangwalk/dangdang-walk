@@ -173,7 +173,7 @@ export class JournalsService {
         }
     }
 
-    makeCoordinate(lat: string, lag: string): string {
+    private makeCoordinate(lat: string, lag: string): string {
         return `POINT(${lat} ${lag})`;
     }
 
@@ -240,9 +240,6 @@ export class JournalsService {
     }
 
     async updateJournal(journalId: number, updateJournalData: UpdateJournalDto) {
-        if (updateJournalData.title) {
-            await this.update({ id: journalId }, { title: updateJournalData.title });
-        }
         if (updateJournalData.memo) {
             await this.updateAndFindOne({ id: journalId }, { memo: updateJournalData.memo });
         }

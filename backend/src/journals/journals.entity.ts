@@ -13,7 +13,7 @@ export class Journals {
     @Column({ name: 'user_id' })
     userId: number;
 
-    @Column()
+    @Column({nullable: true})
     title: string;
 
     @Column()
