@@ -11,7 +11,6 @@ import Cancel from '@/assets/icons/ic-top-cancel.svg';
 import { storageKeys } from '@/constants';
 import { useAuth } from '@/hooks/useAuth';
 import 'react-image-crop/dist/ReactCrop.css';
-import ImageCropper from '@/components/ImageCropper';
 import CropperModal from '@/components/CropperModal';
 import { uploadImg, useDog } from '@/hooks/useDog';
 import { dataURLtoFile } from '@/utils/dataUrlToFile';
