@@ -8,13 +8,13 @@ interface Props {
     data: DogRegInfo;
     setData: Dispatch<SetStateAction<DogRegInfo>>;
 }
-export interface DogDetailInfo {
+export interface DogDetailInfoProps {
     gender: string;
     isNeutered: boolean;
     birth: string | null;
     weight: number;
 }
-export default function DogRegister2({ data, setData }: Props) {
+export default function DogDetailInfo({ data, setData }: Props) {
     function maxLengthCheck(event: FormEvent<HTMLInputElement>) {
         const object = event.currentTarget;
         if (object.value.length > object.maxLength) {
