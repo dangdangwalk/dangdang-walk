@@ -6,7 +6,7 @@ import {
     IsNotEmptyObject,
     IsNumber,
     IsOptional,
-    IsUrl,
+    IsString,
     ValidateNested,
 } from 'class-validator';
 // TODO: 문자열이면서 숫자 범위를 넘지 않는지 확인하는 custom Validator 만들기..?
@@ -47,14 +47,14 @@ export class JournalInfoForCreate {
     duration: number;
 
     @IsNotEmpty()
-    @IsUrl()
+    @IsString()
     routeImageUrl: string;
 
     @IsOptional()
     memo: string;
 
     @IsOptional()
-    @IsUrl({}, { each: true })
+    @IsString({ each: true })
     photoUrls: string[];
 
     static getKeysForJournalTable() {
