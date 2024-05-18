@@ -150,14 +150,17 @@ export default function CreateForm() {
     const receivedState = location.state as ReceivedState;
     console.log(receivedState);
 
-    const { dogs, distance, calories, duration } = receivedState;
+    const { dogs, distance, calories, duration, startedAt: serializedStartedAt } = receivedState;
+    const startedAt = new Date(serializedStartedAt);
 
     return (
         <>
             <div className="flex flex-col">
                 <Topbar>
                     <Topbar.Center className="text-center text-lg font-bold leading-[27px]">
-                        <Heading headingNumber={1}>5월 2일 산책기록</Heading>
+                        <Heading headingNumber={1}>
+                            {startedAt.getMonth() + 1}월 {startedAt.getDate()}일 산책기록
+                        </Heading>
                     </Topbar.Center>
                     <Topbar.Back className="w-12 flex items-center">
                         <button onClick={() => setOpenModal(true)}>
