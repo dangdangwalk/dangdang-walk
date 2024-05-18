@@ -22,7 +22,7 @@ import { walkStartRequest, walkStopRequest } from '@/api/walk';
 import useImageUpload from '@/hooks/useImageUpload';
 import { useSpinnerStore } from '@/store/spinnerStore';
 
-interface DogWalkData {
+export interface DogWalkData {
     dogs: WalkingDog[];
     startedAt: string;
     distance: number;
