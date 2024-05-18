@@ -1,14 +1,20 @@
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { DeleteObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
 import { generateUuid } from 'src/utils/hash.utils';
 import { PresignedUrlInfo } from './type/s3.type';
+
+const BUCKET_NAME = 'dangdangwalk';
 
 @Injectable()
 export class S3Service {
     private readonly s3Client;
-    constructor(private readonly configService: ConfigService) {
+    constructor(
+        private readonly configService: ConfigService,
+        private readonly logger: WinstonLoggerService
+    ) {
         this.s3Client = new S3Client({ region: this.configService.getOrThrow('AWS_S3_REGION') });
     }
 
@@ -20,7 +26,7 @@ export class S3Service {
         const filenameArray = this.makeFileName(userId, type);
         const presignedUrlInfoPromises = await filenameArray.map(async (curFileName) => {
             const command = new PutObjectCommand({
-                Bucket: 'dangdangwalk',
+                Bucket: BUCKET_NAME,
                 ContentType: `image/${type}`,
                 Key: curFileName,
             });
@@ -28,5 +34,19 @@ export class S3Service {
             return { filename: curFileName, url };
         });
         return Promise.all(presignedUrlInfoPromises);
+    }
+
+    async deleteSingleObject(filename: string) {
+        const command = new DeleteObjectCommand({
+            Bucket: BUCKET_NAME,
+            Key: filename,
+        });
+
+        try {
+            const response = await this.s3Client.send(command);
+            this.logger.log(`Successfuly deleted ${filename}`);
+        } catch (error) {
+            this.logger.error(`Can't delete ${filename} from S3 bucket ${BUCKET_NAME}`, error ?? error.stack);
+        }
     }
 }
