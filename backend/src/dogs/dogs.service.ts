@@ -54,6 +54,9 @@ export class DogsService {
 
         await this.dogWalkDayService.delete({ id: dog.walkDayId });
         await this.dailyWalkTimeService.delete({ id: dog.todayWalkTimeId });
+        if (dog.profilePhotoUrl) {
+            await this.s3Service.deleteSingleObject(dog.profilePhotoUrl);
+        }
 
         return dog;
     }
@@ -81,7 +84,6 @@ export class DogsService {
             }
         }
         const updateData = breedName ? { breed, profilePhotoUrl, ...otherAttributes } : otherAttributes;
-
         return this.update({ id: dogId }, updateData);
     }
 
