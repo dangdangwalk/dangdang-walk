@@ -19,6 +19,7 @@ import CancelRegModal from '@/components/CancelRegModal';
 import { useCropStore } from '@/store/cropStore';
 import DogBasicInfo, { DogBasicInfoProps } from '@/pages/JoinStep/DogBasicInfo';
 import DogDetailInfo, { DogDetailInfoProps } from '@/pages/JoinStep/DogDetailInfo';
+import { useSpinnerStore } from '@/store/spinnerStore';
 
 export interface DogRegInfo extends DogBasicInfoProps, DogDetailInfoProps {
     profilePhotoUrl: string | null;
@@ -32,6 +33,7 @@ export default function Join() {
 
     const { signupMustation } = useAuth();
     const { registerDogMutation } = useDog();
+    const { spinnerAdd, spinnerRemove } = useSpinnerStore();
     const { cropError, dogProfileImgUrl } = useCropStore();
     const backToPathname = getStorage(storageKeys.REDIRECT_URI) || '';
 
@@ -119,7 +121,13 @@ export default function Join() {
 
     const handleNextStep = async () => {
         if (step === 'PetOwner') {
-            signupMustation.mutate(null, { onSettled: () => !haveADog && navigate('/') });
+            spinnerAdd();
+            signupMustation.mutate(null, {
+                onSettled: () => {
+                    !haveADog && navigate('/');
+                    spinnerRemove();
+                },
+            });
         }
         if (step === 'DogDetailInfo') {
             const urlData = await getUploadUrl(['png']);
