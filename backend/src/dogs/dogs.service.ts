@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { JournalsDogsService } from 'src/journals-dogs/journals-dogs.service';
+import { S3Service } from 'src/s3/s3.service';
 import { makeSubObjectsArray } from 'src/utils/manipulate.util';
 import { FindOptionsWhere, In, UpdateResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
@@ -10,7 +10,6 @@ import { DailyWalkTimeService } from '../daily-walk-time/daily-walk-time.service
 import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
 import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
 import { UsersDogsService } from '../users-dogs/users-dogs.service';
-import { UsersService } from '../users/users.service';
 import { DogProfile } from './dogs.controller';
 import { Dogs } from './dogs.entity';
 import { DogsRepository } from './dogs.repository';
@@ -21,11 +20,10 @@ export class DogsService {
     constructor(
         private readonly dogsRepository: DogsRepository,
         private readonly usersDogsService: UsersDogsService,
-        private readonly usersService: UsersService,
         private readonly breedService: BreedService,
         private readonly dogWalkDayService: DogWalkDayService,
         private readonly dailyWalkTimeService: DailyWalkTimeService,
-        private readonly journalsDogsService: JournalsDogsService,
+        private readonly s3Service: S3Service,
         private readonly logger: WinstonLoggerService
     ) {}
 
@@ -56,6 +54,9 @@ export class DogsService {
 
         await this.dogWalkDayService.delete({ id: dog.walkDayId });
         await this.dailyWalkTimeService.delete({ id: dog.todayWalkTimeId });
+        if (dog.profilePhotoUrl) {
+            await this.s3Service.deleteSingleObject(dog.profilePhotoUrl);
+        }
 
         return dog;
     }
@@ -69,15 +70,20 @@ export class DogsService {
     }
 
     async updateDog(dogId: number, dogDto: DogDto) {
-        const { breed: breedName, ...otherAttributes } = dogDto;
+        const { breed: breedName, profilePhotoUrl, ...otherAttributes } = dogDto;
         let breed;
 
         if (breedName) {
             breed = await this.breedService.findOne({ koreanName: breedName });
         }
 
-        const updateData = breedName ? { breed, ...otherAttributes } : otherAttributes;
-
+        if (profilePhotoUrl) {
+            const curDogInfo = await this.findOne({ id: dogId });
+            if (curDogInfo && curDogInfo.profilePhotoUrl) {
+                this.s3Service.deleteSingleObject(curDogInfo.profilePhotoUrl);
+            }
+        }
+        const updateData = breedName ? { breed, profilePhotoUrl, ...otherAttributes } : otherAttributes;
         return this.update({ id: dogId }, updateData);
     }
 
