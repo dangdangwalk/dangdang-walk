@@ -1,30 +1,44 @@
-import { Body, Controller, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { AccessTokenPayload } from 'src/auth/token/token.service';
+import { DogProfile } from 'src/dogs/dogs.controller';
+import { User } from 'src/users/decorators/user.decorator';
 import { Serialize } from '../common/interceptors/serialize.interceptor';
 import { DogsService } from '../dogs/dogs.service';
 import { WalkCommandDto } from './dto/walk-command.dto';
+import { WalkService } from './walk.service';
 
-@Controller('/walk')
+@Controller('/dogs/walks')
 @UsePipes(new ValidationPipe())
 export class WalkController {
-    constructor(private readonly dogService: DogsService) {}
+    constructor(
+        private readonly walkService: WalkService,
+        private readonly dogsService: DogsService
+    ) {}
 
     @Serialize(WalkCommandDto)
     @Post('/start')
-    startWalk(@Body() body: WalkCommandDto): Promise<number[]> {
+    async startWalk(@Body() body: WalkCommandDto): Promise<number[]> {
         const dogIds = [];
         for (const curId of body.dogId) {
             dogIds.push(parseInt(curId));
         }
-        return this.dogService.updateIsWalking(dogIds, true);
+        await this.dogsService.updateIsWalking(dogIds, false);
+        return dogIds;
     }
 
     @Serialize(WalkCommandDto)
     @Post('/stop')
-    stopWalk(@Body() body: WalkCommandDto): Promise<number[]> {
+    async stopWalk(@Body() body: WalkCommandDto): Promise<number[]> {
         const dogIds = [];
         for (const curId of body.dogId) {
             dogIds.push(parseInt(curId));
         }
-        return this.dogService.updateIsWalking(dogIds, false);
+        await this.dogsService.updateIsWalking(dogIds, false);
+        return dogIds;
+    }
+
+    @Get('/available')
+    async getAvailableDogs(@User() { userId }: AccessTokenPayload): Promise<DogProfile[]> {
+        return await this.walkService.getAvailableDogs(userId);
     }
 }

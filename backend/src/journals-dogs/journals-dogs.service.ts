@@ -24,4 +24,16 @@ export class JournalsDogsService {
     async find(where: FindOptionsWhere<JournalsDogs>): Promise<JournalsDogs[]> {
         return this.journalsDogsRepository.find({ where });
     }
+
+    async getRecentJournalId(dogIds: number[]): Promise<(number | undefined)[]> {
+        const result = dogIds.map(async (curDogId) => {
+            const journal = await this.journalsDogsRepository.find({
+                where: { dogId: curDogId },
+                order: { journalId: 'DESC' },
+                take: 1,
+            });
+            return journal ? journal[0].journalId : undefined;
+        });
+        return Promise.all(result);
+    }
 }

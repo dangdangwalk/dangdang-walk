@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { JournalsDogsService } from 'src/journals-dogs/journals-dogs.service';
 import { makeSubObjectsArray } from 'src/utils/manipulate.util';
 import { FindOptionsWhere, In, UpdateResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
@@ -24,6 +25,7 @@ export class DogsService {
         private readonly breedService: BreedService,
         private readonly dogWalkDayService: DogWalkDayService,
         private readonly dailyWalkTimeService: DailyWalkTimeService,
+        private readonly journalsDogsService: JournalsDogsService,
         private readonly logger: WinstonLoggerService
     ) {}
 
@@ -79,12 +81,16 @@ export class DogsService {
         return this.update({ id: dogId }, updateData);
     }
 
-    async updateIsWalking(dogIds: number[], stateToUpdate: boolean) {
+    async updateIsWalking(dogIds: number[] | number, stateToUpdate: boolean) {
         const attrs = {
             isWalking: stateToUpdate,
         };
 
-        await this.update({ id: In(dogIds) }, attrs);
+        if (Array.isArray(dogIds)) {
+            await this.update({ id: In(dogIds) }, attrs);
+        } else {
+            await this.update({ id: dogIds }, attrs);
+        }
 
         return dogIds;
     }
@@ -99,11 +105,6 @@ export class DogsService {
 
     private makeProfileList(dogs: Dogs[]): DogProfile[] {
         return makeSubObjectsArray(dogs, ['id', 'name', 'profilePhotoUrl']);
-    }
-
-    async getAvailableDogs(userId: number): Promise<DogProfile[]> {
-        const ownDogIds = await this.usersService.getOwnDogsList(userId);
-        return this.getProfileList({ id: In(ownDogIds), isWalking: false });
     }
 
     async getProfileList(where: FindOptionsWhere<Dogs>): Promise<DogProfile[]> {
