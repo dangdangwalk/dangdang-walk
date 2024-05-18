@@ -144,16 +144,6 @@ export default function CreateForm() {
             setIsUploading(false);
         }, 2000);
     }
-
-    function removeFilenameExtension(fileName: string) {
-        return fileName.replace(/.[^.\\/:*?"<>|\r\n]+$/, '');
-    }
-}
-
-interface Excrement {
-    dogId: number;
-    fecesLocations: Array<Position>;
-    urineLocations: Array<Position>;
 }
 
 interface ReceivedState {
