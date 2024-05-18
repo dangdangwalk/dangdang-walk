@@ -6,7 +6,7 @@ import { ExcrementsService } from './excrements.service';
 
 @Module({
     imports: [DatabaseModule.forFeature([Excrements])],
-    providers: [ExcrementsRepository, ExcrementsService],
+    providers: [ExcrementsService, ExcrementsRepository],
     exports: [ExcrementsService],
 })
 export class ExcrementsModule {}

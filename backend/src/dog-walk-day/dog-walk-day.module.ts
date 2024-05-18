@@ -6,7 +6,7 @@ import { DogWalkDayService } from './dog-walk-day.service';
 
 @Module({
     imports: [DatabaseModule.forFeature([DogWalkDay])],
-    exports: [DatabaseModule, DogWalkDayRepository, DogWalkDayService],
-    providers: [DatabaseModule, DogWalkDayRepository, DogWalkDayService],
+    providers: [DogWalkDayService, DogWalkDayRepository],
+    exports: [DogWalkDayService],
 })
 export class DogWalkDayModule {}
