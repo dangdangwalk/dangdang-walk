@@ -15,6 +15,7 @@ export interface DogDetailInfoProps {
     weight: number;
 }
 export default function DogDetailInfo({ data, setData }: Props) {
+    const [weight, setWeight] = useState('');
     function maxLengthCheck(event: FormEvent<HTMLInputElement>) {
         const object = event.currentTarget;
         if (object.value.length > object.maxLength) {
@@ -113,7 +114,7 @@ export default function DogDetailInfo({ data, setData }: Props) {
                 />
             </div>
             <div className={`${birthCheck ? 'mt-4' : 'mt-8'}`}>
-                <div className={`${birthCheck ? '' : 'py-3 relative'} `}>
+                <div className={`${birthCheck ? '' : 'py-3 mb-2 relative'} `}>
                     {!birthCheck && (
                         <>
                             <input
@@ -140,18 +141,22 @@ export default function DogDetailInfo({ data, setData }: Props) {
                 />
             </div>
             <div className="mt-9">
-                <div className="py-3 relative">
+                <div className={`py-3 relative ${weight && 'font-bold'}`}>
                     <input
+                        value={weight}
                         type="number"
                         pattern="\d*"
                         inputMode="numeric"
                         placeholder={`${data.name}의 체중이 궁금해요`}
-                        className="outline-none"
+                        className={`outline-none ${weight && 'w-9'}`}
                         maxLength={3}
                         onInput={(e) => maxLengthCheck(e)}
-                        onChange={(event) => handleWeightChange(event.target.value)}
+                        onChange={(event) => {
+                            setWeight(event.target.value);
+                            handleWeightChange(event.target.value);
+                        }}
                     />
-                    kg
+                    {weight && 'kg'}
                     <Divider className="absolute bottom-0 h-[1px]" />
                 </div>
             </div>
