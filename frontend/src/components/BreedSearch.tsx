@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Dispatch, SetStateAction, useRef, useState } from 'react';
+import React, { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 import Topbar from '@/components/common/Topbar';
 import TopBack from '@/assets/icons/ic-top-back.svg';
 import Search from '@/assets/icons/ic-search.svg';
