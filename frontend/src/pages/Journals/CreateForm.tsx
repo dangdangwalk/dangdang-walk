@@ -19,6 +19,7 @@ import ExcrementDisplay from '@/components/journals/ExcrementDisplay';
 import Heading from '@/components/journals/Heading';
 import WalkInfo from '@/components/walk/WalkInfo';
 import useToast from '@/hooks/useToast';
+import { Position } from '@/models/location.model';
 import { useSpinnerStore } from '@/store/spinnerStore';
 import { FormEvent, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -246,15 +247,10 @@ export default function CreateForm() {
     }
 }
 
-interface Location {
-    lat: number;
-    lng: number;
-}
-
 interface Excrement {
     dogId: number;
-    fecesLocations: Array<Location>;
-    urineLocations: Array<Location>;
+    fecesLocations: Array<Position>;
+    urineLocations: Array<Position>;
 }
 
 export interface Image {
