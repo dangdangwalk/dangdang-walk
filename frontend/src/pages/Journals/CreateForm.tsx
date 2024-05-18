@@ -16,6 +16,7 @@ import Topbar from '@/components/common/Topbar';
 import AddPhotoButton from '@/components/journals/AddPhotoButton';
 import DogImages from '@/components/journals/DogImages';
 import ExcrementDisplay from '@/components/journals/ExcrementDisplay';
+import Heading from '@/components/journals/Heading';
 import WalkInfo from '@/components/walk/WalkInfo';
 import useToast from '@/hooks/useToast';
 import { useSpinnerStore } from '@/store/spinnerStore';
@@ -148,7 +149,7 @@ export default function CreateForm() {
             <div className="flex flex-col">
                 <Topbar>
                     <Topbar.Center className="text-center text-lg font-bold leading-[27px]">
-                        <h1>5월 2일 산책기록</h1>
+                        <Heading headingNumber={1}>5월 2일 산책기록</Heading>
                     </Topbar.Center>
                     <Topbar.Back className="w-12 flex items-center">
                         <button onClick={() => setOpenModal(true)}>
@@ -161,7 +162,7 @@ export default function CreateForm() {
                     <WalkInfo distance={0} calories={0} duration={0} />
                     <Divider />
                     <div>
-                        <h2>함께한 댕댕이</h2>
+                        <Heading headingNumber={2}>함께한 댕댕이</Heading>
                         <div className="flex flex-col">
                             {FAKE_EXCREMENTS.map((excrement) => (
                                 <div key={excrement.dogId} className="flex justify-between">
@@ -176,14 +177,14 @@ export default function CreateForm() {
                     </div>
                     <Divider />
                     <div>
-                        <h2>사진</h2>
+                        <Heading headingNumber={2}>사진</Heading>
                         <DogImages images={images}>
                             <AddPhotoButton isLoading={isUploading} onChange={handleAddImages} />
                         </DogImages>
                     </div>
                     <Divider />
                     <div>
-                        <h2>메모</h2>
+                        <Heading headingNumber={2}>메모</Heading>
                         <textarea name="memo" className="w-full" ref={textAreaRef} />
                     </div>
                 </div>
