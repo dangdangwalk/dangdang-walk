@@ -1,3 +1,4 @@
+import CustomCalendar from '@/components/journals/CustomCalendar';
 import JournalCardList from '@/components/journals/JournalCardList';
 import { queryStringKeys } from '@/constants';
 import { NAV_HEIGHT, TOP_BAR_HEIGHT } from '@/constants/style';
@@ -8,24 +9,6 @@ import { useSearchParams } from 'react-router-dom';
 const journals: Journal[] = [
     {
         id: 0,
-        title: '테스트',
-        distance: 3.43,
-        duration: 1000,
-        calories: 1000,
-        fecesCnt: 1000,
-        urinesCnt: 1000,
-    },
-    {
-        id: 1,
-        title: '테스트',
-        distance: 3.43,
-        duration: 1000,
-        calories: 1000,
-        fecesCnt: 1000,
-        urinesCnt: 1000,
-    },
-    {
-        id: 2,
         title: '테스트',
         distance: 3.43,
         duration: 1000,
@@ -52,6 +35,7 @@ export default function Journals() {
                 className="flex flex-col px-5 bg-neutral-50 mb-[60px] min-h-dvh"
                 style={{ minHeight: `calc(100dvh - ${NAV_HEIGHT} - ${TOP_BAR_HEIGHT}  )` }}
             >
+                <CustomCalendar />
                 <JournalCardList journals={journals} dog={dog} />
             </main>
         </>
