@@ -173,7 +173,7 @@ export class JournalsService {
         }
     }
 
-    makeCoordinate(lat: string, lag: string): string {
+    private makeCoordinate(lat: string, lag: string): string {
         return `POINT(${lat} ${lag})`;
     }
 
@@ -204,38 +204,42 @@ export class JournalsService {
         }
     }
 
-    async createJournal(userId: number, createJournalData: CreateJournalDto) {
-        const dogs = createJournalData.dogs;
-
+    private makeJournalData(userId: number, createJournalData: CreateJournalDto) {
         const journalData: CreateJournalData = makeSubObject(
             createJournalData.journalInfo,
             JournalInfoForCreate.getKeysForJournalTable()
         );
-
         journalData.userId = userId;
-        const journalCreateResult = await this.createNewJournal(userId, journalData);
-        await this.createNewJournalDogs(journalCreateResult.id, dogs);
 
-        let photoUrls: string[];
-        if (!createJournalData.journalInfo.photoUrls) {
-            photoUrls = [];
+        return journalData;
+    }
+
+    private checkPhotoUrlExist(photoUrls: string[] | undefined): string[] {
+        if (!photoUrls) {
+            return [];
         } else {
-            photoUrls = createJournalData.journalInfo.photoUrls;
+            return photoUrls;
         }
+    }
+    async createJournal(userId: number, createJournalData: CreateJournalDto) {
+        const dogs = createJournalData.dogs;
+        const journalData = this.makeJournalData(userId, createJournalData);
+
+        const createJournalResult = await this.createNewJournal(userId, journalData);
+        await this.createNewJournalDogs(createJournalResult.id, dogs);
+
+        const photoUrls = this.checkPhotoUrlExist(createJournalData.journalInfo.photoUrls);
         if (photoUrls.length) {
-            await this.createNewPhotoUrls(journalCreateResult.id, photoUrls);
+            await this.createNewPhotoUrls(createJournalResult.id, photoUrls);
         }
 
         const excrements: ExcrementsInfoForCreate[] = createJournalData.excrements;
         if (excrements.length) {
-            await this.excrementsLoop(journalCreateResult.id, excrements);
+            await this.excrementsLoop(createJournalResult.id, excrements);
         }
     }
 
     async updateJournal(journalId: number, updateJournalData: UpdateJournalDto) {
-        if (updateJournalData.title) {
-            await this.update({ id: journalId }, { title: updateJournalData.title });
-        }
         if (updateJournalData.memo) {
             await this.updateAndFindOne({ id: journalId }, { memo: updateJournalData.memo });
         }
@@ -248,7 +252,7 @@ export class JournalsService {
     }
 
     async deleteJournal(journalId: number) {
-        console.log(await this.delete(journalId));
+        await this.delete(journalId);
     }
 
     async aggregateJournalsByWeek(
