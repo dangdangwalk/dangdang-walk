@@ -22,7 +22,7 @@ import useToast from '@/hooks/useToast';
 import { WalkingDog } from '@/models/dog.model';
 import { Position } from '@/models/location.model';
 import { useSpinnerStore } from '@/store/spinnerStore';
-import { FormEvent, useRef, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function CreateForm() {
@@ -43,8 +43,12 @@ export default function CreateForm() {
     const receivedState = location.state as ReceivedState;
     console.log(receivedState);
 
-    const { dogs, distance, calories, duration, startedAt: serializedStartedAt } = receivedState;
+    const { dogs, distance, calories, duration, startedAt: serializedStartedAt, photoUrls } = receivedState;
     const startedAt = new Date(serializedStartedAt);
+
+    useEffect(() => {
+        setImages(photoUrls);
+    }, [location]);
 
     return (
         <>
