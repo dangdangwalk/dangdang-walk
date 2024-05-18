@@ -1,9 +1,10 @@
-import React, { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
+import React, { ChangeEvent, Dispatch, SetStateAction, useRef, useState } from 'react';
 import Topbar from '@/components/common/Topbar';
 import TopBack from '@/assets/icons/ic-top-back.svg';
 import Search from '@/assets/icons/ic-search.svg';
 import { DogRegInfo } from '@/pages/Join';
 import { useBreed } from '@/hooks/useBreed';
+import DeleteBtn from '@/assets/icons/btn-delete.svg';
 interface Props {
     isOpen: boolean;
     setIsOpen: (state: boolean) => void;
@@ -11,10 +12,10 @@ interface Props {
 }
 export default function BreedSearch({ isOpen, setIsOpen, setData }: Props) {
     const { data } = useBreed();
+    const [search, setSearch] = useState('');
+
     const [searched, setSearched] = useState<string[]>([]);
     const handleSetBreed = (item: string) => {
-        console.log(item);
-
         setData((prev) => ({
             ...prev,
             breed: item,
@@ -23,6 +24,7 @@ export default function BreedSearch({ isOpen, setIsOpen, setData }: Props) {
     };
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
+        setSearch(value);
         const regex = new RegExp(`(${value})`, 'gi');
 
         const filteredData = data.filter((item: string) => item.includes(value));
@@ -56,10 +58,22 @@ export default function BreedSearch({ isOpen, setIsOpen, setData }: Props) {
                 <div className="w-full h-12 pl-3  py-3.5 bg-white rounded-lg border border-neutral-200 justify-start items-start gap-2 inline-flex">
                     <img src={Search} alt="search" />
                     <input
+                        value={search}
                         onChange={handleChange}
                         placeholder="견종 검색하기"
                         className="w-full text-neutral-800 text-sm font-bold font-['NanumGothic'] leading-[18px] outline-none"
                     />
+                    {search && (
+                        <img
+                            className="mr-4"
+                            src={DeleteBtn}
+                            alt="deletebtn"
+                            onClick={() => {
+                                setSearch('');
+                                setSearched([]);
+                            }}
+                        />
+                    )}
                 </div>
 
                 <div className="flex flex-col w-full mt-2">{searched}</div>
