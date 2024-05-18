@@ -10,7 +10,6 @@ import { HealthController } from './common/health/health.controller';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { PrometheusInterceptor } from './common/interceptors/prometheus.interceptor';
 import { WinstonLoggerModule } from './common/logger/winstonLogger.module';
-import { S3Module } from './s3/s3.module';
 import { StatisticsModule } from './statistics/statistics.module';
 import { WalkModule } from './walk/walk.module';
 
@@ -31,7 +30,6 @@ import { WalkModule } from './walk/walk.module';
         AuthModule,
         StatisticsModule,
         WalkModule,
-        S3Module,
     ],
     controllers: [AppController, HealthController],
     providers: [

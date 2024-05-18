@@ -26,6 +26,14 @@ import { DogsService } from './dogs.service';
     ],
     controllers: [DogsController],
     providers: [DogsService, DogsRepository],
-    exports: [DogsService, UsersModule, JournalsDogsModule, BreedModule, DailyWalkTimeModule, DogWalkDayModule],
+    exports: [
+        DogsService,
+        UsersModule,
+        JournalsDogsModule,
+        BreedModule,
+        DailyWalkTimeModule,
+        DogWalkDayModule,
+        S3Module,
+    ],
 })
 export class DogsModule {}
