@@ -17,7 +17,7 @@ const WEEKDAY = ['월', '화', '수', '목', '금', '토', '일'];
 export default function DogCard({ dog }: DogCardProps) {
     const navigate = useNavigate();
     const onclick = () => {
-        navigate(`/journals?${queryStringKeys.DOGID}=${dog.id}`);
+        navigate({ pathname: 'journals', search: `?${queryStringKeys.DOGID}=${dog.id}` });
     };
     return (
         <div className="flex-col relative bg-white rounded-lg shadow" onClick={onclick}>

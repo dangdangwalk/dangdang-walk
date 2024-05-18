@@ -24,3 +24,11 @@ export const getHours = (date: Date) => {
 export const getElapsedTime = (start: Date, end: Date) => {
     return (end.getTime() - start.getTime()) / 1000;
 };
+
+export const formDate = (date: Date) => {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+};
