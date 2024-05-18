@@ -8,6 +8,8 @@ import React, { SyntheticEvent, useRef } from 'react';
 import ReactCrop, { centerCrop, convertToPixelCrop, makeAspectCrop } from 'react-image-crop';
 
 export default function ImageCropper() {
+    console.log('open');
+
     const {
         crop,
         setCrop,
@@ -56,7 +58,7 @@ export default function ImageCropper() {
     const previewCanvasRef = useRef<HTMLCanvasElement>(null);
     return (
         <div
-            className={`fixed -bottom-full flex flex-col justify-center w-full h-full bg-white duration-300 ${cropperToggle ? '-translate-y-full' : 'translate-y-0'}`}
+            className={`fixed left-0 -bottom-full z-10 flex flex-col justify-center w-full h-full bg-white duration-300 ${cropperToggle ? '-translate-y-full' : 'translate-y-0'}`}
         >
             <Topbar>
                 <Topbar.Front className="pl-3 ">
