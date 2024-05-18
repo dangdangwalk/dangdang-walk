@@ -150,6 +150,8 @@ export default function CreateForm() {
     const receivedState = location.state as ReceivedState;
     console.log(receivedState);
 
+    const { dogs, distance, calories, duration } = receivedState;
+
     return (
         <>
             <div className="flex flex-col">
@@ -165,17 +167,17 @@ export default function CreateForm() {
                 </Topbar>
                 <div className={`h-[calc(100dvh-3rem-4rem)] overflow-y-auto`}>
                     <div className="h-[216px] bg-slate-300">경로 이미지</div>
-                    <WalkInfo distance={0} calories={0} duration={0} />
+                    <WalkInfo distance={distance} calories={calories} duration={duration} />
                     <Divider />
                     <div>
                         <Heading headingNumber={2}>함께한 댕댕이</Heading>
                         <div className="flex flex-col">
-                            {FAKE_EXCREMENTS.map((excrement) => (
-                                <div key={excrement.dogId} className="flex justify-between">
-                                    <Avatar />
+                            {dogs.map((dog) => (
+                                <div key={dog.id} className="flex justify-between">
+                                    <Avatar url={dog.profilePhotoUrl} name={dog.name} />
                                     <ExcrementDisplay
-                                        fecesCount={excrement.fecesLocations.length}
-                                        urineCount={excrement.urineLocations.length}
+                                        fecesCount={dog.fecesLocations.length}
+                                        urineCount={dog.urineLocations.length}
                                     />
                                 </div>
                             ))}
