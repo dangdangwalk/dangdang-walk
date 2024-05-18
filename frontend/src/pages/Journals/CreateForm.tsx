@@ -19,12 +19,15 @@ import ExcrementDisplay from '@/components/journals/ExcrementDisplay';
 import Heading from '@/components/journals/Heading';
 import WalkInfo from '@/components/walk/WalkInfo';
 import useToast from '@/hooks/useToast';
+import { WalkingDog } from '@/models/dog.model';
+import { Position } from '@/models/location.model';
 import { useSpinnerStore } from '@/store/spinnerStore';
 import { FormEvent, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function CreateForm() {
     const navigate = useNavigate();
+    const location = useLocation();
     const { show: showToast } = useToast();
 
     const addSpinner = useSpinnerStore((state) => state.spinnerAdd);
@@ -144,6 +147,9 @@ export default function CreateForm() {
         },
     ];
 
+    const receivedState = location.state as ReceivedState;
+    console.log(receivedState);
+
     return (
         <>
             <div className="flex flex-col">
@@ -246,15 +252,20 @@ export default function CreateForm() {
     }
 }
 
-interface Location {
-    lat: number;
-    lng: number;
-}
-
 interface Excrement {
     dogId: number;
-    fecesLocations: Array<Location>;
-    urineLocations: Array<Location>;
+    fecesLocations: Array<Position>;
+    urineLocations: Array<Position>;
+}
+
+interface ReceivedState {
+    dogs: WalkingDog[];
+    startedAt: string;
+    distance: number;
+    routes: Position[];
+    calories: number;
+    duration: number;
+    photoUrls: string[];
 }
 
 export interface Image {
