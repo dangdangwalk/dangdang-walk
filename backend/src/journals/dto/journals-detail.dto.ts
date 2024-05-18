@@ -54,9 +54,6 @@ export class RouteDto {
 
 export class JournalInfoForDetail {
     @IsNotEmpty()
-    title: string;
-
-    @IsNotEmpty()
     distance: number;
 
     @IsNotEmpty()
@@ -77,7 +74,7 @@ export class JournalInfoForDetail {
     photoUrls: string[];
 
     static getKeysForJournalTable() {
-        return ['title', 'distance', 'calories', 'duration', 'routeImageUrl', 'memo'];
+        return ['distance', 'calories', 'duration', 'routeImageUrl', 'memo'];
     }
     static getKeysForJournalPhotoTable() {
         return ['photoUrls'];

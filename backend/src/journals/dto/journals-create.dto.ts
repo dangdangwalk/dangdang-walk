@@ -35,9 +35,6 @@ export class ExcrementsInfoForCreate {
 
 export class JournalInfoForCreate {
     @IsNotEmpty()
-    title: string;
-
-    @IsNotEmpty()
     distance: number;
 
     @IsNotEmpty()
@@ -61,7 +58,7 @@ export class JournalInfoForCreate {
     photoUrls: string[];
 
     static getKeysForJournalTable() {
-        return ['title', 'distance', 'calories', 'startedAt', 'duration', 'routeImageUrl', 'memo'];
+        return ['distance', 'calories', 'startedAt', 'duration', 'routeImageUrl', 'memo'];
     }
     static getKeysForJournalPhotoTable() {
         return ['photoUrls'];
