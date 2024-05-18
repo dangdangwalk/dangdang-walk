@@ -20,4 +20,8 @@ const storageKeys = {
     DOGS: 'dogs',
 } as const;
 
-export { tokenKeys, cookieKeys, queryKeys, storageKeys };
+const queryStringKeys = {
+    DOGID: 'dogId',
+} as const;
+
+export { tokenKeys, cookieKeys, queryKeys, storageKeys, queryStringKeys };

@@ -67,7 +67,7 @@ function App() {
                     </div>
                 )}
             </div>
-            {spinner && <Spinner className="absolute bg-neutral-800/40 z-40" />}
+            {spinner > 0 && <Spinner className="absolute bg-neutral-800/40 z-40" />}
 
             <Toast />
         </div>

@@ -1,0 +1,13 @@
+import JournalCard from '@/components/journals/JournalCard';
+import { Dog } from '@/models/dog.model';
+import { Journal } from '@/models/journals';
+
+export default function JournalCardList({ journals, dog }: { journals: Journal[]; dog: Dog }) {
+    return (
+        <div className="flex flex-col justify-start items-center gap-3">
+            {journals.map((journal) => {
+                return <JournalCard key={journal.id} journal={journal} dog={dog} />;
+            })}
+        </div>
+    );
+}
