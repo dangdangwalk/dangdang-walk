@@ -28,7 +28,6 @@ export const useCropStore = create<CropState>((set) => ({
     setDogProfileImgUrl: (url: string) => set({ dogProfileImgUrl: url }),
     onSelectFileChange: (e: ChangeEvent<HTMLInputElement>) => {
         const { cropError } = useCropStore.getState();
-        set({ cropPrevImgUrl: '' });
         const files = e.target.files?.[0];
 
         if (!files) return;

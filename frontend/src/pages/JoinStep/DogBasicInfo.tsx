@@ -4,6 +4,7 @@ import { Divider } from '@/components/common/Divider';
 import { DogRegInfo } from '@/pages/Join';
 import BreedSearch from '@/components/BreedSearch';
 import { useCropStore } from '@/store/cropStore';
+import ImageCropper from '@/components/ImageCropper';
 
 export interface DogBasicInfoProps {
     name: string;
@@ -76,6 +77,7 @@ export default function DogBasicInfo({ data, setData, fileInputRef }: Props) {
                 </div>
             </div>
             <BreedSearch isOpen={isOpen} setIsOpen={setIsOpen} setData={setData} />
+            <ImageCropper />
         </>
     );
 }

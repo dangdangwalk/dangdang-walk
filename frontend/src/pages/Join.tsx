@@ -222,7 +222,6 @@ export default function Join() {
                     {ButtonText()}
                 </Button>
             </div>
-            <ImageCropper />
             {cropError && <CropperModal fileInputRef={fileInputRef} />}
             {cancelReg && <CancelRegModal setCancelReg={setCancelReg} />}
         </div>
