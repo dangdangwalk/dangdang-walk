@@ -17,5 +17,5 @@ export default function OauthCallback() {
         }
     }, []);
 
-    return <div>Loading...</div>;
+    return <div></div>;
 }
