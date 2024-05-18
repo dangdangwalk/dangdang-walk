@@ -13,9 +13,6 @@ export class Journals {
     @Column({ name: 'user_id' })
     userId: number;
 
-    @Column({nullable: true})
-    title: string;
-
     @Column()
     distance: number;
 

@@ -1,9 +1,9 @@
 import { Type } from 'class-transformer';
-import { IsNotEmpty, IsOptional, IsString, IsUrl, ValidateNested } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
 
 export class PhotoUrlDto {
     @IsNotEmpty()
-    @IsUrl()
+    @IsString()
     photoUrl: string;
 
     static getKey() {
@@ -63,14 +63,14 @@ export class JournalInfoForDetail {
     duration: number;
 
     @IsNotEmpty()
-    @IsUrl()
+    @IsString()
     routeImageUrl: string;
 
     @IsNotEmpty()
     memo: string;
 
     @IsNotEmpty()
-    @IsUrl({}, { each: true })
+    @IsString({ each: true })
     photoUrls: string[];
 
     static getKeysForJournalTable() {
