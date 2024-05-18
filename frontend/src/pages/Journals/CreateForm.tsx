@@ -34,7 +34,7 @@ export default function CreateForm() {
     const removeSpinner = useSpinnerStore((state) => state.spinnerRemove);
 
     const [openModal, setOpenModal] = useState(false);
-    const [images, setImages] = useState<Array<Image>>([]);
+    const [images, setImages] = useState<Array<ImageUrl>>([]);
     const [isUploading, setIsUploading] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
 
@@ -82,7 +82,7 @@ export default function CreateForm() {
                     <Divider />
                     <div>
                         <Heading headingNumber={2}>사진</Heading>
-                        <DogImages images={images}>
+                        <DogImages imageUrls={images}>
                             <AddPhotoButton isLoading={isUploading} onChange={handleAddImages} />
                         </DogImages>
                     </div>
@@ -136,8 +136,8 @@ export default function CreateForm() {
         if (files === null) return;
         setIsUploading(true);
 
-        const images = Array.from(files).map<Image>((file) => {
-            return { url: URL.createObjectURL(file), name: removeFilenameExtension(file.name) };
+        const images = Array.from(files).map<ImageUrl>((file) => {
+            return URL.createObjectURL(file);
         });
         setTimeout(() => {
             setImages((prevImages) => [...prevImages, ...images]);
@@ -166,7 +166,4 @@ interface ReceivedState {
     photoUrls: string[];
 }
 
-export interface Image {
-    url: string;
-    name: string;
-}
+export type ImageUrl = string;
