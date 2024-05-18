@@ -22,7 +22,7 @@ import useToast from '@/hooks/useToast';
 import { WalkingDog } from '@/models/dog.model';
 import { Position } from '@/models/location.model';
 import { useSpinnerStore } from '@/store/spinnerStore';
-import { FormEvent, useRef, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function CreateForm() {
@@ -34,128 +34,30 @@ export default function CreateForm() {
     const removeSpinner = useSpinnerStore((state) => state.spinnerRemove);
 
     const [openModal, setOpenModal] = useState(false);
-    const [images, setImages] = useState<Array<Image>>([]);
+    const [images, setImages] = useState<Array<ImageUrl>>([]);
     const [isUploading, setIsUploading] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
 
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
-    const FAKE_EXCREMENTS: Array<Excrement> = [
-        {
-            dogId: 1,
-            fecesLocations: [
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-            ],
-            urineLocations: [
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-            ],
-        },
-        {
-            dogId: 2,
-            fecesLocations: [{ lat: 123.45435435, lng: 456.3463465 }],
-            urineLocations: [
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-            ],
-        },
-        {
-            dogId: 3,
-            fecesLocations: [{ lat: 8568.45435435, lng: 456.3463465 }],
-            urineLocations: [
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-            ],
-        },
-        {
-            dogId: 4,
-            fecesLocations: [],
-            urineLocations: [
-                { lat: 456.45435435, lng: 32555.3463465 },
-                { lat: 7477.45435435, lng: 346346.3463465 },
-            ],
-        },
-        {
-            dogId: 5,
-            fecesLocations: [],
-            urineLocations: [],
-        },
-        {
-            dogId: 6,
-            fecesLocations: [{ lat: 8568.45435435, lng: 456.3463465 }],
-            urineLocations: [
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-            ],
-        },
-        {
-            dogId: 7,
-            fecesLocations: [{ lat: 8568.45435435, lng: 456.3463465 }],
-            urineLocations: [
-                { lat: 123.45435435, lng: 456.3463465 },
-                { lat: 123.45435435, lng: 456.3463465 },
-            ],
-        },
-        {
-            dogId: 8,
-            fecesLocations: [{ lat: 8568.45435435, lng: 456.3463465 }],
-            urineLocations: [],
-        },
-    ];
-
     const receivedState = location.state as ReceivedState;
     console.log(receivedState);
+
+    const { dogs, distance, calories, duration, startedAt: serializedStartedAt, photoUrls } = receivedState;
+    const startedAt = new Date(serializedStartedAt);
+
+    useEffect(() => {
+        setImages(photoUrls);
+    }, [location]);
 
     return (
         <>
             <div className="flex flex-col">
                 <Topbar>
                     <Topbar.Center className="text-center text-lg font-bold leading-[27px]">
-                        <Heading headingNumber={1}>5월 2일 산책기록</Heading>
+                        <Heading headingNumber={1}>
+                            {startedAt.getMonth() + 1}월 {startedAt.getDate()}일 산책기록
+                        </Heading>
                     </Topbar.Center>
                     <Topbar.Back className="w-12 flex items-center">
                         <button onClick={() => setOpenModal(true)}>
@@ -165,17 +67,17 @@ export default function CreateForm() {
                 </Topbar>
                 <div className={`h-[calc(100dvh-3rem-4rem)] overflow-y-auto`}>
                     <div className="h-[216px] bg-slate-300">경로 이미지</div>
-                    <WalkInfo distance={0} calories={0} duration={0} />
+                    <WalkInfo distance={distance} calories={calories} duration={duration} />
                     <Divider />
                     <div>
                         <Heading headingNumber={2}>함께한 댕댕이</Heading>
                         <div className="flex flex-col">
-                            {FAKE_EXCREMENTS.map((excrement) => (
-                                <div key={excrement.dogId} className="flex justify-between">
-                                    <Avatar />
+                            {dogs.map((dog) => (
+                                <div key={dog.id} className="flex justify-between">
+                                    <Avatar url={dog.profilePhotoUrl} name={dog.name} />
                                     <ExcrementDisplay
-                                        fecesCount={excrement.fecesLocations.length}
-                                        urineCount={excrement.urineLocations.length}
+                                        fecesCount={dog.fecesLocations.length}
+                                        urineCount={dog.urineLocations.length}
                                     />
                                 </div>
                             ))}
@@ -184,7 +86,7 @@ export default function CreateForm() {
                     <Divider />
                     <div>
                         <Heading headingNumber={2}>사진</Heading>
-                        <DogImages images={images}>
+                        <DogImages imageUrls={images}>
                             <AddPhotoButton isLoading={isUploading} onChange={handleAddImages} />
                         </DogImages>
                     </div>
@@ -238,24 +140,14 @@ export default function CreateForm() {
         if (files === null) return;
         setIsUploading(true);
 
-        const images = Array.from(files).map<Image>((file) => {
-            return { url: URL.createObjectURL(file), name: removeFilenameExtension(file.name) };
+        const images = Array.from(files).map<ImageUrl>((file) => {
+            return URL.createObjectURL(file);
         });
         setTimeout(() => {
             setImages((prevImages) => [...prevImages, ...images]);
             setIsUploading(false);
         }, 2000);
     }
-
-    function removeFilenameExtension(fileName: string) {
-        return fileName.replace(/.[^.\\/:*?"<>|\r\n]+$/, '');
-    }
-}
-
-interface Excrement {
-    dogId: number;
-    fecesLocations: Array<Position>;
-    urineLocations: Array<Position>;
 }
 
 interface ReceivedState {
@@ -268,7 +160,4 @@ interface ReceivedState {
     photoUrls: string[];
 }
 
-export interface Image {
-    url: string;
-    name: string;
-}
+export type ImageUrl = string;
