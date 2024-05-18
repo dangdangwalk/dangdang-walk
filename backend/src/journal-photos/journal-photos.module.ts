@@ -6,7 +6,7 @@ import { JournalPhotosService } from './journal-photos.service';
 
 @Module({
     imports: [DatabaseModule.forFeature([JournalPhotos])],
-    providers: [JournalPhotosRepository, JournalPhotosService],
+    providers: [JournalPhotosService, JournalPhotosRepository],
     exports: [JournalPhotosService],
 })
 export class JournalPhotosModule {}
