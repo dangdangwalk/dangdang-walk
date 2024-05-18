@@ -43,8 +43,5 @@ export class DogsController {
         return this.dogsService.getProfile(dogId);
     }
 
-    @Get('/walk-available')
-    async getAvailableDogs(@User() { userId }: AccessTokenPayload): Promise<DogProfile[]> {
-        return await this.dogsService.getAvailableDogs(userId);
-    }
+
 }

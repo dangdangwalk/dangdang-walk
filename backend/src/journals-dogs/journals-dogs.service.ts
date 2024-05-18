@@ -25,14 +25,14 @@ export class JournalsDogsService {
         return this.journalsDogsRepository.find({ where });
     }
 
-    async getRecentJournalId(dogIds: number[]) {
+    async getRecentJournalId(dogIds: number[]): Promise<(number | undefined)[]> {
         const result = dogIds.map(async (curDogId) => {
             const journal = await this.journalsDogsRepository.find({
                 where: { dogId: curDogId },
                 order: { journalId: 'DESC' },
                 take: 1,
             });
-            return journal[0].journalId;
+            return journal ? journal[0].journalId : undefined;
         });
         return Promise.all(result);
     }
