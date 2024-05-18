@@ -10,8 +10,7 @@ import {
 } from '@/components/common/Modal';
 import { MIN_DIMENSION } from '@/constants/cropper';
 import { useCropStore } from '@/store/cropStore';
-import React, { Dispatch, MutableRefObject } from 'react';
-import { PercentCrop } from 'react-image-crop';
+import React, { MutableRefObject } from 'react';
 
 interface Props {
     fileInputRef: MutableRefObject<HTMLInputElement | null>;
