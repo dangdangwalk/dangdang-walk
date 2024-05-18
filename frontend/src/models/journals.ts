@@ -1,4 +1,5 @@
 export interface Journal {
+    id: number;
     title: string;
     distance: number;
     calories: number;
