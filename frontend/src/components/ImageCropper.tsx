@@ -1,34 +1,23 @@
 import { Button } from '@/components/common/Button';
 import Topbar from '@/components/common/Topbar';
 import { ASPECT_RATIO, MIN_DIMENSION } from '@/constants/cropper';
-import { DogRegInfo } from '@/pages/Join';
+import { useCropStore } from '@/store/cropStore';
 import setCanvasPreview from '@/utils/canvas-preview';
 import { setStorage } from '@/utils/storage';
-import React, { ChangeEvent, Dispatch, SetStateAction, SyntheticEvent, useRef } from 'react';
-import ReactCrop, { PercentCrop, centerCrop, convertToPixelCrop, makeAspectCrop } from 'react-image-crop';
+import React, { SyntheticEvent, useRef } from 'react';
+import ReactCrop, { centerCrop, convertToPixelCrop, makeAspectCrop } from 'react-image-crop';
 
-interface Props {
-    prevImg: string;
-    setPrevImg: (url: string) => void;
-    crop: PercentCrop | undefined;
-    setCrop: Dispatch<SetStateAction<PercentCrop | undefined>>;
-    cropperToggle: boolean;
-    setCropperToggle: (state: boolean) => void;
-    setRegisterData: Dispatch<SetStateAction<DogRegInfo>>;
-    onSelectFile: (e: ChangeEvent<HTMLInputElement>) => void;
-    setDogImgUrl: (url: string) => void;
-}
-
-export default function ImageCropper({
-    prevImg,
-    setPrevImg,
-    cropperToggle,
-    setCropperToggle,
-    onSelectFile,
-    crop,
-    setCrop,
-    setDogImgUrl,
-}: Props) {
+export default function ImageCropper() {
+    const {
+        crop,
+        setCrop,
+        cropperToggle,
+        setCropperToggle,
+        setDogProfileImgUrl,
+        cropPrevImgUrl,
+        setCropPrevImgUrl,
+        onSelectFileChange,
+    } = useCropStore();
     const handleCrop = async () => {
         if (imgRef.current && previewCanvasRef.current && crop) {
             setCanvasPreview(
@@ -39,18 +28,11 @@ export default function ImageCropper({
             const dataUrl = previewCanvasRef.current.toDataURL();
             // const urlData = await getUploadUrl(['png']);
             setStorage('dataUrl', dataUrl);
-            // const fileName = urlData[0]?.filename;
-            // const photoUrl = urlData[0]?.url;
-            // if (!fileName || !photoUrl) return;
-            // const file = dataURLtoFile(dataUrl, fileName);
-            // console.log(file);
-            // if (file !== null) setDogPhotoFile(file);
-            // setDogPhotoUrl(photoUrl);
-            setDogImgUrl(dataUrl);
+            setDogProfileImgUrl(dataUrl);
 
             setCropperToggle(false);
             setCrop(undefined);
-            setPrevImg('');
+            setCropPrevImgUrl('');
         }
     };
 
@@ -101,13 +83,13 @@ export default function ImageCropper({
                             id="input-upload"
                             type="file"
                             accept="image/*"
-                            onChange={onSelectFile}
+                            onChange={onSelectFileChange}
                         />
                         사진
                     </label>
                 </Topbar.Back>
             </Topbar>
-            {prevImg && (
+            {cropPrevImgUrl && (
                 <div className="flex flex-col justify-center items-center w-full h-full my-auto">
                     <ReactCrop
                         className="flex flex-col"
@@ -122,7 +104,7 @@ export default function ImageCropper({
                     >
                         <img
                             ref={imgRef}
-                            src={prevImg}
+                            src={cropPrevImgUrl}
                             alt="Upload"
                             style={{ height: '100%', maxHeight: '75vh' }}
                             onLoad={(event) => onImageLoad(event)}

@@ -1,23 +1,22 @@
-import React, { ChangeEvent, Dispatch, MutableRefObject, SetStateAction, useState } from 'react';
+import React, { Dispatch, MutableRefObject, SetStateAction, useState } from 'react';
 import SelectPhoto from '@/assets/icons/ic-select-photo.svg';
 import { Divider } from '@/components/common/Divider';
 import { DogRegInfo } from '@/pages/Join';
 import BreedSearch from '@/components/BreedSearch';
+import { useCropStore } from '@/store/cropStore';
 
-export interface DogBasicInfo {
+export interface DogBasicInfoProps {
     name: string;
     breed: string;
 }
 interface Props {
-    dogImgUrl: string;
-    data: DogBasicInfo;
+    data: DogBasicInfoProps;
     setData: Dispatch<SetStateAction<DogRegInfo>>;
-    setCropperToggle: (check: boolean) => void;
-    onSelectFile: (e: ChangeEvent<HTMLInputElement>) => void;
     fileInputRef: MutableRefObject<null>;
 }
 
-export default function DogRegister1({ data, setData, dogImgUrl, onSelectFile, fileInputRef }: Props) {
+export default function DogBasicInfo({ data, setData, fileInputRef }: Props) {
+    const { dogProfileImgUrl, onSelectFileChange } = useCropStore();
     const handleNameChange = (name: string) => {
         setData((prev) => ({
             ...prev,
@@ -44,10 +43,10 @@ export default function DogRegister1({ data, setData, dogImgUrl, onSelectFile, f
                             id="input-upload"
                             type="file"
                             accept="image/*"
-                            onChange={onSelectFile}
+                            onChange={onSelectFileChange}
                         />
                         <img
-                            src={dogImgUrl ? dogImgUrl : SelectPhoto}
+                            src={dogProfileImgUrl ? dogProfileImgUrl : SelectPhoto}
                             alt="selectphoto"
                             className="size-[7.5rem] rounded-full"
                         />

@@ -1,38 +1,44 @@
 import Topbar from '@/components/common/Topbar';
 import { getStorage } from '@/utils/storage';
-import React, { ChangeEvent, useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import TopBack from '@/assets/icons/ic-top-back.svg';
 import Agreements from '@/pages/JoinStep/Agreements';
 import { Button } from '@/components/common/Button';
 import { Divider } from '@/components/common/Divider';
 import PetOwner from '@/pages/JoinStep/PetOwner';
-import DogRegister1, { DogBasicInfo } from '@/pages/JoinStep/DogRegister1';
 import Cancel from '@/assets/icons/ic-top-cancel.svg';
-import DogRegister2, { DogDetailInfo } from '@/pages/JoinStep/DogRegister2';
 import { storageKeys } from '@/constants';
 import { useAuth } from '@/hooks/useAuth';
 import 'react-image-crop/dist/ReactCrop.css';
 import ImageCropper from '@/components/ImageCropper';
 import CropperModal from '@/components/CropperModal';
-import { PercentCrop } from 'react-image-crop';
-import { MIN_DIMENSION } from '@/constants/cropper';
 import { uploadImg, useDog } from '@/hooks/useDog';
 import { dataURLtoFile } from '@/utils/dataUrlToFile';
 import { getUploadUrl } from '@/api/upload';
 import CancelRegModal from '@/components/CancelRegModal';
-export interface DogRegInfo extends DogBasicInfo, DogDetailInfo {
+import { useCropStore } from '@/store/cropStore';
+import DogBasicInfo, { DogBasicInfoProps } from '@/pages/JoinStep/DogBasicInfo';
+import DogDetailInfo, { DogDetailInfoProps } from '@/pages/JoinStep/DogDetailInfo';
+
+export interface DogRegInfo extends DogBasicInfoProps, DogDetailInfoProps {
     profilePhotoUrl: string | null;
 }
 
 export default function Join() {
+    const navigate = useNavigate();
     const location = useLocation();
     const currentPage = location.state;
-    const { signupMustation } = useAuth();
-    const navigate = useNavigate();
-    const backToPathname = getStorage(storageKeys.REDIRECT_URI) || '';
-    const [haveADog, sethaveADog] = useState(true);
+    console.log(currentPage);
 
+    const { signupMustation } = useAuth();
+    const { registerDogMutation } = useDog();
+    const { cropError, dogProfileImgUrl } = useCropStore();
+    const backToPathname = getStorage(storageKeys.REDIRECT_URI) || '';
+
+    const fileInputRef = useRef(null);
+    const [cancelReg, setCancelReg] = useState(false);
+    const [haveADog, sethaveADog] = useState(true);
     const [allAgreed, setAllAgreed] = useState(false);
     const [agreements, setAgreements] = useState({
         service: false,
@@ -49,12 +55,10 @@ export default function Join() {
         weight: 0,
         profilePhotoUrl: null,
     });
-    const [step, setStep] = useState<'Agreements' | 'PetOwner' | 'Dog Registration1' | 'Dog Registration2'>(
+    const [step, setStep] = useState<'Agreements' | 'PetOwner' | 'DogBasicInfo' | 'DogDetailInfo'>(
         currentPage ?? 'Agreements'
     );
-    const handleHaveADogChange = (opt: boolean) => {
-        sethaveADog(opt);
-    };
+
     const handleCheck = (checked: boolean, id: string) => {
         setAgreements((prev) => ({
             ...prev,
@@ -73,6 +77,13 @@ export default function Join() {
         }));
         setAllAgreed(checked);
     };
+
+    const [switchStep, setSwitchStep] = useState({
+        mainToStep1: false,
+        step1ToStep2: false,
+        step2ToStep3: false,
+        step3ToStep4: false,
+    });
     const handleGoBack = () => {
         switch (step) {
             case 'Agreements':
@@ -81,10 +92,10 @@ export default function Join() {
             case 'PetOwner':
                 setSwitchStep({ ...switchStep, step1ToStep2: false });
                 break;
-            case 'Dog Registration1':
+            case 'DogBasicInfo':
                 currentPage ? navigate('/') : setSwitchStep({ ...switchStep, step2ToStep3: false });
                 break;
-            case 'Dog Registration2':
+            case 'DogDetailInfo':
                 setSwitchStep({ ...switchStep, step3ToStep4: false });
                 break;
         }
@@ -97,73 +108,52 @@ export default function Join() {
                 case 'PetOwner':
                     setStep('Agreements');
                     break;
-                case 'Dog Registration1':
+                case 'DogBasicInfo':
                     setStep('PetOwner');
                     break;
-                case 'Dog Registration2':
-                    setStep('Dog Registration1');
+                case 'DogDetailInfo':
+                    setStep('DogBasicInfo');
                     break;
             }
         }, 250);
     };
-    const [switchStep, setSwitchStep] = useState({
-        mainToStep1: false,
-        step1ToStep2: false,
-        step2ToStep3: false,
-        step3ToStep4: false,
-    });
-    const { registerDogMutation } = useDog();
+
     const handleNextStep = async () => {
         if (step === 'PetOwner') {
             signupMustation.mutate(null, { onSettled: () => !haveADog && navigate('/') });
         }
-        if (step === 'Dog Registration2') {
+        if (step === 'DogDetailInfo') {
             const urlData = await getUploadUrl(['png']);
             const fileName = urlData[0]?.filename;
             const photoUrl = urlData[0]?.url;
-            const dataUrl = getStorage('dataUrl') || '';
 
             if (!fileName || !photoUrl) return;
-            const file = dataURLtoFile(dataUrl, fileName);
+            const file = dataURLtoFile(dogProfileImgUrl, fileName);
             await uploadImg(file, photoUrl).then(() => {
                 registerDogMutation.mutate({ ...registerData, profilePhotoUrl: fileName });
             });
         }
-        // switch (step) {
-        //     case 'Agreements':
-        //         setSwitchStep({ ...switchStep, step1ToStep2: true });
-        //         break;
-        //     case 'PetOwner':
-        //         setSwitchStep({ ...switchStep, step2ToStep3: true });
-        //         break;
-        //     case 'Dog Registration1':
-        //         setSwitchStep({ ...switchStep, step3ToStep4: true });
-        //         break;
-        // }
 
         switch (step) {
             case 'Agreements':
                 setStep('PetOwner');
                 break;
             case 'PetOwner':
-                setStep('Dog Registration1');
+                setStep('DogBasicInfo');
                 break;
-            case 'Dog Registration1':
-                setStep('Dog Registration2');
+            case 'DogBasicInfo':
+                setStep('DogDetailInfo');
                 break;
         }
-    };
-    const handleCancel = () => {
-        setCancelReg(true);
     };
 
     const disabled = () => {
         switch (step) {
             case 'Agreements':
                 return !agreements.service || !agreements.location || !agreements.personalInfo;
-            case 'Dog Registration1':
+            case 'DogBasicInfo':
                 return !registerData.name || !registerData.breed;
-            case 'Dog Registration2':
+            case 'DogDetailInfo':
                 return !registerData.gender || !registerData.weight;
         }
     };
@@ -175,9 +165,9 @@ export default function Join() {
                     return '다음 단계로';
                 case 'PetOwner':
                     return haveADog ? '다음 단계로' : '가입 완료';
-                case 'Dog Registration1':
+                case 'DogBasicInfo':
                     return '다음 단계로';
-                case 'Dog Registration2':
+                case 'DogDetailInfo':
                     return '가입 완료';
             }
         }, [step, haveADog]);
@@ -185,44 +175,6 @@ export default function Join() {
         return buttonText;
     };
 
-    const [cropperToggle, setCropperToggle] = useState(false);
-    const [cropError, setCropError] = useState(false);
-    const [prevImg, setPrevImg] = useState('');
-    const onSelectFile = (e: ChangeEvent<HTMLInputElement>) => {
-        setPrevImg('');
-        const files = e.target.files?.[0];
-
-        if (!files) return;
-
-        const reader = new FileReader();
-        reader.addEventListener('load', () => {
-            const imageElement = new Image();
-            const imageUrl = reader.result?.toString() || '';
-            imageElement.src = imageUrl;
-
-            imageElement.addEventListener('load', (e) => {
-                if (cropError) setCropError(false);
-                const { naturalWidth, naturalHeight } = e.currentTarget as HTMLImageElement;
-                if (naturalWidth < MIN_DIMENSION || naturalHeight < MIN_DIMENSION) {
-                    setCropError(true);
-                    setCropperToggle(false);
-                    setCrop(undefined);
-                    return;
-                } else {
-                    setPrevImg(imageUrl);
-                    setCropperToggle(true);
-                }
-            });
-        });
-
-        reader.readAsDataURL(files);
-        e.currentTarget.value = '';
-    };
-    const [crop, setCrop] = useState<PercentCrop>();
-    const [dogImgUrl, setDogImgUrl] = useState('');
-    const fileInputRef = useRef(null);
-
-    const [cancelReg, setCancelReg] = useState(false);
     return (
         <div
             className={`relative flex flex-col w-full h-dvh bg-primary-foreground ${switchStep.mainToStep1 ? 'animate-mainToRight' : 'animate-outToMain'}`}
@@ -233,12 +185,12 @@ export default function Join() {
                 </Topbar.Front>
                 {step !== 'Agreements' && (
                     <Topbar.Back>
-                        <img src={Cancel} alt="cancel" onClick={handleCancel} />
+                        <img src={Cancel} alt="cancel" onClick={() => setCancelReg(true)} />
                     </Topbar.Back>
                 )}
             </Topbar>
             <Divider
-                className={`bg-primary duration-500 w-0 ease-in-out ${step === 'PetOwner' && 'w-1/3'} ${step === 'Dog Registration1' && (currentPage ? 'w-1/2' : 'w-2/3')} ${step === 'Dog Registration2' && 'w-full'}`}
+                className={`bg-primary duration-500 w-0 ease-in-out ${step === 'PetOwner' && 'w-1/3'} ${step === 'DogBasicInfo' && (currentPage ? 'w-1/2' : 'w-2/3')} ${step === 'DogDetailInfo' && 'w-full'}`}
             />
 
             <main className="w-full h-full px-5 pt-6">
@@ -251,18 +203,13 @@ export default function Join() {
                         handleCheck={handleCheck}
                     />
                 )}
-                {step === 'PetOwner' && <PetOwner haveADog={haveADog} handleHaveADogChange={handleHaveADogChange} />}
-                {step === 'Dog Registration1' && (
-                    <DogRegister1
-                        dogImgUrl={dogImgUrl}
-                        fileInputRef={fileInputRef}
-                        data={registerData}
-                        setData={setRegisterData}
-                        setCropperToggle={setCropperToggle}
-                        onSelectFile={onSelectFile}
-                    />
+                {step === 'PetOwner' && (
+                    <PetOwner haveADog={haveADog} handleHaveADogChange={(opt: boolean) => sethaveADog(opt)} />
                 )}
-                {step === 'Dog Registration2' && <DogRegister2 data={registerData} setData={setRegisterData} />}
+                {step === 'DogBasicInfo' && (
+                    <DogBasicInfo fileInputRef={fileInputRef} data={registerData} setData={setRegisterData} />
+                )}
+                {step === 'DogDetailInfo' && <DogDetailInfo data={registerData} setData={setRegisterData} />}
             </main>
             <div className="absolute bottom-0 w-full">
                 <Button
@@ -275,18 +222,8 @@ export default function Join() {
                     {ButtonText()}
                 </Button>
             </div>
-            <ImageCropper
-                prevImg={prevImg}
-                setPrevImg={setPrevImg}
-                crop={crop}
-                setCrop={setCrop}
-                cropperToggle={cropperToggle}
-                setCropperToggle={setCropperToggle}
-                setRegisterData={setRegisterData}
-                onSelectFile={onSelectFile}
-                setDogImgUrl={setDogImgUrl}
-            />
-            {cropError && <CropperModal setCropError={setCropError} setCrop={setCrop} fileInputRef={fileInputRef} />}
+            <ImageCropper />
+            {cropError && <CropperModal fileInputRef={fileInputRef} />}
             {cancelReg && <CancelRegModal setCancelReg={setCancelReg} />}
         </div>
     );
