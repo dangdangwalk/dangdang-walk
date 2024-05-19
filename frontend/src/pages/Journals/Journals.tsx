@@ -25,14 +25,12 @@ const dog: Dog = {
 
 export default function Journals() {
     const [searchParams, setSearchParams] = useSearchParams();
-    console.log(searchParams.get(queryStringKeys.DOGID));
-    setSearchParams(searchParams);
 
     return (
         <>
             <header></header>
             <main
-                className="flex flex-col px-5 bg-neutral-50 mb-[60px] min-h-dvh"
+                className="flex flex-col bg-neutral-50 mb-[60px] min-h-dvh"
                 style={{ minHeight: `calc(100dvh - ${NAV_HEIGHT} - ${TOP_BAR_HEIGHT}  )` }}
             >
                 <CustomCalendar />
