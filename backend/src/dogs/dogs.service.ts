@@ -102,11 +102,11 @@ export class DogsService {
         return dogIds;
     }
 
-    private makeProfile(dogInfo: Dogs, breed: string): DogProfile {
+    private makeProfile(dogInfo: Dogs): DogProfile {
         return {
             id: dogInfo.id,
             name: dogInfo.name,
-            breed: breed,
+            breed: dogInfo.breed.koreanName,
             gender: dogInfo.gender as Gender,
             isNeutered: dogInfo.isNeutered,
             birth: dogInfo.birth,
@@ -125,8 +125,7 @@ export class DogsService {
 
     async getProfile(dogId: number): Promise<DogProfile> {
         const dogInfo = await this.dogsRepository.findOne({ id: dogId });
-        const breed = await this.breedService.findOne(dogInfo.breed);
-        return this.makeProfile(dogInfo, breed.koreanName);
+        return this.makeProfile(dogInfo);
     }
 
     async getRelatedTableIdList(
