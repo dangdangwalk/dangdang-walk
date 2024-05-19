@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
+import { DogsService } from 'src/dogs/dogs.service';
 import { Users } from '../users/users.entity';
 import { UsersService } from '../users/users.service';
 import { OauthBody, OauthProvider } from './auth.controller';
@@ -26,6 +27,7 @@ export class AuthService {
     constructor(
         private readonly tokenService: TokenService,
         private readonly usersService: UsersService,
+        private readonly dogsService: DogsService,
         private readonly googleService: GoogleService,
         private readonly kakaoService: KakaoService,
         private readonly naverService: NaverService,
@@ -86,18 +88,6 @@ export class AuthService {
         }
     }
 
-    async deactivate({ userId, provider }: AccessTokenPayload): Promise<void> {
-        const { oauthAccessToken } = await this.usersService.findOne({ id: userId });
-
-        if (provider === 'kakao') {
-            await this.kakaoService.requestUnlink(oauthAccessToken);
-        } else {
-            await this[`${provider}Service`].requestTokenExpiration(oauthAccessToken);
-        }
-
-        await this.usersService.delete({ id: userId });
-    }
-
     async reissueTokens({ oauthId, provider }: RefreshTokenPayload): Promise<AuthData> {
         const { id: userId, oauthRefreshToken } = await this.usersService.findOne({ oauthId });
 
@@ -114,6 +104,27 @@ export class AuthService {
         this.usersService.update({ id: userId }, attr);
 
         return { accessToken: newAccessToken, refreshToken: newRefreshToken };
+    }
+
+    async deactivate({ userId, provider }: AccessTokenPayload): Promise<void> {
+        const { oauthAccessToken } = await this.usersService.findOne({ id: userId });
+
+        if (provider === 'kakao') {
+            await this.kakaoService.requestUnlink(oauthAccessToken);
+        } else {
+            await this[`${provider}Service`].requestTokenExpiration(oauthAccessToken);
+        }
+
+        await this.deleteUserData(userId);
+    }
+
+    private async deleteUserData(userId: number) {
+        const dogIds = await this.usersService.getOwnDogsList(userId);
+        dogIds.forEach(async (dogId) => {
+            await this.dogsService.deleteDogFromUser(dogId);
+        });
+
+        await this.usersService.delete({ id: userId });
     }
 
     private async getOauthData(authorizeCode: string, provider: OauthProvider): Promise<Omit<OauthData, 'provider'>> {
