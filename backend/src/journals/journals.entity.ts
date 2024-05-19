@@ -6,7 +6,7 @@ export class Journals {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => Users, (users) => users.id)
+    @ManyToOne(() => Users, (users) => users.id, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'user_id' })
     user: Users;
 
