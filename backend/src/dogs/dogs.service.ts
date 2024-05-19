@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { S3Service } from 'src/s3/s3.service';
+import { UsersDogs } from 'src/users-dogs/users-dogs.entity';
 import { makeSubObjectsArray } from 'src/utils/manipulate.util';
-import { FindOptionsWhere, In, UpdateResult } from 'typeorm';
+import { EntityManager, FindOptionsWhere, In, UpdateResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { BreedService } from '../breed/breed.service';
 import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
@@ -25,6 +26,7 @@ export class DogsService {
         private readonly dogWalkDayService: DogWalkDayService,
         private readonly dailyWalkTimeService: DailyWalkTimeService,
         private readonly s3Service: S3Service,
+        private readonly entityManager: EntityManager,
         private readonly logger: WinstonLoggerService
     ) {}
 
@@ -126,6 +128,16 @@ export class DogsService {
     async getProfile(dogId: number): Promise<DogProfile> {
         const dogInfo = await this.dogsRepository.findOne({ id: dogId });
         return this.makeProfile(dogInfo);
+    }
+
+    async getProfileList(userId: number): Promise<DogProfile[]> {
+        const dogProfiles = await this.entityManager
+            .createQueryBuilder(Dogs, 'dogs')
+            .innerJoin(UsersDogs, 'users_dogs', 'users_dogs.dogId = dogs.id')
+            .innerJoinAndSelect('dogs.breed', 'breed')
+            .where('users_dogs.userId = :userId', { userId })
+            .getMany();
+        return dogProfiles.map((dog) => this.makeProfile(dog));
     }
 
     async getRelatedTableIdList(

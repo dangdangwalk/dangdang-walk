@@ -26,6 +26,11 @@ export type DogSummary = {
 export class DogsController {
     constructor(private readonly dogsService: DogsService) {}
 
+    @Get()
+    async getProfileList(@User() { userId }: AccessTokenPayload) {
+        return this.dogsService.getProfileList(userId);
+    }
+
     @Post()
     async register(@User() { userId }: AccessTokenPayload, @Body() dogDto: DogDto) {
         await this.dogsService.createDogToUser(userId, dogDto);
@@ -50,7 +55,7 @@ export class DogsController {
 
     @Get('/:id(\\d+)')
     @UseGuards(AuthDogGuard)
-    async getOneProfile(@Param('id', ParseIntPipe) dogId: number) {
+    async getProfile(@Param('id', ParseIntPipe) dogId: number) {
         return this.dogsService.getProfile(dogId);
     }
 }
