@@ -72,6 +72,7 @@ RUN addgroup --system --gid 1001 nodejs && \
 COPY --chown=nestjs:nodejs --from=build /app/dist /app/dist
 COPY --chown=nestjs:nodejs --from=build /app/node_modules /app/node_modules
 COPY --chown=nestjs:nodejs --from=build /app/log /app/log
+COPY --chown=nestjs:nodejs --from=build /app/resources /app/resources
 
 USER nestjs
 

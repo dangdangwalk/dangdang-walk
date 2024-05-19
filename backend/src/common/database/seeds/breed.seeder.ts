@@ -8,7 +8,7 @@ export default class BreedSeeder implements Seeder {
     public async run(dataSource: DataSource): Promise<any> {
         const repository = dataSource.getRepository(Breed);
 
-        const jsonData = fs.readFileSync('breedData.json', 'utf-8');
+        const jsonData = fs.readFileSync('./resources/breedData.json', 'utf-8');
         const breeds = JSON.parse(jsonData);
 
         await repository.query('SET FOREIGN_KEY_CHECKS = 0;');
