@@ -40,15 +40,15 @@ export class AuthController {
         return await this.authService.logout(user);
     }
 
-    @Delete('deactivate')
-    async deactivate(@User() user: AccessTokenPayload) {
-        return await this.authService.deactivate(user);
-    }
-
     @Get('token')
     @SkipAuthGuard()
     @UseGuards(RefreshTokenGuard)
     async token(@User() user: RefreshTokenPayload) {
         return await this.authService.reissueTokens(user);
+    }
+
+    @Delete('deactivate')
+    async deactivate(@User() user: AccessTokenPayload) {
+        return await this.authService.deactivate(user);
     }
 }

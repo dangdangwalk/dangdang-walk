@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
+import { DogsService } from 'src/dogs/dogs.service';
 import { mockUser } from '../fixtures/users.fixture';
 import { Users } from '../users/users.entity';
 import { UsersRepository } from '../users/users.repository';
@@ -20,6 +21,7 @@ const context = describe;
 describe('AuthService', () => {
     let service: AuthService;
     let usersService: UsersService;
+    let dogsService: DogsService;
     let tokenService: TokenService;
     let googleService: GoogleService;
     let kakaoService: KakaoService;
@@ -33,6 +35,10 @@ describe('AuthService', () => {
                 {
                     provide: UsersService,
                     useValue: { updateAndFindOne: jest.fn(), createIfNotExists: jest.fn(), findOne: jest.fn() },
+                },
+                {
+                    provide: DogsService,
+                    useValue: { deleteDogFromUser: jest.fn() },
                 },
                 { provide: UsersRepository, useValue: {} },
                 TokenService,
@@ -48,6 +54,7 @@ describe('AuthService', () => {
 
         service = module.get<AuthService>(AuthService);
         usersService = module.get<UsersService>(UsersService);
+        dogsService = module.get<DogsService>(DogsService);
         tokenService = module.get<TokenService>(TokenService);
         googleService = module.get<GoogleService>(GoogleService);
         kakaoService = module.get<KakaoService>(KakaoService);
