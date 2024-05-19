@@ -60,6 +60,9 @@ export class JournalInfoForDetail {
     calories: number;
 
     @IsNotEmpty()
+    startedAt: Date;
+
+    @IsNotEmpty()
     duration: number;
 
     @IsNotEmpty()
@@ -74,7 +77,7 @@ export class JournalInfoForDetail {
     photoUrls: string[];
 
     static getKeysForJournalTable() {
-        return ['distance', 'calories', 'duration', 'routeImageUrl', 'memo'];
+        return ['distance', 'calories', 'startedAt', 'duration', 'routeImageUrl', 'memo'];
     }
     static getKeysForJournalPhotoTable() {
         return ['photoUrls'];
