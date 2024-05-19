@@ -1,3 +1,4 @@
+import { getUploadUrl, uploadImage } from '@/api/upload';
 import Cancel from '@/assets/icons/ic-top-cancel.svg';
 import Avatar from '@/components/common/Avatar';
 import { Button } from '@/components/common/Button';
@@ -134,19 +135,24 @@ export default function CreateForm() {
         navigate('/');
     }
 
-    function handleAddImages(e: FormEvent<HTMLInputElement>) {
+    async function handleAddImages(e: FormEvent<HTMLInputElement>) {
         const files = e.currentTarget.files;
 
         if (files === null) return;
         setIsUploading(true);
 
-        const images = Array.from(files).map<ImageUrl>((file) => {
-            return URL.createObjectURL(file);
+        const fileTypes = Array.from(files).map((file) => file.type);
+        const uploadUrlResponses = await getUploadUrl(fileTypes);
+        const uploadUrls = uploadUrlResponses.map((uploadUrlResponse) => uploadUrlResponse.url);
+
+        const uploadImagePromises = uploadUrls.map((uploadUrl, index) => {
+            return uploadImage(files[index]!, uploadUrl);
         });
-        setTimeout(() => {
-            setImages((prevImages) => [...prevImages, ...images]);
-            setIsUploading(false);
-        }, 2000);
+        await Promise.allSettled(uploadImagePromises);
+
+        const filenames = uploadUrlResponses.map((uploadUrlResponse) => uploadUrlResponse.filename);
+        setImages((prevImages) => [...prevImages, ...filenames]);
+        setIsUploading(false);
     }
 }
 
