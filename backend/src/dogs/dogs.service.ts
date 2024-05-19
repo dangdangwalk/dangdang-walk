@@ -109,7 +109,7 @@ export class DogsService {
             breed: breed,
             gender: dogInfo.gender as Gender,
             isNeutered: dogInfo.isNeutered,
-            birth: dogInfo.birth,
+            birth: dogInfo.birth ? dogInfo.birth : '',
             profilePhotoUrl: dogInfo.profilePhotoUrl,
         };
     }
