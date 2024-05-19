@@ -10,6 +10,7 @@ import { DailyWalkTimeService } from '../daily-walk-time/daily-walk-time.service
 import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
 import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
 import { UsersDogsService } from '../users-dogs/users-dogs.service';
+import { Gender } from './dogs-gender.enum';
 import { DogProfile } from './dogs.controller';
 import { Dogs } from './dogs.entity';
 import { DogsRepository } from './dogs.repository';
@@ -101,10 +102,14 @@ export class DogsService {
         return dogIds;
     }
 
-    private makeProfile(dogInfo: Dogs): DogProfile {
+    private makeProfile(dogInfo: Dogs, breed: string): DogProfile {
         return {
             id: dogInfo.id,
             name: dogInfo.name,
+            breed: breed,
+            gender: dogInfo.gender as Gender,
+            isNeutered: dogInfo.isNeutered,
+            birth: dogInfo.birth,
             profilePhotoUrl: dogInfo.profilePhotoUrl,
         };
     }
@@ -120,7 +125,8 @@ export class DogsService {
 
     async getProfile(dogId: number): Promise<DogProfile> {
         const dogInfo = await this.dogsRepository.findOne({ id: dogId });
-        return this.makeProfile(dogInfo);
+        const breed = await this.breedService.findOne(dogInfo.breed);
+        return this.makeProfile(dogInfo, breed.koreanName);
     }
 
     async getRelatedTableIdList(

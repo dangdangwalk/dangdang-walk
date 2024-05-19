@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
 import { AccessTokenPayload } from '../auth/token/token.service';
 import { User } from '../users/decorators/user.decorator';
+import { Gender } from './dogs-gender.enum';
 import { DogsService } from './dogs.service';
 import { DogDto } from './dto/dog.dto';
 import { AuthDogGuard } from './guards/authDog.guard';
@@ -8,6 +9,10 @@ import { AuthDogGuard } from './guards/authDog.guard';
 export type DogProfile = {
     id: number;
     name: string;
+    breed: string;
+    gender: Gender;
+    isNeutered: boolean;
+    birth: Date | null;
     profilePhotoUrl: string | null;
 };
 
@@ -42,6 +47,4 @@ export class DogsController {
     async getOneProfile(@Param('id', ParseIntPipe) dogId: number) {
         return this.dogsService.getProfile(dogId);
     }
-
-
 }
