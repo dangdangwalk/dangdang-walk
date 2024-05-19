@@ -2,7 +2,7 @@ import { cn } from '@/utils/tailwind-class';
 import { VariantProps, cva } from 'class-variance-authority';
 import { HTMLAttributes } from 'react';
 
-const variants = cva('', {
+const variants = cva('my-[10px]', {
     variants: {
         headingNumber: {
             1: 'text-lg font-bold',
