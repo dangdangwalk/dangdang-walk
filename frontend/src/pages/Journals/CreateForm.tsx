@@ -13,7 +13,6 @@ import {
     ModalHeader,
     ModalTitle,
 } from '@/components/common/Modal';
-import Topbar from '@/components/common/Topbar';
 import AddPhotoButton from '@/components/journals/AddPhotoButton';
 import DogImages from '@/components/journals/DogImages';
 import ExcrementDisplay from '@/components/journals/ExcrementDisplay';
@@ -54,27 +53,23 @@ export default function CreateForm() {
     return (
         <>
             <div className="flex flex-col">
-                <Topbar>
-                    <Topbar.Center className="text-center text-lg font-bold leading-[27px]">
-                        <Heading headingNumber={1}>
-                            {startedAt.getMonth() + 1}월 {startedAt.getDate()}일 산책기록
-                        </Heading>
-                    </Topbar.Center>
-                    <Topbar.Back className="w-12 flex items-center">
-                        <button onClick={() => setOpenModal(true)}>
-                            <img src={Cancel} alt="cancel" />
-                        </button>
-                    </Topbar.Back>
-                </Topbar>
+                <div className="flex justify-between items-center h-12 pl-5 pr-2">
+                    <Heading headingNumber={1}>
+                        {startedAt.getMonth() + 1}월 {startedAt.getDate()}일 산책기록
+                    </Heading>
+                    <button onClick={() => setOpenModal(true)}>
+                        <img src={Cancel} alt="cancel" />
+                    </button>
+                </div>
                 <div className={`h-[calc(100dvh-3rem-4rem)] overflow-y-auto`}>
-                    <div className="h-[216px] bg-slate-300">경로 이미지</div>
+                    <div className="h-[216px] rounded-lg bg-slate-300">경로가 표시된 지도</div>
                     <WalkInfo distance={distance} calories={calories} duration={duration} />
                     <Divider />
-                    <div>
+                    <div className="px-5 py-[10px]">
                         <Heading headingNumber={2}>함께한 댕댕이</Heading>
                         <div className="flex flex-col">
                             {dogs.map((dog) => (
-                                <div key={dog.id} className="flex justify-between">
+                                <div key={dog.id} className="flex justify-between h-[52px]">
                                     <Avatar url={dog.profilePhotoUrl} name={dog.name} />
                                     <ExcrementDisplay
                                         fecesCount={dog.fecesLocations.length}
@@ -85,16 +80,21 @@ export default function CreateForm() {
                         </div>
                     </div>
                     <Divider />
-                    <div>
+                    <div className="px-5 py-[10px]">
                         <Heading headingNumber={2}>사진</Heading>
                         <DogImages imageUrls={images}>
                             <AddPhotoButton isLoading={isUploading} onChange={handleAddImages} />
                         </DogImages>
                     </div>
                     <Divider />
-                    <div>
+                    <div className="px-5 py-[10px]">
                         <Heading headingNumber={2}>메모</Heading>
-                        <textarea name="memo" className="w-full" ref={textAreaRef} />
+                        <textarea
+                            name="memo"
+                            className="w-full h-[100px] my-2 px-4 py-3 rounded-lg border border-[#E4E4E4] text-xs placeholder:text-[#BABABA]"
+                            placeholder="오늘 산책에 대해서 자유롭게 메모해보세요."
+                            ref={textAreaRef}
+                        />
                     </div>
                 </div>
                 <Button rounded="none" className="w-full h-16" disabled={isSaving} onClick={handleSave}>
