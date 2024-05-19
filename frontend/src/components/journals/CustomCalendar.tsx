@@ -43,7 +43,6 @@ export default function CustomCalendar() {
                 <button onClick={handleNextWeek}>Next</button>
             </div>
             <Calendar
-                value={date}
                 tileDisabled={({ date }) =>
                     !currentWeek.some((weekDate) => date.toDateString() === weekDate.toDateString())
                 }
@@ -51,7 +50,12 @@ export default function CustomCalendar() {
                 activeStartDate={currentWeek[0]}
                 onActiveStartDateChange={() => {}}
                 showNeighboringMonth={false}
+                value={date}
             />
+            handler
+            <div className="w-full h-[30px] origin-top-left -rotate-180 bg-white rounded-tl-2xl rounded-tr-2xl justify-center items-center inline-flex">
+                <div className="w-[30px] h-1 bg-neutral-200 rounded-sm"></div>
+            </div>
         </div>
     );
 }
