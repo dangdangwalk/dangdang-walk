@@ -121,7 +121,7 @@ export class JournalsService {
 
     async getCompanionsProfile(journalDogs: JournalsDogs[], dogId: number) {
         const companions = journalDogs.filter((cur) => cur.dogId !== dogId).map((cur) => cur.dogId);
-        const companionsProfile = await this.dogsService.getProfileList({ id: In(companions) });
+        const companionsProfile = await this.dogsService.getDogsSummaryList({ id: In(companions) });
 
         return companionsProfile;
     }

@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { AccessTokenPayload } from 'src/auth/token/token.service';
-import { DogProfile } from 'src/dogs/dogs.controller';
+import { DogSummary } from 'src/dogs/dogs.controller';
 import { User } from 'src/users/decorators/user.decorator';
 import { Serialize } from '../common/interceptors/serialize.interceptor';
 import { DogsService } from '../dogs/dogs.service';
@@ -38,7 +38,7 @@ export class WalkController {
     }
 
     @Get('/available')
-    async getAvailableDogs(@User() { userId }: AccessTokenPayload): Promise<DogProfile[]> {
+    async getAvailableDogs(@User() { userId }: AccessTokenPayload): Promise<DogSummary[]> {
         return await this.walkService.getAvailableDogs(userId);
     }
 }

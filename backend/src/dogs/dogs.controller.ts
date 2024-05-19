@@ -16,6 +16,12 @@ export type DogProfile = {
     profilePhotoUrl: string | null;
 };
 
+export type DogSummary = {
+    id: number;
+    name: string;
+    profilePhotoUrl: string | null;
+};
+
 @Controller('dogs')
 export class DogsController {
     constructor(private readonly dogsService: DogsService) {}

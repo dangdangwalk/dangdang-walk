@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { DogProfile } from 'src/dogs/dogs.controller';
+import { DogSummary } from 'src/dogs/dogs.controller';
 import { DogsService } from 'src/dogs/dogs.service';
 import { JournalsDogsService } from 'src/journals-dogs/journals-dogs.service';
 import { JournalsService } from 'src/journals/journals.service';
@@ -30,10 +30,10 @@ export class WalkService {
         }
     }
 
-    async getAvailableDogs(userId: number): Promise<DogProfile[]> {
+    async getAvailableDogs(userId: number): Promise<DogSummary[]> {
         const ownDogIds = await this.usersService.getOwnDogsList(userId);
         const recentJournalIds = await this.journalsDogsService.getRecentJournalId(ownDogIds);
         await this.checkAvailableDogs(ownDogIds, recentJournalIds);
-        return await this.dogsService.getProfileList({ id: In(ownDogIds), isWalking: false });
+        return await this.dogsService.getDogsSummaryList({ id: In(ownDogIds), isWalking: false });
     }
 }

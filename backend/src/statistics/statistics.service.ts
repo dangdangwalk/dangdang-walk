@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { DogProfile } from 'src/dogs/dogs.controller';
+import { DogSummary } from 'src/dogs/dogs.controller';
 import { DogsService } from 'src/dogs/dogs.service';
 import { DogStatisticDto } from 'src/dogs/dto/dog-statistic.dto';
 import { JournalsService } from 'src/journals/journals.service';
@@ -23,7 +23,7 @@ export class StatisticsService {
     ) {}
 
     private makeStatisticData(
-        dogProfiles: DogProfile[],
+        dogProfiles: DogSummary[],
         recommendedWalkAmount: number[],
         todayWalkAmount: number[],
         weeklyWalks: number[][]
@@ -55,14 +55,14 @@ export class StatisticsService {
         const dailyWalkTimeIds = await this.dogsService.getRelatedTableIdList(ownDogIds, 'todayWalkTimeId');
         const breedIds = await this.dogsService.getRelatedTableIdList(ownDogIds, 'breedId');
 
-        const dogProfiles = await this.dogsService.getProfileList({ id: In(ownDogIds) });
+        const dogSummaries = await this.dogsService.getDogsSummaryList({ id: In(ownDogIds) });
         const recommendedWalkAmount = await this.breedService.getRecommendedWalkAmountList(breedIds);
         const todayWalkAmount = await this.dailyWalkTimeService.getWalkTimeList(dailyWalkTimeIds);
         const weeklyWalks = await this.dogWalkDayService.getWalkDayList(dogWalkDayIds);
 
         const length = ownDogIds.length;
         const mismatchedLengths = [
-            dogProfiles.length !== length && `dogProfiles.length = ${dogProfiles.length}`,
+            dogSummaries.length !== length && `dogProfiles.length = ${dogSummaries.length}`,
             recommendedWalkAmount.length !== length && `recommendedWalkAmount.length = ${recommendedWalkAmount.length}`,
             todayWalkAmount.length !== length && `todayWalkAmount.length = ${todayWalkAmount.length}`,
             weeklyWalks.length !== length && `weeklyWalks.length = ${weeklyWalks.length}`,
@@ -76,6 +76,6 @@ export class StatisticsService {
             throw error;
         }
 
-        return this.makeStatisticData(dogProfiles, recommendedWalkAmount, todayWalkAmount, weeklyWalks);
+        return this.makeStatisticData(dogSummaries, recommendedWalkAmount, todayWalkAmount, weeklyWalks);
     }
 }

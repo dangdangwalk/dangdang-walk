@@ -11,7 +11,7 @@ import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
 import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
 import { UsersDogsService } from '../users-dogs/users-dogs.service';
 import { Gender } from './dogs-gender.enum';
-import { DogProfile } from './dogs.controller';
+import { DogProfile, DogSummary } from './dogs.controller';
 import { Dogs } from './dogs.entity';
 import { DogsRepository } from './dogs.repository';
 import { DogDto } from './dto/dog.dto';
@@ -114,13 +114,13 @@ export class DogsService {
         };
     }
 
-    private makeProfileList(dogs: Dogs[]): DogProfile[] {
+    private makeDogsSummaryList(dogs: Dogs[]): DogSummary[] {
         return makeSubObjectsArray(dogs, ['id', 'name', 'profilePhotoUrl']);
     }
 
-    async getProfileList(where: FindOptionsWhere<Dogs>): Promise<DogProfile[]> {
+    async getDogsSummaryList(where: FindOptionsWhere<Dogs>): Promise<DogSummary[]> {
         const dogInfos = await this.dogsRepository.find({ where });
-        return this.makeProfileList(dogInfos);
+        return this.makeDogsSummaryList(dogInfos);
     }
 
     async getProfile(dogId: number): Promise<DogProfile> {
@@ -137,11 +137,5 @@ export class DogsService {
         return ownDogList.map((cur) => {
             return cur[attributeName];
         });
-    }
-
-    async getAvailableDogProfileList(ownDogIds: number[]): Promise<DogProfile[]> {
-        const availableDogList = await this.dogsRepository.find({ where: { id: In(ownDogIds), isWalking: false } });
-        const availableDogProfileList = this.makeProfileList(availableDogList);
-        return availableDogProfileList;
     }
 }
