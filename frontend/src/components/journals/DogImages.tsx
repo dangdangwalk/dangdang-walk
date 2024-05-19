@@ -10,7 +10,7 @@ export default function DogImages({ imageUrls, children }: Props) {
                     <img
                         src={makeFileUrl(imageUrl)}
                         alt="강아진 산책 사진"
-                        className="inline-block max-h-[104px] bg-slate-300"
+                        className="inline-block max-h-[104px] max-w-none bg-slate-300"
                     />
                 </span>
             ))}
