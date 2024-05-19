@@ -31,7 +31,7 @@ export const TOKEN_LIFETIME_MAP: TokenExpiryMap = {
 
 @Injectable()
 export class TokenService {
-    constructor(private jwtService: JwtService) {}
+    constructor(private readonly jwtService: JwtService) {}
 
     signAccessToken(userId: number, provider: OauthProvider) {
         const payload: AccessTokenPayload = {

@@ -15,6 +15,11 @@ export class BreedService {
         return this.breedRepository.findOne(where);
     }
 
+    async getKoreanNames(): Promise<string[]> {
+        const breeds = await this.breedRepository.find({ select: ['koreanName'] });
+        return breeds.map((breed) => breed.koreanName);
+    }
+
     async getRecommendedWalkAmountList(breedIds: number[]): Promise<number[]> {
         const breeds = await this.breedRepository.find({ where: { id: In(breedIds) } });
 
