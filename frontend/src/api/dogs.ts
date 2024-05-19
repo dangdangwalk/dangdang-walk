@@ -8,7 +8,7 @@ export const fetchDogStatistic = async (): Promise<DogStatistic[]> => {
 };
 
 export const fetchWalkAvailableDogs = async (): Promise<AvailableDog[]> => {
-    const { data } = await httpClient.get('/dogs/walk-available');
+    const { data } = await httpClient.get('/dogs/walks/available');
     return data;
 };
 
