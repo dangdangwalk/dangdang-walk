@@ -1,0 +1,1087 @@
+[
+    {
+        "koreanName": "아펜핀셔",
+        "englishName": "Affenpinscher",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "아프간 하운드",
+        "englishName": "Afghan Hound",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "에어데일 테리어",
+        "englishName": "Airedale Terrier",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "아키타",
+        "englishName": "Akita",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "알라스칸 말라뮤트",
+        "englishName": "Alaskan Malamute",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "아나톨리안 셰퍼드",
+        "englishName": "Anatolian Shepherd Dog",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "오스트레일리안 캐틀 독",
+        "englishName": "Australian Cattle Dog",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "오스트레일리안 셰퍼드",
+        "englishName": "Australian Shepherd",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "오스트레일리안 실키 테리어",
+        "englishName": "Australian Silky Terrier",
+        "recommendedWalkAmount": 900
+    },
+    {
+        "koreanName": "오스트레일리안 테리어",
+        "englishName": "Australian Terrier",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "아자와크",
+        "englishName": "Azawakh",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "바베트",
+        "englishName": "Barbet",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "바센지",
+        "englishName": "Basenji",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "바셋 블뢰 드 가스코뉴",
+        "englishName": "Basset Bleu De Gascogne",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "바셋 포브 드 브르타뉴",
+        "englishName": "Basset Fauve De Bretagne",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "그랑 바셋 그리폰 벤딘",
+        "englishName": "Basset Griffon Vendeen (Grand)",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "쁘띠 바셋 그리폰 벤딘",
+        "englishName": "Basset Griffon Vendeen (Petit)",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "바셋 하운드",
+        "englishName": "Basset Hound",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "바바리안 마운틴 하운드",
+        "englishName": "Bavarian Mountain Hound",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "비글",
+        "englishName": "Beagle",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "비어디드 콜리",
+        "englishName": "Bearded Collie",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "보스롱",
+        "englishName": "Beauceron",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "베들링턴 테리어",
+        "englishName": "Bedlington Terrier",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "벨지안 셰퍼드",
+        "englishName": "Belgian Shepherd Dog",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "베르가마스코 셰퍼드",
+        "englishName": "Bergamasco",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "버니즈 마운틴 독",
+        "englishName": "Bernese Mountain Dog",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "비숑 프리제",
+        "englishName": "Bichon Frise",
+        "recommendedWalkAmount": 900
+    },
+    {
+        "koreanName": "블랙 앤 탄 쿤 하운드",
+        "englishName": "Black & Tan Coonhound",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "블러드하운드",
+        "englishName": "Bloodhound",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "볼로네즈",
+        "englishName": "Bolognese",
+        "recommendedWalkAmount": 900
+    },
+    {
+        "koreanName": "보더 콜리",
+        "englishName": "Border Collie",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "보더 테리어",
+        "englishName": "Border Terrier",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "보르조이",
+        "englishName": "Borzoi",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "보스턴 테리어",
+        "englishName": "Boston Terrier",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "부비에 데 플랑드르",
+        "englishName": "Bouvier Des Flandres",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "복서",
+        "englishName": "Boxer",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "브라코 이탈리아노",
+        "englishName": "Bracco Italiano",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "브라크 디 오베르뉴",
+        "englishName": "Braque D'Auvergne",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "브리아드",
+        "englishName": "Briard",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "브리트니",
+        "englishName": "Brittany",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "불 테리어",
+        "englishName": "Bull Terrier",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "미니어쳐 불 테리어",
+        "englishName": "Bull Terrier (Miniature)",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "불독",
+        "englishName": "Bulldog",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "불마스티프",
+        "englishName": "Bullmastiff",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "케언 테리어",
+        "englishName": "Cairn Terrier",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "케이넌 독",
+        "englishName": "Canaan Dog",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "캐나다 에스키모 도그",
+        "englishName": "Canadian Eskimo Dog",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "카탈란 쉽독",
+        "englishName": "Catalan Sheepdog",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "캐벌리어 킹 찰스 스파니엘",
+        "englishName": "Cavalier King Charles Spaniel",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "체스키 테리어",
+        "englishName": "Cesky Terrier",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "치와와 (장모)",
+        "englishName": "Chihuahua (Long Coat)",
+        "recommendedWalkAmount": 900
+    },
+    {
+        "koreanName": "치와와 (단모)",
+        "englishName": "Chihuahua (Smooth Coat)",
+        "recommendedWalkAmount": 900
+    },
+    {
+        "koreanName": "차이니스 크레스티드",
+        "englishName": "Chinese Crested",
+        "recommendedWalkAmount": 900
+    },
+    {
+        "koreanName": "차우차우",
+        "englishName": "Chow Chow",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "시르네코 델레트나",
+        "englishName": "Cirneco Dell'Etna",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "러프 콜리",
+        "englishName": "Collie (Rough)",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "스무스 콜리",
+        "englishName": "Collie (Smooth)",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "꼬똥 드 툴레아",
+        "englishName": "Coton De Tulear",
+        "recommendedWalkAmount": 900
+    },
+    {
+        "koreanName": "닥스훈트 (장모)",
+        "englishName": "Dachshund (Long Haired)",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "닥스훈트 미니어쳐 (장모)",
+        "englishName": "Dachshund (Miniature Long Haired)",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "닥스훈트 미니어쳐 (단모)",
+        "englishName": "Dachshund (Miniature Smooth Haired)",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "닥스훈트 미니어쳐 (강모)",
+        "englishName": "Dachshund (Miniature Wire Haired)",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "닥스훈트 (단모)",
+        "englishName": "Dachshund (Smooth Haired)",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "닥스훈트 (강모)",
+        "englishName": "Dachshund (Wire Haired)",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "달마시안",
+        "englishName": "Dalmatian",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "댄디 딘몬트 테리어",
+        "englishName": "Dandie Dinmont Terrier",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "디어하운드",
+        "englishName": "Deerhound",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "도베르만",
+        "englishName": "Dobermann",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "도그 드 보르도",
+        "englishName": "Dogue de Bordeaux",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "잉글리시 세터",
+        "englishName": "English Setter",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "잉글리시 토이 테리어",
+        "englishName": "English Toy Terrier (Black & Tan)",
+        "recommendedWalkAmount": 900
+    },
+    {
+        "koreanName": "엔틀버쳐 마운틴 독",
+        "englishName": "Entlebucher Mountain Dog",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "에스트렐라 마운틴 독",
+        "englishName": "Estrela Mountain Dog",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "유라시아",
+        "englishName": "Eurasier",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "핀란드 사미견",
+        "englishName": "Finnish Lapphund",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "피니시 스피츠",
+        "englishName": "Finnish Spitz",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "폭스 테리어 (단모)",
+        "englishName": "Fox Terrier (Smooth)",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "폭스 테리어 (강모)",
+        "englishName": "Fox Terrier (Wire)",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "폭스하운드",
+        "englishName": "Foxhound",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "프렌치 불독",
+        "englishName": "French Bulldog",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "저먼 롱헤어드 포인터",
+        "englishName": "German Longhaired Pointer",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "저먼 핀셔",
+        "englishName": "German Pinscher",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "저먼 셰퍼드",
+        "englishName": "German Shepherd Dog",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "저먼 스피츠 (작은)",
+        "englishName": "German Spitz (Klein)",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "저먼 스피츠 (중간)",
+        "englishName": "German Spitz (Mittel)",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "저먼 와이어헤어드 포인터",
+        "englishName": "German Wirehaired Pointer",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "자이언트 슈나우저",
+        "englishName": "Giant Schnauzer",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "글렌 오브 이말 테리어",
+        "englishName": "Glen Of Imaal Terrier",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "고든 세터",
+        "englishName": "Gordon Setter",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "그랑블루 드 가스코뉴",
+        "englishName": "Grand Bleu De Gascogne",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "그레이트 덴",
+        "englishName": "Great Dane",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "그레이터 스위스 마운틴 독",
+        "englishName": "Great Swiss Mountain Dog",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "그린란드",
+        "englishName": "Greenland Dog",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "그레이하운드",
+        "englishName": "Greyhound",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "브뤼셀 그리폰",
+        "englishName": "Griffon Bruxellois",
+        "recommendedWalkAmount": 900
+    },
+    {
+        "koreanName": "그리퐁 포브 드 부르타뉴",
+        "englishName": "Griffon Fauve De Bretagne",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "해밀턴스퇴바레",
+        "englishName": "Hamiltonstovare",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "해리어",
+        "englishName": "Harrier",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "하바나 실크 독",
+        "englishName": "Havanese",
+        "recommendedWalkAmount": 900
+    },
+    {
+        "koreanName": "호바와트",
+        "englishName": "Hovawart",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "쿠바츠",
+        "englishName": "Hungarian Kuvasz",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "헝가리안 풀리",
+        "englishName": "Hungarian Puli",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "푸미",
+        "englishName": "Hungarian Pumi",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "비즐라",
+        "englishName": "Hungarian Vizsla",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "와이어헤어드 비즐라",
+        "englishName": "Hungarian Wirehaired Vizsla",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "이비전 하운드",
+        "englishName": "Ibizan Hound",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "아이리시 레드 앤 화이트 세터",
+        "englishName": "Irish Red & White Setter",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "아이리시 레드 세터",
+        "englishName": "Irish Setter",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "아이리시 테리어",
+        "englishName": "Irish Terrier",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "아이리시 울프하운드",
+        "englishName": "Irish Wolfhound",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "이탈리안 그레이하운드",
+        "englishName": "Italian Greyhound",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "스피노네 이탈리아노",
+        "englishName": "Italian Spinone",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "잭 러셀 테리어",
+        "englishName": "Jack Russell Terrier",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "아키타견",
+        "englishName": "Japanese Akita Inu",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "제패니즈 친",
+        "englishName": "Japanese Chin",
+        "recommendedWalkAmount": 900
+    },
+    {
+        "koreanName": "시바",
+        "englishName": "Japanese Shiba Inu",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "재패니즈 스피츠",
+        "englishName": "Japanese Spitz",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "키스혼드",
+        "englishName": "Keeshond",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "케리 블루 테리어",
+        "englishName": "Kerry Blue Terrier",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "킹 찰스 스파니엘",
+        "englishName": "King Charles Spaniel",
+        "recommendedWalkAmount": 900
+    },
+    {
+        "koreanName": "코몬도르",
+        "englishName": "Komondor",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "쿠이커혼제",
+        "englishName": "Kooikerhondje",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "진돗개",
+        "englishName": "Korean Jindo",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "코르탈스 그리폰",
+        "englishName": "Korthals Griffon",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "라고토 로마그놀로",
+        "englishName": "Lagotto Romagnolo",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "레이크랜드 테리어",
+        "englishName": "Lakeland Terrier",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "랭카셔 힐러",
+        "englishName": "Lancashire Heeler",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "라지 먼스터랜더",
+        "englishName": "Large Munsterlander",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "레온베르거",
+        "englishName": "Leonberger",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "라사 압소",
+        "englishName": "Lhasa Apso",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "리틀 라이언 독",
+        "englishName": "Lowchen (Little Lion Dog)",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "말티즈",
+        "englishName": "Maltese",
+        "recommendedWalkAmount": 900
+    },
+    {
+        "koreanName": "맨체스터 테리어",
+        "englishName": "Manchester Terrier",
+        "recommendedWalkAmount": 3600
+    },
+    {
+        "koreanName": "마렘마 쉽독",
+        "englishName": "Maremma Sheepdog",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "마스티프",
+        "englishName": "Mastiff",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "미니어쳐 핀셔",
+        "englishName": "Miniature Pinscher",
+        "recommendedWalkAmount": 900
+    },
+    {
+        "koreanName": "미니어쳐 슈나우저",
+        "englishName": "Miniature Schnauzer",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "네오폴리탄 마스티프",
+        "englishName": "Neapolitan Mastiff",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "뉴펀들랜드",
+        "englishName": "Newfoundland",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "노퍽 테리어",
+        "englishName": "Norfolk Terrier",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "노르웨이안 부훈트",
+        "englishName": "Norwegian Buhund",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "노르위전 엘크하운드",
+        "englishName": "Norwegian Elkhound",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "노리치 테리어",
+        "englishName": "Norwich Terrier",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "올드 잉글리시 쉽독",
+        "englishName": "Old English Sheepdog",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "오터 하운드",
+        "englishName": "Otterhound",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "빠삐용",
+        "englishName": "Papillon",
+        "recommendedWalkAmount": 900
+    },
+    {
+        "koreanName": "파슨 러셀 테리어",
+        "englishName": "Parson Russell Terrier",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "페키니즈",
+        "englishName": "Pekingese",
+        "recommendedWalkAmount": 900
+    },
+    {
+        "koreanName": "파라오 하운드",
+        "englishName": "Pharaoh Hound",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "베르지 피카르드",
+        "englishName": "Picardy Sheepdog",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "잉글리시 포인터",
+        "englishName": "Pointer",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "폴리시 로랜드 쉽독",
+        "englishName": "Polish Lowland Sheepdog",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "포메라니안",
+        "englishName": "Pomeranian",
+        "recommendedWalkAmount": 900
+    },
+    {
+        "koreanName": "미니어쳐 푸들",
+        "englishName": "Poodle (Miniature)",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "스탠다드 푸들",
+        "englishName": "Poodle (Standard)",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "토이 푸들",
+        "englishName": "Poodle (Toy)",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "포르투갈 포덴고",
+        "englishName": "Portuguese Podengo",
+        "recommendedWalkAmount": 900
+    },
+    {
+        "koreanName": "포르투갈 포인터",
+        "englishName": "Portuguese Pointer",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "포르투기즈 워터 독",
+        "englishName": "Portuguese Water Dog",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "퍼그",
+        "englishName": "Pug",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "피레니안 마스티프",
+        "englishName": "Pyrenean Mastiff",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "피레니안 마운틴 독",
+        "englishName": "Pyrenean Mountain Dog",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "피레니안 마운틴 독 (장모)",
+        "englishName": "Pyrenean Sheepdog (Long Haired)",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "체서피크 베이 리트리버",
+        "englishName": "Retriever (Chesapeake Bay)",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "컬리 코티드리트리버",
+        "englishName": "Retriever (Curly Coated)",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "플랫 코티드 리트리버",
+        "englishName": "Retriever (Flat Coated)",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "골든 리트리버",
+        "englishName": "Retriever (Golden)",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "래브라도 리트리버",
+        "englishName": "Retriever (Labrador)",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "노바 스코셔 덕 톨링 리트리버",
+        "englishName": "Retriever (Nova Scotia Duck Tolling)",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "로디지안 리즈백",
+        "englishName": "Rhodesian Ridgeback",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "로트바일러",
+        "englishName": "Rottweiler",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "블랙 러시안 테리어",
+        "englishName": "Russian Black Terrier",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "러시안 토이",
+        "englishName": "Russian Toy",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "살루키",
+        "englishName": "Saluki",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "사모예드",
+        "englishName": "Samoyed",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "스키퍼키",
+        "englishName": "Schipperke",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "슈나우저",
+        "englishName": "Schnauzer",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "스코티시 테리어",
+        "englishName": "Scottish Terrier",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "실리햄 테리어",
+        "englishName": "Sealyham Terrier",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "샤페이",
+        "englishName": "Shar Pei",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "셰틀랜드 쉽독",
+        "englishName": "Shetland Sheepdog",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "시츄",
+        "englishName": "Shih Tzu",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "시베리안 허스키",
+        "englishName": "Siberian Husky",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "스카이 테리어",
+        "englishName": "Skye Terrier",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "슬루기",
+        "englishName": "Sloughi",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "슬로백 러프 헤어드 포인터",
+        "englishName": "Slovakian Rough Haired Pointer",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "스몰 문스터랜더",
+        "englishName": "Small Munsterlander",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "아이리시 소프트코티드 휘튼 테리어",
+        "englishName": "Soft Coated Wheaten Terrier",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "아메리칸 코커 스파니엘",
+        "englishName": "Spaniel (American Cocker)",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "아메리칸 워터 스파니엘",
+        "englishName": "Spaniel (American Water)",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "클럼버 스파니엘",
+        "englishName": "Spaniel (Clumber)",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "잉글리시 코커 스파니엘",
+        "englishName": "Spaniel (Cocker)",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "잉글리시 스프링어 스파니엘",
+        "englishName": "Spaniel (English Springer)",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "필드 스파니엘",
+        "englishName": "Spaniel (Field)",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "아이리시 워터 스파니엘",
+        "englishName": "Spaniel (Irish Water)",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "서식스 스파니엘",
+        "englishName": "Spaniel (Sussex)",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "웰시 스프링어 스파니엘",
+        "englishName": "Spaniel (Welsh Springer)",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "스패니시 워터 독",
+        "englishName": "Spanish Water Dog",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "세인트 버나드",
+        "englishName": "St. Bernard",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "스타포드셔 불 테리어",
+        "englishName": "Staffordshire Bull Terrier",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "스웨디시 라프훈트",
+        "englishName": "Swedish Lapphund",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "스웨디시 발훈트",
+        "englishName": "Swedish Vallhund",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "티베탄 마스티프",
+        "englishName": "Tibetan Mastiff",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "티베탄 스파니엘",
+        "englishName": "Tibetan Spaniel",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "티베탄 테리어",
+        "englishName": "Tibetan Terrier",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "캉갈",
+        "englishName": "Turkish Kangal Dog",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "바이마라너",
+        "englishName": "Weimaraner",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "웰시 코기 카디건",
+        "englishName": "Welsh Corgi (Cardigan)",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "웰시 코기 펨브로크",
+        "englishName": "Welsh Corgi (Pembroke)",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "웰시 테리어",
+        "englishName": "Welsh Terrier",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "웨스트 하일랜드 화이트 테리어",
+        "englishName": "West Highland White Terrier",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "휘핏",
+        "englishName": "Whippet",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "베르거 블랑 스위스",
+        "englishName": "White Swiss Shepherd Dog",
+        "recommendedWalkAmount": 7200
+    },
+    {
+        "koreanName": "멕시칸 헤어리스",
+        "englishName": "Xoloitzcuintle (Mex Hairless) Int",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "멕시칸 헤어리스 미니",
+        "englishName": "Xoloitzcuintle (Mex Hairless) Min",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "멕시칸 헤어리스 스탠다드",
+        "englishName": "Xoloitzcuintle (Mex Hairless) Std",
+        "recommendedWalkAmount": 1800
+    },
+    {
+        "koreanName": "요크셔 테리어",
+        "englishName": "Yorkshire Terrier",
+        "recommendedWalkAmount": 900
+    }
+]
