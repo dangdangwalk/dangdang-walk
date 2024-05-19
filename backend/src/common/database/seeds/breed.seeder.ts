@@ -1,0 +1,21 @@
+import * as fs from 'node:fs';
+import { Breed } from 'src/breed/breed.entity';
+import { color } from 'src/utils/ansi.utils';
+import { DataSource } from 'typeorm';
+import { Seeder } from 'typeorm-extension';
+
+export default class BreedSeeder implements Seeder {
+    public async run(dataSource: DataSource): Promise<any> {
+        const repository = dataSource.getRepository(Breed);
+
+        const jsonData = fs.readFileSync('breedData.json', 'utf-8');
+        const breeds = JSON.parse(jsonData);
+
+        await repository.query('SET FOREIGN_KEY_CHECKS = 0;');
+        await repository.clear();
+        await repository.query('SET FOREIGN_KEY_CHECKS = 1;');
+        await repository.insert(breeds);
+
+        console.log(`${color(breeds.length, 'Yellow')} rows inserted into breed table.`);
+    }
+}
