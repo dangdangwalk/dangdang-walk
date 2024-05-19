@@ -18,7 +18,7 @@ export interface OauthBody {
 @Controller('auth')
 @UseInterceptors(CookieInterceptor)
 export class AuthController {
-    constructor(private authService: AuthService) {}
+    constructor(private readonly authService: AuthService) {}
 
     @Post('login')
     @HttpCode(200)
