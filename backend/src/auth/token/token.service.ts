@@ -65,7 +65,6 @@ export class TokenService {
         });
 
         if ('userId' in payload) payload.userId = parseInt(payload.userId);
-        if ('oauthId' in payload) payload.oauthId = parseInt(payload.oauthId);
 
         return payload;
     }
