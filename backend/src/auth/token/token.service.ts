@@ -59,10 +59,13 @@ export class TokenService {
         return newToken;
     }
 
-    verify(token: string) {
-        const payload = this.jwtService.verify<AccessTokenPayload | RefreshTokenPayload>(token, {
+    verify(token: string): AccessTokenPayload | RefreshTokenPayload {
+        const payload = this.jwtService.verify(token, {
             ignoreExpiration: false,
         });
+
+        if ('userId' in payload) payload.userId = parseInt(payload.userId);
+        if ('oauthId' in payload) payload.oauthId = parseInt(payload.oauthId);
 
         return payload;
     }
