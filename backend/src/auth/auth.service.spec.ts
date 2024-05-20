@@ -74,7 +74,12 @@ describe('AuthService', () => {
 
         for (const oauthService of oauthServiceList) {
             jest.spyOn(oauthService, 'requestToken').mockResolvedValue(mockTokenResponse);
-            jest.spyOn(oauthService, 'requestUserId').mockResolvedValue(mockUser.oauthId);
+            jest.spyOn(oauthService, 'requestUserInfo').mockResolvedValue({
+                oauthId: mockUser.oauthId,
+                oauthNickname: 'test',
+                email: 'test@mail.com',
+                profileImage: 'test.jpg',
+            });
             jest.spyOn(oauthService, 'requestTokenExpiration').mockResolvedValue();
             jest.spyOn(oauthService, 'requestTokenRefresh').mockResolvedValue(mockTokenResponse);
         }
@@ -116,7 +121,6 @@ describe('AuthService', () => {
                     expect(result).toEqual({
                         oauthAccessToken: mockUser.oauthAccessToken,
                         oauthRefreshToken: mockUser.oauthRefreshToken,
-                        oauthId: mockUser.oauthId,
                         provider,
                     });
                 });
