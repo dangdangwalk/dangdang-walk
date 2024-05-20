@@ -57,7 +57,7 @@ export default function CustomCalendar() {
     const handleNextMonth = async () => {
         const nextMonth = new Date(date.getFullYear(), date.getMonth() + 1, 1);
         if (today.getFullYear() >= nextMonth.getFullYear() && today.getMonth() >= nextMonth.getMonth()) {
-            await getStatisticData(formDate(date), 'month');
+            await getStatisticData(formDate(nextMonth), 'month');
         }
         setDate(nextMonth);
     };
@@ -65,6 +65,7 @@ export default function CustomCalendar() {
         if (view === 'month') {
             setView('week');
         } else {
+            getStatisticData(formDate(today), 'month');
             setView('month');
         }
     };
@@ -110,7 +111,6 @@ export default function CustomCalendar() {
                 value={date}
                 calendarType="gregory"
                 showNavigation={false}
-                // activeStartDate={currentWeek[0]}
                 className="mx-auto w-full text-sm border-b"
                 onActiveStartDateChange={() => {}}
                 showNeighboringMonth={view === 'week'}
@@ -124,18 +124,18 @@ export default function CustomCalendar() {
                     let html = [];
                     // 현재 날짜가 post 작성한 날짜 배열(mark)에 있다면, dot div 추가
                     if (mark.includes(formDate(date))) {
-                        html.push(
-                            <svg xmlns="http://www.w3.org/2000/svg" width="4" height="4" viewBox="0 0 4 4" fill="none">
-                                <circle cx="2" cy="2" r="2" fill="#FF9900" />
-                            </svg>
-                        );
+                        html.push(<div className="dot"></div>);
                     }
                     // 다른 조건을 주어서 html.push 에 추가적인 html 태그를 적용할 수 있음.
                     return (
                         <>
                             <div className="flex flex-col justify-center items-center gap-2">
                                 <div className="days">{formDay(date)}</div>
-                                <div className="dot"></div>
+                                {mark.includes(formDate(date)) ? (
+                                    <div className="dot"></div>
+                                ) : (
+                                    <div className="w-1 h-1"></div>
+                                )}
                             </div>
                         </>
                     );
