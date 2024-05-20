@@ -4,4 +4,8 @@ function makeFileUrl(fileName: string) {
     return `${REACT_APP_BASE_IMAGE_URL}/${fileName}`;
 }
 
-export { makeFileUrl };
+function getFileName(fileUrl: string) {
+    return fileUrl.replaceAll(`${REACT_APP_BASE_IMAGE_URL}/`, '');
+}
+
+export { getFileName, makeFileUrl };
