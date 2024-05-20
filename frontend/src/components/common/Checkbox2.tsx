@@ -6,7 +6,7 @@ import { ComponentPropsWithoutRef, ElementRef, forwardRef, useRef } from 'react'
 
 const Checkbox = forwardRef<ElementRef<typeof CheckboxPrimitive.Root>, Props>(
     ({ checked, labelText, className, children, ...props }, ref) => {
-        const idRef = useRef<string | undefined>(labelText ? newID() : undefined);
+        const idRef = useRef<string | undefined>(labelText ? generateId() : undefined);
 
         return (
             <div className={cn('flex items-center gap-3 h-9', className)}>
@@ -29,7 +29,7 @@ const Checkbox = forwardRef<ElementRef<typeof CheckboxPrimitive.Root>, Props>(
 );
 Checkbox.displayName = CheckboxPrimitive.Root.displayName;
 
-function newID() {
+function generateId() {
     return Math.random().toString(36).slice(2);
 }
 
