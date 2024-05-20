@@ -108,7 +108,7 @@ export class UsersService {
 
         if (profileImage) {
             const curUserInfo = await this.findOne({ id: userId });
-            if (curUserInfo && curUserInfo.profileImage) {
+            if (curUserInfo && curUserInfo.profileImage && !curUserInfo.profileImage.startsWith('http')) {
                 await this.s3Service.deleteSingleObject(userId, curUserInfo.profileImage);
             }
         }
