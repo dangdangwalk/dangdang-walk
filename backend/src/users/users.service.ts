@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { OauthProvider } from 'src/auth/auth.controller';
 import { AccessTokenPayload } from 'src/auth/token/token.service';
+import { S3Service } from 'src/s3/s3.service';
 import { FindOptionsWhere } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { UsersDogsService } from '../users-dogs/users-dogs.service';
@@ -24,7 +25,8 @@ export interface UserProfile {
 export class UsersService {
     constructor(
         private readonly usersRepository: UsersRepository,
-        private readonly usersDogsService: UsersDogsService
+        private readonly usersDogsService: UsersDogsService,
+        private readonly s3Service: S3Service
     ) {}
 
     async create(entityData: CreateUser) {
@@ -97,10 +99,20 @@ export class UsersService {
     }
 
     async updateUserProfile(userId: number, userInfo: UpdateUserDto) {
-        if ('nickname' in userInfo) {
+        const { nickname, profileImage } = userInfo;
+
+        if (nickname) {
             const nickname = await this.generateUniqueNickname(userInfo.nickname);
             userInfo.nickname = nickname;
         }
-        await this.usersRepository.update({ id: userId }, userInfo);
+
+        if (profileImage) {
+            const curUserInfo = await this.findOne({ id: userId });
+            if (curUserInfo && curUserInfo.profileImage) {
+                await this.s3Service.deleteSingleObject(userId, curUserInfo.profileImage);
+            }
+        }
+
+        await this.update({ id: userId }, userInfo);
     }
 }
