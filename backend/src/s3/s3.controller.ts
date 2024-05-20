@@ -10,6 +10,12 @@ export class S3Controller {
 
     @Post('/upload')
     async upload(@User() user: AccessTokenPayload, @Body() type: string[]): Promise<PresignedUrlInfo[]> {
-        return await this.s3Service.createPresignedUrlWithClient(user.userId, type);
+        return await this.s3Service.createPresignedUrlWithClientForPut(user.userId, type);
+    }
+
+    @Post('/delete')
+    async delete(@User() user: AccessTokenPayload, @Body() body: { filename: string }): Promise<PresignedUrlInfo> {
+        const { filename } = body;
+        return await this.s3Service.createPresignedUrlWithClientForDelete(user.userId, filename);
     }
 }
