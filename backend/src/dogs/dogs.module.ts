@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { JournalsDogsModule } from 'src/journals-dogs/journals-dogs.module';
-import { S3Module } from 'src/s3/s3.module';
 import { Breed } from '../breed/breed.entity';
 import { BreedModule } from '../breed/breed.module';
 import { DatabaseModule } from '../common/database/database.module';
@@ -22,18 +21,9 @@ import { DogsService } from './dogs.service';
         DailyWalkTimeModule,
         DogWalkDayModule,
         JournalsDogsModule,
-        S3Module,
     ],
     controllers: [DogsController],
     providers: [DogsService, DogsRepository],
-    exports: [
-        DogsService,
-        UsersModule,
-        JournalsDogsModule,
-        BreedModule,
-        DailyWalkTimeModule,
-        DogWalkDayModule,
-        S3Module,
-    ],
+    exports: [DogsService, UsersModule, JournalsDogsModule, BreedModule, DailyWalkTimeModule, DogWalkDayModule],
 })
 export class DogsModule {}

@@ -86,7 +86,7 @@ export class DogsService {
         if (profilePhotoUrl) {
             const curDogInfo = await this.findOne({ id: dogId });
             if (curDogInfo && curDogInfo.profilePhotoUrl) {
-                this.s3Service.deleteSingleObject(userId, curDogInfo.profilePhotoUrl);
+                await this.s3Service.deleteSingleObject(userId, curDogInfo.profilePhotoUrl);
             }
         }
         const updateData = breedName ? { breed, profilePhotoUrl, ...otherAttributes } : otherAttributes;
