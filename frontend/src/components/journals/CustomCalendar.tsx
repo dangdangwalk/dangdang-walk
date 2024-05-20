@@ -75,7 +75,7 @@ export default function CustomCalendar() {
         if (!mark.includes(date)) return;
 
         const newSearchParams = new URLSearchParams(searchParams);
-        newSearchParams.set(queryStringKeys.DATE, value.toISOString());
+        newSearchParams.set(queryStringKeys.DATE, date);
         setSearchParams(newSearchParams);
     };
 

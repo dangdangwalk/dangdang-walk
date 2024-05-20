@@ -1,9 +1,8 @@
 export interface Journal {
-    id: number;
-    title: string;
+    journalId: number;
+    startedAt: string;
     distance: number;
     calories: number;
-    fecesCnt: number;
-    urinesCnt: number;
     duration: number;
+    journalCnt: number;
 }

@@ -6,7 +6,7 @@ export default function JournalCardList({ journals, dog }: { journals: Journal[]
     return (
         <div className="flex flex-col px-5 py-[14px] justify-start items-center gap-3">
             {journals.map((journal) => {
-                return <JournalCard key={journal.id} journal={journal} dog={dog} />;
+                return <JournalCard key={journal.journalId} journal={journal} dog={dog} />;
             })}
         </div>
     );

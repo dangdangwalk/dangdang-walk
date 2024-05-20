@@ -1,19 +1,9 @@
 import CustomCalendar from '@/components/journals/CustomCalendar';
 import JournalCardList from '@/components/journals/JournalCardList';
 import { NAV_HEIGHT, TOP_BAR_HEIGHT } from '@/constants/style';
+import useJournals from '@/hooks/useJournals';
 import { Dog } from '@/models/dog.model';
-import { Journal } from '@/models/journals';
-const journals: Journal[] = [
-    {
-        id: 0,
-        title: '테스트',
-        distance: 3.43,
-        duration: 1000,
-        calories: 1000,
-        fecesCnt: 1000,
-        urinesCnt: 1000,
-    },
-];
+
 const dog: Dog = {
     id: 1,
     name: '테스트',
@@ -21,7 +11,7 @@ const dog: Dog = {
 };
 
 export default function Journals() {
-    // const { journals } = useJournals();
+    const { journals } = useJournals();
 
     return (
         <>
