@@ -5,6 +5,7 @@ import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-clas
 import { color } from 'src/utils/ansi.utils';
 import { DataSource } from 'typeorm';
 import { runSeeders } from 'typeorm-extension';
+import { addTransactionalDataSource } from 'typeorm-transactional';
 import BreedSeeder from './seeds/breed.seeder';
 
 @Module({
@@ -22,6 +23,13 @@ import BreedSeeder from './seeds/breed.seeder';
                     entities: ['dist/**/*.entity{.ts,.js}'],
                     synchronize: true,
                 };
+            },
+            async dataSourceFactory(options) {
+                if (!options) {
+                    throw new Error('Invalid options passed');
+                }
+
+                return addTransactionalDataSource(new DataSource(options));
             },
         }),
     ],

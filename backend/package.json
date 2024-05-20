@@ -49,6 +49,7 @@
         "reflect-metadata": "^0.1.14",
         "rxjs": "^7.8.1",
         "typeorm-extension": "^3.5.1",
+        "typeorm-transactional": "^0.5.0",
         "uuid": "^9.0.1",
         "winston": "^3.13.0",
         "winston-daily-rotate-file": "^5.0.0"
