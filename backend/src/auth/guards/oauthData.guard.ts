@@ -8,14 +8,12 @@ export class OauthDataGuard implements CanActivate {
         const request = context.switchToHttp().getRequest();
         const oauthAccessToken = request.cookies['oauthAccessToken'];
         const oauthRefreshToken = request.cookies['oauthRefreshToken'];
-        const oauthId = request.cookies['oauthId'];
         const provider = request.cookies['provider'];
 
-        if (!oauthAccessToken || !oauthRefreshToken || !oauthId || !provider) {
+        if (!oauthAccessToken || !oauthRefreshToken || !provider) {
             const missingFields = [
                 !oauthAccessToken && 'oauthAccessToken',
                 !oauthRefreshToken && 'oauthRefreshToken',
-                !oauthId && 'oauthId',
                 !provider && 'provider',
             ]
                 .filter(Boolean)
@@ -25,7 +23,7 @@ export class OauthDataGuard implements CanActivate {
             this.logger.error(`OAuthDataGuard failed: missing ${missingFields}.`, error.stack ?? 'No stack');
             throw error;
         }
-        request.oauthData = { oauthAccessToken, oauthRefreshToken, oauthId, provider };
+        request.oauthData = { oauthAccessToken, oauthRefreshToken, provider };
 
         return true;
     }

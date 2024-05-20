@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 import { firstValueFrom } from 'rxjs';
 import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
-import { OauthService, RequestTokenRefreshResponse } from './oauth.service.interface';
+import { OauthService, RequestToken, RequestTokenRefresh, RequestUserInfo } from './oauth.service.interface';
 
 interface TokenResponse {
     access_token: string;
@@ -15,14 +15,10 @@ interface TokenResponse {
 }
 
 interface UserInfoResponse {
-    azp: string;
-    aud: string;
-    sub: string;
-    scope: string;
-    exp: string;
-    expires_in: string;
+    id: string;
     email: string;
-    email_verified: string;
+    name: string;
+    picture: string;
 }
 
 interface TokenRefreshResponse {
@@ -43,10 +39,10 @@ export class GoogleService implements OauthService {
     private readonly CLIENT_ID = this.configService.get<string>('GOOGLE_CLIENT_ID');
     private readonly CLIENT_SECRET = this.configService.get<string>('GOOGLE_CLIENT_SECRET');
     private readonly TOKEN_API = this.configService.get<string>('GOOGLE_TOKEN_API')!;
-    private readonly TOKEN_INFO_API = this.configService.get<string>('GOOGLE_TOKEN_INFO_API')!;
+    private readonly USER_INFO_API = this.configService.get<string>('GOOGLE_USER_INFO_API')!;
     private readonly REVOKE_API = this.configService.get<string>('GOOGLE_REVOKE_API')!;
 
-    async requestToken(authorizeCode: string, redirectURI: string) {
+    async requestToken(authorizeCode: string, redirectURI: string): Promise<RequestToken> {
         try {
             const { data } = await firstValueFrom(
                 this.httpService.post<TokenResponse>(this.TOKEN_API, {
@@ -71,24 +67,31 @@ export class GoogleService implements OauthService {
         }
     }
 
-    async requestUserId(accessToken: string) {
+    async requestUserInfo(accessToken: string): Promise<RequestUserInfo> {
         try {
             const { data } = await firstValueFrom(
-                this.httpService.get<UserInfoResponse>(this.TOKEN_INFO_API, {
-                    params: {
-                        access_token: accessToken,
+                this.httpService.get<UserInfoResponse>(this.USER_INFO_API, {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
                     },
                 })
             );
 
-            return data.sub;
+            this.logger.log(`requestUserInfo:\n${JSON.stringify(data, null, 2)}`);
+
+            return {
+                oauthId: data.id,
+                oauthNickname: data.name,
+                email: data.email,
+                profileImage: data.picture,
+            };
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
                 this.logger.error(
-                    `Google: Failed to request oauthId. ${JSON.stringify(error.response.data)}`,
+                    `Google: Failed to request userInfo. ${JSON.stringify(error.response.data)}`,
                     error.stack ?? 'No stack'
                 );
-                error = new BadRequestException('Google: Failed to request oauthId.');
+                error = new BadRequestException('Google: Failed to request userInfo.');
             }
             throw error;
         }
@@ -122,7 +125,7 @@ export class GoogleService implements OauthService {
         }
     }
 
-    async requestTokenRefresh(refreshToken: string): Promise<RequestTokenRefreshResponse> {
+    async requestTokenRefresh(refreshToken: string): Promise<RequestTokenRefresh> {
         try {
             const { data } = await firstValueFrom(
                 this.httpService.post<TokenRefreshResponse>(this.TOKEN_API, {

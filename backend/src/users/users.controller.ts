@@ -1,0 +1,14 @@
+import { Controller, Get } from '@nestjs/common';
+import { AccessTokenPayload } from 'src/auth/token/token.service';
+import { User } from '../users/decorators/user.decorator';
+import { UsersService } from './users.service';
+
+@Controller('users')
+export class UsersController {
+    constructor(private readonly usersService: UsersService) {}
+
+    @Get('me')
+    async getUserProfile(@User() user: AccessTokenPayload) {
+        return await this.usersService.getUserProfile(user);
+    }
+}

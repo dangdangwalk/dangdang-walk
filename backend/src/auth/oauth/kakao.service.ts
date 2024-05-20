@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 import { firstValueFrom } from 'rxjs';
 import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
-import { OauthService } from './oauth.service.interface';
+import { OauthService, RequestToken, RequestTokenRefresh, RequestUserInfo } from './oauth.service.interface';
 
 interface TokenResponse {
     token_type: string;
@@ -18,8 +18,13 @@ interface TokenResponse {
 
 interface UserInfoResponse {
     id: number;
-    expires_in: number;
-    app_id: number;
+    properties: {
+        nickname: string;
+        profile_image: string;
+    };
+    kakao_account: {
+        email: string;
+    };
 }
 
 interface TokenRefreshResponse {
@@ -41,11 +46,11 @@ export class KakaoService implements OauthService {
     private readonly CLIENT_ID = this.configService.get<string>('KAKAO_CLIENT_ID');
     private readonly CLIENT_SECRET = this.configService.get<string>('KAKAO_CLIENT_SECRET');
     private readonly TOKEN_API = this.configService.get<string>('KAKAO_TOKEN_API')!;
-    private readonly TOKEN_INFO_API = this.configService.get<string>('KAKAO_TOKEN_INFO_API')!;
+    private readonly USER_INFO_API = this.configService.get<string>('KAKAO_USER_INFO_API')!;
     private readonly LOGOUT_API = this.configService.get<string>('KAKAO_LOGOUT_API')!;
     private readonly UNLINK_API = this.configService.get<string>('KAKAO_UNLINK_API')!;
 
-    async requestToken(authorizeCode: string, redirectURI: string) {
+    async requestToken(authorizeCode: string, redirectURI: string): Promise<RequestToken> {
         try {
             const { data } = await firstValueFrom(
                 this.httpService.post<TokenResponse>(
@@ -78,24 +83,31 @@ export class KakaoService implements OauthService {
         }
     }
 
-    async requestUserId(accessToken: string) {
+    async requestUserInfo(accessToken: string): Promise<RequestUserInfo> {
         try {
             const { data } = await firstValueFrom(
-                this.httpService.get<UserInfoResponse>(this.TOKEN_INFO_API, {
+                this.httpService.get<UserInfoResponse>(this.USER_INFO_API, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
                     },
                 })
             );
 
-            return data.id.toString();
+            this.logger.log(`requestUserInfo:\n${JSON.stringify(data, null, 2)}`);
+
+            return {
+                oauthId: data.id.toString(),
+                oauthNickname: data.properties.nickname,
+                email: data.kakao_account.email,
+                profileImage: data.properties.profile_image,
+            };
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
                 this.logger.error(
-                    `Kakao: Failed to request oauthId. ${JSON.stringify(error.response.data)}`,
+                    `Kakao: Failed to request userInfo. ${JSON.stringify(error.response.data)}`,
                     error.stack ?? 'No stack'
                 );
-                error = new BadRequestException('Kakao: Failed to request oauthId.');
+                error = new BadRequestException('Kakao: Failed to request userInfo.');
             }
             throw error;
         }
@@ -153,7 +165,7 @@ export class KakaoService implements OauthService {
         }
     }
 
-    async requestTokenRefresh(refreshToken: string) {
+    async requestTokenRefresh(refreshToken: string): Promise<RequestTokenRefresh> {
         try {
             const { data } = await firstValueFrom(
                 this.httpService.post<TokenRefreshResponse>(

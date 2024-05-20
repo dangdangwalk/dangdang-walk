@@ -10,6 +10,12 @@ export class Users {
     @Column({ unique: true })
     nickname: string;
 
+    @Column()
+    email: string;
+
+    @Column({ name: 'profile_image' })
+    profileImage: string;
+
     @Column({
         type: 'enum',
         enum: Role,

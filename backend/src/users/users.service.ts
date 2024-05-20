@@ -1,13 +1,23 @@
 import { Injectable } from '@nestjs/common';
+import { OauthProvider } from 'src/auth/auth.controller';
+import { AccessTokenPayload } from 'src/auth/token/token.service';
 import { FindOptionsWhere } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { UsersDogsService } from '../users-dogs/users-dogs.service';
 import { generateUuid } from '../utils/hash.utils';
 import { checkIfExistsInArr } from '../utils/manipulate.util';
+import { CreateUserDto } from './dto/createUser.dto';
 import { CreateUser } from './types/user-types';
 import { Role } from './user-roles.enum';
 import { Users } from './users.entity';
 import { UsersRepository } from './users.repository';
+
+export interface UserProfile {
+    nickname: string;
+    email: string;
+    profileImage: string;
+    provider: OauthProvider;
+}
 
 @Injectable()
 export class UsersService {
@@ -41,38 +51,30 @@ export class UsersService {
         return this.usersRepository.delete(where);
     }
 
-    async createIfNotExists(
-        oauthId: string,
-        oauthAccessToken: string,
-        oauthRefreshToken: string,
-        refreshToken: string
-    ) {
-        const nickname = await this.generateUniqueNickname();
+    async createIfNotExists({ oauthNickname, ...otherAttributes }: CreateUserDto) {
+        const nickname = await this.generateUniqueNickname(oauthNickname);
 
         return await this.usersRepository.createIfNotExists(
             new Users({
                 nickname,
                 role: Role.User,
                 mainDogId: null,
-                oauthId,
-                oauthAccessToken,
-                oauthRefreshToken,
-                refreshToken,
+                ...otherAttributes,
             }),
             'oauthId'
         );
     }
 
-    async generateUniqueNickname(): Promise<string> {
-        let nickname = generateUuid();
-        let user = await this.usersRepository.findOneWithNoException({ nickname });
+    async generateUniqueNickname(nickname: string): Promise<string> {
+        let randomId = generateUuid().slice(0, 10);
+        let user = await this.usersRepository.findOneWithNoException({ nickname: `${nickname}#${randomId}` });
 
         while (user) {
-            nickname = generateUuid();
-            user = await this.usersRepository.findOneWithNoException({ nickname });
+            randomId = generateUuid().slice(0, 10);
+            user = await this.usersRepository.findOneWithNoException({ nickname: `${nickname}#${randomId}` });
         }
 
-        return nickname;
+        return `${nickname}#${randomId}`;
     }
 
     async getOwnDogsList(userId: number): Promise<number[]> {
@@ -86,5 +88,10 @@ export class UsersService {
 
         const result = checkIfExistsInArr(myDogIds, dogId);
         return result;
+    }
+
+    async getUserProfile({ userId, provider }: AccessTokenPayload): Promise<UserProfile> {
+        const { nickname, email, profileImage } = await this.usersRepository.findOne({ id: userId });
+        return { nickname, email, profileImage, provider };
     }
 }

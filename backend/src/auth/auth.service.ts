@@ -19,7 +19,6 @@ export interface AuthData {
 export interface OauthData {
     oauthAccessToken: string;
     oauthRefreshToken: string;
-    oauthId: string;
     provider: OauthProvider;
 }
 
@@ -39,7 +38,11 @@ export class AuthService {
     private readonly redirectURI = this.configService.get<string>('CORS_ORIGIN') + '/callback';
 
     async login({ authorizeCode, provider }: OauthBody): Promise<AuthData | OauthData | undefined> {
-        const { oauthAccessToken, oauthRefreshToken, oauthId } = await this.getOauthData(authorizeCode, provider);
+        const { access_token: oauthAccessToken, refresh_token: oauthRefreshToken } = await this[
+            `${provider}Service`
+        ].requestToken(authorizeCode, this.redirectURI);
+
+        const { oauthId } = await this[`${provider}Service`].requestUserInfo(oauthAccessToken);
 
         const refreshToken = this.tokenService.signRefreshToken(oauthId, provider);
         this.logger.debug(`login - signRefreshToken: ${refreshToken}`);
@@ -56,23 +59,29 @@ export class AuthService {
             return { accessToken, refreshToken };
         } catch (error) {
             if (error instanceof NotFoundException) {
-                return { oauthAccessToken, oauthRefreshToken, oauthId, provider };
+                return { oauthAccessToken, oauthRefreshToken, provider };
             }
             this.logger.error(`Login error`, error.stack ?? 'No stack');
             throw error;
         }
     }
 
-    async signup({ oauthAccessToken, oauthRefreshToken, oauthId, provider }: OauthData): Promise<AuthData> {
+    async signup({ oauthAccessToken, oauthRefreshToken, provider }: OauthData): Promise<AuthData> {
+        const { oauthId, oauthNickname, email, profileImage } =
+            await this[`${provider}Service`].requestUserInfo(oauthAccessToken);
+
         const refreshToken = this.tokenService.signRefreshToken(oauthId, provider);
         this.logger.debug(`signup - signRefreshToken: ${refreshToken}`);
 
-        const { id: userId } = await this.usersService.createIfNotExists(
+        const { id: userId } = await this.usersService.createIfNotExists({
+            oauthNickname,
+            email,
+            profileImage,
             oauthId,
             oauthAccessToken,
             oauthRefreshToken,
-            refreshToken
-        );
+            refreshToken,
+        });
 
         const accessToken = this.tokenService.signAccessToken(userId, provider);
         this.logger.debug(`signup - signAccessToken: ${accessToken}`);
@@ -127,16 +136,6 @@ export class AuthService {
         });
 
         await this.usersService.delete({ id: userId });
-    }
-
-    private async getOauthData(authorizeCode: string, provider: OauthProvider): Promise<Omit<OauthData, 'provider'>> {
-        const { access_token: oauthAccessToken, refresh_token: oauthRefreshToken } = await this[
-            `${provider}Service`
-        ].requestToken(authorizeCode, this.redirectURI);
-
-        const oauthId = await this[`${provider}Service`].requestUserId(oauthAccessToken);
-
-        return { oauthAccessToken, oauthRefreshToken, oauthId };
     }
 
     async validateAccessToken(userId: number): Promise<boolean> {
