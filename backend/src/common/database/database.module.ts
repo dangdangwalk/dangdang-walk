@@ -6,6 +6,7 @@ import { color } from 'src/utils/ansi.utils';
 import { DataSource } from 'typeorm';
 import { runSeeders } from 'typeorm-extension';
 import { addTransactionalDataSource } from 'typeorm-transactional';
+import { WinstonLoggerService } from '../logger/winstonLogger.service';
 import BreedSeeder from './seeds/breed.seeder';
 
 @Module({
@@ -35,11 +36,14 @@ import BreedSeeder from './seeds/breed.seeder';
     ],
 })
 export class DatabaseModule {
-    constructor(@Inject(getDataSourceToken()) private readonly dataSource: DataSource) {}
+    constructor(
+        @Inject(getDataSourceToken()) private readonly dataSource: DataSource,
+        private readonly logger: WinstonLoggerService
+    ) {}
 
     async onModuleInit() {
         await runSeeders(this.dataSource, { seeds: [BreedSeeder] });
-        console.log(color('Seed data applied successfully.', 'Cyan'));
+        this.logger.log(color('Seed data applied successfully.', 'Yellow'));
     }
 
     static forFeature(models: EntityClassOrSchema[]): DynamicModule {
