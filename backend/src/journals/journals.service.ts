@@ -267,10 +267,6 @@ export class JournalsService {
         distance: number[];
         durations: number[];
     }> {
-        if (journals.length === 0) {
-            return { journalCntAMonth: [], distance: [], durations: [] };
-        }
-
         const lastDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0);
         const totalWeeks = getWeek(lastDate);
 
@@ -312,10 +308,6 @@ export class JournalsService {
     ): Promise<{
         journalCntAMonth: number[];
     }> {
-        if (journals.length === 0) {
-            return { journalCntAMonth: [] };
-        }
-
         const lastDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0);
 
         const journalCntAMonth = new Array(lastDate.getDate()).fill(0);
