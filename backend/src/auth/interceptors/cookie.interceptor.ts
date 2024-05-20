@@ -40,12 +40,7 @@ export class CookieInterceptor implements NestInterceptor {
                     this.setAuthCookies(response, data);
                     this.clearOauthCookies(response);
                     return { accessToken: data.accessToken };
-                } else if (
-                    'oauthAccessToken' in data &&
-                    'oauthRefreshToken' in data &&
-                    'oauthId' in data &&
-                    'provider' in data
-                ) {
+                } else if ('oauthAccessToken' in data && 'oauthRefreshToken' in data && 'provider' in data) {
                     this.setOauthCookies(response, data);
 
                     const error = new NotFoundException('No matching user found. Please sign up for an account.');
@@ -60,13 +55,9 @@ export class CookieInterceptor implements NestInterceptor {
         response.cookie('refreshToken', refreshToken, this.refreshCookieOptions);
     }
 
-    private setOauthCookies(
-        response: Response,
-        { oauthAccessToken, oauthRefreshToken, oauthId, provider }: OauthData
-    ): void {
+    private setOauthCookies(response: Response, { oauthAccessToken, oauthRefreshToken, provider }: OauthData): void {
         response.cookie('oauthAccessToken', oauthAccessToken, this.sessionCookieOptions);
         response.cookie('oauthRefreshToken', oauthRefreshToken, this.sessionCookieOptions);
-        response.cookie('oauthId', oauthId, this.sessionCookieOptions);
         response.cookie('provider', provider, this.sessionCookieOptions);
     }
 
@@ -77,7 +68,6 @@ export class CookieInterceptor implements NestInterceptor {
     private clearOauthCookies(response: Response): void {
         response.clearCookie('oauthAccessToken', this.sessionCookieOptions);
         response.clearCookie('oauthRefreshToken', this.sessionCookieOptions);
-        response.clearCookie('oauthId', this.sessionCookieOptions);
         response.clearCookie('provider', this.sessionCookieOptions);
     }
 }
