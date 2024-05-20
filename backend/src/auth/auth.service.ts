@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
 import { DogsService } from 'src/dogs/dogs.service';
+import { Transactional } from 'typeorm-transactional';
 import { Users } from '../users/users.entity';
 import { UsersService } from '../users/users.service';
 import { OauthBody, OauthProvider } from './auth.controller';
@@ -118,6 +119,7 @@ export class AuthService {
         await this.deleteUserData(userId);
     }
 
+    @Transactional()
     private async deleteUserData(userId: number) {
         const dogIds = await this.usersService.getOwnDogsList(userId);
         dogIds.forEach(async (dogId) => {

@@ -10,6 +10,7 @@ import { JournalsDogsService } from 'src/journals-dogs/journals-dogs.service';
 import { getWeek } from 'src/utils/date.utils';
 import { checkIfExistsInArr, makeSubObject } from 'src/utils/manipulate.util';
 import { DeleteResult, EntityManager, FindOptionsWhere, In, UpdateResult } from 'typeorm';
+import { Transactional } from 'typeorm-transactional';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { UpdateJournalDto } from './dto/journal-update.dto';
 import { CreateJournalDto, ExcrementsInfoForCreate, JournalInfoForCreate, Location } from './dto/journals-create.dto';
@@ -221,6 +222,8 @@ export class JournalsService {
             return photoUrls;
         }
     }
+
+    @Transactional()
     async createJournal(userId: number, createJournalData: CreateJournalDto) {
         const dogs = createJournalData.dogs;
         const journalData = this.makeJournalData(userId, createJournalData);
@@ -239,6 +242,7 @@ export class JournalsService {
         }
     }
 
+    @Transactional()
     async updateJournal(journalId: number, updateJournalData: UpdateJournalDto) {
         if (updateJournalData.memo) {
             await this.updateAndFindOne({ id: journalId }, { memo: updateJournalData.memo });

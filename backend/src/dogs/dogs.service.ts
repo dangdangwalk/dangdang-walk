@@ -3,6 +3,7 @@ import { S3Service } from 'src/s3/s3.service';
 import { UsersDogs } from 'src/users-dogs/users-dogs.entity';
 import { makeSubObjectsArray } from 'src/utils/manipulate.util';
 import { EntityManager, FindOptionsWhere, In, UpdateResult } from 'typeorm';
+import { Transactional } from 'typeorm-transactional';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { BreedService } from '../breed/breed.service';
 import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
@@ -30,6 +31,7 @@ export class DogsService {
         private readonly logger: WinstonLoggerService
     ) {}
 
+    @Transactional()
     async createDogToUser(userId: number, dogDto: DogDto) {
         try {
             const { breed: breedName, ...otherAttributes } = dogDto;
@@ -52,6 +54,7 @@ export class DogsService {
         }
     }
 
+    @Transactional()
     async deleteDogFromUser(dogId: number) {
         const dog = await this.findOne({ id: dogId });
 
