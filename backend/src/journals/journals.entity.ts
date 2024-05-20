@@ -28,9 +28,6 @@ export class Journals {
     @Column({ type: 'mediumtext' })
     routes: string;
 
-    @Column({ name: 'route_image_url' })
-    routeImageUrl: string;
-
     @Column({ nullable: true })
     memo: string;
 
