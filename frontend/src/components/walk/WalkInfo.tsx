@@ -1,6 +1,6 @@
 import { Divider } from '@/components/common/Divider';
 import { distanceFormat, timeFormat } from '@/utils/format';
-import { cn } from '@/utils/tailwind-class';
+import { cn } from '@/utils/tailwindClass';
 
 interface WalkInfoProps {
     duration: number;

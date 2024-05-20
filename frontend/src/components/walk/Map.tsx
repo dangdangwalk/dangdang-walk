@@ -2,8 +2,8 @@ import Spinner from '@/components/common/Spinner';
 import { DEFAULT_LAT, DEFAULT_LNG } from '@/constants/location';
 import { NAV_HEIGHT, TOP_BAR_HEIGHT, WALK_INFO_HEIGHT } from '@/constants/style';
 import { Position } from '@/models/location.model';
-import { cn } from '@/utils/tailwind-class';
-import React, { useEffect, useState } from 'react';
+import { cn } from '@/utils/tailwindClass';
+import { useEffect, useState } from 'react';
 
 const { REACT_APP_KAKAO_MAP_ID: KAKAO_MAP_ID = '' } = window._ENV ?? process.env;
 

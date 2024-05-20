@@ -1,4 +1,4 @@
-import { cn } from '@/utils/tailwind-class';
+import { cn } from '@/utils/tailwindClass';
 
 export default function Spinner({ className }: { className?: string }) {
     return (

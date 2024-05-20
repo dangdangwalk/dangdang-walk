@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Check } from '@/components/icon/Check';
-import { cn } from '@/utils/tailwind-class';
+import { cn } from '@/utils/tailwindClass';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 import { ComponentPropsWithoutRef, ElementRef, forwardRef, useRef } from 'react';
 

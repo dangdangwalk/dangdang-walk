@@ -1,5 +1,5 @@
 import { TOP_BAR_HEIGHT } from '@/constants/style';
-import { cn } from '@/utils/tailwind-class';
+import { cn } from '@/utils/tailwindClass';
 
 export default function Topbar({ children, className }: { children: React.ReactNode; className?: string }) {
     return (
