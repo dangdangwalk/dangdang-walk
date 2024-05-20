@@ -1,5 +1,6 @@
 import * as fs from 'node:fs';
 import { Breed } from 'src/breed/breed.entity';
+import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
 import { color } from 'src/utils/ansi.utils';
 import { DataSource } from 'typeorm';
 import { Seeder } from 'typeorm-extension';
@@ -16,6 +17,7 @@ export default class BreedSeeder implements Seeder {
         await repository.query('SET FOREIGN_KEY_CHECKS = 1;');
         await repository.insert(breeds);
 
-        console.log(`${color(breeds.length, 'Yellow')} rows inserted into breed table.`);
+        const logger = new WinstonLoggerService();
+        logger.log(`${color(breeds.length, 'Yellow')} rows inserted into breed table.`);
     }
 }
