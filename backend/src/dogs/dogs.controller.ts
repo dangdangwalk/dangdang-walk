@@ -40,16 +40,20 @@ export class DogsController {
     @Delete('/:id(\\d+)')
     @HttpCode(204)
     @UseGuards(AuthDogGuard)
-    async delete(@Param('id', ParseIntPipe) dogId: number) {
-        await this.dogsService.deleteDogFromUser(dogId);
+    async delete(@User() { userId }: AccessTokenPayload, @Param('id', ParseIntPipe) dogId: number) {
+        await this.dogsService.deleteDogFromUser(userId, dogId);
         return true;
     }
 
     @Patch('/:id(\\d+)')
     @HttpCode(204)
     @UseGuards(AuthDogGuard)
-    async update(@Param('id', ParseIntPipe) dogId: number, @Body() dogDto: DogDto) {
-        await this.dogsService.updateDog(dogId, dogDto);
+    async update(
+        @User() { userId }: AccessTokenPayload,
+        @Param('id', ParseIntPipe) dogId: number,
+        @Body() dogDto: DogDto
+    ) {
+        await this.dogsService.updateDog(userId, dogId, dogDto);
         return true;
     }
 

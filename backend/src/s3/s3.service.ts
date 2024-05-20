@@ -1,6 +1,6 @@
-import { DeleteObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { DeleteObjectCommand, DeleteObjectsCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
 import { generateUuid } from 'src/utils/hash.utils';
@@ -38,37 +38,48 @@ export class S3Service {
 
     private checkUserIdInFilename(userId: number, filename: string): boolean {
         const filenameSplit = filename.split('/');
-        console.log('fileUSerId :', `${parseInt(filenameSplit[0])}`);
-        console.log('usrId:', userId);
         if (parseInt(filenameSplit[0]) !== userId) {
             return false;
         }
         return true;
     }
 
-    async createPresignedUrlWithClientForDelete(userId: number, filename: string): Promise<PresignedUrlInfo> {
-        //TODO : guard로 바꾸기
-        console.log('userId:', userId, 'filename:', filename);
+    async deleteObjects(userId: number, filenames: string[]) {
+        const objectArray = filenames.map((curFilename) => {
+            if (!this.checkUserIdInFilename(userId, curFilename)) {
+                throw new ForbiddenException(`User ${userId} is not owner of the file ${curFilename}`);
+            }
+            return { Key: curFilename };
+        });
+
+        const input = {
+            Bucket: BUCKET_NAME,
+            Delete: {
+                Objects: objectArray,
+            },
+        };
+
+        const command = new DeleteObjectsCommand(input);
+        try {
+            await this.s3Client.send(command);
+            this.logger.log(`Successfuly deleted ${objectArray.map((cur) => cur.Key)}`);
+        } catch (error) {
+            this.logger.error(`Can't delete files from S3 bucket ${BUCKET_NAME}`, error ?? error.stack);
+        }
+    }
+
+    async deleteSingleObject(userId: number, filename: string) {
         if (!this.checkUserIdInFilename(userId, filename)) {
-            throw new UnauthorizedException(`User ${userId} is not owner of the file ${filename}`);
+            throw new ForbiddenException(`User ${userId} is not owner of the file ${filename}`);
         }
 
         const command = new DeleteObjectCommand({
             Bucket: BUCKET_NAME,
             Key: filename,
         });
-        const url = await getSignedUrl(this.s3Client, command, { expiresIn: 3600 });
-        return { filename, url };
-    }
-
-    async deleteSingleObject(filename: string) {
-        const command = new DeleteObjectCommand({
-            Bucket: BUCKET_NAME,
-            Key: filename,
-        });
 
         try {
-            const response = await this.s3Client.send(command);
+            await this.s3Client.send(command);
             this.logger.log(`Successfuly deleted ${filename}`);
         } catch (error) {
             this.logger.error(`Can't delete ${filename} from S3 bucket ${BUCKET_NAME}`, error ?? error.stack);
