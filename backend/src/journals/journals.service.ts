@@ -7,7 +7,7 @@ import { JournalPhotos } from 'src/journal-photos/journal-photos.entity';
 import { JournalPhotosService } from 'src/journal-photos/journal-photos.service';
 import { JournalsDogs } from 'src/journals-dogs/journals-dogs.entity';
 import { JournalsDogsService } from 'src/journals-dogs/journals-dogs.service';
-import { getWeek } from 'src/utils/date.utils';
+import { formatDate, getStartAndEndOfMonth, getStartAndEndOfWeek } from 'src/utils/date.utils';
 import { checkIfExistsInArr, makeSubObject } from 'src/utils/manipulate.util';
 import { DeleteResult, EntityManager, FindOptionsWhere, In, UpdateResult } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
@@ -259,37 +259,12 @@ export class JournalsService {
         await this.delete(journalId);
     }
 
-    async aggregateJournalsByWeek(
-        journals: Journals[],
-        startDate: Date
-    ): Promise<{
-        journalCntAMonth: number[];
-        distance: number[];
-        durations: number[];
-    }> {
-        const lastDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0);
-        const totalWeeks = getWeek(lastDate);
-
-        const journalCntAMonth = new Array(totalWeeks).fill(0);
-        const distance = new Array(totalWeeks).fill(0);
-        const durations = new Array(totalWeeks).fill(0);
-
-        journals.forEach((journal) => {
-            const weekIndex = getWeek(new Date(journal.startedAt)) - 1;
-            journalCntAMonth[weekIndex]++;
-            distance[weekIndex] += journal.distance;
-            durations[weekIndex] += journal.duration;
-        });
-
-        return { journalCntAMonth, distance, durations };
-    }
-
-    async getDogStatistics(userId: number, dogId: number, date: string) {
-        const startDate = new Date(date);
-        startDate.setDate(1);
-        const endDate = new Date(startDate);
-        endDate.setMonth(endDate.getMonth() + 1);
-
+    async findJournalsAndAggregate(
+        userId: number,
+        dogId: number,
+        startDate: Date,
+        endDate: Date
+    ): Promise<{ [date: string]: number }> {
         const dogJournals = await this.entityManager
             .createQueryBuilder(Journals, 'journals')
             .innerJoin(JournalsDogs, 'journals_dogs', 'journals.id = journals_dogs.journal_id')
@@ -298,43 +273,35 @@ export class JournalsService {
             .andWhere('journals.started_at >= :startDate', { startDate })
             .andWhere('journals.started_at < :endDate', { endDate })
             .getMany();
-
-        return this.aggregateJournalsByWeek(dogJournals, startDate);
+        return this.aggregateJournals(dogJournals, startDate, endDate);
     }
 
-    async aggregateJournalsByDay(
-        journals: Journals[],
-        startDate: Date
-    ): Promise<{
-        journalCntAMonth: number[];
-    }> {
-        const lastDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0);
+    async aggregateJournals(journals: Journals[], startDate: Date, endDate: Date): Promise<{ [date: string]: number }> {
+        const journalCntAMonth: { [date: string]: number } = {};
 
-        const journalCntAMonth = new Array(lastDate.getDate()).fill(0);
+        const currentDate = new Date(startDate);
+        while (currentDate <= endDate) {
+            const dateString = formatDate(currentDate);
+            journalCntAMonth[dateString] = 0;
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
 
         journals.forEach((journal) => {
-            const dayIndex = new Date(journal.startedAt).getDate() - 1;
-            journalCntAMonth[dayIndex]++;
+            const journalDate = new Date(journal.startedAt);
+            const dateString = formatDate(journalDate);
+            journalCntAMonth[dateString]++;
         });
 
-        return { journalCntAMonth };
+        return journalCntAMonth;
     }
 
-    async getDogjournalCntAMonth(userId: number, dogId: number, date: string) {
-        const startDate = new Date(date);
-        startDate.setDate(1);
-        const endDate = new Date(startDate);
-        endDate.setMonth(endDate.getMonth() + 1);
+    async getDogStatisticsByMonth(userId: number, dogId: number, date: string) {
+        const { startDate, endDate } = getStartAndEndOfMonth(new Date(date));
+        return this.findJournalsAndAggregate(userId, dogId, startDate, endDate);
+    }
 
-        const dogJournals = await this.entityManager
-            .createQueryBuilder(Journals, 'journals')
-            .innerJoin(JournalsDogs, 'journals_dogs', 'journals.id = journals_dogs.journal_id')
-            .where('journals.user_id = :userId', { userId })
-            .andWhere('journals_dogs.dog_id = :dogId', { dogId })
-            .andWhere('journals.started_at >= :startDate', { startDate })
-            .andWhere('journals.started_at < :endDate', { endDate })
-            .getMany();
-
-        return this.aggregateJournalsByDay(dogJournals, startDate);
+    async getDogStatisticsByWeek(userId: number, dogId: number, date: string) {
+        const { startDate, endDate } = getStartAndEndOfWeek(new Date(date));
+        return this.findJournalsAndAggregate(userId, dogId, startDate, endDate);
     }
 }
