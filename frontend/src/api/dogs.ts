@@ -16,3 +16,8 @@ export const registerDogInfo = async (params: DogRegInfo) => {
     const { data } = await httpClient.post('/dogs', params);
     return data;
 };
+
+export const fetchDogMonthStatistic = async (dogId: number, date: string) => {
+    const { data } = await httpClient.get(`/dogs/${dogId}/statistics?date=${date}`);
+    return data;
+};

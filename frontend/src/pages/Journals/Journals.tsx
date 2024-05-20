@@ -3,7 +3,6 @@ import JournalCardList from '@/components/journals/JournalCardList';
 import { NAV_HEIGHT, TOP_BAR_HEIGHT } from '@/constants/style';
 import { Dog } from '@/models/dog.model';
 import { Journal } from '@/models/journals';
-
 const journals: Journal[] = [
     {
         id: 0,
