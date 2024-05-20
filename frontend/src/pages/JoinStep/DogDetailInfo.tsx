@@ -1,9 +1,9 @@
 import React, { Dispatch, FormEvent, SetStateAction, useState } from 'react';
-import Male from '@/assets/icons/ic-sex-male.svg';
-import FeMale from '@/assets/icons/ic-sex-femal.svg';
 import { Divider } from '@/components/common/Divider';
 import { Checkbox } from '@/components/common/Checkbox2';
 import { DogRegInfo } from '@/pages/Join';
+import { MaleIcon } from '@/components/icon/MaleIcon';
+import FemaleIcon from '@/components/icon/FemaleIcon';
 interface Props {
     data: DogRegInfo;
     setData: Dispatch<SetStateAction<DogRegInfo>>;
@@ -66,7 +66,7 @@ export default function DogDetailInfo({ data, setData }: Props) {
                                 data.gender === 'MALE' ? 'text-neutral-800' : 'text-stone-500'
                             }  font-bold`}
                         >
-                            <img src={Male} alt="male" />
+                            <MaleIcon color={`${data.gender === 'MALE' ? '#222222' : '#999999'}`} />
                         </div>
                         <div
                             className={`text-xs ${
@@ -89,7 +89,7 @@ export default function DogDetailInfo({ data, setData }: Props) {
                                 data.gender === 'FEMALE' ? 'text-neutral-800' : 'text-stone-500'
                             }  font-bold`}
                         >
-                            <img src={FeMale} alt="female" />
+                            <FemaleIcon color={`${data.gender === 'FEMALE' ? '#222222' : '#999999'}`} />
                         </div>
                         <div
                             className={`text-xs ${
@@ -120,7 +120,7 @@ export default function DogDetailInfo({ data, setData }: Props) {
                             <input
                                 type="date"
                                 placeholder={`${data.name}의 생일이 궁금해요`}
-                                className="outline-none w-full"
+                                className="outline-none w-full font-bold"
                                 onChange={(event) => handleBirthChange(event.target.value)}
                             />
                             <Divider className="absolute bottom-0 h-[1px]" />

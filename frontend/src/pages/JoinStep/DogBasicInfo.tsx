@@ -58,7 +58,7 @@ export default function DogBasicInfo({ data, setData, fileInputRef }: Props) {
                         <input
                             type="text"
                             placeholder="이름이 궁금해요"
-                            className="outline-none w-full font-bold"
+                            className={`outline-none w-full placeholder:text-neutral-400 text-black font-bold text-base font-['NanumGothic'] leading-normal`}
                             maxLength={10}
                             value={data.name}
                             onChange={(event) => handleNameChange(event.target.value)}
@@ -67,10 +67,10 @@ export default function DogBasicInfo({ data, setData, fileInputRef }: Props) {
                     </div>
                     <div className="py-3 relative">
                         <div
-                            className={`${data.breed ? 'text-black' : 'text-neutral-400'} text-base font-normal font-['NanumGothic'] leading-normal`}
+                            className={`${data.breed ? 'text-black' : 'text-neutral-400'} font-bold text-base font-['NanumGothic'] leading-normal`}
                             onClick={() => setIsOpen(true)}
                         >
-                            {data.breed ? <div className="font-bold">{data.breed}</div> : '견종이 궁금해요'}
+                            {data.breed ? data.breed : '견종이 궁금해요'}
                         </div>
                         <Divider className="absolute bottom-0 h-[1px]" />
                     </div>
