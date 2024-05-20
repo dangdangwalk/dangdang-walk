@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { OauthProvider } from 'src/auth/auth.controller';
+import { AccessTokenPayload } from 'src/auth/token/token.service';
 import { FindOptionsWhere } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { UsersDogsService } from '../users-dogs/users-dogs.service';
@@ -9,6 +11,13 @@ import { CreateUser } from './types/user-types';
 import { Role } from './user-roles.enum';
 import { Users } from './users.entity';
 import { UsersRepository } from './users.repository';
+
+export interface UserProfile {
+    nickname: string;
+    email: string;
+    profileImage: string;
+    provider: OauthProvider;
+}
 
 @Injectable()
 export class UsersService {
@@ -79,5 +88,10 @@ export class UsersService {
 
         const result = checkIfExistsInArr(myDogIds, dogId);
         return result;
+    }
+
+    async getUserProfile({ userId, provider }: AccessTokenPayload): Promise<UserProfile> {
+        const { nickname, email, profileImage } = await this.usersRepository.findOne({ id: userId });
+        return { nickname, email, profileImage, provider };
     }
 }
