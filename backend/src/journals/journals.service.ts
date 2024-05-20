@@ -212,6 +212,7 @@ export class JournalsService {
             JournalInfoForCreate.getKeysForJournalTable()
         );
         journalData.userId = userId;
+        journalData.routes = JSON.stringify(journalData.routes);
 
         return journalData;
     }
@@ -228,7 +229,6 @@ export class JournalsService {
     async createJournal(userId: number, createJournalData: CreateJournalDto) {
         const dogs = createJournalData.dogs;
         const journalData = this.makeJournalData(userId, createJournalData);
-
         const createJournalResult = await this.createNewJournal(userId, journalData);
         await this.createNewJournalDogs(createJournalResult.id, dogs);
 
