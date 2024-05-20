@@ -1,7 +1,7 @@
 import { httpClient } from '@/api/http';
 import { DogRegInfo } from '@/pages/Join';
 import { AvailableDog, DogStatistic } from '@/models/dog.model';
-
+export type period = 'week' | 'month';
 export const fetchDogStatistic = async (): Promise<DogStatistic[]> => {
     const { data } = await httpClient.get('/dogs/statistics');
     return data;
@@ -17,7 +17,7 @@ export const registerDogInfo = async (params: DogRegInfo) => {
     return data;
 };
 
-export const fetchDogMonthStatistic = async (dogId: number, date: string) => {
-    const { data } = await httpClient.get(`/dogs/${dogId}/statistics?date=${date}`);
+export const fetchDogMonthStatistic = async (dogId: number, date: string, period: period) => {
+    const { data } = await httpClient.get(`/dogs/${dogId}/statistics?date=${date}&period=${period}`);
     return data;
 };

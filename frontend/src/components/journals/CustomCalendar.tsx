@@ -4,16 +4,21 @@ import Calendar from 'react-calendar';
 import './CustomCalendar.css'; // Custom CSS for transitions
 import { useLocation, useSearchParams } from 'react-router-dom';
 import { queryStringKeys } from '@/constants';
-import dayjs from 'dayjs';
 import PrevMonth from '@/assets/icons/btn-prev-month.svg';
 import NextMonth from '@/assets/icons/btn-next-month.svg';
-import { fetchDogMonthStatistic } from '@/api/dogs';
+import { fetchDogMonthStatistic, period } from '@/api/dogs';
+import { formDate, formDay } from '@/utils/date';
 
 const getStartOfWeek = (date: Date) => {
     const startDate = new Date(date);
     const day = startDate.getDay();
-    const diff = startDate.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is Sunday
+    const diff = startDate.getDate() - day;
     return new Date(startDate.setDate(diff));
+};
+const formCalendar = (date: Date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    return `${year}년 ${month}`;
 };
 
 export type viewMode = 'week' | 'month';
@@ -27,19 +32,50 @@ export default function CustomCalendar() {
     const [view, setView] = useState<viewMode>('week');
     const [mark, setMark] = useState<any[]>(['2024-05-12']);
 
-    const handleMonth = async (date: string) => {
+    const getStatisticData = async (date: string, period: period) => {
         const params = new URLSearchParams(location.search);
         const dogId = params.get(queryStringKeys.DOGID);
         if (!dogId) return;
-        await fetchDogMonthStatistic(Number(dogId), date).then((data) => {
-            const newArray: any[] = [];
-            Object.keys(data).forEach((v) => {
-                if (data[v]) {
-                    newArray.push(v);
-                }
-            });
-            setMark(newArray);
+        const data = await fetchDogMonthStatistic(Number(dogId), date, period);
+        const newArray: any[] = [];
+        Object.keys(data).forEach((v) => {
+            if (data[v]) {
+                newArray.push(v);
+            }
         });
+        setMark(newArray);
+    };
+
+    const handlePrevMonth = async () => {
+        const prevMonth = new Date(date.getFullYear(), date.getMonth() - 1, 1);
+        if (today.getFullYear() >= prevMonth.getFullYear() && today.getMonth() >= prevMonth.getMonth()) {
+            await getStatisticData(formDate(prevMonth), 'month');
+        }
+        setDate(prevMonth);
+    };
+
+    const handleNextMonth = async () => {
+        const nextMonth = new Date(date.getFullYear(), date.getMonth() + 1, 1);
+        if (today.getFullYear() >= nextMonth.getFullYear() && today.getMonth() >= nextMonth.getMonth()) {
+            await getStatisticData(formDate(date), 'month');
+        }
+        setDate(nextMonth);
+    };
+    const toggleSwitch = () => {
+        if (view === 'month') {
+            setView('week');
+        } else {
+            setView('month');
+        }
+    };
+    const handleClickDay = (value: Date) => {
+        const date = formDate(value);
+        setDate(value);
+        if (!mark.includes(date)) return;
+
+        const newSearchParams = new URLSearchParams(searchParams);
+        newSearchParams.set(queryStringKeys.DATE, value.toISOString());
+        setSearchParams(newSearchParams);
     };
 
     useEffect(() => {
@@ -52,43 +88,9 @@ export default function CustomCalendar() {
         setCurrentWeek(week);
     }, [date]);
 
-    const handlePrevMonth = async () => {
-        const prevMonth = new Date(date.getFullYear(), date.getMonth() - 1, 1);
-
-        if (today.getFullYear() >= prevMonth.getFullYear() && today.getMonth() >= prevMonth.getMonth()) {
-            console.log('next');
-            await handleMonth(dayjs(prevMonth).format('YYYY-MM-DD'));
-        }
-        setDate(prevMonth);
-    };
-
-    const handleNextMonth = async () => {
-        const nextMonth = new Date(date.getFullYear(), date.getMonth() + 1, 1);
-        console.log(nextMonth, today);
-        console.log(today.getMonth(), nextMonth.getMonth());
-        if (today.getFullYear() >= nextMonth.getFullYear() && today.getMonth() >= nextMonth.getMonth()) {
-            console.log('next');
-            await handleMonth(dayjs(nextMonth).format('YYYY-MM-DD'));
-        }
-        setDate(nextMonth);
-    };
-    const toggleSwitch = () => {
-        if (view === 'month') {
-            setView('week');
-        } else {
-            setView('month');
-        }
-    };
-    const handleClickDay = (value: Date) => {
-        const date = dayjs(value).format('YYYY-MM-DD');
-        setDate(value);
-        if (!mark.includes(date)) return;
-
-        const newSearchParams = new URLSearchParams(searchParams);
-        newSearchParams.set(queryStringKeys.DATE, value.toISOString());
-        setSearchParams(newSearchParams);
-    };
-
+    useEffect(() => {
+        getStatisticData(formDate(today), 'week');
+    }, []);
     return (
         <div className="w-full flex flex-col px-[30px] pt-4 gap-6 justify-center items-center bg-white rounded-bl-2xl rounded-br-2xl overflow-hidden">
             {view === 'month' && (
@@ -97,7 +99,7 @@ export default function CustomCalendar() {
                         <img src={PrevMonth} alt="이전달" />
                     </button>
                     <span className="text-center text-neutral-800 text-base font-bold leading-normal">
-                        {dayjs(date).format('YYYY년 M월')}
+                        {formCalendar(date)}
                     </span>
                     <button onClick={handleNextMonth}>
                         <img src={NextMonth} alt="다음달" />
@@ -106,32 +108,35 @@ export default function CustomCalendar() {
             )}
             <Calendar
                 value={date}
-                prev2Label={null}
-                next2Label={null}
                 calendarType="gregory"
                 showNavigation={false}
                 // activeStartDate={currentWeek[0]}
+                className="mx-auto w-full text-sm border-b"
                 onActiveStartDateChange={() => {}}
                 showNeighboringMonth={view === 'week'}
                 onClickDay={handleClickDay}
-                formatDay={(locale, date) => dayjs(date).format('D')}
                 tileDisabled={({ date }) =>
                     view === 'month'
                         ? false
                         : !currentWeek.some((weekDate) => date.toDateString() === weekDate.toDateString())
                 }
                 tileContent={({ date, view }) => {
-                    // 날짜 타일에 컨텐츠 추가하기 (html 태그)
-                    // 추가할 html 태그를 변수 초기화
                     let html = [];
                     // 현재 날짜가 post 작성한 날짜 배열(mark)에 있다면, dot div 추가
-                    if (mark.find((x) => x === dayjs(date).format('YYYY-MM-DD'))) {
-                        html.push(<div className="dot"></div>);
+                    if (mark.includes(formDate(date))) {
+                        html.push(
+                            <svg xmlns="http://www.w3.org/2000/svg" width="4" height="4" viewBox="0 0 4 4" fill="none">
+                                <circle cx="2" cy="2" r="2" fill="#FF9900" />
+                            </svg>
+                        );
                     }
                     // 다른 조건을 주어서 html.push 에 추가적인 html 태그를 적용할 수 있음.
                     return (
                         <>
-                            <div className="flex justify-center items-center">{html}</div>
+                            <div className="flex flex-col justify-center items-center gap-2">
+                                <div className="days">{formDay(date)}</div>
+                                <div className="dot"></div>
+                            </div>
                         </>
                     );
                 }}

@@ -32,3 +32,7 @@ export const formDate = (date: Date) => {
 
     return `${year}-${month}-${day}`;
 };
+
+export const formDay = (date: Date): string => {
+    return date.getDate().toString();
+};
