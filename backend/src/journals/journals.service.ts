@@ -8,10 +8,11 @@ import { JournalPhotosService } from 'src/journal-photos/journal-photos.service'
 import { JournalsDogs } from 'src/journals-dogs/journals-dogs.entity';
 import { JournalsDogsService } from 'src/journals-dogs/journals-dogs.service';
 import { formatDate, getStartAndEndOfMonth, getStartAndEndOfWeek } from 'src/utils/date.utils';
-import { checkIfExistsInArr, makeSubObject } from 'src/utils/manipulate.util';
-import { DeleteResult, EntityManager, FindOptionsWhere, In, UpdateResult } from 'typeorm';
+import { checkIfExistsInArr, makeSubObject, makeSubObjectsArray } from 'src/utils/manipulate.util';
+import { DeleteResult, EntityManager, FindManyOptions, FindOptionsWhere, In, UpdateResult } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { JournalInfoForList } from './dto/journal-list.dto';
 import { UpdateJournalDto } from './dto/journal-update.dto';
 import { CreateJournalDto, ExcrementsInfoForCreate, JournalInfoForCreate, Location } from './dto/journals-create.dto';
 import { DogInfoForDetail, JournalDetailDto, JournalInfoForDetail, PhotoUrlDto } from './dto/journals-detail.dto';
@@ -35,8 +36,8 @@ export class JournalsService {
         return this.journalsRepository.create(journals);
     }
 
-    async find(where: FindOptionsWhere<Journals>) {
-        return this.journalsRepository.find({ where });
+    async find(where: FindManyOptions<Journals>) {
+        return this.journalsRepository.find(where);
     }
 
     async findOne(where: FindOptionsWhere<Journals>): Promise<Journals> {
@@ -129,7 +130,7 @@ export class JournalsService {
 
     async getJournalDetail(journalId: number, dogId: number): Promise<JournalDetailDto> {
         try {
-            const journalDogs = await this.journalsDogsService.find({ journalId });
+            const journalDogs = await this.journalsDogsService.find({ where: { journalId } });
             await this.checkDogExistsInJournal(journalDogs, dogId);
 
             const journalInfo = await this.getJournalInfoForDetail(journalId);
@@ -303,5 +304,44 @@ export class JournalsService {
     async getDogStatisticsByWeek(userId: number, dogId: number, date: string) {
         const { startDate, endDate } = getStartAndEndOfWeek(new Date(date));
         return this.findJournalsAndAggregate(userId, dogId, startDate, endDate);
+    }
+
+    async getJournalIdsByDogIdAndDate(dogId: number, date: string): Promise<number[]> {
+        const result = await this.entityManager
+            .createQueryBuilder(Journals, 'journals')
+            .orderBy('journals_id', 'ASC')
+            .innerJoin(JournalsDogs, 'journals_dogs', 'journals.id = journals_dogs.journal_id')
+            .where('journals_dogs.dog_id = :dogId', { dogId })
+            .andWhere('Date(journals.started_at) = :date', { date })
+            .getRawMany();
+
+        return result.map((cur) => cur.journals_id);
+    }
+
+    private putDogCntToJournalList(journalInfos: JournalInfoForList[], firstJournalCnt: number): JournalInfoForList[] {
+        return journalInfos.map((cur) => {
+            const newJournal: JournalInfoForList = {
+                ...cur,
+                journalCnt: firstJournalCnt++,
+            };
+            return newJournal;
+        });
+    }
+
+    async getJournalList(dogId: number, date: string): Promise<JournalInfoForList[]> {
+        const journalIds = await this.getJournalIdsByDogIdAndDate(dogId, date);
+        if (!journalIds.length) {
+            return [];
+        }
+        const journalInfosRaw = await this.find({ where: { id: In(journalIds) } });
+        const journalInfos = await makeSubObjectsArray(
+            journalInfosRaw,
+            JournalInfoForList.getAttributesForJournalTable(),
+            JournalInfoForList.getKeysForJournalTable()
+        );
+        const findResult = await this.journalsDogsService.find({ where: { dogId } });
+        const journalCntForFirstRow = findResult.findIndex((jd) => jd.journalId === journalInfos[0].journalId);
+        const result = this.putDogCntToJournalList(journalInfos, journalCntForFirstRow + 1);
+        return result;
     }
 }
