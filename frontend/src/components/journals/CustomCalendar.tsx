@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-// import 'react-calendar/dist/Calendar.css';
 import Calendar from 'react-calendar';
 import './CustomCalendar.css'; // Custom CSS for transitions
 import { useLocation, useSearchParams } from 'react-router-dom';
@@ -30,7 +29,7 @@ export default function CustomCalendar() {
     const [date, setDate] = useState<Date>(new Date());
     const [currentWeek, setCurrentWeek] = useState<Date[]>([]);
     const [view, setView] = useState<viewMode>('week');
-    const [mark, setMark] = useState<any[]>(['2024-05-12']);
+    const [mark, setMark] = useState<any[]>([]);
 
     const getStatisticData = async (date: string, period: period) => {
         const params = new URLSearchParams(location.search);
@@ -111,7 +110,7 @@ export default function CustomCalendar() {
                 value={date}
                 calendarType="gregory"
                 showNavigation={false}
-                className="mx-auto w-full text-sm border-b"
+                activeStartDate={date}
                 onActiveStartDateChange={() => {}}
                 showNeighboringMonth={view === 'week'}
                 onClickDay={handleClickDay}
