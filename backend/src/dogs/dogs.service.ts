@@ -55,13 +55,13 @@ export class DogsService {
     }
 
     @Transactional()
-    async deleteDogFromUser(dogId: number) {
+    async deleteDogFromUser(userId: number, dogId: number) {
         const dog = await this.findOne({ id: dogId });
 
         await this.dogWalkDayService.delete({ id: dog.walkDayId });
         await this.dailyWalkTimeService.delete({ id: dog.todayWalkTimeId });
         if (dog.profilePhotoUrl) {
-            await this.s3Service.deleteSingleObject(dog.profilePhotoUrl);
+            await this.s3Service.deleteSingleObject(userId, dog.profilePhotoUrl);
         }
 
         return dog;
@@ -75,7 +75,7 @@ export class DogsService {
         return await this.dogsRepository.update(where, partialEntity);
     }
 
-    async updateDog(dogId: number, dogDto: DogDto) {
+    async updateDog(userId: number, dogId: number, dogDto: DogDto) {
         const { breed: breedName, profilePhotoUrl, ...otherAttributes } = dogDto;
         let breed;
 
@@ -86,7 +86,7 @@ export class DogsService {
         if (profilePhotoUrl) {
             const curDogInfo = await this.findOne({ id: dogId });
             if (curDogInfo && curDogInfo.profilePhotoUrl) {
-                this.s3Service.deleteSingleObject(curDogInfo.profilePhotoUrl);
+                this.s3Service.deleteSingleObject(userId, curDogInfo.profilePhotoUrl);
             }
         }
         const updateData = breedName ? { breed, profilePhotoUrl, ...otherAttributes } : otherAttributes;

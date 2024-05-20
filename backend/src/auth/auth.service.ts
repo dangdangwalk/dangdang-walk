@@ -123,7 +123,7 @@ export class AuthService {
     private async deleteUserData(userId: number) {
         const dogIds = await this.usersService.getOwnDogsList(userId);
         dogIds.forEach(async (dogId) => {
-            await this.dogsService.deleteDogFromUser(dogId);
+            await this.dogsService.deleteDogFromUser(userId, dogId);
         });
 
         await this.usersService.delete({ id: userId });

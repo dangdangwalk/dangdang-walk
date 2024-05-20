@@ -14,8 +14,8 @@ export class S3Controller {
     }
 
     @Post('/delete')
-    async delete(@User() user: AccessTokenPayload, @Body() body: { filename: string }): Promise<PresignedUrlInfo> {
-        const { filename } = body;
-        return await this.s3Service.createPresignedUrlWithClientForDelete(user.userId, filename);
+    async delete(@User() { userId }: AccessTokenPayload, @Body() filenames: string[]): Promise<boolean> {
+        await this.s3Service.deleteObjects(userId, filenames);
+        return true;
     }
 }
