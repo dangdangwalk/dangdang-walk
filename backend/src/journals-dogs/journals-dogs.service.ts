@@ -25,10 +25,6 @@ export class JournalsDogsService {
         return this.journalsDogsRepository.find(where);
     }
 
-    async findAndCountBy(where: FindOptionsWhere<JournalsDogs>) {
-        return this.journalsDogsRepository.findAndCountBy(where);
-    }
-
     async getRecentJournalId(dogIds: number[]): Promise<(number | undefined)[]> {
         const result = dogIds.map(async (curDogId) => {
             const journal = await this.journalsDogsRepository.find({
