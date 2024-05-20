@@ -4,7 +4,8 @@ import { queryStringKeys } from '@/constants';
 import { NAV_HEIGHT, TOP_BAR_HEIGHT } from '@/constants/style';
 import { Dog } from '@/models/dog.model';
 import { Journal } from '@/models/journals';
-import { useSearchParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const journals: Journal[] = [
     {
@@ -24,8 +25,16 @@ const dog: Dog = {
 };
 
 export default function Journals() {
-    const [searchParams, setSearchParams] = useSearchParams();
+    const location = useLocation();
 
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const date = params.get(queryStringKeys.DATE);
+        if (date) {
+            // console.log(new Date(date));
+            // console.log(date);
+        }
+    }, [location.search]);
     return (
         <>
             <header></header>

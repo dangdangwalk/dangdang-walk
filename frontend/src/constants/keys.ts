@@ -22,6 +22,7 @@ const storageKeys = {
 
 const queryStringKeys = {
     DOGID: 'dogId',
+    DATE: 'date',
 } as const;
 
 export { tokenKeys, cookieKeys, queryKeys, storageKeys, queryStringKeys };
