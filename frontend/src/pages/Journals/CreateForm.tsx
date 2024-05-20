@@ -22,6 +22,7 @@ import useToast from '@/hooks/useToast';
 import { WalkingDog } from '@/models/dog.model';
 import { Position } from '@/models/location.model';
 import { useSpinnerStore } from '@/store/spinnerStore';
+import { getFileName } from '@/utils/url';
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -47,6 +48,11 @@ export default function CreateForm() {
     const startedAt = new Date(serializedStartedAt);
 
     useEffect(() => {
+        dogs.forEach((dog) => {
+            if (dog.profilePhotoUrl === undefined) return;
+            dog.profilePhotoUrl = getFileName(dog.profilePhotoUrl);
+        });
+
         setImages(photoUrls);
     }, [location]);
 
