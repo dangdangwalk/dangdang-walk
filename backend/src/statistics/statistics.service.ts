@@ -49,6 +49,10 @@ export class StatisticsService {
         return { ...dogStatistics, recommendedWalkAmount: dog.breed.recommendedWalkAmount };
     }
 
+    async getDogjournalCntAMonth(userId: number, dogId: number, date: string) {
+        return this.journalsService.getDogjournalCntAMonth(userId, dogId, date);
+    }
+
     async getDogsStatistics(userId: number): Promise<DogStatisticDto[]> {
         const ownDogIds = await this.usersService.getOwnDogsList(userId);
         const dogWalkDayIds = await this.dogsService.getRelatedTableIdList(ownDogIds, 'walkDayId');

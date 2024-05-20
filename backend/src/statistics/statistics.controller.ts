@@ -11,12 +11,12 @@ export class StatisticsController {
 
     @Get('/:id(\\d+)/statistics')
     @UseGuards(AuthDogGuard)
-    async getDogStatistics(
+    async getDogjournalCntAMonth(
         @User() { userId }: AccessTokenPayload,
         @Param('id', ParseIntPipe) dogId: number,
         @Query('date', DateValidationPipe) date: string
     ) {
-        return await this.statisticsService.getDogStatistics(userId, dogId, date);
+        return await this.statisticsService.getDogjournalCntAMonth(userId, dogId, date);
     }
 
     @Get('/statistics')

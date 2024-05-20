@@ -305,4 +305,44 @@ export class JournalsService {
 
         return this.aggregateJournalsByWeek(dogJournals, startDate);
     }
+
+    async aggregateJournalsByDay(
+        journals: Journals[],
+        startDate: Date
+    ): Promise<{
+        journalCntAMonth: number[];
+    }> {
+        if (journals.length === 0) {
+            return { journalCntAMonth: [] };
+        }
+
+        const lastDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0);
+
+        const journalCntAMonth = new Array(lastDate.getDate()).fill(0);
+
+        journals.forEach((journal) => {
+            const dayIndex = new Date(journal.startedAt).getDate() - 1;
+            journalCntAMonth[dayIndex]++;
+        });
+
+        return { journalCntAMonth };
+    }
+
+    async getDogjournalCntAMonth(userId: number, dogId: number, date: string) {
+        const startDate = new Date(date);
+        startDate.setDate(1);
+        const endDate = new Date(startDate);
+        endDate.setMonth(endDate.getMonth() + 1);
+
+        const dogJournals = await this.entityManager
+            .createQueryBuilder(Journals, 'journals')
+            .innerJoin(JournalsDogs, 'journals_dogs', 'journals.id = journals_dogs.journal_id')
+            .where('journals.user_id = :userId', { userId })
+            .andWhere('journals_dogs.dog_id = :dogId', { dogId })
+            .andWhere('journals.started_at >= :startDate', { startDate })
+            .andWhere('journals.started_at < :endDate', { endDate })
+            .getMany();
+
+        return this.aggregateJournalsByDay(dogJournals, startDate);
+    }
 }
