@@ -3,12 +3,14 @@ import { DogSummary } from 'src/dogs/dogs.controller';
 import { DogsService } from 'src/dogs/dogs.service';
 import { DogStatisticDto } from 'src/dogs/dto/dog-statistic.dto';
 import { JournalsService } from 'src/journals/journals.service';
+import { getStartAndEndOfMonth, getStartAndEndOfWeek } from 'src/utils/date.utils';
 import { In } from 'typeorm';
 import { BreedService } from '../breed/breed.service';
 import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
 import { DailyWalkTimeService } from '../daily-walk-time/daily-walk-time.service';
 import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
 import { UsersService } from '../users/users.service';
+import { Period } from './pipes/periodValidation.pipe';
 
 @Injectable()
 export class StatisticsService {
@@ -42,15 +44,17 @@ export class StatisticsService {
         return result;
     }
 
-    async getDogStatistics(userId: number, dogId: number, date: string) {
-        const dog = await this.dogsService.findOne({ id: dogId });
-        const dogStatistics = await this.journalsService.getDogStatistics(userId, dogId, date);
+    async getDogStatistics(userId: number, dogId: number, date: string, period: Period) {
+        let startDate: Date, endDate: Date;
+        startDate = endDate = new Date();
 
-        return { ...dogStatistics, recommendedWalkAmount: dog.breed.recommendedWalkAmount };
-    }
+        if (period === 'month') {
+            ({ startDate, endDate } = getStartAndEndOfMonth(new Date(date)));
+        } else if (period === 'week') {
+            ({ startDate, endDate } = getStartAndEndOfWeek(new Date(date)));
+        }
 
-    async getDogjournalCntAMonth(userId: number, dogId: number, date: string) {
-        return this.journalsService.getDogjournalCntAMonth(userId, dogId, date);
+        return this.journalsService.findJournalsAndAggregate(userId, dogId, startDate, endDate);
     }
 
     async getDogsStatistics(userId: number): Promise<DogStatisticDto[]> {
