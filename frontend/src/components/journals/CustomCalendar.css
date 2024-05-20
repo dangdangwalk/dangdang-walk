@@ -24,6 +24,19 @@
     width: 100%;
     border: none;
     line-height: 1.125em;
+    background-color: white;
+}
+.react-calendar__month-view__weekdays__weekday {
+    color: #999;
+    font-variant-numeric: lining-nums proportional-nums;
+    font-feature-settings: 'dlig' on;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%; /* 18px */
+}
+.react-calendar__month-view__weekdays__weekday abbr {
+    text-decoration: none !important;
 }
 .react-calendar__tile {
     width: 42px;

@@ -5,6 +5,8 @@ import './CustomCalendar.css'; // Custom CSS for transitions
 import { useSearchParams } from 'react-router-dom';
 import { queryStringKeys } from '@/constants';
 import dayjs from 'dayjs';
+import PrevMonth from '@/assets/icons/btn-prev-month.svg';
+import NextMonth from '@/assets/icons/btn-next-month.svg';
 
 const getStartOfWeek = (date: any) => {
     const startDate = new Date(date);
@@ -60,17 +62,26 @@ export default function CustomCalendar() {
     };
 
     return (
-        <>
-            <div className="header">
-                <button onClick={handlePrevWeek}>Previous</button>
-                <span>{dayjs(date).format('YYYY년 M월')}</span>
-                <button onClick={handleNextWeek}>Next</button>
-            </div>
+        <div className="w-full flex flex-col px-[30px] pt-4 gap-6 justify-center items-center bg-white rounded-bl-2xl rounded-br-2xl overflow-hidden">
+            {view === 'month' && (
+                <div className="w-full flex gap-2 justify-end">
+                    <button onClick={handlePrevWeek}>
+                        <img src={PrevMonth} alt="이전달" />
+                    </button>
+                    <span className="text-center text-neutral-800 text-base font-bold leading-normal">
+                        {dayjs(date).format('YYYY년 M월')}
+                    </span>
+                    <button onClick={handleNextWeek}>
+                        <img src={NextMonth} alt="다음달" />
+                    </button>
+                </div>
+            )}
             <Calendar
                 value={date}
                 prev2Label={null}
                 next2Label={null}
                 calendarType="gregory"
+                showNavigation={false}
                 activeStartDate={currentWeek[0]}
                 onActiveStartDateChange={() => {}}
                 showNeighboringMonth={view === 'week'}
@@ -97,9 +108,9 @@ export default function CustomCalendar() {
                     );
                 }}
             />
-            <div className="w-full h-[30px] -rotate-180 bg-white rounded-tl-2xl rounded-tr-2xl justify-center items-center inline-flex">
+            <div className="w-full h-[30px]  justify-center items-center inline-flex">
                 <button className="w-[30px] h-1 bg-neutral-200 rounded-sm" onClick={toggleSwitch}></button>
             </div>
-        </>
+        </div>
     );
 }
