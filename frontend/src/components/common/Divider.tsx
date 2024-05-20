@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { cn } from '@/utils/tailwind-class';
+import { cn } from '@/utils/tailwindClass';
 import * as SeparatorPrimitive from '@radix-ui/react-separator';
 import { ComponentPropsWithoutRef, ElementRef, forwardRef } from 'react';
 

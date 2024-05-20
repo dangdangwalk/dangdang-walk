@@ -2,7 +2,7 @@
 import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog';
 
 import { buttonVariants } from '@/components/common/Button';
-import { cn } from '@/utils/tailwind-class';
+import { cn } from '@/utils/tailwindClass';
 import { ComponentPropsWithoutRef, ElementRef, HTMLAttributes, forwardRef } from 'react';
 
 const Modal = AlertDialogPrimitive.Root;

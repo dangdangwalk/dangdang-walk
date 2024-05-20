@@ -1,4 +1,4 @@
-import { cn } from '@/utils/tailwind-class';
+import { cn } from '@/utils/tailwindClass';
 import { VariantProps, cva } from 'class-variance-authority';
 import { HTMLAttributes } from 'react';
 

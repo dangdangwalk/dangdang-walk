@@ -1,6 +1,6 @@
 import { Button } from '@/components/common/Button';
 import { NAV_HEIGHT } from '@/constants/style';
-import { cn } from '@/utils/tailwind-class';
+import { cn } from '@/utils/tailwindClass';
 
 interface BottomSheetProps {
     isOpen: boolean;

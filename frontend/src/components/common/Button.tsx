@@ -1,4 +1,4 @@
-import { cn } from '@/utils/tailwind-class';
+import { cn } from '@/utils/tailwindClass';
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { ButtonHTMLAttributes, forwardRef } from 'react';
