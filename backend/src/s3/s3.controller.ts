@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Post } from '@nestjs/common';
 import { AccessTokenPayload } from 'src/auth/token/token.service';
 import { User } from 'src/users/decorators/user.decorator';
 import { S3Service } from './s3.service';
@@ -13,7 +13,7 @@ export class S3Controller {
         return await this.s3Service.createPresignedUrlWithClientForPut(user.userId, type);
     }
 
-    @Post('/delete')
+    @Delete('/delete')
     async delete(@User() { userId }: AccessTokenPayload, @Body() filenames: string[]): Promise<boolean> {
         await this.s3Service.deleteObjects(userId, filenames);
         return true;
