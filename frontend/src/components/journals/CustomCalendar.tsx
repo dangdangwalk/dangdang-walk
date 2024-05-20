@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-// import 'react-calendar/dist/Calendar.css';
 import Calendar from 'react-calendar';
 import './CustomCalendar.css'; // Custom CSS for transitions
 import { useLocation, useSearchParams } from 'react-router-dom';
@@ -30,7 +29,7 @@ export default function CustomCalendar() {
     const [date, setDate] = useState<Date>(new Date());
     const [currentWeek, setCurrentWeek] = useState<Date[]>([]);
     const [view, setView] = useState<viewMode>('week');
-    const [mark, setMark] = useState<any[]>(['2024-05-12']);
+    const [mark, setMark] = useState<any[]>([]);
 
     const getStatisticData = async (date: string, period: period) => {
         const params = new URLSearchParams(location.search);
@@ -93,9 +92,9 @@ export default function CustomCalendar() {
         getStatisticData(formDate(today), 'week');
     }, []);
     return (
-        <div className="w-full flex flex-col px-[30px] pt-4 gap-6 justify-center items-center bg-white rounded-bl-2xl rounded-br-2xl overflow-hidden">
+        <div className="w-full flex flex-col px-[30px] pt-4 justify-center items-center bg-white rounded-bl-2xl rounded-br-2xl overflow-hidden">
             {view === 'month' && (
-                <div className="w-full flex gap-2 justify-end">
+                <div className="w-full flex gap-2 justify-end mb-6">
                     <button onClick={handlePrevMonth}>
                         <img src={PrevMonth} alt="이전달" />
                     </button>
@@ -111,7 +110,7 @@ export default function CustomCalendar() {
                 value={date}
                 calendarType="gregory"
                 showNavigation={false}
-                className="mx-auto w-full text-sm border-b"
+                activeStartDate={date}
                 onActiveStartDateChange={() => {}}
                 showNeighboringMonth={view === 'week'}
                 onClickDay={handleClickDay}
