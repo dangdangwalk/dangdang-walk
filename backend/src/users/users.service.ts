@@ -7,6 +7,7 @@ import { UsersDogsService } from '../users-dogs/users-dogs.service';
 import { generateUuid } from '../utils/hash.utils';
 import { checkIfExistsInArr } from '../utils/manipulate.util';
 import { CreateUserDto } from './dto/createUser.dto';
+import { UpdateUserDto } from './dto/updateUser.dto';
 import { CreateUser } from './types/user-types';
 import { Role } from './user-roles.enum';
 import { Users } from './users.entity';
@@ -93,5 +94,13 @@ export class UsersService {
     async getUserProfile({ userId, provider }: AccessTokenPayload): Promise<UserProfile> {
         const { nickname, email, profileImage } = await this.usersRepository.findOne({ id: userId });
         return { nickname, email, profileImage, provider };
+    }
+
+    async updateUserProfile(userId: number, userInfo: UpdateUserDto) {
+        if ('nickname' in userInfo) {
+            const nickname = await this.generateUniqueNickname(userInfo.nickname);
+            userInfo.nickname = nickname;
+        }
+        await this.usersRepository.update({ id: userId }, userInfo);
     }
 }
