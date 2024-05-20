@@ -93,9 +93,9 @@ export default function CustomCalendar() {
         getStatisticData(formDate(today), 'week');
     }, []);
     return (
-        <div className="w-full flex flex-col px-[30px] pt-4 gap-6 justify-center items-center bg-white rounded-bl-2xl rounded-br-2xl overflow-hidden">
+        <div className="w-full flex flex-col px-[30px] pt-4 justify-center items-center bg-white rounded-bl-2xl rounded-br-2xl overflow-hidden">
             {view === 'month' && (
-                <div className="w-full flex gap-2 justify-end">
+                <div className="w-full flex gap-2 justify-end mb-6">
                     <button onClick={handlePrevMonth}>
                         <img src={PrevMonth} alt="이전달" />
                     </button>
