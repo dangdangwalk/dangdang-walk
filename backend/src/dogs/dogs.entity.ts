@@ -45,6 +45,9 @@ export class Dogs {
     @Column({ name: 'is_neutered' })
     isNeutered: boolean;
 
+    @Column({ name: 'weight' })
+    weight: number;
+
     @Column({ name: 'profile_photo_url', type: 'varchar', nullable: true, default: null })
     profilePhotoUrl: string | null;
 

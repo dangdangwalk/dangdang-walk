@@ -1,4 +1,4 @@
-import { IsBoolean, IsDate, IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsDate, IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 import { Gender } from '../dogs-gender.enum';
 
 export class DogDto {
@@ -16,6 +16,9 @@ export class DogDto {
 
     @IsDate()
     birth: Date | null;
+
+    @IsNumber()
+    weight: number;
 
     @IsString()
     @IsOptional()
