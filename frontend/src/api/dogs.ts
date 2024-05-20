@@ -21,3 +21,14 @@ export const fetchDogMonthStatistic = async (dogId: number, date: string, period
     const { data } = await httpClient.get(`/dogs/${dogId}/statistics?date=${date}&period=${period}`);
     return data;
 };
+export interface ResponseDogs extends DogRegInfo {
+    id: number;
+}
+export const fetchDogs = async (): Promise<ResponseDogs[]> => {
+    const { data } = await httpClient.get<ResponseDogs[]>('/dogs');
+    return data;
+};
+
+export const deleteDog = async (dogId: number) => {
+    await httpClient.delete(`/dogs/${dogId}`);
+};
