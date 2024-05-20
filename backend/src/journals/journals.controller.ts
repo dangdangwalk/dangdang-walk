@@ -1,19 +1,9 @@
-import {
-    Body,
-    Controller,
-    Delete,
-    ForbiddenException,
-    Get,
-    Param,
-    ParseIntPipe,
-    Patch,
-    Post,
-    Query,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { AccessTokenPayload } from 'src/auth/token/token.service';
 import { User } from 'src/users/decorators/user.decorator';
 import { UpdateJournalDto } from './dto/journal-update.dto';
 import { CreateJournalDto } from './dto/journals-create.dto';
+import { AuthJournalGuard } from './guards/authJournal.guard';
 import { JournalsService } from './journals.service';
 
 @Controller('journals')
@@ -21,19 +11,9 @@ export class JournalsController {
     constructor(private readonly journalsService: JournalsService) {}
 
     @Get('/:id(\\d+)')
-    getJournalDetail(
-        @User() user: AccessTokenPayload,
-        @Param('id', ParseIntPipe) journalId: number,
-        @Query('dogId', ParseIntPipe) dogId: number
-    ) {
-        if (!this.journalsService.checkJournalOwnership(user.userId, journalId)) {
-            throw new ForbiddenException(`User ${user.userId} does not have access to journal ${journalId}`);
-        }
-        try {
-            return this.journalsService.getJournalDetail(journalId, dogId);
-        } catch (e) {
-            throw e;
-        }
+    @UseGuards(AuthJournalGuard)
+    getJournalDetail(@Param('id', ParseIntPipe) journalId: number, @Query('dogId', ParseIntPipe) dogId: number) {
+        return this.journalsService.getJournalDetail(journalId, dogId);
     }
 
     @Post('/')
