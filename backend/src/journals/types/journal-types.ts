@@ -5,6 +5,6 @@ export interface CreateJournalData {
     calories: number;
     startedAt: Date;
     duration: number;
-    routeImageUrl: string;
+    routes: string;
     memo?: string;
 }

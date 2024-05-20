@@ -46,9 +46,10 @@ export class JournalInfoForCreate {
     @IsNotEmpty()
     duration: number;
 
-    @IsNotEmpty()
-    @IsString()
-    routeImageUrl: string;
+    @IsArray()
+    @ValidateNested()
+    @Type(() => Location)
+    routes: Location[];
 
     @IsOptional()
     memo: string;
@@ -58,7 +59,7 @@ export class JournalInfoForCreate {
     photoUrls: string[];
 
     static getKeysForJournalTable() {
-        return ['distance', 'calories', 'startedAt', 'duration', 'routeImageUrl', 'memo'];
+        return ['distance', 'calories', 'startedAt', 'duration', 'routes', 'memo'];
     }
     static getKeysForJournalPhotoTable() {
         return ['photoUrls'];
