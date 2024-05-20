@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { FindOptionsWhere } from 'typeorm';
+import { FindManyOptions, FindOptionsWhere } from 'typeorm';
 import { JournalsDogs } from './journals-dogs.entity';
 import { JournalsDogsRepository } from './journals-dogs.repository';
 
@@ -21,8 +21,8 @@ export class JournalsDogsService {
         return this.journalsDogsRepository.findOne(where);
     }
 
-    async find(where: FindOptionsWhere<JournalsDogs>): Promise<JournalsDogs[]> {
-        return this.journalsDogsRepository.find({ where });
+    async find(where: FindManyOptions<JournalsDogs>): Promise<JournalsDogs[]> {
+        return this.journalsDogsRepository.find(where);
     }
 
     async getRecentJournalId(dogIds: number[]): Promise<(number | undefined)[]> {

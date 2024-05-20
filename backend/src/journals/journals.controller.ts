@@ -1,6 +1,8 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { AccessTokenPayload } from 'src/auth/token/token.service';
+import { DateValidationPipe } from 'src/statistics/pipes/dateValidation.pipe';
 import { User } from 'src/users/decorators/user.decorator';
+import { JournalInfoForList } from './dto/journal-list.dto';
 import { UpdateJournalDto } from './dto/journal-update.dto';
 import { CreateJournalDto } from './dto/journals-create.dto';
 import { AuthJournalGuard } from './guards/authJournal.guard';
@@ -14,6 +16,14 @@ export class JournalsController {
     @UseGuards(AuthJournalGuard)
     getJournalDetail(@Param('id', ParseIntPipe) journalId: number, @Query('dogId', ParseIntPipe) dogId: number) {
         return this.journalsService.getJournalDetail(journalId, dogId);
+    }
+
+    @Get('/')
+    async getJournalList(
+        @Query('dogId', ParseIntPipe) dogId: number,
+        @Query('date', DateValidationPipe) date: string
+    ): Promise<JournalInfoForList[]> {
+        return await this.journalsService.getJournalList(dogId, date);
     }
 
     @Post('/')

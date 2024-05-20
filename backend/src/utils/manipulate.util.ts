@@ -20,36 +20,45 @@ export function checkIfExistsInArr<T>(targetArr: T[], toFind: T | T[]): boolean 
 }
 
 /**
- * 주어진 대상 배열에서 특정 속성을 선택하여 객체 배열을 생성합니다.
+ * 주어진 배열의 각 요소에서 특정 속성을 선택하여 새로운 객체를 만듭니다.
+ * 이때, 새로운 객체의 키로는 `targetAttributes` 배열의 값들이 사용되고,
+ * 값으로는 `srcAttributes` 배열의 값들이 사용됩니다.
+ * 생성된 객체들은 최종 결과 배열에 추가됩니다.
  *
- * 이 함수는 `targetArr`를 반복하고 각 요소에 대해 새 객체를 생성합니다.
- *  결과 객체는 새 배열로 수집되어 반환됩니다.
- *
- * @param targetArr - 속성을 추출할 원본 배열입니다.
- * @param attributes - `targetArr`의 각 객체에서 선택할 속성입니다.
- *   이 매개변수는 문자열(속성 이름) 또는 문자열 배열이 될 수 있습니다.
- *   `attributes`가 배열인 경우, 이 배열에 속한 모든 속성을 포함합니다.
- *   `attributes`가 문자열인 경우, 주어진 이름의 속성 하나를 선택합니다.
- * @returns `targetArr`의 각 객체에서 지정된 속성만 포함하는 객체의 배열을 반환합니다.
+ * @param {any[]} targetArr - 속성을 추출할 소스 배열입니다.
+ * @param {(string|string[])} targetAttributes - 결과 객체의 키로 사용할 속성 이름입니다.
+ * 단일 문자열 또는 속성 이름의 배열을 받을 수 있습니다.
+ * @param {(string|string[])} srcAttributes - 소스 배열의 각 요소에서 속성을 추출할 속성 이름입니다.
+ * 단일 문자열 또는 속성 이름의 배열을 받을 수 있습니다.
+ * @returns {any[]} 결과 객체들의 배열입니다.
  *
  * @example
- * const targetArray = [
- *   { id: 1, name: 'Alice', age: 30 },
- *   { id: 2, name: 'Bob', age: 25 }
+ * const data = [
+ *     { id: 1, name: 'Alice', age: 30 },
+ *     { id: 2, name: 'Bob', age: 25 }
  * ];
- * const attributes = ['id', 'name'];
- * const result = makeSubObjectsArray(targetArray, attributes);
+ * const targetAttrs = ['name'];
+ * const srcAttrs = ['age'];
+ * const result = makeSubObjectsArray(data, targetAttrs, srcAttrs);
  * console.log(result);
- * // 출력: [{ id: 1, name: 'Alice' }, { id: 2, name: 'Bob' }]
+ * // 출력:
+ * // [
+ * //     { name: 30 },
+ * //     { name: 25 }
+ * // ]
  */
-export function makeSubObjectsArray(targetArr: any[], attributes: string | string[]): any[] {
+export function makeSubObjectsArray(
+    targetArr: any[],
+    targetAttributes: string | string[],
+    srcAttributes: string | string[]
+): any[] {
     const resArr: any[] = [];
-    if (Array.isArray(attributes)) {
+    if (Array.isArray(srcAttributes)) {
         targetArr.map((cur) => {
             {
                 const obj: { [key: string]: any } = {};
-                for (let i = 0; i < attributes.length; i++) {
-                    obj[`${attributes[i]}`] = cur[`${attributes[i]}`];
+                for (let i = 0; i < srcAttributes.length; i++) {
+                    obj[`${targetAttributes[i]}`] = cur[`${srcAttributes[i]}`];
                 }
                 resArr.push(obj);
             }
@@ -57,7 +66,7 @@ export function makeSubObjectsArray(targetArr: any[], attributes: string | strin
     } else {
         targetArr.map((cur) => {
             const obj: { [key: string]: any } = {};
-            obj[`${attributes}`] = cur[`${attributes}`];
+            obj[`${targetAttributes}`] = cur[`${srcAttributes}`];
             resArr.push(obj);
         });
     }
