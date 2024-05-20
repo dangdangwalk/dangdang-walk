@@ -1,6 +1,7 @@
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { S3Service } from 'src/s3/s3.service';
 import { EntityManager, Repository, UpdateResult } from 'typeorm';
 import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
 import { mockUser } from '../fixtures/users.fixture';
@@ -27,6 +28,10 @@ describe('UsersService', () => {
                 UsersDogsService,
                 UsersDogsRepository,
                 EntityManager,
+                {
+                    provide: S3Service,
+                    useValue: { deleteSingleObject: jest.fn() },
+                },
                 {
                     provide: getRepositoryToken(Users),
                     useClass: Repository,
@@ -132,12 +137,15 @@ describe('UsersService', () => {
 
             it('ConflictException 예외를 던져야 한다.', async () => {
                 await expect(
-                    service.createIfNotExists(
-                        mockUser.oauthId,
-                        mockUser.oauthAccessToken,
-                        mockUser.oauthRefreshToken,
-                        mockUser.refreshToken
-                    )
+                    service.createIfNotExists({
+                        oauthNickname: 'modifyTest',
+                        email: 'test@mail.com',
+                        profileImage: 'test.jpg',
+                        oauthId: mockUser.oauthId,
+                        oauthAccessToken: mockUser.oauthAccessToken,
+                        oauthRefreshToken: mockUser.oauthRefreshToken,
+                        refreshToken: mockUser.refreshToken,
+                    })
                 ).rejects.toThrow(ConflictException);
             });
         });
