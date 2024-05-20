@@ -65,6 +65,10 @@ export abstract class AbstractRepository<T extends ObjectLiteral> {
         return this.entityRepository.find(where);
     }
 
+    async findAndCountBy(where: FindOptionsWhere<T>): Promise<[T[], number]> {
+        return this.entityRepository.findAndCountBy(where);
+    }
+
     async update(where: FindOptionsWhere<T>, partialEntity: QueryDeepPartialEntity<T>): Promise<UpdateResult> {
         const updateResult = await this.entityRepository.update(where, partialEntity);
 
