@@ -115,6 +115,7 @@ export class DogsService {
             gender: dogInfo.gender as Gender,
             isNeutered: dogInfo.isNeutered,
             birth: dogInfo.birth,
+            weight: dogInfo.weight,
             profilePhotoUrl: dogInfo.profilePhotoUrl,
         };
     }

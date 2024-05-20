@@ -13,6 +13,7 @@ export type DogProfile = {
     gender: Gender;
     isNeutered: boolean;
     birth: Date | null;
+    weight: number;
     profilePhotoUrl: string | null;
 };
 
