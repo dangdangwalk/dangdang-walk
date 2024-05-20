@@ -1,6 +1,6 @@
 import { DeleteObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
 import { generateUuid } from 'src/utils/hash.utils';
@@ -22,7 +22,7 @@ export class S3Service {
         return type.map((curType) => `${userId}/${generateUuid()}.${curType}`);
     }
 
-    async createPresignedUrlWithClient(userId: number, type: string[]): Promise<PresignedUrlInfo[]> {
+    async createPresignedUrlWithClientForPut(userId: number, type: string[]): Promise<PresignedUrlInfo[]> {
         const filenameArray = this.makeFileName(userId, type);
         const presignedUrlInfoPromises = await filenameArray.map(async (curFileName) => {
             const command = new PutObjectCommand({
@@ -34,6 +34,31 @@ export class S3Service {
             return { filename: curFileName, url };
         });
         return Promise.all(presignedUrlInfoPromises);
+    }
+
+    private checkUserIdInFilename(userId: number, filename: string): boolean {
+        const filenameSplit = filename.split('/');
+        console.log('fileUSerId :', `${parseInt(filenameSplit[0])}`);
+        console.log('usrId:', userId);
+        if (parseInt(filenameSplit[0]) !== userId) {
+            return false;
+        }
+        return true;
+    }
+
+    async createPresignedUrlWithClientForDelete(userId: number, filename: string): Promise<PresignedUrlInfo> {
+        //TODO : guard로 바꾸기
+        console.log('userId:', userId, 'filename:', filename);
+        if (!this.checkUserIdInFilename(userId, filename)) {
+            throw new UnauthorizedException(`User ${userId} is not owner of the file ${filename}`);
+        }
+
+        const command = new DeleteObjectCommand({
+            Bucket: BUCKET_NAME,
+            Key: filename,
+        });
+        const url = await getSignedUrl(this.s3Client, command, { expiresIn: 3600 });
+        return { filename, url };
     }
 
     async deleteSingleObject(filename: string) {
