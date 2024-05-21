@@ -104,7 +104,7 @@ export default function CreateForm() {
         const journalInfo = {
             distance,
             calories,
-            startedAt: startedAt.getTime().toString(),
+            startedAt: startedAt.toJSON(),
             duration,
             routes,
             photoUrls: photoUrls ?? [],
