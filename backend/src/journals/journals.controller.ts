@@ -28,8 +28,8 @@ export class JournalsController {
 
     @Get('/:id(\\d+)')
     @UseGuards(AuthJournalGuard)
-    getJournalDetail(@Param('id', ParseIntPipe) journalId: number, @Query('dogId', ParseIntPipe) dogId: number) {
-        return this.journalsService.getJournalDetail(journalId, dogId);
+    getJournalDetail(@Param('id', ParseIntPipe) journalId: number) {
+        return this.journalsService.getJournalDetail(journalId);
     }
 
     @Patch('/:id(\\d+)')

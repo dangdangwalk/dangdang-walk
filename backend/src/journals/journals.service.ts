@@ -133,11 +133,8 @@ export class JournalsService {
         return dogInfo;
     }
 
-    async getJournalDetail(journalId: number, dogId: number): Promise<JournalDetailDto> {
+    async getJournalDetail(journalId: number): Promise<JournalDetailDto> {
         try {
-            const journalDogs = await this.journalsDogsService.find({ where: { journalId } });
-            await this.checkDogExistsInJournal(journalDogs, dogId);
-
             const journalInfo = await this.getJournalInfoForDetail(journalId);
 
             const journalDogIds = await this.journalsDogsService.getDogIdsByJournalId(journalId);
