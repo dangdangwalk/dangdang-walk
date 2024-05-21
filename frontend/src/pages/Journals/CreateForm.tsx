@@ -44,7 +44,15 @@ export default function CreateForm() {
 
     const receivedState = location.state as ReceivedState;
 
-    const { dogs, distance, calories, duration, startedAt: serializedStartedAt, photoUrls, routes } = receivedState;
+    const {
+        dogs,
+        distance,
+        calories,
+        duration,
+        startedAt: serializedStartedAt,
+        photoUrls: photoFileNames,
+        routes,
+    } = receivedState;
     const startedAt = new Date(serializedStartedAt);
 
     useEffect(() => {
@@ -53,7 +61,7 @@ export default function CreateForm() {
             dog.profilePhotoUrl = getFileName(dog.profilePhotoUrl);
         });
 
-        setImageFileNames(photoUrls);
+        setImageFileNames(photoFileNames);
     }, [location]);
 
     return (
@@ -112,7 +120,7 @@ export default function CreateForm() {
             startedAt: startedAt.toJSON(),
             duration,
             routes,
-            photoUrls: photoUrls ?? [],
+            photoUrls: photoFileNames ?? [],
             memo: textAreaRef.current?.value ?? '',
         };
         const excrements = dogs.map((dog) => {
