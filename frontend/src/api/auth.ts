@@ -26,4 +26,8 @@ const requestSignup = async () => {
     const { data } = await httpClient.post('/auth/signup');
     return data;
 };
-export { getAccessToken, requestLogin, requestLogout, requestSignup };
+
+const requestDeactivate = async () => {
+    await httpClient.delete('/auth/deactivate');
+};
+export { getAccessToken, requestLogin, requestLogout, requestSignup, requestDeactivate };

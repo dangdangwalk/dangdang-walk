@@ -1,4 +1,11 @@
-import { ResponseToken, getAccessToken, requestLogin, requestLogout, requestSignup } from '@/api/auth';
+import {
+    ResponseToken,
+    getAccessToken,
+    requestDeactivate,
+    requestLogin,
+    requestLogout,
+    requestSignup,
+} from '@/api/auth';
 import queryClient from '@/api/queryClient';
 import { queryKeys, storageKeys, tokenKeys } from '@/constants';
 import { useAuthStore } from '@/store/authStore';
@@ -77,6 +84,21 @@ const useLogout = (mutationOptions?: UseMutationCustomOptions) => {
         onSuccess: () => {
             storeLogout();
             queryClient.resetQueries({ queryKey: [queryKeys.AUTH] });
+            queryClient.refetchQueries({ queryKey: ['dogs'] });
+        },
+        ...mutationOptions,
+    });
+};
+
+const useDeactivate = (mutationOptions?: UseMutationCustomOptions) => {
+    const navigate = useNavigate();
+    return useMutation({
+        mutationFn: requestDeactivate,
+        onSuccess: () => {
+            removeHeader(tokenKeys.AUTHORIZATION);
+            queryClient.resetQueries({ queryKey: [queryKeys.AUTH] });
+            queryClient.refetchQueries({ queryKey: ['dogs'] });
+            navigate('/');
         },
         ...mutationOptions,
     });
@@ -87,11 +109,13 @@ export const useAuth = () => {
     const logoutMutation = useLogout();
     const signupMustation = useSignup();
     const refreshTokenQuery = useGetRefreshToken();
+    const deactivateMutation = useDeactivate();
     return {
         loginMutation,
         isLoggedIn: refreshTokenQuery.isSuccess,
         logoutMutation,
         signupMustation,
         refreshTokenQuery,
+        deactivateMutation,
     };
 };
