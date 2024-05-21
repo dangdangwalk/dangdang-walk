@@ -3,8 +3,8 @@ import { ConfigService } from '@nestjs/config';
 import { CookieOptions, Response } from 'express';
 import { Observable, map } from 'rxjs';
 import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
-import { AuthData, OauthData } from '../auth.service';
 import { TOKEN_LIFETIME_MAP } from '../token/token.service';
+import { AuthData, OauthData } from '../types/auth.type';
 
 @Injectable()
 export class CookieInterceptor implements NestInterceptor {

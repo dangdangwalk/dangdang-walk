@@ -11,20 +11,15 @@ import {
     ValidationPipe,
 } from '@nestjs/common';
 import { User } from '../users/decorators/user.decorator';
-import { AuthService, OauthData } from './auth.service';
+import { AuthService } from './auth.service';
 import { OauthCookies } from './decorators/oauth-data.decorator';
 import { SkipAuthGuard } from './decorators/public.decorator';
+import { OAuthAuthorizeDTO } from './dtos/oauth.dto';
 import { OauthDataGuard } from './guards/oauth-data.guard';
 import { RefreshTokenGuard } from './guards/refresh-token.guard';
 import { CookieInterceptor } from './interceptors/cookie.interceptor';
 import { AccessTokenPayload, RefreshTokenPayload } from './token/token.service';
-
-export type OauthProvider = 'google' | 'kakao' | 'naver';
-
-export interface OauthBody {
-    authorizeCode: string;
-    provider: OauthProvider;
-}
+import { OauthData } from './types/auth.type';
 
 @Controller('/auth')
 @UseInterceptors(CookieInterceptor)
@@ -35,8 +30,8 @@ export class AuthController {
     @Post('/login')
     @HttpCode(200)
     @SkipAuthGuard()
-    async login(@Body() oauthBody: OauthBody) {
-        return await this.authService.login(oauthBody);
+    async login(@Body() oAuthAuthorizeDTO: OAuthAuthorizeDTO) {
+        return await this.authService.login(oAuthAuthorizeDTO);
     }
 
     @Post('/signup')

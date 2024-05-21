@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { OauthProvider } from 'src/auth/auth.controller';
 import { AccessTokenPayload } from 'src/auth/token/token.service';
+import { OauthProvider } from 'src/auth/types/auth.type';
 import { S3Service } from 'src/s3/s3.service';
 import { FindOptionsWhere } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
