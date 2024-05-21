@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
 import { DogsService } from 'src/dogs/dogs.service';
+import { S3Service } from 'src/s3/s3.service';
 import { Transactional } from 'typeorm-transactional';
 import { Users } from '../users/users.entity';
 import { UsersService } from '../users/users.service';
@@ -32,6 +33,7 @@ export class AuthService {
         private readonly kakaoService: KakaoService,
         private readonly naverService: NaverService,
         private readonly configService: ConfigService,
+        private readonly s3Service: S3Service,
         private readonly logger: WinstonLoggerService
     ) {}
 
@@ -136,6 +138,7 @@ export class AuthService {
         });
 
         await this.usersService.delete({ id: userId });
+        await this.s3Service.deleteObjectFolder(userId);
     }
 
     async validateAccessToken(userId: number): Promise<boolean> {

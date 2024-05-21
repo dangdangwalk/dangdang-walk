@@ -5,6 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
 import { DogsService } from 'src/dogs/dogs.service';
+import { S3Service } from 'src/s3/s3.service';
 import { mockUser } from '../fixtures/users.fixture';
 import { Users } from '../users/users.entity';
 import { UsersRepository } from '../users/users.repository';
@@ -32,6 +33,10 @@ describe('AuthService', () => {
         const module: TestingModule = await Test.createTestingModule({
             providers: [
                 AuthService,
+                {
+                    provide: S3Service,
+                    useValue: { deleteObjectFolder: jest.fn() },
+                },
                 {
                     provide: UsersService,
                     useValue: { updateAndFindOne: jest.fn(), createIfNotExists: jest.fn(), findOne: jest.fn() },
