@@ -44,10 +44,10 @@ const useCalendar = () => {
         }
     };
 
-    const handleClickDay = (value: Date, mark: any[]) => {
+    const handleClickDay = (value: Date, mark: Set<string>) => {
         const date = formDate(value);
         setDate(value);
-        if (!mark.includes(date)) return;
+        if (!mark.has(date)) return;
 
         const newSearchParams = new URLSearchParams(searchParams);
         newSearchParams.set(queryStringKeys.DATE, date);

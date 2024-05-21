@@ -15,11 +15,9 @@ const formCalendar = (date: Date) => {
     return `${year}년 ${month}`;
 };
 
-export type viewMode = 'week' | 'month';
-
 export default function CustomCalendar() {
     const location = useLocation();
-    const [mark, setMark] = useState<any[]>([]);
+    const [mark, setMark] = useState<Set<string>>(new Set<string>());
     const { toggleViewSwitch, handlePrevMonth, handleNextMonth, today, handleClickDay, date, currentWeek, view } =
         useCalendar();
     const getStatisticData = async (date: string, period: period) => {
@@ -27,10 +25,10 @@ export default function CustomCalendar() {
         const dogId = params.get(queryStringKeys.DOGID);
         if (!dogId) return;
         const data = await fetchDogMonthStatistic(Number(dogId), date, period);
-        const newArray: any[] = [];
+        const newArray = new Set<string>();
         Object.keys(data).forEach((v) => {
             if (data[v]) {
-                newArray.push(v);
+                newArray.add(v);
             }
         });
         setMark(newArray);
@@ -39,6 +37,7 @@ export default function CustomCalendar() {
     useEffect(() => {
         getStatisticData(formDate(today), 'week');
     }, []);
+
     return (
         <div className="w-full flex flex-col px-[30px] pt-4 justify-center items-center bg-white shadow rounded-bl-2xl rounded-br-2xl overflow-hidden">
             {view === 'month' && (
@@ -80,7 +79,7 @@ export default function CustomCalendar() {
                 tileContent={({ date, view }) => {
                     let html = [];
                     // 현재 날짜가 post 작성한 날짜 배열(mark)에 있다면, dot div 추가
-                    if (mark.includes(formDate(date))) {
+                    if (mark.has(formDate(date))) {
                         html.push(<div className="dot"></div>);
                     }
                     // 다른 조건을 주어서 html.push 에 추가적인 html 태그를 적용할 수 있음.
@@ -88,7 +87,7 @@ export default function CustomCalendar() {
                         <>
                             <div className="flex flex-col justify-center items-center gap-2">
                                 <div className="days">{formDay(date)}</div>
-                                {mark.includes(formDate(date)) ? (
+                                {mark.has(formDate(date)) ? (
                                     <div className="dot"></div>
                                 ) : (
                                     <div className="w-1 h-1"></div>
