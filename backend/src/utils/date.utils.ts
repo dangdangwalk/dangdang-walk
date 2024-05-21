@@ -30,6 +30,16 @@ export function getStartAndEndOfWeek(date: Date): { startDate: Date; endDate: Da
     return { startDate, endDate };
 }
 
+export function getStartAndEndOfDay(date: Date): { startDate: Date; endDate: Date } {
+    const startDate = new Date(date);
+    startDate.setHours(0, 0, 0, 0);
+
+    const endDate = new Date(date);
+    endDate.setHours(23, 59, 59, 999);
+
+    return { startDate, endDate };
+}
+
 export function formatDate(date: Date): string {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
