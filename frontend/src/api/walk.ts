@@ -7,7 +7,7 @@ export const walkStartRequest = async (dogId: Number[]) => {
 };
 
 export const walkStopRequest = async (dogId: Number[]) => {
-    const { data } = await httpClient.post('/dogs/walk/stop', { dogId });
+    const { data } = await httpClient.post('/dogs/walks/stop', { dogId });
 
     return data;
 };
