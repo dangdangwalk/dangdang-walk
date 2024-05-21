@@ -6,7 +6,7 @@ import { DateValidationPipe } from './pipes/dateValidation.pipe';
 import { Period, PeriodValidationPipe } from './pipes/periodValidation.pipe';
 import { StatisticsService } from './statistics.service';
 
-@Controller('dogs')
+@Controller('/dogs')
 export class StatisticsController {
     constructor(private readonly statisticsService: StatisticsService) {}
 

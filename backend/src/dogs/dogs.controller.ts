@@ -23,7 +23,7 @@ export type DogSummary = {
     profilePhotoUrl: string | null;
 };
 
-@Controller('dogs')
+@Controller('/dogs')
 export class DogsController {
     constructor(private readonly dogsService: DogsService) {}
 

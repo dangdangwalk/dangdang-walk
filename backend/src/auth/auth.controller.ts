@@ -15,39 +15,39 @@ export interface OauthBody {
     provider: OauthProvider;
 }
 
-@Controller('auth')
+@Controller('/auth')
 @UseInterceptors(CookieInterceptor)
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
-    @Post('login')
+    @Post('/login')
     @HttpCode(200)
     @SkipAuthGuard()
     async login(@Body() oauthBody: OauthBody) {
         return await this.authService.login(oauthBody);
     }
 
-    @Post('signup')
+    @Post('/signup')
     @SkipAuthGuard()
     @UseGuards(OauthDataGuard)
     async signup(@OauthCookies() oauthData: OauthData) {
         return await this.authService.signup(oauthData);
     }
 
-    @Post('logout')
+    @Post('/logout')
     @HttpCode(200)
     async logout(@User() user: AccessTokenPayload) {
         return await this.authService.logout(user);
     }
 
-    @Get('token')
+    @Get('/token')
     @SkipAuthGuard()
     @UseGuards(RefreshTokenGuard)
     async token(@User() user: RefreshTokenPayload) {
         return await this.authService.reissueTokens(user);
     }
 
-    @Delete('deactivate')
+    @Delete('/deactivate')
     async deactivate(@User() user: AccessTokenPayload) {
         return await this.authService.deactivate(user);
     }
