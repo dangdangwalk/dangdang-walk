@@ -1,5 +1,5 @@
 import { create as createJournal } from '@/api/journals';
-import { getUploadUrl, uploadImage } from '@/api/upload';
+import { deleteImages, getUploadUrl, uploadImage } from '@/api/upload';
 import Cancel from '@/assets/icons/ic-top-cancel.svg';
 import { Button } from '@/components/common/Button';
 import { Divider } from '@/components/common/Divider';
@@ -91,6 +91,7 @@ export default function CreateForm() {
                         isLoading={isUploading}
                         isModifying
                         onChange={handleAddImages}
+                        onDeleteImage={handleDeleteImage}
                     />
                     <Divider />
                     <Memo textAreaRef={textAreaRef} />
@@ -186,6 +187,14 @@ export default function CreateForm() {
         const filenames = uploadUrlResponses.map((uploadUrlResponse) => uploadUrlResponse.filename);
         setImageFileNames((prevImageFileNames) => [...prevImageFileNames, ...filenames]);
         setIsUploading(false);
+    }
+
+    async function handleDeleteImage(imageFileName: ImageFileName) {
+        await deleteImages([imageFileName]);
+
+        setImageFileNames((prevImageFileNames) =>
+            prevImageFileNames.filter((prevImageFileName) => prevImageFileName !== imageFileName)
+        );
     }
 }
 

@@ -3,7 +3,7 @@ import { ImageFileName } from '@/pages/Journals/CreateForm';
 import { makeFileUrl } from '@/utils/url';
 import { ReactNode } from 'react';
 
-export default function DogImages({ imageFileNames, children, isModifying = false }: Props) {
+export default function DogImages({ imageFileNames, children, onDeleteImage, isModifying = false }: Props) {
     return (
         <div className="flex flex-row gap-1 py-2 overflow-x-auto">
             {imageFileNames.map((imageFileName) => (
@@ -15,7 +15,7 @@ export default function DogImages({ imageFileNames, children, isModifying = fals
                             className="inline-block max-h-[104px] max-w-none rounded-lg"
                         />
                         {isModifying && (
-                            <button className="absolute right-1 top-1">
+                            <button className="absolute right-1 top-1" onClick={() => onDeleteImage(imageFileName)}>
                                 <Delete />
                             </button>
                         )}
@@ -30,5 +30,6 @@ export default function DogImages({ imageFileNames, children, isModifying = fals
 export interface Props {
     imageFileNames: Array<ImageFileName>;
     children: ReactNode;
+    onDeleteImage: (imageFileName: ImageFileName) => Promise<void>;
     isModifying?: boolean;
 }
