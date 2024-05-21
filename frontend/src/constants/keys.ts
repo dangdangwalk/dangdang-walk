@@ -9,9 +9,11 @@ const cookieKeys = {
 
 const queryKeys = {
     AUTH: 'auth',
+    DOGS: 'dogs',
     GET_ACCESS_TOKEN: 'getAccessToken',
     GET_IMAGE_URL: 'getImageURL',
     WALK_AVAILABLE_DOGS: 'walkAvailableDogs',
+    GET_PROFILE: 'getProfile',
 } as const;
 
 const storageKeys = {
