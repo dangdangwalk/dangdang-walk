@@ -1,38 +1,62 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { FindOptionsWhere, In } from 'typeorm';
+import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
+import { getLastSunday } from 'src/utils/date.utils';
+import { FindManyOptions, FindOptionsWhere, In, UpdateResult } from 'typeorm';
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { DogWalkDay } from './dog-walk-day.entity';
 import { DogWalkDayRepository } from './dog-walk-day.repository';
 
 @Injectable()
 export class DogWalkDayService {
-    constructor(private readonly dogWalkDayRepository: DogWalkDayRepository) {}
+    constructor(
+        private readonly dogWalkDayRepository: DogWalkDayRepository,
+        private readonly logger: WinstonLoggerService
+    ) {}
 
-    async find(where: FindOptionsWhere<DogWalkDay>): Promise<DogWalkDay[]> {
-        return this.dogWalkDayRepository.find({ where });
+    async find(where: FindManyOptions<DogWalkDay>): Promise<DogWalkDay[]> {
+        return this.dogWalkDayRepository.find(where);
     }
 
     async delete(where: FindOptionsWhere<DogWalkDay>) {
         return this.dogWalkDayRepository.delete(where);
     }
 
-    private getValuesOnly(walkDays: any[]) {
-        const daysValues = walkDays.map((curWeek) => {
-            const valueArr = [];
-            for (const key in curWeek) {
-                if (key !== 'id' && key != 'updatedAt') {
-                    valueArr.push(curWeek[key]);
-                }
+    async update(
+        where: FindOptionsWhere<DogWalkDay>,
+        partialEntity: QueryDeepPartialEntity<DogWalkDay>
+    ): Promise<UpdateResult> {
+        return this.dogWalkDayRepository.update(where, partialEntity);
+    }
+
+    private getDayCntOnly(walkDay: any): number[] {
+        const dayCntArr = [];
+        for (const key in walkDay) {
+            if (key !== 'id' && key !== 'updatedAt') {
+                dayCntArr.push(walkDay[key]);
             }
-            return valueArr;
-        });
-        return daysValues;
+        }
+        return dayCntArr;
+    }
+
+    async checkWeekPassed(updatedAt: Date, walkDayId: number) {
+        const lastSunday = getLastSunday();
+        if (updatedAt < lastSunday) {
+            await this.update({ id: walkDayId }, { mon: 0, tue: 0, wed: 0, thr: 0, fri: 0, sat: 0, sun: 0 });
+        }
     }
 
     async getWalkDayList(walkDayIds: number[]): Promise<number[][]> {
         const foundDays = await this.dogWalkDayRepository.find({ where: { id: In(walkDayIds) } });
         if (!foundDays.length) {
-            throw new NotFoundException();
+            this.logger.error('Related table not exists : DogWalkDay ', '');
+            throw new NotFoundException('Related table not exists : DogWalkDay ');
         }
-        return this.getValuesOnly(foundDays);
+
+        const result: number[][] = [];
+        for (const curDays of foundDays) {
+            await this.checkWeekPassed(curDays.updatedAt, curDays.id);
+            result.push(this.getDayCntOnly(curDays));
+        }
+        return result;
     }
 }
