@@ -26,4 +26,19 @@ const requestSignup = async () => {
     const { data } = await httpClient.post('/auth/signup');
     return data;
 };
-export { getAccessToken, requestLogin, requestLogout, requestSignup };
+
+const requestDeactivate = async () => {
+    await httpClient.delete('/auth/deactivate');
+};
+
+export type ResponseProfile = {
+    nickname: string;
+    email: string;
+    profileImage: string;
+    provider: string;
+};
+const requestProfile = async (): Promise<ResponseProfile> => {
+    const { data } = await httpClient.get('/users/me');
+    return data;
+};
+export { getAccessToken, requestLogin, requestLogout, requestSignup, requestDeactivate, requestProfile };
