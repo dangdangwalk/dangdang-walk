@@ -17,6 +17,10 @@ export class DogWalkDayService {
         return this.dogWalkDayRepository.find(where);
     }
 
+    async findOne(where: FindOptionsWhere<DogWalkDay>): Promise<DogWalkDay> {
+        return this.dogWalkDayRepository.findOne(where);
+    }
+
     async delete(where: FindOptionsWhere<DogWalkDay>) {
         return this.dogWalkDayRepository.delete(where);
     }
