@@ -5,7 +5,7 @@ import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-clas
 import { color } from 'src/utils/ansi.utils';
 import { DataSource } from 'typeorm';
 import { runSeeders } from 'typeorm-extension';
-import { addTransactionalDataSource } from 'typeorm-transactional';
+import { addTransactionalDataSource, getDataSourceByName } from 'typeorm-transactional';
 import { WinstonLoggerService } from '../logger/winstonLogger.service';
 import BreedSeeder from './seeds/breed.seeder';
 
@@ -31,7 +31,7 @@ import BreedSeeder from './seeds/breed.seeder';
                     throw new Error('Invalid options passed');
                 }
 
-                return addTransactionalDataSource(new DataSource(options));
+                return getDataSourceByName('default') || addTransactionalDataSource(new DataSource(options));
             },
         }),
     ],
