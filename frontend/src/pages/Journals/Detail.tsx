@@ -84,6 +84,11 @@ export default function Detail() {
         setImageFileNames(photoFileNames);
     }, [location]);
 
+    useEffect(() => {
+        if (textAreaRef.current === null) return;
+        textAreaRef.current.value = memo;
+    }, []);
+
     return (
         <>
             <div className="flex flex-col">
