@@ -6,7 +6,7 @@ export default function Photos({ imageUrls, isLoading, onChange }: Props) {
     return (
         <div className="px-5 py-[10px]">
             <Heading headingNumber={2}>사진</Heading>
-            <DogImages imageUrls={imageUrls}>
+            <DogImages imageFileNames={imageUrls}>
                 <AddPhotoButton isLoading={isLoading} onChange={onChange} />
             </DogImages>
         </div>
