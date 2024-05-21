@@ -39,7 +39,7 @@ export class Dogs {
     })
     gender: 'MALE' | 'FEMALE';
 
-    @Column({ nullable: true, type: 'timestamp', default: null })
+    @Column({ nullable: true, type: 'date', default: null })
     birth: Date | null;
 
     @Column({ name: 'is_neutered' })
