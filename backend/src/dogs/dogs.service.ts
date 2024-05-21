@@ -109,7 +109,6 @@ export class DogsService {
     }
 
     private makeProfile(dogInfo: Dogs): DogProfile {
-        console.log(dogInfo.updatedAt);
         return {
             id: dogInfo.id,
             name: dogInfo.name,
