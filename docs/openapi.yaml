@@ -31,10 +31,12 @@ paths:
     $ref: ./auth/signup.yaml
   /auth/logout:
     $ref: ./auth/logout.yaml
-  /auth/deactivate:
-    $ref: ./auth/deactivate.yaml
   /auth/token:
     $ref: ./auth/token.yaml
+  /auth/deactivate:
+    $ref: ./auth/deactivate.yaml
+  /users/me:
+    $ref: ./auth/users.yaml
 
   /dogs:
     $ref: ./dogs/default.yaml

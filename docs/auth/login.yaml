@@ -3,7 +3,7 @@ post:
   tags:
     - 회원
   summary: 로그인
-  description: 사용자가 우리 서비스의 회원이면 로그인 처리를 하고 access token 및 만료 시간, refresh token, 로그인 여부를 반환한다.
+  description: 사용자가 우리 서비스의 회원이면 로그인 처리를 하고 access token 및 refresh token을 반환한다.
   requestBody:
     content:
       application/json:
@@ -38,7 +38,7 @@ post:
           description: 사용자의 로그인 cookie
           schema:
             type: string
-            example: "refreshToken=xxxxx.yyyyy.zzzzz;\nisLoggedIn=true;\nexpiresIn=3600000"
+            example: "refreshToken=xxxxx.yyyyy.zzzzz;"
     "404":
       description: 회원이 아닌 경우
       headers:
@@ -46,4 +46,4 @@ post:
           description: 사용자의 OAuth 로그인 cookie
           schema:
             type: string
-            example: "oauthRefreshToken=xxxxx.yyyyy.zzzzz;\noauthAccessToken=xxxxx.yyyyy.zzzzz;\noauthId=12345;\nprovider=google"
+            example: "oauthRefreshToken=xxxxx.yyyyy.zzzzz;\noauthAccessToken=xxxxx.yyyyy.zzzzz;\nprovider=google;"
