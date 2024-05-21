@@ -5,22 +5,23 @@ import Avatar from '@/components/common/Avatar';
 import DayIcon from '@/components/home/DayIcon';
 import Walk from '@/assets/icons/walk/walk.svg';
 import Progressbar from '@/components/home/Progressbar';
-import { useNavigate } from 'react-router-dom';
-import { queryStringKeys } from '@/constants';
 
 interface DogCardProps {
     dog: DogStatistic;
+    pageMove?: (id: number) => void;
 }
 
 const WEEKDAY = ['월', '화', '수', '목', '금', '토', '일'];
 //TODO navigator 위치
-export default function DogCard({ dog }: DogCardProps) {
-    const navigate = useNavigate();
-    const onclick = () => {
-        navigate({ pathname: 'journals', search: `?${queryStringKeys.DOGID}=${dog.id}` });
-    };
+export default function DogCard({ dog, pageMove }: DogCardProps) {
     return (
-        <div className="flex-col relative bg-white rounded-lg shadow" onClick={onclick}>
+        <div
+            className="flex-col relative bg-white rounded-lg shadow"
+            onClick={() => {
+                if (!pageMove) return;
+                pageMove(dog.id);
+            }}
+        >
             <div className="flex justify-between pl-[15px] pr-5 pt-[5px]">
                 <Avatar url={dog.profilePhotoUrl} name={dog.name} />
                 <img src={Ic} alt="ic" />
