@@ -42,7 +42,6 @@ export default function CreateForm() {
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
     const receivedState = location.state as ReceivedState;
-    console.log(receivedState);
 
     const { dogs, distance, calories, duration, startedAt: serializedStartedAt, photoUrls, routes } = receivedState;
     const startedAt = new Date(serializedStartedAt);
