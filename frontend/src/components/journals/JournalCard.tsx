@@ -19,7 +19,7 @@ const getStartToEnd = (start: string, seconds: number) => {
 export default function JournalCard({ journal, dog }: { journal: Journal; dog: Dog | undefined }) {
     const navigate = useNavigate();
     const goToDetail = (id: number) => {
-        navigate(`/journals/detail/${id}`);
+        navigate(`/journals/${id}`);
     };
     if (!dog) return <></>;
     return (
