@@ -1,5 +1,4 @@
 import Topbar from '@/components/common/Topbar';
-import React from 'react';
 import Ic from '@/assets/icons/ic-arrow.svg';
 import { useNavigate } from 'react-router-dom';
 import Notification from '@/assets/icons/notification.svg';
