@@ -12,10 +12,9 @@ import {
     ModalHeader,
     ModalTitle,
 } from '@/components/common/Modal';
-import AddPhotoButton from '@/components/journals/AddPhotoButton';
 import CompanionDogs from '@/components/journals/CompanionDogs';
-import DogImages from '@/components/journals/DogImages';
 import Heading from '@/components/journals/Heading';
+import Photos from '@/components/journals/Photos';
 import WalkInfo from '@/components/walk/WalkInfo';
 import useToast from '@/hooks/useToast';
 import { WalkingDog } from '@/models/dog.model';
@@ -72,12 +71,7 @@ export default function CreateForm() {
                     <Divider />
                     <CompanionDogs dogs={dogs} />
                     <Divider />
-                    <div className="px-5 py-[10px]">
-                        <Heading headingNumber={2}>사진</Heading>
-                        <DogImages imageUrls={images}>
-                            <AddPhotoButton isLoading={isUploading} onChange={handleAddImages} />
-                        </DogImages>
-                    </div>
+                    <Photos imageUrls={images} isLoading={isUploading} onChange={handleAddImages} />
                     <Divider />
                     <div className="px-5 py-[10px]">
                         <Heading headingNumber={2}>메모</Heading>
