@@ -1,7 +1,7 @@
 import * as fs from 'node:fs';
 import { Breed } from 'src/breed/breed.entity';
 import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
-import { color } from 'src/utils/ansi.utils';
+import { color } from 'src/utils/ansi.util';
 import { DataSource } from 'typeorm';
 import { Seeder } from 'typeorm-extension';
 

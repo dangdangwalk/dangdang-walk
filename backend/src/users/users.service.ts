@@ -5,7 +5,7 @@ import { S3Service } from 'src/s3/s3.service';
 import { FindOptionsWhere } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { UsersDogsService } from '../users-dogs/users-dogs.service';
-import { generateUuid } from '../utils/hash.utils';
+import { generateUuid } from '../utils/hash.util';
 import { checkIfExistsInArr } from '../utils/manipulate.util';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';

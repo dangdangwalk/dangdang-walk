@@ -3,7 +3,7 @@ import { DogSummary } from 'src/dogs/dogs.controller';
 import { DogsService } from 'src/dogs/dogs.service';
 import { DogStatisticDto } from 'src/dogs/dtos/dog-statistic.dto';
 import { JournalsService } from 'src/journals/journals.service';
-import { getOneMonthAgo, getStartAndEndOfMonth, getStartAndEndOfWeek } from 'src/utils/date.utils';
+import { getOneMonthAgo, getStartAndEndOfMonth, getStartAndEndOfWeek } from 'src/utils/date.util';
 import { In } from 'typeorm';
 import { BreedService } from '../breed/breed.service';
 import { WinstonLoggerService } from '../common/logger/winstonLogger.service';

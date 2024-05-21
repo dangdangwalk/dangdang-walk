@@ -2,7 +2,7 @@ import { DynamicModule, Inject, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule, getDataSourceToken } from '@nestjs/typeorm';
 import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
-import { color } from 'src/utils/ansi.utils';
+import { color } from 'src/utils/ansi.util';
 import { DataSource } from 'typeorm';
 import { runSeeders } from 'typeorm-extension';
 import { addTransactionalDataSource, getDataSourceByName } from 'typeorm-transactional';

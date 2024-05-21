@@ -1,7 +1,7 @@
 import { Injectable, LoggerService } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
-import stripAnsi from 'src/utils/ansi.utils';
+import stripAnsi from 'src/utils/ansi.util';
 import * as winston from 'winston';
 import * as winstonDaily from 'winston-daily-rotate-file';
 
