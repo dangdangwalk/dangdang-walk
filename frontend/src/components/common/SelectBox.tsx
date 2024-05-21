@@ -1,4 +1,6 @@
 import { cn } from '@/utils/tailwindClass';
+import IcDrop from '@/assets/icons/ic-drop-down.svg';
+
 import React, { useContext, useEffect, useRef, useState } from 'react';
 interface DefaultProps {
     className?: string;
@@ -89,10 +91,17 @@ function Label({ children, className }: DefaultProps) {
         throw new Error('Option must be used within a CustomSelect');
     }
 
-    const { toggleOpen } = context;
+    const { toggleOpen, selectedValue, isOpen } = context;
     return (
         <div className={cn(` ${className}`)} onClick={toggleOpen}>
-            {children}
+            {children ? (
+                children
+            ) : (
+                <>
+                    <span>{selectedValue}</span>
+                    <img src={IcDrop} className={`${isOpen ? 'rotate-180' : 'rotate-0'} transition`} alt="select box" />
+                </>
+            )}
         </div>
     );
 }
