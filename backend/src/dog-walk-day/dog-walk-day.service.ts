@@ -8,7 +8,7 @@ export class DogWalkDayService {
     constructor(private readonly dogWalkDayRepository: DogWalkDayRepository) {}
 
     async find(where: FindOptionsWhere<DogWalkDay>): Promise<DogWalkDay[]> {
-        return this.dogWalkDayRepository.find({where});
+        return this.dogWalkDayRepository.find({ where });
     }
 
     async delete(where: FindOptionsWhere<DogWalkDay>) {
@@ -19,7 +19,7 @@ export class DogWalkDayService {
         const daysValues = walkDays.map((curWeek) => {
             const valueArr = [];
             for (const key in curWeek) {
-                if (key !== 'id') {
+                if (key !== 'id' && key != 'updatedAt') {
                     valueArr.push(curWeek[key]);
                 }
             }
@@ -29,7 +29,7 @@ export class DogWalkDayService {
     }
 
     async getWalkDayList(walkDayIds: number[]): Promise<number[][]> {
-        const foundDays = await this.dogWalkDayRepository.find({where:{ id: In(walkDayIds) }});
+        const foundDays = await this.dogWalkDayRepository.find({ where: { id: In(walkDayIds) } });
         if (!foundDays.length) {
             throw new NotFoundException();
         }
