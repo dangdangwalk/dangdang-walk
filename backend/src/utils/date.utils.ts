@@ -1,3 +1,10 @@
+export function formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
 export function getWeek(date: Date): number {
     const currentDate = date.getDate();
     const firstDay = new Date(date.setDate(1)).getDay();
@@ -44,11 +51,4 @@ export function getOneMonthAgo(date: Date): Date {
     const oneMonthAgo = new Date(date);
     oneMonthAgo.setMonth(date.getMonth() - 1);
     return oneMonthAgo;
-}
-
-export function formatDate(date: Date): string {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
 }
