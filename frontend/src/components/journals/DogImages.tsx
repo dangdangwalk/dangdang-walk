@@ -19,7 +19,7 @@ export default function DogImages({ imageFileNames, children }: Props) {
     );
 }
 
-interface Props {
+export interface Props {
     imageFileNames: Array<ImageFileName>;
     children: ReactNode;
 }
