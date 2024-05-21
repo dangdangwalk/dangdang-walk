@@ -11,7 +11,7 @@ import { fetchDogList } from '@/api/dogs';
 import Avatar from '@/components/common/Avatar';
 import SelectBox from '@/components/common/SelectBox';
 import { queryStringKeys } from '@/constants';
-
+const { REACT_APP_BASE_IMAGE_URL = '' } = window._ENV ?? process.env;
 interface ReceivedState {
     dog?: Dog;
     dogs?: Dog[];
@@ -19,12 +19,13 @@ interface ReceivedState {
 
 export default function Journals() {
     const location = useLocation();
+    const navigate = useNavigate();
+
     const [searchParams, setSearchParams] = useSearchParams();
     const receivedState = location.state as ReceivedState;
     const [dogList, setDogList] = useState<Dog[]>(receivedState?.dogs ?? []);
     const [selectedDog, setSelectedDog] = useState<Dog | undefined>(receivedState?.dog);
     const { journals } = useJournals();
-    const navigate = useNavigate();
 
     const goBack = () => {
         navigate('/');
@@ -41,8 +42,16 @@ export default function Journals() {
         if (selectedDog) return;
         fetchDogList().then((data) => {
             if (data) {
-                setDogList(data);
-                setSelectedDog(data[0]);
+                const dogs: Dog[] = data.map((dog) => {
+                    return {
+                        ...dog,
+                        profilePhotoUrl: dog.profilePhotoUrl
+                            ? `${REACT_APP_BASE_IMAGE_URL}/${dog.profilePhotoUrl}`
+                            : undefined,
+                    };
+                });
+                setDogList(dogs);
+                setSelectedDog(dogs[0]);
             } else {
                 navigate('/');
             }
@@ -56,7 +65,9 @@ export default function Journals() {
                 </Topbar.Front>
                 <Topbar.Center className="h-full">
                     <SelectBox onChange={handleSelectDog} defaultValue={selectedDog?.name}>
-                        <SelectBox.Label className=" flex h-12  justify-center items-center"></SelectBox.Label>
+                        <SelectBox.Label className=" flex h-12  justify-center items-center">
+                            <div>{selectedDog?.name}</div>
+                        </SelectBox.Label>
                         <SelectBox.Group>
                             {dogList.map((dog) => (
                                 <SelectBox.Option key={dog.id} value={dog.name}>
