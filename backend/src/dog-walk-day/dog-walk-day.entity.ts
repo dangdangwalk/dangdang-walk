@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('dog_walk_day')
 export class DogWalkDay {
@@ -26,11 +26,11 @@ export class DogWalkDay {
     @Column({ default: 0 })
     sun: number;
 
-    @UpdateDateColumn({
-        name: 'updated_at',
-        type: 'timestamp',
-        default: () => 'CURRENT_TIMESTAMP',
-        onUpdate: 'CURRENT_TIMESTAMP',
-    })
-    updatedAt: Date;
+    // @Column({
+    //     name: 'updated_at',
+    //     type: 'timestamp',
+    //     default: () => 'CURRENT_TIMESTAMP(6)',
+    //     onUpdate: 'CURRENT_TIMESTAMP(6)',
+    // })
+    // updatedAt: Date;
 }

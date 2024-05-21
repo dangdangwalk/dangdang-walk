@@ -13,22 +13,22 @@ export class WalkService {
         private readonly dogsService: DogsService
     ) {}
 
-    async checkAvailableDogs(dogIds: number[]) {
-        for (const curDogId of dogIds) {
-            const curDogInfo = await this.dogsService.findOne({ id: curDogId });
-            const updatedAt = curDogInfo.updatedAt;
-            const curTime = new Date();
-
-            updatedAt.setHours(updatedAt.getHours() + MAX_WALK_TIME);
-            if (curTime >= updatedAt) {
-                await this.dogsService.updateIsWalking(curDogId, false);
-            }
-        }
-    }
+    // async checkAvailableDogs(dogIds: number[]) {
+    //     for (const curDogId of dogIds) {
+    //         const curDogInfo = await this.dogsService.findOne({ id: curDogId });
+    //         const updatedAt = curDogInfo.updatedAt;
+    //         const curTime = new Date();
+    //
+    //         updatedAt.setHours(updatedAt.getHours() + MAX_WALK_TIME);
+    //         if (curTime >= updatedAt) {
+    //             await this.dogsService.updateIsWalking(curDogId, false);
+    //         }
+    //     }
+    // }
 
     async getAvailableDogs(userId: number): Promise<DogSummary[]> {
         const ownDogIds = await this.usersService.getOwnDogsList(userId);
-        await this.checkAvailableDogs(ownDogIds);
+        // await this.checkAvailableDogs(ownDogIds);
         return await this.dogsService.getDogsSummaryList({ id: In(ownDogIds), isWalking: false });
     }
 }
