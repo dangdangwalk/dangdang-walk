@@ -140,7 +140,7 @@ describe('UsersService', () => {
                     service.createIfNotExists({
                         oauthNickname: 'modifyTest',
                         email: 'test@mail.com',
-                        profileImage: 'test.jpg',
+                        profileImageUrl: 'test.jpg',
                         oauthId: mockUser.oauthId,
                         oauthAccessToken: mockUser.oauthAccessToken,
                         oauthRefreshToken: mockUser.oauthRefreshToken,

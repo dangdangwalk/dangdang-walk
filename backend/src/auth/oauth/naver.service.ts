@@ -86,7 +86,7 @@ export class NaverService implements OauthService {
                 oauthId: data.response.id,
                 oauthNickname: data.response.nickname,
                 email: data.response.email,
-                profileImage: data.response.profile_image,
+                profileImageUrl: data.response.profile_image,
             };
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {

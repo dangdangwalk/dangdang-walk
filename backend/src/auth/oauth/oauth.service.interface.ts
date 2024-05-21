@@ -12,7 +12,7 @@ export interface RequestUserInfo {
     oauthId: string;
     oauthNickname: string;
     email: string;
-    profileImage: string;
+    profileImageUrl: string;
 }
 
 export interface OauthService {

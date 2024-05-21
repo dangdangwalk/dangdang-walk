@@ -99,7 +99,7 @@ export class KakaoService implements OauthService {
                 oauthId: data.id.toString(),
                 oauthNickname: data.properties.nickname,
                 email: data.kakao_account.email,
-                profileImage: data.properties.profile_image,
+                profileImageUrl: data.properties.profile_image,
             };
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {

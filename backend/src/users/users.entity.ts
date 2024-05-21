@@ -13,8 +13,8 @@ export class Users {
     @Column()
     email: string;
 
-    @Column({ name: 'profile_image' })
-    profileImage: string;
+    @Column({ name: 'profile_image_url' })
+    profileImageUrl: string;
 
     @Column({
         type: 'enum',

@@ -8,7 +8,7 @@ export class CreateUserDto {
     email: string;
 
     @IsString()
-    profileImage: string;
+    profileImageUrl: string;
 
     @IsString()
     oauthId: string;
