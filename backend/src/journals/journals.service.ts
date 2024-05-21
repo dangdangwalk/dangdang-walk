@@ -8,6 +8,7 @@ import { JournalPhotos } from 'src/journal-photos/journal-photos.entity';
 import { JournalPhotosService } from 'src/journal-photos/journal-photos.service';
 import { JournalsDogs } from 'src/journals-dogs/journals-dogs.entity';
 import { JournalsDogsService } from 'src/journals-dogs/journals-dogs.service';
+import { TodayWalkTimeService } from 'src/today-walk-time/today-walk-time.service';
 import { formatDate, getStartAndEndOfDay, getStartAndEndOfMonth, getStartAndEndOfWeek } from 'src/utils/date.util';
 import { checkIfExistsInArr, makeSubObject, makeSubObjectsArray } from 'src/utils/manipulate.util';
 import { DeleteResult, EntityManager, FindManyOptions, FindOptionsWhere, In, UpdateResult } from 'typeorm';
@@ -35,6 +36,7 @@ export class JournalsService {
         private readonly journalPhotosService: JournalPhotosService,
         private readonly excrementsService: ExcrementsService,
         private readonly dogWalkDayService: DogWalkDayService,
+        private readonly todayWalkTimeService: TodayWalkTimeService,
         private readonly entityManager: EntityManager
     ) {}
 
@@ -247,6 +249,15 @@ export class JournalsService {
         }
     }
 
+    async updateTodayWalkTime(dogIds: number[], duration: number) {
+        const todayWalkTimeIds = await this.dogsService.getRelatedTableIdList(dogIds, 'todayWalkTimeId');
+        for (const curWalkTimeId of todayWalkTimeIds) {
+            const walkTimeInfo = await this.todayWalkTimeService.findOne({ id: curWalkTimeId });
+            const updateDuration = walkTimeInfo.duration + duration;
+            this.todayWalkTimeService.update({ id: curWalkTimeId }, { duration: updateDuration });
+        }
+    }
+
     //@Transactional()
     async createJournal(userId: number, createJournalData: CreateJournalDto) {
         const dogIds = createJournalData.dogs;
@@ -264,6 +275,7 @@ export class JournalsService {
             await this.excrementsLoop(createJournalResult.id, excrements);
         }
         await this.updateDogWalkDay(dogIds);
+        await this.updateTodayWalkTime(dogIds, parseInt(createJournalData.journalInfo.duration));
     }
 
     //@Transactional()

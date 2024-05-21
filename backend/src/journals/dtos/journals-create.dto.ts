@@ -43,8 +43,9 @@ export class JournalInfoForCreate {
     @IsNotEmpty()
     startedAt: Date;
 
+    //TODO: validation 완성되면 number로 변경
     @IsNotEmpty()
-    duration: number;
+    duration: string;
 
     @IsArray()
     @ValidateNested()
