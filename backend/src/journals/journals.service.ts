@@ -7,7 +7,7 @@ import { JournalPhotos } from 'src/journal-photos/journal-photos.entity';
 import { JournalPhotosService } from 'src/journal-photos/journal-photos.service';
 import { JournalsDogs } from 'src/journals-dogs/journals-dogs.entity';
 import { JournalsDogsService } from 'src/journals-dogs/journals-dogs.service';
-import { formatDate, getStartAndEndOfMonth, getStartAndEndOfWeek } from 'src/utils/date.utils';
+import { formatDate, getStartAndEndOfDay, getStartAndEndOfMonth, getStartAndEndOfWeek } from 'src/utils/date.utils';
 import { checkIfExistsInArr, makeSubObject, makeSubObjectsArray } from 'src/utils/manipulate.util';
 import { DeleteResult, EntityManager, FindManyOptions, FindOptionsWhere, In, UpdateResult } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
@@ -98,7 +98,6 @@ export class JournalsService {
         const journalInfoRaw = await this.findOne({ id: journalId });
         const journalInfo = makeSubObject(journalInfoRaw, JournalInfoForDetail.getKeysForJournalTable());
         journalInfo.id = journalId;
-        console.log('journalInfo.route', journalInfo.routes);
         journalInfo.routes = JSON.parse(journalInfo.routes);
         journalInfo.photoUrls = await this.getJournalPhotos(journalId);
 
@@ -107,7 +106,6 @@ export class JournalsService {
 
     async getExcrementsCnt(journalId: number, dogId: number, type: ExcrementsType): Promise<number> {
         const excrements = await this.excrementsService.find({ where: { journalId, dogId, type } });
-        console.log('-----findresult', excrements);
 
         return excrements.length;
     }
@@ -121,11 +119,9 @@ export class JournalsService {
         if (!fecesCnt && !urineCnt) {
             return;
         }
-        console.log('journalId:', journalId, 'dogId:', dogId, 'fecesCnt:', fecesCnt, 'urineCnt:', urineCnt);
         fecesCnt ? (excrementsInfo.fecesCnt = fecesCnt) : fecesCnt;
         urineCnt ? (excrementsInfo.urineCnt = urineCnt) : urineCnt;
 
-        console.log('excrementsInfo:', excrementsInfo);
         return excrementsInfo;
     }
 
@@ -150,11 +146,9 @@ export class JournalsService {
             for (const curDogId of journalDogIds) {
                 dogInfo.push(await this.getDogsInfoForDetail(journalId, curDogId));
                 const curExcrements = await this.getExcrementsInfoForDetail(journalId, curDogId);
-                console.log('curExcrements:', curExcrements);
                 curExcrements ? excrementsInfo.push(curExcrements) : curExcrements;
             }
 
-            console.log('excrementsInfo', excrementsInfo);
             return new JournalDetailDto(journalInfo, dogInfo, excrementsInfo);
         } catch (error) {
             throw error;
@@ -325,12 +319,14 @@ export class JournalsService {
     }
 
     async getJournalIdsByDogIdAndDate(dogId: number, date: string): Promise<number[]> {
+        const startEndDate = getStartAndEndOfDay(new Date(date));
         const result = await this.entityManager
             .createQueryBuilder(Journals, 'journals')
             .orderBy('journals_id', 'ASC')
             .innerJoin(JournalsDogs, 'journals_dogs', 'journals.id = journals_dogs.journal_id')
             .where('journals_dogs.dog_id = :dogId', { dogId })
-            .andWhere('Date(journals.started_at) = :date', { date })
+            .andWhere('journals.started_at >= :startDate', { startDate: startEndDate.startDate })
+            .andWhere('journals.started_at < :endDate', { endDate: startEndDate.endDate })
             .getRawMany();
 
         return result.map((cur) => cur.journals_id);
