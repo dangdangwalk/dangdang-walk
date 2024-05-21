@@ -52,3 +52,19 @@ export function getOneMonthAgo(date: Date): Date {
     oneMonthAgo.setMonth(date.getMonth() - 1);
     return oneMonthAgo;
 }
+
+export function getLastSunday() {
+    const now = new Date();
+    let lastSunday;
+
+    if (now.getDay() > 0) {
+        const millisecondsToLastSunday = (now.getDay() - 1) * 24 * 60 * 60 * 1000 + 1;
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        lastSunday = new Date(today.getTime() - millisecondsToLastSunday);
+    } else {
+        lastSunday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 8, 23, 59, 59);
+    }
+
+    return lastSunday;
+}
