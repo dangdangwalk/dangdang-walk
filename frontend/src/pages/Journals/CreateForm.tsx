@@ -36,7 +36,7 @@ export default function CreateForm() {
     const removeSpinner = useSpinnerStore((state) => state.spinnerRemove);
 
     const [openModal, setOpenModal] = useState(false);
-    const [images, setImages] = useState<Array<ImageFileName>>([]);
+    const [imageFileNames, setImageFileNames] = useState<Array<ImageFileName>>([]);
     const [isUploading, setIsUploading] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
 
@@ -53,7 +53,7 @@ export default function CreateForm() {
             dog.profilePhotoUrl = getFileName(dog.profilePhotoUrl);
         });
 
-        setImages(photoUrls);
+        setImageFileNames(photoUrls);
     }, [location]);
 
     return (
@@ -78,7 +78,7 @@ export default function CreateForm() {
                     <Divider />
                     <CompanionDogs dogs={dogs} />
                     <Divider />
-                    <Photos imageUrls={images} isLoading={isUploading} onChange={handleAddImages} />
+                    <Photos imageUrls={imageFileNames} isLoading={isUploading} onChange={handleAddImages} />
                     <Divider />
                     <Memo textAreaRef={textAreaRef} />
                 </div>
@@ -171,7 +171,7 @@ export default function CreateForm() {
         await Promise.allSettled(uploadImagePromises);
 
         const filenames = uploadUrlResponses.map((uploadUrlResponse) => uploadUrlResponse.filename);
-        setImages((prevImages) => [...prevImages, ...filenames]);
+        setImageFileNames((prevImageFileNames) => [...prevImageFileNames, ...filenames]);
         setIsUploading(false);
     }
 }
