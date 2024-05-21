@@ -1,5 +1,5 @@
 import { create as createJournal } from '@/api/journals';
-import { getUploadUrl, uploadImage } from '@/api/upload';
+import { deleteImages, getUploadUrl, uploadImage } from '@/api/upload';
 import Cancel from '@/assets/icons/ic-top-cancel.svg';
 import { Button } from '@/components/common/Button';
 import { Divider } from '@/components/common/Divider';
@@ -86,7 +86,13 @@ export default function CreateForm() {
                     <Divider />
                     <CompanionDogs dogs={dogs} />
                     <Divider />
-                    <Photos imageFileNames={imageFileNames} isLoading={isUploading} onChange={handleAddImages} />
+                    <Photos
+                        imageFileNames={imageFileNames}
+                        isLoading={isUploading}
+                        isModifying
+                        onChange={handleAddImages}
+                        onDeleteImage={handleDeleteImage}
+                    />
                     <Divider />
                     <Memo textAreaRef={textAreaRef} />
                 </div>
@@ -181,6 +187,15 @@ export default function CreateForm() {
         const filenames = uploadUrlResponses.map((uploadUrlResponse) => uploadUrlResponse.filename);
         setImageFileNames((prevImageFileNames) => [...prevImageFileNames, ...filenames]);
         setIsUploading(false);
+    }
+
+    async function handleDeleteImage(imageFileName: ImageFileName) {
+        await deleteImages([imageFileName]);
+
+        setImageFileNames((prevImageFileNames) =>
+            prevImageFileNames.filter((prevImageFileName) => prevImageFileName !== imageFileName)
+        );
+        showToast('사진이 삭제되었습니다.');
     }
 }
 

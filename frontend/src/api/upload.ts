@@ -1,4 +1,5 @@
 import { createClient, httpClient } from '@/api/http';
+import { ImageFileName } from '@/pages/Journals/CreateForm';
 
 interface UploadUrlResponse {
     url: string;
@@ -24,4 +25,8 @@ export const uploadImage = async (file: File, url: string | undefined): Promise<
     if (!url || !file) return;
     const { data } = await uploadClient.put(url, file, { headers: { 'Content-Type': file.type } });
     return data;
+};
+
+export const deleteImages = async (imageFileNames: Array<ImageFileName>) => {
+    await httpClient.delete('/api/delete', { data: imageFileNames });
 };
