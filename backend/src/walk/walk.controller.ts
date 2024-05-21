@@ -22,7 +22,7 @@ export class WalkController {
         for (const curId of body.dogId) {
             dogIds.push(parseInt(curId));
         }
-        await this.dogsService.updateIsWalking(dogIds, false);
+        await this.dogsService.updateIsWalking(dogIds, true);
         return dogIds;
     }
 
