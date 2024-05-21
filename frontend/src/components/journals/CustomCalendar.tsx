@@ -77,12 +77,6 @@ export default function CustomCalendar() {
                         : !currentWeek.some((weekDate) => date.toDateString() === weekDate.toDateString())
                 }
                 tileContent={({ date, view }) => {
-                    let html = [];
-                    // 현재 날짜가 post 작성한 날짜 배열(mark)에 있다면, dot div 추가
-                    if (mark.has(formDate(date))) {
-                        html.push(<div className="dot"></div>);
-                    }
-                    // 다른 조건을 주어서 html.push 에 추가적인 html 태그를 적용할 수 있음.
                     return (
                         <>
                             <div className="flex flex-col justify-center items-center gap-2">
