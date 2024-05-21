@@ -1,11 +1,11 @@
-import { ImageUrl } from '@/pages/Journals/CreateForm';
+import { ImageFileName } from '@/pages/Journals/CreateForm';
 import { makeFileUrl } from '@/utils/url';
 import { ReactNode } from 'react';
 
-export default function DogImages({ imageUrls, children }: Props) {
+export default function DogImages({ imageFileNames, children }: Props) {
     return (
         <div className="flex flex-row gap-1 py-2 overflow-x-auto">
-            {imageUrls.map((imageUrl) => (
+            {imageFileNames.map((imageUrl) => (
                 <span key={imageUrl} className="inline-flex items-center h-[104px]">
                     <img
                         src={makeFileUrl(imageUrl)}
@@ -19,7 +19,7 @@ export default function DogImages({ imageUrls, children }: Props) {
     );
 }
 
-interface Props {
-    imageUrls: Array<ImageUrl>;
+export interface Props {
+    imageFileNames: Array<ImageFileName>;
     children: ReactNode;
 }
