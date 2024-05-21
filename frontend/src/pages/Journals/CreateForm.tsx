@@ -86,7 +86,12 @@ export default function CreateForm() {
                     <Divider />
                     <CompanionDogs dogs={dogs} />
                     <Divider />
-                    <Photos imageFileNames={imageFileNames} isLoading={isUploading} onChange={handleAddImages} />
+                    <Photos
+                        imageFileNames={imageFileNames}
+                        isLoading={isUploading}
+                        isModifying
+                        onChange={handleAddImages}
+                    />
                     <Divider />
                     <Memo textAreaRef={textAreaRef} />
                 </div>
