@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer';
-import { IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { Excrements } from 'src/excrements/excrements.entity';
 
 export class PhotoUrlDto {
     @IsNotEmpty()
@@ -22,52 +23,29 @@ export class DogInfoForDetail {
     @IsOptional()
     profilePhotoUrl: string | null;
 
-    @IsNotEmpty()
-    fecesCnt: number;
-
-    @IsNotEmpty()
-    urinesCnt: number;
-
-    // TODO: reflect -metadata 사용하도록 변경
+    // TODO: reflect-metadata 사용하도록 변경
     static getKeysForDogTable() {
         return ['id', 'name', 'profilePhotoUrl'];
     }
 }
 
-export class Companions {
+export class ExcrementsInfoForDetail {
     @IsNotEmpty()
-    id: number;
+    dogId: number;
 
-    @IsNotEmpty()
-    name: string;
+    @IsOptional()
+    @IsNumber()
+    fecesCnt: number;
 
-    profilePhotoUrl: string | null;
-}
-
-export class RouteDto {
-    @IsNotEmpty()
-    x: number;
-
-    @IsNotEmpty()
-    y: number;
+    @IsOptional()
+    @IsNumber()
+    urineCnt: number;
 }
 
 export class JournalInfoForDetail {
     @IsNotEmpty()
-    distance: number;
-
-    @IsNotEmpty()
-    calories: number;
-
-    @IsNotEmpty()
-    startedAt: Date;
-
-    @IsNotEmpty()
-    duration: number;
-
-    @IsNotEmpty()
     @IsString()
-    routeImageUrl: string;
+    routes: Location[];
 
     @IsNotEmpty()
     memo: string;
@@ -77,7 +55,7 @@ export class JournalInfoForDetail {
     photoUrls: string[];
 
     static getKeysForJournalTable() {
-        return ['distance', 'calories', 'startedAt', 'duration', 'routeImageUrl', 'memo'];
+        return ['routes', 'memo'];
     }
     static getKeysForJournalPhotoTable() {
         return ['photoUrls'];
@@ -93,15 +71,16 @@ export class JournalDetailDto {
     @IsNotEmpty()
     @ValidateNested()
     @Type(() => DogInfoForDetail)
-    dog: DogInfoForDetail;
+    dogs: DogInfoForDetail[];
 
-    @IsNotEmpty()
-    @Type(() => Companions)
-    companions: Companions[];
+    @IsOptional()
+    @ValidateNested()
+    @Type(() => Excrements)
+    excrements: ExcrementsInfoForDetail[];
 
-    constructor(journalInfo: JournalInfoForDetail, dogInfo: DogInfoForDetail, companions: Companions[]) {
+    constructor(journalInfo: JournalInfoForDetail, dogInfo: DogInfoForDetail[], excrements: ExcrementsInfoForDetail[]) {
         this.journalInfo = journalInfo;
-        this.dog = dogInfo;
-        this.companions = companions;
+        this.dogs = dogInfo;
+        excrements.length ? (this.excrements = excrements) : excrements;
     }
 }
