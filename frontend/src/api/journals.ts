@@ -1,5 +1,6 @@
 import { httpClient } from '@/api/http';
 import { Journal } from '@/models/journals';
+import { Position as NumberPosition } from '@/models/location.model';
 import { formDate } from '@/utils/date';
 
 export const fetchJournals = async (dogId: number, date: string | null = formDate(new Date())): Promise<Journal[]> => {
@@ -19,7 +20,7 @@ interface JournalCreateForm {
         calories: number;
         startedAt: string;
         duration: number;
-        routeImageUrl: string;
+        routes: Array<NumberPosition>;
         photoUrls?: string[];
         memo?: string;
     };
@@ -28,11 +29,11 @@ interface JournalCreateForm {
 
 interface Excrement {
     dogId: number;
-    fecesLocations: Array<Location>;
-    urineLocations: Array<Location>;
+    fecesLocations: Array<StringPosition>;
+    urineLocations: Array<StringPosition>;
 }
 
-interface Location {
+interface StringPosition {
     lat: string;
     lng: string;
 }
