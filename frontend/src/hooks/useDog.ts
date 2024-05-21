@@ -1,11 +1,11 @@
-import { ResponseDogs, deleteDog, fetchDogs, registerDogInfo } from '@/api/dogs';
+import { ResponseDogs, deleteDog, fetchDogs, registerDogInfo, updateDog } from '@/api/dogs';
 import queryClient from '@/api/queryClient';
 import { uploadImage } from '@/api/upload';
-import { useAuth } from '@/hooks/useAuth';
 import { UseMutationCustomOptions } from '@/types/common';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import ProfileUnknown from '@/assets/icons/ic-profile-unknown.svg';
+import { useAuth } from '@/hooks/useAuth';
 const { REACT_APP_BASE_IMAGE_URL = '' } = window._ENV ?? process.env;
 
 const useRegisterDog = (mutationOptions?: UseMutationCustomOptions) => {
@@ -21,7 +21,6 @@ const useRegisterDog = (mutationOptions?: UseMutationCustomOptions) => {
 
 const useFetchDogs = () => {
     const { refreshTokenQuery } = useAuth();
-
     const { data, isSuccess, isError } = useQuery<ResponseDogs[]>({
         queryKey: ['dogs'],
         queryFn: fetchDogs,
@@ -42,6 +41,7 @@ const useFetchDogs = () => {
         return [
             {
                 id: 0,
+                weight: 0,
                 name: '',
                 breed: '',
                 gender: '',
@@ -58,7 +58,18 @@ const useDeleteDog = () => {
         mutationFn: deleteDog,
         onSuccess: () => {
             queryClient.refetchQueries({ queryKey: ['dogs'] });
+            window.location.reload();
         },
+    });
+};
+
+const useUpdateDog = (mutationOptions?: UseMutationCustomOptions) => {
+    return useMutation({
+        mutationFn: updateDog,
+        onSuccess: () => {
+            window.location.reload();
+        },
+        ...mutationOptions,
     });
 };
 
@@ -71,6 +82,7 @@ export const useDog = () => {
     const registerDogMutation = useRegisterDog();
     const dogs = useFetchDogs();
     const deleteDogMutation = useDeleteDog();
+    const updateDogMutation = useUpdateDog();
 
-    return { registerDogMutation, dogs, deleteDogMutation };
+    return { registerDogMutation, dogs, deleteDogMutation, updateDogMutation };
 };

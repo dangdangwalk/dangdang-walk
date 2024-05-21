@@ -14,6 +14,7 @@ const queryKeys = {
     GET_IMAGE_URL: 'getImageURL',
     WALK_AVAILABLE_DOGS: 'walkAvailableDogs',
     GET_PROFILE: 'getProfile',
+    GET_DOG_RECENT_MONTH_STATISTICS: 'getDogRecentMonthStatistic',
 } as const;
 
 const storageKeys = {
