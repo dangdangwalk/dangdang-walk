@@ -6,12 +6,11 @@ import { S3Service } from 'src/s3/s3.service';
 import { Transactional } from 'typeorm-transactional';
 import { Users } from '../users/users.entity';
 import { UsersService } from '../users/users.service';
-import { OAuthAuthorizeDTO } from './dtos/oauth.dto';
 import { GoogleService } from './oauth/google.service';
 import { KakaoService } from './oauth/kakao.service';
 import { NaverService } from './oauth/naver.service';
 import { AccessTokenPayload, RefreshTokenPayload, TokenService } from './token/token.service';
-import { AuthData, OauthData } from './types/auth.type';
+import { AuthData, OauthAuthorizeData, OauthData } from './types/auth.type';
 
 @Injectable()
 export class AuthService {
@@ -29,7 +28,7 @@ export class AuthService {
 
     private readonly redirectURI = this.configService.get<string>('CORS_ORIGIN') + '/callback';
 
-    async login({ authorizeCode, provider }: OAuthAuthorizeDTO): Promise<AuthData | OauthData | undefined> {
+    async login({ authorizeCode, provider }: OauthAuthorizeData): Promise<AuthData | OauthData | undefined> {
         const { access_token: oauthAccessToken, refresh_token: oauthRefreshToken } = await this[
             `${provider}Service`
         ].requestToken(authorizeCode, this.redirectURI);

@@ -11,12 +11,11 @@ import { Users } from '../users/users.entity';
 import { UsersRepository } from '../users/users.repository';
 import { UsersService } from '../users/users.service';
 import { AuthService } from './auth.service';
-import { OAuthAuthorizeDTO } from './dtos/oauth.dto';
 import { GoogleService } from './oauth/google.service';
 import { KakaoService } from './oauth/kakao.service';
 import { NaverService } from './oauth/naver.service';
 import { TokenService } from './token/token.service';
-import { OAUTH_PROVIDERS, OauthData } from './types/auth.type';
+import { OAUTH_PROVIDERS, OauthAuthorizeData, OauthData } from './types/auth.type';
 
 const context = describe;
 
@@ -105,7 +104,7 @@ describe('AuthService', () => {
                 it(`${provider} 로그인 후 access token과 refresh token을 반환해야 한다.`, async () => {
                     jest.spyOn(usersService, 'updateAndFindOne').mockResolvedValue({ id: 1 } as Users);
 
-                    const result = await service.login({ authorizeCode, provider } as OAuthAuthorizeDTO);
+                    const result = await service.login({ authorizeCode, provider } as OauthAuthorizeData);
 
                     expect(result).toEqual({
                         accessToken: mockUser.refreshToken,
@@ -121,7 +120,7 @@ describe('AuthService', () => {
                 it(`${provider} 로그인 후 oauth data를 반환해야 한다.`, async () => {
                     jest.spyOn(usersService, 'updateAndFindOne').mockRejectedValue(new NotFoundException());
 
-                    const result = await service.login({ authorizeCode, provider } as OAuthAuthorizeDTO);
+                    const result = await service.login({ authorizeCode, provider } as OauthAuthorizeData);
 
                     expect(result).toEqual({
                         oauthAccessToken: mockUser.oauthAccessToken,
