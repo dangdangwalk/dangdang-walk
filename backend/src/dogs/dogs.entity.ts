@@ -54,12 +54,7 @@ export class Dogs {
     @Column({ name: 'is_walking', default: false })
     isWalking: boolean;
 
-    @UpdateDateColumn({
-        name: 'updated_at',
-        type: 'timestamp',
-        default: () => 'CURRENT_TIMESTAMP',
-        onUpdate: 'CURRENT_TIMESTAMP',
-    })
+    @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
     updatedAt: Date;
 
     constructor(entityData: Partial<Dogs>) {
