@@ -1,9 +1,12 @@
+import { fetchJournal } from '@/api/journals';
 import queryClient from '@/api/queryClient';
 import Camera from '@/pages/Camera';
 import Health from '@/pages/Health';
 import Home from '@/pages/Home';
 import Join from '@/pages/Join';
 import JournalCreateForm from '@/pages/Journals/CreateForm';
+import Detail from '@/pages/Journals/Detail';
+import Journals from '@/pages/Journals/Journals';
 import OauthCallback from '@/pages/OauthCallback';
 import Profile from '@/pages/Profile';
 import Walk from '@/pages/Walk';
@@ -15,7 +18,6 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import App from './App';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import Journals from '@/pages/Journals/Journals';
 const router = createBrowserRouter([
     {
         path: '/',
@@ -61,6 +63,14 @@ const router = createBrowserRouter([
             {
                 path: '/journals',
                 element: <Journals />,
+            },
+            {
+                path: '/journals/:journalId',
+                element: <Detail />,
+                loader: async ({ params }) => {
+                    const journalId = Number(params.journalId);
+                    return await fetchJournal(journalId);
+                },
             },
         ],
     },

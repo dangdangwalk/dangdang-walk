@@ -1,6 +1,6 @@
 import { httpClient } from '@/api/http';
 import { Journal } from '@/models/journals';
-import { Position as NumberPosition } from '@/models/location.model';
+import { Position as NumberPosition, Position } from '@/models/location.model';
 import { formDate } from '@/utils/date';
 
 export const fetchJournals = async (dogId: number, date: string = formDate(new Date())): Promise<Journal[]> => {
@@ -11,6 +11,16 @@ export const fetchJournals = async (dogId: number, date: string = formDate(new D
 
 export const create = async (form: JournalCreateForm) => {
     await httpClient.post('/journals', form);
+};
+
+export const update = async (journalId: number, form: JournalUpdateForm) => {
+    await httpClient.patch(`/journals/${journalId}`, form);
+};
+
+export const fetchJournal = async (journalId: number) => {
+    const { data } = await httpClient.get<JournalDetail>(`/journals/${journalId}`);
+
+    return data;
 };
 
 interface JournalCreateForm {
@@ -36,4 +46,32 @@ interface Excrement {
 interface StringPosition {
     lat: string;
     lng: string;
+}
+
+export interface JournalDetail {
+    journalInfo: {
+        id: number;
+        routes: Array<Position>;
+        memo: string;
+        photoUrls: Array<string>;
+    };
+    dogs: Array<Dog>;
+    excrements?: Array<ExcrementCounts>;
+}
+
+interface Dog {
+    id: number;
+    name: string;
+    profilePhotoUrl: string;
+}
+
+interface ExcrementCounts {
+    dogId: number;
+    fecesCnt: number;
+    urineCnt: number;
+}
+
+interface JournalUpdateForm {
+    memo?: string;
+    photoUrls?: Array<string>;
 }
