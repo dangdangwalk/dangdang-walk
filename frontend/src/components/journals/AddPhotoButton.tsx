@@ -35,7 +35,7 @@ export default function AddPhotoButton({ isLoading, onChange }: Props) {
     }
 }
 
-interface Props {
+export interface Props {
     isLoading: boolean;
     onChange: ChangeEventHandler<HTMLInputElement>;
 }

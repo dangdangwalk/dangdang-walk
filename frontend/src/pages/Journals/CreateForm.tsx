@@ -1,6 +1,5 @@
 import { getUploadUrl, uploadImage } from '@/api/upload';
 import Cancel from '@/assets/icons/ic-top-cancel.svg';
-import Avatar from '@/components/common/Avatar';
 import { Button } from '@/components/common/Button';
 import { Divider } from '@/components/common/Divider';
 import {
@@ -13,10 +12,10 @@ import {
     ModalHeader,
     ModalTitle,
 } from '@/components/common/Modal';
-import AddPhotoButton from '@/components/journals/AddPhotoButton';
-import DogImages from '@/components/journals/DogImages';
-import ExcrementDisplay from '@/components/journals/ExcrementDisplay';
+import CompanionDogs from '@/components/journals/CompanionDogs';
 import Heading from '@/components/journals/Heading';
+import Memo from '@/components/journals/Memo';
+import Photos from '@/components/journals/Photos';
 import WalkInfo from '@/components/walk/WalkInfo';
 import useToast from '@/hooks/useToast';
 import { WalkingDog } from '@/models/dog.model';
@@ -71,37 +70,11 @@ export default function CreateForm() {
                     <div className="h-[216px] rounded-lg bg-slate-300">경로가 표시된 지도</div>
                     <WalkInfo distance={distance} calories={calories} duration={duration} />
                     <Divider />
-                    <div className="px-5 py-[10px]">
-                        <Heading headingNumber={2}>함께한 댕댕이</Heading>
-                        <div className="flex flex-col">
-                            {dogs.map((dog) => (
-                                <div key={dog.id} className="flex justify-between h-[52px]">
-                                    <Avatar url={dog.profilePhotoUrl} name={dog.name} />
-                                    <ExcrementDisplay
-                                        fecesCount={dog.fecesLocations.length}
-                                        urineCount={dog.urineLocations.length}
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                    <CompanionDogs dogs={dogs} />
                     <Divider />
-                    <div className="px-5 py-[10px]">
-                        <Heading headingNumber={2}>사진</Heading>
-                        <DogImages imageUrls={images}>
-                            <AddPhotoButton isLoading={isUploading} onChange={handleAddImages} />
-                        </DogImages>
-                    </div>
+                    <Photos imageUrls={images} isLoading={isUploading} onChange={handleAddImages} />
                     <Divider />
-                    <div className="px-5 py-[10px]">
-                        <Heading headingNumber={2}>메모</Heading>
-                        <textarea
-                            name="memo"
-                            className="w-full h-[100px] my-2 px-4 py-3 rounded-lg border border-[#E4E4E4] text-xs placeholder:text-[#BABABA]"
-                            placeholder="오늘 산책에 대해서 자유롭게 메모해보세요."
-                            ref={textAreaRef}
-                        />
-                    </div>
+                    <Memo textAreaRef={textAreaRef} />
                 </div>
                 <Button rounded="none" className="w-full h-16" disabled={isSaving} onClick={handleSave}>
                     <span className="-translate-y-[5px]">저장하기</span>
