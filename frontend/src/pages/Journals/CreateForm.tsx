@@ -1,6 +1,5 @@
 import { getUploadUrl, uploadImage } from '@/api/upload';
 import Cancel from '@/assets/icons/ic-top-cancel.svg';
-import Avatar from '@/components/common/Avatar';
 import { Button } from '@/components/common/Button';
 import { Divider } from '@/components/common/Divider';
 import {
@@ -14,8 +13,8 @@ import {
     ModalTitle,
 } from '@/components/common/Modal';
 import AddPhotoButton from '@/components/journals/AddPhotoButton';
+import CompanionDogs from '@/components/journals/CompanionDogs';
 import DogImages from '@/components/journals/DogImages';
-import ExcrementDisplay from '@/components/journals/ExcrementDisplay';
 import Heading from '@/components/journals/Heading';
 import WalkInfo from '@/components/walk/WalkInfo';
 import useToast from '@/hooks/useToast';
@@ -71,20 +70,7 @@ export default function CreateForm() {
                     <div className="h-[216px] rounded-lg bg-slate-300">경로가 표시된 지도</div>
                     <WalkInfo distance={distance} calories={calories} duration={duration} />
                     <Divider />
-                    <div className="px-5 py-[10px]">
-                        <Heading headingNumber={2}>함께한 댕댕이</Heading>
-                        <div className="flex flex-col">
-                            {dogs.map((dog) => (
-                                <div key={dog.id} className="flex justify-between h-[52px]">
-                                    <Avatar url={dog.profilePhotoUrl} name={dog.name} />
-                                    <ExcrementDisplay
-                                        fecesCount={dog.fecesLocations.length}
-                                        urineCount={dog.urineLocations.length}
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                    <CompanionDogs dogs={dogs} />
                     <Divider />
                     <div className="px-5 py-[10px]">
                         <Heading headingNumber={2}>사진</Heading>
