@@ -28,4 +28,6 @@ export class DogWalkDay {
 
     @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
     updatedAt: Date;
+
+    [key: string]: number | Date;
 }

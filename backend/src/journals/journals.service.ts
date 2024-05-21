@@ -1,4 +1,5 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
+import { DogWalkDayService } from 'src/dog-walk-day/dog-walk-day.service';
 import { DogsService } from 'src/dogs/dogs.service';
 import { Excrements } from 'src/excrements/excrements.entity';
 import { ExcrementsService } from 'src/excrements/excrements.service';
@@ -10,7 +11,6 @@ import { JournalsDogsService } from 'src/journals-dogs/journals-dogs.service';
 import { formatDate, getStartAndEndOfDay, getStartAndEndOfMonth, getStartAndEndOfWeek } from 'src/utils/date.util';
 import { checkIfExistsInArr, makeSubObject, makeSubObjectsArray } from 'src/utils/manipulate.util';
 import { DeleteResult, EntityManager, FindManyOptions, FindOptionsWhere, In, UpdateResult } from 'typeorm';
-import { Transactional } from 'typeorm-transactional';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { JournalInfoForList } from './dtos/journal-list.dto';
 import { UpdateJournalDto } from './dtos/journal-update.dto';
@@ -34,6 +34,7 @@ export class JournalsService {
         private readonly dogsService: DogsService,
         private readonly journalPhotosService: JournalPhotosService,
         private readonly excrementsService: ExcrementsService,
+        private readonly dogWalkDayService: DogWalkDayService,
         private readonly entityManager: EntityManager
     ) {}
 
@@ -234,12 +235,24 @@ export class JournalsService {
         }
     }
 
-    @Transactional()
+    async updateDogWalkDay(dogIds: number[]) {
+        const dogWalkDayIds = await this.dogsService.getRelatedTableIdList(dogIds, 'walkDayId');
+        const dayArr = ['sun', 'mon', 'tue', 'wed', 'thr', 'fri', 'sat'];
+        const day = dayArr[new Date().getDay()];
+
+        for (const curWalkDayId of dogWalkDayIds) {
+            const curWalkDay = await this.dogWalkDayService.findOne({ id: curWalkDayId });
+            const curCnt = curWalkDay[day] as number;
+            this.dogWalkDayService.update({ id: curWalkDayId }, { [day]: curCnt + 1 });
+        }
+    }
+
+    //@Transactional()
     async createJournal(userId: number, createJournalData: CreateJournalDto) {
-        const dogs = createJournalData.dogs;
+        const dogIds = createJournalData.dogs;
         const journalData = this.makeJournalData(userId, createJournalData);
         const createJournalResult = await this.createNewJournal(userId, journalData);
-        await this.createNewJournalDogs(createJournalResult.id, dogs);
+        await this.createNewJournalDogs(createJournalResult.id, dogIds);
 
         const photoUrls = this.checkPhotoUrlExist(createJournalData.journalInfo.photoUrls);
         if (photoUrls.length) {
@@ -250,9 +263,10 @@ export class JournalsService {
         if (excrements.length) {
             await this.excrementsLoop(createJournalResult.id, excrements);
         }
+        await this.updateDogWalkDay(dogIds);
     }
 
-    @Transactional()
+    //@Transactional()
     async updateJournal(journalId: number, updateJournalData: UpdateJournalDto) {
         if (updateJournalData.memo) {
             await this.updateAndFindOne({ id: journalId }, { memo: updateJournalData.memo });
