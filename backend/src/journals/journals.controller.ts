@@ -8,17 +8,11 @@ import { CreateJournalDto } from './dto/journals-create.dto';
 import { AuthJournalGuard } from './guards/authJournal.guard';
 import { JournalsService } from './journals.service';
 
-@Controller('journals')
+@Controller('/journals')
 export class JournalsController {
     constructor(private readonly journalsService: JournalsService) {}
 
-    @Get('/:id(\\d+)')
-    @UseGuards(AuthJournalGuard)
-    getJournalDetail(@Param('id', ParseIntPipe) journalId: number, @Query('dogId', ParseIntPipe) dogId: number) {
-        return this.journalsService.getJournalDetail(journalId, dogId);
-    }
-
-    @Get('/')
+    @Get()
     async getJournalList(
         @Query('dogId', ParseIntPipe) dogId: number,
         @Query('date', DateValidationPipe) date: string
@@ -26,10 +20,16 @@ export class JournalsController {
         return await this.journalsService.getJournalList(dogId, date);
     }
 
-    @Post('/')
+    @Post()
     async createJournal(@User() user: AccessTokenPayload, @Body() body: CreateJournalDto) {
         await this.journalsService.createJournal(user.userId, body);
         return true;
+    }
+
+    @Get('/:id(\\d+)')
+    @UseGuards(AuthJournalGuard)
+    getJournalDetail(@Param('id', ParseIntPipe) journalId: number, @Query('dogId', ParseIntPipe) dogId: number) {
+        return this.journalsService.getJournalDetail(journalId, dogId);
     }
 
     @Patch('/:id(\\d+)')

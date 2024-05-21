@@ -4,16 +4,16 @@ import { User } from '../users/decorators/user.decorator';
 import { UpdateUserDto } from './dto/updateUser.dto';
 import { UsersService } from './users.service';
 
-@Controller('users')
+@Controller('/users')
 export class UsersController {
     constructor(private readonly usersService: UsersService) {}
 
-    @Get('me')
+    @Get('/me')
     async getUserProfile(@User() user: AccessTokenPayload) {
         return await this.usersService.getUserProfile(user);
     }
 
-    @Patch('me')
+    @Patch('/me')
     async updateUserProfile(@User() { userId }: AccessTokenPayload, @Body() userInfo: UpdateUserDto) {
         return await this.usersService.updateUserProfile(userId, userInfo);
     }
