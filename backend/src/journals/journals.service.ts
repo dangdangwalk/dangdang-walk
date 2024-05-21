@@ -15,7 +15,13 @@ import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity
 import { JournalInfoForList } from './dto/journal-list.dto';
 import { UpdateJournalDto } from './dto/journal-update.dto';
 import { CreateJournalDto, ExcrementsInfoForCreate, JournalInfoForCreate, Location } from './dto/journals-create.dto';
-import { DogInfoForDetail, JournalDetailDto, JournalInfoForDetail, PhotoUrlDto } from './dto/journals-detail.dto';
+import {
+    DogInfoForDetail,
+    ExcrementsInfoForDetail,
+    JournalDetailDto,
+    JournalInfoForDetail,
+    PhotoUrlDto,
+} from './dto/journals-detail.dto';
 import { Journals } from './journals.entity';
 import { JournalsRepository } from './journals.repository';
 import { CreateJournalData } from './types/journal-types';
@@ -63,10 +69,6 @@ export class JournalsService {
         return this.journalsRepository.updateAndFindOne(where, partialEntity);
     }
 
-    async getOwnJournals(userId: number): Promise<Journals[]> {
-        return this.journalsRepository.find({ where: { id: userId } });
-    }
-
     async getOwnJournalIds(userId: number): Promise<number[]> {
         const ownJournals = await this.journalsRepository.find({ where: { userId: userId } });
 
@@ -83,15 +85,6 @@ export class JournalsService {
         return photoUrls as string[];
     }
 
-    async getJournalInfoForDetail(journalId: number): Promise<JournalInfoForDetail> {
-        const journalInfoRaw = await this.findOne({ id: journalId });
-        const journalInfo = makeSubObject(journalInfoRaw, JournalInfoForDetail.getKeysForJournalTable());
-
-        journalInfo.photoUrls = await this.getJournalPhotos(journalId);
-
-        return journalInfo;
-    }
-
     async checkDogExistsInJournal(journalDogs: JournalsDogs[], dogId: number) {
         const journalDogIds = journalDogs.map((cur) => cur.dogId);
 
@@ -101,31 +94,47 @@ export class JournalsService {
         return;
     }
 
+    async getJournalInfoForDetail(journalId: number): Promise<JournalInfoForDetail> {
+        const journalInfoRaw = await this.findOne({ id: journalId });
+        const journalInfo = makeSubObject(journalInfoRaw, JournalInfoForDetail.getKeysForJournalTable());
+        journalInfo.id = journalId;
+        console.log('journalInfo.route', journalInfo.routes);
+        journalInfo.routes = JSON.parse(journalInfo.routes);
+        journalInfo.photoUrls = await this.getJournalPhotos(journalId);
+
+        return journalInfo;
+    }
+
     async getExcrementsCnt(journalId: number, dogId: number, type: ExcrementsType): Promise<number> {
-        const excrements = await this.excrementsService.find({ journalId, dogId, type });
+        const excrements = await this.excrementsService.find({ where: { journalId, dogId, type } });
+        console.log('-----findresult', excrements);
 
         return excrements.length;
     }
 
-    async getDogInfoForDetail(journalId: number, dogId: number): Promise<DogInfoForDetail> {
-        const dogInfoRaw = await this.dogsService.findOne({ id: dogId });
+    async getExcrementsInfoForDetail(journalId: number, dogId: number): Promise<ExcrementsInfoForDetail | void> {
+        const excrementsInfo = new ExcrementsInfoForDetail();
 
-        const dogInfo = makeSubObject(dogInfoRaw, DogInfoForDetail.getKeysForDogTable());
-
+        excrementsInfo.dogId = dogId;
         const fecesCnt = await this.getExcrementsCnt(journalId, dogId, ExcrementsType.feces);
         const urineCnt = await this.getExcrementsCnt(journalId, dogId, ExcrementsType.urine);
+        if (!fecesCnt && !urineCnt) {
+            return;
+        }
+        console.log('journalId:', journalId, 'dogId:', dogId, 'fecesCnt:', fecesCnt, 'urineCnt:', urineCnt);
+        fecesCnt ? (excrementsInfo.fecesCnt = fecesCnt) : fecesCnt;
+        urineCnt ? (excrementsInfo.urineCnt = urineCnt) : urineCnt;
 
-        dogInfo.fecesCnt = fecesCnt;
-        dogInfo.urineCnt = urineCnt;
-
-        return dogInfo;
+        console.log('excrementsInfo:', excrementsInfo);
+        return excrementsInfo;
     }
 
-    async getCompanionsProfile(journalDogs: JournalsDogs[], dogId: number) {
-        const companions = journalDogs.filter((cur) => cur.dogId !== dogId).map((cur) => cur.dogId);
-        const companionsProfile = await this.dogsService.getDogsSummaryList({ id: In(companions) });
+    async getDogsInfoForDetail(journalId: number, dogId: number): Promise<DogInfoForDetail> {
+        const dogInfoRaw = await this.dogsService.findOne({ id: dogId });
 
-        return companionsProfile;
+        const dogInfo: DogInfoForDetail = makeSubObject(dogInfoRaw, DogInfoForDetail.getKeysForDogTable());
+
+        return dogInfo;
     }
 
     async getJournalDetail(journalId: number, dogId: number): Promise<JournalDetailDto> {
@@ -134,10 +143,19 @@ export class JournalsService {
             await this.checkDogExistsInJournal(journalDogs, dogId);
 
             const journalInfo = await this.getJournalInfoForDetail(journalId);
-            const dogInfo = await this.getDogInfoForDetail(journalId, dogId);
-            const companionsProfile = await this.getCompanionsProfile(journalDogs, dogId);
 
-            return new JournalDetailDto(journalInfo, dogInfo, companionsProfile);
+            const journalDogIds = await this.journalsDogsService.getDogIdsByJournalId(journalId);
+            const dogInfo: DogInfoForDetail[] = [];
+            const excrementsInfo: ExcrementsInfoForDetail[] = [];
+            for (const curDogId of journalDogIds) {
+                dogInfo.push(await this.getDogsInfoForDetail(journalId, curDogId));
+                const curExcrements = await this.getExcrementsInfoForDetail(journalId, curDogId);
+                console.log('curExcrements:', curExcrements);
+                curExcrements ? excrementsInfo.push(curExcrements) : curExcrements;
+            }
+
+            console.log('excrementsInfo', excrementsInfo);
+            return new JournalDetailDto(journalInfo, dogInfo, excrementsInfo);
         } catch (error) {
             throw error;
         }

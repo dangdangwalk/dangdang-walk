@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DeleteResult, FindOptionsWhere, UpdateResult } from 'typeorm';
+import { DeleteResult, FindManyOptions, FindOptionsWhere, UpdateResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { Excrements } from './excrements.entity';
 import { ExcrementsRepository } from './excrements.repository';
@@ -24,8 +24,8 @@ export class ExcrementsService {
         ]);
     }
 
-    async find(where: FindOptionsWhere<Excrements>): Promise<Excrements[]> {
-        return this.excrementsRepository.find({ where });
+    async find(where: FindManyOptions<Excrements>): Promise<Excrements[]> {
+        return this.excrementsRepository.find(where);
     }
 
     async findOne(where: FindOptionsWhere<Excrements>): Promise<Excrements> {

@@ -25,6 +25,10 @@ export class JournalsDogsService {
         return this.journalsDogsRepository.find(where);
     }
 
+    async getDogIdsByJournalId(journalId: number): Promise<number[]> {
+        const findResult = await this.journalsDogsRepository.find({ where: { journalId } });
+        return findResult.map((cur) => cur.dogId);
+    }
     async getRecentJournalId(dogIds: number[]): Promise<(number | undefined)[]> {
         const result = dogIds.map(async (curDogId) => {
             const journal = await this.journalsDogsRepository.find({

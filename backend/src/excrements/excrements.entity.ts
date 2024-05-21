@@ -10,10 +10,16 @@ export class Excrements {
 
     @ManyToOne(() => Journals, (WalkJournals) => WalkJournals.id, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'journal_id' })
+    journal: Journals;
+
+    @Column({ name: 'journal_id' })
     journalId: number;
 
     @ManyToOne(() => Dogs, (dog) => dog.id, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'dog_id' })
+    dog: Dogs;
+
+    @Column({ name: 'dog_id' })
     dogId: number;
 
     @Column({ name: 'type', type: 'enum', enum: ExcrementsType })
