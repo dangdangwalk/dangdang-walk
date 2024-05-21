@@ -7,8 +7,8 @@ import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity
 import { UsersDogsService } from '../users-dogs/users-dogs.service';
 import { generateUuid } from '../utils/hash.utils';
 import { checkIfExistsInArr } from '../utils/manipulate.util';
-import { CreateUserDto } from './dto/createUser.dto';
-import { UpdateUserDto } from './dto/updateUser.dto';
+import { CreateUserDto } from './dtos/create-user.dto';
+import { UpdateUserDto } from './dtos/update-user.dto';
 import { CreateUser } from './types/user-types';
 import { Role } from './user-roles.enum';
 import { Users } from './users.entity';

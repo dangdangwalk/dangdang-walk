@@ -1,10 +1,21 @@
-import { Body, Controller, Delete, Get, HttpCode, Post, UseGuards, UseInterceptors } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    HttpCode,
+    Post,
+    UseGuards,
+    UseInterceptors,
+    UsePipes,
+    ValidationPipe,
+} from '@nestjs/common';
 import { User } from '../users/decorators/user.decorator';
 import { AuthService, OauthData } from './auth.service';
-import { OauthCookies } from './decorators/oauthData.decorator';
+import { OauthCookies } from './decorators/oauth-data.decorator';
 import { SkipAuthGuard } from './decorators/public.decorator';
-import { OauthDataGuard } from './guards/oauthData.guard';
-import { RefreshTokenGuard } from './guards/refreshToken.guard';
+import { OauthDataGuard } from './guards/oauth-data.guard';
+import { RefreshTokenGuard } from './guards/refresh-token.guard';
 import { CookieInterceptor } from './interceptors/cookie.interceptor';
 import { AccessTokenPayload, RefreshTokenPayload } from './token/token.service';
 
@@ -17,6 +28,7 @@ export interface OauthBody {
 
 @Controller('/auth')
 @UseInterceptors(CookieInterceptor)
+@UsePipes(ValidationPipe)
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
 

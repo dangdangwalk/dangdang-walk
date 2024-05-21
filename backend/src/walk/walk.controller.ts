@@ -4,7 +4,7 @@ import { DogSummary } from 'src/dogs/dogs.controller';
 import { User } from 'src/users/decorators/user.decorator';
 import { Serialize } from '../common/interceptors/serialize.interceptor';
 import { DogsService } from '../dogs/dogs.service';
-import { WalkCommandDto } from './dto/walk-command.dto';
+import { WalkCommandDto } from './dtos/walk-command.dto';
 import { WalkService } from './walk.service';
 
 @Controller('/dogs/walks')

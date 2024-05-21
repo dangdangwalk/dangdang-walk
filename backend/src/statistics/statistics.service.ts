@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { DogSummary } from 'src/dogs/dogs.controller';
 import { DogsService } from 'src/dogs/dogs.service';
-import { DogStatisticDto } from 'src/dogs/dto/dog-statistic.dto';
+import { DogStatisticDto } from 'src/dogs/dtos/dog-statistic.dto';
 import { JournalsService } from 'src/journals/journals.service';
 import { getOneMonthAgo, getStartAndEndOfMonth, getStartAndEndOfWeek } from 'src/utils/date.utils';
 import { In } from 'typeorm';
@@ -10,7 +10,7 @@ import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
 import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
 import { TodayWalkTimeService } from '../today-walk-time/today-walk-time.service';
 import { UsersService } from '../users/users.service';
-import { Period } from './pipes/periodValidation.pipe';
+import { Period } from './pipes/period-validation.pipe';
 
 @Injectable()
 export class StatisticsService {
