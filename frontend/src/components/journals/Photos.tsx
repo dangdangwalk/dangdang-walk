@@ -2,7 +2,7 @@ import AddPhotoButton, { Props as AddPhotoButtonProps } from '@/components/journ
 import DogImages, { Props as DogImagesProps } from '@/components/journals/DogImages';
 import Heading from '@/components/journals/Heading';
 
-export default function Photos({ imageFileNames, isLoading, onChange }: Props3) {
+export default function Photos({ imageFileNames, isLoading, onChange }: Props) {
     return (
         <div className="px-5 py-[10px]">
             <Heading headingNumber={2}>사진</Heading>
@@ -13,4 +13,4 @@ export default function Photos({ imageFileNames, isLoading, onChange }: Props3) 
     );
 }
 
-interface Props3 extends AddPhotoButtonProps, Pick<DogImagesProps, 'imageFileNames'> {}
+interface Props extends AddPhotoButtonProps, Pick<DogImagesProps, 'imageFileNames'> {}
