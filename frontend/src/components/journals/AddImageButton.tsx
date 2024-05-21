@@ -2,7 +2,7 @@ import Plus from '@/assets/icons/ic-plus.svg';
 import Spinner from '@/components/common/Spinner';
 import { ChangeEventHandler, useRef } from 'react';
 
-export default function AddPhotoButton({ isLoading, onChange }: Props) {
+export default function AddImageButton({ isLoading, onChange }: Props) {
     const inputRef = useRef<HTMLInputElement | null>(null);
 
     return (
