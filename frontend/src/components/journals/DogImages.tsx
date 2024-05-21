@@ -1,4 +1,4 @@
-import { ImageUrl } from '@/pages/Journals/CreateForm';
+import { ImageFileName } from '@/pages/Journals/CreateForm';
 import { makeFileUrl } from '@/utils/url';
 import { ReactNode } from 'react';
 
@@ -20,6 +20,6 @@ export default function DogImages({ imageUrls, children }: Props) {
 }
 
 interface Props {
-    imageUrls: Array<ImageUrl>;
+    imageUrls: Array<ImageFileName>;
     children: ReactNode;
 }

@@ -36,7 +36,7 @@ export default function CreateForm() {
     const removeSpinner = useSpinnerStore((state) => state.spinnerRemove);
 
     const [openModal, setOpenModal] = useState(false);
-    const [images, setImages] = useState<Array<ImageUrl>>([]);
+    const [images, setImages] = useState<Array<ImageFileName>>([]);
     const [isUploading, setIsUploading] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
 
@@ -186,4 +186,4 @@ interface ReceivedState {
     photoUrls: string[];
 }
 
-export type ImageUrl = string;
+export type ImageFileName = string;
