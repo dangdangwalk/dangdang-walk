@@ -13,6 +13,7 @@ import useWalkAvailabeDog from '@/hooks/useWalkAvailabeDog';
 import Spinner from '@/components/common/Spinner';
 import { useAuth } from '@/hooks/useAuth';
 import RegisterCard from '@/components/home/RegisterCard';
+import { queryStringKeys } from '@/constants';
 
 function Home() {
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
@@ -42,6 +43,12 @@ function Home() {
         });
     };
 
+    const goToJournals = (dogId: number) => {
+        navigate(`/journals?${queryStringKeys.DOGID}=${dogId}`, {
+            state: { dogs, dog: dogs.find((d) => d.id === dogId) },
+        });
+    };
+
     return (
         <>
             <Topbar className="bg-neutral-50 ">
@@ -61,7 +68,7 @@ function Home() {
                     <Spinner />
                 ) : dogs && dogs?.length > 0 ? (
                     <>
-                        <DogCardList dogs={dogs} />
+                        <DogCardList dogs={dogs} pageMove={goToJournals} />
                         <Button
                             color={'primary'}
                             rounded={'medium'}
