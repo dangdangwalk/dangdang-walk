@@ -6,21 +6,24 @@ import { DogRegInfo } from '@/pages/Join';
 import { useBreed } from '@/hooks/useBreed';
 import DeleteBtn from '@/assets/icons/btn-delete.svg';
 interface Props {
-    isOpen: boolean;
-    setIsOpen: (state: boolean) => void;
-    setData: Dispatch<SetStateAction<DogRegInfo>>;
+    isOpen?: boolean;
+    setIsOpen?: (state: boolean) => void;
+    setData?: Dispatch<SetStateAction<DogRegInfo>>;
 }
 export default function BreedSearch({ isOpen, setIsOpen, setData }: Props) {
     const { data } = useBreed();
     const [search, setSearch] = useState('');
-
     const [searched, setSearched] = useState<string[]>([]);
     const handleSetBreed = (item: string) => {
-        setData((prev) => ({
-            ...prev,
-            breed: item,
-        }));
-        setIsOpen(false);
+        if (setData && setIsOpen) {
+            setData((prev) => ({
+                ...prev,
+                breed: item,
+            }));
+            setIsOpen(false);
+            setSearched([]);
+            setSearch('');
+        }
     };
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -31,7 +34,7 @@ export default function BreedSearch({ isOpen, setIsOpen, setData }: Props) {
         const formattedData = filteredData.map((item: string) => (
             <div
                 key={item}
-                className="flex items-center w-full text-sm font-bold font-NanumGothic h-[2.125rem] pl-1 py-3 border-b border-b-zinc-300"
+                className="flex items-center w-full text-sm font-bold font-NanumGothic h-[2.125rem] pl-1 py-3 border-b border-b-zinc-300 "
                 onClick={() => handleSetBreed(item)}
             >
                 <span
@@ -47,11 +50,19 @@ export default function BreedSearch({ isOpen, setIsOpen, setData }: Props) {
     };
     return (
         <div
-            className={`fixed flex flex-col bg-white w-full h-full z-10 top-0 left-full duration-200 ${isOpen ? '-translate-x-full' : 'translate-x-0'}`}
+            className={`fixed flex flex-col bg-white w-full h-full z-30 top-0 left-full duration-200 ${isOpen ? '-translate-x-full' : 'translate-x-0'}`}
         >
             <Topbar>
                 <Topbar.Front className="pl-3">
-                    <img src={TopBack} alt="ToBack" onClick={() => setIsOpen(false)} />
+                    <img
+                        src={TopBack}
+                        alt="ToBack"
+                        onClick={() => {
+                            setIsOpen && setIsOpen(false);
+                            setSearch('');
+                            setSearched([]);
+                        }}
+                    />
                 </Topbar.Front>
             </Topbar>
             <main className="flex flex-col w-full px-5 mt-3 justify-center items-center">
