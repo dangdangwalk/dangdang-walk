@@ -21,10 +21,10 @@ interface JournalCreateForm {
         startedAt: string;
         duration: number;
         routes: Array<NumberPosition>;
-        photoUrls?: string[];
-        memo?: string;
+        photoUrls: string[];
+        memo: string;
     };
-    excrements?: Array<Excrement>;
+    excrements: Array<Excrement>;
 }
 
 interface Excrement {
