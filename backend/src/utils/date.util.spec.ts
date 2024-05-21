@@ -5,7 +5,7 @@ import {
     getStartAndEndOfMonth,
     getStartAndEndOfWeek,
     getWeek,
-} from './date.utils';
+} from './date.util';
 
 describe('formatDate', () => {
     test('should return the correct formatted date string', () => {

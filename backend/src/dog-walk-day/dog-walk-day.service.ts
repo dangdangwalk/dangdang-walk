@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
-import { getLastSunday } from 'src/utils/date.utils';
+import { getLastSunday } from 'src/utils/date.util';
 import { FindManyOptions, FindOptionsWhere, In, UpdateResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { DogWalkDay } from './dog-walk-day.entity';

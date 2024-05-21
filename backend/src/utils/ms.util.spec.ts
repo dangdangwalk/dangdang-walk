@@ -2,7 +2,7 @@
  * Modified from https://github.com/vercel/ms/blob/main/src/parse.test.ts
  */
 
-import { parse } from './ms.utils';
+import { parse } from './ms.util';
 
 describe('parse(string)', () => {
     it('should not throw an error', () => {
