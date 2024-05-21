@@ -16,7 +16,6 @@ export class DogWalkDayService {
     }
 
     private getValuesOnly(walkDays: any[]) {
-        console.log(walkDays[0]);
         const daysValues = walkDays.map((curWeek) => {
             const valueArr = [];
             for (const key in curWeek) {
