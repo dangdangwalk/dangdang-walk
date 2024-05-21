@@ -11,7 +11,7 @@ export default function DogImages({ imageFileNames, children, isModifying = fals
                     <span className="relative">
                         <img
                             src={makeFileUrl(imageFileName)}
-                            alt="강아진 산책 사진"
+                            alt="강아지 산책 사진"
                             className="inline-block max-h-[104px] max-w-none rounded-lg"
                         />
                         {isModifying && (
