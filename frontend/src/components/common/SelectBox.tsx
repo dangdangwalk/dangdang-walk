@@ -91,17 +91,11 @@ function Label({ children, className }: DefaultProps) {
         throw new Error('Option must be used within a CustomSelect');
     }
 
-    const { toggleOpen, selectedValue, isOpen } = context;
+    const { toggleOpen, isOpen } = context;
     return (
         <div className={cn(` ${className}`)} onClick={toggleOpen}>
-            {children ? (
-                children
-            ) : (
-                <>
-                    <span>{selectedValue}</span>
-                    <img src={IcDrop} className={`${isOpen ? 'rotate-180' : 'rotate-0'} transition`} alt="select box" />
-                </>
-            )}
+            {children}
+            <img src={IcDrop} className={`${isOpen ? 'rotate-180' : 'rotate-0'} transition`} alt="select box" />
         </div>
     );
 }
