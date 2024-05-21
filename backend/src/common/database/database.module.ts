@@ -23,7 +23,7 @@ import BreedSeeder from './seeds/breed.seeder';
                     database: config.get<string>('MYSQL_DATABASE'),
                     entities: ['dist/**/*.entity{.ts,.js}'],
                     synchronize: true,
-                    timezone: 'z',
+                    timezone: 'Z',
                 };
             },
             async dataSourceFactory(options) {
