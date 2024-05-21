@@ -83,7 +83,7 @@ describe('AuthService', () => {
                 oauthId: mockUser.oauthId,
                 oauthNickname: 'test',
                 email: 'test@mail.com',
-                profileImage: 'test.jpg',
+                profileImageUrl: 'test.jpg',
             });
             jest.spyOn(oauthService, 'requestTokenExpiration').mockResolvedValue();
             jest.spyOn(oauthService, 'requestTokenRefresh').mockResolvedValue(mockTokenResponse);

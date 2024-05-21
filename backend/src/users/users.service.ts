@@ -17,7 +17,7 @@ import { UsersRepository } from './users.repository';
 export interface UserProfile {
     nickname: string;
     email: string;
-    profileImage: string;
+    profileImageUrl: string;
     provider: OauthProvider;
 }
 
@@ -94,22 +94,22 @@ export class UsersService {
     }
 
     async getUserProfile({ userId, provider }: AccessTokenPayload): Promise<UserProfile> {
-        const { nickname, email, profileImage } = await this.usersRepository.findOne({ id: userId });
-        return { nickname, email, profileImage, provider };
+        const { nickname, email, profileImageUrl } = await this.usersRepository.findOne({ id: userId });
+        return { nickname, email, profileImageUrl, provider };
     }
 
     async updateUserProfile(userId: number, userInfo: UpdateUserDto) {
-        const { nickname, profileImage } = userInfo;
+        const { nickname, profileImageUrl } = userInfo;
 
         if (nickname) {
             const nickname = await this.generateUniqueNickname(userInfo.nickname);
             userInfo.nickname = nickname;
         }
 
-        if (profileImage) {
+        if (profileImageUrl) {
             const curUserInfo = await this.findOne({ id: userId });
-            if (curUserInfo && curUserInfo.profileImage && !curUserInfo.profileImage.startsWith('http')) {
-                await this.s3Service.deleteSingleObject(userId, curUserInfo.profileImage);
+            if (curUserInfo && curUserInfo.profileImageUrl && !curUserInfo.profileImageUrl.startsWith('http')) {
+                await this.s3Service.deleteSingleObject(userId, curUserInfo.profileImageUrl);
             }
         }
 

@@ -69,7 +69,7 @@ export class AuthService {
     }
 
     async signup({ oauthAccessToken, oauthRefreshToken, provider }: OauthData): Promise<AuthData> {
-        const { oauthId, oauthNickname, email, profileImage } =
+        const { oauthId, oauthNickname, email, profileImageUrl } =
             await this[`${provider}Service`].requestUserInfo(oauthAccessToken);
 
         const refreshToken = this.tokenService.signRefreshToken(oauthId, provider);
@@ -78,7 +78,7 @@ export class AuthService {
         const { id: userId } = await this.usersService.createIfNotExists({
             oauthNickname,
             email,
-            profileImage,
+            profileImageUrl,
             oauthId,
             oauthAccessToken,
             oauthRefreshToken,

@@ -83,7 +83,7 @@ export class GoogleService implements OauthService {
                 oauthId: data.id,
                 oauthNickname: data.name,
                 email: data.email,
-                profileImage: data.picture,
+                profileImageUrl: data.picture,
             };
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {

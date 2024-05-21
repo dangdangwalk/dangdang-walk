@@ -7,5 +7,5 @@ export class UpdateUserDto {
 
     @IsString()
     @IsOptional()
-    profileImage: string;
+    profileImageUrl: string;
 }
