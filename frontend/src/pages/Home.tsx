@@ -7,12 +7,13 @@ import Notification from '@/assets/icons/notification.svg';
 import Topbar from '@/components/common/Topbar';
 import BottomSheet from '@/components/common/BottomSheet';
 import AvailableDogCheckList from '@/components/home/AvailableDogCheckList';
-import useDogStatistic from '@/hooks/useDogStatistic';
+import useDogsStatistic from '@/hooks/useDogsStatistic';
 import { useNavigate } from 'react-router-dom';
 import useWalkAvailabeDog from '@/hooks/useWalkAvailabeDog';
 import Spinner from '@/components/common/Spinner';
 import { useAuth } from '@/hooks/useAuth';
 import RegisterCard from '@/components/home/RegisterCard';
+import { queryStringKeys } from '@/constants';
 
 function Home() {
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
@@ -24,7 +25,7 @@ function Home() {
         changeCheckAll: handleCheckAll,
     } = useWalkAvailabeDog();
     const { refreshTokenQuery, isLoggedIn } = useAuth();
-    const { dogs, isDogsPending } = useDogStatistic(isLoggedIn, {
+    const { dogs, isDogsPending } = useDogsStatistic(isLoggedIn, {
         enabled: refreshTokenQuery.isSuccess,
     });
     const navigate = useNavigate();
@@ -39,6 +40,12 @@ function Home() {
         setIsDogBottomsheetOpen(false);
         navigate('/walk', {
             state: { dogs: availableDogs?.length === 1 ? availableDogs : availableDogs?.filter((d) => d.isChecked) },
+        });
+    };
+
+    const goToJournals = (dogId: number) => {
+        navigate(`/journals?${queryStringKeys.DOGID}=${dogId}`, {
+            state: { dogs, dog: dogs.find((d) => d.id === dogId) },
         });
     };
 
@@ -61,7 +68,7 @@ function Home() {
                     <Spinner />
                 ) : dogs && dogs?.length > 0 ? (
                     <>
-                        <DogCardList dogs={dogs} />
+                        <DogCardList dogs={dogs} pageMove={goToJournals} />
                         <Button
                             color={'primary'}
                             rounded={'medium'}

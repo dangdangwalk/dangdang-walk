@@ -16,11 +16,12 @@ const getStartToEnd = (start: string, seconds: number) => {
     return `${formDate(startTime)} ${formTime(startTime)}-${formTime(endTime)}`;
 };
 
-export default function JournalCard({ journal, dog }: { journal: Journal; dog: Dog }) {
+export default function JournalCard({ journal, dog }: { journal: Journal; dog: Dog | undefined }) {
     const navigate = useNavigate();
     const goToDetail = (id: number) => {
         navigate(`/journals/detail/${id}`);
     };
+    if (!dog) return <></>;
     return (
         <button
             className="h-[140px] w-full flex flex-col items-center pt-4 pb-2 relative bg-white rounded-lg shadow"

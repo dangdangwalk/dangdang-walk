@@ -8,8 +8,7 @@ export interface Dog {
     birth?: Date;
     breed?: string;
     isNeutered?: boolean;
-    fecesLocations?: Position[];
-    urineLocations?: Position[];
+    weight?: number;
 }
 
 export interface WalkingDog extends Dog {
