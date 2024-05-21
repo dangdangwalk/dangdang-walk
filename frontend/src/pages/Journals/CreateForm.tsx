@@ -1,3 +1,4 @@
+import { create as createJournal } from '@/api/journals';
 import { getUploadUrl, uploadImage } from '@/api/upload';
 import Cancel from '@/assets/icons/ic-top-cancel.svg';
 import { Button } from '@/components/common/Button';
@@ -43,7 +44,7 @@ export default function CreateForm() {
     const receivedState = location.state as ReceivedState;
     console.log(receivedState);
 
-    const { dogs, distance, calories, duration, startedAt: serializedStartedAt, photoUrls } = receivedState;
+    const { dogs, distance, calories, duration, startedAt: serializedStartedAt, photoUrls, routes } = receivedState;
     const startedAt = new Date(serializedStartedAt);
 
     useEffect(() => {
@@ -95,17 +96,52 @@ export default function CreateForm() {
         </>
     );
 
-    function handleSave() {
+    async function handleSave() {
         setIsSaving(true);
         addSpinner();
 
-        setTimeout(() => {
-            setIsSaving(false);
-            removeSpinner();
-            showToast('산책 기록이 저장되었습니다.');
+        const dogIds = dogs.map((dog) => dog.id);
+        const journalInfo = {
+            distance,
+            calories,
+            startedAt: startedAt.toJSON(),
+            duration,
+            routes,
+            photoUrls: photoUrls ?? [],
+            memo: textAreaRef.current?.value ?? '',
+        };
+        const excrements = dogs.map((dog) => {
+            const stringFecesLocations = dog.fecesLocations.map((position) => {
+                return {
+                    lat: String(position.lat),
+                    lng: String(position.lng),
+                };
+            });
+            const stringUrineLocations = dog.fecesLocations.map((position) => {
+                return {
+                    lat: String(position.lat),
+                    lng: String(position.lng),
+                };
+            });
 
-            navigate('/');
-        }, 2000);
+            return {
+                dogId: dog.id,
+                fecesLocations: stringFecesLocations,
+                urineLocations: stringUrineLocations,
+            };
+        });
+
+        await createJournal({
+            dogs: dogIds,
+            journalInfo,
+            excrements: excrements ?? [],
+        });
+
+        setIsSaving(false);
+        removeSpinner();
+        showToast('산책 기록이 저장되었습니다.');
+
+        navigate('/');
     }
 
     function handleCancelSave() {
