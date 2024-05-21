@@ -19,12 +19,16 @@ const imgSize = (size: string) => {
     }
 };
 
+const { REACT_APP_BASE_IMAGE_URL = '' } = window._ENV ?? process.env;
+
 export default function Avatar({ url, name, size = 'small', onClick, className }: AvatarProps) {
+    const convertedUrl = convertUrl(url);
+
     return (
         <div className={`justify-start items-center gap-2 inline-flex ${className}`} onClick={onClick}>
             <div className={`flex justify-center items-center rounded-full border overflow-hidden border-neutral-200`}>
-                {url ? (
-                    <img src={url} alt={name} width={imgSize(size)} height={imgSize(size)} />
+                {convertedUrl ? (
+                    <img src={convertedUrl} alt={name} width={imgSize(size)} height={imgSize(size)} />
                 ) : (
                     <DefaultProfileImage />
                 )}
@@ -32,4 +36,10 @@ export default function Avatar({ url, name, size = 'small', onClick, className }
             {name && <div className="text-neutral-800 text-sm font-bold leading-[21px]">{name ? name : ''}</div>}
         </div>
     );
+}
+
+function convertUrl(url?: string): string | undefined {
+    if (url === undefined) return undefined;
+    if (url.startsWith('http') || url.startsWith('/static')) return url;
+    return `${REACT_APP_BASE_IMAGE_URL}/${url}`;
 }
