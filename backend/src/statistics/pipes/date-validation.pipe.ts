@@ -21,13 +21,6 @@ export class DateValidationPipe implements PipeTransform<string, string> {
             throw new BadRequestException(`Invalid day: ${day}. Day must be between 1 and ${lastDayOfMonth}.`);
         }
 
-        const currentDate = new Date();
-        const requestedDate = new Date(value);
-
-        if (requestedDate > currentDate) {
-            throw new BadRequestException('Date cannot be in the future.');
-        }
-
         return value;
     }
 }
