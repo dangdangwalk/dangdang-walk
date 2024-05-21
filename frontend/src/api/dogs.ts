@@ -21,8 +21,15 @@ export const fetchDogMonthStatistic = async (dogId: number, date: string, period
     const { data } = await httpClient.get(`/dogs/${dogId}/statistics?date=${date}&period=${period}`);
     return data;
 };
-export interface ResponseDogs extends DogRegInfo {
+export interface ResponseDogs {
     id: number;
+    birth: string | null;
+    name: string;
+    breed: string;
+    gender: string;
+    weight: number;
+    isNeutered: boolean;
+    profilePhotoUrl: string;
 }
 export const fetchDogs = async (): Promise<ResponseDogs[]> => {
     const { data } = await httpClient.get<ResponseDogs[]>('/dogs');
@@ -31,4 +38,18 @@ export const fetchDogs = async (): Promise<ResponseDogs[]> => {
 
 export const deleteDog = async (dogId: number) => {
     await httpClient.delete(`/dogs/${dogId}`);
+};
+
+export interface ResponseRecentMonthStatistics {
+    totalWalkCnt: number;
+    totalDistance: number;
+    totalTime: number;
+}
+export const fetchDogRecentMonthStatistics = async (dogId: number): Promise<ResponseRecentMonthStatistics> => {
+    const { data } = await httpClient.get(`/dogs/${dogId}/statistics/recent?period=month`);
+    return data;
+};
+
+export const updateDog = async ({ dogId, params }: { dogId: number; params: DogRegInfo }) => {
+    await httpClient.patch(`/dogs/${dogId}`, params);
 };
