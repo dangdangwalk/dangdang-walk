@@ -14,14 +14,15 @@ export interface DogDetailInfoProps {
     birth: string | null;
     weight: number;
 }
+export function maxLengthCheck(event: FormEvent<HTMLInputElement>) {
+    const object = event.currentTarget;
+    if (object.value.length > object.maxLength) {
+        object.value = object.value.slice(0, object.maxLength);
+    }
+}
 export default function DogDetailInfo({ data, setData }: Props) {
     const [weight, setWeight] = useState('');
-    function maxLengthCheck(event: FormEvent<HTMLInputElement>) {
-        const object = event.currentTarget;
-        if (object.value.length > object.maxLength) {
-            object.value = object.value.slice(0, object.maxLength);
-        }
-    }
+
     const handleGenderChange = (gender: string) => {
         setData((prev) => ({
             ...prev,
