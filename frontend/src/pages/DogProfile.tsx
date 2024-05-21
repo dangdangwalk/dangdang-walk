@@ -1,6 +1,6 @@
 import { ResponseDogs, ResponseRecentMonthStatistics } from '@/api/dogs';
 import Topbar from '@/components/common/Topbar';
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import Back from '@/assets/icons/ic-top-back.svg';
 import Edit from '@/assets/icons/ic-top-edit.svg';
 import CrownIcon from '@/assets/icons/ic-crown.svg';
