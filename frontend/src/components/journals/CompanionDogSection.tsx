@@ -3,7 +3,7 @@ import ExcrementDisplay from '@/components/journals/ExcrementDisplay';
 import Heading from '@/components/journals/Heading';
 import { WalkingDog } from '@/models/dog.model';
 
-export default function CompanionDogs({ dogs }: Props) {
+export default function CompanionDogSection({ dogs }: Props) {
     return (
         <div className="px-5 py-[10px]">
             <Heading headingNumber={2}>함께한 댕댕이</Heading>

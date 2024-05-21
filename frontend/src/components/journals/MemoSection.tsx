@@ -1,7 +1,7 @@
 import Heading from '@/components/journals/Heading';
 import { RefObject } from 'react';
 
-export default function Memo({ textAreaRef, readonly = false }: Props) {
+export default function MemoSection({ textAreaRef, readonly = false }: Props) {
     return (
         <div className="px-5 py-[10px]">
             <Heading headingNumber={2}>메모</Heading>

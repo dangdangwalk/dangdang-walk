@@ -13,10 +13,10 @@ import {
     ModalHeader,
     ModalTitle,
 } from '@/components/common/Modal';
-import CompanionDogs from '@/components/journals/CompanionDogs';
+import CompanionDogSection from '@/components/journals/CompanionDogSection';
 import Heading from '@/components/journals/Heading';
-import Memo from '@/components/journals/Memo';
-import Photos from '@/components/journals/Photos';
+import MemoSection from '@/components/journals/MemoSection';
+import PhotoSection from '@/components/journals/PhotoSection';
 import Map from '@/components/walk/Map';
 import WalkInfo from '@/components/walk/WalkInfo';
 import useToast from '@/hooks/useToast';
@@ -84,9 +84,9 @@ export default function CreateForm() {
                     />
                     <WalkInfo distance={distance} calories={calories} duration={duration} />
                     <Divider />
-                    <CompanionDogs dogs={dogs} />
+                    <CompanionDogSection dogs={dogs} />
                     <Divider />
-                    <Photos
+                    <PhotoSection
                         imageFileNames={imageFileNames}
                         isLoading={isUploading}
                         isModifying
@@ -94,7 +94,7 @@ export default function CreateForm() {
                         onDeleteImage={handleDeleteImage}
                     />
                     <Divider />
-                    <Memo textAreaRef={textAreaRef} />
+                    <MemoSection textAreaRef={textAreaRef} />
                 </div>
                 <Button rounded="none" className="w-full h-16" disabled={isSaving} onClick={handleSave}>
                     <span className="-translate-y-[5px]">저장하기</span>
