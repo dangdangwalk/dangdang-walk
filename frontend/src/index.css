@@ -13,6 +13,7 @@ body {
 }
 #root {
     /* @apply w-full h-dvh max-w-screen-sm px-5; */
+    @apply min-w-[360px] overflow-x-hidden;
 }
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
