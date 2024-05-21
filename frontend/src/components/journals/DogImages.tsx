@@ -6,11 +6,11 @@ import { ReactNode } from 'react';
 export default function DogImages({ imageFileNames, children, isModifying = false }: Props) {
     return (
         <div className="flex flex-row gap-1 py-2 overflow-x-auto">
-            {imageFileNames.map((imageUrl) => (
-                <span key={imageUrl} className="inline-flex items-center h-[104px]">
+            {imageFileNames.map((imageFileName) => (
+                <span key={imageFileName} className="inline-flex items-center h-[104px]">
                     <span className="relative">
                         <img
-                            src={makeFileUrl(imageUrl)}
+                            src={makeFileUrl(imageFileName)}
                             alt="강아진 산책 사진"
                             className="inline-block max-h-[104px] max-w-none rounded-lg"
                         />
