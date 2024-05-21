@@ -85,4 +85,20 @@ export class S3Service {
             this.logger.error(`Can't delete ${filename} from S3 bucket ${BUCKET_NAME}`, error ?? error.stack);
         }
     }
+
+    async deleteObjectFolder(userId: number) {
+        const filename = `${userId.toString()}/`;
+
+        const command = new DeleteObjectCommand({
+            Bucket: BUCKET_NAME,
+            Key: filename,
+        });
+
+        try {
+            await this.s3Client.send(command);
+            this.logger.log(`Successfuly deleted ${filename}`);
+        } catch (error) {
+            this.logger.error(`Can't delete ${filename} from S3 bucket ${BUCKET_NAME}`, error ?? error.stack);
+        }
+    }
 }
