@@ -16,7 +16,7 @@ import { Gender } from './dogs-gender.enum';
 import { DogProfile, DogSummary } from './dogs.controller';
 import { Dogs } from './dogs.entity';
 import { DogsRepository } from './dogs.repository';
-import { DogDto } from './dto/dog.dto';
+import { DogDto } from './dtos/dog.dto';
 
 @Injectable()
 export class DogsService {

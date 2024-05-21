@@ -1,9 +1,9 @@
 import { Controller, Get, Param, ParseIntPipe, Query, UseGuards } from '@nestjs/common';
-import { AuthDogGuard } from 'src/dogs/guards/authDog.guard';
+import { AuthDogGuard } from 'src/dogs/guards/auth-dog.guard';
 import { AccessTokenPayload } from '../auth/token/token.service';
 import { User } from '../users/decorators/user.decorator';
-import { DateValidationPipe } from './pipes/dateValidation.pipe';
-import { Period, PeriodValidationPipe } from './pipes/periodValidation.pipe';
+import { DateValidationPipe } from './pipes/date-validation.pipe';
+import { Period, PeriodValidationPipe } from './pipes/period-validation.pipe';
 import { StatisticsService } from './statistics.service';
 
 @Controller('/dogs')

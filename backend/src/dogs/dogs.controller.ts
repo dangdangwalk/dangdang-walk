@@ -3,8 +3,8 @@ import { AccessTokenPayload } from '../auth/token/token.service';
 import { User } from '../users/decorators/user.decorator';
 import { Gender } from './dogs-gender.enum';
 import { DogsService } from './dogs.service';
-import { DogDto } from './dto/dog.dto';
-import { AuthDogGuard } from './guards/authDog.guard';
+import { DogDto } from './dtos/dog.dto';
+import { AuthDogGuard } from './guards/auth-dog.guard';
 
 export type DogProfile = {
     id: number;

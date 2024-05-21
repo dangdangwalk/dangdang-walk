@@ -12,16 +12,16 @@ import { checkIfExistsInArr, makeSubObject, makeSubObjectsArray } from 'src/util
 import { DeleteResult, EntityManager, FindManyOptions, FindOptionsWhere, In, UpdateResult } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
-import { JournalInfoForList } from './dto/journal-list.dto';
-import { UpdateJournalDto } from './dto/journal-update.dto';
-import { CreateJournalDto, ExcrementsInfoForCreate, JournalInfoForCreate, Location } from './dto/journals-create.dto';
+import { JournalInfoForList } from './dtos/journal-list.dto';
+import { UpdateJournalDto } from './dtos/journal-update.dto';
+import { CreateJournalDto, ExcrementsInfoForCreate, JournalInfoForCreate, Location } from './dtos/journals-create.dto';
 import {
     DogInfoForDetail,
     ExcrementsInfoForDetail,
     JournalDetailDto,
     JournalInfoForDetail,
     PhotoUrlDto,
-} from './dto/journals-detail.dto';
+} from './dtos/journals-detail.dto';
 import { Journals } from './journals.entity';
 import { JournalsRepository } from './journals.repository';
 import { CreateJournalData } from './types/journal-types';
