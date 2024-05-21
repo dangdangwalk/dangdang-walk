@@ -3,7 +3,7 @@ import { DogSummary } from 'src/dogs/dogs.controller';
 import { DogsService } from 'src/dogs/dogs.service';
 import { DogStatisticDto } from 'src/dogs/dto/dog-statistic.dto';
 import { JournalsService } from 'src/journals/journals.service';
-import { getStartAndEndOfMonth, getStartAndEndOfWeek } from 'src/utils/date.utils';
+import { getOneMonthAgo, getStartAndEndOfMonth, getStartAndEndOfWeek } from 'src/utils/date.utils';
 import { In } from 'typeorm';
 import { BreedService } from '../breed/breed.service';
 import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
@@ -44,7 +44,18 @@ export class StatisticsService {
         return result;
     }
 
-    async getDogStatistics(userId: number, dogId: number, date: string, period: Period) {
+    async getDogStatistics(userId: number, dogId: number, period: Period) {
+        let startDate: Date, endDate: Date;
+        startDate = endDate = new Date();
+
+        if (period === 'month') {
+            startDate = getOneMonthAgo(new Date());
+        }
+
+        return this.journalsService.findJournalsAndGetTotal(userId, dogId, startDate, endDate);
+    }
+
+    async getDogWalkCnt(userId: number, dogId: number, date: string, period: Period) {
         let startDate: Date, endDate: Date;
         startDate = endDate = new Date();
 
@@ -54,7 +65,7 @@ export class StatisticsService {
             ({ startDate, endDate } = getStartAndEndOfWeek(new Date(date)));
         }
 
-        return this.journalsService.findJournalsAndAggregate(userId, dogId, startDate, endDate);
+        return this.journalsService.findJournalsAndAggregateByDay(userId, dogId, startDate, endDate);
     }
 
     async getDogsStatistics(userId: number): Promise<DogStatisticDto[]> {

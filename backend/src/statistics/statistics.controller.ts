@@ -10,15 +10,25 @@ import { StatisticsService } from './statistics.service';
 export class StatisticsController {
     constructor(private readonly statisticsService: StatisticsService) {}
 
-    @Get('/:id(\\d+)/statistics')
+    @Get('/:id(\\d+)/statistics/recent')
     @UseGuards(AuthDogGuard)
     async getDogStatistics(
+        @User() { userId }: AccessTokenPayload,
+        @Param('id', ParseIntPipe) dogId: number,
+        @Query('period', PeriodValidationPipe) period: Period
+    ) {
+        return await this.statisticsService.getDogStatistics(userId, dogId, period);
+    }
+
+    @Get('/:id(\\d+)/statistics')
+    @UseGuards(AuthDogGuard)
+    async getDogWalkCnt(
         @User() { userId }: AccessTokenPayload,
         @Param('id', ParseIntPipe) dogId: number,
         @Query('date', DateValidationPipe) date: string,
         @Query('period', PeriodValidationPipe) period: Period
     ) {
-        return await this.statisticsService.getDogStatistics(userId, dogId, date, period);
+        return await this.statisticsService.getDogWalkCnt(userId, dogId, date, period);
     }
 
     @Get('/statistics')

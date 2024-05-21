@@ -272,13 +272,8 @@ export class JournalsService {
         await this.delete(journalId);
     }
 
-    async findJournalsAndAggregate(
-        userId: number,
-        dogId: number,
-        startDate: Date,
-        endDate: Date
-    ): Promise<{ [date: string]: number }> {
-        const dogJournals = await this.entityManager
+    async findJournals(userId: number, dogId: number, startDate: Date, endDate: Date): Promise<Journals[]> {
+        return this.entityManager
             .createQueryBuilder(Journals, 'journals')
             .innerJoin(JournalsDogs, 'journals_dogs', 'journals.id = journals_dogs.journal_id')
             .where('journals.user_id = :userId', { userId })
@@ -286,10 +281,29 @@ export class JournalsService {
             .andWhere('journals.started_at >= :startDate', { startDate })
             .andWhere('journals.started_at < :endDate', { endDate })
             .getMany();
-        return this.aggregateJournals(dogJournals, startDate, endDate);
     }
 
-    async aggregateJournals(journals: Journals[], startDate: Date, endDate: Date): Promise<{ [date: string]: number }> {
+    async getTotal(journals: Journals[]): Promise<{ totalWalkCnt: number; totalDistance: number; totalTime: number }> {
+        const totalDistance = journals.reduce((acc, journal) => acc + journal.distance, 0);
+        const totalTime = journals.reduce((acc, journal) => acc + journal.duration, 0);
+        return { totalWalkCnt: journals.length, totalDistance, totalTime };
+    }
+
+    async findJournalsAndGetTotal(
+        userId: number,
+        dogId: number,
+        startDate: Date,
+        endDate: Date
+    ): Promise<{ [date: string]: number }> {
+        const dogJournals = await this.findJournals(userId, dogId, startDate, endDate);
+        return this.getTotal(dogJournals);
+    }
+
+    async aggregateJournalsByDay(
+        journals: Journals[],
+        startDate: Date,
+        endDate: Date
+    ): Promise<{ [date: string]: number }> {
         const journalCntAMonth: { [date: string]: number } = {};
 
         const currentDate = new Date(startDate);
@@ -308,14 +322,24 @@ export class JournalsService {
         return journalCntAMonth;
     }
 
+    async findJournalsAndAggregateByDay(
+        userId: number,
+        dogId: number,
+        startDate: Date,
+        endDate: Date
+    ): Promise<{ [date: string]: number }> {
+        const dogJournals = await this.findJournals(userId, dogId, startDate, endDate);
+        return this.aggregateJournalsByDay(dogJournals, startDate, endDate);
+    }
+
     async getDogStatisticsByMonth(userId: number, dogId: number, date: string) {
         const { startDate, endDate } = getStartAndEndOfMonth(new Date(date));
-        return this.findJournalsAndAggregate(userId, dogId, startDate, endDate);
+        return this.findJournalsAndAggregateByDay(userId, dogId, startDate, endDate);
     }
 
     async getDogStatisticsByWeek(userId: number, dogId: number, date: string) {
         const { startDate, endDate } = getStartAndEndOfWeek(new Date(date));
-        return this.findJournalsAndAggregate(userId, dogId, startDate, endDate);
+        return this.findJournalsAndAggregateByDay(userId, dogId, startDate, endDate);
     }
 
     async getJournalIdsByDogIdAndDate(dogId: number, date: string): Promise<number[]> {
