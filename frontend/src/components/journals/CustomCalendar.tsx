@@ -40,7 +40,6 @@ export default function CustomCalendar() {
         const dogId = params.get(queryStringKeys.DOGID);
         if (Number(dogId) === currentDogId) return;
         if (date.getFullYear() <= today.getFullYear() && date.getMonth() <= today.getMonth()) {
-            console.log('today');
             getStatisticData(formDate(date), view);
         }
         setCurrentDogId(Number(dogId));

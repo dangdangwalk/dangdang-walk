@@ -7,6 +7,10 @@ import Ic from '@/assets/icons/ic-arrow.svg';
 import { Dog } from '@/models/dog.model';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { fetchDogList } from '@/api/dogs';
+import Avatar from '@/components/common/Avatar';
+import SelectBox from '@/components/common/SelectBox';
+import IcDrop from '@/assets/icons/ic-drop-down.svg';
 
 interface ReceivedState {
     dog?: Dog;
@@ -16,17 +20,24 @@ interface ReceivedState {
 export default function Journals() {
     const location = useLocation();
     const receivedState = location.state as ReceivedState;
-    const [dogs, setDogs] = useState<Dog[]>(receivedState?.dogs ?? []);
+    const [dogList, setDogList] = useState<Dog[]>(receivedState?.dogs ?? []);
     const [selectedDog, setSelectedDog] = useState<Dog | undefined>(receivedState?.dog);
     const { journals } = useJournals();
     const navigate = useNavigate();
 
     const goBack = () => {
-        navigate(-1);
+        navigate('/');
     };
     useEffect(() => {
         if (selectedDog) return;
-        console.log('no dog');
+        fetchDogList().then((data) => {
+            if (data) {
+                setDogList(data);
+                setSelectedDog(data[0]);
+            } else {
+                navigate('/');
+            }
+        });
     }, []);
     return (
         <>
@@ -34,7 +45,21 @@ export default function Journals() {
                 <Topbar.Front onClick={goBack}>
                     <img className="rotate-180" src={Ic} alt="back button" />
                 </Topbar.Front>
-                <Topbar.Center></Topbar.Center>
+                <Topbar.Center>
+                    <SelectBox>
+                        <SelectBox.Label className="h-12 flex justify-center items-center">
+                            <span>{selectedDog?.name}</span>
+                            <img src={IcDrop} alt="select box" />
+                        </SelectBox.Label>
+                        <SelectBox.Group>
+                            {dogList.map((dog) => (
+                                <SelectBox.Item key={dog.id} onClick={() => setSelectedDog(dog)}>
+                                    <Avatar url={dog.profilePhotoUrl} name={dog.name} className="gap-4" />
+                                </SelectBox.Item>
+                            ))}
+                        </SelectBox.Group>
+                    </SelectBox>
+                </Topbar.Center>
                 <Topbar.Back className="w-12"></Topbar.Back>
             </Topbar>
             <main
