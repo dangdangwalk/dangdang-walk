@@ -13,6 +13,10 @@ export const create = async (form: JournalCreateForm) => {
     await httpClient.post('/journals', form);
 };
 
+export const update = async (journalId: number, form: JournalUpdateForm) => {
+    await httpClient.patch(`/journals/${journalId}`, form);
+};
+
 export const fetchJournal = async (journalId: number) => {
     const { data } = await httpClient.get<JournalDetail>(`/journals/${journalId}`);
 
@@ -65,4 +69,9 @@ interface ExcrementCounts {
     dogId: number;
     fecesCnt: number;
     urineCnt: number;
+}
+
+interface JournalUpdateForm {
+    memo?: string;
+    photoUrls?: Array<string>;
 }
