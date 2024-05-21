@@ -76,20 +76,21 @@ export class DogsService {
     }
 
     async updateDog(userId: number, dogId: number, dogDto: DogDto) {
-        const { breed: breedName, profilePhotoUrl, ...otherAttributes } = dogDto;
+        const { breed: breedName, ...otherAttributes } = dogDto;
         let breed;
 
         if (breedName) {
             breed = await this.breedService.findOne({ koreanName: breedName });
         }
 
-        if (profilePhotoUrl) {
+        if (dogDto.profilePhotoUrl) {
             const curDogInfo = await this.findOne({ id: dogId });
             if (curDogInfo && curDogInfo.profilePhotoUrl) {
                 await this.s3Service.deleteSingleObject(userId, curDogInfo.profilePhotoUrl);
             }
         }
-        const updateData = breedName ? { breed, profilePhotoUrl, ...otherAttributes } : otherAttributes;
+
+        const updateData = breed ? { breedId: breed.id, ...otherAttributes } : otherAttributes;
         return this.update({ id: dogId }, updateData);
     }
 
@@ -108,6 +109,7 @@ export class DogsService {
     }
 
     private makeProfile(dogInfo: Dogs): DogProfile {
+        console.log(dogInfo.updatedAt);
         return {
             id: dogInfo.id,
             name: dogInfo.name,
