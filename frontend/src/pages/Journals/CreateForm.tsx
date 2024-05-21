@@ -195,6 +195,7 @@ export default function CreateForm() {
         setImageFileNames((prevImageFileNames) =>
             prevImageFileNames.filter((prevImageFileName) => prevImageFileName !== imageFileName)
         );
+        showToast('사진이 삭제되었습니다.');
     }
 }
 
