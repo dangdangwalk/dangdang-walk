@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 const { REACT_APP_KAKAO_MAP_ID: KAKAO_MAP_ID = '' } = window._ENV ?? process.env;
 
 interface MapProps {
-    startPosition: Position | null;
+    startPosition: Position | null | undefined;
     path: Position[];
     className?: string;
     height?: string;
@@ -50,10 +50,11 @@ export default function Map({ startPosition, path, className, height }: MapProps
     };
 
     useEffect(() => {
-        const kakaoScript = document.getElementById('kakao-script');
+        const kakaoScript = document.getElementById('kakao-map');
         if (!startPosition) return;
         if (kakaoScript) {
             onLoadKakaoMap();
+            return;
         }
 
         const script = document.createElement('script');
