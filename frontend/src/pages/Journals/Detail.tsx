@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { JournalDetail } from '@/api/journals';
+import { JournalDetail, update as updateJournal } from '@/api/journals';
 import { deleteImages, getUploadUrl, uploadImage } from '@/api/upload';
 import Cancel from '@/assets/icons/ic-top-cancel.svg';
 import { Button } from '@/components/common/Button';
@@ -30,7 +30,7 @@ export default function Detail() {
     const journalDetail = useLoaderData() as JournalDetail;
     console.log(journalDetail);
     const { journalInfo, dogs: dogsFromAPI, excrements = [] } = journalDetail;
-    const { routes, memo, photoUrls: photoFileNames } = journalInfo;
+    const { id: journalId, routes, memo, photoUrls: photoFileNames } = journalInfo;
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -116,7 +116,7 @@ export default function Detail() {
                     <Divider />
                     <MemoSection textAreaRef={textAreaRef} />
                 </div>
-                <Button rounded="none" className="w-full h-16" disabled={isSaving}>
+                <Button rounded="none" className="w-full h-16" disabled={isSaving} onClick={handleSave}>
                     <span className="-translate-y-[5px]">저장하기</span>
                 </Button>
             </div>
@@ -135,53 +135,20 @@ export default function Detail() {
         </>
     );
 
-    // async function handleSave() {
-    //     setIsSaving(true);
-    //     addSpinner();
+    async function handleSave() {
+        setIsSaving(true);
+        addSpinner();
 
-    //     const dogIds = dogs.map((dog) => dog.id);
-    //     const journalInfo = {
-    //         distance,
-    //         calories,
-    //         startedAt: startedAt.toJSON(),
-    //         duration,
-    //         routes,
-    //         photoUrls: photoFileNames ?? [],
-    //         memo: textAreaRef.current?.value ?? '',
-    //     };
-    //     const excrements = dogs.map((dog) => {
-    //         const stringFecesLocations = dog.fecesLocations.map((position) => {
-    //             return {
-    //                 lat: String(position.lat),
-    //                 lng: String(position.lng),
-    //             };
-    //         });
-    //         const stringUrineLocations = dog.fecesLocations.map((position) => {
-    //             return {
-    //                 lat: String(position.lat),
-    //                 lng: String(position.lng),
-    //             };
-    //         });
+        const memo = textAreaRef.current?.value ?? '';
+        const photoUrls = imageFileNames;
+        await updateJournal(journalId, { memo, photoUrls });
 
-    //         return {
-    //             dogId: dog.id,
-    //             fecesLocations: stringFecesLocations,
-    //             urineLocations: stringUrineLocations,
-    //         };
-    //     });
+        setIsSaving(false);
+        removeSpinner();
+        showToast('산책 기록이 저장되었습니다.');
 
-    //     await createJournal({
-    //         dogs: dogIds,
-    //         journalInfo,
-    //         excrements: excrements ?? [],
-    //     });
-
-    //     setIsSaving(false);
-    //     removeSpinner();
-    //     showToast('산책 기록이 저장되었습니다.');
-
-    //     navigate('/');
-    // }
+        navigate('/');
+    }
 
     function handleCancelSave() {
         showToast('산책 기록이 삭제되었습니다.');
