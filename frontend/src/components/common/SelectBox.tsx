@@ -1,40 +1,116 @@
 import { cn } from '@/utils/tailwindClass';
-import React from 'react';
-
-interface SelectBoxProps {
-    children: React.ReactNode;
+import React, { useContext, useEffect, useRef, useState } from 'react';
+interface DefaultProps {
     className?: string;
-}
-export default function SelectBox({ children, className }: SelectBoxProps) {
-    return <div className={cn(`${className}`)}>{children}</div>;
+    children?: React.ReactNode;
 }
 
-function Group({ children, className }: SelectBoxProps) {
+interface SelectBoxProps extends DefaultProps {
+    defaultValue: string | undefined;
+    onChange?: (value: string) => void;
+}
+
+interface SelectContextType {
+    selectedValue: string | undefined;
+    selectOption: (value: string) => void;
+    toggleOpen: () => void;
+    isOpen: boolean;
+}
+
+const SelectContext = React.createContext<SelectContextType | undefined>(undefined);
+
+export default function SelectBox({ children, className, onChange, defaultValue }: SelectBoxProps) {
+    const [selectedValue, setSelectedValue] = useState(defaultValue);
+    const [isOpen, setIsOpen] = useState(false);
+    const selectRef = useRef<HTMLDivElement>(null);
+
+    const selectOption = (value: string) => {
+        setSelectedValue(value);
+        setIsOpen(false);
+        if (onChange) {
+            onChange(value);
+        }
+    };
+
+    const toggleOpen = () => {
+        setIsOpen(!isOpen);
+    };
+
+    const handleClickOutside = (event: MouseEvent) => {
+        if (selectRef.current && !selectRef.current.contains(event.target as Node)) {
+            setIsOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     return (
-        <ul
-            className={cn(
-                `absolute z-10 px-[10px] -translate-x-1/3 bg-white rounded-lg shadow flex-col justify-center items-center inline-flex ${className}`
-            )}
-        >
-            {children}
-        </ul>
+        <SelectContext.Provider value={{ selectedValue, selectOption, toggleOpen, isOpen }}>
+            <div ref={selectRef} className={cn(`${className}`)}>
+                {children}
+            </div>
+            ;
+        </SelectContext.Provider>
     );
 }
-function Label({ children, className }: SelectBoxProps) {
-    return <div className={cn(`${className}`)}>{children}</div>;
+
+function Group({ children, className }: DefaultProps) {
+    const context = useContext(SelectContext);
+
+    if (!context) {
+        throw new Error('Option must be used within a CustomSelect');
+    }
+
+    const { isOpen } = context;
+    return (
+        <>
+            {isOpen && (
+                <ul
+                    className={cn(
+                        `absolute z-10 px-[10px] -translate-x-1/3 bg-white rounded-lg shadow flex-col justify-start items-start inline-flex ${className}`
+                    )}
+                >
+                    {children}
+                </ul>
+            )}
+        </>
+    );
 }
 
-function Item({
-    children,
-    className,
-    onClick,
-}: {
-    children: React.ReactNode;
-    className?: string;
-    onClick: () => void;
-}) {
+function Label({ children, className }: DefaultProps) {
+    const context = useContext(SelectContext);
+
+    if (!context) {
+        throw new Error('Option must be used within a CustomSelect');
+    }
+
+    const { toggleOpen } = context;
     return (
-        <li className={cn(`p-[10px] ${className}`)} onClick={onClick}>
+        <div className={cn(` ${className}`)} onClick={toggleOpen}>
+            {children}
+        </div>
+    );
+}
+
+interface OptionProps extends DefaultProps {
+    value: string;
+}
+
+function Option({ value, children, className }: OptionProps) {
+    const context = useContext(SelectContext);
+
+    if (!context) {
+        throw new Error('Option must be used within a CustomSelect');
+    }
+
+    const { selectOption } = context;
+    return (
+        <li className={cn(`p-[10px] ${className}`)} onClick={() => selectOption(value)}>
             {children}
         </li>
     );
@@ -42,4 +118,4 @@ function Item({
 
 SelectBox.Group = Group;
 SelectBox.Label = Label;
-SelectBox.Item = Item;
+SelectBox.Option = Option;

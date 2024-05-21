@@ -5,12 +5,13 @@ import { NAV_HEIGHT, TOP_BAR_HEIGHT } from '@/constants/style';
 import useJournals from '@/hooks/useJournals';
 import Ic from '@/assets/icons/ic-arrow.svg';
 import { Dog } from '@/models/dog.model';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { fetchDogList } from '@/api/dogs';
 import Avatar from '@/components/common/Avatar';
 import SelectBox from '@/components/common/SelectBox';
 import IcDrop from '@/assets/icons/ic-drop-down.svg';
+import { queryStringKeys } from '@/constants';
 
 interface ReceivedState {
     dog?: Dog;
@@ -19,6 +20,7 @@ interface ReceivedState {
 
 export default function Journals() {
     const location = useLocation();
+    const [searchParams, setSearchParams] = useSearchParams();
     const receivedState = location.state as ReceivedState;
     const [dogList, setDogList] = useState<Dog[]>(receivedState?.dogs ?? []);
     const [selectedDog, setSelectedDog] = useState<Dog | undefined>(receivedState?.dog);
@@ -27,6 +29,15 @@ export default function Journals() {
 
     const goBack = () => {
         navigate('/');
+    };
+    const handleSelectDog = (dogName: string) => {
+        console.log(dogName);
+        const dog = dogList.find((dog) => dog.name === dogName);
+        if (!dog) return;
+        const newSearchParams = new URLSearchParams(searchParams);
+        newSearchParams.set(queryStringKeys.DOGID, String(dog.id));
+        setSearchParams(newSearchParams);
+        setSelectedDog(dog);
     };
     useEffect(() => {
         if (selectedDog) return;
@@ -45,17 +56,17 @@ export default function Journals() {
                 <Topbar.Front onClick={goBack}>
                     <img className="rotate-180" src={Ic} alt="back button" />
                 </Topbar.Front>
-                <Topbar.Center>
-                    <SelectBox>
-                        <SelectBox.Label className="h-12 flex justify-center items-center">
+                <Topbar.Center className="h-full">
+                    <SelectBox onChange={handleSelectDog} defaultValue={selectedDog?.name}>
+                        <SelectBox.Label className=" flex h-12  justify-center items-center">
                             <span>{selectedDog?.name}</span>
                             <img src={IcDrop} alt="select box" />
                         </SelectBox.Label>
                         <SelectBox.Group>
                             {dogList.map((dog) => (
-                                <SelectBox.Item key={dog.id} onClick={() => setSelectedDog(dog)}>
+                                <SelectBox.Option key={dog.id} value={dog.name}>
                                     <Avatar url={dog.profilePhotoUrl} name={dog.name} className="gap-4" />
-                                </SelectBox.Item>
+                                </SelectBox.Option>
                             ))}
                         </SelectBox.Group>
                     </SelectBox>
