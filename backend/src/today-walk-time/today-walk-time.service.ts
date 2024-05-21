@@ -1,26 +1,26 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
 import { FindOptionsWhere, In } from 'typeorm';
-import { TodayWalkTime } from './daily-walk-time.entity';
-import { DailyWalkTimeRepository } from './daily-walk-time.repository';
+import { TodayWalkTime } from './today-walk-time.entity';
+import { TodayWalkTimeRepository } from './today-walk-time.repository';
 
 @Injectable()
-export class DailyWalkTimeService {
+export class TodayWalkTimeService {
     constructor(
-        private readonly dailyWalkTimeRepository: DailyWalkTimeRepository,
+        private readonly todayWalkTimeRepository: TodayWalkTimeRepository,
         private readonly logger: WinstonLoggerService
     ) {}
 
     async find(where: FindOptionsWhere<TodayWalkTime>): Promise<TodayWalkTime[]> {
-        return this.dailyWalkTimeRepository.find({ where });
+        return this.todayWalkTimeRepository.find({ where });
     }
 
     async delete(where: FindOptionsWhere<TodayWalkTime>) {
-        return this.dailyWalkTimeRepository.delete(where);
+        return this.todayWalkTimeRepository.delete(where);
     }
 
     async getWalkTimeList(walkTimeIds: number[]) {
-        const walkTimeList = await this.dailyWalkTimeRepository.find({ where: { id: In(walkTimeIds) } });
+        const walkTimeList = await this.todayWalkTimeRepository.find({ where: { id: In(walkTimeIds) } });
         if (!walkTimeList.length) {
             const error = new NotFoundException(`No walkTime found for the provided IDs: ${walkTimeIds}.`);
             this.logger.error(`No walkTime found for the provided IDs: ${walkTimeIds}.`, error.stack ?? 'No stack');

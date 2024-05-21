@@ -68,7 +68,7 @@ export class JournalsService {
     }
 
     async getOwnJournalIds(userId: number): Promise<number[]> {
-        const ownJournals = await this.journalsRepository.find({ where: { id: userId } });
+        const ownJournals = await this.journalsRepository.find({ where: { userId: userId } });
 
         return ownJournals.map((cur) => cur.id);
     }

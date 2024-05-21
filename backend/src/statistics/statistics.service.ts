@@ -7,8 +7,8 @@ import { getStartAndEndOfMonth, getStartAndEndOfWeek } from 'src/utils/date.util
 import { In } from 'typeorm';
 import { BreedService } from '../breed/breed.service';
 import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
-import { DailyWalkTimeService } from '../daily-walk-time/daily-walk-time.service';
 import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
+import { TodayWalkTimeService } from '../today-walk-time/today-walk-time.service';
 import { UsersService } from '../users/users.service';
 import { Period } from './pipes/periodValidation.pipe';
 
@@ -19,7 +19,7 @@ export class StatisticsService {
         private readonly dogsService: DogsService,
         private readonly breedService: BreedService,
         private readonly dogWalkDayService: DogWalkDayService,
-        private readonly dailyWalkTimeService: DailyWalkTimeService,
+        private readonly todayWalkTimeService: TodayWalkTimeService,
         private readonly journalsService: JournalsService,
         private readonly logger: WinstonLoggerService
     ) {}
@@ -60,12 +60,12 @@ export class StatisticsService {
     async getDogsStatistics(userId: number): Promise<DogStatisticDto[]> {
         const ownDogIds = await this.usersService.getOwnDogsList(userId);
         const dogWalkDayIds = await this.dogsService.getRelatedTableIdList(ownDogIds, 'walkDayId');
-        const dailyWalkTimeIds = await this.dogsService.getRelatedTableIdList(ownDogIds, 'todayWalkTimeId');
+        const todayWalkTimeIds = await this.dogsService.getRelatedTableIdList(ownDogIds, 'todayWalkTimeId');
         const breedIds = await this.dogsService.getRelatedTableIdList(ownDogIds, 'breedId');
 
         const dogSummaries = await this.dogsService.getDogsSummaryList({ id: In(ownDogIds) });
         const recommendedWalkAmount = await this.breedService.getRecommendedWalkAmountList(breedIds);
-        const todayWalkAmount = await this.dailyWalkTimeService.getWalkTimeList(dailyWalkTimeIds);
+        const todayWalkAmount = await this.todayWalkTimeService.getWalkTimeList(todayWalkTimeIds);
         const weeklyWalks = await this.dogWalkDayService.getWalkDayList(dogWalkDayIds);
 
         const length = ownDogIds.length;

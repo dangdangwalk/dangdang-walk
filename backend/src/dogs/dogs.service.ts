@@ -7,10 +7,10 @@ import { Transactional } from 'typeorm-transactional';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { BreedService } from '../breed/breed.service';
 import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
-import { TodayWalkTime } from '../daily-walk-time/daily-walk-time.entity';
-import { DailyWalkTimeService } from '../daily-walk-time/daily-walk-time.service';
 import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
 import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
+import { TodayWalkTime } from '../today-walk-time/today-walk-time.entity';
+import { TodayWalkTimeService } from '../today-walk-time/today-walk-time.service';
 import { UsersDogsService } from '../users-dogs/users-dogs.service';
 import { Gender } from './dogs-gender.enum';
 import { DogProfile, DogSummary } from './dogs.controller';
@@ -25,7 +25,7 @@ export class DogsService {
         private readonly usersDogsService: UsersDogsService,
         private readonly breedService: BreedService,
         private readonly dogWalkDayService: DogWalkDayService,
-        private readonly dailyWalkTimeService: DailyWalkTimeService,
+        private readonly todayWalkTimeService: TodayWalkTimeService,
         private readonly s3Service: S3Service,
         private readonly entityManager: EntityManager,
         private readonly logger: WinstonLoggerService
@@ -59,7 +59,7 @@ export class DogsService {
         const dog = await this.findOne({ id: dogId });
 
         await this.dogWalkDayService.delete({ id: dog.walkDayId });
-        await this.dailyWalkTimeService.delete({ id: dog.todayWalkTimeId });
+        await this.todayWalkTimeService.delete({ id: dog.todayWalkTimeId });
         if (dog.profilePhotoUrl) {
             await this.s3Service.deleteSingleObject(userId, dog.profilePhotoUrl);
         }

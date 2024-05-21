@@ -1,7 +1,7 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Breed } from '../breed/breed.entity';
-import { TodayWalkTime } from '../daily-walk-time/daily-walk-time.entity';
 import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
+import { TodayWalkTime } from '../today-walk-time/today-walk-time.entity';
 import { Gender } from './dogs-gender.enum';
 
 @Entity('dogs')
@@ -53,6 +53,14 @@ export class Dogs {
 
     @Column({ name: 'is_walking', default: false })
     isWalking: boolean;
+
+    @UpdateDateColumn({
+        name: 'updated_at',
+        type: 'timestamp',
+        default: () => 'CURRENT_TIMESTAMP',
+        onUpdate: 'CURRENT_TIMESTAMP',
+    })
+    updatedAt: Date;
 
     constructor(entityData: Partial<Dogs>) {
         Object.assign(this, entityData);

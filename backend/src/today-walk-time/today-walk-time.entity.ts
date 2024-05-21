@@ -1,4 +1,4 @@
-import { BeforeUpdate, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BeforeUpdate, Column, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity('today_walk_time')
 export class TodayWalkTime {
@@ -8,7 +8,12 @@ export class TodayWalkTime {
     @Column({ default: 0 })
     duration: number;
 
-    @CreateDateColumn({ name: 'updated_at' })
+    @UpdateDateColumn({
+        name: 'updated_at',
+        type: 'timestamp',
+        default: () => 'CURRENT_TIMESTAMP',
+        onUpdate: 'CURRENT_TIMESTAMP',
+    })
     updatedAt: Date;
 
     @BeforeUpdate()

@@ -1,39 +1,34 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { DogSummary } from 'src/dogs/dogs.controller';
 import { DogsService } from 'src/dogs/dogs.service';
-import { JournalsDogsService } from 'src/journals-dogs/journals-dogs.service';
-import { JournalsService } from 'src/journals/journals.service';
 import { UsersService } from 'src/users/users.service';
 import { In } from 'typeorm';
+
+const MAX_WALK_TIME = 3;
 
 @Injectable()
 export class WalkService {
     constructor(
         private readonly usersService: UsersService,
-        private readonly journalsDogsService: JournalsDogsService,
-        private readonly journalsService: JournalsService,
         private readonly dogsService: DogsService
     ) {}
 
-    async checkAvailableDogs(dogIds: number[], recentJournalIds: (number | undefined)[]) {
-        if (dogIds.length !== recentJournalIds.length) {
-            throw new NotFoundException('checkAvailableDogs | Data not match; check dogIds, recentJournalIds');
-        }
-        for (let i = 0; i < dogIds.length; i++) {
-            const recentJournalInfo = await this.journalsService.findOne({ id: recentJournalIds[i] });
-            const recentWalkStartTime = new Date(recentJournalInfo.startedAt);
+    async checkAvailableDogs(dogIds: number[]) {
+        for (const curDogId of dogIds) {
+            const curDogInfo = await this.dogsService.findOne({ id: curDogId });
+            const updatedAt = curDogInfo.updatedAt;
             const curTime = new Date();
-            recentWalkStartTime.setHours(recentWalkStartTime.getHours() + 3);
-            if (curTime >= recentWalkStartTime) {
-                await this.dogsService.updateIsWalking(dogIds[i], false);
+
+            updatedAt.setHours(updatedAt.getHours() + MAX_WALK_TIME);
+            if (curTime >= updatedAt) {
+                await this.dogsService.updateIsWalking(curDogId, false);
             }
         }
     }
 
     async getAvailableDogs(userId: number): Promise<DogSummary[]> {
         const ownDogIds = await this.usersService.getOwnDogsList(userId);
-        const recentJournalIds = await this.journalsDogsService.getRecentJournalId(ownDogIds);
-        await this.checkAvailableDogs(ownDogIds, recentJournalIds);
+        await this.checkAvailableDogs(ownDogIds);
         return await this.dogsService.getDogsSummaryList({ id: In(ownDogIds), isWalking: false });
     }
 }

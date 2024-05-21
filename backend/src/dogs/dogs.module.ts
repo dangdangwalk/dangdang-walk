@@ -3,10 +3,10 @@ import { JournalsDogsModule } from 'src/journals-dogs/journals-dogs.module';
 import { Breed } from '../breed/breed.entity';
 import { BreedModule } from '../breed/breed.module';
 import { DatabaseModule } from '../common/database/database.module';
-import { TodayWalkTime } from '../daily-walk-time/daily-walk-time.entity';
-import { DailyWalkTimeModule } from '../daily-walk-time/daily-walk-time.module';
 import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
 import { DogWalkDayModule } from '../dog-walk-day/dog-walk-day.module';
+import { TodayWalkTime } from '../today-walk-time/today-walk-time.entity';
+import { TodayWalkTimeModule } from '../today-walk-time/today-walk-time.module';
 import { UsersModule } from '../users/users.module';
 import { DogsController } from './dogs.controller';
 import { Dogs } from './dogs.entity';
@@ -18,12 +18,12 @@ import { DogsService } from './dogs.service';
         DatabaseModule.forFeature([Dogs, Breed, DogWalkDay, TodayWalkTime]),
         UsersModule,
         BreedModule,
-        DailyWalkTimeModule,
+        TodayWalkTimeModule,
         DogWalkDayModule,
         JournalsDogsModule,
     ],
     controllers: [DogsController],
     providers: [DogsService, DogsRepository],
-    exports: [DogsService, UsersModule, JournalsDogsModule, BreedModule, DailyWalkTimeModule, DogWalkDayModule],
+    exports: [DogsService, UsersModule, JournalsDogsModule, BreedModule, TodayWalkTimeModule, DogWalkDayModule],
 })
 export class DogsModule {}
