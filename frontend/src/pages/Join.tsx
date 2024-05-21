@@ -34,7 +34,7 @@ export default function Join() {
     const { signupMustation } = useAuth();
     const { registerDogMutation } = useDog();
     const { spinnerAdd, spinnerRemove } = useSpinnerStore();
-    const { cropError, dogProfileImgUrl } = useCropStore();
+    const { cropError, dogProfileImgUrl, setDogProfileImgUrl } = useCropStore();
     const backToPathname = getStorage(storageKeys.REDIRECT_URI) || '';
 
     const fileInputRef = useRef(null);
@@ -135,10 +135,13 @@ export default function Join() {
             const photoUrl = urlData[0]?.url;
 
             if (!fileName || !photoUrl) return;
-            const file = dataURLtoFile(dogProfileImgUrl, fileName);
-            await uploadImg(file, photoUrl).then(() => {
-                registerDogMutation.mutate({ ...registerData, profilePhotoUrl: fileName });
-            });
+            const file = dogProfileImgUrl && dataURLtoFile(dogProfileImgUrl, fileName);
+            setDogProfileImgUrl('');
+            file === ''
+                ? registerDogMutation.mutate({ ...registerData, profilePhotoUrl: null })
+                : await uploadImg(file, photoUrl).then(() => {
+                      registerDogMutation.mutate({ ...registerData, profilePhotoUrl: fileName });
+                  });
         }
 
         switch (step) {
