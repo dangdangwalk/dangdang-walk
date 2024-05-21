@@ -7,7 +7,7 @@ import Notification from '@/assets/icons/notification.svg';
 import Topbar from '@/components/common/Topbar';
 import BottomSheet from '@/components/common/BottomSheet';
 import AvailableDogCheckList from '@/components/home/AvailableDogCheckList';
-import useDogStatistic from '@/hooks/useDogStatistic';
+import useDogsStatistic from '@/hooks/useDogsStatistic';
 import { useNavigate } from 'react-router-dom';
 import useWalkAvailabeDog from '@/hooks/useWalkAvailabeDog';
 import Spinner from '@/components/common/Spinner';
@@ -25,7 +25,7 @@ function Home() {
         changeCheckAll: handleCheckAll,
     } = useWalkAvailabeDog();
     const { refreshTokenQuery, isLoggedIn } = useAuth();
-    const { dogs, isDogsPending } = useDogStatistic(isLoggedIn, {
+    const { dogs, isDogsPending } = useDogsStatistic(isLoggedIn, {
         enabled: refreshTokenQuery.isSuccess,
     });
     const navigate = useNavigate();
