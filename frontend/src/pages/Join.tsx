@@ -94,7 +94,7 @@ export default function Join() {
                 setSwitchStep({ ...switchStep, step1ToStep2: false });
                 break;
             case 'DogBasicInfo':
-                currentPage ? navigate('/') : setSwitchStep({ ...switchStep, step2ToStep3: false });
+                currentPage ? navigate(-1) : setSwitchStep({ ...switchStep, step2ToStep3: false });
                 break;
             case 'DogDetailInfo':
                 setSwitchStep({ ...switchStep, step3ToStep4: false });
