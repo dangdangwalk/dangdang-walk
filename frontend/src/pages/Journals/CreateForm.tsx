@@ -17,6 +17,7 @@ import CompanionDogs from '@/components/journals/CompanionDogs';
 import Heading from '@/components/journals/Heading';
 import Memo from '@/components/journals/Memo';
 import Photos from '@/components/journals/Photos';
+import Map from '@/components/walk/Map';
 import WalkInfo from '@/components/walk/WalkInfo';
 import useToast from '@/hooks/useToast';
 import { WalkingDog } from '@/models/dog.model';
@@ -67,7 +68,12 @@ export default function CreateForm() {
                     </button>
                 </div>
                 <div className={`h-[calc(100dvh-3rem-4rem)] overflow-y-auto`}>
-                    <div className="h-[216px] rounded-lg bg-slate-300">경로가 표시된 지도</div>
+                    <Map
+                        startPosition={routes[0]}
+                        path={routes}
+                        className="rounded-lg overflow-hidden"
+                        height="216px"
+                    />
                     <WalkInfo distance={distance} calories={calories} duration={duration} />
                     <Divider />
                     <CompanionDogs dogs={dogs} />
