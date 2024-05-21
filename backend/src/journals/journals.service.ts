@@ -11,7 +11,6 @@ import { JournalsDogsService } from 'src/journals-dogs/journals-dogs.service';
 import { formatDate, getStartAndEndOfDay, getStartAndEndOfMonth, getStartAndEndOfWeek } from 'src/utils/date.util';
 import { checkIfExistsInArr, makeSubObject, makeSubObjectsArray } from 'src/utils/manipulate.util';
 import { DeleteResult, EntityManager, FindManyOptions, FindOptionsWhere, In, UpdateResult } from 'typeorm';
-import { Transactional } from 'typeorm-transactional';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { JournalInfoForList } from './dtos/journal-list.dto';
 import { UpdateJournalDto } from './dtos/journal-update.dto';
@@ -248,7 +247,7 @@ export class JournalsService {
         }
     }
 
-    @Transactional()
+    //@Transactional()
     async createJournal(userId: number, createJournalData: CreateJournalDto) {
         const dogIds = createJournalData.dogs;
         const journalData = this.makeJournalData(userId, createJournalData);
@@ -267,7 +266,7 @@ export class JournalsService {
         await this.updateDogWalkDay(dogIds);
     }
 
-    @Transactional()
+    //@Transactional()
     async updateJournal(journalId: number, updateJournalData: UpdateJournalDto) {
         if (updateJournalData.memo) {
             await this.updateAndFindOne({ id: journalId }, { memo: updateJournalData.memo });
