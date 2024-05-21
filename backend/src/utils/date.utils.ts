@@ -40,6 +40,12 @@ export function getStartAndEndOfDay(date: Date): { startDate: Date; endDate: Dat
     return { startDate, endDate };
 }
 
+export function getOneMonthAgo(date: Date): Date {
+    const oneMonthAgo = new Date(date);
+    oneMonthAgo.setMonth(date.getMonth() - 1);
+    return oneMonthAgo;
+}
+
 export function formatDate(date: Date): string {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
