@@ -3,7 +3,7 @@ import { Position } from '@/models/location.model';
 export interface Dog {
     id: number;
     name: string;
-    profilePhotoUrl?: string;
+    profilePhotoUrl?: string | null;
     gender?: string;
     birth?: Date;
     breed?: string;

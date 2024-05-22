@@ -57,7 +57,7 @@ export default function CreateForm() {
 
     useEffect(() => {
         dogs.forEach((dog) => {
-            if (dog.profilePhotoUrl === undefined) return;
+            if (!dog.profilePhotoUrl) return;
             dog.profilePhotoUrl = getFileName(dog.profilePhotoUrl);
         });
 
