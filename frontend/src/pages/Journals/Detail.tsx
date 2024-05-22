@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { JournalDetail, update as updateJournal } from '@/api/journals';
+import { JournalDetail, remove as removeJournal, update as updateJournal } from '@/api/journals';
 import { deleteImages, getUploadUrl, uploadImage } from '@/api/upload';
 import { ReactComponent as Arrow } from '@/assets/icons/ic-arrow.svg';
 import { ReactComponent as Meatball } from '@/assets/icons/ic-meatball.svg';
@@ -185,10 +185,12 @@ export default function Detail() {
         navigate('/');
     }
 
-    function handleCancelSave() {
+    async function handleCancelSave() {
+        await removeJournal(journalId);
+
         showToast('산책 기록이 삭제되었습니다.');
 
-        navigate('/');
+        navigate(-1);
     }
 
     async function handleAddImages(e: FormEvent<HTMLInputElement>) {
