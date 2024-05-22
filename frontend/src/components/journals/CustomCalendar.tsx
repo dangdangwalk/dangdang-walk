@@ -8,6 +8,7 @@ import NextMonth from '@/assets/icons/btn-next-month.svg';
 import { fetchDogMonthStatistic, period } from '@/api/dogs';
 import { formDate, formDay } from '@/utils/date';
 import useCalendar from '@/hooks/useCalendar';
+import { useAuth } from '@/hooks/useAuth';
 
 const formCalendar = (date: Date) => {
     const year = date.getFullYear();
@@ -19,6 +20,7 @@ export default function CustomCalendar() {
     const location = useLocation();
     const [mark, setMark] = useState<Set<string>>(new Set<string>());
     const [currentDogId, setCurrentDogId] = useState<number | null>(null);
+    const { refreshTokenQuery } = useAuth();
     const { toggleViewSwitch, handlePrevMonth, handleNextMonth, today, handleClickDay, date, currentWeek, view } =
         useCalendar();
     const getStatisticData = async (date: string, period: period) => {
@@ -36,6 +38,7 @@ export default function CustomCalendar() {
     };
 
     useEffect(() => {
+        if (refreshTokenQuery.isPending) return;
         const params = new URLSearchParams(location.search);
         const dogId = params.get(queryStringKeys.DOGID);
         if (Number(dogId) === currentDogId) return;
@@ -43,7 +46,7 @@ export default function CustomCalendar() {
             getStatisticData(formDate(date), view);
         }
         setCurrentDogId(Number(dogId));
-    }, [location.search]);
+    }, [location.search, refreshTokenQuery.isPending]);
 
     return (
         <div className="w-full flex flex-col px-[30px] pt-4 justify-center items-center bg-white shadow rounded-bl-2xl rounded-br-2xl overflow-hidden">

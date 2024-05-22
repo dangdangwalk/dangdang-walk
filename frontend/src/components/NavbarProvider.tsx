@@ -13,10 +13,14 @@ export default function NavbarProvider({ children }: Props) {
     const handleClose = () => {
         setLoginBottomSheetState(false);
     };
-    const { isLoggedIn } = useAuth();
+    const { isLoggedIn, refreshTokenQuery } = useAuth();
     const handleToggle = (toggle: boolean) => {
         setLoginBottomSheetState(toggle);
     };
+    if (refreshTokenQuery.isPending) {
+        return <></>;
+    }
+
     return (
         <>
             {children}
