@@ -46,6 +46,7 @@ export default function Detail() {
     const [imageFileNames, setImageFileNames] = useState<Array<ImageFileName>>([]);
     const [isUploading, setIsUploading] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
+    const [isModifying, setIsModifying] = useState(false);
 
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -123,17 +124,20 @@ export default function Detail() {
                     <PhotoSection
                         imageFileNames={imageFileNames}
                         isLoading={isUploading}
-                        isModifying
+                        isModifying={isModifying}
                         onChange={handleAddImages}
                         onDeleteImage={handleDeleteImage}
                     />
                     <Divider />
-                    <MemoSection textAreaRef={textAreaRef} />
+                    <MemoSection textAreaRef={textAreaRef} readonly={!isModifying} />
                 </div>
-                <Navbar />
-                {/* <Button rounded="none" className="w-full h-16" disabled={isSaving} onClick={handleSave}>
-                    <span className="-translate-y-[5px]">저장하기</span>
-                </Button> */}
+                {isModifying ? (
+                    <Button rounded="none" className="w-full h-16" disabled={isSaving} onClick={handleSave}>
+                        <span className="-translate-y-[5px]">저장하기</span>
+                    </Button>
+                ) : (
+                    <Navbar />
+                )}
             </div>
             <Modal open={openModal}>
                 <ModalContent>
@@ -150,7 +154,11 @@ export default function Detail() {
             <BottomSheet isOpen={isBottomsheetOpen} onClose={() => setIsBottomsheetOpen(false)}>
                 <BottomSheet.Body className="h-auto px-0 overflow-y-visible">
                     <Divider className="h-px" />
-                    <Button rounded="none" className="w-full bg-white text-[#222222] text-base font-normal">
+                    <Button
+                        rounded="none"
+                        className="w-full bg-white text-[#222222] text-base font-normal"
+                        onClick={handleModify}
+                    >
                         수정하기
                     </Button>
                     <Divider className="h-px" />
@@ -181,7 +189,7 @@ export default function Detail() {
         removeSpinner();
         showToast('산책 기록이 저장되었습니다.');
 
-        navigate('/');
+        navigate(-1);
     }
 
     async function handleCancelSave() {
@@ -223,6 +231,11 @@ export default function Detail() {
 
     function handleGoBack() {
         navigate(-1);
+    }
+
+    function handleModify() {
+        setIsModifying(true);
+        setIsBottomsheetOpen(false);
     }
 }
 

@@ -7,7 +7,7 @@ export default function PhotoSection({ imageFileNames, isLoading, isModifying, o
         <div className="px-5 py-[10px]">
             <Heading headingNumber={2}>사진</Heading>
             <RemovableImageList imageFileNames={imageFileNames} isModifying={isModifying} onDeleteImage={onDeleteImage}>
-                <AddImageButton isLoading={isLoading} onChange={onChange} />
+                {isModifying && <AddImageButton isLoading={isLoading} onChange={onChange} />}
             </RemovableImageList>
         </div>
     );
