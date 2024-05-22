@@ -8,4 +8,10 @@ function getFileName(fileUrl: string) {
     return fileUrl.replaceAll(`${REACT_APP_BASE_IMAGE_URL}/`, '');
 }
 
-export { getFileName, makeFileUrl };
+function isImageFileName(url: string): boolean {
+    const regexp = /^\d+\//;
+
+    return regexp.test(url);
+}
+
+export { getFileName, isImageFileName, makeFileUrl };

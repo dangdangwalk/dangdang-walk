@@ -1,4 +1,5 @@
 import DefaultProfileImage from '@/components/common/DefaultProfileImage';
+import { isImageFileName } from '@/utils/url';
 import { MouseEvent } from 'react';
 
 interface AvatarProps {
@@ -23,7 +24,7 @@ const { REACT_APP_BASE_IMAGE_URL = '' } = window._ENV ?? process.env;
 
 export default function Avatar({ url, name, size = 'small', onClick, className }: AvatarProps) {
     const convertedUrl = convertUrl(url);
-    console.log(url);
+
     return (
         <div className={`justify-start items-center gap-2 inline-flex ${className}`} onClick={onClick}>
             <div className={`flex justify-center items-center rounded-full border overflow-hidden border-neutral-200`}>
@@ -39,8 +40,7 @@ export default function Avatar({ url, name, size = 'small', onClick, className }
     );
 }
 
-function convertUrl(url?: string | null): string | undefined {
-    if (!url) return undefined;
-    if (url.startsWith('http') || url.startsWith('/static')) return url;
-    return `${REACT_APP_BASE_IMAGE_URL}/${url}`;
+function convertUrl(url: undefined | null | string): undefined | null | string {
+    if (typeof url === 'string' && isImageFileName(url)) return `${REACT_APP_BASE_IMAGE_URL}/${url}`;
+    return url;
 }
