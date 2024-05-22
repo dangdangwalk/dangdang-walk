@@ -21,7 +21,6 @@ import {
     ExcrementsInfoForDetail,
     JournalDetailDto,
     JournalInfoForDetail,
-    PhotoUrlDto,
 } from './dtos/journals-detail.dto';
 import { Journals } from './journals.entity';
 import { JournalsRepository } from './journals.repository';
@@ -82,7 +81,7 @@ export class JournalsService {
         const photoUrlsRaw = await this.journalPhotosService.find({ journalId });
 
         const photoUrls = photoUrlsRaw.map((cur) => {
-            return cur[PhotoUrlDto.getKey() as keyof JournalPhotos];
+            return cur.photoUrl;
         });
 
         return photoUrls as string[];
@@ -179,8 +178,12 @@ export class JournalsService {
         const keys: (keyof JournalPhotos)[] = ['journalId', 'photoUrl'];
         const data: Partial<JournalPhotos> = {};
 
-        data.journalId = journalId;
+        if (!photoUrls.length) {
+            await this.journalPhotosService.createIfNotExists({ journalId, photoUrl: '' }, keys);
+            return;
+        }
 
+        data.journalId = journalId;
         for (const curUrl of photoUrls) {
             data.photoUrl = curUrl;
             await this.journalPhotosService.createIfNotExists(data, keys);
@@ -266,9 +269,7 @@ export class JournalsService {
         await this.createNewJournalDogs(createJournalResult.id, dogIds);
 
         const photoUrls = this.checkPhotoUrlExist(createJournalData.journalInfo.photoUrls);
-        if (photoUrls.length) {
-            await this.createNewPhotoUrls(createJournalResult.id, photoUrls);
-        }
+        await this.createNewPhotoUrls(createJournalResult.id, photoUrls);
 
         const excrements: ExcrementsInfoForCreate[] = createJournalData.excrements;
         if (excrements.length) {
