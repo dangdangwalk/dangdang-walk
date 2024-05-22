@@ -103,7 +103,7 @@ export default function CreateForm() {
             <Modal open={openModal}>
                 <ModalContent>
                     <ModalHeader>
-                        <ModalTitle>산책기록삭제</ModalTitle>
+                        <ModalTitle>산책기록 삭제</ModalTitle>
                         <ModalDescription>오늘한 산책을 기록에서 삭제할까요?</ModalDescription>
                     </ModalHeader>
                     <ModalFooter>
