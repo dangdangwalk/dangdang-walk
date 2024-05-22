@@ -17,6 +17,10 @@ export const update = async (journalId: number, form: JournalUpdateForm) => {
     await httpClient.patch(`/journals/${journalId}`, form);
 };
 
+export const remove = async (journalId: number) => {
+    await httpClient.delete(`/journals/${journalId}`);
+};
+
 export const fetchJournal = async (journalId: number) => {
     const { data } = await httpClient.get<JournalDetail>(`/journals/${journalId}`);
 
