@@ -139,15 +139,9 @@ export default function Join() {
             file === ''
                 ? registerDogMutation.mutate({ ...registerData, profilePhotoUrl: null })
                 : await uploadImg(file, photoUrl).then(() => {
-                      registerDogMutation.mutate(
-                          { ...registerData, profilePhotoUrl: fileName },
-                          {
-                              onSettled: () => {
-                                  spinnerRemove();
-                              },
-                          }
-                      );
+                      registerDogMutation.mutate({ ...registerData, profilePhotoUrl: fileName });
                   });
+            spinnerRemove();
         }
 
         switch (step) {
