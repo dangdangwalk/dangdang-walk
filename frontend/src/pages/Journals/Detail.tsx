@@ -94,7 +94,7 @@ export default function Detail() {
         <>
             <div className="flex flex-col">
                 <div className="flex justify-between items-center h-12 px-5">
-                    <button className="w-12 h-12 flex justify-center items-center">
+                    <button className="w-12 h-12 flex justify-center items-center" onClick={handleGoBack}>
                         <Arrow className="rotate-180" />
                     </button>
                     <Heading headingNumber={1} className="-translate-x-[15px]">
@@ -192,6 +192,10 @@ export default function Detail() {
             prevImageFileNames.filter((prevImageFileName) => prevImageFileName !== imageFileName)
         );
         showToast('사진이 삭제되었습니다.');
+    }
+
+    function handleGoBack() {
+        navigate(-1);
     }
 }
 
