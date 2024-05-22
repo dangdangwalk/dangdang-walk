@@ -1,29 +1,25 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    HttpCode,
+    Param,
+    ParseIntPipe,
+    Patch,
+    Post,
+    UseGuards,
+    UsePipes,
+    ValidationPipe,
+} from '@nestjs/common';
 import { AccessTokenPayload } from '../auth/token/token.service';
 import { User } from '../users/decorators/user.decorator';
-import { Gender } from './dogs-gender.enum';
 import { DogsService } from './dogs.service';
-import { DogDto } from './dtos/dog.dto';
+import { CreateDogDto, UpdateDogDto } from './dtos/dog.dto';
 import { AuthDogGuard } from './guards/auth-dog.guard';
 
-export type DogProfile = {
-    id: number;
-    name: string;
-    breed: string;
-    gender: Gender;
-    isNeutered: boolean;
-    birth: Date | null;
-    weight: number;
-    profilePhotoUrl: string | null;
-};
-
-export type DogSummary = {
-    id: number;
-    name: string;
-    profilePhotoUrl: string | null;
-};
-
 @Controller('/dogs')
+@UsePipes(new ValidationPipe({ validateCustomDecorators: true }))
 export class DogsController {
     constructor(private readonly dogsService: DogsService) {}
 
@@ -33,8 +29,8 @@ export class DogsController {
     }
 
     @Post()
-    async register(@User() { userId }: AccessTokenPayload, @Body() dogDto: DogDto) {
-        await this.dogsService.createDogToUser(userId, dogDto);
+    async create(@User() { userId }: AccessTokenPayload, @Body() createDogDto: CreateDogDto) {
+        await this.dogsService.createDogToUser(userId, createDogDto);
         return true;
     }
 
@@ -52,9 +48,9 @@ export class DogsController {
     async update(
         @User() { userId }: AccessTokenPayload,
         @Param('id', ParseIntPipe) dogId: number,
-        @Body() dogDto: DogDto
+        @Body() updateDogDto: UpdateDogDto
     ) {
-        await this.dogsService.updateDog(userId, dogId, dogDto);
+        await this.dogsService.updateDog(userId, dogId, updateDogDto);
         return true;
     }
 
