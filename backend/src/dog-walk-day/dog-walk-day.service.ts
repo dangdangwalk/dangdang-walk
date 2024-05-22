@@ -32,11 +32,11 @@ export class DogWalkDayService {
         return this.dogWalkDayRepository.update(where, partialEntity);
     }
 
-    private getDayCntOnly(walkDay: any): number[] {
+    private getDayCntOnly(walkDay: DogWalkDay): number[] {
         const dayCntArr = [];
         for (const key in walkDay) {
             if (key !== 'id' && key !== 'updatedAt') {
-                dayCntArr.push(walkDay[key]);
+                dayCntArr.push(walkDay[key] as number);
             }
         }
         return dayCntArr;
