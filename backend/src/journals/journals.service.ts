@@ -78,10 +78,7 @@ export class JournalsService {
     }
 
     async getJournalPhotos(journalId: number): Promise<string[]> {
-        const photoUrlsRaw = await this.journalPhotosService.find({ journalId });
-        if (photoUrlsRaw.length === 1 && photoUrlsRaw[0].photoUrl === "") {
-            return[];
-        }
+        const photoUrlsRaw = await this.journalPhotosService.find({ where: { journalId } });
 
         const photoUrls = photoUrlsRaw.map((cur) => {
             return cur.photoUrl;
@@ -180,11 +177,6 @@ export class JournalsService {
     async createNewPhotoUrls(journalId: number, photoUrls: string[]) {
         const keys: (keyof JournalPhotos)[] = ['journalId', 'photoUrl'];
         const data: Partial<JournalPhotos> = {};
-
-        if (!photoUrls.length) {
-            await this.journalPhotosService.createIfNotExists({ journalId, photoUrl: '' }, keys);
-            return;
-        }
 
         data.journalId = journalId;
         for (const curUrl of photoUrls) {
@@ -288,7 +280,10 @@ export class JournalsService {
             await this.updateAndFindOne({ id: journalId }, { memo: updateJournalData.memo });
         }
         if (updateJournalData.photoUrls) {
-            await this.journalPhotosService.delete({ journalId });
+            const journalPhotos = await this.journalPhotosService.find({ where: { journalId } });
+            if (journalPhotos.length) {
+                await this.journalPhotosService.delete({ journalId });
+            }
             if (updateJournalData.photoUrls.length) {
                 await this.createNewPhotoUrls(journalId, updateJournalData.photoUrls);
             }

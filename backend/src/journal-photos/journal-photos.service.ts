@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DeleteResult, FindOptionsWhere, UpdateResult } from 'typeorm';
+import { DeleteResult, FindManyOptions, FindOptionsWhere, UpdateResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { JournalPhotos } from './journal-photos.entity';
 import { JournalPhotosRepository } from './journal-photos.repository';
@@ -22,8 +22,8 @@ export class JournalPhotosService {
         return this.journalPhotosRepository.findOne(where);
     }
 
-    async find(where: FindOptionsWhere<JournalPhotos>): Promise<JournalPhotos[]> {
-        return this.journalPhotosRepository.find({ where });
+    async find(where: FindManyOptions<JournalPhotos>): Promise<JournalPhotos[]> {
+        return this.journalPhotosRepository.find(where);
     }
 
     async update(
