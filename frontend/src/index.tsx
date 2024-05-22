@@ -18,6 +18,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import App from './App';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
+import NavbarProvider from '@/components/NavbarProvider';
 const router = createBrowserRouter([
     {
         path: '/',
@@ -30,11 +31,19 @@ const router = createBrowserRouter([
             {
                 index: true,
                 path: '/',
-                element: <Home />,
+                element: (
+                    <NavbarProvider>
+                        <Home />,
+                    </NavbarProvider>
+                ),
             },
             {
                 path: '/profile',
-                element: <Profile />,
+                element: (
+                    <NavbarProvider>
+                        <Profile />,
+                    </NavbarProvider>
+                ),
             },
             {
                 path: '/health',
@@ -62,7 +71,11 @@ const router = createBrowserRouter([
             },
             {
                 path: '/journals',
-                element: <Journals />,
+                element: (
+                    <NavbarProvider>
+                        <Journals />,
+                    </NavbarProvider>
+                ),
             },
             {
                 path: '/journals/:journalId',
