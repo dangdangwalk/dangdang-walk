@@ -31,7 +31,7 @@ const useDogsStatistic = (isLoggedIn: boolean, queryOptions?: UseQueryCustomOpti
             return data.map((d: DogStatistic) => {
                 return {
                     ...d,
-                    profilePhotoUrl: `${REACT_APP_BASE_IMAGE_URL}/${d.profilePhotoUrl}`,
+                    profilePhotoUrl: d.profilePhotoUrl ? `${REACT_APP_BASE_IMAGE_URL}/${d.profilePhotoUrl}` : undefined,
                 };
             });
         },
