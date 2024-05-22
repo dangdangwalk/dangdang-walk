@@ -15,13 +15,8 @@ const getStartToEnd = (start: string, seconds: number) => {
     endTime.setSeconds(endTime.getSeconds() + seconds);
     return `${formDate(startTime)} ${formTime(startTime)}-${formTime(endTime)}`;
 };
-interface PageState {
+interface PageState extends Journal {
     dogName: string;
-    journalCnt: number;
-    startedAt: string;
-    calories: number;
-    duration: number;
-    distance: number;
 }
 
 export default function JournalCard({ journal, dog }: { journal: Journal; dog: Dog | undefined }) {
