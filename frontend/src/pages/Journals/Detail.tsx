@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { JournalDetail, remove as removeJournal, update as updateJournal } from '@/api/journals';
 import { deleteImages, getUploadUrl, uploadImage } from '@/api/upload';
 import { ReactComponent as Arrow } from '@/assets/icons/ic-arrow.svg';
@@ -61,15 +60,7 @@ export default function Detail() {
             duration: 131,
         } as ReceivedState);
 
-    const {
-        dogName,
-        journalCnt: journalCount,
-        startedAt: serializedStartedAt,
-        calories,
-        duration,
-        distance,
-    } = receivedState;
-    const startedAt = new Date(serializedStartedAt);
+    const { dogName, journalCnt: journalCount, calories, duration, distance } = receivedState;
 
     const dogs: Array<Dog> = dogsFromAPI.map((dog) => {
         const foundExcrement = excrements.find((excrement) => excrement.dogId === dog.id);
