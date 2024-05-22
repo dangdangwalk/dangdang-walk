@@ -68,3 +68,8 @@ export function getLastSunday() {
 
     return lastSunday;
 }
+
+export function getStartOfToday(): Date {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+}
