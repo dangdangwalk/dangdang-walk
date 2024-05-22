@@ -24,7 +24,7 @@ const { REACT_APP_BASE_IMAGE_URL = '' } = window._ENV ?? process.env;
 
 export default function Avatar({ url, name, size = 'small', onClick, className }: AvatarProps) {
     const convertedUrl = convertUrl(url);
-    console.log(url);
+
     return (
         <div className={`justify-start items-center gap-2 inline-flex ${className}`} onClick={onClick}>
             <div className={`flex justify-center items-center rounded-full border overflow-hidden border-neutral-200`}>
