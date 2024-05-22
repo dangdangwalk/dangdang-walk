@@ -139,8 +139,8 @@ export default function Detail() {
             <Modal open={openModal}>
                 <ModalContent>
                     <ModalHeader>
-                        <ModalTitle>산책기록삭제</ModalTitle>
-                        <ModalDescription>오늘한 산책을 기록에서 삭제할까요?</ModalDescription>
+                        <ModalTitle>산책기록 삭제</ModalTitle>
+                        <ModalDescription>산책기록을 삭제하시겠어요?</ModalDescription>
                     </ModalHeader>
                     <ModalFooter>
                         <ModalCancel onClick={() => setOpenModal(false)}>취소</ModalCancel>
@@ -155,7 +155,11 @@ export default function Detail() {
                         수정하기
                     </Button>
                     <Divider className="h-px" />
-                    <Button rounded="none" className="w-full bg-white text-[#222222] text-base font-normal">
+                    <Button
+                        rounded="none"
+                        className="w-full bg-white text-[#222222] text-base font-normal"
+                        onClick={() => setOpenModal(true)}
+                    >
                         삭제하기
                     </Button>
                 </BottomSheet.Body>
