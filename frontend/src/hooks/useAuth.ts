@@ -99,7 +99,7 @@ const useDeactivate = (mutationOptions?: UseMutationCustomOptions) => {
         mutationFn: requestDeactivate,
         onSuccess: () => {
             removeHeader(tokenKeys.AUTHORIZATION);
-            queryClient.resetQueries({ queryKey: [queryKeys.AUTH] });
+            queryClient.refetchQueries({ queryKey: [queryKeys.AUTH] });
             queryClient.refetchQueries({ queryKey: [queryKeys.DOGS] });
             navigate('/');
         },
