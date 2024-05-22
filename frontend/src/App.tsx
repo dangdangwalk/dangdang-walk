@@ -5,14 +5,11 @@ import { Toast } from '@/components/common/Toast';
 import { OAUTH } from '@/constants';
 import { useAuth } from '@/hooks/useAuth';
 import { useEffect, useState } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
-import Navbar from './components/Navbar';
+import { Outlet } from 'react-router-dom';
 import { useSpinnerStore } from '@/store/spinnerStore';
 import Spinner from '@/components/common/Spinner';
 // var console;
 function App() {
-    const location = useLocation();
-    const currentPage = location.pathname;
     const { isLoggedIn } = useAuth();
     const { spinner } = useSpinnerStore();
     //TODO: 일시적인 배포시 console.log 제거 추가로 환경설정으로 빼줘야함ㄴ
@@ -48,24 +45,21 @@ function App() {
         <div className="flex flex-col w-full">
             <div>
                 <Outlet />
-                {(currentPage === '/' || currentPage === '/profile') && (
-                    <div>
-                        <Navbar />
-                        {!isLoggedIn && !isLoginBottomSheetOpen && (
-                            <LoginAlertModal isOpen={isLoginBottomSheetOpen} setToggle={handleToggle} />
-                        )}
+                <div>
+                    {!isLoggedIn && !isLoginBottomSheetOpen && (
+                        <LoginAlertModal isOpen={isLoginBottomSheetOpen} setToggle={handleToggle} />
+                    )}
 
-                        <BottomSheet isOpen={isLoginBottomSheetOpen} onClose={handleClose}>
-                            <BottomSheet.Body className="h-[230px]">
-                                <div className="flex flex-col items-center gap-3 mx-2 mt-4 mb-5">
-                                    {OAUTH.map((oauth, index) => (
-                                        <OAuthButton key={index} provider={oauth.PROVIDER} name={oauth.NAME} />
-                                    ))}
-                                </div>
-                            </BottomSheet.Body>
-                        </BottomSheet>
-                    </div>
-                )}
+                    <BottomSheet isOpen={isLoginBottomSheetOpen} onClose={handleClose}>
+                        <BottomSheet.Body className="h-[230px]">
+                            <div className="flex flex-col items-center gap-3 mx-2 mt-4 mb-5">
+                                {OAUTH.map((oauth, index) => (
+                                    <OAuthButton key={index} provider={oauth.PROVIDER} name={oauth.NAME} />
+                                ))}
+                            </div>
+                        </BottomSheet.Body>
+                    </BottomSheet>
+                </div>
             </div>
             {spinner > 0 && <Spinner className="absolute bg-neutral-800/40 z-40" />}
 
