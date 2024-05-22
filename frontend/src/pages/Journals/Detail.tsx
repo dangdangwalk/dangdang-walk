@@ -19,6 +19,7 @@ import {
 import CompanionDogSection, { Dog } from '@/components/journals/CompanionDogSection2';
 import Heading from '@/components/journals/Heading';
 import MemoSection from '@/components/journals/MemoSection';
+import Navbar from '@/components/journals/Navbar';
 import PhotoSection from '@/components/journals/PhotoSection';
 import Map from '@/components/walk/Map';
 import WalkInfo from '@/components/walk/WalkInfo';
@@ -130,9 +131,10 @@ export default function Detail() {
                     <Divider />
                     <MemoSection textAreaRef={textAreaRef} />
                 </div>
-                <Button rounded="none" className="w-full h-16" disabled={isSaving} onClick={handleSave}>
+                <Navbar />
+                {/* <Button rounded="none" className="w-full h-16" disabled={isSaving} onClick={handleSave}>
                     <span className="-translate-y-[5px]">저장하기</span>
-                </Button>
+                </Button> */}
             </div>
             <Modal open={openModal}>
                 <ModalContent>
