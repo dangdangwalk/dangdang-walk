@@ -121,15 +121,14 @@ export default function Join() {
 
     const handleNextStep = async () => {
         if (step === 'PetOwner') {
-            spinnerAdd();
             signupMustation.mutate(null, {
                 onSettled: () => {
                     !haveADog && navigate('/');
-                    spinnerRemove();
                 },
             });
         }
         if (step === 'DogDetailInfo') {
+            spinnerAdd();
             const urlData = await getUploadUrl(['png']);
             const fileName = urlData[0]?.filename;
             const photoUrl = urlData[0]?.url;
@@ -140,7 +139,14 @@ export default function Join() {
             file === ''
                 ? registerDogMutation.mutate({ ...registerData, profilePhotoUrl: null })
                 : await uploadImg(file, photoUrl).then(() => {
-                      registerDogMutation.mutate({ ...registerData, profilePhotoUrl: fileName });
+                      registerDogMutation.mutate(
+                          { ...registerData, profilePhotoUrl: fileName },
+                          {
+                              onSettled: () => {
+                                  spinnerRemove();
+                              },
+                          }
+                      );
                   });
         }
 
