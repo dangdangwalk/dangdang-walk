@@ -15,18 +15,23 @@ const getStartToEnd = (start: string, seconds: number) => {
     endTime.setSeconds(endTime.getSeconds() + seconds);
     return `${formDate(startTime)} ${formTime(startTime)}-${formTime(endTime)}`;
 };
+interface PageState extends Journal {
+    dogName: string;
+}
 
 export default function JournalCard({ journal, dog }: { journal: Journal; dog: Dog | undefined }) {
     const navigate = useNavigate();
     const goToDetail = (id: number) => {
-        navigate(`/journals/${id}`);
+        if (!dog) return;
+        const state: PageState = { ...journal, dogName: dog.name };
+        navigate(`/journals/${id}`, { state });
     };
     if (!dog) return <></>;
     return (
         <button
             className="h-[140px] w-full flex flex-col items-center pt-4 pb-2 relative bg-white rounded-lg shadow"
             onClick={() => {
-                goToDetail(dog.id);
+                goToDetail(journal.journalId);
             }}
         >
             <div className="w-full flex justify-start gap-3 px-4">

@@ -14,12 +14,6 @@ interface MapProps {
     height?: string;
 }
 
-declare global {
-    interface Window {
-        kakao: any;
-    }
-}
-
 export default function Map({ startPosition, path, className, height }: MapProps) {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [map, setMap] = useState<any>(null);
