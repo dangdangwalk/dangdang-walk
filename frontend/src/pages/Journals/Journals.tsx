@@ -11,6 +11,7 @@ import { fetchDogList } from '@/api/dogs';
 import Avatar from '@/components/common/Avatar';
 import SelectBox from '@/components/common/SelectBox';
 import { queryStringKeys } from '@/constants';
+import { useAuth } from '@/hooks/useAuth';
 const { REACT_APP_BASE_IMAGE_URL = '' } = window._ENV ?? process.env;
 interface ReceivedState {
     dog?: Dog;
@@ -20,12 +21,12 @@ interface ReceivedState {
 export default function Journals() {
     const location = useLocation();
     const navigate = useNavigate();
-
+    const { refreshTokenQuery } = useAuth();
     const [searchParams, setSearchParams] = useSearchParams();
     const receivedState = location.state as ReceivedState;
     const [dogList, setDogList] = useState<Dog[]>(receivedState?.dogs ?? []);
     const [selectedDog, setSelectedDog] = useState<Dog | undefined>(receivedState?.dog);
-    const { journals } = useJournals();
+    const { journals } = useJournals(refreshTokenQuery.isPending);
 
     const goBack = () => {
         navigate('/');
@@ -39,7 +40,7 @@ export default function Journals() {
         setSelectedDog(dog);
     };
     useEffect(() => {
-        if (selectedDog) return;
+        if (selectedDog || refreshTokenQuery.isPending) return;
         fetchDogList().then((data) => {
             if (data) {
                 const dogs: Dog[] = data.map((dog) => {
@@ -56,7 +57,7 @@ export default function Journals() {
                 navigate('/');
             }
         });
-    }, []);
+    }, [refreshTokenQuery.isPending]);
     return (
         <>
             <Topbar className="bg-white px-5">

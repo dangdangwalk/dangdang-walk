@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useSpinnerStore } from '@/store/spinnerStore';
 import Spinner from '@/components/common/Spinner';
+import { useAuth } from '@/hooks/useAuth';
 // var console;
 function App() {
     const { spinner } = useSpinnerStore();
@@ -13,6 +14,7 @@ function App() {
     //     console.warn = function no_console() {};
     //     console.error = function () {};
     // }
+    const { refreshTokenQuery } = useAuth();
     useEffect(() => {
         window.onpageshow = function (event) {
             if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
@@ -29,9 +31,16 @@ function App() {
         };
     }, []);
 
+    if (refreshTokenQuery.isPending) {
+        return (
+            <>
+                <Spinner className="absolute bg-neutral-800/40 z-40" />
+            </>
+        );
+    }
     return (
         <div className="flex flex-col w-full">
-            <Outlet />
+            {<Outlet />}
             {spinner > 0 && <Spinner className="absolute bg-neutral-800/40 z-40" />}
             <Toast />
         </div>

@@ -57,7 +57,7 @@ const useSignup = (mutationOptions?: UseMutationCustomOptions) => {
 const useGetRefreshToken = () => {
     const { expiresIn } = useAuthStore();
 
-    const { isSuccess, isError, data } = useQuery({
+    const { isSuccess, isError, data, isPending } = useQuery({
         queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN],
         queryFn: getAccessToken,
         gcTime: expiresIn + 1000 * 60,
@@ -77,7 +77,7 @@ const useGetRefreshToken = () => {
             removeHeader(tokenKeys.AUTHORIZATION);
         }
     }, [isError]);
-    return { isSuccess, isError };
+    return { isSuccess, isError, isPending };
 };
 
 const useLogout = (mutationOptions?: UseMutationCustomOptions) => {
@@ -119,13 +119,11 @@ export const useAuth = () => {
     const logoutMutation = useLogout();
     const signupMustation = useSignup();
     const refreshTokenQuery = useGetRefreshToken();
-    const getProfileQuery = useGetProfile({
-        enabled: refreshTokenQuery.isSuccess,
-    });
+    const getProfileQuery = useGetProfile();
     const deactivateMutation = useDeactivate();
     return {
         loginMutation,
-        isLoggedIn: getProfileQuery.isSuccess,
+        isLoggedIn: refreshTokenQuery.isSuccess,
         logoutMutation,
         signupMustation,
         refreshTokenQuery,
