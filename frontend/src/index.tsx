@@ -33,7 +33,7 @@ const router = createBrowserRouter([
                 path: '/',
                 element: (
                     <NavbarProvider>
-                        <Home />,
+                        <Home />
                     </NavbarProvider>
                 ),
             },
@@ -41,7 +41,7 @@ const router = createBrowserRouter([
                 path: '/profile',
                 element: (
                     <NavbarProvider>
-                        <Profile />,
+                        <Profile />
                     </NavbarProvider>
                 ),
             },
@@ -73,7 +73,7 @@ const router = createBrowserRouter([
                 path: '/journals',
                 element: (
                     <NavbarProvider>
-                        <Journals />,
+                        <Journals />
                     </NavbarProvider>
                 ),
             },
