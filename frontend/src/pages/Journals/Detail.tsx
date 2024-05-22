@@ -3,6 +3,7 @@ import { JournalDetail, update as updateJournal } from '@/api/journals';
 import { deleteImages, getUploadUrl, uploadImage } from '@/api/upload';
 import { ReactComponent as Arrow } from '@/assets/icons/ic-arrow.svg';
 import { ReactComponent as Meatball } from '@/assets/icons/ic-meatball.svg';
+import BottomSheet from '@/components/common/BottomSheet';
 import { Button } from '@/components/common/Button';
 import { Divider } from '@/components/common/Divider';
 import {
@@ -41,6 +42,7 @@ export default function Detail() {
     const removeSpinner = useSpinnerStore((state) => state.spinnerRemove);
 
     const [openModal, setOpenModal] = useState(false);
+    const [isBottomsheetOpen, setIsBottomsheetOpen] = useState(false);
     const [imageFileNames, setImageFileNames] = useState<Array<ImageFileName>>([]);
     const [isUploading, setIsUploading] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
@@ -100,7 +102,10 @@ export default function Detail() {
                     <Heading headingNumber={1} className="-translate-x-[15px]">
                         {dogName}의 {journalCount}번째 산책
                     </Heading>
-                    <button className="w-12 h-12 flex justify-center items-center" onClick={() => setOpenModal(true)}>
+                    <button
+                        className="w-12 h-12 flex justify-center items-center"
+                        onClick={() => setIsBottomsheetOpen(true)}
+                    >
                         <Meatball />
                     </button>
                 </div>
@@ -141,6 +146,21 @@ export default function Detail() {
                     </ModalFooter>
                 </ModalContent>
             </Modal>
+            <BottomSheet isOpen={isBottomsheetOpen} onClose={() => setIsBottomsheetOpen(false)}>
+                <BottomSheet.Body className="h-auto px-0 overflow-y-visible">
+                    <Divider className="h-px" />
+                    <Button rounded="none" className="w-full bg-white text-[#222222] text-base font-normal">
+                        수정하기
+                    </Button>
+                    <Divider className="h-px" />
+                    <Button rounded="none" className="w-full bg-white text-[#222222] text-base font-normal">
+                        삭제하기
+                    </Button>
+                </BottomSheet.Body>
+                <BottomSheet.ConfirmButton onConfirm={() => setIsBottomsheetOpen(false)} disabled={false}>
+                    취소
+                </BottomSheet.ConfirmButton>
+            </BottomSheet>
         </>
     );
 
