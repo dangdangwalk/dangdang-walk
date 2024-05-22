@@ -32,8 +32,8 @@ jobs:
       - name: Install Dependencies
         if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
         run: npm ci
-      - name: Run test
-        run: npm run test
+      - name: Run Test(only Changed)
+        run: npm run test:only-changed
   build:
     runs-on: ubuntu-20.04
     defaults:
