@@ -2,7 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn
 import { Breed } from '../breed/breed.entity';
 import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
 import { TodayWalkTime } from '../today-walk-time/today-walk-time.entity';
-import { Gender } from './dogs-gender.enum';
+import { GENDER, Gender } from './types/dog.type';
 
 @Entity('dogs')
 export class Dogs {
@@ -35,12 +35,12 @@ export class Dogs {
 
     @Column({
         type: 'enum',
-        enum: Gender,
+        enum: GENDER,
     })
-    gender: 'MALE' | 'FEMALE';
+    gender: Gender;
 
     @Column({ nullable: true, type: 'date', default: null })
-    birth: Date | null;
+    birth: string | null;
 
     @Column({ name: 'is_neutered' })
     isNeutered: boolean;

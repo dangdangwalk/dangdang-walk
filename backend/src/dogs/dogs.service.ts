@@ -12,11 +12,9 @@ import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
 import { TodayWalkTime } from '../today-walk-time/today-walk-time.entity';
 import { TodayWalkTimeService } from '../today-walk-time/today-walk-time.service';
 import { UsersDogsService } from '../users-dogs/users-dogs.service';
-import { Gender } from './dogs-gender.enum';
-import { DogProfile, DogSummary } from './dogs.controller';
 import { Dogs } from './dogs.entity';
 import { DogsRepository } from './dogs.repository';
-import { DogDto } from './dtos/dog.dto';
+import { DogData, DogProfile, DogSummary, Gender } from './types/dog.type';
 
 @Injectable()
 export class DogsService {
@@ -32,7 +30,7 @@ export class DogsService {
     ) {}
 
     @Transactional()
-    async createDogToUser(userId: number, dogDto: DogDto) {
+    async createDogToUser(userId: number, dogDto: DogData) {
         try {
             const { breed: breedName, ...otherAttributes } = dogDto;
 
@@ -75,7 +73,7 @@ export class DogsService {
         return await this.dogsRepository.update(where, partialEntity);
     }
 
-    async updateDog(userId: number, dogId: number, dogDto: DogDto) {
+    async updateDog(userId: number, dogId: number, dogDto: Partial<DogData>) {
         const { breed: breedName, ...otherAttributes } = dogDto;
         let breed;
 
