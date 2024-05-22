@@ -1,6 +1,6 @@
 interface Window {
     _ENV: Record<string, string>;
-    kakao?: any;
+    kakao: any;
 }
 declare global {
     interface Window {

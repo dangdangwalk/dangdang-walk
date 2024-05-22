@@ -1,10 +1,6 @@
 import useImageUpload from '@/hooks/useImageUpload';
 const { REACT_APP_BASE_IMAGE_URL = '' } = window._ENV ?? process.env;
-declare global {
-    interface Window {
-        kakao: any;
-    }
-}
+
 export default function Camera() {
     const { selectedFiles, uploadedImageUrls, handleFileChange, handleUpload } = useImageUpload();
 
