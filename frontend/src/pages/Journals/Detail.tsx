@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { JournalDetail, update as updateJournal } from '@/api/journals';
 import { deleteImages, getUploadUrl, uploadImage } from '@/api/upload';
-import Cancel from '@/assets/icons/ic-top-cancel.svg';
+import { ReactComponent as Arrow } from '@/assets/icons/ic-arrow.svg';
+import { ReactComponent as Meatball } from '@/assets/icons/ic-meatball.svg';
 import { Button } from '@/components/common/Button';
 import { Divider } from '@/components/common/Divider';
 import {
@@ -92,12 +93,15 @@ export default function Detail() {
     return (
         <>
             <div className="flex flex-col">
-                <div className="flex justify-between items-center h-12 pl-5 pr-2">
-                    <Heading headingNumber={1}>
+                <div className="flex justify-between items-center h-12 px-5">
+                    <button className="w-12 h-12 flex justify-center items-center">
+                        <Arrow className="rotate-180" />
+                    </button>
+                    <Heading headingNumber={1} className="-translate-x-[15px]">
                         {dogName}의 {journalCount}번째 산책
                     </Heading>
-                    <button onClick={() => setOpenModal(true)}>
-                        <img src={Cancel} alt="cancel" />
+                    <button className="w-12 h-12 flex justify-center items-center" onClick={() => setOpenModal(true)}>
+                        <Meatball />
                     </button>
                 </div>
                 <div className={`h-[calc(100dvh-3rem-4rem)] overflow-y-auto`}>
