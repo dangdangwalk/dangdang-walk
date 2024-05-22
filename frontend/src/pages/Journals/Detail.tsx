@@ -31,7 +31,6 @@ import { useLoaderData, useLocation, useNavigate } from 'react-router-dom';
 
 export default function Detail() {
     const journalDetail = useLoaderData() as JournalDetail;
-    console.log(journalDetail);
     const { journalInfo, dogs: dogsFromAPI, excrements = [] } = journalDetail;
     const { id: journalId, routes, memo, photoUrls: photoFileNames } = journalInfo;
 
