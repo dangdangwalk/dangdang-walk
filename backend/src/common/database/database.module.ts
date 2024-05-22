@@ -24,6 +24,7 @@ import BreedSeeder from './seeds/breed.seeder';
                     entities: ['dist/**/*.entity{.ts,.js}'],
                     synchronize: true,
                     timezone: 'Z',
+                    legacySpatialSupport: false
                 };
             },
             async dataSourceFactory(options) {
