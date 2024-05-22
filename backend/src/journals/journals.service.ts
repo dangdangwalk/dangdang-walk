@@ -79,6 +79,9 @@ export class JournalsService {
 
     async getJournalPhotos(journalId: number): Promise<string[]> {
         const photoUrlsRaw = await this.journalPhotosService.find({ journalId });
+        if (photoUrlsRaw.length === 1 && photoUrlsRaw[0].photoUrl === "") {
+            return[];
+        }
 
         const photoUrls = photoUrlsRaw.map((cur) => {
             return cur.photoUrl;
