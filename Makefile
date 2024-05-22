@@ -1,9 +1,9 @@
 all:
-	cat. ./Makefile
+	cat ./Makefile
 
-local-mariadb:
-	docker run -d --name local-mariadb -p 3306:3306 \
-    -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=dangdangwalk mariadb \
+local-mysql:
+	docker run -d --name local-mysql --platform linux/amd64 -p 3306:3306 \
+    -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=dangdangwalk mysql:8.4.0 \
     --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
 
 docker-build:

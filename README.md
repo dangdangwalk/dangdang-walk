@@ -45,8 +45,8 @@
 
 ### **Local Environment**
 
-로컬 개발 시 Mariadb 데이터베이스를 사용합니다.
-Mariadb은 Docker를 실행해야 사용 할 수 있습니다.
+로컬 개발 시 Mysql 데이터베이스를 사용합니다.
+Mysql은 Docker를 실행해야 사용 할 수 있습니다.
 
 1. `.env.local` 파일을 backend 폴더에 생성합니다.
 2. env 파일 내에 다음과 같은 내용을 추가합니다.
@@ -57,10 +57,10 @@ Mariadb은 Docker를 실행해야 사용 할 수 있습니다.
    MYSQL_ROOT_PASSWORD=root
    MYSQL_PORT=3306 # 기본 포트 3306
    ```
-3. Docker mariadb 이미지를 다운 받습니다.
+3. Docker mysql 이미지를 다운 받습니다.
    ```shell
-   docker run -d --name local-mariadb -p 3306:3306 \
-   -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=dangdangwalk mariadb \
+   docker run -d --name local-mysql --platform linux/amd64 -p 3306:3306 \
+   -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=dangdangwalk mysql:8.4.0 \
    --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
    ```
 4. Nest.js를 실행합니다.
