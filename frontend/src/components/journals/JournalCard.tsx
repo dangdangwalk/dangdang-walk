@@ -52,7 +52,7 @@ export default function JournalCard({ journal, dog }: { journal: Journal; dog: D
                 </div>
             </div>
             <WalkInfo
-                distance={journal.distance / 1000}
+                distance={journal.distance}
                 duration={journal.duration}
                 calories={journal.calories}
                 isDivider={false}
