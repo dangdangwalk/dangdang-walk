@@ -1,4 +1,4 @@
-import { getSidoCode, gpsToGrid } from './geo';
+import { calculateDistance, getSidoCode, gpsToGrid } from './geo';
 import { describe, expect, it } from 'vitest';
 
 const result = [
@@ -29,5 +29,13 @@ describe('위치 정보 관환 테스트', () => {
         expect(seoul).toBe('서울');
         expect(chung).toBe('충북');
         expect(undifine).toBe('전국');
+    });
+    it('거리 계산', () => {
+        const seoulLat = 37.5665;
+        const seoulLon = 126.978;
+        const busanLat = 35.1796;
+        const busanLon = 129.0756;
+        const dist = calculateDistance(seoulLat, seoulLon, busanLat, busanLon);
+        expect(Math.floor(dist)).toBe(325111);
     });
 });
