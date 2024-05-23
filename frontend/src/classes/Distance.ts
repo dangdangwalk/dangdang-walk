@@ -22,6 +22,6 @@ export default class Distance {
         return this._value >= KM ? this.toKm(this._value) : String(this._value);
     }
     get valueWithUnit() {
-        return `${this.value}${this.unit}`;
+        return `${this.formatedDistance} ${this.unit}`;
     }
 }

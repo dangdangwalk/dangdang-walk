@@ -17,6 +17,7 @@ const useGeolocation = () => {
             navigator.geolocation.getCurrentPosition((position: GeolocationPosition) => {
                 const { latitude, longitude } = position.coords;
                 setStartPosition({ lat: latitude, lng: longitude });
+                setPrevPosition({ lat: latitude, lng: longitude });
             });
         } else {
             console.log('no geolocation');
@@ -26,15 +27,18 @@ const useGeolocation = () => {
 
     useEffect(() => {
         if (!startPosition || !isStartGeo) return;
-        const watchId = navigator.geolocation.watchPosition((position) => {
+        const onSuccess = (position: GeolocationPosition) => {
             if (!isStartGeo) return;
             const { latitude, longitude } = position.coords;
             setCurrentPosition({
                 lat: latitude,
                 lng: longitude,
             });
-            setPrevPosition({ lat: latitude, lng: longitude });
-        });
+        };
+        const onError = (error: GeolocationPositionError) => {
+            console.log(error);
+        };
+        const watchId = navigator.geolocation.watchPosition(onSuccess, onError, { enableHighAccuracy: true });
 
         return () => {
             navigator.geolocation.clearWatch(watchId);
@@ -53,6 +57,7 @@ const useGeolocation = () => {
     useEffect(() => {
         if (!startPosition || !currentPosition || !prevPosition) return;
         const { lat, lng } = currentPosition;
+        console.log(currentPosition, prevPosition);
         const newDistance = calculateDistance(prevPosition.lat, prevPosition.lng, lat, lng);
         setRoutes([...routes, { lat, lng }]);
         setPrevPosition({ lat, lng });
