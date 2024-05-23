@@ -10,13 +10,15 @@ const useGeolocation = () => {
     const [distance, setDistance] = useState<number>(0);
     const [routes, setRoutes] = useState<Position[]>([]);
     const [isStartGeo, setIsStartGeo] = useState<boolean>(false);
-    let oldPosition: Position | null = null;
+    const [prevPosition, setPrevPosition] = useState<Position | null>(null);
 
     useEffect(() => {
         if ('geolocation' in navigator) {
             navigator.geolocation.getCurrentPosition((position: GeolocationPosition) => {
-                const { latitude, longitude } = position.coords;
-                setStartPosition({ lat: latitude, lng: longitude });
+                const { latitude: lat, longitude: lng } = position.coords;
+                setStartPosition({ lat, lng });
+                setPrevPosition({ lat, lng });
+                setRoutes([...routes, { lat, lng }]);
             });
         } else {
             console.log('no geolocation');
@@ -29,18 +31,7 @@ const useGeolocation = () => {
         const onSuccess = (position: GeolocationPosition) => {
             if (!isStartGeo) return;
             const { latitude: lat, longitude: lng } = position.coords;
-            if (oldPosition === null) {
-                setCurrentPosition({ lat, lng });
-                setRoutes([...routes, { lat, lng }]);
-                oldPosition = { lat, lng };
-            } else {
-                const newDistance = calculateDistance(oldPosition.lat, oldPosition.lng, lat, lng);
-                if (newDistance < 1) return;
-                setRoutes([...routes, { lat, lng }]);
-                setCurrentPosition({ lat, lng });
-                setDistance(distance + Math.floor(newDistance));
-                oldPosition = { lat, lng };
-            }
+            setCurrentPosition({ lat, lng });
         };
 
         const onError = (error: GeolocationPositionError) => {
@@ -63,7 +54,15 @@ const useGeolocation = () => {
     const stopGeo = () => {
         setIsStartGeo(false);
     };
-
+    useEffect(() => {
+        if (!prevPosition || !currentPosition) return;
+        const { lat, lng } = currentPosition;
+        const newDistance = calculateDistance(prevPosition.lat, prevPosition.lng, lat, lng);
+        if (newDistance < 1.2) return;
+        setDistance(distance + Math.floor(newDistance));
+        setRoutes([...routes, { lat, lng }]);
+        setPrevPosition({ lat, lng });
+    }, [currentPosition]);
     return { position: startPosition, distance, routes, currentPosition, stopGeo, startGeo };
 };
 
