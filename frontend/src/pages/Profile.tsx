@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import Topbar from '@/components/common/Topbar';
 import { useDog } from '@/hooks/useDog';
@@ -20,7 +20,20 @@ import DogProfile from '@/pages/DogProfile';
 import { ResponseDogs, ResponseRecentMonthStatistics, fetchDogRecentMonthStatistics } from '@/api/dogs';
 function Profile() {
     const navigate = useNavigate();
-    const { dogs } = useDog();
+    const { useDogsQuery } = useDog();
+    const { data, isSuccess } = useDogsQuery;
+    const [dogs, setDogs] = useState<ResponseDogs[]>([
+        {
+            id: 0,
+            birth: null,
+            name: '',
+            breed: '',
+            gender: '',
+            weight: 0,
+            isNeutered: false,
+            profilePhotoUrl: null,
+        },
+    ]);
     const { logoutMutation, profileData } = useAuth();
     const nickname = profileData?.nickname.substring(0, profileData?.nickname.indexOf('#'));
     const provider = profileData?.provider;
@@ -41,11 +54,19 @@ function Profile() {
         isNeutered: false,
         profilePhotoUrl: null,
     });
-    const handleProfileOpen = (dog: ResponseDogs, data: ResponseRecentMonthStatistics) => {
-        setDogInfo(dog);
-        setStatistics(data);
-        setIsProfileOpen(true);
-    };
+    const handleProfileOpen = useCallback(
+        (dog: ResponseDogs, data: ResponseRecentMonthStatistics) => {
+            setDogInfo(dog);
+            setStatistics(data);
+            setIsProfileOpen(true);
+        },
+        [data, isSuccess]
+    );
+    useEffect(() => {
+        if (isSuccess) {
+            setDogs(data);
+        }
+    }, [isSuccess, data]);
     return (
         <div className={`flex w-200vw bg-white `}>
             <div className="w-dvw ">
@@ -92,7 +113,7 @@ function Profile() {
                             dogs.map((dog, index) => (
                                 <div key={dog.id} className="flex justify-between items-center px-5 py-[6px]">
                                     <div className="flex justify-start gap-2">
-                                        <Avatar url={dog.profilePhotoUrl} name={dog.name} />
+                                        <Avatar url={`${dog.profilePhotoUrl}`} name={dog.name} />
                                         {index === 0 && <img src={CrownIcon} alt="crown" />}
                                     </div>
                                     <img

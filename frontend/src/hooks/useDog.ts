@@ -5,7 +5,7 @@ import { UseMutationCustomOptions } from '@/types/common';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-const { REACT_APP_BASE_IMAGE_URL = '' } = window._ENV ?? process.env;
+import { queryKeys } from '@/constants';
 
 const useRegisterDog = (mutationOptions?: UseMutationCustomOptions) => {
     const navigate = useNavigate();
@@ -20,40 +20,18 @@ const useRegisterDog = (mutationOptions?: UseMutationCustomOptions) => {
 
 const useFetchDogs = () => {
     const { refreshTokenQuery } = useAuth();
-    const { data, isSuccess, isError } = useQuery<ResponseDogs[]>({
-        queryKey: ['dogs'],
+    return useQuery<ResponseDogs[]>({
+        queryKey: [queryKeys.DOGS],
         queryFn: fetchDogs,
         enabled: refreshTokenQuery.isSuccess,
     });
-    if (isSuccess) {
-        return data?.map((dog: ResponseDogs) => {
-            return {
-                ...dog,
-                profilePhotoUrl: dog.profilePhotoUrl ? `${REACT_APP_BASE_IMAGE_URL}/${dog.profilePhotoUrl}` : null,
-            };
-        });
-    }
-    if (isError) {
-        return [
-            {
-                id: 0,
-                weight: 0,
-                name: '',
-                breed: '',
-                gender: '',
-                isNeutered: true,
-                birth: null,
-                profilePhotoUrl: '',
-            },
-        ];
-    }
 };
 
 const useDeleteDog = () => {
     return useMutation({
         mutationFn: deleteDog,
         onSuccess: () => {
-            queryClient.refetchQueries({ queryKey: ['dogs'] });
+            queryClient.refetchQueries({ queryKey: [queryKeys.DOGS] });
             window.location.reload();
         },
     });
@@ -62,8 +40,8 @@ const useDeleteDog = () => {
 const useUpdateDog = (mutationOptions?: UseMutationCustomOptions) => {
     return useMutation({
         mutationFn: updateDog,
-        onSuccess: () => {
-            window.location.reload();
+        onSettled: () => {
+            queryClient.refetchQueries({ queryKey: [queryKeys.DOGS] });
         },
         ...mutationOptions,
     });
@@ -76,9 +54,9 @@ export const uploadImg = async (file: File | null, dogImgUrl: string) => {
 
 export const useDog = () => {
     const registerDogMutation = useRegisterDog();
-    const dogs = useFetchDogs();
+    const useDogsQuery = useFetchDogs();
     const deleteDogMutation = useDeleteDog();
     const updateDogMutation = useUpdateDog();
 
-    return { registerDogMutation, dogs, deleteDogMutation, updateDogMutation };
+    return { registerDogMutation, useDogsQuery, deleteDogMutation, updateDogMutation };
 };
