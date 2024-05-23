@@ -4,7 +4,6 @@ import { uploadImage } from '@/api/upload';
 import { UseMutationCustomOptions } from '@/types/common';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import ProfileUnknown from '@/assets/icons/ic-profile-unknown.svg';
 import { useAuth } from '@/hooks/useAuth';
 const { REACT_APP_BASE_IMAGE_URL = '' } = window._ENV ?? process.env;
 
