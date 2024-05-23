@@ -10,6 +10,7 @@ const useGeolocation = () => {
     const [distance, setDistance] = useState<number>(0);
     const [routes, setRoutes] = useState<Position[]>([]);
     const [isStartGeo, setIsStartGeo] = useState<boolean>(false);
+    let oldPosition: Position | null = null;
 
     useEffect(() => {
         if ('geolocation' in navigator) {
@@ -25,23 +26,21 @@ const useGeolocation = () => {
 
     useEffect(() => {
         if (!startPosition || !isStartGeo) return;
-
         const onSuccess = (position: GeolocationPosition) => {
             if (!isStartGeo) return;
-
             const { latitude: lat, longitude: lng } = position.coords;
-            if (currentPosition === null) {
+            if (oldPosition === null) {
                 setCurrentPosition({ lat, lng });
                 setRoutes([...routes, { lat, lng }]);
-                return;
+                oldPosition = { lat, lng };
+            } else {
+                const newDistance = calculateDistance(oldPosition.lat, oldPosition.lng, lat, lng);
+                if (newDistance < 1) return;
+                setRoutes([...routes, { lat, lng }]);
+                setCurrentPosition({ lat, lng });
+                setDistance(distance + Math.floor(newDistance));
+                oldPosition = { lat, lng };
             }
-
-            const oldPosition = currentPosition;
-            const newDistance = calculateDistance(oldPosition.lat, oldPosition.lng, lat, lng);
-            if (newDistance < 1) return;
-            setDistance(distance + Math.floor(newDistance));
-            setCurrentPosition({ lat, lng });
-            setRoutes([...routes, { lat, lng }]);
         };
 
         const onError = (error: GeolocationPositionError) => {
