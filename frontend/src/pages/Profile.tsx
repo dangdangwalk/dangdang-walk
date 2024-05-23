@@ -39,17 +39,16 @@ function Profile() {
         gender: '',
         weight: 0,
         isNeutered: false,
-        profilePhotoUrl: '',
+        profilePhotoUrl: null,
     });
     const handleProfileOpen = (dog: ResponseDogs, data: ResponseRecentMonthStatistics) => {
         setDogInfo(dog);
         setStatistics(data);
         setIsProfileOpen(true);
     };
-
     return (
-        <div className="flex w-200vw bg-white relative">
-            <div className="w-dvw">
+        <div className={`flex w-200vw bg-white `}>
+            <div className="w-dvw ">
                 <Topbar>
                     <Topbar.Front className="w-12" />
                     <Topbar.Center className="text-black text-lg font-bold leading-[27px]">마이페이지</Topbar.Center>
@@ -57,7 +56,7 @@ function Profile() {
                         <img src={SettingIcon} alt="setting" />
                     </Topbar.Back>
                 </Topbar>
-                <main className={`flex flex-col mb-[60px]`}>
+                <main className={`flex flex-col mb-[60px] max-h-min`}>
                     <section className="flex justify-between items-center px-5 py-6">
                         <section className="flex justify-start gap-2">
                             <div className="text-neutral-800 text-lg font-bold leading-[33px]">{nickname}님</div>
@@ -123,14 +122,12 @@ function Profile() {
                     </button>
                 </main>
             </div>
-
             <DogProfile
                 dog={dogInfo}
                 statistics={statistics}
                 isProfileOpen={isProfileOpen}
                 setIsProfileOpen={setIsProfileOpen}
             />
-
             {deactivate && <DeactivateModal setDeactivate={setDeactivate} />}
         </div>
     );

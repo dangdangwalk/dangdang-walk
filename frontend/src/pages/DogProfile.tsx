@@ -73,11 +73,10 @@ export default function DogProfile({ dog, statistics, isProfileOpen, setIsProfil
             }));
         setOnEdit(false);
     };
-
     return (
         <>
             <div
-                className={`w-dvw -right-full top-0 mb-[60px] z-20 bg-white duration-200 ${isProfileOpen && '-translate-x-full'}`}
+                className={`w-dvw -right-full top-0 z-20 bg-white duration-200 ${isProfileOpen && '-translate-x-full'}`}
             >
                 <Topbar>
                     <Topbar.Front
@@ -100,8 +99,8 @@ export default function DogProfile({ dog, statistics, isProfileOpen, setIsProfil
                     </Topbar.Back>
                 </Topbar>
                 {dog && (
-                    <main className="flex flex-col mt-2">
-                        <section className="relative flex flex-col items-center">
+                    <main className="flex flex-col mt-2 mb-[60px] ">
+                        <section className=" flex flex-col items-center">
                             <img className="size-7" src={CrownIcon} alt="crown" />
 
                             <Avatar url={dogProfileImgUrl ? dogProfileImgUrl : profilePhotoUrl} size="large" />
