@@ -28,8 +28,15 @@ const useGeolocation = () => {
 
         const onSuccess = (position: GeolocationPosition) => {
             if (!isStartGeo) return;
+
             const { latitude: lat, longitude: lng } = position.coords;
-            const oldPosition = currentPosition ?? startPosition;
+            if (currentPosition === null) {
+                setCurrentPosition({ lat, lng });
+                setRoutes([...routes, { lat, lng }]);
+                return;
+            }
+
+            const oldPosition = currentPosition;
             const newDistance = calculateDistance(oldPosition.lat, oldPosition.lng, lat, lng);
             if (newDistance < 2000) return;
             setDistance(distance + Math.floor(newDistance));
