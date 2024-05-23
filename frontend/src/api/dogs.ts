@@ -29,7 +29,7 @@ export interface ResponseDogs {
     gender: string;
     weight: number;
     isNeutered: boolean;
-    profilePhotoUrl: string;
+    profilePhotoUrl: string | null;
 }
 export const fetchDogs = async (): Promise<ResponseDogs[]> => {
     const { data } = await httpClient.get<ResponseDogs[]>('/dogs');

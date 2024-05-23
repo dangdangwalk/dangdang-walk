@@ -30,10 +30,7 @@ const useFetchDogs = () => {
         return data?.map((dog: ResponseDogs) => {
             return {
                 ...dog,
-                profilePhotoUrl:
-                    dog.profilePhotoUrl === null
-                        ? ProfileUnknown
-                        : `${REACT_APP_BASE_IMAGE_URL}/${dog.profilePhotoUrl}`,
+                profilePhotoUrl: dog.profilePhotoUrl ? `${REACT_APP_BASE_IMAGE_URL}/${dog.profilePhotoUrl}` : null,
             };
         });
     }
