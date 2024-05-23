@@ -1,5 +1,6 @@
+import Distance from '@/classes/Distance';
 import { Divider } from '@/components/common/Divider';
-import { distanceFormat, timeFormat } from '@/utils/format';
+import { timeFormat } from '@/utils/format';
 import { cn } from '@/utils/tailwindClass';
 
 interface WalkInfoProps {
@@ -9,7 +10,14 @@ interface WalkInfoProps {
     isDivider?: boolean;
     className?: string;
 }
-export default function WalkInfo({ duration, calories, distance, isDivider = true, className }: WalkInfoProps) {
+export default function WalkInfo({
+    duration,
+    calories,
+    distance: rawDistance,
+    isDivider = true,
+    className,
+}: WalkInfoProps) {
+    const distance = new Distance(rawDistance);
     return (
         <div
             className={cn(
@@ -17,8 +25,8 @@ export default function WalkInfo({ duration, calories, distance, isDivider = tru
             )}
         >
             <div className="flex flex-col h-15 w-[100px] justify-center items-center">
-                <div className=" text-amber-500 text-lg font-bold leading-[27px]">{distanceFormat(distance)}</div>
-                <div className="text-center text-stone-500 text-xs font-normal leading-[18px]">km</div>
+                <div className=" text-amber-500 text-lg font-bold leading-[27px]">{distance.formatedDistance}</div>
+                <div className="text-center text-stone-500 text-xs font-normal leading-[18px]">{distance.unit}</div>
             </div>
             {isDivider && <Divider orientation={'vertical'} />}
             <div className="flex flex-col w-[100px] justify-center items-center">
