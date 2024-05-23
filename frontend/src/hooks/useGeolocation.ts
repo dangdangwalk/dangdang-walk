@@ -27,14 +27,18 @@ const useGeolocation = () => {
 
     useEffect(() => {
         if (!startPosition || !isStartGeo) return;
-        const watchId = navigator.geolocation.watchPosition((position) => {
+        const onSuccess = (position: GeolocationPosition) => {
             if (!isStartGeo) return;
             const { latitude, longitude } = position.coords;
             setCurrentPosition({
                 lat: latitude,
                 lng: longitude,
             });
-        });
+        };
+        const onError = (error: GeolocationPositionError) => {
+            console.log(error);
+        };
+        const watchId = navigator.geolocation.watchPosition(onSuccess, onError, { enableHighAccuracy: true });
 
         return () => {
             navigator.geolocation.clearWatch(watchId);
