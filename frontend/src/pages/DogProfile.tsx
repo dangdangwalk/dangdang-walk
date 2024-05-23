@@ -19,6 +19,7 @@ import { maxLengthCheck } from '@/pages/JoinStep/DogDetailInfo';
 import { getUploadUrl } from '@/api/upload';
 import { dataURLtoFile } from '@/utils/dataUrlToFile';
 import { uploadImg, useDog } from '@/hooks/useDog';
+import { secondsToTimeFormat } from '@/utils/time';
 interface Props {
     dog: ResponseDogs;
     statistics: ResponseRecentMonthStatistics;
@@ -315,7 +316,9 @@ export default function DogProfile({ dog, statistics, isProfileOpen, setIsProfil
                                 </div>
                                 <div className="flex justify-between">
                                     <p className="text-neutral-400 text-sm font-normal">총 시간</p>
-                                    <p className="text-neutral-800 text-sm font-bold">{totalTime}</p>
+                                    <p className="text-neutral-800 text-sm font-bold">
+                                        {secondsToTimeFormat(totalTime)}
+                                    </p>
                                 </div>
                             </section>
                         </section>
