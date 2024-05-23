@@ -22,7 +22,7 @@ import DogDetailInfo, { DogDetailInfoProps } from '@/pages/JoinStep/DogDetailInf
 import { useSpinnerStore } from '@/store/spinnerStore';
 
 export interface DogRegInfo extends DogBasicInfoProps, DogDetailInfoProps {
-    profilePhotoUrl: string | null;
+    profilePhotoUrl?: string | null;
 }
 
 export default function Join() {

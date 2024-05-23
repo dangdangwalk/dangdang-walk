@@ -28,53 +28,49 @@ interface Props {
     setIsProfileOpen: (state: boolean) => void;
 }
 export default function DogProfile({ dog, statistics, isProfileOpen, setIsProfileOpen }: Props) {
-    window.scrollTo({ top: 0 });
     const { updateDogMutation } = useDog();
     const { dogProfileImgUrl, setDogProfileImgUrl, onSelectFileChange } = useCropStore();
-
+    const { useDogsQuery } = useDog();
     const [onEdit, setOnEdit] = useState(false);
     window.location.pathname !== '/profile' && setOnEdit(false);
     const [breedSearchOpen, setBreedSearchOpen] = useState(false);
     const [deleteDogConfirm, setDeleteDogConfirm] = useState(false);
-    const [registerData, setRegisterData] = useState<DogRegInfo>({
-        name: '',
-        breed: '',
-        gender: 'MALE',
-        isNeutered: false,
-        birth: '',
-        weight: 0,
-        profilePhotoUrl: '',
-    });
+    const [registerData, setRegisterData] = useState<DogRegInfo>(dog);
 
     const { totalDistance, totalTime, totalWalkCnt } = statistics;
     const distance = new Distance(totalDistance);
-    const { id, name, breed, birth, gender, isNeutered, weight, profilePhotoUrl } = dog;
+    const { id } = dog;
+    const { name, breed, birth, gender, isNeutered, weight, profilePhotoUrl } = registerData;
 
     useEffect(() => {
-        setRegisterData({
-            name,
-            breed,
-            gender,
-            isNeutered,
-            birth,
-            weight,
-            profilePhotoUrl,
-        });
-    }, [dog]);
+        setDogProfileImgUrl('');
+        setRegisterData(dog);
+    }, [dog, useDogsQuery.data]);
 
     const handleSave = async () => {
-        const urlData = await getUploadUrl(['png']);
-        const fileName = urlData[0]?.filename;
-        const photoUrl = urlData[0]?.url;
-        if (!fileName || !photoUrl) return;
-        const file = dogProfileImgUrl && dataURLtoFile(dogProfileImgUrl, fileName);
-        setDogProfileImgUrl('');
-
-        file &&
-            (await uploadImg(file, photoUrl).then(() => {
-                updateDogMutation.mutate({ dogId: id, params: { ...registerData, profilePhotoUrl: fileName } });
-            }));
+        if (dogProfileImgUrl) {
+            const urlData = await getUploadUrl(['png']);
+            const fileName = urlData[0]?.filename;
+            const photoUrl = urlData[0]?.url;
+            if (!fileName || !photoUrl) return;
+            const file = dataURLtoFile(dogProfileImgUrl, fileName);
+            setDogProfileImgUrl('');
+            await uploadImg(file, photoUrl).then(() =>
+                updateDogMutation.mutate({
+                    dogId: id,
+                    params: { ...registerData, profilePhotoUrl: fileName },
+                })
+            );
+        } else {
+            setDogProfileImgUrl('');
+            profilePhotoUrl &&
+                updateDogMutation.mutate({
+                    dogId: id,
+                    params: { name, breed, birth, gender, isNeutered, weight },
+                });
+        }
         setOnEdit(false);
+        setIsProfileOpen(false);
     };
     return (
         <>
@@ -103,7 +99,7 @@ export default function DogProfile({ dog, statistics, isProfileOpen, setIsProfil
                 </Topbar>
                 {dog && (
                     <main className="flex flex-col mt-2 mb-[60px] ">
-                        <section className=" flex flex-col items-center">
+                        <section className="relative flex flex-col items-center">
                             <img className="size-7" src={CrownIcon} alt="crown" />
 
                             <Avatar url={dogProfileImgUrl ? dogProfileImgUrl : profilePhotoUrl} size="large" />
@@ -133,7 +129,7 @@ export default function DogProfile({ dog, statistics, isProfileOpen, setIsProfil
                                     <input
                                         disabled={!onEdit}
                                         type="text"
-                                        value={onEdit ? registerData.name : name}
+                                        value={name}
                                         onChange={(e: ChangeEvent<HTMLInputElement>) =>
                                             setRegisterData((prev) => ({
                                                 ...prev,
@@ -149,7 +145,7 @@ export default function DogProfile({ dog, statistics, isProfileOpen, setIsProfil
                                         className="text-neutral-800 text-sm font-bold"
                                         onClick={() => onEdit && setBreedSearchOpen(true)}
                                     >
-                                        {registerData.breed ? registerData.breed : breed}
+                                        {breed}
                                     </p>
                                 </div>
                                 <div className="flex justify-between">
@@ -164,29 +160,23 @@ export default function DogProfile({ dog, statistics, isProfileOpen, setIsProfil
                                                     }))
                                                 }
                                                 className={`border ${
-                                                    registerData.gender === 'MALE'
-                                                        ? 'border-primary'
-                                                        : 'border-secondary'
+                                                    gender === 'MALE' ? 'border-primary' : 'border-secondary'
                                                 } bg-primary-foreground  rounded-lg w-full flex items-center justify-center px-[9px] py-[7px]`}
                                             >
                                                 <div className="flex justify-center items-center gap-1">
                                                     <div
                                                         className={`text-base ${
-                                                            registerData.gender === 'MALE'
-                                                                ? 'text-neutral-800'
-                                                                : 'text-stone-500'
+                                                            gender === 'MALE' ? 'text-neutral-800' : 'text-stone-500'
                                                         }  font-bold`}
                                                     >
                                                         <MaleIcon
-                                                            color={`${registerData.gender === 'MALE' ? '#222222' : '#999999'}`}
+                                                            color={`${gender === 'MALE' ? '#222222' : '#999999'}`}
                                                             size="18"
                                                         />
                                                     </div>
                                                     <div
                                                         className={`text-xs ${
-                                                            registerData.gender === 'MALE'
-                                                                ? 'text-neutral-800'
-                                                                : 'text-neutral-400'
+                                                            gender === 'MALE' ? 'text-neutral-800' : 'text-neutral-400'
                                                         }  font-normal`}
                                                     >
                                                         남아
@@ -201,27 +191,23 @@ export default function DogProfile({ dog, statistics, isProfileOpen, setIsProfil
                                                     }))
                                                 }
                                                 className={`border ${
-                                                    registerData.gender === 'FEMALE'
-                                                        ? 'border-primary'
-                                                        : 'border-secondary'
+                                                    gender === 'FEMALE' ? 'border-primary' : 'border-secondary'
                                                 } bg-primary-foreground  rounded-lg w-full flex items-center justify-center px-[9px] py-[7px]`}
                                             >
                                                 <div className="flex justify-center items-center gap-1">
                                                     <div
                                                         className={`text-base ${
-                                                            registerData.gender === 'FEMALE'
-                                                                ? 'text-neutral-800'
-                                                                : 'text-stone-500'
+                                                            gender === 'FEMALE' ? 'text-neutral-800' : 'text-stone-500'
                                                         }  font-bold`}
                                                     >
                                                         <FemaleIcon
-                                                            color={`${registerData.gender === 'FEMALE' ? '#222222' : '#999999'}`}
+                                                            color={`${gender === 'FEMALE' ? '#222222' : '#999999'}`}
                                                             size="18"
                                                         />
                                                     </div>
                                                     <div
                                                         className={`text-xs ${
-                                                            registerData.gender === 'FEMALE'
+                                                            gender === 'FEMALE'
                                                                 ? 'text-neutral-800'
                                                                 : 'text-neutral-400'
                                                         }  font-normal`}
@@ -242,7 +228,7 @@ export default function DogProfile({ dog, statistics, isProfileOpen, setIsProfil
                                     <div className="flex justify-between">
                                         <p className="text-neutral-400 text-sm font-normal">중성화 유무</p>
                                         <Checkbox
-                                            checked={onEdit ? registerData.isNeutered : isNeutered}
+                                            checked={isNeutered}
                                             onCheckedChange={(checked: boolean) =>
                                                 setRegisterData((prev) => ({
                                                     ...prev,
@@ -255,19 +241,17 @@ export default function DogProfile({ dog, statistics, isProfileOpen, setIsProfil
                                 <div className="flex justify-between">
                                     <p className="text-neutral-400 text-sm font-normal">생일</p>
                                     {onEdit ? (
-                                        registerData.birth && (
-                                            <input
-                                                type="date"
-                                                value={registerData.birth}
-                                                className="text-end"
-                                                onChange={(event) =>
-                                                    setRegisterData((prev) => ({
-                                                        ...prev,
-                                                        birth: event.target.value,
-                                                    }))
-                                                }
-                                            />
-                                        )
+                                        <input
+                                            type="date"
+                                            value={birth ? birth : ''}
+                                            className="text-end"
+                                            onChange={(event) =>
+                                                setRegisterData((prev) => ({
+                                                    ...prev,
+                                                    birth: event.target.value,
+                                                }))
+                                            }
+                                        />
                                     ) : (
                                         <p className="text-neutral-800 text-sm font-bold">
                                             {birth ? birth : '생일을 몰라요'}
@@ -284,7 +268,7 @@ export default function DogProfile({ dog, statistics, isProfileOpen, setIsProfil
                                                 pattern="\d*"
                                                 inputMode="numeric"
                                                 maxLength={3}
-                                                value={onEdit ? registerData.weight : weight}
+                                                value={weight}
                                                 onInput={(e) => maxLengthCheck(e)}
                                                 onChange={(event) =>
                                                     setRegisterData((prev) => ({
@@ -314,7 +298,7 @@ export default function DogProfile({ dog, statistics, isProfileOpen, setIsProfil
                                 </div>
                                 <div className="flex justify-between">
                                     <p className="text-neutral-400 text-sm font-normal">총 거리(km)</p>
-                                    <p className="text-neutral-800 text-sm font-bold">{distance.valueWithUnit}</p>
+                                    <p className="text-neutral-800 text-sm font-bold">{distance.valueWithUnit}km</p>
                                 </div>
                                 <div className="flex justify-between">
                                     <p className="text-neutral-400 text-sm font-normal">총 시간</p>
