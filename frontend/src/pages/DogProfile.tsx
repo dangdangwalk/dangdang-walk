@@ -20,6 +20,7 @@ import { getUploadUrl } from '@/api/upload';
 import { dataURLtoFile } from '@/utils/dataUrlToFile';
 import { uploadImg, useDog } from '@/hooks/useDog';
 import { secondsToTimeFormat } from '@/utils/time';
+import Distance from '@/classes/Distance';
 interface Props {
     dog: ResponseDogs;
     statistics: ResponseRecentMonthStatistics;
@@ -46,6 +47,7 @@ export default function DogProfile({ dog, statistics, isProfileOpen, setIsProfil
     });
 
     const { totalDistance, totalTime, totalWalkCnt } = statistics;
+    const distance = new Distance(totalDistance);
     const { id, name, breed, birth, gender, isNeutered, weight, profilePhotoUrl } = dog;
 
     useEffect(() => {
@@ -312,7 +314,7 @@ export default function DogProfile({ dog, statistics, isProfileOpen, setIsProfil
                                 </div>
                                 <div className="flex justify-between">
                                     <p className="text-neutral-400 text-sm font-normal">총 거리(km)</p>
-                                    <p className="text-neutral-800 text-sm font-bold">{totalDistance}km</p>
+                                    <p className="text-neutral-800 text-sm font-bold">{distance.valueWithUnit}</p>
                                 </div>
                                 <div className="flex justify-between">
                                     <p className="text-neutral-400 text-sm font-normal">총 시간</p>
