@@ -1,4 +1,4 @@
-export const KM: number = 1000;
+const KM: number = 1000;
 export default class Distance {
     private _value: number;
 
