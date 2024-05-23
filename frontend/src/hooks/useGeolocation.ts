@@ -58,8 +58,8 @@ const useGeolocation = () => {
         if (!prevPosition || !currentPosition) return;
         const { lat, lng } = currentPosition;
         const newDistance = calculateDistance(prevPosition.lat, prevPosition.lng, lat, lng);
-        if (newDistance < 1.2) return;
-        setDistance(distance + Math.floor(newDistance));
+        // if (newDistance < 1.2) return;
+        setDistance(distance + Math.floor(newDistance) / 10);
         setRoutes([...routes, { lat, lng }]);
         setPrevPosition({ lat, lng });
     }, [currentPosition]);
