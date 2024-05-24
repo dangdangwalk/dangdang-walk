@@ -1,95 +1,122 @@
-# DangDang-walk
+<p align="center">
+  <img src="https://github.com/jihwooon/dangdang-walk/assets/68071599/0426836a-8b79-453d-b57e-6dcc1d23f8d6">
+</p>
 
-이는 프로젝트 애플리케이션용 REST API입니다.
+<p align="center"> 견주와 반려견이 함께 산책을 통해 건강을 관리하자 “DangDangWalk App” ​입니다. <p/>
+<br><br>
 
-## Tech Stack
+# **프로젝트 소개**
 
-- Next: 14.2.2
-- Nest: 10.3.0
-- MySQL:8.0.22
-- Npm: 9.6.7
-- Node: 18.17.1
+### 구성원
 
-## Getting Started
+|이름|포지션|Github|
+|------|------|------|
+|이길영|FrontEnd|https://github.com/supremgy|
+|이준형|FrontEnd|https://github.com/goddls123|
+|이민철|FrontEnd|https://github.com/autroshot|
+|조안나|BackEnd|https://github.com/opehn|
+|황재경|BackEnd|https://github.com/do0ori|
+|안지환|BackEnd|https://github.com/jihwooon|
 
-- 해당 Repository에서 프로젝트를 복제합니다.
-- `front` 와 `backend` 각 폴더에 실행방법은 다음과 같습니다.
-  - front
-    - `npm install` 명령어를 입력하여 의존성 패키지를 다운 받습니다.
-    - `npm run dev` 명령어로 Next.js Dev 모드를 실행합니다. - `npm run build` 명령어로 Next.js를 빌드합니다.
-    - `npm run start` 명령어로 production server를 실행합니다.
-    - `npm run lint` 명령어로 ESLint를 설정합니다.
-  - backend
-    - `npm run start` 명령어를 입력하여 local 환경 Nest.js를 실행합니다.
-    - `npm run start:dev` 명령어를 입력하여 dev 환경 Nest.js를 실행합니다.
-    - `npm run start:prod` 명령어를 입력하여 prod 환경 Nest.js를 실행합니다.
-    - `npm run test` 명령어를 입력하여 Nest.js 테스트를 실행합니다.
-    - `npm run test:e2e` 명령어를 입력하여 Nest.js e2e 테스트를 실행합니다.
-- git hook 사용법
-  - `npm install` 명령어를 입력해 husky와 lint-staged 모듈을 다운받습니다.
-  - **자신이 작업할 폴더(backend 또는 frontend)로 이동해** `npm run prepare`를 실행합니다.
-    - 이는 `git commit` 시 실행할 git hook script 파일의 위치를 설정하는 것으로 언제든 `npm run prepare`를 통해 변경할 수 있습니다.
-    - 자신이 작업할 폴더와 git hook script 파일이 위치하는 폴더가 동일하게 설정되도록 합니다.
-  - 이제 `git commit` 시 `pre-commit` git hook script가 자동으로 실행되며 다음과 같은 작업을 합니다.
-    - branch 이름이 프로젝트의 naming convention을 따르는지 검사 (ex. frontend/DANG-1, backend/DANG-26)
-    - commit message 작성 전에 lint-staged로 linter와 formatter 적용
-  - `pre-commit` git hook script에서는 branch 이름이 backend로 시작하면 backend에서 작업한 것으로 간주하며, `git commit` 실행 시 frontend의 script가 실행될 경우 다음과 같은 경고 메시지가 출력됩니다. 그 반대도 마찬가지이며 필요한 경우 경고 메시지의 안내에 따릅니다.
-    ![image](https://github.com/jihwooon/dangdang-walk/assets/71831926/279a2f4f-0756-4bbb-892f-6179f6f10d28)
-  - `git commit` 시 git hook의 실행을 skip하고 싶다면 `-n/--no-verify` option을 사용합니다.
-    ```bash
-    git commit -n # Skips git hooks
-    ```
-    Root directory에서 작업한 경우와 같이 특수한 경우가 아니라면 git hook의 실행을 skip하는 행동은 지양합니다.
 
-## Database Setting
+### 주요 키워드
+1. Blue/Green 무중단 배포
+    - AWS EC2 자원은 할당량이 1대 책정됨
+    - 때문에 안정적인 배포를 위해서 무중단 배포를 구축
+    - 롤백과 이력 관리가 쉬운 Blue/Green 무중단 배포 전략을 사용함
+2. Auth 인증/인가
+    - 복잡한 회원 절차를 쉽게 하기 위해서 소셜 Auth 인증 인가를 도입
+    - 회원
+3. Worker Thread
+    - 전투연산 등 IO대비 CPU연산의 비중이 큰 작업들이 존재하며
+      해당 작업들에 트래픽이 치중되는 상황이 예상
+    - 따라서 멀티스레드 환경을 구성하여 메인 스레드에서는 IO처리에만 집중하고,
+      전투연산 등의 작업은 Worker Thread에 할당하여 처리 
+<br><br>
 
-### **Local Environment**
 
-로컬 개발 시 Mysql 데이터베이스를 사용합니다.
-Mysql은 Docker를 실행해야 사용 할 수 있습니다.
 
-1. `.env.local` 파일을 backend 폴더에 생성합니다.
-2. env 파일 내에 다음과 같은 내용을 추가합니다.
-   ```yaml
-   MYSQL_HOST=local # 호스트 명에 따라 이름을 변경해줍니다.
-   MYSQL_DATABASE=test
-   MYSQL_ROOT_USER=root
-   MYSQL_ROOT_PASSWORD=root
-   MYSQL_PORT=3306 # 기본 포트 3306
-   ```
-3. Docker mysql 이미지를 다운 받습니다.
-   ```shell
-   docker run -d --name local-mysql --platform linux/amd64 -p 3306:3306 \
-   -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=dangdangwalk mysql:8.4.0 \
-   --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-   ```
-4. Nest.js를 실행합니다.
+# 아키텍쳐
 
-### **Dev Environment**
+![아키텍처](https://github.com/jihwooon/dangdang-walk/assets/68071599/96568db5-1ea5-4f4d-a2df-b5eaa432a250)
 
-Dev 개발 시 Dockerfile를 build를 해야 합니다.
+<br><br>
 
-1. backend 폴더 내 `.env.dev` 파일을 생성합니다.
-2. `.env.dev` 파일 내에 Local 환경에 설정값과 동일하게 추가합니다.
-   - MYSQL_HOST는 docker-compose 내에 데이터베이스 호스트명과 동일하게 변경해야합니다.
-     ex) `db -> MYSQL_HOST=db`, `dev-db -> MYSQL_HOST=dev-db`
-3. Root 폴더에 `docker-compose-dev.yml`를 Build 실행합니다.
-   ```shell
-   docker-compose -f docker-compose-dev.yml build
-   ```
-4. Build 완료 시 docker-compose를 실행합니다.
-   ```shell
-   docker-compose -f docker-compose-dev.yml up
-   ```
+# 기술스택
+![기술스택](https://github.com/jihwooon/dangdang-walk/assets/68071599/ed253a68-0050-4589-8e58-125c09cd3d12)
 
-### **Monitoring Environment**
+<br><br><br>
 
-Monitoring를 사용하기 위해서는 Prometheus와 Grafana를 실행해야 합니다.
+# ERD
+<img width="1143" alt="ERD" src="https://github.com/jihwooon/dangdang-walk/assets/68071599/fd0fa903-af82-422d-98d6-33bce77e276d">
 
-1. `docker-compose -f docker-compose-dev.yml up` 를 실행합니다.
-2. Grafana Port를 입력하여 접속합니다.
-3. Grafana 로그인 접속 시 초기 접속 번호는 admin 입니다.
-4. 메뉴 바에 Connections 클릭하고 Prometheus를 추가해줍니다.
-5. `Add new data source`를 클릭합니다.
-6. Connection에 URL 에 `prometheus:{Grafana Port}`를 입력해줍니다.
-7. Save& test 버튼을 클릭하여 저장합니다.
+<br><br><br>
+# **기술적인 도전 및 트러블 슈팅**
+자세한 내용을 확인 하고 싶으시면, ▶️ [Wiki Documentation](https://www.notion.so/do0ori/946c5f068b79446b85ba2ab5a040822a?v=9d5e009c22aa46c5adb7328be7419155&pvs=4)를 참조 하시면 됩니다.
+
+### Docker Multi-stage 빌드 최적화 하기
+```
+💥 문제 상황
+   1. 프로젝트에서 NestJS(백엔드)와 React(프론트엔드)를 분리하여 개발하고 있으며, 서버와 클라이언트 간 통신을 확인할 필요가 있습니다.
+   2. 각 개발자의 운영체제와 컴퓨팅 환경이 다르기 때문에 일관된 실행 환경을 보장하기 어렵습니다.
+   3. 개발 환경과 프로덕션 환경에서 Docker 이미지 빌드 요구사항이 다릅니다.
+
+✅ 해결 방안
+   1. Docker 가상 컨테이너를 활용하여 일관된 실행 환경을 제공합니다.
+   2. Multi-stage 빌드를 사용하여 개발 환경(Dev), 빌드 환경(Build), 프로덕션 환경(Prod)으로 단계를 구분합니다.
+      - Dev 단계: 모든 의존성 라이브러리를 설치합니다.
+      - Build 단계: 최소한의 크기로 빌드를 컴파일하고, 개발 환경에서 설치한 의존성을 복사하며, 로그 폴더를 생성합니다.
+      - Prod 단계: 소스 코드를 컴파일하고 최소한의 자산을 생성합니다. 개발 단계와 동일한 기본 이미지와 모범 사례를 사용하며, 프로덕션 전용 의존성을 설치하고 캐시를 정리하여 번들 크기를 최소화합니다.
+   3. 이를 통해 개발 환경, 빌드 환경, 프로덕션 환경에 맞는 최적화된 Docker 이미지를 생성할 수 있습니다.
+```
+
+<br>
+
+### 배포 환경에서 Cookie 사용하기
+```
+💥 문제 상황
+- 로그인 요청 시 회원이 아니면 OAuth 관련 데이터(oauthAccessToken, oauthRefreshToken, oauthId, provider)를 쿠키에 저장해두고, 이후 회원가입 요청 시 OauthDataGuard에서 해당 쿠키를 가져와 회원가입 로직에서 사용하게 된다. 그런데 배포 환경에서 쿠키가 가져와지지 않는 오류가 발생했습니다.
+   1. 로컬 환경과 배포 환경을 비교해본 결과, 배포 환경에서는 클라이언트와 서버가 다른 도메인(cross-site)에 있음을 확인했습니다.
+   2. 사이트 간 요청과 함께 쿠키가 전송될지를 제어하는 쿠키의 속성은 `SameSite`입니다.
+   3. `SameSite` 속성을 별도로 설정하지 않으면 기본값은 `Lax`이다. `Lax`는 같은 사이트 요청일 때만 쿠키를 전송하고, cross-site 요청에는 전송하지 않습니다.
+   4. Cross-site 요청에서도 쿠키를 보내려면 `SameSite` 속성을 `None`으로 설정해야 하며, 이 경우 HTTPS 통신일 때만 쿠키를 전송하도록 하는 `Secure` 옵션도 `true`여야 합니다.
+
+✅ 해결 방안
+private readonly cookieOptions: CookieOptions = {
+    httpOnly: true,
+    sameSite: this.isProduction ? 'none' : 'lax',
+    secure: this.isProduction,
+    ⁝
+};
+- 쿠키 옵션을 배포 환경일 때에는 `SameSite=None`, `Secure=true`로 설정하여 cross-site 요청에서도 쿠키가 전송되도록 수정하여 해결 할 수 있었습니다.
+```
+<br>
+
+### Git history 그래프 복잡성 해결하기
+
+```
+💥 문제 상황
+- GitHub에서 여러 명이 동시에 PR을 생성하고 merge하는 과정에서 커밋 히스토리가 복잡하게 얽혔습니다.
+
+✅ 해결 방안
+1. git rebase -i -r <commit-hash> 명령어를 사용하여 인터렉티브 리베이스 모드로 진입합니다
+2. 같은 색상의 밑줄은 동일한 커밋 내용을 나타냅니다.
+3. 공백 줄로 나뉘어진 묶음이 PR 세트입니다.
+   reset
+   merge
+   label
+   commit
+   commit
+      ⁝
+   commit
+   label
+4. 세트의 마지막 label이 다음 PR 세트의 merge와 동일해야 합니다.
+5. 세트의 첫 label이 다음 PR 세트의 reset과 동일해야 합니다.
+6. 이 규칙을 찾아 짝을 맞추면 된다. 보통 merge가 뭉쳐있으므로 순서대로 위치에 맞게 옮깁니다.
+7. label이 없으면 임의로 만들어서 맞춰줍니다. (예: label b0)
+8. vim 단축키 dd(잘라내기), p(붙여넣기)를 사용하여 순서를 조정합니다.
+9. 정리된 히스토리를 main으로 force push 합니다ㅏ.
+
+이 방식을 통해 꼬인 커밋 히스토리를 정리할 수 있습니다.
+```
+
