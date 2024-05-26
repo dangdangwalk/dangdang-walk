@@ -71,6 +71,11 @@ export class JournalsService {
         return this.journalsRepository.updateAndFindOne(where, partialEntity);
     }
 
+    async checkJournalOwnership(userId: number, journalIds: number | number[]): Promise<boolean> {
+        const myJournalIds = await this.getOwnJournalIds(userId);
+        return checkIfExistsInArr(myJournalIds, journalIds);
+    }
+
     async getOwnJournalIds(userId: number): Promise<number[]> {
         const ownJournals = await this.journalsRepository.find({ where: { userId: userId } });
 
@@ -102,7 +107,7 @@ export class JournalsService {
         return excrementsInfo;
     }
 
-    async getDogsInfoForDetail(journalId: number, dogId: number): Promise<DogInfoForDetail> {
+    async getDogsInfoForDetail(dogId: number): Promise<DogInfoForDetail> {
         const dogInfoRaw = await this.dogsService.findOne({ id: dogId });
 
         const dogInfo: DogInfoForDetail = makeSubObject(dogInfoRaw, DogInfoForDetail.getKeysForDogTable());
@@ -118,7 +123,7 @@ export class JournalsService {
             const dogInfo: DogInfoForDetail[] = [];
             const excrementsInfo: ExcrementsInfoForDetail[] = [];
             for (const curDogId of journalDogIds) {
-                dogInfo.push(await this.getDogsInfoForDetail(journalId, curDogId));
+                dogInfo.push(await this.getDogsInfoForDetail(curDogId));
                 const curExcrements = await this.getExcrementsInfoForDetail(journalId, curDogId);
                 curExcrements ? excrementsInfo.push(curExcrements) : curExcrements;
             }
@@ -128,12 +133,6 @@ export class JournalsService {
             throw error;
         }
     }
-
-    async checkJournalOwnership(userId: number, journalIds: number | number[]): Promise<boolean> {
-        const myJournalIds = await this.getOwnJournalIds(userId);
-        return checkIfExistsInArr(myJournalIds, journalIds);
-    }
-
     async createNewJournal(userId: number, journalInfo: CreateJournalData) {
         if (!journalInfo.memo) {
             journalInfo.memo = '';
