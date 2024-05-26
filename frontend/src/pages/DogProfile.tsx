@@ -75,7 +75,7 @@ export default function DogProfile({ dog, statistics, isProfileOpen, setIsProfil
     return (
         <>
             <div
-                className={`w-dvw -right-full top-0 z-20 bg-white duration-200 ${isProfileOpen && '-translate-x-full'}`}
+                className={`fixed max-h-dvh top-0 overflow-y-scroll w-full -right-full z-20 bg-white duration-200 ${isProfileOpen && '-translate-x-full '}`}
             >
                 <Topbar>
                     <Topbar.Front
@@ -98,7 +98,7 @@ export default function DogProfile({ dog, statistics, isProfileOpen, setIsProfil
                     </Topbar.Back>
                 </Topbar>
                 {dog && (
-                    <main className="flex flex-col mt-2 mb-[60px] ">
+                    <main className="flex flex-col mt-2 mb-[60px]">
                         <section className="relative flex flex-col items-center">
                             <img className="size-7" src={CrownIcon} alt="crown" />
 

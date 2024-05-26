@@ -68,81 +68,79 @@ function Profile() {
         }
     }, [isSuccess, data]);
     return (
-        <div className={`flex w-200vw bg-white `}>
-            <div className="w-dvw ">
-                <Topbar>
-                    <Topbar.Front className="w-12" />
-                    <Topbar.Center className="text-black text-lg font-bold leading-[27px]">마이페이지</Topbar.Center>
-                    <Topbar.Back>
-                        <img src={SettingIcon} alt="setting" />
-                    </Topbar.Back>
-                </Topbar>
-                <main className={`flex flex-col mb-[60px] max-h-min`}>
-                    <section className="flex justify-between items-center px-5 py-6">
-                        <section className="flex justify-start gap-2">
-                            <div className="text-neutral-800 text-lg font-bold leading-[33px]">{nickname}님</div>
+        <>
+            <Topbar>
+                <Topbar.Front className="w-12" />
+                <Topbar.Center className="text-black text-lg font-bold leading-[27px]">마이페이지</Topbar.Center>
+                <Topbar.Back>
+                    <img src={SettingIcon} alt="setting" />
+                </Topbar.Back>
+            </Topbar>
+            <main className={`flex flex-col mb-[60px] h-full`}>
+                <section className="flex justify-between items-center px-5 py-6">
+                    <section className="flex justify-start gap-2">
+                        <div className="text-neutral-800 text-lg font-bold leading-[33px]">{nickname}님</div>
 
-                            <img src={provider === 'kakao' ? KaKao : Google} alt="provider" />
-                        </section>
-                        <div onClick={() => logoutMutation.mutate(null)}>
-                            <img src={LogoutIcon} alt="logout" />
-                        </div>
+                        <img src={provider === 'kakao' ? KaKao : Google} alt="provider" />
                     </section>
+                    <div onClick={() => logoutMutation.mutate(null)}>
+                        <img src={LogoutIcon} alt="logout" />
+                    </div>
+                </section>
 
-                    <section className="flex justify-between px-10 mt-[0.625rem] mb-[2.125rem]">
-                        <div
-                            className="flex flex-col items-center"
-                            onClick={() => dogs && dogs[0] && navigate(`/journals?dogId=${dogs[0].id}`)}
-                        >
-                            <img src={NoteIcon} alt="note" className="size-12" />
-                            <p className="text-neutral-800 text-sm font-normal leading-[21px]">산책기록</p>
-                        </div>
-                        <div className="flex flex-col items-center">
-                            <img src={MegaphoneIcon} alt="megaphone" className="size-12" />
-                            <p className="text-neutral-800 text-sm font-normal leading-[21px]">공지사항</p>
-                        </div>
-                        <div className="flex flex-col items-center">
-                            <img src={HeadphoneIcon} alt="headphone" className="size-12" />
-                            <p className="text-neutral-800 text-sm font-normal leading-[21px]">문의하기</p>
-                        </div>
-                    </section>
-                    <Divider />
-                    <section>
-                        <div className="px-5 py-5 text-neutral-800 text-base font-bold leading-normal">나의 댕댕이</div>
-                        {dogs &&
-                            dogs.map((dog, index) => (
-                                <div key={dog.id} className="flex justify-between items-center px-5 py-[6px]">
-                                    <div className="flex justify-start gap-2">
-                                        <Avatar url={`${dog.profilePhotoUrl}`} name={dog.name} />
-                                        {index === 0 && <img src={CrownIcon} alt="crown" />}
-                                    </div>
-                                    <img
-                                        src={RightArrowIcon}
-                                        alt="rightArrow"
-                                        onClick={async () => {
-                                            const data = await fetchDogRecentMonthStatistics(dog.id);
-                                            handleProfileOpen(dog, data);
-                                        }}
-                                    />
-                                </div>
-                            ))}
-                        {dogs && 5 - dogs?.length > 0 && (
-                            <div
-                                className="flex justify-between items-center px-5 py-[6px]"
-                                onClick={() => navigate('/join', { state: 'DogBasicInfo' })}
-                            >
-                                <Avatar url={SelectPhoto} name={'댕댕이 추가하기'} />
-                            </div>
-                        )}
-                    </section>
-                    <button
-                        onClick={() => setDeactivate(true)}
-                        className="flex justify-center items-center py-[13px] mx-5 my-8 border border-neutral-200 rounded-lg text-neutral-400 text-sm font-normal leading-[21px]"
+                <section className="flex justify-between px-10 mt-[0.625rem] mb-[2.125rem]">
+                    <div
+                        className="flex flex-col items-center"
+                        onClick={() => dogs && dogs[0] && navigate(`/journals?dogId=${dogs[0].id}`)}
                     >
-                        회원탈퇴
-                    </button>
-                </main>
-            </div>
+                        <img src={NoteIcon} alt="note" className="size-12" />
+                        <p className="text-neutral-800 text-sm font-normal leading-[21px]">산책기록</p>
+                    </div>
+                    <div className="flex flex-col items-center">
+                        <img src={MegaphoneIcon} alt="megaphone" className="size-12" />
+                        <p className="text-neutral-800 text-sm font-normal leading-[21px]">공지사항</p>
+                    </div>
+                    <div className="flex flex-col items-center">
+                        <img src={HeadphoneIcon} alt="headphone" className="size-12" />
+                        <p className="text-neutral-800 text-sm font-normal leading-[21px]">문의하기</p>
+                    </div>
+                </section>
+                <Divider />
+                <section>
+                    <div className="px-5 py-5 text-neutral-800 text-base font-bold leading-normal">나의 댕댕이</div>
+                    {dogs &&
+                        dogs.map((dog, index) => (
+                            <div key={dog.id} className="flex justify-between items-center px-5 py-[6px]">
+                                <div className="flex justify-start gap-2">
+                                    <Avatar url={`${dog.profilePhotoUrl}`} name={dog.name} />
+                                    {index === 0 && <img src={CrownIcon} alt="crown" />}
+                                </div>
+                                <img
+                                    src={RightArrowIcon}
+                                    alt="rightArrow"
+                                    onClick={async () => {
+                                        const data = await fetchDogRecentMonthStatistics(dog.id);
+                                        handleProfileOpen(dog, data);
+                                    }}
+                                />
+                            </div>
+                        ))}
+                    {dogs && 5 - dogs?.length > 0 && (
+                        <div
+                            className="flex justify-between items-center px-5 py-[6px]"
+                            onClick={() => navigate('/join', { state: 'DogBasicInfo' })}
+                        >
+                            <Avatar url={SelectPhoto} name={'댕댕이 추가하기'} />
+                        </div>
+                    )}
+                </section>
+                <button
+                    onClick={() => setDeactivate(true)}
+                    className="flex justify-center items-center py-[13px] mx-5 my-8 border border-neutral-200 rounded-lg text-neutral-400 text-sm font-normal leading-[21px]"
+                >
+                    회원탈퇴
+                </button>
+            </main>
             <DogProfile
                 dog={dogInfo}
                 statistics={statistics}
@@ -150,7 +148,7 @@ function Profile() {
                 setIsProfileOpen={setIsProfileOpen}
             />
             {deactivate && <DeactivateModal setDeactivate={setDeactivate} />}
-        </div>
+        </>
     );
 }
 
