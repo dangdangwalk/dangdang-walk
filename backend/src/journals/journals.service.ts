@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { DogWalkDayService } from 'src/dog-walk-day/dog-walk-day.service';
 import { DogsService } from 'src/dogs/dogs.service';
-import { Excrements } from 'src/excrements/excrements.entity';
 import { ExcrementsService } from 'src/excrements/excrements.service';
 import { ExcrementsType } from 'src/excrements/types/excrements.enum';
-import { JournalPhotos } from 'src/journal-photos/journal-photos.entity';
 import { JournalPhotosService } from 'src/journal-photos/journal-photos.service';
 import { JournalsDogs } from 'src/journals-dogs/journals-dogs.entity';
 import { JournalsDogsService } from 'src/journals-dogs/journals-dogs.service';
@@ -15,7 +13,7 @@ import { checkIfExistsInArr, makeSubObject, makeSubObjectsArray } from 'src/util
 import { DeleteResult, EntityManager, FindManyOptions, FindOptionsWhere, In, UpdateResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { UpdateJournalDto } from './dtos/journal-update.dto';
-import { CreateJournalDto, ExcrementsInfoForCreate, JournalInfoForCreate, Location } from './dtos/journals-create.dto';
+import { CreateJournalDto, ExcrementsInfoForCreate, JournalInfoForCreate } from './dtos/journals-create.dto';
 import { Journals } from './journals.entity';
 import { JournalsRepository } from './journals.repository';
 import {
@@ -144,24 +142,6 @@ export class JournalsService {
         return await this.create(journalInfo);
     }
 
-    async createNewJournalDogs(journalId: number, dogIds: number[]) {
-        for (const curId of dogIds) {
-            await this.journalsDogsService.createIfNotExists(journalId, curId);
-        }
-        return;
-    }
-
-    async createNewPhotoUrls(journalId: number, photoUrls: string[]) {
-        const keys: (keyof JournalPhotos)[] = ['journalId', 'photoUrl'];
-        const data: Partial<JournalPhotos> = {};
-
-        data.journalId = journalId;
-        for (const curUrl of photoUrls) {
-            data.photoUrl = curUrl;
-            await this.journalPhotosService.createIfNotExists(data, keys);
-        }
-    }
-
     async excrementsLoop(journalId: number, excrements: ExcrementsInfoForCreate[]) {
         let dogId;
         for (const curExcrements of excrements) {
@@ -188,14 +168,6 @@ export class JournalsService {
         return journalData;
     }
 
-    private checkPhotoUrlExist(photoUrls: string[] | undefined): string[] {
-        if (!photoUrls) {
-            return [];
-        } else {
-            return photoUrls;
-        }
-    }
-
     async updateDogWalkDay(dogIds: number[], operation: (current: number) => number) {
         const dogWalkDayIds = await this.dogsService.getRelatedTableIdList(dogIds, 'walkDayId');
         await this.dogWalkDayService.updateValues(dogWalkDayIds, operation);
@@ -210,15 +182,23 @@ export class JournalsService {
         this.todayWalkTimeService.updateDurations(todayWalkTimeIds, duration, operation);
     }
 
+    private checkPhotoUrlExist(photoUrls: string[] | undefined): string[] {
+        if (!photoUrls) {
+            return [];
+        } else {
+            return photoUrls;
+        }
+    }
+
     //@Transactional()
     async createJournal(userId: number, createJournalData: CreateJournalDto) {
         const dogIds = createJournalData.dogs;
         const journalData = this.makeJournalData(userId, createJournalData);
         const createJournalResult = await this.createNewJournal(userId, journalData);
-        await this.createNewJournalDogs(createJournalResult.id, dogIds);
+        await this.journalsDogsService.createNewJournalDogs(createJournalResult.id, dogIds);
 
         const photoUrls = this.checkPhotoUrlExist(createJournalData.journalInfo.photoUrls);
-        await this.createNewPhotoUrls(createJournalResult.id, photoUrls);
+        await this.journalPhotosService.createNewPhotoUrls(createJournalResult.id, photoUrls);
 
         const excrements: ExcrementsInfoForCreate[] = createJournalData.excrements;
         if (excrements.length) {
@@ -243,7 +223,7 @@ export class JournalsService {
                 await this.journalPhotosService.delete({ journalId });
             }
             if (updateJournalData.photoUrls.length) {
-                await this.createNewPhotoUrls(journalId, updateJournalData.photoUrls);
+                await this.journalPhotosService.createNewPhotoUrls(journalId, updateJournalData.photoUrls);
             }
         }
     }

@@ -44,6 +44,17 @@ export class JournalPhotosService {
         return this.journalPhotosRepository.delete(where);
     }
 
+    async createNewPhotoUrls(journalId: number, photoUrls: string[]) {
+        const keys: (keyof JournalPhotos)[] = ['journalId', 'photoUrl'];
+        const data: Partial<JournalPhotos> = {};
+
+        data.journalId = journalId;
+        for (const curUrl of photoUrls) {
+            data.photoUrl = curUrl;
+            await this.createIfNotExists(data, keys);
+        }
+    }
+
     async getPhotoUrlsByJournalId(journalId: number): Promise<string[]> {
         const findResult = await this.find({ where: { journalId } });
         return findResult.map((cur) => {
