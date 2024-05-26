@@ -14,6 +14,7 @@ import RightArrowIcon from '@/assets/icons/ic-arrow.svg';
 import CrownIcon from '@/assets/icons/ic-crown.svg';
 import KaKao from '@/assets/icons/ic-provider-kakao.svg';
 import Google from '@/assets/icons/ic-provider-google.svg';
+import Naver from '@/assets/icons/ic-provider-naver.svg';
 import { Divider } from '@/components/common/Divider';
 import DeactivateModal from '@/components/DeactivateModal';
 import DogProfile from '@/pages/DogProfile';
@@ -62,6 +63,16 @@ function Profile() {
         },
         [data, isSuccess]
     );
+    const ProviderIcon = (provider: string) => {
+        switch (provider) {
+            case 'kakao':
+                return KaKao;
+            case 'google':
+                return Google;
+            case 'naver':
+                return Naver;
+        }
+    };
     useEffect(() => {
         if (isSuccess) {
             setDogs(data);
@@ -81,7 +92,7 @@ function Profile() {
                     <section className="flex justify-start gap-2">
                         <div className="text-neutral-800 text-lg font-bold leading-[33px]">{nickname}님</div>
 
-                        <img src={provider === 'kakao' ? KaKao : Google} alt="provider" />
+                        <img src={ProviderIcon(provider)} alt="provider" />
                     </section>
                     <div onClick={() => logoutMutation.mutate(null)}>
                         <img src={LogoutIcon} alt="logout" />
