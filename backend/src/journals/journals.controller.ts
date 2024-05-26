@@ -39,8 +39,8 @@ export class JournalsController {
     }
 
     @Delete('/:id(\\d+)')
-    async deleteJournal(@Param('id', ParseIntPipe) journalId: number) {
-        await this.journalsService.deleteJournal(journalId);
+    async deleteJournal(@User() user: AccessTokenPayload, @Param('id', ParseIntPipe) journalId: number) {
+        await this.journalsService.deleteJournal(user.userId, journalId);
         return true;
     }
 }

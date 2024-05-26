@@ -43,4 +43,11 @@ export class JournalPhotosService {
     async delete(where: FindOptionsWhere<JournalPhotos>): Promise<DeleteResult> {
         return this.journalPhotosRepository.delete(where);
     }
+
+    async getPhotoUrlsByJournalId(journalId: number): Promise<string[]> {
+        const findResult = await this.find({ where: { journalId } });
+        return findResult.map((cur) => {
+            return cur.photoUrl;
+        });
+    }
 }
