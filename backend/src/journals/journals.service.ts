@@ -8,6 +8,7 @@ import { JournalPhotos } from 'src/journal-photos/journal-photos.entity';
 import { JournalPhotosService } from 'src/journal-photos/journal-photos.service';
 import { JournalsDogs } from 'src/journals-dogs/journals-dogs.entity';
 import { JournalsDogsService } from 'src/journals-dogs/journals-dogs.service';
+import { S3Service } from 'src/s3/s3.service';
 import { TodayWalkTimeService } from 'src/today-walk-time/today-walk-time.service';
 import { formatDate, getStartAndEndOfDay, getStartAndEndOfMonth, getStartAndEndOfWeek } from 'src/utils/date.util';
 import { checkIfExistsInArr, makeSubObject, makeSubObjectsArray } from 'src/utils/manipulate.util';
@@ -36,7 +37,8 @@ export class JournalsService {
         private readonly excrementsService: ExcrementsService,
         private readonly dogWalkDayService: DogWalkDayService,
         private readonly todayWalkTimeService: TodayWalkTimeService,
-        private readonly entityManager: EntityManager
+        private readonly entityManager: EntityManager,
+        private readonly s3Service: S3Service
     ) {}
 
     async create(entityData: CreateJournalData): Promise<Journals> {
@@ -77,16 +79,6 @@ export class JournalsService {
         return ownJournals.map((cur) => cur.id);
     }
 
-    async getJournalPhotos(journalId: number): Promise<string[]> {
-        const photoUrlsRaw = await this.journalPhotosService.find({ where: { journalId } });
-
-        const photoUrls = photoUrlsRaw.map((cur) => {
-            return cur.photoUrl;
-        });
-
-        return photoUrls as string[];
-    }
-
     async checkDogExistsInJournal(journalDogs: JournalsDogs[], dogId: number) {
         const journalDogIds = journalDogs.map((cur) => cur.dogId);
 
@@ -101,7 +93,7 @@ export class JournalsService {
         const journalInfo = makeSubObject(journalInfoRaw, JournalInfoForDetail.getKeysForJournalTable());
         journalInfo.id = journalId;
         journalInfo.routes = JSON.parse(journalInfo.routes);
-        journalInfo.photoUrls = await this.getJournalPhotos(journalId);
+        journalInfo.photoUrls = await this.journalPhotosService.getPhotoUrlsByJournalId(journalId);
 
         return journalInfo;
     }
@@ -290,7 +282,9 @@ export class JournalsService {
         }
     }
 
-    async deleteJournal(journalId: number) {
+    async deleteJournal(userId: number, journalId: number) {
+        const photoUrls: string[] = await this.journalPhotosService.getPhotoUrlsByJournalId(journalId);
+        await this.s3Service.deleteObjects(userId, photoUrls);
         await this.delete(journalId);
     }
 
