@@ -39,6 +39,18 @@ export class TodayWalkTimeService {
         }
     }
 
+    async updateDurations(
+        todayWalkTimeIds: number[],
+        duration: number,
+        operation: (current: number, operand: number) => number
+    ) {
+        for (const curWalkTimeId of todayWalkTimeIds) {
+            const walkTimeInfo = await this.findOne({ id: curWalkTimeId });
+            const updateDuration = operation(walkTimeInfo.duration, duration);
+            this.update({ id: curWalkTimeId }, { duration: updateDuration });
+        }
+    }
+
     async getWalkTimeList(walkTimeIds: number[]) {
         const walkTimeListBeforeCheck = await this.todayWalkTimeRepository.find({ where: { id: In(walkTimeIds) } });
         if (!walkTimeListBeforeCheck.length) {

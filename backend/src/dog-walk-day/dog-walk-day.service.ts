@@ -49,6 +49,18 @@ export class DogWalkDayService {
         }
     }
 
+    async updateValues(dogWalkDayIds: number[], operation: (current: number) => number) {
+        const dayArr = ['sun', 'mon', 'tue', 'wed', 'thr', 'fri', 'sat'];
+        const day = dayArr[new Date().getDay()];
+
+        for (const curWalkDayId of dogWalkDayIds) {
+            const curWalkDay = await this.findOne({ id: curWalkDayId });
+            const curCnt = curWalkDay[day] as number;
+            const updateCnt = operation(curCnt);
+            this.update({ id: curWalkDayId }, { [day]: updateCnt });
+        }
+    }
+
     async getWalkDayList(walkDayIds: number[]): Promise<number[][]> {
         const foundDays = await this.dogWalkDayRepository.find({ where: { id: In(walkDayIds) } });
         if (!foundDays.length) {
