@@ -49,11 +49,14 @@ export function checkIfExistsInArr<T>(targetArr: T[], toFind: T | T[]): boolean 
  */
 export function makeSubObjectsArray(
     targetArr: any[],
-    targetAttributes: string | string[],
-    srcAttributes: string | string[]
+    srcAttributes: string | string[],
+    targetAttributes: string | string[]
 ): any[] {
     const resArr: any[] = [];
-    if (Array.isArray(srcAttributes)) {
+    if (!targetAttributes) {
+        targetAttributes = srcAttributes;
+    }
+    if (Array.isArray(srcAttributes) && Array.isArray(targetAttributes)) {
         targetArr.map((cur) => {
             {
                 const obj: { [key: string]: any } = {};
@@ -63,12 +66,15 @@ export function makeSubObjectsArray(
                 resArr.push(obj);
             }
         });
-    } else {
+    } else if (typeof srcAttributes === 'string' && typeof targetAttributes === 'string') {
         targetArr.map((cur) => {
             const obj: { [key: string]: any } = {};
             obj[`${targetAttributes}`] = cur[`${srcAttributes}`];
             resArr.push(obj);
         });
+    } else {
+        //TODO: 에러를 던지는게 적절한지 고민
+        throw new Error('srcAttributes and targetAttributes must be of the same type');
     }
     return resArr;
 }

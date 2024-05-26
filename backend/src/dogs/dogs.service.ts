@@ -121,7 +121,7 @@ export class DogsService {
 
     private makeDogsSummaryList(dogs: Dogs[]): DogSummary[] {
         //TODO: key를 리턴하는 함수 만들어 인자로 넣기
-        return makeSubObjectsArray(dogs, ['id', 'name', 'profilePhotoUrl'], ['id', 'name', 'profilePhotoUrl']);
+        return makeSubObjectsArray(dogs, ['id', 'name', 'profilePhotoUrl']);
     }
 
     async getDogsSummaryList(where: FindOptionsWhere<Dogs>): Promise<DogSummary[]> {
