@@ -227,25 +227,18 @@ export class JournalsService {
         }
     }
 
-    async updateDogWalkDay(dogIds: number[]) {
+    async updateDogWalkDay(dogIds: number[], operation: (current: number) => number) {
         const dogWalkDayIds = await this.dogsService.getRelatedTableIdList(dogIds, 'walkDayId');
-        const dayArr = ['sun', 'mon', 'tue', 'wed', 'thr', 'fri', 'sat'];
-        const day = dayArr[new Date().getDay()];
-
-        for (const curWalkDayId of dogWalkDayIds) {
-            const curWalkDay = await this.dogWalkDayService.findOne({ id: curWalkDayId });
-            const curCnt = curWalkDay[day] as number;
-            this.dogWalkDayService.update({ id: curWalkDayId }, { [day]: curCnt + 1 });
-        }
+        await this.dogWalkDayService.updateValues(dogWalkDayIds, operation);
     }
 
-    async updateTodayWalkTime(dogIds: number[], duration: number) {
+    async updateTodayWalkTime(
+        dogIds: number[],
+        duration: number,
+        operation: (current: number, operand: number) => number
+    ) {
         const todayWalkTimeIds = await this.dogsService.getRelatedTableIdList(dogIds, 'todayWalkTimeId');
-        for (const curWalkTimeId of todayWalkTimeIds) {
-            const walkTimeInfo = await this.todayWalkTimeService.findOne({ id: curWalkTimeId });
-            const updateDuration = walkTimeInfo.duration + duration;
-            this.todayWalkTimeService.update({ id: curWalkTimeId }, { duration: updateDuration });
-        }
+        this.todayWalkTimeService.updateDurations(todayWalkTimeIds, duration, operation);
     }
 
     //@Transactional()
@@ -262,8 +255,12 @@ export class JournalsService {
         if (excrements.length) {
             await this.excrementsLoop(createJournalResult.id, excrements);
         }
-        await this.updateDogWalkDay(dogIds);
-        await this.updateTodayWalkTime(dogIds, parseInt(createJournalData.journalInfo.duration));
+        await this.updateDogWalkDay(dogIds, (current: number) => (current += 1));
+        await this.updateTodayWalkTime(
+            dogIds,
+            parseInt(createJournalData.journalInfo.duration),
+            (current: number, value: number) => current + value
+        );
     }
 
     //@Transactional()
@@ -284,6 +281,15 @@ export class JournalsService {
 
     async deleteJournal(userId: number, journalId: number) {
         const photoUrls: string[] = await this.journalPhotosService.getPhotoUrlsByJournalId(journalId);
+        const dogIds: number[] = await this.journalsDogsService.getDogIdsByJournalId(journalId);
+        const journalInfo = await this.findOne({ id: journalId });
+
+        await this.updateDogWalkDay(dogIds, (current: number) => (current -= 1));
+        await this.updateTodayWalkTime(
+            dogIds,
+            journalInfo.duration,
+            (current: number, value: number) => current - value
+        );
         await this.s3Service.deleteObjects(userId, photoUrls);
         await this.delete(journalId);
     }
