@@ -89,18 +89,12 @@ export class JournalsService {
         return journalInfo;
     }
 
-    async getExcrementsCnt(journalId: number, dogId: number, type: ExcrementsType): Promise<number> {
-        const excrements = await this.excrementsService.find({ where: { journalId, dogId, type } });
-
-        return excrements.length;
-    }
-
     async getExcrementsInfoForDetail(journalId: number, dogId: number): Promise<ExcrementsInfoForDetail | void> {
         const excrementsInfo = new ExcrementsInfoForDetail();
 
         excrementsInfo.dogId = dogId;
-        const fecesCnt = await this.getExcrementsCnt(journalId, dogId, ExcrementsType.feces);
-        const urineCnt = await this.getExcrementsCnt(journalId, dogId, ExcrementsType.urine);
+        const fecesCnt = await this.excrementsService.getExcrementsCnt(journalId, dogId, ExcrementsType.feces);
+        const urineCnt = await this.excrementsService.getExcrementsCnt(journalId, dogId, ExcrementsType.urine);
         if (!fecesCnt && !urineCnt) {
             return;
         }
@@ -168,33 +162,17 @@ export class JournalsService {
         }
     }
 
-    private makeCoordinate(lat: string, lag: string): string {
-        return `POINT(${lat} ${lag})`;
-    }
-
-    async createNewExcrements(
-        journalId: number,
-        dogId: number,
-        type: ExcrementsType,
-        location: Location
-    ): Promise<Excrements> {
-        const coordinate = this.makeCoordinate(location.lat, location.lng);
-        const data: Partial<Excrements> = { journalId, dogId, type, coordinate };
-
-        return this.excrementsService.createIfNotExists(data);
-    }
-
     async excrementsLoop(journalId: number, excrements: ExcrementsInfoForCreate[]) {
         let dogId;
         for (const curExcrements of excrements) {
             dogId = curExcrements.dogId;
 
             for (const curFeces of curExcrements.fecesLocations) {
-                await this.createNewExcrements(journalId, dogId, ExcrementsType.feces, curFeces);
+                await this.excrementsService.createNewExcrements(journalId, dogId, ExcrementsType.feces, curFeces);
             }
 
             for (const curUrine of curExcrements.urineLocations) {
-                await this.createNewExcrements(journalId, dogId, ExcrementsType.urine, curUrine);
+                await this.excrementsService.createNewExcrements(journalId, dogId, ExcrementsType.urine, curUrine);
             }
         }
     }
