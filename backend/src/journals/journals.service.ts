@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { DogWalkDayService } from 'src/dog-walk-day/dog-walk-day.service';
 import { DogsService } from 'src/dogs/dogs.service';
 import { Excrements } from 'src/excrements/excrements.entity';
@@ -14,18 +14,18 @@ import { formatDate, getStartAndEndOfDay, getStartAndEndOfMonth, getStartAndEndO
 import { checkIfExistsInArr, makeSubObject, makeSubObjectsArray } from 'src/utils/manipulate.util';
 import { DeleteResult, EntityManager, FindManyOptions, FindOptionsWhere, In, UpdateResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
-import { JournalInfoForList } from './dtos/journal-list.dto';
 import { UpdateJournalDto } from './dtos/journal-update.dto';
 import { CreateJournalDto, ExcrementsInfoForCreate, JournalInfoForCreate, Location } from './dtos/journals-create.dto';
+import { Journals } from './journals.entity';
+import { JournalsRepository } from './journals.repository';
 import {
     DogInfoForDetail,
     ExcrementsInfoForDetail,
-    JournalDetailDto,
+    JournalDetail,
     JournalInfoForDetail,
-} from './dtos/journals-detail.dto';
-import { Journals } from './journals.entity';
-import { JournalsRepository } from './journals.repository';
-import { CreateJournalData } from './types/journal-types';
+} from './types/journals-detail-types';
+import { JournalInfoForList } from './types/journals-list-types';
+import { CreateJournalData } from './types/journals-types';
 
 @Injectable()
 export class JournalsService {
@@ -79,15 +79,6 @@ export class JournalsService {
         return ownJournals.map((cur) => cur.id);
     }
 
-    async checkDogExistsInJournal(journalDogs: JournalsDogs[], dogId: number) {
-        const journalDogIds = journalDogs.map((cur) => cur.dogId);
-
-        if (!checkIfExistsInArr(journalDogIds, dogId)) {
-            throw new ForbiddenException(`Dog ${dogId} is not included in current journal `);
-        }
-        return;
-    }
-
     async getJournalInfoForDetail(journalId: number): Promise<JournalInfoForDetail> {
         const journalInfoRaw = await this.findOne({ id: journalId });
         const journalInfo = makeSubObject(journalInfoRaw, JournalInfoForDetail.getKeysForJournalTable());
@@ -127,7 +118,7 @@ export class JournalsService {
         return dogInfo;
     }
 
-    async getJournalDetail(journalId: number): Promise<JournalDetailDto> {
+    async getJournalDetail(journalId: number): Promise<JournalDetail> {
         try {
             const journalInfo = await this.getJournalInfoForDetail(journalId);
 
@@ -140,7 +131,7 @@ export class JournalsService {
                 curExcrements ? excrementsInfo.push(curExcrements) : curExcrements;
             }
 
-            return new JournalDetailDto(journalInfo, dogInfo, excrementsInfo);
+            return new JournalDetail(journalInfo, dogInfo, excrementsInfo);
         } catch (error) {
             throw error;
         }
