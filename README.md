@@ -33,10 +33,17 @@
 
 # 🚀시작 가이드
 
+이 프로젝트를 다운로드 받습니다.
+
+```bash
+git clone https://github.com/jihwooon/dangdang-walk.git
+```
+
 ## 📋Requirements
 
 - [Node.js](https://nodejs.org/en)
 - [Npm](https://www.npmjs.com/)
+- [OAuth 사전 작업](https://github.com/jihwooon/dangdang-walk/wiki#oauth-%EC%82%AC%EC%A0%84-%EC%9E%91%EC%97%85)
 
 ## ⚙️Installation
 
