@@ -59,3 +59,13 @@ git clone https://github.com/jihwooon/dangdang-walk.git
 # 🏗️아키텍쳐
 
 ![아키텍처](https://github.com/jihwooon/dangdang-walk/assets/68071599/96568db5-1ea5-4f4d-a2df-b5eaa432a250)
+
+# 🔄주요 기능 Sequence Diagram
+
+## 🔒OAuth 로그인
+
+![OAuth-flow6 drawio](https://github.com/jihwooon/dangdang-walk/assets/71831926/6e01ccf0-b1f5-4484-be6f-b3b613c10547)
+
+## 🏃산책
+
+![walking-flow](https://github.com/jihwooon/dangdang-walk/assets/71831926/bc8c6674-2023-4f56-ab1e-16b16963e0ab)
