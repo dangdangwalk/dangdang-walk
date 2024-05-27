@@ -47,29 +47,26 @@ export function checkIfExistsInArr<T>(targetArr: T[], toFind: T | T[]): boolean 
  * //     { name: 25 }
  * // ]
  */
+
 export function makeSubObjectsArray(
     targetArr: any[],
-    targetAttributes: string | string[],
-    srcAttributes: string | string[]
+    srcAttributes: string | string[],
+    targetAttributes?: string | string[]
 ): any[] {
     const resArr: any[] = [];
-    if (Array.isArray(srcAttributes)) {
-        targetArr.map((cur) => {
-            {
-                const obj: { [key: string]: any } = {};
-                for (let i = 0; i < srcAttributes.length; i++) {
-                    obj[`${targetAttributes[i]}`] = cur[`${srcAttributes[i]}`];
-                }
-                resArr.push(obj);
-            }
-        });
-    } else {
-        targetArr.map((cur) => {
-            const obj: { [key: string]: any } = {};
-            obj[`${targetAttributes}`] = cur[`${srcAttributes}`];
-            resArr.push(obj);
-        });
+    targetAttributes = targetAttributes ?? srcAttributes;
+    Array.isArray(srcAttributes) ? srcAttributes : [srcAttributes];
+    Array.isArray(targetAttributes) ? targetAttributes : [targetAttributes];
+    if (srcAttributes.length != targetAttributes.length) {
+        throw new Error('srcAttributes and targetAttributes must have same length');
     }
+    targetArr.map((cur) => {
+        const obj: { [key: string]: any } = {};
+        for (let i = 0; i < srcAttributes.length; i++) {
+            obj[`${targetAttributes[i]}`] = cur[`${srcAttributes[i]}`];
+        }
+        resArr.push(obj);
+    });
     return resArr;
 }
 
