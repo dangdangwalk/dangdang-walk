@@ -47,35 +47,26 @@ export function checkIfExistsInArr<T>(targetArr: T[], toFind: T | T[]): boolean 
  * //     { name: 25 }
  * // ]
  */
+
 export function makeSubObjectsArray(
     targetArr: any[],
     srcAttributes: string | string[],
-    targetAttributes: string | string[]
+    targetAttributes?: string | string[]
 ): any[] {
     const resArr: any[] = [];
-    if (!targetAttributes) {
-        targetAttributes = srcAttributes;
+    targetAttributes = targetAttributes ?? srcAttributes;
+    Array.isArray(srcAttributes) ? srcAttributes : [srcAttributes];
+    Array.isArray(targetAttributes) ? targetAttributes : [targetAttributes];
+    if (srcAttributes.length != targetAttributes.length) {
+        throw new Error('srcAttributes and targetAttributes must have same length');
     }
-    if (Array.isArray(srcAttributes) && Array.isArray(targetAttributes)) {
-        targetArr.map((cur) => {
-            {
-                const obj: { [key: string]: any } = {};
-                for (let i = 0; i < srcAttributes.length; i++) {
-                    obj[`${targetAttributes[i]}`] = cur[`${srcAttributes[i]}`];
-                }
-                resArr.push(obj);
-            }
-        });
-    } else if (typeof srcAttributes === 'string' && typeof targetAttributes === 'string') {
-        targetArr.map((cur) => {
-            const obj: { [key: string]: any } = {};
-            obj[`${targetAttributes}`] = cur[`${srcAttributes}`];
-            resArr.push(obj);
-        });
-    } else {
-        //TODO: 에러를 던지는게 적절한지 고민
-        throw new Error('srcAttributes and targetAttributes must be of the same type');
-    }
+    targetArr.map((cur) => {
+        const obj: { [key: string]: any } = {};
+        for (let i = 0; i < srcAttributes.length; i++) {
+            obj[`${targetAttributes[i]}`] = cur[`${srcAttributes[i]}`];
+        }
+        resArr.push(obj);
+    });
     return resArr;
 }
 
