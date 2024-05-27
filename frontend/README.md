@@ -1,46 +1,42 @@
-# Getting Started with Create React App
+# 댕댕워크 Front 시작하기
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+댕댕워크는 [Create React App](https://github.com/facebook/create-react-app)으로 부트스랩 되었습니다.
 
-## Available Scripts
+## 0. 필수 준비 사항
+### 1. 환경 설정 파일 생성 및 API 키 발급
+프로젝트를 시작하기 전에 다음 두 가지 작업을 반드시 완료해야 합니다.
+- **환경 설정 파일 생성:** `.env.{환경}` 파일을 생성하고 아래 내용을 입력합니다. 각 항목의 값은 실제 발급받은 API 키 및 설정 값으로 변경해야 합니다.
+```shell
+REACT_APP_BASE_URL=http://localhost:3000
+REACT_APP_NEST_BASE_URL='서버 주소'
 
-In the project directory, you can run:
+REACT_APP_WEATHER_URL=http://apis.data.go.kr
+REACT_APP_WEATHER_KEY='공공데이터 api key'
+REACT_APP_KAKAO_MAP_URL=https://dapi.kakao.com/v2/local
 
-### `npm start`
+REACT_APP_KAKAO_CLIENT_ID='카카오 client api key'
+REACT_APP_NAVER_CLIENT_ID='네이버 client api key'
+REACT_APP_GOOGLE_CLIENT_ID='구글 client api key'
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+REACT_APP_KAKAO_MAP_ID='카카오 client api key'
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+REACT_APP_BASE_IMAGE_URL='이미지 서버 주소'
+```
 
-### `npm test`
+- **API 키 발급:** 아래 링크를 참고하여 각 제조사별 API 키를 발급받아 .env.{환경} 파일에 입력합니다.
+  - 카카오 개발자: https://developers.kakao.com/
+  - 네이버 개발자: https://developers.naver.com/main/
+  - 구글 개발자: https://cloud.google.com/
+  - 공공 데이터: https://www.data.go.kr/
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+**주의:** API 키 발급 및 환경 설정 파일 생성은 프로젝트 실행 전에 반드시 완료해야 하는 필수 절차입니다. 이 단계를 완료하지 않으면 프로젝트를 정상적으로 실행할 수 없습니다.
 
-### `npm run build`
+### 1. 프론트 설정하기
+- `frontend` 폴더에 실행방법은 다음과 같습니다.  
+  - `npm run start` 명령어를 입력하여 local 환경 React.js를 실행합니다.
+  - `npm run start:dev` 명령어를 입력하여 dev 환경 React.js를 실행합니다.
+  - `npm run start:prod` 명령어를 입력하여 prod 환경 React.js를 실행합니다.
+  - `npm run test` 명령어를 입력하여 React.js 테스트를 실행합니다.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
