@@ -3,6 +3,10 @@ import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
 @Injectable()
 export class DateValidationPipe implements PipeTransform<string, string> {
     transform(value: string): string {
+        if (!value) {
+            throw new BadRequestException('date query parameter is missing.');
+        }
+
         const dateFormat = /^\d{4}-\d{2}-\d{2}$/;
 
         if (!value.match(dateFormat)) {
