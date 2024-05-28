@@ -9,8 +9,8 @@ import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
 import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
 import { TodayWalkTimeService } from '../today-walk-time/today-walk-time.service';
 import { UsersService } from '../users/users.service';
-import { DogStatisticDto } from './dtos/dog-statistic.dto';
 import { Period } from './pipes/period-validation.pipe';
+import { DogStatistic } from './types/statistic.type';
 
 @Injectable()
 export class StatisticsService {
@@ -29,8 +29,8 @@ export class StatisticsService {
         recommendedWalkAmount: number[],
         todayWalkAmount: number[],
         weeklyWalks: number[][]
-    ): DogStatisticDto[] {
-        const result: DogStatisticDto[] = [];
+    ): DogStatistic[] {
+        const result: DogStatistic[] = [];
         for (let i = 0; i < dogProfiles.length; i++) {
             result.push({
                 id: dogProfiles[i].id,
@@ -68,7 +68,7 @@ export class StatisticsService {
         return this.journalsService.findJournalsAndAggregateByDay(userId, dogId, startDate, endDate);
     }
 
-    async getDogsStatistics(userId: number): Promise<DogStatisticDto[]> {
+    async getDogsStatistics(userId: number): Promise<DogStatistic[]> {
         const ownDogIds = await this.usersService.getOwnDogsList(userId);
         const dogWalkDayIds = await this.dogsService.getRelatedTableIdList(ownDogIds, 'walkDayId');
         const todayWalkTimeIds = await this.dogsService.getRelatedTableIdList(ownDogIds, 'todayWalkTimeId');
