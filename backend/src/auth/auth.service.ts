@@ -10,7 +10,9 @@ import { GoogleService } from './oauth/google.service';
 import { KakaoService } from './oauth/kakao.service';
 import { NaverService } from './oauth/naver.service';
 import { AccessTokenPayload, RefreshTokenPayload, TokenService } from './token/token.service';
-import { AuthData, OauthAuthorizeData, OauthData } from './types/auth.type';
+import { AuthData } from './types/auth-data.type';
+import { OauthAuthorizeData } from './types/oauth-authorize-data.type';
+import { OauthData } from './types/oauth-data.type';
 
 @Injectable()
 export class AuthService {

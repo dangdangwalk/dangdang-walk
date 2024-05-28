@@ -15,7 +15,9 @@ import { GoogleService } from './oauth/google.service';
 import { KakaoService } from './oauth/kakao.service';
 import { NaverService } from './oauth/naver.service';
 import { TokenService } from './token/token.service';
-import { OAUTH_PROVIDERS, OauthAuthorizeData, OauthData } from './types/auth.type';
+import { OauthAuthorizeData } from './types/oauth-authorize-data.type';
+import { OauthData } from './types/oauth-data.type';
+import { OAUTH_PROVIDERS } from './types/oauth-provider.type';
 
 const context = describe;
 

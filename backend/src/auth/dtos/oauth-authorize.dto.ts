@@ -1,14 +1,10 @@
 import { IsIn, IsNotEmpty, IsString } from 'class-validator';
 import { OAUTH_PROVIDERS, OauthProvider } from '../types/oauth-provider.type';
 
-export class OauthDto {
+export class OauthAuthorizeDto {
     @IsString()
     @IsNotEmpty()
-    oauthAccessToken: string;
-
-    @IsString()
-    @IsNotEmpty()
-    oauthRefreshToken: string;
+    authorizeCode: string;
 
     @IsString()
     @IsIn(OAUTH_PROVIDERS)

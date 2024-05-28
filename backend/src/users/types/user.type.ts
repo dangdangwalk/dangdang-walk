@@ -1,4 +1,4 @@
-import { OauthProvider } from 'src/auth/types/auth.type';
+import { OauthProvider } from 'src/auth/types/oauth-provider.type';
 
 export interface CreateUser {
     oauthNickname: string;
