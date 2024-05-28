@@ -18,6 +18,7 @@ jobs:
         uses: actions/labeler@v5
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+          configuration-path: ".github/labeler.yaml"
 
       - name: Check branch name format
         run: |
