@@ -14,7 +14,10 @@ import { TodayWalkTimeService } from '../today-walk-time/today-walk-time.service
 import { UsersDogsService } from '../users-dogs/users-dogs.service';
 import { Dogs } from './dogs.entity';
 import { DogsRepository } from './dogs.repository';
-import { DogData, DogProfile, DogSummary, Gender } from './types/dog.type';
+import { DogData } from './types/dog-data.type';
+import { DogProfile } from './types/dog-profile.type';
+import { DogSummary } from './types/dog-summary.type';
+import { Gender } from './types/gender.type';
 
 @Injectable()
 export class DogsService {
