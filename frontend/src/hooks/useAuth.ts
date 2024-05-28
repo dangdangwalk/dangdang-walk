@@ -10,7 +10,6 @@ import {
 } from '@/api/auth';
 import queryClient from '@/api/queryClient';
 import { queryKeys, storageKeys, tokenKeys } from '@/constants';
-import { useAuthStore } from '@/store/authStore';
 import { UseMutationCustomOptions, UseQueryCustomOptions } from '@/types/common';
 import { removeHeader, setHeader } from '@/utils/header';
 import { getStorage, removeStorage, setStorage } from '@/utils/storage';
@@ -56,14 +55,12 @@ const useSignup = (mutationOptions?: UseMutationCustomOptions) => {
 };
 
 const useGetRefreshToken = () => {
-    const { expiresIn } = useAuthStore();
-
     const { isSuccess, isError, data } = useQuery({
         queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN],
         queryFn: getAccessToken,
-        gcTime: expiresIn + 1000 * 60,
-        staleTime: expiresIn - 1000 * 60 * 10,
-        refetchInterval: expiresIn - 1000 * 60 * 10,
+        gcTime: 1000 * 60 * 60 + 1000 * 60,
+        staleTime: 1000 * 60 * 60 - 1000 * 60 * 10,
+        refetchInterval: 1000 * 60 * 60 - 1000 * 60 * 10,
         refetchOnReconnect: true,
         refetchIntervalInBackground: true,
     });
@@ -84,7 +81,6 @@ const useGetRefreshToken = () => {
 };
 
 const useLogout = (mutationOptions?: UseMutationCustomOptions) => {
-    const { storeLogout } = useAuthStore();
     return useMutation({
         mutationFn: requestLogout,
         onSuccess: () => {
