@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { AccessTokenPayload } from 'src/auth/token/token.service';
-import { OauthProvider } from 'src/auth/types/auth.type';
 import { S3Service } from 'src/s3/s3.service';
 import { FindOptionsWhere } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
@@ -9,17 +8,10 @@ import { generateUuid } from '../utils/hash.util';
 import { checkIfExistsInArr } from '../utils/manipulate.util';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
-import { CreateUser } from './types/user-types';
+import { CreateUser, UserProfile } from './types/user.type';
 import { Role } from './user-roles.enum';
 import { Users } from './users.entity';
 import { UsersRepository } from './users.repository';
-
-export interface UserProfile {
-    nickname: string;
-    email: string;
-    profileImageUrl: string;
-    provider: OauthProvider;
-}
 
 @Injectable()
 export class UsersService {
