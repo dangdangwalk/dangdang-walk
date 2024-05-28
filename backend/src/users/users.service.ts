@@ -7,9 +7,9 @@ import { UsersDogsService } from '../users-dogs/users-dogs.service';
 import { generateUuid } from '../utils/hash.util';
 import { checkIfExistsInArr } from '../utils/manipulate.util';
 import { CreateUser } from './types/create-user.type';
+import { ROLE } from './types/role.type';
 import { UpdateUser } from './types/update-user.type';
 import { UserProfile } from './types/user-profile.type';
-import { Role } from './user-roles.enum';
 import { Users } from './users.entity';
 import { UsersRepository } from './users.repository';
 
@@ -47,7 +47,7 @@ export class UsersService {
         return await this.usersRepository.createIfNotExists(
             new Users({
                 nickname,
-                role: Role.User,
+                role: ROLE.User,
                 mainDogId: null,
                 ...otherAttributes,
             }),

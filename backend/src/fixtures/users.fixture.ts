@@ -1,4 +1,4 @@
-import { Role } from '../users/user-roles.enum';
+import { ROLE } from '../users/types/role.type';
 import { Users } from '../users/users.entity';
 
 const REFRESH_TOKEN =
@@ -11,7 +11,7 @@ const OAUTH_REFRESH_TOKEN =
 export const mockUser = new Users({
     id: 1,
     nickname: '오징어1234',
-    role: Role.User,
+    role: ROLE.User,
     mainDogId: 1,
     oauthId: '1',
     oauthAccessToken: OAUTH_ACCESS_TOKEN,
