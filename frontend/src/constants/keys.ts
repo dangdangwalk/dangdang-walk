@@ -21,6 +21,7 @@ const storageKeys = {
     REDIRECT_URI: 'redirectURI',
     PROVIDER: 'provider',
     DOGS: 'dogs',
+    IS_LOGGED_IN: 'isLoggedIn',
 } as const;
 
 const queryStringKeys = {
