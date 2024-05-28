@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DogWalkDayService } from 'src/dog-walk-day/dog-walk-day.service';
 import { DogsService } from 'src/dogs/dogs.service';
 import { ExcrementsService } from 'src/excrements/excrements.service';
-import { ExcrementsType } from 'src/excrements/types/excrements.enum';
+import { EXCREMENT } from 'src/excrements/types/excrement.type';
 import { JournalPhotosService } from 'src/journal-photos/journal-photos.service';
 import { JournalsDogs } from 'src/journals-dogs/journals-dogs.entity';
 import { JournalsDogsService } from 'src/journals-dogs/journals-dogs.service';
@@ -96,8 +96,8 @@ export class JournalsService {
         const excrementsInfo = new ExcrementsInfoForDetail();
 
         excrementsInfo.dogId = dogId;
-        const fecesCnt = await this.excrementsService.getExcrementsCnt(journalId, dogId, ExcrementsType.feces);
-        const urineCnt = await this.excrementsService.getExcrementsCnt(journalId, dogId, ExcrementsType.urine);
+        const fecesCnt = await this.excrementsService.getExcrementsCnt(journalId, dogId, EXCREMENT.Feces);
+        const urineCnt = await this.excrementsService.getExcrementsCnt(journalId, dogId, EXCREMENT.Urine);
         if (!fecesCnt && !urineCnt) {
             return;
         }
@@ -147,11 +147,11 @@ export class JournalsService {
             dogId = curExcrements.dogId;
 
             for (const curFeces of curExcrements.fecesLocations) {
-                await this.excrementsService.createNewExcrements(journalId, dogId, ExcrementsType.feces, curFeces);
+                await this.excrementsService.createNewExcrements(journalId, dogId, EXCREMENT.Feces, curFeces);
             }
 
             for (const curUrine of curExcrements.urineLocations) {
-                await this.excrementsService.createNewExcrements(journalId, dogId, ExcrementsType.urine, curUrine);
+                await this.excrementsService.createNewExcrements(journalId, dogId, EXCREMENT.Urine, curUrine);
             }
         }
     }

@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Dogs } from '../dogs/dogs.entity';
 import { Journals } from '../journals/journals.entity';
-import { ExcrementsType } from './types/excrements.enum';
+import { EXCREMENT, Excrement } from './types/excrement.type';
 
 @Entity('excrements')
 export class Excrements {
@@ -22,8 +22,8 @@ export class Excrements {
     @Column({ name: 'dog_id' })
     dogId: number;
 
-    @Column({ name: 'type', type: 'enum', enum: ExcrementsType })
-    type: ExcrementsType;
+    @Column({ name: 'type', type: 'enum', enum: EXCREMENT })
+    type: Excrement;
 
     @Column({ type: 'point', spatialFeatureType: 'Point', srid: 4326 })
     coordinate: string;
