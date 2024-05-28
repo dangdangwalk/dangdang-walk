@@ -25,6 +25,7 @@ const useLogin = (mutationOptions?: UseMutationCustomOptions) => {
             const url = getStorage(storageKeys.REDIRECT_URI) || '';
             setStorage(storageKeys.IS_LOGGED_IN, 'true');
             setHeader(tokenKeys.AUTHORIZATION, `Bearer ${accessToken}`);
+            setStorage(tokenKeys.AUTHORIZATION, `Bearer ${accessToken}`);
             navigate(url);
         },
         onError: (error) => {
@@ -45,6 +46,7 @@ const useSignup = (mutationOptions?: UseMutationCustomOptions) => {
         mutationFn: requestSignup,
         onSuccess: ({ accessToken }: ResponseToken) => {
             setStorage(storageKeys.IS_LOGGED_IN, 'true');
+            setStorage(tokenKeys.AUTHORIZATION, `Bearer ${accessToken}`);
             setHeader(tokenKeys.AUTHORIZATION, `Bearer ${accessToken}`);
         },
         onSettled: () => {
@@ -66,14 +68,16 @@ const useGetRefreshToken = () => {
     });
     useEffect(() => {
         if (isSuccess) {
-            setStorage(storageKeys.IS_LOGGED_IN, 'true');
             setHeader(tokenKeys.AUTHORIZATION, `Bearer ${data.accessToken}`);
+            setStorage(storageKeys.IS_LOGGED_IN, 'true');
+            setStorage(tokenKeys.AUTHORIZATION, `Bearer ${data.accessToken}`);
         }
     }, [isSuccess, data]);
 
     useEffect(() => {
         if (isError) {
             removeStorage(storageKeys.IS_LOGGED_IN);
+            removeStorage(tokenKeys.AUTHORIZATION);
             removeHeader(tokenKeys.AUTHORIZATION);
         }
     }, [isError]);
@@ -85,6 +89,7 @@ const useLogout = (mutationOptions?: UseMutationCustomOptions) => {
         mutationFn: requestLogout,
         onSuccess: () => {
             removeHeader(tokenKeys.AUTHORIZATION);
+            removeStorage(tokenKeys.AUTHORIZATION);
             removeStorage(storageKeys.REDIRECT_URI);
             removeStorage(storageKeys.PROVIDER);
             removeStorage(storageKeys.IS_LOGGED_IN);
@@ -102,6 +107,7 @@ const useDeactivate = (mutationOptions?: UseMutationCustomOptions) => {
         mutationFn: requestDeactivate,
         onSuccess: () => {
             removeHeader(tokenKeys.AUTHORIZATION);
+            removeStorage(tokenKeys.AUTHORIZATION);
             removeStorage(storageKeys.REDIRECT_URI);
             removeStorage(storageKeys.PROVIDER);
             removeStorage(storageKeys.IS_LOGGED_IN);
@@ -125,11 +131,10 @@ export const useAuth = () => {
     const logoutMutation = useLogout();
     const signupMustation = useSignup();
     const refreshTokenQuery = useGetRefreshToken();
-    const getProfileQuery = useGetProfile({
-        enabled: refreshTokenQuery.isSuccess,
-    });
+    const getProfileQuery = useGetProfile();
     const deactivateMutation = useDeactivate();
     return {
+        isTokenInit: refreshTokenQuery.isSuccess,
         loginMutation,
         logoutMutation,
         signupMustation,

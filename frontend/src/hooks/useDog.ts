@@ -4,7 +4,6 @@ import { uploadImage } from '@/api/upload';
 import { UseMutationCustomOptions } from '@/types/common';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
 import { queryKeys } from '@/constants';
 
 const useRegisterDog = (mutationOptions?: UseMutationCustomOptions) => {
@@ -19,11 +18,9 @@ const useRegisterDog = (mutationOptions?: UseMutationCustomOptions) => {
 };
 
 const useFetchDogs = () => {
-    const { refreshTokenQuery } = useAuth();
     return useQuery<ResponseDogs[]>({
         queryKey: [queryKeys.DOGS],
         queryFn: fetchDogs,
-        enabled: refreshTokenQuery.isSuccess,
     });
 };
 
