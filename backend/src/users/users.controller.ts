@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Patch } from '@nestjs/common';
 import { AccessTokenPayload } from 'src/auth/token/token.service';
 import { User } from '../users/decorators/user.decorator';
-import { UpdateUserDto } from './dtos/update-user.dto';
+import { UpdateUserDto } from './dtos/user.dto';
 import { UsersService } from './users.service';
 
 @Controller('/users')

@@ -1,14 +1,18 @@
 import { OauthProvider } from 'src/auth/types/auth.type';
-import { Role } from '../user-roles.enum';
 
 export interface CreateUser {
-    nickname: string;
-    role: Role;
-    mainDogId: number | undefined;
+    oauthNickname: string;
+    email: string;
+    profileImageUrl: string;
     oauthId: string;
     oauthAccessToken: string;
     oauthRefreshToken: string;
     refreshToken: string;
+}
+
+export interface UpdateUser {
+    nickname: string;
+    profileImageUrl: string;
 }
 
 export interface UserProfile {
