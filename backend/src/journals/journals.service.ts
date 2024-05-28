@@ -1,10 +1,8 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { DogWalkDayService } from 'src/dog-walk-day/dog-walk-day.service';
 import { DogsService } from 'src/dogs/dogs.service';
-import { Excrements } from 'src/excrements/excrements.entity';
 import { ExcrementsService } from 'src/excrements/excrements.service';
 import { ExcrementsType } from 'src/excrements/types/excrements.enum';
-import { JournalPhotos } from 'src/journal-photos/journal-photos.entity';
 import { JournalPhotosService } from 'src/journal-photos/journal-photos.service';
 import { JournalsDogs } from 'src/journals-dogs/journals-dogs.entity';
 import { JournalsDogsService } from 'src/journals-dogs/journals-dogs.service';
@@ -14,18 +12,18 @@ import { formatDate, getStartAndEndOfDay, getStartAndEndOfMonth, getStartAndEndO
 import { checkIfExistsInArr, makeSubObject, makeSubObjectsArray } from 'src/utils/manipulate.util';
 import { DeleteResult, EntityManager, FindManyOptions, FindOptionsWhere, In, UpdateResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
-import { JournalInfoForList } from './dtos/journal-list.dto';
 import { UpdateJournalDto } from './dtos/journal-update.dto';
-import { CreateJournalDto, ExcrementsInfoForCreate, JournalInfoForCreate, Location } from './dtos/journals-create.dto';
+import { CreateJournalDto, ExcrementsInfoForCreate, JournalInfoForCreate } from './dtos/journals-create.dto';
+import { Journals } from './journals.entity';
+import { JournalsRepository } from './journals.repository';
 import {
     DogInfoForDetail,
     ExcrementsInfoForDetail,
-    JournalDetailDto,
+    JournalDetail,
     JournalInfoForDetail,
-} from './dtos/journals-detail.dto';
-import { Journals } from './journals.entity';
-import { JournalsRepository } from './journals.repository';
-import { CreateJournalData } from './types/journal-types';
+} from './types/journals-detail-types';
+import { JournalInfoForList } from './types/journals-list-types';
+import { CreateJournalData } from './types/journals-types';
 
 @Injectable()
 export class JournalsService {
@@ -73,19 +71,15 @@ export class JournalsService {
         return this.journalsRepository.updateAndFindOne(where, partialEntity);
     }
 
+    async checkJournalOwnership(userId: number, journalIds: number | number[]): Promise<boolean> {
+        const myJournalIds = await this.getOwnJournalIds(userId);
+        return checkIfExistsInArr(myJournalIds, journalIds);
+    }
+
     async getOwnJournalIds(userId: number): Promise<number[]> {
         const ownJournals = await this.journalsRepository.find({ where: { userId: userId } });
 
         return ownJournals.map((cur) => cur.id);
-    }
-
-    async checkDogExistsInJournal(journalDogs: JournalsDogs[], dogId: number) {
-        const journalDogIds = journalDogs.map((cur) => cur.dogId);
-
-        if (!checkIfExistsInArr(journalDogIds, dogId)) {
-            throw new ForbiddenException(`Dog ${dogId} is not included in current journal `);
-        }
-        return;
     }
 
     async getJournalInfoForDetail(journalId: number): Promise<JournalInfoForDetail> {
@@ -98,18 +92,12 @@ export class JournalsService {
         return journalInfo;
     }
 
-    async getExcrementsCnt(journalId: number, dogId: number, type: ExcrementsType): Promise<number> {
-        const excrements = await this.excrementsService.find({ where: { journalId, dogId, type } });
-
-        return excrements.length;
-    }
-
     async getExcrementsInfoForDetail(journalId: number, dogId: number): Promise<ExcrementsInfoForDetail | void> {
         const excrementsInfo = new ExcrementsInfoForDetail();
 
         excrementsInfo.dogId = dogId;
-        const fecesCnt = await this.getExcrementsCnt(journalId, dogId, ExcrementsType.feces);
-        const urineCnt = await this.getExcrementsCnt(journalId, dogId, ExcrementsType.urine);
+        const fecesCnt = await this.excrementsService.getExcrementsCnt(journalId, dogId, ExcrementsType.feces);
+        const urineCnt = await this.excrementsService.getExcrementsCnt(journalId, dogId, ExcrementsType.urine);
         if (!fecesCnt && !urineCnt) {
             return;
         }
@@ -119,7 +107,7 @@ export class JournalsService {
         return excrementsInfo;
     }
 
-    async getDogsInfoForDetail(journalId: number, dogId: number): Promise<DogInfoForDetail> {
+    async getDogsInfoForDetail(dogId: number): Promise<DogInfoForDetail> {
         const dogInfoRaw = await this.dogsService.findOne({ id: dogId });
 
         const dogInfo: DogInfoForDetail = makeSubObject(dogInfoRaw, DogInfoForDetail.getKeysForDogTable());
@@ -127,7 +115,7 @@ export class JournalsService {
         return dogInfo;
     }
 
-    async getJournalDetail(journalId: number): Promise<JournalDetailDto> {
+    async getJournalDetail(journalId: number): Promise<JournalDetail> {
         try {
             const journalInfo = await this.getJournalInfoForDetail(journalId);
 
@@ -135,22 +123,16 @@ export class JournalsService {
             const dogInfo: DogInfoForDetail[] = [];
             const excrementsInfo: ExcrementsInfoForDetail[] = [];
             for (const curDogId of journalDogIds) {
-                dogInfo.push(await this.getDogsInfoForDetail(journalId, curDogId));
+                dogInfo.push(await this.getDogsInfoForDetail(curDogId));
                 const curExcrements = await this.getExcrementsInfoForDetail(journalId, curDogId);
                 curExcrements ? excrementsInfo.push(curExcrements) : curExcrements;
             }
 
-            return new JournalDetailDto(journalInfo, dogInfo, excrementsInfo);
+            return new JournalDetail(journalInfo, dogInfo, excrementsInfo);
         } catch (error) {
             throw error;
         }
     }
-
-    async checkJournalOwnership(userId: number, journalIds: number | number[]): Promise<boolean> {
-        const myJournalIds = await this.getOwnJournalIds(userId);
-        return checkIfExistsInArr(myJournalIds, journalIds);
-    }
-
     async createNewJournal(userId: number, journalInfo: CreateJournalData) {
         if (!journalInfo.memo) {
             journalInfo.memo = '';
@@ -159,51 +141,17 @@ export class JournalsService {
         return await this.create(journalInfo);
     }
 
-    async createNewJournalDogs(journalId: number, dogIds: number[]) {
-        for (const curId of dogIds) {
-            await this.journalsDogsService.createIfNotExists(journalId, curId);
-        }
-        return;
-    }
-
-    async createNewPhotoUrls(journalId: number, photoUrls: string[]) {
-        const keys: (keyof JournalPhotos)[] = ['journalId', 'photoUrl'];
-        const data: Partial<JournalPhotos> = {};
-
-        data.journalId = journalId;
-        for (const curUrl of photoUrls) {
-            data.photoUrl = curUrl;
-            await this.journalPhotosService.createIfNotExists(data, keys);
-        }
-    }
-
-    private makeCoordinate(lat: string, lag: string): string {
-        return `POINT(${lat} ${lag})`;
-    }
-
-    async createNewExcrements(
-        journalId: number,
-        dogId: number,
-        type: ExcrementsType,
-        location: Location
-    ): Promise<Excrements> {
-        const coordinate = this.makeCoordinate(location.lat, location.lng);
-        const data: Partial<Excrements> = { journalId, dogId, type, coordinate };
-
-        return this.excrementsService.createIfNotExists(data);
-    }
-
     async excrementsLoop(journalId: number, excrements: ExcrementsInfoForCreate[]) {
         let dogId;
         for (const curExcrements of excrements) {
             dogId = curExcrements.dogId;
 
             for (const curFeces of curExcrements.fecesLocations) {
-                await this.createNewExcrements(journalId, dogId, ExcrementsType.feces, curFeces);
+                await this.excrementsService.createNewExcrements(journalId, dogId, ExcrementsType.feces, curFeces);
             }
 
             for (const curUrine of curExcrements.urineLocations) {
-                await this.createNewExcrements(journalId, dogId, ExcrementsType.urine, curUrine);
+                await this.excrementsService.createNewExcrements(journalId, dogId, ExcrementsType.urine, curUrine);
             }
         }
     }
@@ -217,14 +165,6 @@ export class JournalsService {
         journalData.routes = JSON.stringify(journalData.routes);
 
         return journalData;
-    }
-
-    private checkPhotoUrlExist(photoUrls: string[] | undefined): string[] {
-        if (!photoUrls) {
-            return [];
-        } else {
-            return photoUrls;
-        }
     }
 
     async updateDogWalkDay(dogIds: number[], operation: (current: number) => number) {
@@ -241,15 +181,23 @@ export class JournalsService {
         this.todayWalkTimeService.updateDurations(todayWalkTimeIds, duration, operation);
     }
 
+    private checkPhotoUrlExist(photoUrls: string[] | undefined): string[] {
+        if (!photoUrls) {
+            return [];
+        } else {
+            return photoUrls;
+        }
+    }
+
     //@Transactional()
     async createJournal(userId: number, createJournalData: CreateJournalDto) {
         const dogIds = createJournalData.dogs;
         const journalData = this.makeJournalData(userId, createJournalData);
         const createJournalResult = await this.createNewJournal(userId, journalData);
-        await this.createNewJournalDogs(createJournalResult.id, dogIds);
+        await this.journalsDogsService.createNewJournalDogs(createJournalResult.id, dogIds);
 
         const photoUrls = this.checkPhotoUrlExist(createJournalData.journalInfo.photoUrls);
-        await this.createNewPhotoUrls(createJournalResult.id, photoUrls);
+        await this.journalPhotosService.createNewPhotoUrls(createJournalResult.id, photoUrls);
 
         const excrements: ExcrementsInfoForCreate[] = createJournalData.excrements;
         if (excrements.length) {
@@ -274,7 +222,7 @@ export class JournalsService {
                 await this.journalPhotosService.delete({ journalId });
             }
             if (updateJournalData.photoUrls.length) {
-                await this.createNewPhotoUrls(journalId, updateJournalData.photoUrls);
+                await this.journalPhotosService.createNewPhotoUrls(journalId, updateJournalData.photoUrls);
             }
         }
     }

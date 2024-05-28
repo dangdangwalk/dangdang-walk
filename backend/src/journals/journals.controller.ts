@@ -2,11 +2,11 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query,
 import { AccessTokenPayload } from 'src/auth/token/token.service';
 import { DateValidationPipe } from 'src/statistics/pipes/date-validation.pipe';
 import { User } from 'src/users/decorators/user.decorator';
-import { JournalInfoForList } from './dtos/journal-list.dto';
 import { UpdateJournalDto } from './dtos/journal-update.dto';
 import { CreateJournalDto } from './dtos/journals-create.dto';
 import { AuthJournalGuard } from './guards/auth-journal.guard';
 import { JournalsService } from './journals.service';
+import { JournalInfoForList } from './types/journals-list-types';
 
 @Controller('/journals')
 export class JournalsController {

@@ -2,7 +2,7 @@ import { Type } from 'class-transformer';
 import { IsNotEmpty, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Excrements } from 'src/excrements/excrements.entity';
 
-export class PhotoUrlDto {
+export class PhotoUrlType {
     @IsNotEmpty()
     @IsString()
     photoUrl: string;
@@ -62,7 +62,7 @@ export class JournalInfoForDetail {
     }
 }
 
-export class JournalDetailDto {
+export class JournalDetail {
     @IsNotEmpty()
     @ValidateNested()
     @Type(() => JournalInfoForDetail)

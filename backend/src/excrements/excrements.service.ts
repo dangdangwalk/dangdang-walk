@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
+import { Location } from 'src/journals/dtos/journals-create.dto';
 import { DeleteResult, FindManyOptions, FindOptionsWhere, UpdateResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { Excrements } from './excrements.entity';
 import { ExcrementsRepository } from './excrements.repository';
+import { ExcrementsType } from './types/excrements.enum';
 
 @Injectable()
 export class ExcrementsService {
@@ -52,5 +54,27 @@ export class ExcrementsService {
 
     async delete(where: FindOptionsWhere<Excrements>): Promise<DeleteResult> {
         return this.excrementsRepository.delete(where);
+    }
+
+    private makeCoordinate(lat: string, lag: string): string {
+        return `POINT(${lat} ${lag})`;
+    }
+
+    async createNewExcrements(
+        journalId: number,
+        dogId: number,
+        type: ExcrementsType,
+        location: Location
+    ): Promise<Excrements> {
+        const coordinate = this.makeCoordinate(location.lat, location.lng);
+        const data: Partial<Excrements> = { journalId, dogId, type, coordinate };
+
+        return this.createIfNotExists(data);
+    }
+
+    async getExcrementsCnt(journalId: number, dogId: number, type: ExcrementsType): Promise<number> {
+        const excrements = await this.find({ where: { journalId, dogId, type } });
+
+        return excrements.length;
     }
 }
