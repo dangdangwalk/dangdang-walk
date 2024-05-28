@@ -6,7 +6,9 @@ import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity
 import { UsersDogsService } from '../users-dogs/users-dogs.service';
 import { generateUuid } from '../utils/hash.util';
 import { checkIfExistsInArr } from '../utils/manipulate.util';
-import { CreateUser, UpdateUser, UserProfile } from './types/user.type';
+import { CreateUser } from './types/create-user.type';
+import { UpdateUser } from './types/update-user.type';
+import { UserProfile } from './types/user-profile.type';
 import { Role } from './user-roles.enum';
 import { Users } from './users.entity';
 import { UsersRepository } from './users.repository';
