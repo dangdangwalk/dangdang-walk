@@ -1,25 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { AccessTokenPayload } from 'src/auth/token/token.service';
-import { OauthProvider } from 'src/auth/types/auth.type';
 import { S3Service } from 'src/s3/s3.service';
 import { FindOptionsWhere } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { UsersDogsService } from '../users-dogs/users-dogs.service';
 import { generateUuid } from '../utils/hash.util';
 import { checkIfExistsInArr } from '../utils/manipulate.util';
-import { CreateUserDto } from './dtos/create-user.dto';
-import { UpdateUserDto } from './dtos/update-user.dto';
-import { CreateUser } from './types/user-types';
+import { CreateUser, UpdateUser, UserProfile } from './types/user.type';
 import { Role } from './user-roles.enum';
 import { Users } from './users.entity';
 import { UsersRepository } from './users.repository';
-
-export interface UserProfile {
-    nickname: string;
-    email: string;
-    profileImageUrl: string;
-    provider: OauthProvider;
-}
 
 @Injectable()
 export class UsersService {
@@ -28,11 +18,6 @@ export class UsersService {
         private readonly usersDogsService: UsersDogsService,
         private readonly s3Service: S3Service
     ) {}
-
-    async create(entityData: CreateUser) {
-        const user = new Users(entityData);
-        return this.usersRepository.create(user);
-    }
 
     async find(where: FindOptionsWhere<Users>) {
         return this.usersRepository.find({ where });
@@ -54,7 +39,7 @@ export class UsersService {
         return this.usersRepository.delete(where);
     }
 
-    async createIfNotExists({ oauthNickname, ...otherAttributes }: CreateUserDto) {
+    async createIfNotExists({ oauthNickname, ...otherAttributes }: CreateUser) {
         const nickname = await this.generateUniqueNickname(oauthNickname);
 
         return await this.usersRepository.createIfNotExists(
@@ -98,7 +83,7 @@ export class UsersService {
         return { nickname, email, profileImageUrl, provider };
     }
 
-    async updateUserProfile(userId: number, userInfo: UpdateUserDto) {
+    async updateUserProfile(userId: number, userInfo: UpdateUser) {
         const { nickname, profileImageUrl } = userInfo;
 
         if (nickname) {
