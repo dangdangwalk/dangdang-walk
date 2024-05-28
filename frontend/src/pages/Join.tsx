@@ -27,10 +27,10 @@ export interface DogRegInfo extends DogBasicInfoProps, DogDetailInfoProps {
 
 export default function Join() {
     const navigate = useNavigate();
+    const provider = getStorage(storageKeys.PROVIDER);
+    if (!provider) navigate('/');
     const location = useLocation();
     const currentPage = location.state;
-    console.log(currentPage);
-
     const { signupMustation } = useAuth();
     const { registerDogMutation } = useDog();
     const { spinnerAdd, spinnerRemove } = useSpinnerStore();

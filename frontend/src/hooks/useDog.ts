@@ -19,11 +19,9 @@ const useRegisterDog = (mutationOptions?: UseMutationCustomOptions) => {
 };
 
 const useFetchDogs = () => {
-    const { refreshTokenQuery } = useAuth();
     return useQuery<ResponseDogs[]>({
         queryKey: [queryKeys.DOGS],
         queryFn: fetchDogs,
-        enabled: refreshTokenQuery.isSuccess,
     });
 };
 

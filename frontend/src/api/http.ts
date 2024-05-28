@@ -1,8 +1,10 @@
+import { tokenKeys } from '@/constants';
+import { getStorage } from '@/utils/storage';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
 const { REACT_APP_NEST_BASE_URL: NEST_BASE_URL = '' } = window._ENV ?? process.env;
 const DEFAULT_TIMEOUT = 30000;
-
+const token = getStorage(tokenKeys.AUTHORIZATION);
 export const createClient = (config?: AxiosRequestConfig): AxiosInstance => {
     const axiosInstance = axios.create({
         baseURL: NEST_BASE_URL,
@@ -10,6 +12,7 @@ export const createClient = (config?: AxiosRequestConfig): AxiosInstance => {
         headers: {
             'Content-Type': `application/json;charset=UTF-8`,
             Accept: 'application/json',
+            ...(token ? { Authorization: token } : {}),
         },
         withCredentials: true,
         ...config,
