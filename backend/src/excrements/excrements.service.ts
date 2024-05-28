@@ -4,7 +4,7 @@ import { DeleteResult, FindManyOptions, FindOptionsWhere, UpdateResult } from 't
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { Excrements } from './excrements.entity';
 import { ExcrementsRepository } from './excrements.repository';
-import { ExcrementsType } from './types/excrements.enum';
+import { Excrement } from './types/excrement.type';
 
 @Injectable()
 export class ExcrementsService {
@@ -63,7 +63,7 @@ export class ExcrementsService {
     async createNewExcrements(
         journalId: number,
         dogId: number,
-        type: ExcrementsType,
+        type: Excrement,
         location: Location
     ): Promise<Excrements> {
         const coordinate = this.makeCoordinate(location.lat, location.lng);
@@ -72,7 +72,7 @@ export class ExcrementsService {
         return this.createIfNotExists(data);
     }
 
-    async getExcrementsCnt(journalId: number, dogId: number, type: ExcrementsType): Promise<number> {
+    async getExcrementsCnt(journalId: number, dogId: number, type: Excrement): Promise<number> {
         const excrements = await this.find({ where: { journalId, dogId, type } });
 
         return excrements.length;

@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, UsePipes, ValidationPipe } from '@nestjs/common';
 import { AccessTokenPayload } from 'src/auth/token/token.service';
-import { DogSummary } from 'src/dogs/types/dog.type';
+import { DogSummary } from 'src/dogs/types/dog-summary.type';
 import { User } from 'src/users/decorators/user.decorator';
 import { Serialize } from '../common/interceptors/serialize.interceptor';
 import { DogsService } from '../dogs/dogs.service';

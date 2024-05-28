@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { DogsService } from 'src/dogs/dogs.service';
-import { DogSummary } from 'src/dogs/types/dog.type';
+import { DogSummary } from 'src/dogs/types/dog-summary.type';
 import { JournalsService } from 'src/journals/journals.service';
 import { getOneMonthAgo, getStartAndEndOfMonth, getStartAndEndOfWeek } from 'src/utils/date.util';
 import { In } from 'typeorm';

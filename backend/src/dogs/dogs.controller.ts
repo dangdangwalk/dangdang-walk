@@ -15,7 +15,8 @@ import {
 import { AccessTokenPayload } from '../auth/token/token.service';
 import { User } from '../users/decorators/user.decorator';
 import { DogsService } from './dogs.service';
-import { CreateDogDto, UpdateDogDto } from './dtos/dog.dto';
+import { CreateDogDto } from './dtos/create-dog.dto';
+import { UpdateDogDto } from './dtos/update-dog.dto';
 import { AuthDogGuard } from './guards/auth-dog.guard';
 
 @Controller('/dogs')

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { parse } from '../../utils/ms.util';
-import { OauthProvider } from '../types/auth.type';
+import { OauthProvider } from '../types/oauth-provider.type';
 
 export interface AccessTokenPayload {
     userId: number;
