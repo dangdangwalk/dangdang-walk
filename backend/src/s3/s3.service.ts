@@ -4,7 +4,7 @@ import { ForbiddenException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
 import { generateUuid } from 'src/utils/hash.util';
-import { PresignedUrlInfo } from './types/s3.type';
+import { PresignedUrlInfo } from './types/presigned-url-info.type';
 
 const BUCKET_NAME = 'dangdangwalk';
 

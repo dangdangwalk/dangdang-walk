@@ -2,7 +2,7 @@ import { Body, Controller, Delete, ParseArrayPipe, Post } from '@nestjs/common';
 import { AccessTokenPayload } from 'src/auth/token/token.service';
 import { User } from 'src/users/decorators/user.decorator';
 import { S3Service } from './s3.service';
-import { PresignedUrlInfo } from './types/s3.type';
+import { PresignedUrlInfo } from './types/presigned-url-info.type';
 
 @Controller('/api')
 export class S3Controller {
