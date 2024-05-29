@@ -3,6 +3,13 @@ get:
     - 강아지
   summary: 산책 가능한 강아지 목록 조회
   description: 산책 가능한 강아지 목록을 조회한다.
+  parameters:
+    - in: cookie
+      name: Authorization
+      required: true
+      schema:
+        type: string
+        example: "Bearer ${accessToken}"
   responses:
     "200":
       description: 산책 가능한 강아지 목록 반환
@@ -19,6 +26,7 @@ get:
                 name:
                   type: string
                   description: 강아지 이름
+                  example: 덕지
                 profilePhotoUrl:
                   type: string
                   description: 강아지 사진 URL

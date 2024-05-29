@@ -1,0 +1,191 @@
+post:
+  tags:
+    - 산책 일지
+  summary: 산책 일지 생성
+  description: 산책 일지를 생성한다
+  parameters:
+    - in: cookie
+      name: Authorization
+      required: true
+      schema:
+        type: string
+        example: "Bearer ${accessToken}"
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            dogs:
+              type: array
+              items:
+                type: number
+                description: 강아지 ID의 배열
+                example: 1
+            journalInfo:
+              type: object
+              properties:
+                distance:
+                  type: number
+                  description: 산책 거리(미터)
+                  example: 100
+                calories:
+                  type: number
+                  description: 주인의 소모 칼로리
+                  example: 400
+                startedAt:
+                  type: string
+                  format: date-time
+                  description: 산책 시작 시간
+                duration:
+                  type: number
+                  description: 산책 시간(초)
+                  example: 3600
+                routes:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      lat:
+                        type: number
+                        description: 위도
+                        example: 303
+                      lng:
+                        type: number
+                        description: 경도
+                        example: 100
+                photoUrls:
+                  type: array
+                  items:
+                    type: string
+                    description: S3에 저장된 산책 사진 경로의 배열
+                    example: "/1/sdofijwoejf.jpg"
+                memo:
+                  type: string
+                  description: 산책 메모
+              required:
+                - distance
+                - calories
+                - startedAt
+                - duration
+                - routes
+            excrements:
+              type: array
+              items:
+                type: object
+                properties:
+                  dogId:
+                    type: number
+                    description: 각 강아지 ID
+                    example: 2
+                  fecesLocations:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        lat:
+                          type: string
+                          description: 위도
+                          example: 300
+                        lng:
+                          type: string
+                          description: 경도
+                          example: 202
+                  urineLocations:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        lat:
+                          type: string
+                          description: 위도
+                          example: 202
+                        lng:
+                          type: string
+                          description: 경도
+                          example: 120
+          required:
+            - dogs
+            - journalInfo
+  responses:
+    "201":
+      description: 산책일지 생성 성공
+    "401":
+      description: Authorization header가 없거나 유효한 access token이 아닌 경우
+    "403":
+      description: 회원이 소유한 일지가 아닌 경우
+    "404":
+      description: 일지를 찾을 수 없는 경우
+
+get:
+  tags:
+    - 산책 일지
+  summary: 산책 목록
+  description: 주어진 강아지 ID와 날짜에 따른 산책 일지를 조회합니다.
+  parameters:
+    - in: cookie
+      name: Authorization
+      required: true
+      schema:
+        type: string
+        example: "Bearer ${accessToken}"
+    - in: query
+      name: dogId
+      required: true
+      schema:
+        type: number
+      description: 조회할 강아지의 ID
+    - in: query
+      name: date
+      required: true
+      schema:
+        type: string
+        format: date
+      description: 조회할 날짜 (YYYY-MM-DD 형식)
+  responses:
+    "200":
+      description: 성공적인 응답
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                journalId:
+                  type: number
+                  description: 산책일지 ID
+                  example: 31
+                startedAt:
+                  type: string
+                  format: date-time
+                  description: 산책 시작 시간
+                distance:
+                  type: number
+                  description: 산책 거리(미터)
+                  example: 500
+                calories:
+                  type: number
+                  description: 주인이 소모한 칼로리
+                  example: 400
+                duration:
+                  type: number
+                  description: 산책 시간 (초)
+                  example: 2200
+                journalCnt:
+                  type: number
+                  description: 해당 강아지의 해당 일지까지의 산책 횟수
+                  example: 3
+              required:
+                - journalId
+                - startedAt
+                - distance
+                - calories
+                - duration
+                - journalCnt
+    "401":
+      description: Authorization header가 없거나 유효한 access token이 아닌 경우
+    "403":
+      description: 회원이 소유한 일지가 아닌 경우
+    "404":
+      description: 일지를 찾을 수 없는 경우

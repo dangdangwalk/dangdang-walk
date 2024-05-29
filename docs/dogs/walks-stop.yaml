@@ -1,0 +1,29 @@
+post:
+  tags:
+    - 강아지
+  summary: 강아지 산책 중단
+  description: 강아지의 산책 상태를 산책 가능(false)으로 변경한다
+  parameters:
+    - in: cookie
+      name: Authorization
+      required: true
+      schema:
+        type: string
+        example: "Bearer ${accessToken}"
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: array
+          items:
+            type: number
+            description: 산책 상태를 변경할 강아지 id
+            example: 1
+  responses:
+    "200":
+      description: 상태 변경 성공
+    "401":
+      description: Authorization header가 없거나 유효한 access token이 아닌 경우
+    "404":
+      description: 회원을 찾을 수 없는 경우
