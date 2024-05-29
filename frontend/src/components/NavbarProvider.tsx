@@ -2,13 +2,14 @@ import LoginAlertModal from '@/components/LoginAlertModal';
 import Navbar from '@/components/Navbar';
 import OAuthButton from '@/components/OAuthButton';
 import BottomSheet from '@/components/common/BottomSheet';
-import { OAUTH, storageKeys } from '@/constants';
-import { getStorage } from '@/utils/storage';
+import { OAUTH } from '@/constants';
+import { useAuthStore } from '@/store/authStore';
 import React, { useState } from 'react';
 interface Props {
     children: React.ReactNode;
 }
 export default function NavbarProvider({ children }: Props) {
+    const { isLoggedIn } = useAuthStore();
     const [isLoginBottomSheetOpen, setLoginBottomSheetState] = useState(false);
     const handleClose = () => {
         setLoginBottomSheetState(false);
@@ -16,7 +17,6 @@ export default function NavbarProvider({ children }: Props) {
     const handleToggle = (toggle: boolean) => {
         setLoginBottomSheetState(toggle);
     };
-    const isLoggedIn = getStorage(storageKeys.IS_LOGGED_IN) ? true : false;
     return (
         <>
             {children}

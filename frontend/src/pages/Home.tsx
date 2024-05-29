@@ -13,8 +13,8 @@ import useWalkAvailabeDog from '@/hooks/useWalkAvailabeDog';
 import Spinner from '@/components/common/Spinner';
 import { useAuth } from '@/hooks/useAuth';
 import RegisterCard from '@/components/home/RegisterCard';
-import { queryStringKeys, storageKeys } from '@/constants';
-import { getStorage } from '@/utils/storage';
+import { queryStringKeys } from '@/constants';
+import { useAuthStore } from '@/store/authStore';
 
 function Home() {
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
@@ -26,7 +26,7 @@ function Home() {
         changeCheckAll: handleCheckAll,
     } = useWalkAvailabeDog();
     const { refreshTokenQuery } = useAuth();
-    const isLoggedIn = getStorage(storageKeys.IS_LOGGED_IN) ? true : false;
+    const { isLoggedIn } = useAuthStore();
     const { dogs, isDogsPending } = useDogsStatistic(isLoggedIn, {
         enabled: refreshTokenQuery.isSuccess,
     });
