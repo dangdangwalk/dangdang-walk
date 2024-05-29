@@ -22,9 +22,26 @@ paths:
       description: client(frontend)와 server(backend) 간의 연결 상태를 확인한다. Docker health check에도 사용된다.
       security: []
       responses:
-        200:
+        "200":
           description: OK
-
+  /breeds:
+    get:
+      tags:
+        - 견종
+      summary: 견종 목록 조회
+      description: 견종 목록을 가져온다
+      security: []
+      responses:
+        "200":
+          description: 견종 목록 리턴
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  description: 견종 한글 이름
+                  example: 시츄, 푸들, ...
   /auth/login:
     $ref: ./auth/login.yaml
   /auth/signup:
@@ -42,7 +59,23 @@ paths:
     $ref: ./dogs/default.yaml
   /dogs/{id}:
     $ref: ./dogs/id.yaml
+  /dogs/{id}/statistics:
+    $ref: ./dogs/id-statistics.yaml
   /dogs/walk-available:
     $ref: ./dogs/walk-available.yaml
   /dogs/statistics:
     $ref: ./dogs/statistics.yaml
+  /dogs/walks/start:
+    $ref: ./dogs/walks-start.yaml
+  /dogs/walks/stop:
+    $ref: ./dogs/walks-stop.yaml
+
+  /journals:
+    $ref: ./journals/default.yaml
+  /journals/{id}:
+    $ref: ./journals/id.yaml
+
+  /api/upload:
+    $ref: ./api/upload.yaml
+  /api/delete:
+    $ref: ./api/delete.yaml

@@ -1,0 +1,45 @@
+post:
+  tags:
+    - 이미지
+  summary: 이미지 업로드용 presignedUrl 리턴
+  description: S3에 이미지를 업로드 할 수 있는 presignedUrl을 요청합니다.
+  parameters:
+    - in: cookie
+      name: Authorization
+      required: true
+      schema:
+        type: string
+        example: "Bearer ${accessToken}"
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: array
+          items:
+            type: string
+            description: 업로드할 파일의 확장자
+            example: "jpg"
+  responses:
+    "200":
+      description: presignedUrl 성공적으로 리턴
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                filename:
+                  type: string
+                  description: S3 내 업로드 경로
+                  example: "1/eoijef.jpg"
+                url:
+                  type: string
+                  description: presignedUrl
+              required:
+                - filename
+                - url
+    "401":
+      description: Authorization header가 없거나 유효한 access token이 아닌 경우
+    "500":
+      description: Server error

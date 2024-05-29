@@ -1,0 +1,173 @@
+patch:
+  tags:
+    - 산책 일지
+  summary: 산책 일지 수정
+  description: 산책 일지를 수정한다
+  parameters:
+    - in: cookie
+      name: Authorization
+      required: true
+      schema:
+        type: string
+        example: "Bearer ${accessToken}"
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            memo:
+              type: string
+              description: 산책일지 메모
+            photoUrls:
+              type: array
+              items:
+                type: string
+                description: 산책일지 사진 경로
+                example: "1/randomName.jpg"
+  responses:
+    "200":
+      description: 산책일지 수정 성공
+      content:
+        text/plain:
+          schema:
+            type: boolean
+            example: true
+    "401":
+      description: Authorization header가 없거나 유효한 access token이 아닌 경우
+    "403":
+      description: 회원이 소유한 일지가 아닌 경우
+    "404":
+      description: 일지를 찾을 수 없는 경우
+
+delete:
+  tags:
+    - 산책 일지
+  summary: 산책 일지 삭제 
+  description: 산책 일지를 삭제한다
+  parameters:
+    - in: cookie
+      name: Authorization
+      required: true
+      schema:
+        type: string
+        example: "Bearer ${accessToken}"
+  responses:
+    "200":
+      description: 산책일지 삭제 성공
+      content:
+        text/plain:
+          schema:
+            type: boolean
+            example: true
+    "401":
+      description: Authorization header가 없거나 유효한 access token이 아닌 경우
+    "403":
+      description: 회원이 소유한 일지가 아닌 경우
+    "404":
+      description: 일지를 찾을 수 없는 경우
+
+get:
+  tags:
+    - 산책 일지
+  summary: 산책 일지 상세
+  description: 산책 일지의 상세 정보를 리턴한다
+  parameters:
+    - in: cookie
+      name: Authorization
+      required: true
+      schema:
+        type: string
+        example: "Bearer ${accessToken}"
+  responses:
+    "200":
+      description: 성공적인 응답
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              journalInfo:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    description: 산책일지 Id
+                    example: 2
+                  routes:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        lat:
+                          type: number
+                          description: 위도
+                          example: 200
+                        lng:
+                          type: number
+                          description: 경도
+                          example: 100
+                  memo:
+                    type: string
+                    description: 산책일지 메모
+                    example: "메모 1"
+                  photoUrls:
+                    type: array
+                    items:
+                      type: string
+                    description: S3에 업로드한 산책일지 사진 경로
+                    example: "1/oifjwe.jpg"
+                required:
+                  - id
+                  - routes
+              dogs:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                      description: 강아지 Id
+                      example: 2
+                    name:
+                      type: string
+                      description: 강아지 이름
+                      example: "덕지"
+                    profilePhotoUrl:
+                      type: string
+                      description: S3에 업로드한 강아지 프로필 사진 경로
+                      example: "/1/sdoifjwe.jpg"
+                  required:
+                    - id
+                    - name
+                    - profilePhotoUrl
+              excrements:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    dogId:
+                      type: number
+                      description: 배변한 강아지 id
+                      example: 2
+                    fecesCnt:
+                      type: number
+                      description: 대변 본 횟수
+                      example: 1
+                    urineCnt:
+                      type: number
+                      description: 소변 본 횟수
+                      example: 2
+                  required:
+                    - dogId
+                    - fecesCnt
+                    - urineCnt
+            required:
+              - journalInfo
+              - dogs
+    "401":
+      description: Authorization header가 없거나 유효한 access token이 아닌 경우
+    "403":
+      description: 회원이 소유한 일지가 아닌 경우
+    "404":
+      description: 일지를 찾을 수 없는 경우

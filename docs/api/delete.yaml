@@ -1,0 +1,35 @@
+delete:
+  tags:
+    - 이미지
+  summary: 이미지 삭제
+  description: 삭제할 이미지들의 S3 파일 내 경로를 받아 S3에 삭제 요청
+  parameters:
+    - in: cookie
+      name: Authorization
+      required: true
+      schema:
+        type: string
+        example: "Bearer ${accessToken}"
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: array
+          items:
+            type: string
+            description: 업로드할 파일의 확장자
+            example: "jpg"
+  responses:
+    "200":
+      description: 이미지 삭제 성공
+      content:
+        text/plain:
+          schema:
+            type: boolean
+            example: true
+    "401":
+      description: Authorization header가 없거나 유효한 access token이 아닌 경우
+    "403":
+      description: 요청한 유저의 사진이 아닌 경우
+    "500":
+      description: Server Error

@@ -31,7 +31,7 @@ post:
           schema:
             type: object
             properties:
-              accessToken:
+              refreshToken:
                 type: string
       headers:
         Set-Cookie:
