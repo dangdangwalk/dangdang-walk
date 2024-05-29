@@ -9,23 +9,22 @@ import {
     requestSignup,
 } from '@/api/auth';
 import queryClient from '@/api/queryClient';
-import { queryKeys, storageKeys, tokenKeys } from '@/constants';
+import { queryKeys, storageKeys } from '@/constants';
+import { useAuthStore } from '@/store/authStore';
 import { UseMutationCustomOptions, UseQueryCustomOptions } from '@/types/common';
-import { removeHeader, setHeader } from '@/utils/header';
-import { getStorage, removeStorage, setStorage } from '@/utils/storage';
+import { getStorage, removeStorage } from '@/utils/storage';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const useLogin = (mutationOptions?: UseMutationCustomOptions) => {
     const navigate = useNavigate();
+    const { storeLogin } = useAuthStore();
     return useMutation({
         mutationFn: requestLogin,
         onSuccess: ({ accessToken }: ResponseToken) => {
             const url = getStorage(storageKeys.REDIRECT_URI) || '';
-            setStorage(storageKeys.IS_LOGGED_IN, 'true');
-            setHeader(tokenKeys.AUTHORIZATION, `Bearer ${accessToken}`);
-            setStorage(tokenKeys.AUTHORIZATION, `Bearer ${accessToken}`);
+            storeLogin(accessToken);
             navigate(url);
         },
         onError: (error) => {
@@ -42,12 +41,11 @@ const useLogin = (mutationOptions?: UseMutationCustomOptions) => {
 };
 
 const useSignup = (mutationOptions?: UseMutationCustomOptions) => {
+    const { storeLogin } = useAuthStore();
     return useMutation({
         mutationFn: requestSignup,
         onSuccess: ({ accessToken }: ResponseToken) => {
-            setStorage(storageKeys.IS_LOGGED_IN, 'true');
-            setStorage(tokenKeys.AUTHORIZATION, `Bearer ${accessToken}`);
-            setHeader(tokenKeys.AUTHORIZATION, `Bearer ${accessToken}`);
+            storeLogin(accessToken);
         },
         onSettled: () => {
             queryClient.refetchQueries({ queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN] });
@@ -57,6 +55,7 @@ const useSignup = (mutationOptions?: UseMutationCustomOptions) => {
 };
 
 const useGetRefreshToken = () => {
+    const { storeLogin, storeLogout } = useAuthStore();
     const { isSuccess, isError, data } = useQuery({
         queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN],
         queryFn: getAccessToken,
@@ -68,34 +67,28 @@ const useGetRefreshToken = () => {
     });
     useEffect(() => {
         if (isSuccess) {
-            setHeader(tokenKeys.AUTHORIZATION, `Bearer ${data.accessToken}`);
-            setStorage(storageKeys.IS_LOGGED_IN, 'true');
-            setStorage(tokenKeys.AUTHORIZATION, `Bearer ${data.accessToken}`);
+            storeLogin(data.accessToken);
         }
     }, [isSuccess, data]);
 
     useEffect(() => {
         if (isError) {
-            removeStorage(storageKeys.IS_LOGGED_IN);
-            removeStorage(tokenKeys.AUTHORIZATION);
-            removeHeader(tokenKeys.AUTHORIZATION);
+            storeLogout();
         }
     }, [isError]);
     return { isSuccess, isError };
 };
 
 const useLogout = (mutationOptions?: UseMutationCustomOptions) => {
+    const { storeLogout } = useAuthStore();
     return useMutation({
         mutationFn: requestLogout,
         onSuccess: () => {
-            removeHeader(tokenKeys.AUTHORIZATION);
-            removeStorage(tokenKeys.AUTHORIZATION);
+            storeLogout();
             removeStorage(storageKeys.REDIRECT_URI);
             removeStorage(storageKeys.PROVIDER);
-            removeStorage(storageKeys.IS_LOGGED_IN);
             queryClient.resetQueries({ queryKey: [queryKeys.AUTH] });
             queryClient.refetchQueries({ queryKey: [queryKeys.DOGS] });
-            window.location.reload();
         },
         ...mutationOptions,
     });
@@ -103,15 +96,12 @@ const useLogout = (mutationOptions?: UseMutationCustomOptions) => {
 
 const useDeactivate = (mutationOptions?: UseMutationCustomOptions) => {
     const navigate = useNavigate();
+    const { storeLogout } = useAuthStore();
     return useMutation({
         mutationFn: requestDeactivate,
         onSuccess: () => {
-            removeHeader(tokenKeys.AUTHORIZATION);
-            removeStorage(tokenKeys.AUTHORIZATION);
-            removeStorage(storageKeys.REDIRECT_URI);
-            removeStorage(storageKeys.PROVIDER);
-            removeStorage(storageKeys.IS_LOGGED_IN);
-            queryClient.refetchQueries({ queryKey: [queryKeys.AUTH] });
+            storeLogout();
+            queryClient.resetQueries({ queryKey: [queryKeys.AUTH] });
             queryClient.refetchQueries({ queryKey: [queryKeys.DOGS] });
             navigate('/');
         },
