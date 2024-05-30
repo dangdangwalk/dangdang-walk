@@ -49,8 +49,8 @@ git clone https://github.com/jihwooon/dangdang-walk.git
 
 환경 설정 방법은 각각 backend, frontend 폴더에 있는 README 파일에서 확인할 수 있습니다.
 
-- [Backend 환경 세팅 안내](https://github.com/jihwooon/dangdang-walk/tree/main/backend#readme)
-- [Frontend 환경 세팅 안내](https://github.com/jihwooon/dangdang-walk/tree/main/frontend#readme)
+- [Backend 환경 설정 안내](https://github.com/jihwooon/dangdang-walk/tree/main/backend#readme)
+- [Frontend 환경 설정 안내](https://github.com/jihwooon/dangdang-walk/tree/main/frontend#readme)
 
 # 🛠️ 기술 스택
 
@@ -66,6 +66,6 @@ git clone https://github.com/jihwooon/dangdang-walk.git
 
 ![OAuth-flow6 drawio](https://github.com/jihwooon/dangdang-walk/assets/71831926/6e01ccf0-b1f5-4484-be6f-b3b613c10547)
 
-## 🏃 산책
+## 🚶‍♂️ 산책
 
 ![walking-flow](https://github.com/jihwooon/dangdang-walk/assets/71831926/bc8c6674-2023-4f56-ab1e-16b16963e0ab)
