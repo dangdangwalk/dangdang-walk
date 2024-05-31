@@ -58,13 +58,6 @@ export class JournalInfoForCreate {
     @IsOptional()
     @IsString({ each: true })
     photoUrls: string[];
-
-    static getKeysForJournalTable() {
-        return ['distance', 'calories', 'startedAt', 'duration', 'routes', 'memo'];
-    }
-    static getKeysForJournalPhotoTable() {
-        return ['photoUrls'];
-    }
 }
 
 export class CreateJournalDto {

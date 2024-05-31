@@ -1,4 +1,4 @@
-export interface CreateJournalData {
+export interface JournalData {
     userId: number;
     title: string;
     distance: number;

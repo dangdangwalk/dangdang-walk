@@ -12,18 +12,18 @@ import { formatDate, getStartAndEndOfDay, getStartAndEndOfMonth, getStartAndEndO
 import { checkIfExistsInArr, makeSubObject, makeSubObjectsArray } from 'src/utils/manipulate.util';
 import { DeleteResult, EntityManager, FindManyOptions, FindOptionsWhere, In, UpdateResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
-import { UpdateJournalDto } from './dtos/journal-update.dto';
-import { CreateJournalDto, ExcrementsInfoForCreate, JournalInfoForCreate } from './dtos/journals-create.dto';
 import { Journals } from './journals.entity';
 import { JournalsRepository } from './journals.repository';
+import { CreateExcrementsInfo, CreateJournalData, CreateJournalInfo } from './types/create-journal-data.type';
+import { JournalData } from './types/journal-data.type';
 import {
     DogInfoForDetail,
     ExcrementsInfoForDetail,
     JournalDetail,
     JournalInfoForDetail,
-} from './types/journals-detail-types';
-import { JournalInfoForList } from './types/journals-list-types';
-import { CreateJournalData } from './types/journals-types';
+} from './types/journal-detail.type';
+import { JournalInfoForList } from './types/journal-info.type';
+import { UpdateJournalData } from './types/update-journal-data.type';
 
 @Injectable()
 export class JournalsService {
@@ -39,7 +39,7 @@ export class JournalsService {
         private readonly s3Service: S3Service
     ) {}
 
-    async create(entityData: CreateJournalData): Promise<Journals> {
+    async create(entityData: JournalData): Promise<Journals> {
         const journals = new Journals(entityData);
         return this.journalsRepository.create(journals);
     }
@@ -133,7 +133,7 @@ export class JournalsService {
             throw error;
         }
     }
-    async createNewJournal(userId: number, journalInfo: CreateJournalData) {
+    async createNewJournal(userId: number, journalInfo: JournalData) {
         if (!journalInfo.memo) {
             journalInfo.memo = '';
         }
@@ -141,7 +141,7 @@ export class JournalsService {
         return await this.create(journalInfo);
     }
 
-    async excrementsLoop(journalId: number, excrements: ExcrementsInfoForCreate[]) {
+    async excrementsLoop(journalId: number, excrements: CreateExcrementsInfo[]) {
         let dogId;
         for (const curExcrements of excrements) {
             dogId = curExcrements.dogId;
@@ -156,10 +156,10 @@ export class JournalsService {
         }
     }
 
-    private makeJournalData(userId: number, createJournalData: CreateJournalDto) {
-        const journalData: CreateJournalData = makeSubObject(
+    private makeJournalData(userId: number, createJournalData: CreateJournalData) {
+        const journalData: JournalData = makeSubObject(
             createJournalData.journalInfo,
-            JournalInfoForCreate.getKeysForJournalTable()
+            CreateJournalInfo.getKeysForJournalTable()
         );
         journalData.userId = userId;
         journalData.routes = JSON.stringify(journalData.routes);
@@ -190,7 +190,7 @@ export class JournalsService {
     }
 
     //@Transactional()
-    async createJournal(userId: number, createJournalData: CreateJournalDto) {
+    async createJournal(userId: number, createJournalData: CreateJournalData) {
         const dogIds = createJournalData.dogs;
         const journalData = this.makeJournalData(userId, createJournalData);
         const createJournalResult = await this.createNewJournal(userId, journalData);
@@ -199,7 +199,7 @@ export class JournalsService {
         const photoUrls = this.checkPhotoUrlExist(createJournalData.journalInfo.photoUrls);
         await this.journalPhotosService.createNewPhotoUrls(createJournalResult.id, photoUrls);
 
-        const excrements: ExcrementsInfoForCreate[] = createJournalData.excrements;
+        const excrements: CreateExcrementsInfo[] = createJournalData.excrements;
         if (excrements.length) {
             await this.excrementsLoop(createJournalResult.id, excrements);
         }
@@ -212,7 +212,7 @@ export class JournalsService {
     }
 
     //@Transactional()
-    async updateJournal(journalId: number, updateJournalData: UpdateJournalDto) {
+    async updateJournal(journalId: number, updateJournalData: UpdateJournalData) {
         if (updateJournalData.memo) {
             await this.updateAndFindOne({ id: journalId }, { memo: updateJournalData.memo });
         }
