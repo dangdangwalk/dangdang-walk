@@ -38,7 +38,7 @@ export class AuthService {
         const { oauthId } = await this[`${provider}Service`].requestUserInfo(oauthAccessToken);
 
         const refreshToken = this.tokenService.signRefreshToken(oauthId, provider);
-        this.logger.debug(`login - signRefreshToken: ${refreshToken}`);
+        this.logger.debug('login - signRefreshToken', { refreshToken });
 
         try {
             const { id: userId } = await this.usersService.updateAndFindOne(
@@ -47,7 +47,7 @@ export class AuthService {
             );
 
             const accessToken = this.tokenService.signAccessToken(userId, provider);
-            this.logger.debug(`login - signAccessToken: ${accessToken}`);
+            this.logger.debug('login - signAccessToken', { accessToken });
 
             return { accessToken, refreshToken };
         } catch (error) {
@@ -64,7 +64,7 @@ export class AuthService {
             await this[`${provider}Service`].requestUserInfo(oauthAccessToken);
 
         const refreshToken = this.tokenService.signRefreshToken(oauthId, provider);
-        this.logger.debug(`signup - signRefreshToken: ${refreshToken}`);
+        this.logger.debug('signup - signRefreshToken', { refreshToken });
 
         const { id: userId } = await this.usersService.createIfNotExists({
             oauthNickname,
@@ -77,14 +77,14 @@ export class AuthService {
         });
 
         const accessToken = this.tokenService.signAccessToken(userId, provider);
-        this.logger.debug(`signup - signAccessToken: ${accessToken}`);
+        this.logger.debug('signup - signAccessToken', { accessToken });
 
         return { accessToken, refreshToken };
     }
 
     async logout({ userId, provider }: AccessTokenPayload): Promise<void> {
         const { oauthAccessToken } = await this.usersService.findOne({ id: userId });
-        this.logger.debug(`logout - oauthAccessToken: ${oauthAccessToken}`);
+        this.logger.debug('logout - oauthAccessToken', { oauthAccessToken });
 
         if (provider === 'kakao') {
             await this.kakaoService.requestTokenExpiration(oauthAccessToken);
@@ -135,7 +135,7 @@ export class AuthService {
     async validateAccessToken(userId: number): Promise<boolean> {
         try {
             const result = await this.usersService.findOne({ id: userId });
-            this.logger.debug(`validateAccessToken - find User result:\n${JSON.stringify(result, null, 2)}`);
+            this.logger.debug('validateAccessToken - find User result', { ...result });
 
             return true;
         } catch {
