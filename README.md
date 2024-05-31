@@ -7,7 +7,7 @@
 <p align="center"> 견주와 반려견이 함께 산책을 통해 건강을 관리하자 “DangDangWalk App” ​입니다. <p/>
 <br><br>
 
-# 📖 프로젝트 소개
+# 🎯 프로젝트 소개
 
 ## 💡 서비스 기획 배경
 
@@ -69,3 +69,16 @@ git clone https://github.com/jihwooon/dangdang-walk.git
 ## 🚶‍♂️ 산책
 
 ![walking-flow](https://github.com/jihwooon/dangdang-walk/assets/71831926/bc8c6674-2023-4f56-ab1e-16b16963e0ab)
+
+# 📖 Wiki
+
+> 프로젝트 상세 정보는 [Wiki](https://github.com/jihwooon/dangdang-walk/wiki)에서 확인할 수 있습니다.
+
+1. [Business Requirements](https://github.com/jihwooon/dangdang-walk/wiki/1.-Business-Requirements)
+2. [Architecture](https://github.com/jihwooon/dangdang-walk/wiki/2.-Architecture)
+3. [Page Specifications](https://github.com/jihwooon/dangdang-walk/wiki/3.-Page-Specifications)
+4. [API](https://github.com/jihwooon/dangdang-walk/wiki/4.-API)
+5. [Technical Issue](https://github.com/jihwooon/dangdang-walk/wiki/5.-Technical-Issue)
+6. [Conventions](https://github.com/jihwooon/dangdang-walk/wiki/6.-Conventions)
+7. [Agile: Development Methology](https://github.com/jihwooon/dangdang-walk/wiki/7.-Agile:-Development-Methology)
+8. [Automation](https://github.com/jihwooon/dangdang-walk/wiki/8.-Automation)
