@@ -6,7 +6,7 @@ import { UpdateJournalDto } from './dtos/journal-update.dto';
 import { CreateJournalDto } from './dtos/journals-create.dto';
 import { AuthJournalGuard } from './guards/auth-journal.guard';
 import { JournalsService } from './journals.service';
-import { JournalInfoForList } from './types/journals-list-types';
+import { JournalInfoForList } from './types/journal-info.type';
 
 @Controller('/journals')
 export class JournalsController {

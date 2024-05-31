@@ -16,14 +16,14 @@ import { UpdateJournalDto } from './dtos/journal-update.dto';
 import { CreateJournalDto, ExcrementsInfoForCreate, JournalInfoForCreate } from './dtos/journals-create.dto';
 import { Journals } from './journals.entity';
 import { JournalsRepository } from './journals.repository';
+import { CreateJournalData } from './types/create-journal-data.type';
 import {
     DogInfoForDetail,
     ExcrementsInfoForDetail,
     JournalDetail,
     JournalInfoForDetail,
-} from './types/journals-detail-types';
-import { JournalInfoForList } from './types/journals-list-types';
-import { CreateJournalData } from './types/journals-types';
+} from './types/journal-detail.type';
+import { JournalInfoForList } from './types/journal-info.type';
 
 @Injectable()
 export class JournalsService {
