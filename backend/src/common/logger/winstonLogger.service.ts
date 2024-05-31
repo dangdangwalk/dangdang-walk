@@ -16,14 +16,10 @@ export class WinstonLoggerService implements LoggerService {
             fs.mkdirSync(logDir, { recursive: true });
         }
 
-        const consoleLogFormat = winston.format.printf(({ timestamp, level, message }) => {
+        const consoleLogFormat = winston.format.printf(({ timestamp, level, message, ...meta }) => {
             const seoulTimestamp = new Date(timestamp).toLocaleString('ko-KR');
-            return `${seoulTimestamp} | ${level}| ${message}`;
-        });
-
-        const fileLogFormat = winston.format.printf(({ timestamp, level, message }) => {
-            const seoulTimestamp = new Date(timestamp).toLocaleString('ko-KR');
-            return `${seoulTimestamp} | ${level}| ${stripAnsi(message)}`;
+            const metaString = Object.keys(meta).length > 0 ? `\n${JSON.stringify(meta, null, 2)}` : '';
+            return `${seoulTimestamp} | ${level}| ${message}${metaString}`;
         });
 
         const consoleFormat = winston.format.combine(
@@ -42,9 +38,9 @@ export class WinstonLoggerService implements LoggerService {
             maxSize: '20m',
             maxFiles: '14d',
             format: winston.format.combine(
-                winston.format((info) => ({ ...info, level: info.level.toUpperCase().padEnd(7) }))(),
+                winston.format((info) => ({ ...info, message: stripAnsi(info.message) }))(),
                 winston.format.timestamp(),
-                fileLogFormat
+                winston.format.json()
             ),
         });
 
@@ -56,9 +52,9 @@ export class WinstonLoggerService implements LoggerService {
             maxFiles: '14d',
             level: 'error',
             format: winston.format.combine(
-                winston.format((info) => ({ ...info, level: info.level.toUpperCase().padEnd(7) }))(),
+                winston.format((info) => ({ ...info, message: stripAnsi(info.message) }))(),
                 winston.format.timestamp(),
-                fileLogFormat
+                winston.format.json()
             ),
         });
 
@@ -71,19 +67,19 @@ export class WinstonLoggerService implements LoggerService {
         });
     }
 
-    log(message: string) {
-        this.logger.info(message);
+    log(message: string, meta?: any) {
+        this.logger.info(message, meta);
     }
 
-    error(message: string, trace: string) {
-        this.logger.error(message, { trace });
+    error(message: string, trace: string, meta?: any) {
+        this.logger.error(message, { trace, ...meta });
     }
 
-    warn(message: string) {
-        this.logger.warn(message);
+    warn(message: string, meta?: any) {
+        this.logger.warn(message, meta);
     }
 
-    debug(message: string, ...meta: any[]) {
+    debug(message: string, meta?: any) {
         this.logger.debug(message, meta);
     }
 }
