@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://create-react-app.dev/img/logo.svg" width="200" alt="Nest Logo" /></a>
+  <a href="https://create-react-app.dev/" target="blank"><img src="https://create-react-app.dev/img/logo.svg" width="200" alt="RCA Logo" /></a>
 </p>
 
 # 댕댕워크 Frontend 시작하기
