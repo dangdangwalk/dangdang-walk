@@ -15,7 +15,6 @@ import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity
 import { Journals } from './journals.entity';
 import { JournalsRepository } from './journals.repository';
 import { CreateExcrementsInfo, CreateJournalData, CreateJournalInfo } from './types/create-journal-data.type';
-import { JournalData } from './types/journal-data.type';
 import {
     DogInfoForDetail,
     ExcrementsInfoForDetail,
@@ -39,7 +38,7 @@ export class JournalsService {
         private readonly s3Service: S3Service
     ) {}
 
-    async create(entityData: JournalData): Promise<Journals> {
+    async create(entityData: Partial<Journals>): Promise<Journals> {
         const journals = new Journals(entityData);
         return this.journalsRepository.create(journals);
     }
@@ -133,7 +132,7 @@ export class JournalsService {
             throw error;
         }
     }
-    async createNewJournal(userId: number, journalInfo: JournalData) {
+    async createNewJournal(userId: number, journalInfo: Partial<Journals>) {
         if (!journalInfo.memo) {
             journalInfo.memo = '';
         }
@@ -156,9 +155,9 @@ export class JournalsService {
         }
     }
 
-    private makeJournalData(userId: number, createJournalData: CreateJournalData) {
-        const journalData: JournalData = makeSubObject(
-            createJournalData.journalInfo,
+    private makeJournalData(userId: number, createJournalInfo: CreateJournalInfo): Partial<Journals> {
+        const journalData: Partial<Journals> = makeSubObject(
+            createJournalInfo,
             CreateJournalInfo.getKeysForJournalTable()
         );
         journalData.userId = userId;
@@ -192,7 +191,7 @@ export class JournalsService {
     //@Transactional()
     async createJournal(userId: number, createJournalData: CreateJournalData) {
         const dogIds = createJournalData.dogs;
-        const journalData = this.makeJournalData(userId, createJournalData);
+        const journalData = this.makeJournalData(userId, createJournalData.journalInfo);
         const createJournalResult = await this.createNewJournal(userId, journalData);
         await this.journalsDogsService.createNewJournalDogs(createJournalResult.id, dogIds);
 
