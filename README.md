@@ -17,19 +17,30 @@
 
 ## ⭐ 주요 기능 소개
 
-- **산책 시간 기록**: 권장 산책 시간 대비 실제 산책 시간을 기록하여 반려견과 충분한 산책을 했는지 확인할 수 있습니다.
-- **건강 관리**: 산책 중 견주의 칼로리 소모량도 계산하여 반려견과 견주 모두의 건강을 관리할 수 있습니다.
+### 간편한 가입
+
+- 소셜 로그인(카카오, 구글, 네이버)을 통해 간편하게 가입할 수 있습니다.
+
+### 산책 기록
+
+- 반려견과 산책한 경로, 거리, 시간, 배변 횟수, 사진 등을 기록할 수 있습니다.
+- 월별, 주별 산책 통계를 확인할 수 있습니다.
+
+### 건강 관리
+
+- 견종별 하루 권장 산책 시간 대비 실제 산책 시간을 제공해 오늘 반려견과 충분한 산책을 했는지 확인할 수 있습니다.
+- 거리와 시간뿐만 아니라 견주의 칼로리 소모량도 계산하여 반려견과 견주 모두의 건강을 관리할 수 있습니다.
 
 ## 👥 팀원
 
-| 이름   | 포지션   | Github                       |
+| 이름   | 역할     | GitHub                       |
 | ------ | -------- | ---------------------------- |
-| 이길영 | FrontEnd | https://github.com/supremgy  |
-| 이준형 | FrontEnd | https://github.com/goddls123 |
-| 이민철 | FrontEnd | https://github.com/autroshot |
-| 조안나 | BackEnd  | https://github.com/opehn     |
-| 황재경 | BackEnd  | https://github.com/do0ori    |
-| 안지환 | BackEnd  | https://github.com/jihwooon  |
+| 이길영 | Frontend | https://github.com/supremgy  |
+| 이준형 | Frontend | https://github.com/goddls123 |
+| 이민철 | Frontend | https://github.com/autroshot |
+| 조안나 | Backend  | https://github.com/opehn     |
+| 황재경 | Backend  | https://github.com/do0ori    |
+| 안지환 | Backend  | https://github.com/jihwooon  |
 
 # 🚀 시작 가이드
 
@@ -47,7 +58,7 @@ git clone https://github.com/jihwooon/dangdang-walk.git
 
 ## ⚙️ Installation
 
-환경 설정 방법은 각각 backend, frontend 폴더에 있는 README 파일에서 확인할 수 있습니다.
+환경 설정 방법은 각각 `backend`, `frontend` 폴더에 있는 `README.md` 파일에서 확인할 수 있습니다.
 
 - [Backend 환경 설정 안내](https://github.com/jihwooon/dangdang-walk/tree/main/backend#readme)
 - [Frontend 환경 설정 안내](https://github.com/jihwooon/dangdang-walk/tree/main/frontend#readme)
@@ -56,7 +67,7 @@ git clone https://github.com/jihwooon/dangdang-walk.git
 
 ![기술스택](https://github.com/jihwooon/dangdang-walk/assets/71831926/de271659-a9b5-4dfd-91dc-c63d67781f72)
 
-# 🏗️ 아키텍쳐
+# 🏗️ 프로젝트 구조
 
 ![아키텍처](https://github.com/jihwooon/dangdang-walk/assets/68071599/96568db5-1ea5-4f4d-a2df-b5eaa432a250)
 
