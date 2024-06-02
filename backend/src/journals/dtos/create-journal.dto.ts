@@ -1,21 +1,21 @@
 import { Type } from 'class-transformer';
-import {
-    IsArray,
-    IsDefined,
-    IsNotEmpty,
-    IsNotEmptyObject,
-    IsNumber,
-    IsOptional,
-    IsString,
-    ValidateNested,
-} from 'class-validator';
-// TODO: 문자열이면서 숫자 범위를 넘지 않는지 확인하는 custom Validator 만들기..?
+import { IsArray, IsDefined, IsNotEmpty, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsWGS84 } from '../validator/WGS84.validator';
 export class Location {
-    @IsNumber()
+    @IsWGS84({ message: 'The provided point is not in WGS84 format' })
     lat: string;
 
-    @IsNumber()
+    @IsWGS84({ message: 'The provided point is not in WGS84 format' })
     lng: string;
+}
+
+//TODO: GeoJSON으로 넘어가기 전 임시로 사용
+export class journalLocation {
+    @IsNumber()
+    lat: number;
+
+    @IsNumber()
+    lng: number;
 }
 
 export class ExcrementsInfoForCreate {
@@ -49,8 +49,8 @@ export class JournalInfoForCreate {
 
     @IsArray()
     @ValidateNested()
-    @Type(() => Location)
-    routes: Location[];
+    @Type(() => journalLocation)
+    routes: journalLocation[];
 
     @IsOptional()
     memo: string;
@@ -61,18 +61,15 @@ export class JournalInfoForCreate {
 }
 
 export class CreateJournalDto {
-    @IsNotEmpty()
+    @IsDefined()
     dogs: number[];
 
     @IsDefined()
-    @IsNotEmptyObject()
-    @IsNotEmpty()
     @ValidateNested()
     @Type(() => JournalInfoForCreate)
     journalInfo: JournalInfoForCreate;
 
     @IsOptional()
-    @IsDefined()
     @ValidateNested()
     @Type(() => ExcrementsInfoForCreate)
     excrements: ExcrementsInfoForCreate[];

@@ -1,4 +1,17 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    ParseIntPipe,
+    Patch,
+    Post,
+    Query,
+    UseGuards,
+    UsePipes,
+    ValidationPipe,
+} from '@nestjs/common';
 import { AccessTokenPayload } from 'src/auth/token/token.service';
 import { DateValidationPipe } from 'src/statistics/pipes/date-validation.pipe';
 import { User } from 'src/users/decorators/user.decorator';
@@ -9,6 +22,7 @@ import { JournalsService } from './journals.service';
 import { JournalInfoForList } from './types/journal-info.type';
 
 @Controller('/journals')
+@UsePipes(new ValidationPipe({ validateCustomDecorators: true }))
 export class JournalsController {
     constructor(private readonly journalsService: JournalsService) {}
 
