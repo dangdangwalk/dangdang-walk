@@ -198,9 +198,11 @@ export class JournalsService {
         const photoUrls = this.checkPhotoUrlExist(createJournalData.journalInfo.photoUrls);
         await this.journalPhotosService.createNewPhotoUrls(createJournalResult.id, photoUrls);
 
-        const excrements: CreateExcrementsInfo[] = createJournalData.excrements;
-        if (excrements.length) {
-            await this.excrementsLoop(createJournalResult.id, excrements);
+        if (createJournalData.excrements) {
+            const excrements: CreateExcrementsInfo[] = createJournalData.excrements;
+            if (excrements.length) {
+                await this.excrementsLoop(createJournalResult.id, excrements);
+            }
         }
         await this.updateDogWalkDay(dogIds, (current: number) => (current += 1));
         await this.updateTodayWalkTime(
