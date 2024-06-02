@@ -10,7 +10,7 @@ export class CreateJournalInfo {
     distance: number;
     calories: number;
     startedAt: Date;
-    duration: string; //TODO: validation 완성되면 number로 변경
+    duration: number;
     routes: journalLocation[];
     memo: string;
     photoUrls: string[];
