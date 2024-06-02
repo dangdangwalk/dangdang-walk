@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Location } from 'src/journals/types/create-journal-data.type';
+import { Location } from 'src/journals/dtos/create-journal.dto';
 import { DeleteResult, FindManyOptions, FindOptionsWhere, UpdateResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { Excrements } from './excrements.entity';
