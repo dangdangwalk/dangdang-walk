@@ -1,7 +1,4 @@
-export interface Location {
-    lat: string;
-    lng: string;
-}
+import { Location, journalLocation } from '../dtos/create-journal.dto';
 
 export interface CreateExcrementsInfo {
     dogId: number;
@@ -13,8 +10,8 @@ export class CreateJournalInfo {
     distance: number;
     calories: number;
     startedAt: Date;
-    duration: string; //TODO: validation 완성되면 number로 변경
-    routes: Location[];
+    duration: number;
+    routes: journalLocation[];
     memo: string;
     photoUrls: string[];
 

@@ -1,21 +1,34 @@
 import { Type } from 'class-transformer';
 import {
     IsArray,
-    IsDefined,
+    IsDateString,
     IsNotEmpty,
-    IsNotEmptyObject,
     IsNumber,
     IsOptional,
     IsString,
+    Max,
+    Min,
     ValidateNested,
 } from 'class-validator';
-// TODO: 문자열이면서 숫자 범위를 넘지 않는지 확인하는 custom Validator 만들기..?
+import { IsWGS84 } from '../validator/WGS84.validator';
+
 export class Location {
-    @IsNumber()
+    @IsWGS84({ message: 'The provided point is not in WGS84 format' })
+    @IsString()
     lat: string;
 
-    @IsNumber()
+    @IsWGS84({ message: 'The provided point is not in WGS84 format' })
+    @IsString()
     lng: string;
+}
+
+//TODO: GeoJSON으로 넘어가기 전 임시로 사용
+export class journalLocation {
+    @IsNumber()
+    lat: number;
+
+    @IsNumber()
+    lng: number;
 }
 
 export class ExcrementsInfoForCreate {
@@ -35,44 +48,53 @@ export class ExcrementsInfoForCreate {
 
 export class JournalInfoForCreate {
     @IsNotEmpty()
+    @Max(100000) //TODO: 합의 필요
+    @Min(0)
     distance: number;
 
     @IsNotEmpty()
+    @Max(10800) //TODO: 합의 필요
+    @Min(0)
     calories: number;
 
     @IsNotEmpty()
+    @IsDateString()
     startedAt: Date;
 
-    //TODO: validation 완성되면 number로 변경
     @IsNotEmpty()
-    duration: string;
+    @IsNumber()
+    @Max(10800) //TODO: 합의 필요
+    @Min(0)
+    duration: number;
 
     @IsArray()
     @ValidateNested()
-    @Type(() => Location)
-    routes: Location[];
+    @Type(() => journalLocation)
+    routes: journalLocation[];
 
     @IsOptional()
+    @IsString()
     memo: string;
 
     @IsOptional()
+    @IsArray()
     @IsString({ each: true })
     photoUrls: string[];
 }
 
 export class CreateJournalDto {
     @IsNotEmpty()
+    @IsArray()
+    @IsNumber({}, { each: true })
     dogs: number[];
 
-    @IsDefined()
-    @IsNotEmptyObject()
     @IsNotEmpty()
     @ValidateNested()
     @Type(() => JournalInfoForCreate)
     journalInfo: JournalInfoForCreate;
 
     @IsOptional()
-    @IsDefined()
+    @IsArray()
     @ValidateNested()
     @Type(() => ExcrementsInfoForCreate)
     excrements: ExcrementsInfoForCreate[];
