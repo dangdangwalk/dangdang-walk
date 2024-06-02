@@ -1,11 +1,12 @@
-import { IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsArray, IsOptional, IsString } from 'class-validator';
 
 export class UpdateJournalDto {
     @IsOptional()
+    @IsString()
     memo: string;
 
     @IsOptional()
-    @ValidateNested()
+    @IsArray()
     @IsString({ each: true })
     photoUrls: string[];
 }

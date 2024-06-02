@@ -207,7 +207,7 @@ export class JournalsService {
         await this.updateDogWalkDay(dogIds, (current: number) => (current += 1));
         await this.updateTodayWalkTime(
             dogIds,
-            parseInt(createJournalData.journalInfo.duration),
+            createJournalData.journalInfo.duration,
             (current: number, value: number) => current + value
         );
     }
