@@ -26,44 +26,30 @@ export function checkIfExistsInArr<T>(targetArr: T[], toFind: T | T[]): boolean 
  * 생성된 객체들은 최종 결과 배열에 추가됩니다.
  *
  * @param {any[]} targetArr - 속성을 추출할 소스 배열입니다.
- * @param {(string|string[])} targetAttributes - 결과 객체의 키로 사용할 속성 이름입니다.
+ * @param {(string|string[])} newAttributes - 결과 객체의 키로 사용할 속성 이름입니다.
  * 단일 문자열 또는 속성 이름의 배열을 받을 수 있습니다.
  * @param {(string|string[])} srcAttributes - 소스 배열의 각 요소에서 속성을 추출할 속성 이름입니다.
  * 단일 문자열 또는 속성 이름의 배열을 받을 수 있습니다.
  * @returns {any[]} 결과 객체들의 배열입니다.
- *
- * @example
- * const data = [
- *     { id: 1, name: 'Alice', age: 30 },
- *     { id: 2, name: 'Bob', age: 25 }
- * ];
- * const targetAttrs = ['name'];
- * const srcAttrs = ['age'];
- * const result = makeSubObjectsArray(data, targetAttrs, srcAttrs);
- * console.log(result);
- * // 출력:
- * // [
- * //     { name: 30 },
- * //     { name: 25 }
- * // ]
- */
+ **/
 
 export function makeSubObjectsArray(
     targetArr: any[],
     srcAttributes: string | string[],
-    targetAttributes?: string | string[],
+    newAttributes?: string | string[],
 ): any[] {
     const resArr: any[] = [];
-    targetAttributes = targetAttributes ?? srcAttributes;
+    newAttributes = newAttributes ?? srcAttributes;
     Array.isArray(srcAttributes) ? srcAttributes : [srcAttributes];
-    Array.isArray(targetAttributes) ? targetAttributes : [targetAttributes];
-    if (srcAttributes.length != targetAttributes.length) {
+    Array.isArray(newAttributes) ? newAttributes : [newAttributes];
+
+    if (srcAttributes.length != newAttributes.length) {
         throw new Error('srcAttributes and targetAttributes must have same length');
     }
     targetArr.map((cur) => {
         const obj: { [key: string]: any } = {};
         for (let i = 0; i < srcAttributes.length; i++) {
-            obj[`${targetAttributes[i]}`] = cur[`${srcAttributes[i]}`];
+            obj[`${srcAttributes[i]}`] = cur[`${newAttributes[i]}`];
         }
         resArr.push(obj);
     });
