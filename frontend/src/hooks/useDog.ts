@@ -18,7 +18,7 @@ const useRegisterDog = (mutationOptions?: UseMutationCustomOptions) => {
 };
 
 const useFetchDogs = () => {
-    return useQuery<ResponseDogs[]>({
+    return useQuery<ResponseDogs[] | undefined>({
         queryKey: [queryKeys.DOGS],
         queryFn: fetchDogs,
     });

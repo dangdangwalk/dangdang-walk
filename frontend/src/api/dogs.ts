@@ -1,6 +1,8 @@
 import { httpClient } from '@/api/http';
 import { DogRegInfo } from '@/pages/Join';
 import { AvailableDog, Dog, DogStatistic } from '@/models/dog.model';
+import { getStorage } from '@/utils/storage';
+import { tokenKeys } from '@/constants';
 export type period = 'week' | 'month';
 export const fetchDogStatistic = async (): Promise<DogStatistic[]> => {
     const { data } = await httpClient.get('/dogs/statistics');
@@ -31,8 +33,13 @@ export interface ResponseDogs {
     isNeutered: boolean;
     profilePhotoUrl: string | null;
 }
-export const fetchDogs = async (): Promise<ResponseDogs[]> => {
-    const { data } = await httpClient.get<ResponseDogs[]>('/dogs');
+export const fetchDogs = async (): Promise<ResponseDogs[] | undefined> => {
+    const isLoggedIn = getStorage(tokenKeys.AUTHORIZATION) ? true : false;
+    let data: ResponseDogs[] | undefined;
+    if (isLoggedIn) {
+        const response = await httpClient.get<ResponseDogs[]>('/dogs');
+        data = response.data;
+    }
     return data;
 };
 
