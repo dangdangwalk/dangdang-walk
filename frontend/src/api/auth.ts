@@ -7,9 +7,8 @@ export type ResponseToken = {
     accessToken: string;
 };
 
-const isLoggedIn = getStorage(tokenKeys.AUTHORIZATION) ? true : false;
-
 const getAccessToken = async (): Promise<ResponseToken | undefined> => {
+    const isLoggedIn = getStorage(tokenKeys.AUTHORIZATION) ? true : false;
     let data: ResponseToken | undefined;
 
     if (isLoggedIn) {
@@ -49,6 +48,7 @@ export type ResponseProfile = {
     provider: string;
 };
 const requestProfile = async (): Promise<ResponseProfile | undefined> => {
+    const isLoggedIn = getStorage(tokenKeys.AUTHORIZATION) ? true : false;
     let data: ResponseProfile | undefined;
     if (isLoggedIn) {
         const response: AxiosResponse = await httpClient.get('/users/me');
