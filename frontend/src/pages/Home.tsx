@@ -11,10 +11,8 @@ import useDogsStatistic from '@/hooks/useDogsStatistic';
 import { useNavigate } from 'react-router-dom';
 import useWalkAvailabeDog from '@/hooks/useWalkAvailabeDog';
 import Spinner from '@/components/common/Spinner';
-import { useAuth } from '@/hooks/useAuth';
 import RegisterCard from '@/components/home/RegisterCard';
 import { queryStringKeys } from '@/constants';
-import { useAuthStore } from '@/store/authStore';
 
 function Home() {
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
@@ -25,11 +23,7 @@ function Home() {
         toggleCheck: handleToggle,
         changeCheckAll: handleCheckAll,
     } = useWalkAvailabeDog();
-    const { refreshTokenQuery } = useAuth();
-    const { isLoggedIn } = useAuthStore();
-    const { dogs, isDogsPending } = useDogsStatistic(isLoggedIn, {
-        enabled: refreshTokenQuery.isSuccess,
-    });
+    const { dogs, isDogsPending } = useDogsStatistic();
     const navigate = useNavigate();
     const handleBottomSheet = () => {
         if (!isDogBottomsheetOpen) {
