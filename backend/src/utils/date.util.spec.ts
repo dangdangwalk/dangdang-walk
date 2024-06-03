@@ -1,5 +1,6 @@
 import {
     formatDate,
+    getLastSunday,
     getOneMonthAgo,
     getStartAndEndOfDay,
     getStartAndEndOfMonth,
@@ -59,5 +60,13 @@ describe('getOneMonthAgo', () => {
         const oneMonthAgoDate = getOneMonthAgo(date);
 
         expect(formatDate(oneMonthAgoDate)).toBe('2024-02-01');
+    });
+});
+
+describe('getLastSunday', () => {
+    it('현재 날짜의 마지막 일요일을 반환한다', () => {
+        const lastSunday = getLastSunday();
+
+        expect(formatDate(lastSunday)).toEqual(expect.any(String));
     });
 });
