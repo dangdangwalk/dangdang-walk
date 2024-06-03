@@ -70,7 +70,9 @@ export class TokenService {
             ignoreExpiration: false,
         });
 
-        if ('userId' in payload) payload.userId = parseInt(payload.userId);
+        if ('userId' in payload) {
+            payload.userId = parseInt(payload.userId);
+        }
 
         return payload;
     }
