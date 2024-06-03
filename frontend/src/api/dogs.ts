@@ -2,7 +2,7 @@ import { httpClient } from '@/api/http';
 import { DogRegInfo } from '@/pages/Join';
 import { AvailableDog, Dog, DogStatistic } from '@/models/dog.model';
 import { getStorage } from '@/utils/storage';
-import { tokenKeys } from '@/constants';
+import { storageKeys } from '@/constants';
 export type period = 'week' | 'month';
 export const fetchDogStatistic = async (): Promise<DogStatistic[]> => {
     const { data } = await httpClient.get('/dogs/statistics');
@@ -34,7 +34,7 @@ export interface ResponseDogs {
     profilePhotoUrl: string | null;
 }
 export const fetchDogs = async (): Promise<ResponseDogs[] | undefined> => {
-    const isLoggedIn = getStorage(tokenKeys.AUTHORIZATION) ? true : false;
+    const isLoggedIn = getStorage(storageKeys.IS_LOGGED_IN) ? true : false;
     let data: ResponseDogs[] | undefined;
     if (isLoggedIn) {
         const response = await httpClient.get<ResponseDogs[]>('/dogs');

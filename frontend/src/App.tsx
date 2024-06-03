@@ -3,8 +3,10 @@ import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useSpinnerStore } from '@/store/spinnerStore';
 import Spinner from '@/components/common/Spinner';
+import { useAuth } from '@/hooks/useAuth';
 // var console;
 function App() {
+    useAuth();
     const { spinner } = useSpinnerStore();
     //TODO: 일시적인 배포시 console.log 제거 추가로 환경설정으로 빼줘야함ㄴ
     // if (process.env.NODE_ENV === 'production') {
