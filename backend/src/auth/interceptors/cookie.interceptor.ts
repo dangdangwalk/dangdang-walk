@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { CookieOptions, Response } from 'express';
 import { Observable, map } from 'rxjs';
 import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
-import { TOKEN_LIFETIME_MAP } from '../token/token.service';
+import { TokenService } from '../token/token.service';
 import { AuthData } from '../types/auth-data.type';
 import { OauthData } from '../types/oauth-data.type';
 
@@ -24,7 +24,7 @@ export class CookieInterceptor implements NestInterceptor {
 
     private readonly refreshCookieOptions: CookieOptions = {
         ...this.sessionCookieOptions,
-        maxAge: TOKEN_LIFETIME_MAP.refresh.maxAge,
+        maxAge: TokenService.TOKEN_LIFETIME_MAP.refresh.maxAge,
     };
 
     intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any> | Promise<Observable<any>> {
