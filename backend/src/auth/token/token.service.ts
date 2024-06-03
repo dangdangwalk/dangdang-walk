@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { parse } from '../../utils/ms.util';
 import { OauthProvider } from '../types/oauth-provider.type';
@@ -21,17 +22,22 @@ type TokenExpiryMap = {
     };
 };
 
-const ACCESS_TOKEN_LIFETIME = process.env.ACCESS_TOKEN_LIFETIME || '1h';
-const REFRESH_TOKEN_LIFETIME = process.env.REFRESH_TOKEN_LIFETIME || '14d';
-
-export const TOKEN_LIFETIME_MAP: TokenExpiryMap = {
-    access: { expiresIn: ACCESS_TOKEN_LIFETIME, maxAge: parse(ACCESS_TOKEN_LIFETIME) },
-    refresh: { expiresIn: REFRESH_TOKEN_LIFETIME, maxAge: parse(REFRESH_TOKEN_LIFETIME) },
-};
-
 @Injectable()
 export class TokenService {
-    constructor(private readonly jwtService: JwtService) {}
+    static TOKEN_LIFETIME_MAP: TokenExpiryMap;
+
+    constructor(
+        private readonly jwtService: JwtService,
+        private readonly configService: ConfigService
+    ) {
+        const ACCESS_TOKEN_LIFETIME = this.configService.get<string>('ACCESS_TOKEN_LIFETIME', '1h');
+        const REFRESH_TOKEN_LIFETIME = this.configService.get<string>('REFRESH_TOKEN_LIFETIME', '14d');
+
+        TokenService.TOKEN_LIFETIME_MAP = {
+            access: { expiresIn: ACCESS_TOKEN_LIFETIME, maxAge: parse(ACCESS_TOKEN_LIFETIME) },
+            refresh: { expiresIn: REFRESH_TOKEN_LIFETIME, maxAge: parse(REFRESH_TOKEN_LIFETIME) },
+        };
+    }
 
     signAccessToken(userId: number, provider: OauthProvider) {
         const payload: AccessTokenPayload = {
@@ -40,7 +46,7 @@ export class TokenService {
         };
 
         const newToken = this.jwtService.sign(payload, {
-            expiresIn: TOKEN_LIFETIME_MAP.access.expiresIn,
+            expiresIn: TokenService.TOKEN_LIFETIME_MAP.access.expiresIn,
         });
 
         return newToken;
@@ -53,7 +59,7 @@ export class TokenService {
         };
 
         const newToken = this.jwtService.sign(payload, {
-            expiresIn: TOKEN_LIFETIME_MAP.refresh.expiresIn,
+            expiresIn: TokenService.TOKEN_LIFETIME_MAP.refresh.expiresIn,
         });
 
         return newToken;
