@@ -55,7 +55,9 @@ export type StringValue = `${number}` | `${number}${UnitAnyCase}` | `${number} $
  */
 function msFn(value: StringValue): number {
     try {
-        if (typeof value === 'string') return parse(value);
+        if (typeof value === 'string') {
+            return parse(value);
+        }
         throw new Error('Value provided to ms() must be a string or number.');
     } catch (error) {
         const message = isError(error)

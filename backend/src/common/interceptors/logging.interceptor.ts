@@ -44,7 +44,9 @@ export class LoggingInterceptor implements NestInterceptor {
                 const responseTime = endTime - startTime;
 
                 let responseTimeColor: Color = 'Yellow';
-                if (responseTime > 1000) responseTimeColor = 'Red';
+                if (responseTime > 1000) {
+                    responseTimeColor = 'Red';
+                }
 
                 this.logger.log(
                     `${color('RESPONSE', 'Magenta')} [ ${bold(method)} | ${bold(url)} | ${ip} | ${statusCode} | ${color(`+${responseTime}ms`, responseTimeColor)} ] ${color(requestId, 'Black')}`

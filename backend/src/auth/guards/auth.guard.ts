@@ -22,10 +22,14 @@ export class AuthGuard implements CanActivate {
             context.getClass(),
         ]);
 
-        if (skipAuthGuard) return true;
+        if (skipAuthGuard) {
+            return true;
+        }
 
         const request = context.switchToHttp().getRequest();
-        if (request.url === '/metrics') return true;
+        if (request.url === '/metrics') {
+            return true;
+        }
 
         const token = this.extractTokenFromHeader(request);
         if (!token) {

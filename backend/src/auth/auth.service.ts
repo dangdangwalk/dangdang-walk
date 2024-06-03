@@ -102,7 +102,9 @@ export class AuthService {
 
         const attr: Partial<Users> = { oauthAccessToken: newOauthAccessToken, refreshToken: newRefreshToken };
 
-        if (newOauthRefreshToken) attr.oauthRefreshToken = newOauthRefreshToken;
+        if (newOauthRefreshToken) {
+            attr.oauthRefreshToken = newOauthRefreshToken;
+        }
 
         this.usersService.update({ id: userId }, attr);
 
