@@ -2,9 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { S3Service } from 'src/s3/s3.service';
 import { UsersDogs } from 'src/users-dogs/users-dogs.entity';
 import { makeSubObjectsArray } from 'src/utils/manipulate.util';
-import { EntityManager, FindOptionsWhere, In, UpdateResult } from 'typeorm';
+import { EntityManager, FindOptionsWhere, In } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
-import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { BreedService } from '../breed/breed.service';
 import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
 import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
@@ -57,7 +56,7 @@ export class DogsService {
 
     @Transactional()
     async deleteDogFromUser(userId: number, dogId: number) {
-        const dog = await this.findOne({ id: dogId });
+        const dog = await this.dogsRepository.findOne({ id: dogId });
 
         await this.dogWalkDayService.delete({ id: dog.walkDayId });
         await this.todayWalkTimeService.delete({ id: dog.todayWalkTimeId });
@@ -72,10 +71,6 @@ export class DogsService {
         return this.dogsRepository.findOne(where);
     }
 
-    async update(where: FindOptionsWhere<Dogs>, partialEntity: QueryDeepPartialEntity<Dogs>): Promise<UpdateResult> {
-        return await this.dogsRepository.update(where, partialEntity);
-    }
-
     async updateDog(userId: number, dogId: number, dogDto: Partial<DogData>) {
         const { breed: breedName, ...otherAttributes } = dogDto;
         let breed;
@@ -85,14 +80,14 @@ export class DogsService {
         }
 
         if (dogDto.profilePhotoUrl) {
-            const curDogInfo = await this.findOne({ id: dogId });
+            const curDogInfo = await this.dogsRepository.findOne({ id: dogId });
             if (curDogInfo && curDogInfo.profilePhotoUrl) {
                 await this.s3Service.deleteSingleObject(userId, curDogInfo.profilePhotoUrl);
             }
         }
 
         const updateData = breed ? { breedId: breed.id, ...otherAttributes } : otherAttributes;
-        return this.update({ id: dogId }, updateData);
+        return this.dogsRepository.update({ id: dogId }, updateData);
     }
 
     async updateIsWalking(dogIds: number[] | number, stateToUpdate: boolean) {
@@ -101,9 +96,9 @@ export class DogsService {
         };
 
         if (Array.isArray(dogIds)) {
-            await this.update({ id: In(dogIds) }, attrs);
+            await this.dogsRepository.update({ id: In(dogIds) }, attrs);
         } else {
-            await this.update({ id: dogIds }, attrs);
+            await this.dogsRepository.update({ id: dogIds }, attrs);
         }
 
         return dogIds;

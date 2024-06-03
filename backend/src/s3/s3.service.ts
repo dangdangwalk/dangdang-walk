@@ -18,7 +18,7 @@ export class S3Service {
         this.s3Client = new S3Client({ region: this.configService.getOrThrow('AWS_S3_REGION') });
     }
 
-    makeFileName(userId: number, type: string[]): string[] {
+    private makeFileName(userId: number, type: string[]): string[] {
         return type.map((curType) => `${userId}/${generateUuid()}.${curType}`);
     }
 

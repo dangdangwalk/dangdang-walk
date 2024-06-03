@@ -1,8 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
 import { getStartOfToday } from 'src/utils/date.util';
-import { FindManyOptions, FindOptionsWhere, In, UpdateResult } from 'typeorm';
-import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { FindOptionsWhere, In } from 'typeorm';
 import { TodayWalkTime } from './today-walk-time.entity';
 import { TodayWalkTimeRepository } from './today-walk-time.repository';
 
@@ -13,29 +12,14 @@ export class TodayWalkTimeService {
         private readonly logger: WinstonLoggerService
     ) {}
 
-    async find(where: FindManyOptions<TodayWalkTime>): Promise<TodayWalkTime[]> {
-        return this.todayWalkTimeRepository.find(where);
-    }
-
-    async findOne(where: FindOptionsWhere<TodayWalkTime>): Promise<TodayWalkTime> {
-        return this.todayWalkTimeRepository.findOne(where);
-    }
-
-    async update(
-        where: FindOptionsWhere<TodayWalkTime>,
-        partialEntity: QueryDeepPartialEntity<TodayWalkTime>
-    ): Promise<UpdateResult> {
-        return this.todayWalkTimeRepository.update(where, partialEntity);
-    }
-
     async delete(where: FindOptionsWhere<TodayWalkTime>) {
         return this.todayWalkTimeRepository.delete(where);
     }
 
-    async checkDayPassed(walkTimeId: number, updatedAt: Date) {
+    private async checkDayPassed(walkTimeId: number, updatedAt: Date) {
         const startOfToday = getStartOfToday();
         if (updatedAt < startOfToday) {
-            await this.update({ id: walkTimeId }, { duration: 0 });
+            await this.todayWalkTimeRepository.update({ id: walkTimeId }, { duration: 0 });
         }
     }
 
@@ -45,9 +29,9 @@ export class TodayWalkTimeService {
         operation: (current: number, operand: number) => number
     ) {
         for (const curWalkTimeId of todayWalkTimeIds) {
-            const walkTimeInfo = await this.findOne({ id: curWalkTimeId });
+            const walkTimeInfo = await this.todayWalkTimeRepository.findOne({ id: curWalkTimeId });
             const updateDuration = operation(walkTimeInfo.duration, duration);
-            this.update({ id: curWalkTimeId }, { duration: updateDuration });
+            this.todayWalkTimeRepository.update({ id: curWalkTimeId }, { duration: updateDuration });
         }
     }
 

@@ -3,7 +3,6 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './common/database/database.module';
 import { HealthController } from './common/health/health.controller';
@@ -33,7 +32,6 @@ import { WalkModule } from './walk/walk.module';
     ],
     controllers: [AppController, HealthController],
     providers: [
-        AppService,
         {
             provide: APP_INTERCEPTOR,
             useClass: PrometheusInterceptor,

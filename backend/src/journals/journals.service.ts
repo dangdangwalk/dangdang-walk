@@ -8,9 +8,9 @@ import { JournalsDogs } from 'src/journals-dogs/journals-dogs.entity';
 import { JournalsDogsService } from 'src/journals-dogs/journals-dogs.service';
 import { S3Service } from 'src/s3/s3.service';
 import { TodayWalkTimeService } from 'src/today-walk-time/today-walk-time.service';
-import { formatDate, getStartAndEndOfDay, getStartAndEndOfMonth, getStartAndEndOfWeek } from 'src/utils/date.util';
+import { formatDate, getStartAndEndOfDay } from 'src/utils/date.util';
 import { checkIfExistsInArr, makeSubObject, makeSubObjectsArray } from 'src/utils/manipulate.util';
-import { DeleteResult, EntityManager, FindManyOptions, FindOptionsWhere, In, UpdateResult } from 'typeorm';
+import { DeleteResult, EntityManager, FindOptionsWhere, In } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { Journals } from './journals.entity';
 import { JournalsRepository } from './journals.repository';
@@ -38,36 +38,27 @@ export class JournalsService {
         private readonly s3Service: S3Service
     ) {}
 
-    async create(entityData: Partial<Journals>): Promise<Journals> {
+    private async create(entityData: Partial<Journals>): Promise<Journals> {
         const journals = new Journals(entityData);
         return this.journalsRepository.create(journals);
     }
 
-    async find(where: FindManyOptions<Journals>) {
-        return this.journalsRepository.find(where);
-    }
-
-    async findOne(where: FindOptionsWhere<Journals>): Promise<Journals> {
-        return await this.journalsRepository.findOne(where);
-    }
-
-    async update(
-        where: FindOptionsWhere<Journals>,
-        partialEntity: QueryDeepPartialEntity<Journals>
-    ): Promise<UpdateResult> {
-        return this.journalsRepository.update(where, partialEntity);
-    }
-
-    async delete(journalId: number): Promise<DeleteResult> {
+    private async delete(journalId: number): Promise<DeleteResult> {
         const where: FindOptionsWhere<Journals> = { id: journalId };
         return this.journalsRepository.delete(where);
     }
 
-    async updateAndFindOne(
+    private async updateAndFindOne(
         where: FindOptionsWhere<Journals>,
         partialEntity: QueryDeepPartialEntity<Journals>
     ): Promise<Journals | null> {
         return this.journalsRepository.updateAndFindOne(where, partialEntity);
+    }
+
+    private async getOwnJournalIds(userId: number): Promise<number[]> {
+        const ownJournals = await this.journalsRepository.find({ where: { userId: userId } });
+
+        return ownJournals.map((cur) => cur.id);
     }
 
     async checkJournalOwnership(userId: number, journalIds: number | number[]): Promise<boolean> {
@@ -75,14 +66,8 @@ export class JournalsService {
         return checkIfExistsInArr(myJournalIds, journalIds);
     }
 
-    async getOwnJournalIds(userId: number): Promise<number[]> {
-        const ownJournals = await this.journalsRepository.find({ where: { userId: userId } });
-
-        return ownJournals.map((cur) => cur.id);
-    }
-
     async getJournalInfoForDetail(journalId: number): Promise<JournalInfoForDetail> {
-        const journalInfoRaw = await this.findOne({ id: journalId });
+        const journalInfoRaw = await this.journalsRepository.findOne({ id: journalId });
         const journalInfo = makeSubObject(journalInfoRaw, JournalInfoForDetail.getKeysForJournalTable());
         journalInfo.id = journalId;
         journalInfo.routes = JSON.parse(journalInfo.routes);
@@ -166,12 +151,12 @@ export class JournalsService {
         return journalData;
     }
 
-    async updateDogWalkDay(dogIds: number[], operation: (current: number) => number) {
+    private async updateDogWalkDay(dogIds: number[], operation: (current: number) => number) {
         const dogWalkDayIds = await this.dogsService.getRelatedTableIdList(dogIds, 'walkDayId');
         await this.dogWalkDayService.updateValues(dogWalkDayIds, operation);
     }
 
-    async updateTodayWalkTime(
+    private async updateTodayWalkTime(
         dogIds: number[],
         duration: number,
         operation: (current: number, operand: number) => number
@@ -204,6 +189,7 @@ export class JournalsService {
                 await this.excrementsLoop(createJournalResult.id, excrements);
             }
         }
+
         await this.updateDogWalkDay(dogIds, (current: number) => (current += 1));
         await this.updateTodayWalkTime(
             dogIds,
@@ -212,7 +198,7 @@ export class JournalsService {
         );
     }
 
-    //@Transactional()
+    // @Transactional()
     async updateJournal(journalId: number, updateJournalData: UpdateJournalData) {
         if (updateJournalData.memo) {
             await this.updateAndFindOne({ id: journalId }, { memo: updateJournalData.memo });
@@ -231,7 +217,7 @@ export class JournalsService {
     async deleteJournal(userId: number, journalId: number) {
         const photoUrls: string[] = await this.journalPhotosService.getPhotoUrlsByJournalId(journalId);
         const dogIds: number[] = await this.journalsDogsService.getDogIdsByJournalId(journalId);
-        const journalInfo = await this.findOne({ id: journalId });
+        const journalInfo = await this.journalsRepository.findOne({ id: journalId });
 
         await this.updateDogWalkDay(dogIds, (current: number) => (current -= 1));
         await this.updateTodayWalkTime(
@@ -243,7 +229,7 @@ export class JournalsService {
         await this.delete(journalId);
     }
 
-    async findJournals(userId: number, dogId: number, startDate: Date, endDate: Date): Promise<Journals[]> {
+    private async findJournals(userId: number, dogId: number, startDate: Date, endDate: Date): Promise<Journals[]> {
         return this.entityManager
             .createQueryBuilder(Journals, 'journals')
             .innerJoin(JournalsDogs, 'journals_dogs', 'journals.id = journals_dogs.journal_id')
@@ -254,7 +240,9 @@ export class JournalsService {
             .getMany();
     }
 
-    async getTotal(journals: Journals[]): Promise<{ totalWalkCnt: number; totalDistance: number; totalTime: number }> {
+    private async getTotal(
+        journals: Journals[]
+    ): Promise<{ totalWalkCnt: number; totalDistance: number; totalTime: number }> {
         const totalDistance = journals.reduce((acc, journal) => acc + journal.distance, 0);
         const totalTime = journals.reduce((acc, journal) => acc + journal.duration, 0);
         return { totalWalkCnt: journals.length, totalDistance, totalTime };
@@ -303,17 +291,7 @@ export class JournalsService {
         return this.aggregateJournalsByDay(dogJournals, startDate, endDate);
     }
 
-    async getDogStatisticsByMonth(userId: number, dogId: number, date: string) {
-        const { startDate, endDate } = getStartAndEndOfMonth(new Date(date));
-        return this.findJournalsAndAggregateByDay(userId, dogId, startDate, endDate);
-    }
-
-    async getDogStatisticsByWeek(userId: number, dogId: number, date: string) {
-        const { startDate, endDate } = getStartAndEndOfWeek(new Date(date));
-        return this.findJournalsAndAggregateByDay(userId, dogId, startDate, endDate);
-    }
-
-    async getJournalIdsByDogIdAndDate(dogId: number, date: string): Promise<number[]> {
+    private async getJournalIdsByDogIdAndDate(dogId: number, date: string): Promise<number[]> {
         const startEndDate = getStartAndEndOfDay(new Date(date));
         const result = await this.entityManager
             .createQueryBuilder(Journals, 'journals')
@@ -342,7 +320,7 @@ export class JournalsService {
         if (!journalIds.length) {
             return [];
         }
-        const journalInfosRaw = await this.find({ where: { id: In(journalIds) } });
+        const journalInfosRaw = await this.journalsRepository.find({ where: { id: In(journalIds) } });
         const journalInfos = await makeSubObjectsArray(
             journalInfosRaw,
             JournalInfoForList.getAttributesForJournalTable(),
