@@ -6,7 +6,7 @@ import { UsersService } from '../../users/users.service';
 export class AuthDogGuard implements CanActivate {
     constructor(
         private readonly usersService: UsersService,
-        private readonly logger: WinstonLoggerService
+        private readonly logger: WinstonLoggerService,
     ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {

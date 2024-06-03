@@ -21,14 +21,14 @@ export class StatisticsService {
         private readonly dogWalkDayService: DogWalkDayService,
         private readonly todayWalkTimeService: TodayWalkTimeService,
         private readonly journalsService: JournalsService,
-        private readonly logger: WinstonLoggerService
+        private readonly logger: WinstonLoggerService,
     ) {}
 
     private makeStatisticData(
         dogProfiles: DogSummary[],
         recommendedWalkAmount: number[],
         todayWalkAmount: number[],
-        weeklyWalks: number[][]
+        weeklyWalks: number[][],
     ): DogStatistic[] {
         const result: DogStatistic[] = [];
         for (let i = 0; i < dogProfiles.length; i++) {
@@ -90,7 +90,7 @@ export class StatisticsService {
             const error = new NotFoundException(`Data missing or mismatched for dogId: ${ownDogIds}.`);
             this.logger.error(
                 `Data missing or mismatched for dogId: ${ownDogIds}. Expected length: ${length}. Mismatched data: ${mismatchedLengths.join(', ')}`,
-                error.stack ?? 'No stack'
+                error.stack ?? 'No stack',
             );
             throw error;
         }

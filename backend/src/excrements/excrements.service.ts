@@ -26,7 +26,7 @@ export class ExcrementsService {
         journalId: number,
         dogId: number,
         type: Excrement,
-        location: Location
+        location: Location,
     ): Promise<Excrements> {
         const coordinate = this.makeCoordinate(location.lat, location.lng);
         const data: Partial<Excrements> = { journalId, dogId, type, coordinate };

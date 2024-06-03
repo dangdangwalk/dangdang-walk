@@ -9,7 +9,7 @@ export class JournalPhotosService {
 
     private async createIfNotExists(
         data: Partial<JournalPhotos>,
-        keys: (keyof JournalPhotos)[]
+        keys: (keyof JournalPhotos)[],
     ): Promise<JournalPhotos> {
         const newEntity = new JournalPhotos(data);
         return this.journalPhotosRepository.createIfNotExists(newEntity, keys);

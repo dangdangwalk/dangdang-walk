@@ -41,7 +41,7 @@ export class PrometheusInterceptor implements NestInterceptor, OnModuleInit {
                 name: `${serviceInfo.domain}.${serviceInfo.name}`,
                 version: serviceInfo.version,
             },
-            1
+            1,
         );
 
         return new PrometheusInterceptor();
@@ -83,7 +83,7 @@ export class PrometheusInterceptor implements NestInterceptor, OnModuleInit {
                             this.failureCounter.labels({ ...labels }).inc(1);
                         }
                     },
-                })
+                }),
             );
         } catch (error) {}
     }

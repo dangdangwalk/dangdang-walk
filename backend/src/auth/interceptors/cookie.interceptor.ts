@@ -11,7 +11,7 @@ import { OauthData } from '../types/oauth-data.type';
 export class CookieInterceptor implements NestInterceptor {
     constructor(
         private configService: ConfigService,
-        private logger: WinstonLoggerService
+        private logger: WinstonLoggerService,
     ) {}
 
     private readonly isProduction = this.configService.get<string>('NODE_ENV') === 'prod';
@@ -48,7 +48,7 @@ export class CookieInterceptor implements NestInterceptor {
                     this.logger.error(`No matching user found`, error.stack ?? 'No Stack');
                     throw error;
                 }
-            })
+            }),
         );
     }
 

@@ -6,7 +6,7 @@ import { Excrements } from '../excrements/excrements.entity';
 export class ExcrementsRepository extends AbstractRepository<Excrements> {
     constructor(
         @InjectRepository(Excrements) excrementsRepository: Repository<Excrements>,
-        entityManager: EntityManager
+        entityManager: EntityManager,
     ) {
         super(excrementsRepository, entityManager);
     }

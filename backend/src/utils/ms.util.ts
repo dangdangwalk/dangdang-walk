@@ -80,7 +80,7 @@ export function parse(str: string): number {
     }
     const match =
         /^(?<value>-?(?:\d+)?\.?\d+) *(?<type>milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|weeks?|w|years?|yrs?|y)?$/i.exec(
-            str
+            str,
         );
     // Named capture groups need to be manually typed today.
     // https://github.com/microsoft/TypeScript/issues/32098

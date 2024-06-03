@@ -13,7 +13,7 @@ export class S3Service {
     private readonly s3Client;
     constructor(
         private readonly configService: ConfigService,
-        private readonly logger: WinstonLoggerService
+        private readonly logger: WinstonLoggerService,
     ) {
         this.s3Client = new S3Client({ region: this.configService.getOrThrow('AWS_S3_REGION') });
     }

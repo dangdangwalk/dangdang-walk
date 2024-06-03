@@ -10,7 +10,7 @@ const MAX_WALK_TIME = 3;
 export class WalkService {
     constructor(
         private readonly usersService: UsersService,
-        private readonly dogsService: DogsService
+        private readonly dogsService: DogsService,
     ) {}
 
     private async checkAvailableDogs(dogIds: number[]) {

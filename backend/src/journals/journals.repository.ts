@@ -9,7 +9,7 @@ export class JournalsRepository extends AbstractRepository<Journals> {
     constructor(
         @InjectRepository(Journals)
         walkJournalRepository: Repository<Journals>,
-        entityManager: EntityManager
+        entityManager: EntityManager,
     ) {
         super(walkJournalRepository, entityManager);
     }

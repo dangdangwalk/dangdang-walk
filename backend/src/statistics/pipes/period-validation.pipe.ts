@@ -14,7 +14,7 @@ export class PeriodValidationPipe implements PipeTransform<Period, Period> {
 
         if (!this.allowedPeriods.includes(value)) {
             throw new BadRequestException(
-                `Invalid period: ${value}. Allowed periods are: ${this.allowedPeriods.join(', ')}`
+                `Invalid period: ${value}. Allowed periods are: ${this.allowedPeriods.join(', ')}`,
             );
         }
 

@@ -31,7 +31,7 @@ export class LoggingInterceptor implements NestInterceptor {
         }
 
         this.logger.log(
-            `${color('REQUEST', 'Cyan')}  [ ${bold(method)} | ${bold(url)} | ${ip} | ${italic(user)} ] ${color(requestId, 'Black')}`
+            `${color('REQUEST', 'Cyan')}  [ ${bold(method)} | ${bold(url)} | ${ip} | ${italic(user)} ] ${color(requestId, 'Black')}`,
         );
 
         const startTime = Date.now();
@@ -49,11 +49,11 @@ export class LoggingInterceptor implements NestInterceptor {
                 }
 
                 this.logger.log(
-                    `${color('RESPONSE', 'Magenta')} [ ${bold(method)} | ${bold(url)} | ${ip} | ${statusCode} | ${color(`+${responseTime}ms`, responseTimeColor)} ] ${color(requestId, 'Black')}`
+                    `${color('RESPONSE', 'Magenta')} [ ${bold(method)} | ${bold(url)} | ${ip} | ${statusCode} | ${color(`+${responseTime}ms`, responseTimeColor)} ] ${color(requestId, 'Black')}`,
                 );
 
                 this.logger.debug('Response body', { ...res });
-            })
+            }),
         );
     }
 }

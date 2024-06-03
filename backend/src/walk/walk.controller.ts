@@ -12,7 +12,7 @@ import { WalkService } from './walk.service';
 export class WalkController {
     constructor(
         private readonly walkService: WalkService,
-        private readonly dogsService: DogsService
+        private readonly dogsService: DogsService,
     ) {}
 
     @Serialize(WalkCommandDto)

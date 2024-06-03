@@ -11,7 +11,7 @@ export class S3Controller {
     @Post('/upload')
     async upload(
         @User() user: AccessTokenPayload,
-        @Body(new ParseArrayPipe({ items: String, separator: ',' })) type: string[]
+        @Body(new ParseArrayPipe({ items: String, separator: ',' })) type: string[],
     ): Promise<PresignedUrlInfo[]> {
         return await this.s3Service.createPresignedUrlWithClientForPut(user.userId, type);
     }
@@ -19,7 +19,7 @@ export class S3Controller {
     @Delete('/delete')
     async delete(
         @User() { userId }: AccessTokenPayload,
-        @Body(new ParseArrayPipe({ items: String, separator: ',' })) filenames: string[]
+        @Body(new ParseArrayPipe({ items: String, separator: ',' })) filenames: string[],
     ): Promise<boolean> {
         await this.s3Service.deleteObjects(userId, filenames);
         return true;

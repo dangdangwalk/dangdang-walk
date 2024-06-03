@@ -9,7 +9,7 @@ export class TodayWalkTimeRepository extends AbstractRepository<TodayWalkTime> {
     constructor(
         @InjectRepository(TodayWalkTime)
         todayWalkTimeRepository: Repository<TodayWalkTime>,
-        entityManager: EntityManager
+        entityManager: EntityManager,
     ) {
         super(todayWalkTimeRepository, entityManager);
     }

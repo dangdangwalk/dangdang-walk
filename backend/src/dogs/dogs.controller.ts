@@ -49,7 +49,7 @@ export class DogsController {
     async update(
         @User() { userId }: AccessTokenPayload,
         @Param('id', ParseIntPipe) dogId: number,
-        @Body() updateDogDto: UpdateDogDto
+        @Body() updateDogDto: UpdateDogDto,
     ) {
         await this.dogsService.updateDog(userId, dogId, updateDogDto);
         return true;

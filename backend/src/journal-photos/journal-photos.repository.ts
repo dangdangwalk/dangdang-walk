@@ -8,7 +8,7 @@ import { JournalPhotos } from './journal-photos.entity';
 export class JournalPhotosRepository extends AbstractRepository<JournalPhotos> {
     constructor(
         @InjectRepository(JournalPhotos) journalPhotosRepository: Repository<JournalPhotos>,
-        entityManager: EntityManager
+        entityManager: EntityManager,
     ) {
         super(journalPhotosRepository, entityManager);
     }
