@@ -1,18 +1,17 @@
 import { httpClient } from './http';
 import { getStorage } from '@/utils/storage';
-import { tokenKeys } from '@/constants';
-import { AxiosResponse } from 'axios';
+import { storageKeys } from '@/constants';
 
 export type ResponseToken = {
     accessToken: string;
 };
 
 const getAccessToken = async (): Promise<ResponseToken | undefined> => {
-    const isLoggedIn = getStorage(tokenKeys.AUTHORIZATION) ? true : false;
+    const isLoggedIn = getStorage(storageKeys.IS_LOGGED_IN) ? true : false;
     let data: ResponseToken | undefined;
 
     if (isLoggedIn) {
-        const response: AxiosResponse = await httpClient.get('/auth/token');
+        const response = await httpClient.get('/auth/token');
         data = response.data;
     }
 
@@ -48,10 +47,10 @@ export type ResponseProfile = {
     provider: string;
 };
 const requestProfile = async (): Promise<ResponseProfile | undefined> => {
-    const isLoggedIn = getStorage(tokenKeys.AUTHORIZATION) ? true : false;
+    const isLoggedIn = getStorage(storageKeys.IS_LOGGED_IN) ? true : false;
     let data: ResponseProfile | undefined;
     if (isLoggedIn) {
-        const response: AxiosResponse = await httpClient.get('/users/me');
+        const response = await httpClient.get('/users/me');
         data = response.data;
     }
     return data;
