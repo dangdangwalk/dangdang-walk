@@ -90,7 +90,7 @@ export class StatisticsService {
             const error = new NotFoundException(`Data missing or mismatched for dogId: ${ownDogIds}.`);
             this.logger.error(
                 `Data missing or mismatched for dogId: ${ownDogIds}. Expected length: ${length}. Mismatched data: ${mismatchedLengths.join(', ')}`,
-                error.stack ?? 'No stack',
+                { trace: error.stack ?? 'No stack' },
             );
             throw error;
         }
