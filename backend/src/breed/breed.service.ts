@@ -7,10 +7,6 @@ import { BreedRepository } from './breed.repository';
 export class BreedService {
     constructor(private readonly breedRepository: BreedRepository) {}
 
-    async find(where: FindOptionsWhere<Breed>): Promise<Breed[]> {
-        return this.breedRepository.find({ where });
-    }
-
     async findOne(where: FindOptionsWhere<Breed>): Promise<Breed> {
         return this.breedRepository.findOne(where);
     }

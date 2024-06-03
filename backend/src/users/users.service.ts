@@ -21,10 +21,6 @@ export class UsersService {
         private readonly s3Service: S3Service
     ) {}
 
-    async find(where: FindOptionsWhere<Users>) {
-        return this.usersRepository.find({ where });
-    }
-
     async findOne(where: FindOptionsWhere<Users>) {
         return this.usersRepository.findOne(where);
     }
@@ -55,7 +51,7 @@ export class UsersService {
         );
     }
 
-    async generateUniqueNickname(nickname: string): Promise<string> {
+    private async generateUniqueNickname(nickname: string): Promise<string> {
         let randomId = generateUuid().slice(0, 10);
         let user = await this.usersRepository.findOneWithNoException({ nickname: `${nickname}#${randomId}` });
 
@@ -94,12 +90,12 @@ export class UsersService {
         }
 
         if (profileImageUrl) {
-            const curUserInfo = await this.findOne({ id: userId });
+            const curUserInfo = await this.usersRepository.findOne({ id: userId });
             if (curUserInfo && curUserInfo.profileImageUrl && !curUserInfo.profileImageUrl.startsWith('http')) {
                 await this.s3Service.deleteSingleObject(userId, curUserInfo.profileImageUrl);
             }
         }
 
-        await this.update({ id: userId }, userInfo);
+        await this.usersRepository.update({ id: userId }, userInfo);
     }
 }

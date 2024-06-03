@@ -13,7 +13,7 @@ export class WalkService {
         private readonly dogsService: DogsService
     ) {}
 
-    async checkAvailableDogs(dogIds: number[]) {
+    private async checkAvailableDogs(dogIds: number[]) {
         for (const curDogId of dogIds) {
             const curDogInfo = await this.dogsService.findOne({ id: curDogId });
             const updatedAt = curDogInfo.updatedAt;
