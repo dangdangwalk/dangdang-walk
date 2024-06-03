@@ -71,8 +71,8 @@ export class WinstonLoggerService implements LoggerService {
         this.logger.info(message, meta);
     }
 
-    error(message: string, trace: string, meta?: any) {
-        this.logger.error(message, { trace, ...meta });
+    error(message: string, meta: any) {
+        this.logger.error(message, meta);
     }
 
     warn(message: string, meta?: any) {
