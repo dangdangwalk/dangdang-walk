@@ -31,27 +31,12 @@ export function checkIfExistsInArr<T>(targetArr: T[], toFind: T | T[]): boolean 
  * @param {(string|string[])} srcAttributes - 소스 배열의 각 요소에서 속성을 추출할 속성 이름입니다.
  * 단일 문자열 또는 속성 이름의 배열을 받을 수 있습니다.
  * @returns {any[]} 결과 객체들의 배열입니다.
- *
- * @example
- * const data = [
- *     { id: 1, name: 'Alice', age: 30 },
- *     { id: 2, name: 'Bob', age: 25 }
- * ];
- * const targetAttrs = ['name'];
- * const srcAttrs = ['age'];
- * const result = makeSubObjectsArray(data, targetAttrs, srcAttrs);
- * console.log(result);
- * // 출력:
- * // [
- * //     { name: 30 },
- * //     { name: 25 }
- * // ]
- */
+ **/
 
 export function makeSubObjectsArray(
     targetArr: any[],
     srcAttributes: string | string[],
-    newAttributes?: string | string[]
+    newAttributes?: string | string[],
 ): any[] {
     const resArr: any[] = [];
     newAttributes = newAttributes ?? srcAttributes;
