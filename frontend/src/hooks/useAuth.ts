@@ -18,8 +18,8 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const useLogin = (mutationOptions?: UseMutationCustomOptions) => {
-    const navigate = useNavigate();
     const { storeLogin } = useAuthStore();
+    const navigate = useNavigate();
     return useMutation({
         mutationFn: requestLogin,
         onSuccess: ({ accessToken }: ResponseToken) => {
@@ -55,11 +55,11 @@ const useSignup = (mutationOptions?: UseMutationCustomOptions) => {
 };
 
 const useGetRefreshToken = () => {
-    const { storeLogin, storeLogout } = useAuthStore();
-    const { isSuccess, isError, data } = useQuery({
+    const { storeLogin } = useAuthStore();
+    const { isSuccess, data } = useQuery({
         queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN],
         queryFn: getAccessToken,
-        gcTime: 1000 * 60 * 60 + 1000 * 60,
+        gcTime: 1000 * 60 * 60,
         staleTime: 1000 * 60 * 60 - 1000 * 60 * 10,
         refetchInterval: 1000 * 60 * 60 - 1000 * 60 * 10,
         refetchOnReconnect: true,
@@ -71,12 +71,7 @@ const useGetRefreshToken = () => {
         }
     }, [isSuccess, data]);
 
-    useEffect(() => {
-        if (isError) {
-            storeLogout();
-        }
-    }, [isError]);
-    return { isSuccess, isError };
+    return { isSuccess, data };
 };
 
 const useLogout = (mutationOptions?: UseMutationCustomOptions) => {
@@ -95,8 +90,8 @@ const useLogout = (mutationOptions?: UseMutationCustomOptions) => {
 };
 
 const useDeactivate = (mutationOptions?: UseMutationCustomOptions) => {
-    const navigate = useNavigate();
     const { storeLogout } = useAuthStore();
+    const navigate = useNavigate();
     return useMutation({
         mutationFn: requestDeactivate,
         onSuccess: () => {
@@ -113,6 +108,8 @@ const useGetProfile = (queryOptions?: UseQueryCustomOptions) => {
     return useQuery({
         queryKey: [queryKeys.AUTH, queryKeys.GET_PROFILE],
         queryFn: requestProfile,
+        gcTime: 1000 * 60 * 60 * 24,
+        staleTime: 1000 * 60 * 60 * 24 - 1000 * 60,
         ...queryOptions,
     });
 };
@@ -124,7 +121,6 @@ export const useAuth = () => {
     const getProfileQuery = useGetProfile();
     const deactivateMutation = useDeactivate();
     return {
-        isTokenInit: refreshTokenQuery.isSuccess,
         loginMutation,
         logoutMutation,
         signupMustation,

@@ -1,10 +1,11 @@
-import { tokenKeys } from '@/constants';
+import queryClient from '@/api/queryClient';
+import { queryKeys } from '@/constants';
 import { getStorage } from '@/utils/storage';
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
 
 const { REACT_APP_NEST_BASE_URL: NEST_BASE_URL = '' } = window._ENV ?? process.env;
+const { REACT_APP_BASE_IMAGE_URL = '' } = window._ENV ?? process.env;
 const DEFAULT_TIMEOUT = 30000;
-const token = getStorage(tokenKeys.AUTHORIZATION);
 export const createClient = (config?: AxiosRequestConfig): AxiosInstance => {
     const axiosInstance = axios.create({
         baseURL: NEST_BASE_URL,
@@ -12,13 +13,28 @@ export const createClient = (config?: AxiosRequestConfig): AxiosInstance => {
         headers: {
             'Content-Type': `application/json;charset=UTF-8`,
             Accept: 'application/json',
-            ...(token ? { Authorization: token } : {}),
         },
         withCredentials: true,
         ...config,
     });
+
     axiosInstance.interceptors.request.use(
-        (request) => {
+        async (request) => {
+            if (request.url?.startsWith(REACT_APP_BASE_IMAGE_URL)) return request;
+            if (request.baseURL !== NEST_BASE_URL) return request;
+            console.log(request);
+
+            if (!request.headers['Authorization']) {
+                let data = queryClient.getQueryData<{ accessToken: string }>([
+                    queryKeys.AUTH,
+                    queryKeys.GET_ACCESS_TOKEN,
+                ]);
+
+                if (data) {
+                    const { accessToken } = data;
+                    request.headers['Authorization'] = `Bearer ${accessToken}`;
+                }
+            }
             return request;
         },
         (error) => {
@@ -30,8 +46,34 @@ export const createClient = (config?: AxiosRequestConfig): AxiosInstance => {
         (response) => {
             return response;
         },
-        (error) => {
-            return Promise.reject(error);
+        async (error: AxiosError) => {
+            const isLoggedIn = getStorage('isLoggedIn') ? true : false;
+            if (error.response && error.response.status === 401 && isLoggedIn) {
+                try {
+                    const data = await queryClient.fetchQuery<{ accessToken: string }>({
+                        queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN],
+                    });
+
+                    if (data) {
+                        const originalRequest = error.config;
+                        if (originalRequest) {
+                            const { accessToken } = data;
+                            originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
+                            const response = await axiosInstance(originalRequest);
+
+                            return response;
+                        } else {
+                            console.error('Original request config is undefined');
+                            return Promise.reject(error);
+                        }
+                    }
+                } catch (retryError) {
+                    console.error('Retrying request failed:', retryError);
+                    return Promise.reject(retryError);
+                }
+            } else {
+                return Promise.reject(error);
+            }
         }
     );
 
