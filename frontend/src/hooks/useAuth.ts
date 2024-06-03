@@ -67,7 +67,7 @@ const useGetRefreshToken = () => {
     });
     useEffect(() => {
         if (isSuccess) {
-            storeLogin(data.accessToken);
+            storeLogin(data?.accessToken);
         }
     }, [isSuccess, data]);
 

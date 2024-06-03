@@ -1,11 +1,21 @@
 import { httpClient } from './http';
+import { getStorage } from '@/utils/storage';
+import { tokenKeys } from '@/constants';
+import { AxiosResponse } from 'axios';
 
 export type ResponseToken = {
     accessToken: string;
 };
 
-const getAccessToken = async (): Promise<ResponseToken> => {
-    const { data } = await httpClient.get('/auth/token');
+const getAccessToken = async (): Promise<ResponseToken | undefined> => {
+    const isLoggedIn = getStorage(tokenKeys.AUTHORIZATION) ? true : false;
+    let data: ResponseToken | undefined;
+
+    if (isLoggedIn) {
+        const response: AxiosResponse = await httpClient.get('/auth/token');
+        data = response.data;
+    }
+
     return data;
 };
 

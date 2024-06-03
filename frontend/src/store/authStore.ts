@@ -4,12 +4,12 @@ import { getStorage, removeStorage, setStorage } from '@/utils/storage';
 import { create } from 'zustand';
 interface AuthState {
     isLoggedIn: boolean;
-    storeLogin: (token: string) => void;
+    storeLogin: (token: string | undefined) => void;
     storeLogout: () => void;
 }
 export const useAuthStore = create<AuthState>((set) => ({
     isLoggedIn: getStorage(tokenKeys.AUTHORIZATION) ? true : false,
-    storeLogin: (token: string) => {
+    storeLogin: (token: string | undefined) => {
         set({ isLoggedIn: true });
         setHeader(tokenKeys.AUTHORIZATION, `Bearer ${token}`);
         setStorage(tokenKeys.AUTHORIZATION, `Bearer ${token}`);
