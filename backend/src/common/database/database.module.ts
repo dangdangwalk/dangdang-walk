@@ -40,7 +40,7 @@ import BreedSeeder from './seeds/breed.seeder';
 export class DatabaseModule {
     constructor(
         @Inject(getDataSourceToken()) private readonly dataSource: DataSource,
-        private readonly logger: WinstonLoggerService
+        private readonly logger: WinstonLoggerService,
     ) {}
 
     async onModuleInit() {

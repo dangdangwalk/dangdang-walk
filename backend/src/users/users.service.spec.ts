@@ -92,7 +92,7 @@ describe('UsersService', () => {
                         oauthAccessToken: mockUser.oauthAccessToken,
                         oauthRefreshToken: mockUser.oauthRefreshToken,
                         refreshToken: mockUser.refreshToken,
-                    }
+                    },
                 );
 
                 expect(res).toBe(mockUser);
@@ -103,7 +103,7 @@ describe('UsersService', () => {
                         oauthAccessToken: mockUser.oauthAccessToken,
                         oauthRefreshToken: mockUser.oauthRefreshToken,
                         refreshToken: mockUser.refreshToken,
-                    }
+                    },
                 );
             });
         });
@@ -121,8 +121,8 @@ describe('UsersService', () => {
                             oauthAccessToken: mockUser.oauthAccessToken,
                             oauthRefreshToken: mockUser.oauthRefreshToken,
                             refreshToken: mockUser.refreshToken,
-                        }
-                    )
+                        },
+                    ),
                 ).rejects.toThrow(NotFoundException);
             });
         });
@@ -145,7 +145,7 @@ describe('UsersService', () => {
                         oauthAccessToken: mockUser.oauthAccessToken,
                         oauthRefreshToken: mockUser.oauthRefreshToken,
                         refreshToken: mockUser.refreshToken,
-                    })
+                    }),
                 ).rejects.toThrow(ConflictException);
             });
         });

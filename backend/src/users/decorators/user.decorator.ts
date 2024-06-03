@@ -5,5 +5,5 @@ export const User = createParamDecorator(
     (data: never, context: ExecutionContext): AccessTokenPayload | RefreshTokenPayload => {
         const request = context.switchToHttp().getRequest();
         return request.user;
-    }
+    },
 );

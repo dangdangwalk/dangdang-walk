@@ -35,7 +35,7 @@ export class NaverService implements OauthService {
     constructor(
         private readonly configService: ConfigService,
         private readonly httpService: HttpService,
-        private readonly logger: WinstonLoggerService
+        private readonly logger: WinstonLoggerService,
     ) {}
 
     private readonly CLIENT_ID = this.configService.get<string>('NAVER_CLIENT_ID');
@@ -54,7 +54,7 @@ export class NaverService implements OauthService {
                         code: authorizeCode,
                         state: 'naverLoginState',
                     },
-                })
+                }),
             );
 
             return data;
@@ -76,7 +76,7 @@ export class NaverService implements OauthService {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
                     },
-                })
+                }),
             );
 
             this.logger.log('requestUserInfo', { ...data });
@@ -109,7 +109,7 @@ export class NaverService implements OauthService {
                         access_token: accessToken,
                         service_provider: 'NAVER',
                     },
-                })
+                }),
             );
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
@@ -132,7 +132,7 @@ export class NaverService implements OauthService {
                         client_secret: this.CLIENT_SECRET,
                         refresh_token: refreshToken,
                     },
-                })
+                }),
             );
 
             return data;

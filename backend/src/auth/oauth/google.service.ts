@@ -33,7 +33,7 @@ export class GoogleService implements OauthService {
     constructor(
         private readonly configService: ConfigService,
         private readonly httpService: HttpService,
-        private readonly logger: WinstonLoggerService
+        private readonly logger: WinstonLoggerService,
     ) {}
 
     private readonly CLIENT_ID = this.configService.get<string>('GOOGLE_CLIENT_ID');
@@ -51,7 +51,7 @@ export class GoogleService implements OauthService {
                     code: authorizeCode,
                     grant_type: 'authorization_code',
                     redirect_uri: redirectURI,
-                })
+                }),
             );
 
             return data;
@@ -73,7 +73,7 @@ export class GoogleService implements OauthService {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
                     },
-                })
+                }),
             );
 
             this.logger.log('requestUserInfo', { ...data });
@@ -108,8 +108,8 @@ export class GoogleService implements OauthService {
                         params: {
                             token: accessToken,
                         },
-                    }
-                )
+                    },
+                ),
             );
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
@@ -130,7 +130,7 @@ export class GoogleService implements OauthService {
                     client_secret: this.CLIENT_SECRET,
                     grant_type: 'refresh_token',
                     refresh_token: refreshToken,
-                })
+                }),
             );
 
             return data;

@@ -9,7 +9,7 @@ import { DogWalkDayRepository } from './dog-walk-day.repository';
 export class DogWalkDayService {
     constructor(
         private readonly dogWalkDayRepository: DogWalkDayRepository,
-        private readonly logger: WinstonLoggerService
+        private readonly logger: WinstonLoggerService,
     ) {}
 
     async delete(where: FindOptionsWhere<DogWalkDay>) {
@@ -31,7 +31,7 @@ export class DogWalkDayService {
         if (updatedAt < lastSunday) {
             await this.dogWalkDayRepository.update(
                 { id: walkDayId },
-                { mon: 0, tue: 0, wed: 0, thr: 0, fri: 0, sat: 0, sun: 0 }
+                { mon: 0, tue: 0, wed: 0, thr: 0, fri: 0, sat: 0, sun: 0 },
             );
         }
     }

@@ -9,7 +9,7 @@ export class RefreshTokenGuard implements CanActivate {
     constructor(
         private tokenService: TokenService,
         private authService: AuthService,
-        private logger: WinstonLoggerService
+        private logger: WinstonLoggerService,
     ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {

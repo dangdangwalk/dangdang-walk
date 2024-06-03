@@ -15,7 +15,7 @@ export class StatisticsController {
     async getDogStatistics(
         @User() { userId }: AccessTokenPayload,
         @Param('id', ParseIntPipe) dogId: number,
-        @Query('period', PeriodValidationPipe) period: Period
+        @Query('period', PeriodValidationPipe) period: Period,
     ) {
         return await this.statisticsService.getDogStatistics(userId, dogId, period);
     }
@@ -26,7 +26,7 @@ export class StatisticsController {
         @User() { userId }: AccessTokenPayload,
         @Param('id', ParseIntPipe) dogId: number,
         @Query('date', DateValidationPipe) date: string,
-        @Query('period', PeriodValidationPipe) period: Period
+        @Query('period', PeriodValidationPipe) period: Period,
     ) {
         return await this.statisticsService.getDogWalkCnt(userId, dogId, date, period);
     }

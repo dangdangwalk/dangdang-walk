@@ -9,7 +9,7 @@ export class BreedRepository extends AbstractRepository<Breed> {
     constructor(
         @InjectRepository(Breed)
         breedRepository: Repository<Breed>,
-        entityManager: EntityManager
+        entityManager: EntityManager,
     ) {
         super(breedRepository, entityManager);
     }

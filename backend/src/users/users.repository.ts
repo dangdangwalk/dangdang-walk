@@ -9,7 +9,7 @@ export class UsersRepository extends AbstractRepository<Users> {
     constructor(
         @InjectRepository(Users)
         usersRepository: Repository<Users>,
-        entityManager: EntityManager
+        entityManager: EntityManager,
     ) {
         super(usersRepository, entityManager);
     }

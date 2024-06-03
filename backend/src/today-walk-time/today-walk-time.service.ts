@@ -9,7 +9,7 @@ import { TodayWalkTimeRepository } from './today-walk-time.repository';
 export class TodayWalkTimeService {
     constructor(
         private readonly todayWalkTimeRepository: TodayWalkTimeRepository,
-        private readonly logger: WinstonLoggerService
+        private readonly logger: WinstonLoggerService,
     ) {}
 
     async delete(where: FindOptionsWhere<TodayWalkTime>) {
@@ -26,7 +26,7 @@ export class TodayWalkTimeService {
     async updateDurations(
         todayWalkTimeIds: number[],
         duration: number,
-        operation: (current: number, operand: number) => number
+        operation: (current: number, operand: number) => number,
     ) {
         for (const curWalkTimeId of todayWalkTimeIds) {
             const walkTimeInfo = await this.todayWalkTimeRepository.findOne({ id: curWalkTimeId });

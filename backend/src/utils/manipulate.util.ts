@@ -51,7 +51,7 @@ export function checkIfExistsInArr<T>(targetArr: T[], toFind: T | T[]): boolean 
 export function makeSubObjectsArray(
     targetArr: any[],
     srcAttributes: string | string[],
-    targetAttributes?: string | string[]
+    targetAttributes?: string | string[],
 ): any[] {
     const resArr: any[] = [];
     targetAttributes = targetAttributes ?? srcAttributes;

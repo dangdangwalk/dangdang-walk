@@ -25,7 +25,7 @@ export class AuthService {
         private readonly naverService: NaverService,
         private readonly configService: ConfigService,
         private readonly s3Service: S3Service,
-        private readonly logger: WinstonLoggerService
+        private readonly logger: WinstonLoggerService,
     ) {}
 
     private readonly redirectURI = this.configService.get<string>('CORS_ORIGIN') + '/callback';
@@ -43,7 +43,7 @@ export class AuthService {
         try {
             const { id: userId } = await this.usersService.updateAndFindOne(
                 { oauthId },
-                { oauthAccessToken, oauthRefreshToken, refreshToken }
+                { oauthAccessToken, oauthRefreshToken, refreshToken },
             );
 
             const accessToken = this.tokenService.signAccessToken(userId, provider);

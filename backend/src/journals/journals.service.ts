@@ -35,7 +35,7 @@ export class JournalsService {
         private readonly dogWalkDayService: DogWalkDayService,
         private readonly todayWalkTimeService: TodayWalkTimeService,
         private readonly entityManager: EntityManager,
-        private readonly s3Service: S3Service
+        private readonly s3Service: S3Service,
     ) {}
 
     private async create(entityData: Partial<Journals>): Promise<Journals> {
@@ -50,7 +50,7 @@ export class JournalsService {
 
     private async updateAndFindOne(
         where: FindOptionsWhere<Journals>,
-        partialEntity: QueryDeepPartialEntity<Journals>
+        partialEntity: QueryDeepPartialEntity<Journals>,
     ): Promise<Journals | null> {
         return this.journalsRepository.updateAndFindOne(where, partialEntity);
     }
@@ -143,7 +143,7 @@ export class JournalsService {
     private makeJournalData(userId: number, createJournalInfo: CreateJournalInfo): Partial<Journals> {
         const journalData: Partial<Journals> = makeSubObject(
             createJournalInfo,
-            CreateJournalInfo.getKeysForJournalTable()
+            CreateJournalInfo.getKeysForJournalTable(),
         );
         journalData.userId = userId;
         journalData.routes = JSON.stringify(journalData.routes);
@@ -159,7 +159,7 @@ export class JournalsService {
     private async updateTodayWalkTime(
         dogIds: number[],
         duration: number,
-        operation: (current: number, operand: number) => number
+        operation: (current: number, operand: number) => number,
     ) {
         const todayWalkTimeIds = await this.dogsService.getRelatedTableIdList(dogIds, 'todayWalkTimeId');
         this.todayWalkTimeService.updateDurations(todayWalkTimeIds, duration, operation);
@@ -194,7 +194,7 @@ export class JournalsService {
         await this.updateTodayWalkTime(
             dogIds,
             createJournalData.journalInfo.duration,
-            (current: number, value: number) => current + value
+            (current: number, value: number) => current + value,
         );
     }
 
@@ -223,7 +223,7 @@ export class JournalsService {
         await this.updateTodayWalkTime(
             dogIds,
             journalInfo.duration,
-            (current: number, value: number) => current - value
+            (current: number, value: number) => current - value,
         );
         await this.s3Service.deleteObjects(userId, photoUrls);
         await this.delete(journalId);
@@ -241,7 +241,7 @@ export class JournalsService {
     }
 
     private async getTotal(
-        journals: Journals[]
+        journals: Journals[],
     ): Promise<{ totalWalkCnt: number; totalDistance: number; totalTime: number }> {
         const totalDistance = journals.reduce((acc, journal) => acc + journal.distance, 0);
         const totalTime = journals.reduce((acc, journal) => acc + journal.duration, 0);
@@ -252,7 +252,7 @@ export class JournalsService {
         userId: number,
         dogId: number,
         startDate: Date,
-        endDate: Date
+        endDate: Date,
     ): Promise<{ [date: string]: number }> {
         const dogJournals = await this.findJournals(userId, dogId, startDate, endDate);
         return this.getTotal(dogJournals);
@@ -261,7 +261,7 @@ export class JournalsService {
     async aggregateJournalsByDay(
         journals: Journals[],
         startDate: Date,
-        endDate: Date
+        endDate: Date,
     ): Promise<{ [date: string]: number }> {
         const journalCntAMonth: { [date: string]: number } = {};
 
@@ -285,7 +285,7 @@ export class JournalsService {
         userId: number,
         dogId: number,
         startDate: Date,
-        endDate: Date
+        endDate: Date,
     ): Promise<{ [date: string]: number }> {
         const dogJournals = await this.findJournals(userId, dogId, startDate, endDate);
         return this.aggregateJournalsByDay(dogJournals, startDate, endDate);
@@ -324,7 +324,7 @@ export class JournalsService {
         const journalInfos = await makeSubObjectsArray(
             journalInfosRaw,
             JournalInfoForList.getAttributesForJournalTable(),
-            JournalInfoForList.getKeysForJournalTable()
+            JournalInfoForList.getKeysForJournalTable(),
         );
         const findResult = await this.journalsDogsService.find({ where: { dogId } });
         const journalCntForFirstRow = findResult.findIndex((jd) => jd.journalId === journalInfos[0].journalId);

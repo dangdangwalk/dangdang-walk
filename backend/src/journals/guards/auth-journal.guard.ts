@@ -6,7 +6,7 @@ import { JournalsService } from '../journals.service';
 export class AuthJournalGuard implements CanActivate {
     constructor(
         private readonly journalsService: JournalsService,
-        private readonly logger: WinstonLoggerService
+        private readonly logger: WinstonLoggerService,
     ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {

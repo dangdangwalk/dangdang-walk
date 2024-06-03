@@ -28,7 +28,7 @@ export class TokenService {
 
     constructor(
         private readonly jwtService: JwtService,
-        private readonly configService: ConfigService
+        private readonly configService: ConfigService,
     ) {
         const ACCESS_TOKEN_LIFETIME = this.configService.get<string>('ACCESS_TOKEN_LIFETIME', '1h');
         const REFRESH_TOKEN_LIFETIME = this.configService.get<string>('REFRESH_TOKEN_LIFETIME', '14d');

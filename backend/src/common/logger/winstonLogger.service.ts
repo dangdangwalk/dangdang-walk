@@ -27,7 +27,7 @@ export class WinstonLoggerService implements LoggerService {
             winston.format.colorize(),
             winston.format.prettyPrint(),
             winston.format.timestamp(),
-            consoleLogFormat
+            consoleLogFormat,
         );
         const consoleTransport = new winston.transports.Console({ format: consoleFormat });
 
@@ -40,7 +40,7 @@ export class WinstonLoggerService implements LoggerService {
             format: winston.format.combine(
                 winston.format((info) => ({ ...info, message: stripAnsi(info.message) }))(),
                 winston.format.timestamp(),
-                winston.format.json()
+                winston.format.json(),
             ),
         });
 
@@ -54,7 +54,7 @@ export class WinstonLoggerService implements LoggerService {
             format: winston.format.combine(
                 winston.format((info) => ({ ...info, message: stripAnsi(info.message) }))(),
                 winston.format.timestamp(),
-                winston.format.json()
+                winston.format.json(),
             ),
         });
 

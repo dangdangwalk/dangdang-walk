@@ -18,7 +18,7 @@ export class UsersService {
     constructor(
         private readonly usersRepository: UsersRepository,
         private readonly usersDogsService: UsersDogsService,
-        private readonly s3Service: S3Service
+        private readonly s3Service: S3Service,
     ) {}
 
     async findOne(where: FindOptionsWhere<Users>) {
@@ -47,7 +47,7 @@ export class UsersService {
                 mainDogId: null,
                 ...otherAttributes,
             }),
-            'oauthId'
+            'oauthId',
         );
     }
 

@@ -40,7 +40,7 @@ export class KakaoService implements OauthService {
     constructor(
         private readonly configService: ConfigService,
         private readonly httpService: HttpService,
-        private readonly logger: WinstonLoggerService
+        private readonly logger: WinstonLoggerService,
     ) {}
 
     private readonly CLIENT_ID = this.configService.get<string>('KAKAO_CLIENT_ID');
@@ -66,8 +66,8 @@ export class KakaoService implements OauthService {
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
                         },
-                    }
-                )
+                    },
+                ),
             );
 
             return data;
@@ -89,7 +89,7 @@ export class KakaoService implements OauthService {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
                     },
-                })
+                }),
             );
 
             this.logger.log('requestUserInfo', { ...data });
@@ -122,8 +122,8 @@ export class KakaoService implements OauthService {
                             Authorization: `Bearer ${accessToken}`,
                             'Content-Type': 'application/x-www-form-urlencoded',
                         },
-                    }
-                )
+                    },
+                ),
             );
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
@@ -147,8 +147,8 @@ export class KakaoService implements OauthService {
                             Authorization: `Bearer ${accessToken}`,
                             'Content-Type': 'application/x-www-form-urlencoded',
                         },
-                    }
-                )
+                    },
+                ),
             );
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
@@ -176,8 +176,8 @@ export class KakaoService implements OauthService {
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
                         },
-                    }
-                )
+                    },
+                ),
             );
 
             return data;

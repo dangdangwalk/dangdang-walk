@@ -13,7 +13,7 @@ export class AuthGuard implements CanActivate {
         private tokenService: TokenService,
         private authService: AuthService,
         private reflector: Reflector,
-        private logger: WinstonLoggerService
+        private logger: WinstonLoggerService,
     ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {

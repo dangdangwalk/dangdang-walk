@@ -29,7 +29,7 @@ export class JournalsController {
     @Get()
     async getJournalList(
         @Query('dogId', ParseIntPipe) dogId: number,
-        @Query('date', DateValidationPipe) date: string
+        @Query('date', DateValidationPipe) date: string,
     ): Promise<JournalInfoForList[]> {
         return await this.journalsService.getJournalList(dogId, date);
     }

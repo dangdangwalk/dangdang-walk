@@ -28,7 +28,7 @@ export class DogsService {
         private readonly todayWalkTimeService: TodayWalkTimeService,
         private readonly s3Service: S3Service,
         private readonly entityManager: EntityManager,
-        private readonly logger: WinstonLoggerService
+        private readonly logger: WinstonLoggerService,
     ) {}
 
     @Transactional()
@@ -144,7 +144,7 @@ export class DogsService {
 
     async getRelatedTableIdList(
         ownDogIds: number[],
-        attributeName: 'walkDayId' | 'todayWalkTimeId' | 'breedId'
+        attributeName: 'walkDayId' | 'todayWalkTimeId' | 'breedId',
     ): Promise<number[]> {
         const ownDogList = await this.dogsRepository.find({ where: { id: In(ownDogIds) } });
         return ownDogList.map((cur) => {

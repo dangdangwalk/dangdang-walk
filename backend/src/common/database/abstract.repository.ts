@@ -13,7 +13,7 @@ import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity
 export abstract class AbstractRepository<T extends ObjectLiteral> {
     constructor(
         private readonly entityRepository: Repository<T>,
-        private readonly entityManager: EntityManager
+        private readonly entityManager: EntityManager,
     ) {}
 
     async create(entity: T): Promise<T> {
