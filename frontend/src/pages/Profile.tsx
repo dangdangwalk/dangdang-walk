@@ -75,7 +75,7 @@ function Profile() {
     };
     useEffect(() => {
         if (isSuccess) {
-            setDogs(data);
+            setDogs(data ?? []);
         }
     }, [isSuccess, data]);
     return (
