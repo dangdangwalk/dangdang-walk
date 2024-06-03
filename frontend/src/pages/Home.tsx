@@ -25,11 +25,7 @@ function Home() {
         toggleCheck: handleToggle,
         changeCheckAll: handleCheckAll,
     } = useWalkAvailabeDog();
-    const { refreshTokenQuery } = useAuth();
-    const { isLoggedIn } = useAuthStore();
-    const { dogs, isDogsPending } = useDogsStatistic(isLoggedIn, {
-        enabled: refreshTokenQuery.isSuccess,
-    });
+    const { dogs, isDogsPending } = useDogsStatistic();
     const navigate = useNavigate();
     const handleBottomSheet = () => {
         if (!isDogBottomsheetOpen) {
