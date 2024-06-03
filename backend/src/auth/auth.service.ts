@@ -54,7 +54,7 @@ export class AuthService {
             if (error instanceof NotFoundException) {
                 return { oauthAccessToken, oauthRefreshToken, provider };
             }
-            this.logger.error(`Login error`, error.stack ?? 'No stack');
+            this.logger.error(`Login error`, { trace: error.stack ?? 'No stack' });
             throw error;
         }
     }

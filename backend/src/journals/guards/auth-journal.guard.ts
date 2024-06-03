@@ -18,7 +18,9 @@ export class AuthJournalGuard implements CanActivate {
 
         if (!owned) {
             const error = new ForbiddenException(`User ${userId} does not have access to journal ${journalId}`);
-            this.logger.error(`User ${userId} does not have access to journal ${journalId}`, error.stack ?? 'No stack');
+            this.logger.error(`User ${userId} does not have access to journal ${journalId}`, {
+                trace: error.stack ?? 'No stack',
+            });
             throw error;
         }
 

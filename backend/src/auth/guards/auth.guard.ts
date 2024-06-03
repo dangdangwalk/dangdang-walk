@@ -34,7 +34,7 @@ export class AuthGuard implements CanActivate {
         const token = this.extractTokenFromHeader(request);
         if (!token) {
             const error = new UnauthorizedException('Token does not exist in Authorization header.');
-            this.logger.error(`Authorization header is missing or empty.`, error.stack ?? 'No stack');
+            this.logger.error(`Authorization header is missing or empty.`, { trace: error.stack ?? 'No stack' });
             throw error;
         }
 
@@ -50,11 +50,11 @@ export class AuthGuard implements CanActivate {
         } catch (error) {
             if (error instanceof TokenExpiredError || error instanceof JsonWebTokenError) {
                 error = new UnauthorizedException(error.message);
-                this.logger.error(error.message, error.stack ?? 'No stack');
+                this.logger.error(error.message, { trace: error.stack ?? 'No stack' });
                 throw error;
             } else {
                 error = new UnauthorizedException('No matching user found.');
-                this.logger.error(`No matching user found`, error.stack ?? 'No stack');
+                this.logger.error(`No matching user found`, { trace: error.stack ?? 'No stack' });
                 throw error;
             }
         }

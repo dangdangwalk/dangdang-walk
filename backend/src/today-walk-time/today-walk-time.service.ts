@@ -39,7 +39,9 @@ export class TodayWalkTimeService {
         const walkTimeListBeforeCheck = await this.todayWalkTimeRepository.find({ where: { id: In(walkTimeIds) } });
         if (!walkTimeListBeforeCheck.length) {
             const error = new NotFoundException(`No walkTime found for the provided IDs: ${walkTimeIds}.`);
-            this.logger.error(`No walkTime found for the provided IDs: ${walkTimeIds}.`, error.stack ?? 'No stack');
+            this.logger.error(`No walkTime found for the provided IDs: ${walkTimeIds}.`, {
+                trace: error.stack ?? 'No stack',
+            });
             throw error;
         }
 

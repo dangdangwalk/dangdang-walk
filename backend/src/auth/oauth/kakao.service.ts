@@ -73,7 +73,8 @@ export class KakaoService implements OauthService {
             return data;
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
-                this.logger.error(`Kakao: Failed to request token.`, error.stack ?? 'No stack', {
+                this.logger.error(`Kakao: Failed to request token.`, {
+                    trace: error.stack ?? 'No stack',
                     response: error.response.data,
                 });
                 error = new BadRequestException('Kakao: Failed to request token.');
@@ -102,7 +103,8 @@ export class KakaoService implements OauthService {
             };
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
-                this.logger.error('Kakao: Failed to request userInfo.', error.stack ?? 'No stack', {
+                this.logger.error('Kakao: Failed to request userInfo.', {
+                    trace: error.stack ?? 'No stack',
                     response: error.response.data,
                 });
                 error = new BadRequestException('Kakao: Failed to request userInfo.');
@@ -127,7 +129,8 @@ export class KakaoService implements OauthService {
             );
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
-                this.logger.error('Kakao: Failed to request token expiration.', error.stack ?? 'No stack', {
+                this.logger.error('Kakao: Failed to request token expiration.', {
+                    trace: error.stack ?? 'No stack',
                     response: error.response.data,
                 });
                 error = new BadRequestException('Kakao: Failed to request token expiration.');
@@ -152,7 +155,8 @@ export class KakaoService implements OauthService {
             );
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
-                this.logger.error('Kakao: Failed to request unlink.', error.stack ?? 'No stack', {
+                this.logger.error('Kakao: Failed to request unlink.', {
+                    trace: error.stack ?? 'No stack',
                     response: error.response.data,
                 });
                 error = new BadRequestException('Kakao: Failed to request unlink.');
@@ -183,7 +187,8 @@ export class KakaoService implements OauthService {
             return data;
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
-                this.logger.error('Kakao: Failed to request token refresh.', error.stack ?? 'No stack', {
+                this.logger.error('Kakao: Failed to request token refresh.', {
+                    trace: error.stack ?? 'No stack',
                     response: error.response.data,
                 });
                 error = new BadRequestException('Kakao: Failed to request token refresh.');

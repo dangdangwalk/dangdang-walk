@@ -20,7 +20,7 @@ export class OauthDataGuard implements CanActivate {
                 .join(', ');
 
             const error = new UnauthorizedException(`OAuth data missing in cookies: ${missingFields}.`);
-            this.logger.error(`OAuthDataGuard failed: missing ${missingFields}.`, error.stack ?? 'No stack');
+            this.logger.error(`OAuthDataGuard failed: missing ${missingFields}.`, { trace: error.stack ?? 'No stack' });
             throw error;
         }
         request.oauthData = { oauthAccessToken, oauthRefreshToken, provider };

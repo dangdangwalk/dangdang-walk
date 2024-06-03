@@ -57,7 +57,8 @@ export class GoogleService implements OauthService {
             return data;
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
-                this.logger.error('Google: Failed to request token.', error.stack ?? 'No stack', {
+                this.logger.error('Google: Failed to request token.', {
+                    trace: error.stack ?? 'No stack',
                     response: error.response.data,
                 });
                 error = new BadRequestException('Google: Failed to request token.');
@@ -86,7 +87,8 @@ export class GoogleService implements OauthService {
             };
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
-                this.logger.error('Google: Failed to request userInfo.', error.stack ?? 'No stack', {
+                this.logger.error('Google: Failed to request userInfo.', {
+                    trace: error.stack ?? 'No stack',
                     response: error.response.data,
                 });
                 error = new BadRequestException('Google: Failed to request userInfo.');
@@ -113,7 +115,8 @@ export class GoogleService implements OauthService {
             );
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
-                this.logger.error('Google: Failed to request token expiration.', error.stack ?? 'No stack', {
+                this.logger.error('Google: Failed to request token expiration.', {
+                    trace: error.stack ?? 'No stack',
                     response: error.response.data,
                 });
                 error = new BadRequestException('Google: Failed to request token expiration.');
@@ -136,7 +139,8 @@ export class GoogleService implements OauthService {
             return data;
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
-                this.logger.error('Google: Failed to request token refresh.', error.stack ?? 'No stack', {
+                this.logger.error('Google: Failed to request token refresh.', {
+                    trace: error.stack ?? 'No stack',
                     response: error.response.data,
                 });
                 error = new BadRequestException('Google: Failed to request token refresh.');

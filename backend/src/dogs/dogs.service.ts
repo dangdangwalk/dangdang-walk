@@ -49,7 +49,7 @@ export class DogsService {
 
             return this.usersDogsService.create({ userId, dogId: dog.id });
         } catch (error) {
-            this.logger.error(`Unknown breed.`, error.stack ?? 'No stack');
+            this.logger.error(`Unknown breed.`, { trace: error.stack ?? 'No stack' });
             throw error;
         }
     }

@@ -18,7 +18,7 @@ export class RefreshTokenGuard implements CanActivate {
 
         if (!token) {
             const error = new UnauthorizedException('Refresh token not found in cookies.');
-            this.logger.error(`No refreshToken inside cookie.`, error.stack ?? 'No stack');
+            this.logger.error(`No refreshToken inside cookie.`, { trace: error.stack ?? 'No stack' });
             throw error;
         }
 
@@ -31,13 +31,13 @@ export class RefreshTokenGuard implements CanActivate {
             return isValid;
         } catch (error) {
             if (error instanceof TokenExpiredError || error instanceof JsonWebTokenError) {
-                const trace = error.stack ?? 'No stack';
+                const trace = { trace: error.stack ?? 'No stack' };
                 error = new UnauthorizedException(error.message);
                 this.logger.error(error.message, trace);
                 throw error;
             } else {
                 error = new UnauthorizedException('No matching user found.');
-                this.logger.error(`No matching user found`, error.stack ?? 'No stack');
+                this.logger.error(`No matching user found`, { trace: error.stack ?? 'No stack' });
                 throw error;
             }
         }
