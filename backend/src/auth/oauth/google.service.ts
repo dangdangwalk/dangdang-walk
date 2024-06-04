@@ -3,7 +3,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 import { firstValueFrom } from 'rxjs';
-import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
+import { WinstonLoggerService } from '../../common/logger/winstonLogger.service';
 import { OauthService, RequestToken, RequestTokenRefresh, RequestUserInfo } from './oauth.service.interface';
 
 interface TokenResponse {

@@ -1,6 +1,6 @@
 import { Controller, Get, Param, ParseIntPipe, Query, UseGuards } from '@nestjs/common';
-import { AuthDogGuard } from 'src/dogs/guards/auth-dog.guard';
 import { AccessTokenPayload } from '../auth/token/token.service';
+import { AuthDogGuard } from '../dogs/guards/auth-dog.guard';
 import { User } from '../users/decorators/user.decorator';
 import { DateValidationPipe } from './pipes/date-validation.pipe';
 import { Period, PeriodValidationPipe } from './pipes/period-validation.pipe';

@@ -1,5 +1,5 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
-import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
+import { WinstonLoggerService } from '../../common/logger/winstonLogger.service';
 
 @Injectable()
 export class OauthDataGuard implements CanActivate {

@@ -1,10 +1,10 @@
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { S3Service } from 'src/s3/s3.service';
 import { EntityManager, Repository, UpdateResult } from 'typeorm';
 import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
 import { mockUser } from '../fixtures/users.fixture';
+import { S3Service } from '../s3/s3.service';
 import { UsersDogs } from '../users-dogs/users-dogs.entity';
 import { UsersDogsRepository } from '../users-dogs/users-dogs.repository';
 import { UsersDogsService } from '../users-dogs/users-dogs.service';
@@ -82,7 +82,6 @@ describe('UsersService', () => {
             beforeEach(() => {
                 jest.spyOn(userRepository, 'findOne').mockResolvedValue(mockUser);
                 jest.spyOn(userRepository, 'update').mockResolvedValue({ affected: 1 } as UpdateResult);
-                jest.spyOn(service, 'generateUniqueNickname').mockResolvedValue('unique-nickname');
             });
 
             it('사용자 정보를 업데이트하고 사용자를 리턴해야 한다.', async () => {
@@ -132,7 +131,6 @@ describe('UsersService', () => {
         context('사용자 토큰 정보가 주어지고 사용자가 존재하면', () => {
             beforeEach(() => {
                 jest.spyOn(userRepository, 'findOne').mockResolvedValue(mockUser);
-                jest.spyOn(service, 'generateUniqueNickname').mockResolvedValue('unique-nickname');
             });
 
             it('ConflictException 예외를 던져야 한다.', async () => {

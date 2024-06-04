@@ -12,9 +12,9 @@ import {
     UsePipes,
     ValidationPipe,
 } from '@nestjs/common';
-import { AccessTokenPayload } from 'src/auth/token/token.service';
-import { DateValidationPipe } from 'src/statistics/pipes/date-validation.pipe';
-import { User } from 'src/users/decorators/user.decorator';
+import { AccessTokenPayload } from '../auth/token/token.service';
+import { DateValidationPipe } from '../statistics/pipes/date-validation.pipe';
+import { User } from '../users/decorators/user.decorator';
 import { CreateJournalDto } from './dtos/create-journal.dto';
 import { UpdateJournalDto } from './dtos/update-journal.dto';
 import { AuthJournalGuard } from './guards/auth-journal.guard';

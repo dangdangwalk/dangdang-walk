@@ -2,7 +2,7 @@ import { CallHandler, ExecutionContext, Injectable, NestInterceptor, NotFoundExc
 import { ConfigService } from '@nestjs/config';
 import { CookieOptions, Response } from 'express';
 import { Observable, map } from 'rxjs';
-import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
+import { WinstonLoggerService } from '../../common/logger/winstonLogger.service';
 import { TokenService } from '../token/token.service';
 import { AuthData } from '../types/auth-data.type';
 import { OauthData } from '../types/oauth-data.type';

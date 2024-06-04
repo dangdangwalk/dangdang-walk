@@ -2,7 +2,7 @@ import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from
 import { Reflector } from '@nestjs/core';
 import { JsonWebTokenError, TokenExpiredError } from '@nestjs/jwt';
 import { Request } from 'express';
-import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
+import { WinstonLoggerService } from '../../common/logger/winstonLogger.service';
 import { AuthService } from '../auth.service';
 import { SKIP } from '../decorators/public.decorator';
 import { AccessTokenPayload, TokenService } from '../token/token.service';
