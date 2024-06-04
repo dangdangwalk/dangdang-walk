@@ -8,7 +8,7 @@ import JournalCreateForm from '@/pages/Journals/CreateForm';
 import Detail from '@/pages/Journals/Detail';
 import Journals from '@/pages/Journals';
 import OauthCallback from '@/pages/OauthCallback';
-import Profile from '@/pages/Profile';
+import Profile from '@/pages/MyPage';
 import Walk from '@/pages/Walk';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';

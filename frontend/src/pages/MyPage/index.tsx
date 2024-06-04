@@ -17,7 +17,7 @@ import Google from '@/assets/icons/ic-provider-google.svg';
 import Naver from '@/assets/icons/ic-provider-naver.svg';
 import { Divider } from '@/components/common/Divider';
 import DeactivateModal from '@/components/DeactivateModal';
-import DogProfile from '@/pages/DogProfile';
+import DogDetail from '@/pages/MyPage/DogDetail';
 import { ResponseDogs, ResponseRecentMonthStatistics, fetchDogRecentMonthStatistics } from '@/api/dogs';
 function Profile() {
     const navigate = useNavigate();
@@ -152,7 +152,7 @@ function Profile() {
                     회원탈퇴
                 </button>
             </main>
-            <DogProfile
+            <DogDetail
                 dog={dogInfo}
                 statistics={statistics}
                 isProfileOpen={isProfileOpen}

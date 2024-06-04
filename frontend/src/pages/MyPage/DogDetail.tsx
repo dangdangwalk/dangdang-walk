@@ -27,7 +27,7 @@ interface Props {
     isProfileOpen: boolean;
     setIsProfileOpen: (state: boolean) => void;
 }
-export default function DogProfile({ dog, statistics, isProfileOpen, setIsProfileOpen }: Props) {
+export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfileOpen }: Props) {
     const { updateDogMutation } = useDog();
     const { dogProfileImgUrl, setDogProfileImgUrl, onSelectFileChange } = useCropStore();
     const { useDogsQuery } = useDog();
