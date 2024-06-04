@@ -22,11 +22,7 @@ import NavbarProvider from '@/components/NavbarProvider';
 const router = createBrowserRouter([
     {
         path: '/',
-        element: (
-            <CookiesProvider>
-                <App />
-            </CookiesProvider>
-        ),
+        element: <App />,
         children: [
             {
                 index: true,
