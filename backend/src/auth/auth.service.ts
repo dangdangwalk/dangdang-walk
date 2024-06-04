@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
-import { DogsService } from 'src/dogs/dogs.service';
-import { S3Service } from 'src/s3/s3.service';
 import { Transactional } from 'typeorm-transactional';
+import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
+import { DogsService } from '../dogs/dogs.service';
+import { S3Service } from '../s3/s3.service';
 import { Users } from '../users/users.entity';
 import { UsersService } from '../users/users.service';
 import { GoogleService } from './oauth/google.service';

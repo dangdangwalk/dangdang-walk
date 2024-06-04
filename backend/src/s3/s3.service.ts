@@ -2,8 +2,8 @@ import { DeleteObjectCommand, DeleteObjectsCommand, PutObjectCommand, S3Client }
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { WinstonLoggerService } from 'src/common/logger/winstonLogger.service';
-import { generateUuid } from 'src/utils/hash.util';
+import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
+import { generateUuid } from '../utils/hash.util';
 import { PresignedUrlInfo } from './types/presigned-url-info.type';
 
 const BUCKET_NAME = 'dangdangwalk';

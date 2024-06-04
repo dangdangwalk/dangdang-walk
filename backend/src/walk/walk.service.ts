@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { DogsService } from 'src/dogs/dogs.service';
-import { DogSummary } from 'src/dogs/types/dog-summary.type';
-import { UsersService } from 'src/users/users.service';
 import { In } from 'typeorm';
+import { DogsService } from '../dogs/dogs.service';
+import { DogSummary } from '../dogs/types/dog-summary.type';
+import { UsersService } from '../users/users.service';
 
 const MAX_WALK_TIME = 3;
 

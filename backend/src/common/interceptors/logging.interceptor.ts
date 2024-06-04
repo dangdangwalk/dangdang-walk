@@ -1,6 +1,6 @@
 import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { Observable, tap } from 'rxjs';
-import { Color, bold, color, italic } from 'src/utils/ansi.util';
+import { Color, bold, color, italic } from '../../utils/ansi.util';
 import { generateUuid } from '../../utils/hash.util';
 import { WinstonLoggerService } from '../logger/winstonLogger.service';
 

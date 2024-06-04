@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { DogsModule } from 'src/dogs/dogs.module';
-import { Excrements } from 'src/excrements/excrements.entity';
-import { ExcrementsModule } from 'src/excrements/excrements.module';
-import { JournalPhotosModule } from 'src/journal-photos/journal-photos.module';
 import { DatabaseModule } from '../common/database/database.module';
+import { DogsModule } from '../dogs/dogs.module';
+import { Excrements } from '../excrements/excrements.entity';
+import { ExcrementsModule } from '../excrements/excrements.module';
+import { JournalPhotosModule } from '../journal-photos/journal-photos.module';
 import { JournalsController } from './journals.controller';
 import { Journals } from './journals.entity';
 import { JournalsRepository } from './journals.repository';

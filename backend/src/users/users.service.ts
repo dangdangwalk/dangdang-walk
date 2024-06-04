@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { AccessTokenPayload } from 'src/auth/token/token.service';
-import { S3Service } from 'src/s3/s3.service';
 import { FindOptionsWhere } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+import { AccessTokenPayload } from '../auth/token/token.service';
+import { S3Service } from '../s3/s3.service';
 import { UsersDogsService } from '../users-dogs/users-dogs.service';
 import { generateUuid } from '../utils/hash.util';
 import { checkIfExistsInArr } from '../utils/manipulate.util';
