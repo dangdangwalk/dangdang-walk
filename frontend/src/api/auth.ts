@@ -1,20 +1,11 @@
 import { httpClient } from './http';
-import { getStorage } from '@/utils/storage';
-import { storageKeys } from '@/constants';
 
 export type ResponseToken = {
     accessToken: string;
 };
 
-const getAccessToken = async (): Promise<ResponseToken | undefined> => {
-    const isLoggedIn = getStorage(storageKeys.IS_LOGGED_IN) ? true : false;
-    let data: ResponseToken | undefined;
-
-    if (isLoggedIn) {
-        const response = await httpClient.get('/auth/token');
-        data = response.data;
-    }
-
+const getAccessToken = async (): Promise<ResponseToken> => {
+    const { data } = await httpClient.get('/auth/token');
     return data;
 };
 
@@ -46,13 +37,8 @@ export type ResponseProfile = {
     profileImage: string;
     provider: string;
 };
-const requestProfile = async (): Promise<ResponseProfile | undefined> => {
-    const isLoggedIn = getStorage(storageKeys.IS_LOGGED_IN) ? true : false;
-    let data: ResponseProfile | undefined;
-    if (isLoggedIn) {
-        const response = await httpClient.get('/users/me');
-        data = response.data;
-    }
+const requestProfile = async (): Promise<ResponseProfile> => {
+    const { data } = await httpClient.get('/users/me');
     return data;
 };
 export { getAccessToken, requestLogin, requestLogout, requestSignup, requestDeactivate, requestProfile };
