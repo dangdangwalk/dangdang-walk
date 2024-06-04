@@ -12,7 +12,6 @@ import Profile from '@/pages/MyPage';
 import Walk from '@/pages/Walk';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { CookiesProvider } from 'react-cookie';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import App from './App';
@@ -22,11 +21,7 @@ import NavbarProvider from '@/components/NavbarProvider';
 const router = createBrowserRouter([
     {
         path: '/',
-        element: (
-            <CookiesProvider>
-                <App />
-            </CookiesProvider>
-        ),
+        element: <App />,
         children: [
             {
                 index: true,
