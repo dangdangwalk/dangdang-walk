@@ -55,7 +55,7 @@ const useSignup = (mutationOptions?: UseMutationCustomOptions) => {
 };
 
 const useGetRefreshToken = () => {
-    const { storeLogin } = useAuthStore();
+    const { storeLogin, isLoggedIn } = useAuthStore();
     const { isSuccess, data } = useQuery({
         queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN],
         queryFn: getAccessToken,
@@ -64,6 +64,7 @@ const useGetRefreshToken = () => {
         refetchInterval: 1000 * 60 * 60 - 1000 * 60 * 10,
         refetchOnReconnect: true,
         refetchIntervalInBackground: true,
+        enabled: isLoggedIn,
     });
     useEffect(() => {
         if (isSuccess) {
@@ -105,11 +106,13 @@ const useDeactivate = (mutationOptions?: UseMutationCustomOptions) => {
 };
 
 const useGetProfile = (queryOptions?: UseQueryCustomOptions) => {
+    const { isLoggedIn } = useAuthStore();
     return useQuery({
         queryKey: [queryKeys.AUTH, queryKeys.GET_PROFILE],
         queryFn: requestProfile,
         gcTime: 1000 * 60 * 60 * 24,
         staleTime: 1000 * 60 * 60 * 24 - 1000 * 60,
+        enabled: isLoggedIn,
         ...queryOptions,
     });
 };
