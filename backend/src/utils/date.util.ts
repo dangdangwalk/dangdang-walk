@@ -5,7 +5,7 @@ export function formatDate(date: Date): string {
     return `${year}-${month}-${day}`;
 }
 
-export function getWeek(date: Date): number {
+export function getWeekNumber(date: Date): number {
     const currentDate = date.getDate();
     const firstDay = new Date(date.setDate(1)).getDay();
 
