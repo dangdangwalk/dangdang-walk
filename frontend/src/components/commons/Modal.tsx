@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog';
 
-import { buttonVariants } from '@/components/common/Button';
+import { buttonVariants } from '@/components/commons/Button';
 import { cn } from '@/utils/tailwindClass';
 import { ComponentPropsWithoutRef, ElementRef, HTMLAttributes, forwardRef } from 'react';
 

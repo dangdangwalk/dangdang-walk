@@ -1,5 +1,5 @@
 import Plus from '@/assets/icons/ic-plus.svg';
-import Spinner from '@/components/common/Spinner';
+import Spinner from '@/components/commons/Spinner';
 import { ChangeEventHandler, useRef } from 'react';
 
 export default function AddImageButton({ isLoading, onChange }: Props) {

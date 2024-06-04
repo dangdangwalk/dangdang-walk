@@ -1,8 +1,8 @@
-import Avatar from '@/components/common/Avatar';
-import { Checkbox } from '@/components/common/Checkbox';
-import { Divider } from '@/components/common/Divider';
-import { Feces } from '@/components/icon/Feces';
-import { Urine } from '@/components/icon/Urine';
+import Avatar from '@/components/commons/Avatar';
+import { Checkbox } from '@/components/commons/Checkbox';
+import { Divider } from '@/components/commons/Divider';
+import { Feces } from '@/components/icons/Feces';
+import { Urine } from '@/components/icons/Urine';
 import { WalkingDog } from '@/models/dog';
 
 interface DogFeceAndUrineCheckListProps {

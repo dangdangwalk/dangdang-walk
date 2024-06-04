@@ -1,6 +1,6 @@
 import AllDogs from '@/assets/icons/ic-default-dog.svg';
-import Avatar from '@/components/common/Avatar';
-import { Checkbox } from '@/components/common/Checkbox';
+import Avatar from '@/components/commons/Avatar';
+import { Checkbox } from '@/components/commons/Checkbox';
 import { AvailableDogCheck } from '@/components/home/AvailableDogCheck';
 import { AvailableDog } from '@/models/dog';
 import { useState } from 'react';

@@ -1,4 +1,4 @@
-import { Button } from '@/components/common/Button';
+import { Button } from '@/components/commons/Button';
 import { NAV_HEIGHT } from '@/constants/style';
 import { cn } from '@/utils/tailwindClass';
 

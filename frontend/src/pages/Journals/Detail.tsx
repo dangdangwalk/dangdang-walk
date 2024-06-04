@@ -2,9 +2,9 @@ import { JournalDetail, remove as removeJournal, update as updateJournal } from 
 import { deleteImages, getUploadUrl, uploadImage } from '@/api/upload';
 import { ReactComponent as Arrow } from '@/assets/icons/ic-arrow-right.svg';
 import { ReactComponent as Meatball } from '@/assets/icons/ic-meatball.svg';
-import BottomSheet from '@/components/common/BottomSheet';
-import { Button } from '@/components/common/Button';
-import { Divider } from '@/components/common/Divider';
+import BottomSheet from '@/components/commons/BottomSheet';
+import { Button } from '@/components/commons/Button';
+import { Divider } from '@/components/commons/Divider';
 import {
     Modal,
     ModalAction,
@@ -14,7 +14,7 @@ import {
     ModalFooter,
     ModalHeader,
     ModalTitle,
-} from '@/components/common/Modal';
+} from '@/components/commons/Modal';
 import CompanionDogSection, { Dog } from '@/components/journals/CompanionDogSection2';
 import Heading from '@/components/journals/Heading';
 import MemoSection from '@/components/journals/MemoSection';

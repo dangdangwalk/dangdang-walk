@@ -1,8 +1,8 @@
 import { create as createJournal } from '@/api/journal';
 import { deleteImages, getUploadUrl, uploadImage } from '@/api/upload';
 import Cancel from '@/assets/icons/ic-cancel.svg';
-import { Button } from '@/components/common/Button';
-import { Divider } from '@/components/common/Divider';
+import { Button } from '@/components/commons/Button';
+import { Divider } from '@/components/commons/Divider';
 import {
     Modal,
     ModalAction,
@@ -12,7 +12,7 @@ import {
     ModalFooter,
     ModalHeader,
     ModalTitle,
-} from '@/components/common/Modal';
+} from '@/components/commons/Modal';
 import CompanionDogSection from '@/components/journals/CompanionDogSection';
 import Heading from '@/components/journals/Heading';
 import MemoSection from '@/components/journals/MemoSection';

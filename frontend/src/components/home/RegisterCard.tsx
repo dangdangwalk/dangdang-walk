@@ -1,4 +1,4 @@
-import { Button } from '@/components/common/Button';
+import { Button } from '@/components/commons/Button';
 import DogCard from '@/components/home/DogCard';
 import { DogStatistic } from '@/models/dog';
 import { useNavigate } from 'react-router-dom';

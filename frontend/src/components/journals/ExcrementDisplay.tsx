@@ -1,5 +1,5 @@
-import { Feces } from '@/components/icon/Feces';
-import { Urine } from '@/components/icon/Urine';
+import { Feces } from '@/components/icons/Feces';
+import { Urine } from '@/components/icons/Urine';
 import IconAndNumberDisplay from '@/components/journals/IconAndNumberDisplay';
 
 export default function ExcrementDisplay({ fecesCount = 0, urineCount = 0 }: Props) {

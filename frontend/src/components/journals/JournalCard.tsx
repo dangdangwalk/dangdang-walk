@@ -1,4 +1,4 @@
-import DefaultProfileImage from '@/components/common/DefaultProfileImage';
+import DefaultProfileImage from '@/components/commons/DefaultProfileImage';
 import WalkInfo from '@/components/walk/WalkInfo';
 import { Dog } from '@/models/dog';
 import { Journal } from '@/models/journals';

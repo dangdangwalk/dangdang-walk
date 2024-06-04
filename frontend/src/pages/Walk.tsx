@@ -4,7 +4,7 @@ import WalkNavbar from '@/components/walk/WalkNavbar';
 import WalkHeader from '@/components/walk/WalkHeader';
 import { useEffect, useState } from 'react';
 import useGeolocation from '@/hooks/useGeolocation';
-import BottomSheet from '@/components/common/BottomSheet';
+import BottomSheet from '@/components/commons/BottomSheet';
 import useWalkingDogs from '@/hooks/useWalkingDogs';
 import useStopWatch from '@/hooks/useStopWatch';
 import { DEFAULT_WALK_MET, DEFAULT_WEIGHT } from '@/constants/walk';

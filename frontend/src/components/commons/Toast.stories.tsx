@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { Button } from '@/components/common/Button';
+import { Button } from '@/components/commons/Button';
 import useToast from '@/hooks/useToast';
 import { Toast } from './Toast';
 

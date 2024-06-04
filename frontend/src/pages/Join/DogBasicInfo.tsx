@@ -1,6 +1,6 @@
 import React, { Dispatch, MutableRefObject, SetStateAction, useState } from 'react';
 import SelectPhoto from '@/assets/icons/ic-select-photo.svg';
-import { Divider } from '@/components/common/Divider';
+import { Divider } from '@/components/commons/Divider';
 import { DogRegInfo } from '@/pages/Join';
 import BreedSearch from '@/components/BreedSearch';
 import { useCropStore } from '@/store/cropStore';

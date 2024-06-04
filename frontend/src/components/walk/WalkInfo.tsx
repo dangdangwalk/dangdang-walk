@@ -1,5 +1,5 @@
 import Distance from '@/classes/Distance';
-import { Divider } from '@/components/common/Divider';
+import { Divider } from '@/components/commons/Divider';
 import { timeFormat } from '@/utils/format';
 import { cn } from '@/utils/tailwindClass';
 

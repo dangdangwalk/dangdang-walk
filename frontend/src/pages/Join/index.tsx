@@ -1,11 +1,11 @@
-import Topbar from '@/components/common/Topbar';
+import Topbar from '@/components/commons/Topbar';
 import { getStorage } from '@/utils/storage';
 import React, { useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import TopBack from '@/assets/icons/ic-arrow-left.svg';
 import Agreements from '@/pages/Join/Agreements';
-import { Button } from '@/components/common/Button';
-import { Divider } from '@/components/common/Divider';
+import { Button } from '@/components/commons/Button';
+import { Divider } from '@/components/commons/Divider';
 import PetOwner from '@/pages/Join/PetOwner';
 import Cancel from '@/assets/icons/ic-cancel.svg';
 import { storageKeys } from '@/constants';

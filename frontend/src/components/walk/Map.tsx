@@ -1,4 +1,4 @@
-import Spinner from '@/components/common/Spinner';
+import Spinner from '@/components/commons/Spinner';
 import { DEFAULT_LAT, DEFAULT_LNG } from '@/constants/location';
 import { NAV_HEIGHT, TOP_BAR_HEIGHT, WALK_INFO_HEIGHT } from '@/constants/style';
 import { Position } from '@/models/location';

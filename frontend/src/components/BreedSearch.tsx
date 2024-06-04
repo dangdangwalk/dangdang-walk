@@ -1,5 +1,5 @@
 import React, { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
-import Topbar from '@/components/common/Topbar';
+import Topbar from '@/components/commons/Topbar';
 import TopBack from '@/assets/icons/ic-arrow-left.svg';
 import Search from '@/assets/icons/ic-search.svg';
 import { DogRegInfo } from '@/pages/Join';

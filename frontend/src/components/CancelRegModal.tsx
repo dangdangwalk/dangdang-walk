@@ -7,7 +7,7 @@ import {
     ModalFooter,
     ModalHeader,
     ModalTitle,
-} from '@/components/common/Modal';
+} from '@/components/commons/Modal';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 

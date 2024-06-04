@@ -1,4 +1,4 @@
-import { Button } from '@/components/common/Button';
+import { Button } from '@/components/commons/Button';
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import {
