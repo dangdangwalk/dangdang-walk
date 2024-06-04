@@ -87,15 +87,15 @@ export default function Detail() {
     return (
         <>
             <div className="flex flex-col">
-                <div className="flex justify-between items-center h-12 px-5">
-                    <button className="w-12 h-12 flex justify-center items-center" onClick={handleGoBack}>
+                <div className="flex h-12 items-center justify-between px-5">
+                    <button className="flex h-12 w-12 items-center justify-center" onClick={handleGoBack}>
                         <Arrow className="rotate-180" />
                     </button>
                     <Heading headingNumber={1} className="-translate-x-[15px]">
                         {dogName}의 {journalCount}번째 산책
                     </Heading>
                     <button
-                        className="w-12 h-12 flex justify-center items-center"
+                        className="flex h-12 w-12 items-center justify-center"
                         onClick={() => setIsBottomsheetOpen(true)}
                     >
                         <Meatball />
@@ -105,7 +105,7 @@ export default function Detail() {
                     <Map
                         startPosition={routes[0]}
                         path={routes}
-                        className="rounded-lg overflow-hidden"
+                        className="overflow-hidden rounded-lg"
                         height="216px"
                     />
                     <WalkInfo distance={distance} calories={calories} duration={duration} />
@@ -123,7 +123,7 @@ export default function Detail() {
                     <MemoSection textAreaRef={textAreaRef} readonly={!isModifying} />
                 </div>
                 {isModifying ? (
-                    <Button rounded="none" className="w-full h-16" disabled={isSaving} onClick={handleSave}>
+                    <Button rounded="none" className="h-16 w-full" disabled={isSaving} onClick={handleSave}>
                         <span className="-translate-y-[5px]">저장하기</span>
                     </Button>
                 ) : (
@@ -143,11 +143,11 @@ export default function Detail() {
                 </ModalContent>
             </Modal>
             <BottomSheet isOpen={isBottomsheetOpen} onClose={() => setIsBottomsheetOpen(false)}>
-                <BottomSheet.Body className="h-auto px-0 overflow-y-visible">
+                <BottomSheet.Body className="h-auto overflow-y-visible px-0">
                     <Divider className="h-px" />
                     <Button
                         rounded="none"
-                        className="w-full bg-white text-[#222222] text-base font-normal"
+                        className="w-full bg-white text-base font-normal text-[#222222]"
                         onClick={handleModify}
                     >
                         수정하기
@@ -155,7 +155,7 @@ export default function Detail() {
                     <Divider className="h-px" />
                     <Button
                         rounded="none"
-                        className="w-full bg-white text-[#222222] text-base font-normal"
+                        className="w-full bg-white text-base font-normal text-[#222222]"
                         onClick={() => setOpenModal(true)}
                     >
                         삭제하기

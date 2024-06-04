@@ -34,7 +34,7 @@ export default function BreedSearch({ isOpen, setIsOpen, setData }: Props) {
         const formattedData = filteredData.map((item: string) => (
             <div
                 key={item}
-                className="flex items-center w-full text-sm font-bold font-NanumGothic h-[2.125rem] pl-1 py-3 border-b border-b-zinc-300 "
+                className="font-NanumGothic flex h-[2.125rem] w-full items-center border-b border-b-zinc-300 py-3 pl-1 text-sm font-bold"
                 onClick={() => handleSetBreed(item)}
             >
                 <span
@@ -50,7 +50,7 @@ export default function BreedSearch({ isOpen, setIsOpen, setData }: Props) {
     };
     return (
         <div
-            className={`fixed flex flex-col bg-white w-full h-full z-30 top-0 left-full duration-200 ${isOpen ? '-translate-x-full' : 'translate-x-0'}`}
+            className={`fixed left-full top-0 z-30 flex h-full w-full flex-col bg-white duration-200 ${isOpen ? '-translate-x-full' : 'translate-x-0'}`}
         >
             <Topbar>
                 <Topbar.Front className="pl-3">
@@ -65,14 +65,14 @@ export default function BreedSearch({ isOpen, setIsOpen, setData }: Props) {
                     />
                 </Topbar.Front>
             </Topbar>
-            <main className="flex flex-col w-full px-5 mt-3 justify-center items-center">
-                <div className="w-full h-12 pl-3  py-3.5 bg-white rounded-lg border border-neutral-200 justify-start items-start gap-2 inline-flex">
+            <main className="mt-3 flex w-full flex-col items-center justify-center px-5">
+                <div className="inline-flex h-12 w-full items-start justify-start gap-2 rounded-lg border border-neutral-200 bg-white py-3.5 pl-3">
                     <img src={Search} alt="search" />
                     <input
                         value={search}
                         onChange={handleChange}
                         placeholder="견종 검색하기"
-                        className="w-full text-neutral-800 text-sm font-bold font-['NanumGothic'] leading-[18px] outline-none"
+                        className="w-full font-['NanumGothic'] text-sm font-bold leading-[18px] text-neutral-800 outline-none"
                     />
                     {search && (
                         <img
@@ -87,7 +87,7 @@ export default function BreedSearch({ isOpen, setIsOpen, setData }: Props) {
                     )}
                 </div>
 
-                <div className="flex flex-col w-full mt-2">{searched}</div>
+                <div className="mt-2 flex w-full flex-col">{searched}</div>
             </main>
         </div>
     );

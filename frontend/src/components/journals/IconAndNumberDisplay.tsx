@@ -13,7 +13,7 @@ const variants = cva('text', {
 
 export default function IconAndNumberDisplay({ color, count, children }: Props) {
     return (
-        <span className="flex gap-[6px] items-center">
+        <span className="flex items-center gap-[6px]">
             {children}
             <span className={cn(variants({ color }))}>{count}</span>
         </span>

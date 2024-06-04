@@ -13,7 +13,7 @@ const Divider = forwardRef<
         orientation={orientation}
         className={cn(
             'shrink-0',
-            orientation === 'horizontal' ? 'bg-[#f6f6f6] h-1 w-full' : 'bg-[#e4e4e4] h-5 w-[1px]',
+            orientation === 'horizontal' ? 'h-1 w-full bg-[#f6f6f6]' : 'h-5 w-[1px] bg-[#e4e4e4]',
             className
         )}
         {...props}

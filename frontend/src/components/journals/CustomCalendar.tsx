@@ -46,9 +46,9 @@ export default function CustomCalendar() {
     }, [location.search]);
 
     return (
-        <div className="w-full flex flex-col px-[30px] pt-4 justify-center items-center bg-white shadow rounded-bl-2xl rounded-br-2xl overflow-hidden">
+        <div className="flex w-full flex-col items-center justify-center overflow-hidden rounded-bl-2xl rounded-br-2xl bg-white px-[30px] pt-4 shadow">
             {view === 'month' && (
-                <div className="w-full flex gap-2 justify-end mb-6">
+                <div className="mb-6 flex w-full justify-end gap-2">
                     <button
                         onClick={() => {
                             handlePrevMonth(getStatisticData);
@@ -56,7 +56,7 @@ export default function CustomCalendar() {
                     >
                         <img src={PrevMonth} alt="이전달" />
                     </button>
-                    <span className="text-center text-neutral-800 text-base font-bold leading-normal">
+                    <span className="text-center text-base font-bold leading-normal text-neutral-800">
                         {formCalendar(date)}
                     </span>
                     <button
@@ -86,21 +86,21 @@ export default function CustomCalendar() {
                 tileContent={({ date, view }) => {
                     return (
                         <>
-                            <div className="flex flex-col justify-center items-center gap-2">
+                            <div className="flex flex-col items-center justify-center gap-2">
                                 <div className="days">{formDay(date)}</div>
                                 {mark.has(formDate(date)) ? (
                                     <div className="dot"></div>
                                 ) : (
-                                    <div className="w-1 h-1"></div>
+                                    <div className="h-1 w-1"></div>
                                 )}
                             </div>
                         </>
                     );
                 }}
             />
-            <div className="w-full h-[30px]  justify-center items-center inline-flex">
+            <div className="inline-flex h-[30px] w-full items-center justify-center">
                 <button
-                    className="w-[30px] h-1 bg-neutral-200 rounded-sm"
+                    className="h-1 w-[30px] rounded-sm bg-neutral-200"
                     onClick={() => {
                         toggleViewSwitch(getStatisticData);
                     }}

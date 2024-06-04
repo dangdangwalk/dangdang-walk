@@ -5,9 +5,9 @@ import { ReactNode } from 'react';
 
 export default function RemovableImageList({ imageFileNames, children, onDeleteImage, isModifying = false }: Props) {
     return (
-        <div className="flex flex-row gap-1 py-2 overflow-x-auto">
+        <div className="flex flex-row gap-1 overflow-x-auto py-2">
             {imageFileNames.map((imageFileName) => (
-                <span key={imageFileName} className="inline-flex items-center h-[104px]">
+                <span key={imageFileName} className="inline-flex h-[104px] items-center">
                     <span className="relative">
                         <img
                             src={makeFileUrl(imageFileName)}

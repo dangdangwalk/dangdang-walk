@@ -56,7 +56,7 @@ export default function WalkNavbar({ onOpen, onStop, onChange }: WalkNavbarProps
     };
 
     return (
-        <nav className="absolute bottom-0 left-0 w-full flex px-[60px] py-3 justify-between bg-white items-center z-40">
+        <nav className="absolute bottom-0 left-0 z-40 flex w-full items-center justify-between bg-white px-[60px] py-3">
             <button onClick={onOpen}>
                 <img src={Poop} alt="배소변 버튼" />
             </button>

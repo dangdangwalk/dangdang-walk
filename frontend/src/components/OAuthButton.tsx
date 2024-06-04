@@ -45,9 +45,9 @@ const OAuthButton = ({ provider, name }: Props) => {
     };
     return (
         <button
-            className={`rounded-lg flex justify-center items-center relative w-full h-[3.25rem] ${bgColor(
+            className={`relative flex h-[3.25rem] w-full items-center justify-center rounded-lg ${bgColor(
                 provider
-            )} ${provider === 'google' && 'border border-neutral-200 '}`}
+            )} ${provider === 'google' && 'border border-neutral-200'}`}
             onClick={() => {
                 setLoginBottomSheetState(false);
                 setTimeout(() => {
@@ -57,7 +57,7 @@ const OAuthButton = ({ provider, name }: Props) => {
         >
             <img className="absolute left-0 ml-5" src={btnLogin(provider)} alt={`${provider}`} />
             <div
-                className={`my-auto text-center text-base font-bold font-roboto leading-normal  ${
+                className={`my-auto text-center font-roboto text-base font-bold leading-normal ${
                     provider === 'kakao' && 'text-opacity-85'
                 } ${provider === 'naver' ? 'text-white' : 'text-black'}`}
             >

@@ -4,7 +4,7 @@ import { cn } from '@/utils/tailwindClass';
 export default function Topbar({ children, className }: { children: React.ReactNode; className?: string }) {
     return (
         <header
-            className={cn(`flex w-full justify-between items-center px-2 ${className}`)}
+            className={cn(`flex w-full items-center justify-between px-2 ${className}`)}
             style={{ height: TOP_BAR_HEIGHT }}
         >
             {children}

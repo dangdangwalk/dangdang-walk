@@ -8,7 +8,7 @@ export default function CompanionDogSection({ dogs }: Props) {
             <Heading headingNumber={2}>함께한 댕댕이</Heading>
             <div className="flex flex-col">
                 {dogs.map((dog) => (
-                    <div key={dog.id} className="flex justify-between h-[52px]">
+                    <div key={dog.id} className="flex h-[52px] justify-between">
                         <Avatar url={dog.profilePhotoUrl} name={dog.name} />
                         <ExcrementDisplay fecesCount={dog.fecesCount} urineCount={dog.urineCount} />
                     </div>

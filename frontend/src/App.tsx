@@ -24,9 +24,9 @@ function App() {
     }, []);
 
     return (
-        <div className="flex flex-col w-full">
+        <div className="flex w-full flex-col">
             <Outlet />
-            {spinner > 0 && <Spinner className="absolute bg-neutral-800/40 z-40" />}
+            {spinner > 0 && <Spinner className="absolute z-40 bg-neutral-800/40" />}
             <Toast />
         </div>
     );

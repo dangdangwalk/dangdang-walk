@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 
 export default function Navbar() {
     return (
-        <div className={`w-full h-16 border-t bg-white border-neutral-200 px-5`}>
-            <div className="flex justify-around items-center">
+        <div className={`h-16 w-full border-t border-neutral-200 bg-white px-5`}>
+            <div className="flex items-center justify-around">
                 <Link to="/">
                     <WalkOn />
                 </Link>

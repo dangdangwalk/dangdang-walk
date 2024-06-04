@@ -16,7 +16,7 @@ const WEEKDAY = ['월', '화', '수', '목', '금', '토', '일'];
 export default function DogCard({ dog, pageMove }: DogCardProps) {
     return (
         <div
-            className="flex-col relative bg-white rounded-lg shadow"
+            className="relative flex-col rounded-lg bg-white shadow"
             onClick={() => {
                 if (!pageMove) return;
                 pageMove(dog.id);
@@ -26,7 +26,7 @@ export default function DogCard({ dog, pageMove }: DogCardProps) {
                 <Avatar url={dog.profilePhotoUrl} name={dog.name} />
                 <img src={Ic} alt="ic" />
             </div>
-            <div className="flex justify-start items-center gap-2 pl-[15px]">
+            <div className="flex items-center justify-start gap-2 pl-[15px]">
                 {dog.weeklyWalks.map((walk, index) => {
                     return walk === 0 ? (
                         <DayIcon key={WEEKDAY[index]} day={WEEKDAY[index]} />
@@ -35,21 +35,21 @@ export default function DogCard({ dog, pageMove }: DogCardProps) {
                     );
                 })}
             </div>
-            <div className="p-2.5 pr-[15px] flex flex-col justify-start gap-3">
-                <div className="text-neutral-800 pl-[5px] text-xs font-bold leading-[18px]">
+            <div className="flex flex-col justify-start gap-3 p-2.5 pr-[15px]">
+                <div className="pl-[5px] text-xs font-bold leading-[18px] text-neutral-800">
                     {dog.todayWalkAmount === 0
                         ? '산책하러 나가요!'
                         : dog.todayWalkAmount >= dog.recommendedWalkAmount
                           ? '오늘은 만족스러워요😁'
                           : '산책이 모자라요😢'}
                 </div>
-                <div className="flex gap-2 justify-between items-center">
+                <div className="flex items-center justify-between gap-2">
                     <Progressbar percentage={(dog.todayWalkAmount / dog.recommendedWalkAmount) * 100} />
                     <span>
-                        <span className="text-amber-500 text-sm font-bold leading-[21px]">
+                        <span className="text-sm font-bold leading-[21px] text-amber-500">
                             {walkPercentFormat(Number(dog.todayWalkAmount) / Number(dog.recommendedWalkAmount))}
                         </span>
-                        <span className="text-neutral-400 text-sm font-bold leading-[18px]">/100</span>
+                        <span className="text-sm font-bold leading-[18px] text-neutral-400">/100</span>
                     </span>
                 </div>
             </div>

@@ -73,7 +73,7 @@ export default function Map({ startPosition, path, className, height }: MapProps
         <>
             <div
                 id="map"
-                className={cn(`100vdw  ${className}`)}
+                className={cn(`100vdw ${className}`)}
                 style={{
                     height: height
                         ? height

@@ -6,10 +6,10 @@ export default function AddImageButton({ isLoading, onChange }: Props) {
     const inputRef = useRef<HTMLInputElement | null>(null);
 
     return (
-        <span className="inline-block min-w-[104px] h-[104px] bg-[#F1F1F1] rounded-lg">
+        <span className="inline-block h-[104px] min-w-[104px] rounded-lg bg-[#F1F1F1]">
             <>
                 <button
-                    className="flex w-full h-full flex-col items-center gap-[10px]"
+                    className="flex h-full w-full flex-col items-center gap-[10px]"
                     disabled={isLoading}
                     onClick={handleClick}
                 >
@@ -17,10 +17,10 @@ export default function AddImageButton({ isLoading, onChange }: Props) {
                         <Spinner />
                     ) : (
                         <>
-                            <span className="flex justify-center mt-[30px]">
+                            <span className="mt-[30px] flex justify-center">
                                 <img src={Plus} alt="더하기" className="w-6" />
                             </span>
-                            <span className="text-[#BABABA] text-xs font-semibold">사진추가</span>
+                            <span className="text-xs font-semibold text-[#BABABA]">사진추가</span>
                         </>
                     )}
                 </button>

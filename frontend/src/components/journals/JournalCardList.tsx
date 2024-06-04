@@ -4,7 +4,7 @@ import { Journal } from '@/models/journals';
 
 export default function JournalCardList({ journals, dog }: { journals: Journal[]; dog: Dog | undefined }) {
     return (
-        <div className="flex flex-col px-5 py-[14px] justify-start items-center gap-3">
+        <div className="flex flex-col items-center justify-start gap-3 px-5 py-[14px]">
             {journals.map((journal) => {
                 return <JournalCard key={journal.journalId} journal={journal} dog={dog} />;
             })}

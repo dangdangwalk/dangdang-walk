@@ -48,9 +48,9 @@ export default function WeatherInfo() {
             {isLoading ? (
                 <Spinner className="h-[164px]" />
             ) : (
-                <figure className="py-4 flex justify-between ">
-                    <div className="flex-col justify-between items-start inline-flex ">
-                        <div className="text-black font-bold text-[28px] leading-[42px]">
+                <figure className="flex justify-between py-4">
+                    <div className="inline-flex flex-col items-start justify-between">
+                        <div className="text-[28px] font-bold leading-[42px] text-black">
                             {weatherStatus(weather?.temperature, weather?.precipitation) ? (
                                 <div>
                                     산책하기 좋은 <br /> 날씨에요
@@ -63,16 +63,16 @@ export default function WeatherInfo() {
                                 </div>
                             )}
                         </div>
-                        <div className="pl-1 flex-col justify-between items-start flex">
-                            <p className="text-zinc-500 text-xs font-normal leading-[18px]">위치 : {address}</p>
-                            <div className="text-[#999999] text-xs font-normal leading-[18px]">
+                        <div className="flex flex-col items-start justify-between pl-1">
+                            <p className="text-xs font-normal leading-[18px] text-zinc-500">위치 : {address}</p>
+                            <div className="text-xs font-normal leading-[18px] text-[#999999]">
                                 대기질 : {getAirStatus(airGrade)}
                             </div>
                         </div>
                     </div>
-                    <div className="flex-col justify-start items-center gap-3.5 inline-flex">
+                    <div className="inline-flex flex-col items-center justify-start gap-3.5">
                         <img src={statusImage[skyStatus ?? 'dayclear']} alt={skyStatus} />
-                        <div className="text-zinc-500 text-xs font-normal leading-[18px]">{`최고:${temperFormat(weather?.maxTemperature)} 최저:${weather?.minTemperature}`}</div>
+                        <div className="text-xs font-normal leading-[18px] text-zinc-500">{`최고:${temperFormat(weather?.maxTemperature)} 최저:${weather?.minTemperature}`}</div>
                     </div>
                 </figure>
             )}

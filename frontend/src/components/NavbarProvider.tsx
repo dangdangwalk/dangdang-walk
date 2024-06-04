@@ -26,7 +26,7 @@ export default function NavbarProvider({ children }: Props) {
             )}
             <BottomSheet isOpen={isLoginBottomSheetOpen} onClose={handleClose}>
                 <BottomSheet.Body className="h-[230px]">
-                    <div className="flex flex-col items-center gap-3 mx-2 mt-4 mb-5">
+                    <div className="mx-2 mb-5 mt-4 flex flex-col items-center gap-3">
                         {OAUTH.map((oauth, index) => (
                             <OAuthButton key={index} provider={oauth.PROVIDER} name={oauth.NAME} />
                         ))}
