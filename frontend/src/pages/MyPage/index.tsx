@@ -123,7 +123,7 @@ function Profile() {
                         dogs.map((dog, index) => (
                             <div key={dog.id} className="flex items-center justify-between px-5 py-[6px]">
                                 <div className="flex justify-start gap-2">
-                                    <Avatar url={`${dog.profilePhotoUrl}`} name={dog.name} />
+                                    <Avatar url={dog.profilePhotoUrl} name={dog.name} />
                                     {index === 0 && <img src={CrownIcon} alt="crown" />}
                                 </div>
                                 <img
