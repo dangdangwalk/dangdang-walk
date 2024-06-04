@@ -1,6 +1,6 @@
 import { httpClient } from '@/api/http';
 import { Journal } from '@/models/journals';
-import { Position as NumberPosition, Position } from '@/models/location.model';
+import { Position as NumberPosition, Position } from '@/models/location';
 import { formDate } from '@/utils/date';
 
 export const fetchJournals = async (dogId: number, date: string = formDate(new Date())): Promise<Journal[]> => {

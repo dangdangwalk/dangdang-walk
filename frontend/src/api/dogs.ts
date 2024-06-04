@@ -1,6 +1,6 @@
 import { httpClient } from '@/api/http';
 import { DogRegInfo } from '@/pages/Join';
-import { AvailableDog, Dog, DogStatistic } from '@/models/dog.model';
+import { AvailableDog, Dog, DogStatistic } from '@/models/dog';
 import { getStorage } from '@/utils/storage';
 import { storageKeys } from '@/constants';
 export type period = 'week' | 'month';
