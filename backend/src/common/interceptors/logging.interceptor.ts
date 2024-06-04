@@ -52,7 +52,7 @@ export class LoggingInterceptor implements NestInterceptor {
                     `${color('RESPONSE', 'Magenta')} [ ${bold(method)} | ${bold(url)} | ${ip} | ${statusCode} | ${color(`+${responseTime}ms`, responseTimeColor)} ] ${color(requestId, 'Black')}`,
                 );
 
-                this.logger.debug('Response body', { ...res });
+                this.logger.debug('Response body', typeof res === 'object' ? { ...res } : { res });
             }),
         );
     }
