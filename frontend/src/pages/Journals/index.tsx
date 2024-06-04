@@ -1,15 +1,15 @@
-import Topbar from '@/components/common/Topbar';
+import Topbar from '@/components/commons/Topbar';
 import CustomCalendar from '@/components/journals/CustomCalendar';
 import JournalCardList from '@/components/journals/JournalCardList';
 import { NAV_HEIGHT, TOP_BAR_HEIGHT } from '@/constants/style';
 import useJournals from '@/hooks/useJournals';
-import Ic from '@/assets/icons/ic-arrow.svg';
-import { Dog } from '@/models/dog.model';
+import Ic from '@/assets/icons/ic-arrow-right.svg';
+import { Dog } from '@/models/dog';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { fetchDogList } from '@/api/dogs';
-import Avatar from '@/components/common/Avatar';
-import SelectBox from '@/components/common/SelectBox';
+import { fetchDogList } from '@/api/dog';
+import Avatar from '@/components/commons/Avatar';
+import SelectBox from '@/components/commons/SelectBox';
 import { queryStringKeys } from '@/constants';
 const { REACT_APP_BASE_IMAGE_URL = '' } = window._ENV ?? process.env;
 interface ReceivedState {

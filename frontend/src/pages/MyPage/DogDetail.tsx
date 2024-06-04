@@ -1,22 +1,22 @@
-import { ResponseDogs, ResponseRecentMonthStatistics } from '@/api/dogs';
+import { ResponseDogs, ResponseRecentMonthStatistics } from '@/api/dog';
 import { getUploadUrl } from '@/api/upload';
-import EditPhoto from '@/assets/icons/btn-edit-photo.svg';
+import EditPhoto from '@/assets/buttons/btn-edit-photo.svg';
 import CrownIcon from '@/assets/icons/ic-crown.svg';
-import Back from '@/assets/icons/ic-top-back.svg';
-import Edit from '@/assets/icons/ic-top-edit.svg';
+import Back from '@/assets/icons/ic-arrow-left.svg';
+import Edit from '@/assets/icons/ic-edit.svg';
 import Distance from '@/classes/Distance';
 import BreedSearch from '@/components/BreedSearch';
 import DeleteDogModal from '@/components/DeleteDogModal';
 import ImageCropper from '@/components/ImageCropper';
-import Avatar from '@/components/common/Avatar';
-import { Checkbox } from '@/components/common/Checkbox';
-import { Divider } from '@/components/common/Divider';
-import Topbar from '@/components/common/Topbar';
-import FemaleIcon from '@/components/icon/FemaleIcon';
-import { MaleIcon } from '@/components/icon/MaleIcon';
+import Avatar from '@/components/commons/Avatar';
+import { Checkbox } from '@/components/commons/Checkbox';
+import { Divider } from '@/components/commons/Divider';
+import Topbar from '@/components/commons/Topbar';
+import FemaleIcon from '@/components/icons/FemaleIcon';
+import { MaleIcon } from '@/components/icons/MaleIcon';
 import { uploadImg, useDog } from '@/hooks/useDog';
 import { DogRegInfo } from '@/pages/Join';
-import { maxLengthCheck } from '@/pages/JoinStep/DogDetailInfo';
+import { maxLengthCheck } from '@/pages/Join/DogDetailInfo';
 import { useCropStore } from '@/store/cropStore';
 import { dataURLtoFile } from '@/utils/dataUrlToFile';
 import { secondsToTimeFormat } from '@/utils/time';
@@ -27,7 +27,7 @@ interface Props {
     isProfileOpen: boolean;
     setIsProfileOpen: (state: boolean) => void;
 }
-export default function DogProfile({ dog, statistics, isProfileOpen, setIsProfileOpen }: Props) {
+export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfileOpen }: Props) {
     const { updateDogMutation } = useDog();
     const { dogProfileImgUrl, setDogProfileImgUrl, onSelectFileChange } = useCropStore();
     const { useDogsQuery } = useDog();

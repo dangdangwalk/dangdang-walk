@@ -1,6 +1,6 @@
-import { fetchJournals } from '@/api/journals';
+import { fetchJournals } from '@/api/journal';
 import { queryStringKeys } from '@/constants';
-import { Journal } from '@/models/journals';
+import { Journal } from '@/models/journal';
 import { formDate } from '@/utils/date';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';

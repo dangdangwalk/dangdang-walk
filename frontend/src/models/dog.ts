@@ -1,4 +1,4 @@
-import { Position } from '@/models/location.model';
+import { Position } from '@/models/location';
 
 export interface Dog {
     id: number;

@@ -7,7 +7,7 @@ import {
     ModalFooter,
     ModalHeader,
     ModalTitle,
-} from '@/components/common/Modal';
+} from '@/components/commons/Modal';
 import { MIN_DIMENSION } from '@/constants/cropper';
 import { useCropStore } from '@/store/cropStore';
 import React, { MutableRefObject } from 'react';

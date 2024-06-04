@@ -1,8 +1,8 @@
-import { create as createJournal } from '@/api/journals';
+import { create as createJournal } from '@/api/journal';
 import { deleteImages, getUploadUrl, uploadImage } from '@/api/upload';
-import Cancel from '@/assets/icons/ic-top-cancel.svg';
-import { Button } from '@/components/common/Button';
-import { Divider } from '@/components/common/Divider';
+import Cancel from '@/assets/icons/ic-cancel.svg';
+import { Button } from '@/components/commons/Button';
+import { Divider } from '@/components/commons/Divider';
 import {
     Modal,
     ModalAction,
@@ -12,7 +12,7 @@ import {
     ModalFooter,
     ModalHeader,
     ModalTitle,
-} from '@/components/common/Modal';
+} from '@/components/commons/Modal';
 import CompanionDogSection from '@/components/journals/CompanionDogSection';
 import Heading from '@/components/journals/Heading';
 import MemoSection from '@/components/journals/MemoSection';
@@ -20,8 +20,8 @@ import PhotoSection from '@/components/journals/PhotoSection';
 import Map from '@/components/walk/Map';
 import WalkInfo from '@/components/walk/WalkInfo';
 import useToast from '@/hooks/useToast';
-import { WalkingDog } from '@/models/dog.model';
-import { Position } from '@/models/location.model';
+import { WalkingDog } from '@/models/dog';
+import { Position } from '@/models/location';
 import { useSpinnerStore } from '@/store/spinnerStore';
 import { getFileName } from '@/utils/url';
 import { FormEvent, useEffect, useRef, useState } from 'react';

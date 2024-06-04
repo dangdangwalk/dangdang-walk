@@ -1,5 +1,5 @@
 import { fetchSunsetSunrise } from '@/api/weather';
-import { Position } from '@/models/location.model';
+import { Position } from '@/models/location';
 import { getCurrentDate } from '@/utils/date';
 import { useQuery } from '@tanstack/react-query';
 

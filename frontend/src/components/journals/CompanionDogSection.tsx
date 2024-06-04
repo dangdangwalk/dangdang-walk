@@ -1,7 +1,7 @@
-import Avatar from '@/components/common/Avatar';
+import Avatar from '@/components/commons/Avatar';
 import ExcrementDisplay from '@/components/journals/ExcrementDisplay';
 import Heading from '@/components/journals/Heading';
-import { WalkingDog } from '@/models/dog.model';
+import { WalkingDog } from '@/models/dog';
 
 export default function CompanionDogSection({ dogs }: Props) {
     return (

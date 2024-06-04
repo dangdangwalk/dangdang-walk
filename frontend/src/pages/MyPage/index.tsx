@@ -1,24 +1,24 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import Topbar from '@/components/common/Topbar';
+import Topbar from '@/components/commons/Topbar';
 import { useDog } from '@/hooks/useDog';
-import Avatar from '@/components/common/Avatar';
+import Avatar from '@/components/commons/Avatar';
 import SelectPhoto from '@/assets/icons/ic-select-photo.svg';
 import { useNavigate } from 'react-router-dom';
 import SettingIcon from '@/assets/icons/ic-setting.svg';
-import LogoutIcon from '@/assets/icons/btn-logout.svg';
+import LogoutIcon from '@/assets/buttons/btn-logout.svg';
 import NoteIcon from '@/assets/icons/ic-note.svg';
 import MegaphoneIcon from '@/assets/icons/ic-megaphone.svg';
 import HeadphoneIcon from '@/assets/icons/ic-headphone.svg';
-import RightArrowIcon from '@/assets/icons/ic-arrow.svg';
+import RightArrowIcon from '@/assets/icons/ic-arrow-right.svg';
 import CrownIcon from '@/assets/icons/ic-crown.svg';
 import KaKao from '@/assets/icons/ic-provider-kakao.svg';
 import Google from '@/assets/icons/ic-provider-google.svg';
 import Naver from '@/assets/icons/ic-provider-naver.svg';
-import { Divider } from '@/components/common/Divider';
+import { Divider } from '@/components/commons/Divider';
 import DeactivateModal from '@/components/DeactivateModal';
-import DogProfile from '@/pages/DogProfile';
-import { ResponseDogs, ResponseRecentMonthStatistics, fetchDogRecentMonthStatistics } from '@/api/dogs';
+import DogDetail from '@/pages/MyPage/DogDetail';
+import { ResponseDogs, ResponseRecentMonthStatistics, fetchDogRecentMonthStatistics } from '@/api/dog';
 function Profile() {
     const navigate = useNavigate();
     const { useDogsQuery } = useDog();
@@ -152,7 +152,7 @@ function Profile() {
                     회원탈퇴
                 </button>
             </main>
-            <DogProfile
+            <DogDetail
                 dog={dogInfo}
                 statistics={statistics}
                 isProfileOpen={isProfileOpen}

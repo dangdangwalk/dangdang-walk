@@ -1,4 +1,4 @@
-import { AirPolution, SunsetSunrise, WeatherData } from '@/models/weather.model';
+import { AirPolution, SunsetSunrise, WeatherData } from '@/models/weather';
 import { createClient } from './http';
 
 const { REACT_APP_WEATHER_URL: WEATHER_URL = '' } = window._ENV ?? process.env;

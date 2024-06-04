@@ -1,5 +1,5 @@
 import DogCard from '@/components/home/DogCard';
-import { DogStatistic } from '@/models/dog.model';
+import { DogStatistic } from '@/models/dog';
 
 export default function DogCardList({
     dogs,

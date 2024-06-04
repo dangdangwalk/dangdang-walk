@@ -1,4 +1,4 @@
-import { ReactComponent as Delete } from '@/assets/icons/btn-delete.svg';
+import { ReactComponent as Delete } from '@/assets/buttons/btn-delete.svg';
 import { ImageFileName } from '@/pages/Journals/CreateForm';
 import { makeFileUrl } from '@/utils/url';
 import { ReactNode } from 'react';

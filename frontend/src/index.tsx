@@ -1,4 +1,4 @@
-import { fetchJournal } from '@/api/journals';
+import { fetchJournal } from '@/api/journal';
 import queryClient from '@/api/queryClient';
 import Camera from '@/pages/Camera';
 import Health from '@/pages/Health';
@@ -6,9 +6,9 @@ import Home from '@/pages/Home';
 import Join from '@/pages/Join';
 import JournalCreateForm from '@/pages/Journals/CreateForm';
 import Detail from '@/pages/Journals/Detail';
-import Journals from '@/pages/Journals/Journals';
+import Journals from '@/pages/Journals';
 import OauthCallback from '@/pages/OauthCallback';
-import Profile from '@/pages/Profile';
+import Profile from '@/pages/MyPage';
 import Walk from '@/pages/Walk';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';

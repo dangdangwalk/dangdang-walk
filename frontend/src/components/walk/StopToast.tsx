@@ -1,4 +1,4 @@
-import Touch from '@/assets/icons/walk/touch.svg';
+import Touch from '@/assets/icons/ic-touch.svg';
 
 export default function StopToast({ isVisible }: { isVisible: boolean }) {
     return (

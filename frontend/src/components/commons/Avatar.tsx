@@ -1,4 +1,4 @@
-import DefaultProfileImage from '@/components/common/DefaultProfileImage';
+import DefaultProfileImage from '@/components/commons/DefaultProfileImage';
 import { isImageFileName } from '@/utils/url';
 import { MouseEvent } from 'react';
 

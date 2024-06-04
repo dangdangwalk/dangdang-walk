@@ -1,8 +1,8 @@
-import { Toast } from '@/components/common/Toast';
+import { Toast } from '@/components/commons/Toast';
 import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useSpinnerStore } from '@/store/spinnerStore';
-import Spinner from '@/components/common/Spinner';
+import Spinner from '@/components/commons/Spinner';
 import { useAuth } from '@/hooks/useAuth';
 // var console;
 function App() {

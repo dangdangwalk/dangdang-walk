@@ -1,8 +1,8 @@
-import { Button } from '@/components/common/Button';
-import Topbar from '@/components/common/Topbar';
+import { Button } from '@/components/commons/Button';
+import Topbar from '@/components/commons/Topbar';
 import { ASPECT_RATIO, MIN_DIMENSION } from '@/constants/cropper';
 import { useCropStore } from '@/store/cropStore';
-import setCanvasPreview from '@/utils/canvas-preview';
+import setCanvasPreview from '@/utils/canvasPreview';
 import { setStorage } from '@/utils/storage';
 import React, { SyntheticEvent, useRef } from 'react';
 import ReactCrop, { centerCrop, convertToPixelCrop, makeAspectCrop } from 'react-image-crop';

@@ -1,5 +1,5 @@
-import { Checkbox } from '@/components/common/Checkbox';
-import { Divider } from '@/components/common/Divider';
+import { Checkbox } from '@/components/commons/Checkbox';
+import { Divider } from '@/components/commons/Divider';
 
 interface AgreementsProps {
     service: boolean;

@@ -1,7 +1,7 @@
 import LoginAlertModal from '@/components/LoginAlertModal';
 import Navbar from '@/components/Navbar';
 import OAuthButton from '@/components/OAuthButton';
-import BottomSheet from '@/components/common/BottomSheet';
+import BottomSheet from '@/components/commons/BottomSheet';
 import { OAUTH } from '@/constants';
 import { useAuthStore } from '@/store/authStore';
 import React, { useState } from 'react';

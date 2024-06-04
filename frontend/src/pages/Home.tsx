@@ -1,16 +1,16 @@
 import DogCardList from '@/components/home/DogCardList';
 import WeatherInfo from '@/components/home/WeatherInfo';
 import { useState } from 'react';
-import { Button } from '@/components/common/Button';
+import { Button } from '@/components/commons/Button';
 import { NAV_HEIGHT, TOP_BAR_HEIGHT } from '@/constants/style';
-import Notification from '@/assets/icons/notification.svg';
-import Topbar from '@/components/common/Topbar';
-import BottomSheet from '@/components/common/BottomSheet';
+import Notification from '@/assets/icons/ic-notification.svg';
+import Topbar from '@/components/commons/Topbar';
+import BottomSheet from '@/components/commons/BottomSheet';
 import AvailableDogCheckList from '@/components/home/AvailableDogCheckList';
 import useDogsStatistic from '@/hooks/useDogsStatistic';
 import { useNavigate } from 'react-router-dom';
 import useWalkAvailabeDog from '@/hooks/useWalkAvailabeDog';
-import Spinner from '@/components/common/Spinner';
+import Spinner from '@/components/commons/Spinner';
 import RegisterCard from '@/components/home/RegisterCard';
 import { queryStringKeys } from '@/constants';
 

@@ -1,6 +1,6 @@
 import { fetchCurrentWeather } from '@/api/weather';
-import { Position } from '@/models/location.model';
-import { WeatherData } from '@/models/weather.model';
+import { Position } from '@/models/location';
+import { WeatherData } from '@/models/weather';
 import { getCurrentDate, getHours } from '@/utils/date';
 import { gpsToGrid } from '@/utils/geo';
 import { useQuery } from '@tanstack/react-query';

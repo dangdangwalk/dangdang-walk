@@ -12,7 +12,7 @@ import NightCloudy from '@/assets/icons/ic-nightcloudy.svg';
 import DayCloudy from '@/assets/icons/ic-daycloudy.svg';
 import useAddressAndAirgrade from '@/hooks/useAddressAndAirgrade';
 import useSunsetSunrise from '@/hooks/useSunsetSunrise';
-import Spinner from '@/components/common/Spinner';
+import Spinner from '@/components/commons/Spinner';
 import useGeolocation from '@/hooks/useGeolocation';
 
 const statusImage = {

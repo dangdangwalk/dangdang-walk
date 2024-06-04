@@ -1,6 +1,6 @@
 import { fetchAddress } from '@/api/map';
 import { fetchAirGrade } from '@/api/weather';
-import { Position } from '@/models/location.model';
+import { Position } from '@/models/location';
 import { getSidoCode } from '@/utils/geo';
 import { useQuery } from '@tanstack/react-query';
 

@@ -1,8 +1,8 @@
-import Topbar from '@/components/common/Topbar';
-import Ic from '@/assets/icons/ic-arrow.svg';
+import Topbar from '@/components/commons/Topbar';
+import Ic from '@/assets/icons/ic-arrow-right.svg';
 import { useNavigate } from 'react-router-dom';
-import Notification from '@/assets/icons/notification.svg';
-import { Divider } from '@/components/common/Divider';
+import Notification from '@/assets/icons/ic-notification.svg';
+import { Divider } from '@/components/commons/Divider';
 export default function WalkHeader() {
     const navigate = useNavigate();
 

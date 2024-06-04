@@ -1,7 +1,7 @@
-import Avatar from '@/components/common/Avatar';
-import { Checkbox } from '@/components/common/Checkbox';
-import { Divider } from '@/components/common/Divider';
-import { AvailableDog } from '@/models/dog.model';
+import Avatar from '@/components/commons/Avatar';
+import { Checkbox } from '@/components/commons/Checkbox';
+import { Divider } from '@/components/commons/Divider';
+import { AvailableDog } from '@/models/dog';
 
 export const AvailableDogCheck = ({ dog, onToggle }: { dog: AvailableDog; onToggle: (id: number) => void }) => {
     return (

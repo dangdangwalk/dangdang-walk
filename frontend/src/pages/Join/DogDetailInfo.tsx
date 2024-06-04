@@ -1,7 +1,7 @@
-import { Checkbox } from '@/components/common/Checkbox';
-import { Divider } from '@/components/common/Divider';
-import FemaleIcon from '@/components/icon/FemaleIcon';
-import { MaleIcon } from '@/components/icon/MaleIcon';
+import { Checkbox } from '@/components/commons/Checkbox';
+import { Divider } from '@/components/commons/Divider';
+import FemaleIcon from '@/components/icons/FemaleIcon';
+import { MaleIcon } from '@/components/icons/MaleIcon';
 import { DogRegInfo } from '@/pages/Join';
 import { Dispatch, FormEvent, SetStateAction, useState } from 'react';
 interface Props {

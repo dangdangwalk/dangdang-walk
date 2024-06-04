@@ -1,6 +1,6 @@
-import { fetchWalkAvailableDogs } from '@/api/dogs';
+import { fetchWalkAvailableDogs } from '@/api/dog';
 import { queryKeys } from '@/constants';
-import { AvailableDog } from '@/models/dog.model';
+import { AvailableDog } from '@/models/dog';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 const { REACT_APP_BASE_IMAGE_URL = '' } = window._ENV ?? process.env;
