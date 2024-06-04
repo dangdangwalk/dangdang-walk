@@ -130,7 +130,7 @@ export default function Walk() {
     }, []);
 
     return (
-        <div className="overflow-hidden h-dvh inset-0">
+        <div className="inset-0 h-dvh overflow-hidden">
             <WalkHeader />
             <WalkInfo duration={duration} calories={calories} distance={distance} />
 

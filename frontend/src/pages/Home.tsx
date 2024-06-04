@@ -47,7 +47,7 @@ function Home() {
 
     return (
         <>
-            <Topbar className="bg-neutral-50 ">
+            <Topbar className="bg-neutral-50">
                 <Topbar.Front></Topbar.Front>
                 <Topbar.Center></Topbar.Center>
                 <Topbar.Back>
@@ -55,7 +55,7 @@ function Home() {
                 </Topbar.Back>
             </Topbar>
             <main
-                className="flex flex-col px-5 bg-neutral-50 mb-[60px] min-h-dvh"
+                className="mb-[60px] flex min-h-dvh flex-col bg-neutral-50 px-5"
                 style={{ minHeight: `calc(100dvh - ${NAV_HEIGHT} - ${TOP_BAR_HEIGHT}  )` }}
             >
                 <WeatherInfo />
@@ -68,7 +68,7 @@ function Home() {
                         <Button
                             color={'primary'}
                             rounded={'medium'}
-                            className={`w-[120px] h-12 fixed  text-white text-base font-bold leading-normal`}
+                            className={`fixed h-12 w-[120px] text-base font-bold leading-normal text-white`}
                             style={{ bottom: `calc(${NAV_HEIGHT} + 16px)`, left: '50%', translate: '-50%' }}
                             disabled={dogs?.length === 0}
                             onClick={handleBottomSheet}

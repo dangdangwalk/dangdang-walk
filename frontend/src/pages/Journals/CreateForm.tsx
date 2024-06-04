@@ -67,7 +67,7 @@ export default function CreateForm() {
     return (
         <>
             <div className="flex flex-col">
-                <div className="flex justify-between items-center h-12 pl-5 pr-2">
+                <div className="flex h-12 items-center justify-between pl-5 pr-2">
                     <Heading headingNumber={1}>
                         {startedAt.getMonth() + 1}월 {startedAt.getDate()}일 산책기록
                     </Heading>
@@ -79,7 +79,7 @@ export default function CreateForm() {
                     <Map
                         startPosition={routes[0]}
                         path={routes}
-                        className="rounded-lg overflow-hidden"
+                        className="overflow-hidden rounded-lg"
                         height="216px"
                     />
                     <WalkInfo distance={distance} calories={calories} duration={duration} />
@@ -96,7 +96,7 @@ export default function CreateForm() {
                     <Divider />
                     <MemoSection textAreaRef={textAreaRef} />
                 </div>
-                <Button rounded="none" className="w-full h-16" disabled={isSaving} onClick={handleSave}>
+                <Button rounded="none" className="h-16 w-full" disabled={isSaving} onClick={handleSave}>
                     <span className="-translate-y-[5px]">저장하기</span>
                 </Button>
             </div>

@@ -82,15 +82,15 @@ function Profile() {
         <>
             <Topbar>
                 <Topbar.Front className="w-12" />
-                <Topbar.Center className="text-black text-lg font-bold leading-[27px]">마이페이지</Topbar.Center>
+                <Topbar.Center className="text-lg font-bold leading-[27px] text-black">마이페이지</Topbar.Center>
                 <Topbar.Back>
                     <img src={SettingIcon} alt="setting" />
                 </Topbar.Back>
             </Topbar>
-            <main className={`flex flex-col mb-[60px] h-full`}>
-                <section className="flex justify-between items-center px-5 py-6">
+            <main className={`mb-[60px] flex h-full flex-col`}>
+                <section className="flex items-center justify-between px-5 py-6">
                     <section className="flex justify-start gap-2">
-                        <div className="text-neutral-800 text-lg font-bold leading-[33px]">{nickname}님</div>
+                        <div className="text-lg font-bold leading-[33px] text-neutral-800">{nickname}님</div>
 
                         <img src={ProviderIcon(provider)} alt="provider" />
                     </section>
@@ -99,29 +99,29 @@ function Profile() {
                     </div>
                 </section>
 
-                <section className="flex justify-between px-10 mt-[0.625rem] mb-[2.125rem]">
+                <section className="mb-[2.125rem] mt-[0.625rem] flex justify-between px-10">
                     <div
                         className="flex flex-col items-center"
                         onClick={() => dogs && dogs[0] && navigate(`/journals?dogId=${dogs[0].id}`)}
                     >
                         <img src={NoteIcon} alt="note" className="size-12" />
-                        <p className="text-neutral-800 text-sm font-normal leading-[21px]">산책기록</p>
+                        <p className="text-sm font-normal leading-[21px] text-neutral-800">산책기록</p>
                     </div>
                     <div className="flex flex-col items-center">
                         <img src={MegaphoneIcon} alt="megaphone" className="size-12" />
-                        <p className="text-neutral-800 text-sm font-normal leading-[21px]">공지사항</p>
+                        <p className="text-sm font-normal leading-[21px] text-neutral-800">공지사항</p>
                     </div>
                     <div className="flex flex-col items-center">
                         <img src={HeadphoneIcon} alt="headphone" className="size-12" />
-                        <p className="text-neutral-800 text-sm font-normal leading-[21px]">문의하기</p>
+                        <p className="text-sm font-normal leading-[21px] text-neutral-800">문의하기</p>
                     </div>
                 </section>
                 <Divider />
                 <section>
-                    <div className="px-5 py-5 text-neutral-800 text-base font-bold leading-normal">나의 댕댕이</div>
+                    <div className="px-5 py-5 text-base font-bold leading-normal text-neutral-800">나의 댕댕이</div>
                     {dogs &&
                         dogs.map((dog, index) => (
-                            <div key={dog.id} className="flex justify-between items-center px-5 py-[6px]">
+                            <div key={dog.id} className="flex items-center justify-between px-5 py-[6px]">
                                 <div className="flex justify-start gap-2">
                                     <Avatar url={`${dog.profilePhotoUrl}`} name={dog.name} />
                                     {index === 0 && <img src={CrownIcon} alt="crown" />}
@@ -138,7 +138,7 @@ function Profile() {
                         ))}
                     {dogs && 5 - dogs?.length > 0 && (
                         <div
-                            className="flex justify-between items-center px-5 py-[6px]"
+                            className="flex items-center justify-between px-5 py-[6px]"
                             onClick={() => navigate('/join', { state: 'DogBasicInfo' })}
                         >
                             <Avatar url={SelectPhoto} name={'댕댕이 추가하기'} />
@@ -147,7 +147,7 @@ function Profile() {
                 </section>
                 <button
                     onClick={() => setDeactivate(true)}
-                    className="flex justify-center items-center py-[13px] mx-5 my-8 border border-neutral-200 rounded-lg text-neutral-400 text-sm font-normal leading-[21px]"
+                    className="mx-5 my-8 flex items-center justify-center rounded-lg border border-neutral-200 py-[13px] text-sm font-normal leading-[21px] text-neutral-400"
                 >
                     회원탈퇴
                 </button>

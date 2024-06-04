@@ -46,33 +46,33 @@ export default function DogDetailInfo({ data, setData }: Props) {
     return (
         <div className="flex flex-col bg-white">
             <div>
-                <span className="text-amber-500 text-xl font-semibold leading-[30px]">{data.name}의 세부 정보</span>
-                <span className="text-neutral-800 text-xl font-semibold leading-[30px]">
+                <span className="text-xl font-semibold leading-[30px] text-amber-500">{data.name}의 세부 정보</span>
+                <span className="text-xl font-semibold leading-[30px] text-neutral-800">
                     를
                     <br />
                     알려주세요 :)
                 </span>
             </div>
-            <div className="mt-8 text-stone-500 text-sm font-normal leading-[21px]">성별</div>
+            <div className="mt-8 text-sm font-normal leading-[21px] text-stone-500">성별</div>
             <div className="mt-3 inline-flex gap-2">
                 <button
                     onClick={() => handleGenderChange('MALE')}
                     className={`border ${
                         data.gender === 'MALE' ? 'border-primary' : 'border-secondary'
-                    } bg-primary-foreground  rounded-lg w-full flex flex-col items-center justify-center`}
+                    } flex w-full flex-col items-center justify-center rounded-lg bg-primary-foreground`}
                 >
-                    <div className="flex flex-col justify-center items-center gap-1 my-5 mx-6">
+                    <div className="mx-6 my-5 flex flex-col items-center justify-center gap-1">
                         <div
                             className={`text-base ${
                                 data.gender === 'MALE' ? 'text-neutral-800' : 'text-stone-500'
-                            }  font-bold`}
+                            } font-bold`}
                         >
                             <MaleIcon color={`${data.gender === 'MALE' ? '#222222' : '#999999'}`} />
                         </div>
                         <div
                             className={`text-xs ${
                                 data.gender === 'MALE' ? 'text-neutral-800' : 'text-neutral-400'
-                            }  font-normal`}
+                            } font-normal`}
                         >
                             남아
                         </div>
@@ -82,20 +82,20 @@ export default function DogDetailInfo({ data, setData }: Props) {
                     onClick={() => handleGenderChange('FEMALE')}
                     className={`border ${
                         data.gender === 'FEMALE' ? 'border-primary' : 'border-secondary'
-                    } bg-primary-foreground  rounded-lg w-full flex flex-col items-center justify-center`}
+                    } flex w-full flex-col items-center justify-center rounded-lg bg-primary-foreground`}
                 >
-                    <div className="flex flex-col justify-center items-center gap-1 my-5 mx-6">
+                    <div className="mx-6 my-5 flex flex-col items-center justify-center gap-1">
                         <div
                             className={`text-base ${
                                 data.gender === 'FEMALE' ? 'text-neutral-800' : 'text-stone-500'
-                            }  font-bold`}
+                            } font-bold`}
                         >
                             <FemaleIcon color={`${data.gender === 'FEMALE' ? '#222222' : '#999999'}`} />
                         </div>
                         <div
                             className={`text-xs ${
                                 data.gender === 'FEMALE' ? 'text-neutral-800' : 'text-neutral-400'
-                            }  font-normal`}
+                            } font-normal`}
                         >
                             여아
                         </div>
@@ -115,13 +115,13 @@ export default function DogDetailInfo({ data, setData }: Props) {
                 />
             </div>
             <div className={`${birthCheck ? 'mt-4' : 'mt-8'}`}>
-                <div className={`${birthCheck ? '' : 'py-3 mb-2 relative'} `}>
+                <div className={`${birthCheck ? '' : 'relative mb-2 py-3'} `}>
                     {!birthCheck && (
                         <>
                             <input
                                 type="date"
                                 placeholder={`${data.name}의 생일이 궁금해요`}
-                                className="outline-none w-full font-bold"
+                                className="w-full font-bold outline-none"
                                 onChange={(event) => handleBirthChange(event.target.value)}
                             />
                             <Divider className="absolute bottom-0 h-[1px]" />
@@ -142,7 +142,7 @@ export default function DogDetailInfo({ data, setData }: Props) {
                 />
             </div>
             <div className="mt-9">
-                <div className={`py-3 relative ${weight && 'font-bold'}`}>
+                <div className={`relative py-3 ${weight && 'font-bold'}`}>
                     <input
                         value={weight}
                         type="number"

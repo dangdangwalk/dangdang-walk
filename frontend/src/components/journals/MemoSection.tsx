@@ -7,7 +7,7 @@ export default function MemoSection({ textAreaRef, readonly = false }: Props) {
             <Heading headingNumber={2}>메모</Heading>
             <textarea
                 name="memo"
-                className="w-full h-[100px] my-2 px-4 py-3 rounded-lg border border-[#E4E4E4] text-xs placeholder:text-[#BABABA]"
+                className="my-2 h-[100px] w-full rounded-lg border border-[#E4E4E4] px-4 py-3 text-xs placeholder:text-[#BABABA]"
                 placeholder="오늘 산책에 대해서 자유롭게 메모해보세요."
                 readOnly={readonly}
                 ref={textAreaRef}

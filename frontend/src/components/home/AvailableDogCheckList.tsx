@@ -21,7 +21,7 @@ export default function AvailableDogCheckList({
     };
     return (
         <>
-            <li className="flex py-2 justify-between items-center">
+            <li className="flex items-center justify-between py-2">
                 <Avatar url={AllDogs} name={'다 함께'} />
                 <Checkbox
                     checked={isCheckedAll}

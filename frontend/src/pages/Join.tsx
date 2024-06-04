@@ -187,7 +187,7 @@ export default function Join() {
 
     return (
         <div
-            className={`relative flex flex-col w-full h-dvh bg-primary-foreground ${switchStep.mainToStep1 ? 'animate-mainToRight' : 'animate-outToMain'}`}
+            className={`relative flex h-dvh w-full flex-col bg-primary-foreground ${switchStep.mainToStep1 ? 'animate-mainToRight' : 'animate-outToMain'}`}
         >
             <Topbar>
                 <Topbar.Front className="pl-3">
@@ -200,10 +200,10 @@ export default function Join() {
                 )}
             </Topbar>
             <Divider
-                className={`bg-primary duration-500 w-0 ease-in-out ${step === 'PetOwner' && 'w-1/3'} ${step === 'DogBasicInfo' && (currentPage ? 'w-1/2' : 'w-2/3')} ${step === 'DogDetailInfo' && 'w-full'}`}
+                className={`w-0 bg-primary duration-500 ease-in-out ${step === 'PetOwner' && 'w-1/3'} ${step === 'DogBasicInfo' && (currentPage ? 'w-1/2' : 'w-2/3')} ${step === 'DogDetailInfo' && 'w-full'}`}
             />
 
-            <main className="w-full h-full px-5 pt-6">
+            <main className="h-full w-full px-5 pt-6">
                 {step === 'Agreements' && (
                     <Agreements
                         toggle={switchStep.step1ToStep2}
@@ -223,7 +223,7 @@ export default function Join() {
             </main>
             <div className="absolute bottom-0 w-full">
                 <Button
-                    className="w-full "
+                    className="w-full"
                     disabled={disabled()}
                     color="primary"
                     rounded="none"

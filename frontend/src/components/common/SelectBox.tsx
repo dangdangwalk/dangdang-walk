@@ -74,7 +74,7 @@ function Group({ children, className }: DefaultProps) {
             {isOpen && (
                 <ul
                     className={cn(
-                        `absolute z-10 px-[10px] -translate-x-1/3 bg-white rounded-lg shadow flex-col justify-start items-start inline-flex ${className}`
+                        `absolute z-10 inline-flex -translate-x-1/3 flex-col items-start justify-start rounded-lg bg-white px-[10px] shadow ${className}`
                     )}
                 >
                     {children}

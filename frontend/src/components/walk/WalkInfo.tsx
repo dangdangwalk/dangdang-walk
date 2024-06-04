@@ -21,22 +21,22 @@ export default function WalkInfo({
     return (
         <div
             className={cn(
-                `w-full h-16 px-5 mt-4 pb-1 bg-white justify-between items-center gap-[5px] inline-flex ${className}`
+                `mt-4 inline-flex h-16 w-full items-center justify-between gap-[5px] bg-white px-5 pb-1 ${className}`
             )}
         >
-            <div className="flex flex-col h-15 w-[100px] justify-center items-center">
-                <div className=" text-amber-500 text-lg font-bold leading-[27px]">{distance.formatedDistance}</div>
-                <div className="text-center text-stone-500 text-xs font-normal leading-[18px]">{distance.unit}</div>
+            <div className="h-15 flex w-[100px] flex-col items-center justify-center">
+                <div className="text-lg font-bold leading-[27px] text-amber-500">{distance.formatedDistance}</div>
+                <div className="text-center text-xs font-normal leading-[18px] text-stone-500">{distance.unit}</div>
             </div>
             {isDivider && <Divider orientation={'vertical'} />}
-            <div className="flex flex-col w-[100px] justify-center items-center">
-                <div className="text-amber-500 text-lg font-bold leading-[27px]">{calories}</div>
-                <div className="text-center text-stone-500 text-xs font-normal leading-[18px]">kcal</div>
+            <div className="flex w-[100px] flex-col items-center justify-center">
+                <div className="text-lg font-bold leading-[27px] text-amber-500">{calories}</div>
+                <div className="text-center text-xs font-normal leading-[18px] text-stone-500">kcal</div>
             </div>
             {isDivider && <Divider orientation={'vertical'} />}
-            <div className="flex flex-col w-[100px] justify-center items-center">
-                <div className="text-amber-500 text-lg font-bold leading-[27px]">{timeFormat(duration)}</div>
-                <div className="text-center text-stone-500 text-xs font-normal leading-[18px]">시간</div>
+            <div className="flex w-[100px] flex-col items-center justify-center">
+                <div className="text-lg font-bold leading-[27px] text-amber-500">{timeFormat(duration)}</div>
+                <div className="text-center text-xs font-normal leading-[18px] text-stone-500">시간</div>
             </div>
         </div>
     );

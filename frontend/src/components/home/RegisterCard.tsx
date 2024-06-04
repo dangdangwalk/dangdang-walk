@@ -20,14 +20,14 @@ export default function RegisterCard() {
     return (
         <div className="relative">
             <DogCard dog={defaultDpg} />
-            <div className="w-full h-full flex flex-col justify-center items-center top-0 left-0 absolute z-20 backdrop-blur-sm rounded-lg">
-                <div className="text-black text-lg font-bold leading-[27px] mb-1">산책기록</div>
-                <div className="text-stone-500 text-xs font-semibold  leading-[18px] mb-3">
+            <div className="absolute left-0 top-0 z-20 flex h-full w-full flex-col items-center justify-center rounded-lg backdrop-blur-sm">
+                <div className="mb-1 text-lg font-bold leading-[27px] text-black">산책기록</div>
+                <div className="mb-3 text-xs font-semibold leading-[18px] text-stone-500">
                     반려견을 등록하면 산책 기록을 볼 수 있어요!
                 </div>
 
                 <Button
-                    className="w-[86px] h-[30px] text-xs font-extrabold"
+                    className="h-[30px] w-[86px] text-xs font-extrabold"
                     color={'primary'}
                     rounded={'small'}
                     onClick={handleClick}

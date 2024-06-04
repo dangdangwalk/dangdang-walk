@@ -56,10 +56,10 @@ export default function ImageCropper() {
     const previewCanvasRef = useRef<HTMLCanvasElement>(null);
     return (
         <div
-            className={`fixed left-0 -bottom-full z-50 flex flex-col justify-center w-full h-full bg-white duration-300 ${cropperToggle ? '-translate-y-full' : 'translate-y-0'}`}
+            className={`fixed -bottom-full left-0 z-50 flex h-full w-full flex-col justify-center bg-white duration-300 ${cropperToggle ? '-translate-y-full' : 'translate-y-0'}`}
         >
             <Topbar>
-                <Topbar.Front className="pl-3 ">
+                <Topbar.Front className="pl-3">
                     <button
                         onClick={() => {
                             setCrop(undefined);
@@ -90,7 +90,7 @@ export default function ImageCropper() {
                 </Topbar.Back>
             </Topbar>
             {cropPrevImgUrl && (
-                <div className="flex flex-col justify-center items-center w-full h-full my-auto">
+                <div className="my-auto flex h-full w-full flex-col items-center justify-center">
                     <ReactCrop
                         className="flex flex-col"
                         crop={crop}
@@ -115,7 +115,7 @@ export default function ImageCropper() {
             {crop && (
                 <canvas
                     ref={previewCanvasRef}
-                    className=" fixed"
+                    className="fixed"
                     style={{
                         display: 'none',
                         border: '1px solid black',

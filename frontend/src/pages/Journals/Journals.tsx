@@ -65,7 +65,7 @@ export default function Journals() {
                 </Topbar.Front>
                 <Topbar.Center className="h-full">
                     <SelectBox onChange={handleSelectDog} defaultValue={selectedDog?.name}>
-                        <SelectBox.Label className=" flex h-12  justify-center items-center">
+                        <SelectBox.Label className="flex h-12 items-center justify-center">
                             <div>{selectedDog?.name}</div>
                         </SelectBox.Label>
                         <SelectBox.Group>
@@ -80,7 +80,7 @@ export default function Journals() {
                 <Topbar.Back className="w-12"></Topbar.Back>
             </Topbar>
             <main
-                className="flex flex-col bg-neutral-50 mb-[60px] min-h-dvh"
+                className="mb-[60px] flex min-h-dvh flex-col bg-neutral-50"
                 style={{ minHeight: `calc(100dvh - ${NAV_HEIGHT} - ${TOP_BAR_HEIGHT}  )` }}
             >
                 <CustomCalendar />

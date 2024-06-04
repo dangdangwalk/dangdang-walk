@@ -29,24 +29,24 @@ export default function JournalCard({ journal, dog }: { journal: Journal; dog: D
     if (!dog) return <></>;
     return (
         <button
-            className="h-[140px] w-full flex flex-col items-center pt-4 pb-2 relative bg-white rounded-lg shadow"
+            className="relative flex h-[140px] w-full flex-col items-center rounded-lg bg-white pb-2 pt-4 shadow"
             onClick={() => {
                 goToDetail(journal.journalId);
             }}
         >
-            <div className="w-full flex justify-start gap-3 px-4">
-                <div className="w-12 h-12 rounded-lg overflow-hidden">
+            <div className="flex w-full justify-start gap-3 px-4">
+                <div className="h-12 w-12 overflow-hidden rounded-lg">
                     {dog.profilePhotoUrl ? (
-                        <img className="w-12 h-12" src={dog.profilePhotoUrl} alt={dog.name} />
+                        <img className="h-12 w-12" src={dog.profilePhotoUrl} alt={dog.name} />
                     ) : (
                         <DefaultProfileImage />
                     )}
                 </div>
                 <div className="flex flex-col gap-1">
-                    <div className="text-neutral-800 text-sm font-bold  leading-[21px]">
+                    <div className="text-sm font-bold leading-[21px] text-neutral-800">
                         {getTitle(dog.name, journal.journalCnt)}
                     </div>
-                    <div className="text-neutral-400 text-xs font-normalleading-[18px]">
+                    <div className="font-normalleading-[18px] text-xs text-neutral-400">
                         {getStartToEnd(journal.startedAt, journal.duration)}
                     </div>
                 </div>
@@ -56,7 +56,7 @@ export default function JournalCard({ journal, dog }: { journal: Journal; dog: D
                 duration={journal.duration}
                 calories={journal.calories}
                 isDivider={false}
-                className="px-[10px] gap-0 mt-2 pb-2"
+                className="mt-2 gap-0 px-[10px] pb-2"
             />
         </button>
     );

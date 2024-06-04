@@ -26,16 +26,16 @@ export default function Avatar({ url, name, size = 'small', onClick, className }
     const convertedUrl = convertUrl(url);
 
     return (
-        <div className={`justify-start items-center gap-2 inline-flex ${className}`} onClick={onClick}>
-            <div className={`flex justify-center items-center rounded-full border overflow-hidden border-neutral-200`}>
+        <div className={`inline-flex items-center justify-start gap-2 ${className}`} onClick={onClick}>
+            <div className={`flex items-center justify-center overflow-hidden rounded-full border border-neutral-200`}>
                 <div
-                    className="flex justify-center items-center"
+                    className="flex items-center justify-center"
                     style={{ width: imgSize(size), height: imgSize(size) }}
                 >
                     {convertedUrl ? <img src={convertedUrl} alt={name} /> : <DefaultProfileImage />}
                 </div>
             </div>
-            {name && <div className="text-neutral-800 text-sm font-bold leading-[21px]">{name ? name : ''}</div>}
+            {name && <div className="text-sm font-bold leading-[21px] text-neutral-800">{name ? name : ''}</div>}
         </div>
     );
 }

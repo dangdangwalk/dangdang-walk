@@ -21,7 +21,7 @@ export default function DogFeceAndUrineCheckList({
     return (
         <>
             <Divider className="h-0 border border-neutral-200" />
-            <li className="flex py-2 justify-between items-center" key={dog.id}>
+            <li className="flex items-center justify-between py-2" key={dog.id}>
                 <Avatar url={dog.profilePhotoUrl} name={dog.name} />
                 <div className="flex gap-1">
                     <Checkbox

@@ -20,14 +20,14 @@ interface Props {
 export default function AgreementsPage({ toggle, allAgreed, handleAllCheck, agreements, handleCheck }: Props) {
     return (
         <div className={`flex flex-col bg-white ${toggle && 'animate-mainToLeft'}`}>
-            <span className="text-black text-xl font-semibold leading-[30px]">
+            <span className="text-xl font-semibold leading-[30px] text-black">
                 댕댕워크 사용을 위한
                 <br />
-                <span className="text-amber-500 text-xl font-semibold leading-[30px]">약관내용에 동의</span>
+                <span className="text-xl font-semibold leading-[30px] text-amber-500">약관내용에 동의</span>
                 해주세요
             </span>
 
-            <div className="w-full mt-7">
+            <div className="mt-7 w-full">
                 <Checkbox
                     checked={allAgreed}
                     onCheckedChange={(checked) => handleAllCheck(checked)}
@@ -36,9 +36,9 @@ export default function AgreementsPage({ toggle, allAgreed, handleAllCheck, agre
             </div>
             <Divider className="mt-4" />
 
-            <div className="mt-6 inline-flex flex-col justify-start items-start gap-6">
-                <div className="flex-col justify-start items-start gap-3 flex">
-                    <div className=" text-stone-500 text-xs font-normal leading-[18px]">필수 동의</div>
+            <div className="mt-6 inline-flex flex-col items-start justify-start gap-6">
+                <div className="flex flex-col items-start justify-start gap-3">
+                    <div className="text-xs font-normal leading-[18px] text-stone-500">필수 동의</div>
                     <div className="flex flex-col gap-1">
                         <Checkbox
                             checked={agreements.service}
@@ -58,15 +58,15 @@ export default function AgreementsPage({ toggle, allAgreed, handleAllCheck, agre
                     </div>
                 </div>
 
-                <div className="inline-flex flex-col justify-start items-start gap-3">
-                    <div className="text-stone-500 text-xs font-normal leading-[18px]">선택 동의</div>
-                    <div className="inline-flex flex-col justify-start items-start gap-[3.5px]">
+                <div className="inline-flex flex-col items-start justify-start gap-3">
+                    <div className="text-xs font-normal leading-[18px] text-stone-500">선택 동의</div>
+                    <div className="inline-flex flex-col items-start justify-start gap-[3.5px]">
                         <Checkbox
                             checked={agreements.marketing}
                             onCheckedChange={(checked) => handleCheck(checked, 'marketing')}
                             labelText="마케팅 정보 수신"
                         />
-                        <div className="text-stone-500 text-[10px] font-normal leading-[15px]">
+                        <div className="text-[10px] font-normal leading-[15px] text-stone-500">
                             앱 알림, 문자 메시지, 이메일로
                             <br /> 광고성 정보를 전송합니다.
                         </div>

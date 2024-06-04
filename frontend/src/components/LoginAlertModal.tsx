@@ -7,12 +7,12 @@ interface Props {
 }
 export default function LoginAlertModal({ isOpen, setToggle }: Props) {
     return (
-        <div className="fixed w-full h-dvh top-0 right-0 z-10 backdrop-blur-sm">
-            <div className={`flex flex-col w-full h-full absolute z-10 `}>
+        <div className="fixed right-0 top-0 z-10 h-dvh w-full backdrop-blur-sm">
+            <div className={`absolute z-10 flex h-full w-full flex-col`}>
                 {!isOpen && (
-                    <section className={`w-full flex flex-col items-center justify-center h-full mb-[3.75rem] `}>
-                        <h1 className="text-2xl font-bold mb-1">산책기능</h1>
-                        <p className="text-stone-500 text-xs font-semibold mb-3">
+                    <section className={`mb-[3.75rem] flex h-full w-full flex-col items-center justify-center`}>
+                        <h1 className="mb-1 text-2xl font-bold">산책기능</h1>
+                        <p className="mb-3 text-xs font-semibold text-stone-500">
                             댕댕워크 산책기능은 회원에게만 제공됩니다
                         </p>
                         <button onClick={() => setToggle(true)}>
