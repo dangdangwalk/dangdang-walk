@@ -1,6 +1,6 @@
 import { Button } from '@/components/common/Button';
 import DogCard from '@/components/home/DogCard';
-import { DogStatistic } from '@/models/dog.model';
+import { DogStatistic } from '@/models/dog';
 import { useNavigate } from 'react-router-dom';
 
 const defaultDpg: DogStatistic = {

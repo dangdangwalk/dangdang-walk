@@ -1,4 +1,4 @@
-import { ResponseDogs, deleteDog, fetchDogs, registerDogInfo, updateDog } from '@/api/dogs';
+import { ResponseDogs, deleteDog, fetchDogs, registerDogInfo, updateDog } from '@/api/dog';
 import queryClient from '@/api/queryClient';
 import { uploadImage } from '@/api/upload';
 import { UseMutationCustomOptions } from '@/types/common';

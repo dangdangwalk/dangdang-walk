@@ -1,4 +1,4 @@
-import { create as createJournal } from '@/api/journals';
+import { create as createJournal } from '@/api/journal';
 import { deleteImages, getUploadUrl, uploadImage } from '@/api/upload';
 import Cancel from '@/assets/icons/ic-top-cancel.svg';
 import { Button } from '@/components/common/Button';
@@ -20,8 +20,8 @@ import PhotoSection from '@/components/journals/PhotoSection';
 import Map from '@/components/walk/Map';
 import WalkInfo from '@/components/walk/WalkInfo';
 import useToast from '@/hooks/useToast';
-import { WalkingDog } from '@/models/dog.model';
-import { Position } from '@/models/location.model';
+import { WalkingDog } from '@/models/dog';
+import { Position } from '@/models/location';
 import { useSpinnerStore } from '@/store/spinnerStore';
 import { getFileName } from '@/utils/url';
 import { FormEvent, useEffect, useRef, useState } from 'react';

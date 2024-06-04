@@ -1,4 +1,4 @@
-import { fetchJournal } from '@/api/journals';
+import { fetchJournal } from '@/api/journal';
 import queryClient from '@/api/queryClient';
 import Camera from '@/pages/Camera';
 import Health from '@/pages/Health';

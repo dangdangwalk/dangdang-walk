@@ -1,5 +1,5 @@
-import { fetchDogStatistic } from '@/api/dogs';
-import { DogStatistic } from '@/models/dog.model';
+import { fetchDogStatistic } from '@/api/dog';
+import { DogStatistic } from '@/models/dog';
 import { useAuthStore } from '@/store/authStore';
 import { UseQueryCustomOptions } from '@/types/common';
 import { useQuery } from '@tanstack/react-query';

@@ -1,4 +1,4 @@
-import { period } from '@/api/dogs';
+import { period } from '@/api/dog';
 import { queryStringKeys } from '@/constants';
 import { formDate } from '@/utils/date';
 import { useEffect, useState } from 'react';

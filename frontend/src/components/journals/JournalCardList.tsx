@@ -1,5 +1,5 @@
 import JournalCard from '@/components/journals/JournalCard';
-import { Dog } from '@/models/dog.model';
+import { Dog } from '@/models/dog';
 import { Journal } from '@/models/journals';
 
 export default function JournalCardList({ journals, dog }: { journals: Journal[]; dog: Dog | undefined }) {

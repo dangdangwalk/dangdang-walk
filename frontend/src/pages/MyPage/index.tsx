@@ -18,7 +18,7 @@ import Naver from '@/assets/icons/ic-provider-naver.svg';
 import { Divider } from '@/components/common/Divider';
 import DeactivateModal from '@/components/DeactivateModal';
 import DogDetail from '@/pages/MyPage/DogDetail';
-import { ResponseDogs, ResponseRecentMonthStatistics, fetchDogRecentMonthStatistics } from '@/api/dogs';
+import { ResponseDogs, ResponseRecentMonthStatistics, fetchDogRecentMonthStatistics } from '@/api/dog';
 function Profile() {
     const navigate = useNavigate();
     const { useDogsQuery } = useDog();

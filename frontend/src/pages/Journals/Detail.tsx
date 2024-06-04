@@ -1,4 +1,4 @@
-import { JournalDetail, remove as removeJournal, update as updateJournal } from '@/api/journals';
+import { JournalDetail, remove as removeJournal, update as updateJournal } from '@/api/journal';
 import { deleteImages, getUploadUrl, uploadImage } from '@/api/upload';
 import { ReactComponent as Arrow } from '@/assets/icons/ic-arrow.svg';
 import { ReactComponent as Meatball } from '@/assets/icons/ic-meatball.svg';

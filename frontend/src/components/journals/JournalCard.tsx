@@ -1,6 +1,6 @@
 import DefaultProfileImage from '@/components/common/DefaultProfileImage';
 import WalkInfo from '@/components/walk/WalkInfo';
-import { Dog } from '@/models/dog.model';
+import { Dog } from '@/models/dog';
 import { Journal } from '@/models/journals';
 import { formDate, formTime } from '@/utils/date';
 import { useNavigate } from 'react-router-dom';

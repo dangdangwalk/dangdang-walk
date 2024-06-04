@@ -1,4 +1,4 @@
-import { DogStatistic } from '@/models/dog.model';
+import { DogStatistic } from '@/models/dog';
 import { walkPercentFormat } from '@/utils/format';
 import Ic from '@/assets/icons/ic-arrow.svg';
 import Avatar from '@/components/common/Avatar';

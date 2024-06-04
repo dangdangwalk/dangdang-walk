@@ -1,5 +1,5 @@
-import { WalkingDog } from '@/models/dog.model';
-import { Position } from '@/models/location.model';
+import { WalkingDog } from '@/models/dog';
+import { Position } from '@/models/location';
 import { useState } from 'react';
 
 const useWalkingDogs = () => {

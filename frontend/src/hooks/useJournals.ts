@@ -1,4 +1,4 @@
-import { fetchJournals } from '@/api/journals';
+import { fetchJournals } from '@/api/journal';
 import { queryStringKeys } from '@/constants';
 import { Journal } from '@/models/journals';
 import { formDate } from '@/utils/date';
