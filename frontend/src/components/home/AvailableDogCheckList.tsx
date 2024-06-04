@@ -1,9 +1,9 @@
-import Avatar from '@/components/common/Avatar';
-import { Checkbox } from '@/components/common/Checkbox2';
-import { AvailableDogCheck } from '@/components/home/AvailableDogCheck';
-import { useState } from 'react';
 import AllDogs from '@/assets/icons/walk/frame-5058.svg';
+import Avatar from '@/components/common/Avatar';
+import { Checkbox } from '@/components/common/Checkbox';
+import { AvailableDogCheck } from '@/components/home/AvailableDogCheck';
 import { AvailableDog } from '@/models/dog.model';
+import { useState } from 'react';
 
 export default function AvailableDogCheckList({
     dogs,
