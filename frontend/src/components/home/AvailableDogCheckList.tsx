@@ -3,22 +3,14 @@ import Avatar from '@/components/commons/Avatar';
 import { Checkbox } from '@/components/commons/Checkbox';
 import { AvailableDogCheck } from '@/components/home/AvailableDogCheck';
 import { AvailableDog } from '@/models/dog';
-import { useState } from 'react';
 
-export default function AvailableDogCheckList({
-    dogs,
-    onToggle,
-    checkAll,
-}: {
+interface AvailableDogCheckListProps {
     dogs: AvailableDog[] | undefined;
     onToggle: (id: number) => void;
     checkAll: (flag: boolean) => void;
-}) {
-    const [isCheckedAll, setIsCheckedAll] = useState<boolean>(false);
-    const onCheckAll = (flag: boolean) => {
-        setIsCheckedAll(flag);
-        checkAll(flag);
-    };
+    isCheckedAll: boolean;
+}
+export default function AvailableDogCheckList({ dogs, onToggle, checkAll, isCheckedAll }: AvailableDogCheckListProps) {
     return (
         <>
             <li className="flex items-center justify-between py-2">
@@ -26,7 +18,7 @@ export default function AvailableDogCheckList({
                 <Checkbox
                     checked={isCheckedAll}
                     onCheckedChange={() => {
-                        onCheckAll(!isCheckedAll);
+                        checkAll(!isCheckedAll);
                     }}
                 ></Checkbox>
             </li>
