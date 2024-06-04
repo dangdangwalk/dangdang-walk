@@ -1,9 +1,9 @@
-import React, { Dispatch, FormEvent, SetStateAction, useState } from 'react';
+import { Checkbox } from '@/components/common/Checkbox';
 import { Divider } from '@/components/common/Divider';
-import { Checkbox } from '@/components/common/Checkbox2';
-import { DogRegInfo } from '@/pages/Join';
-import { MaleIcon } from '@/components/icon/MaleIcon';
 import FemaleIcon from '@/components/icon/FemaleIcon';
+import { MaleIcon } from '@/components/icon/MaleIcon';
+import { DogRegInfo } from '@/pages/Join';
+import { Dispatch, FormEvent, SetStateAction, useState } from 'react';
 interface Props {
     data: DogRegInfo;
     setData: Dispatch<SetStateAction<DogRegInfo>>;

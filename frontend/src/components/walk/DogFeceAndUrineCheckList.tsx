@@ -1,10 +1,9 @@
 import Avatar from '@/components/common/Avatar';
-import { Checkbox } from '@/components/common/Checkbox2';
+import { Checkbox } from '@/components/common/Checkbox';
 import { Divider } from '@/components/common/Divider';
 import { Feces } from '@/components/icon/Feces';
 import { Urine } from '@/components/icon/Urine';
 import { WalkingDog } from '@/models/dog.model';
-import React from 'react';
 
 interface DogFeceAndUrineCheckListProps {
     dog: WalkingDog;

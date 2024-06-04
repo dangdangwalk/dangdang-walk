@@ -1,5 +1,5 @@
 import Avatar from '@/components/common/Avatar';
-import { Checkbox } from '@/components/common/Checkbox2';
+import { Checkbox } from '@/components/common/Checkbox';
 import { Divider } from '@/components/common/Divider';
 import { AvailableDog } from '@/models/dog.model';
 
