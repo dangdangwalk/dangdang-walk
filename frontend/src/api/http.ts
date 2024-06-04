@@ -22,7 +22,6 @@ export const createClient = (config?: AxiosRequestConfig): AxiosInstance => {
         async (request) => {
             if (request.url?.startsWith(REACT_APP_BASE_IMAGE_URL)) return request;
             if (request.baseURL !== NEST_BASE_URL) return request;
-            console.log(request);
 
             if (!request.headers['Authorization']) {
                 let data = queryClient.getQueryData<{ accessToken: string }>([
