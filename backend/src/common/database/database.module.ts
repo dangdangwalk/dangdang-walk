@@ -5,7 +5,6 @@ import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-clas
 import { DataSource } from 'typeorm';
 import { runSeeders } from 'typeorm-extension';
 import { addTransactionalDataSource, getDataSourceByName } from 'typeorm-transactional';
-import { Breed } from '../../breed/breed.entity';
 import { color } from '../../utils/ansi.util';
 import { WinstonLoggerService } from '../logger/winstonLogger.service';
 import BreedSeeder from './seeds/breed.seeder';
@@ -22,7 +21,10 @@ import BreedSeeder from './seeds/breed.seeder';
                     username: config.get<string>('MYSQL_ROOT_USER'),
                     password: config.get<string>('MYSQL_ROOT_PASSWORD'),
                     database: config.get<string>('MYSQL_DATABASE'),
-                    entities: ['dist/**/*.entity{.ts,.js}', Breed],
+                    entities:
+                        config.get<string>('NODE_ENV') === 'test'
+                            ? ['src/**/*.entity{.ts,.js}']
+                            : ['dist/**/*.entity{.ts,.js}'],
                     synchronize: true,
                     timezone: 'Z',
                     legacySpatialSupport: false,
