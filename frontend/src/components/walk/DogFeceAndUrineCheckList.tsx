@@ -7,16 +7,11 @@ import { WalkingDog } from '@/models/dog';
 
 interface DogFeceAndUrineCheckListProps {
     dog: WalkingDog;
-    toggleFeceCheck: (id: number) => void;
-    toggleUrineCheck: (id: number) => void;
+    toggleCheck: (id: number, key: keyof WalkingDog) => void;
 }
 
 //Refactor 컴포넌트 이름과 divider 위치
-export default function DogFeceAndUrineCheckList({
-    dog,
-    toggleFeceCheck,
-    toggleUrineCheck,
-}: DogFeceAndUrineCheckListProps) {
+export default function DogFeceAndUrineCheckList({ dog, toggleCheck }: DogFeceAndUrineCheckListProps) {
     return (
         <>
             <Divider className="h-0 border border-neutral-200" />
@@ -26,7 +21,7 @@ export default function DogFeceAndUrineCheckList({
                     <Checkbox
                         checked={dog?.isFeceChecked}
                         onCheckedChange={() => {
-                            toggleFeceCheck(dog.id);
+                            toggleCheck(dog.id, 'isFeceChecked');
                         }}
                     >
                         <Feces color={dog.isFeceChecked ? 'primary' : 'secondary'} />
@@ -34,7 +29,7 @@ export default function DogFeceAndUrineCheckList({
                     <Checkbox
                         checked={dog?.isUrineChecked}
                         onCheckedChange={() => {
-                            toggleUrineCheck(dog.id);
+                            toggleCheck(dog.id, 'isUrineChecked');
                         }}
                     >
                         <Urine color={dog.isUrineChecked ? 'primary' : 'secondary'} />

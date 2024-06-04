@@ -13,23 +13,23 @@ import useWalkAvailabeDog from '@/hooks/useWalkAvailabeDog';
 import Spinner from '@/components/commons/Spinner';
 import RegisterCard from '@/components/home/RegisterCard';
 import { queryStringKeys } from '@/constants';
+import { setFlagValueByKey, toggleCheckById } from '@/utils/check';
 
 function Home() {
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
-    const {
-        isAvailableDogsLoading,
-        fetchWalkAvailableDogs,
-        availableDogs,
-        toggleCheck: handleToggle,
-        changeCheckAll: handleCheckAll,
-    } = useWalkAvailabeDog();
+    const { isAvailableDogsLoading, fetchWalkAvailableDogs, availableDogs, setAvailableDogs } = useWalkAvailabeDog();
     const { dogs, isDogsPending } = useDogsStatistic();
+    const [isAvailableDogsCheckedAll, setIsAvailableDogsCheckedAll] = useState<boolean>(false);
     const navigate = useNavigate();
     const handleBottomSheet = () => {
         if (!isDogBottomsheetOpen) {
             fetchWalkAvailableDogs();
+            setIsDogBottomsheetOpen(true);
+        } else {
+            handleCheckAll(false);
+            setIsDogBottomsheetOpen(false);
+            setIsAvailableDogsCheckedAll(false);
         }
-        setIsDogBottomsheetOpen(!isDogBottomsheetOpen);
     };
 
     const handleConfirm = () => {
@@ -43,6 +43,18 @@ function Home() {
         navigate(`/journals?${queryStringKeys.DOGID}=${dogId}`, {
             state: { dogs, dog: dogs.find((d) => d.id === dogId) },
         });
+    };
+
+    const handleToggle = (id: number) => {
+        if (!availableDogs) return;
+        const newAvailableDogs = toggleCheckById(availableDogs, id, 'isChecked');
+        setAvailableDogs(newAvailableDogs);
+    };
+    const handleCheckAll = (flag: boolean) => {
+        if (!availableDogs) return;
+        const newAvailableDogs = setFlagValueByKey(availableDogs, flag, 'isChecked');
+        setAvailableDogs(newAvailableDogs);
+        setIsAvailableDogsCheckedAll(flag);
     };
 
     return (
@@ -87,7 +99,12 @@ function Home() {
                     {isAvailableDogsLoading ? (
                         <Spinner />
                     ) : availableDogs && availableDogs?.length > 0 ? (
-                        <AvailableDogCheckList dogs={availableDogs} onToggle={handleToggle} checkAll={handleCheckAll} />
+                        <AvailableDogCheckList
+                            dogs={availableDogs}
+                            onToggle={handleToggle}
+                            checkAll={handleCheckAll}
+                            isCheckedAll={isAvailableDogsCheckedAll}
+                        />
                     ) : (
                         <div>산책할 강아지가없습니다</div>
                     )}
