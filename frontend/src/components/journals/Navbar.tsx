@@ -1,5 +1,5 @@
-import { ReactComponent as MyPageOff } from '@/assets/icons/btn-mypage-off.svg';
-import { ReactComponent as WalkOn } from '@/assets/icons/btn-walk-on.svg';
+import { ReactComponent as MyPageOff } from '@/assets/buttons/btn-mypage-off.svg';
+import { ReactComponent as WalkOn } from '@/assets/buttons/btn-walk-on.svg';
 import { Link } from 'react-router-dom';
 
 export default function Navbar() {

@@ -1,5 +1,5 @@
 import React from 'react';
-import LoginButton from '@/assets/icons/btn-login.svg';
+import LoginButton from '@/assets/buttons/btn-login.svg';
 
 interface Props {
     isOpen: boolean;

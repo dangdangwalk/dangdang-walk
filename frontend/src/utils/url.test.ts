@@ -10,7 +10,7 @@ describe('유틸 함수 isImageFileName은', () => {
         expect(isImageFileName('data:image/png;base64,1/8bd7fb6e-351d-4224-bf8a-1e855c018de9.png')).toBe(false);
     });
     test('정적 자산 형식에 대해 false를 반환한다.', () => {
-        expect(isImageFileName('/static/media/frame-5058.bb2c5fbbf292bff8ee8face288e54913.svg')).toBe(false);
+        expect(isImageFileName('/static/media/default-dog.bb2c5fbbf292bff8ee8face288e54913.svg')).toBe(false);
     });
     test('base64 형식에 대해 false를 반환한다.', () => {
         expect(isImageFileName('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAANSUhEUoAAAANSUhEU')).toBe(false);

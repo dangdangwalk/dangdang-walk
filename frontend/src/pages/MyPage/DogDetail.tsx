@@ -1,6 +1,6 @@
 import { ResponseDogs, ResponseRecentMonthStatistics } from '@/api/dog';
 import { getUploadUrl } from '@/api/upload';
-import EditPhoto from '@/assets/icons/btn-edit-photo.svg';
+import EditPhoto from '@/assets/buttons/btn-edit-photo.svg';
 import CrownIcon from '@/assets/icons/ic-crown.svg';
 import Back from '@/assets/icons/ic-top-back.svg';
 import Edit from '@/assets/icons/ic-top-edit.svg';

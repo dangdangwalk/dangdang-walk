@@ -1,4 +1,4 @@
-import AllDogs from '@/assets/icons/walk/frame-5058.svg';
+import AllDogs from '@/assets/icons/walk/default-dog.svg';
 import Avatar from '@/components/common/Avatar';
 import { Checkbox } from '@/components/common/Checkbox';
 import { AvailableDogCheck } from '@/components/home/AvailableDogCheck';

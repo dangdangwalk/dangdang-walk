@@ -6,7 +6,7 @@ import Avatar from '@/components/common/Avatar';
 import SelectPhoto from '@/assets/icons/ic-select-photo.svg';
 import { useNavigate } from 'react-router-dom';
 import SettingIcon from '@/assets/icons/ic-setting.svg';
-import LogoutIcon from '@/assets/icons/btn-logout.svg';
+import LogoutIcon from '@/assets/buttons/btn-logout.svg';
 import NoteIcon from '@/assets/icons/ic-note.svg';
 import MegaphoneIcon from '@/assets/icons/ic-megaphone.svg';
 import HeadphoneIcon from '@/assets/icons/ic-headphone.svg';

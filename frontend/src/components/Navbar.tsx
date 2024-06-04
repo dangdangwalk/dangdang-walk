@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import myPageOff from '@/assets/icons/btn-mypage-off.svg';
-import myPageOn from '@/assets/icons/btn-mypage-on.svg';
-import WalkOff from '@/assets/icons/btn-walk-off.svg';
-import WalkOn from '@/assets/icons/btn-walk-on.svg';
+import myPageOff from '@/assets/buttons/btn-mypage-off.svg';
+import myPageOn from '@/assets/buttons/btn-mypage-on.svg';
+import WalkOff from '@/assets/buttons/btn-walk-off.svg';
+import WalkOn from '@/assets/buttons/btn-walk-on.svg';
 import { NAV_HEIGHT } from '@/constants/style';
 
 function Navbar() {

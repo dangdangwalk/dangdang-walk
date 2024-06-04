@@ -3,8 +3,8 @@ import Calendar from 'react-calendar';
 import './CustomCalendar.css'; // Custom CSS for transitions
 import { useLocation } from 'react-router-dom';
 import { queryStringKeys } from '@/constants';
-import PrevMonth from '@/assets/icons/btn-prev-month.svg';
-import NextMonth from '@/assets/icons/btn-next-month.svg';
+import PrevMonth from '@/assets/buttons/btn-prev-month.svg';
+import NextMonth from '@/assets/buttons/btn-next-month.svg';
 import { fetchDogMonthStatistic, period } from '@/api/dog';
 import { formDate, formDay } from '@/utils/date';
 import useCalendar from '@/hooks/useCalendar';
