@@ -6,7 +6,7 @@ import Home from '@/pages/Home';
 import Join from '@/pages/Join';
 import JournalCreateForm from '@/pages/Journals/CreateForm';
 import Detail from '@/pages/Journals/Detail';
-import Journals from '@/pages/Journals/Journals';
+import Journals from '@/pages/Journals';
 import OauthCallback from '@/pages/OauthCallback';
 import Profile from '@/pages/Profile';
 import Walk from '@/pages/Walk';

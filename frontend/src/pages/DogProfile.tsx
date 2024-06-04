@@ -15,7 +15,7 @@ import Topbar from '@/components/common/Topbar';
 import FemaleIcon from '@/components/icon/FemaleIcon';
 import { MaleIcon } from '@/components/icon/MaleIcon';
 import { uploadImg, useDog } from '@/hooks/useDog';
-import { DogRegInfo } from '@/pages/Join/index';
+import { DogRegInfo } from '@/pages/Join';
 import { maxLengthCheck } from '@/pages/Join/DogDetailInfo';
 import { useCropStore } from '@/store/cropStore';
 import { dataURLtoFile } from '@/utils/dataUrlToFile';
