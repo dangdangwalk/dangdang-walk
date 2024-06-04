@@ -1,5 +1,5 @@
 import { httpClient } from '@/api/http';
-import { Journal } from '@/models/journals';
+import { Journal } from '@/models/journal';
 import { Position as NumberPosition, Position } from '@/models/location';
 import { formDate } from '@/utils/date';
 
