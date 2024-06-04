@@ -13,7 +13,7 @@ import useWalkAvailabeDog from '@/hooks/useWalkAvailabeDog';
 import Spinner from '@/components/commons/Spinner';
 import RegisterCard from '@/components/home/RegisterCard';
 import { queryStringKeys } from '@/constants';
-import { toggleCheckAll, toggleCheckById } from '@/utils/check';
+import { setFlagValueByKey, toggleCheckById } from '@/utils/check';
 
 function Home() {
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
@@ -47,7 +47,7 @@ function Home() {
     };
     const handleCheckAll = (flag: boolean) => {
         if (!availableDogs) return;
-        const newAvailableDogs = toggleCheckAll(availableDogs, flag, 'isChecked');
+        const newAvailableDogs = setFlagValueByKey(availableDogs, flag, 'isChecked');
         setAvailableDogs(newAvailableDogs);
     };
 

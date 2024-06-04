@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { toggleCheckAll, toggleCheckById } from './check';
+import { setFlagValueByKey, toggleCheckById } from './check';
 
 describe('check util test', () => {
     it('check ', () => {
@@ -48,13 +48,13 @@ describe('check util test', () => {
                 checked: false,
             },
         ];
-        const result1 = toggleCheckAll(array, true, 'checked');
+        const result1 = setFlagValueByKey(array, true, 'checked');
 
         expect(result1[0]?.checked).toBe(true);
         expect(result1[1]?.checked).toBe(true);
         expect(result1[2]?.checked).toBe(true);
 
-        const result2 = toggleCheckAll(result1, false, 'checked');
+        const result2 = setFlagValueByKey(result1, false, 'checked');
 
         expect(result2[0]?.checked).toBe(false);
         expect(result2[1]?.checked).toBe(false);

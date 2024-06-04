@@ -21,6 +21,7 @@ import { storageKeys } from '@/constants';
 import { walkStartRequest, walkStopRequest } from '@/api/walk';
 import useImageUpload from '@/hooks/useImageUpload';
 import { useSpinnerStore } from '@/store/spinnerStore';
+import { setFlagValueByKey, toggleCheckById } from '@/utils/check';
 
 export interface DogWalkData {
     dogs: WalkingDog[];
@@ -34,8 +35,7 @@ export default function Walk() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const { walkingDogs, toggleFeceCheck, toggleUrineCheck, saveFecesAndUriens, cancelCheckedAll, setDogs } =
-        useWalkingDogs();
+    const { walkingDogs, saveFecesAndUriens, setDogs, setWalkingDogs } = useWalkingDogs();
     const { duration, isStart: isWalk, stopClock, startClock, startedAt } = useStopWatch();
     const { distance, position: startPosition, currentPosition, stopGeo, routes, startGeo } = useGeolocation();
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
@@ -51,6 +51,18 @@ export default function Walk() {
         if (isDogBottomsheetOpen) {
             cancelCheckedAll();
         }
+    };
+
+    const cancelCheckedAll = () => {
+        if (!walkingDogs?.length) return;
+        const newWalkingDogs = setFlagValueByKey(walkingDogs, false, 'isFeceChecked', 'isUrineChecked');
+        setWalkingDogs(newWalkingDogs);
+    };
+
+    const handleToggle = (id: number, key: keyof WalkingDog) => {
+        if (!walkingDogs?.length) return;
+        const newWalkingDogs = toggleCheckById(walkingDogs, id, key);
+        setWalkingDogs(newWalkingDogs);
     };
 
     const handleConfirm = () => {
@@ -143,12 +155,7 @@ export default function Walk() {
                 <BottomSheet.Header> 강아지 선책</BottomSheet.Header>
                 <BottomSheet.Body>
                     {walkingDogs?.map((dog) => (
-                        <DogFeceAndUrineCheckList
-                            dog={dog}
-                            toggleFeceCheck={toggleFeceCheck}
-                            toggleUrineCheck={toggleUrineCheck}
-                            key={dog.id}
-                        />
+                        <DogFeceAndUrineCheckList dog={dog} toggleCheck={handleToggle} key={dog.id} />
                     ))}
                 </BottomSheet.Body>
                 <BottomSheet.ConfirmButton

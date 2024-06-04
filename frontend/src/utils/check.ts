@@ -2,7 +2,7 @@ export const toggleCheckById = <T extends { id: number }>(array: T[], id: number
     return array.map((item) => (item.id === id ? { ...item, [key]: !item[key] } : item));
 };
 
-export const toggleCheckAll = <T extends { id: number }>(
+export const setFlagValueByKey = <T extends { id: number }>(
     array: T[],
     flag: boolean,
     key1: keyof T,
