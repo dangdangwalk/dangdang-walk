@@ -1,6 +1,6 @@
 import { JournalDetail, remove as removeJournal, update as updateJournal } from '@/api/journal';
 import { deleteImages, getUploadUrl, uploadImage } from '@/api/upload';
-import { ReactComponent as Arrow } from '@/assets/icons/ic-arrow.svg';
+import { ReactComponent as Arrow } from '@/assets/icons/ic-arrow-right.svg';
 import { ReactComponent as Meatball } from '@/assets/icons/ic-meatball.svg';
 import BottomSheet from '@/components/common/BottomSheet';
 import { Button } from '@/components/common/Button';

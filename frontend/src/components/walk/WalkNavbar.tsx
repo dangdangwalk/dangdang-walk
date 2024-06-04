@@ -1,7 +1,7 @@
 import { useRef, useState, MouseEvent, TouchEvent, ChangeEvent } from 'react';
-import Pause from '@/assets/icons/pause.svg';
-import Camera from '@/assets/icons/camera.svg';
-import Poop from '@/assets/icons/poop.svg';
+import Pause from '@/assets/icons/ic-pause.svg';
+import Camera from '@/assets/icons/ic-camera.svg';
+import Poop from '@/assets/icons/ic-poop.svg';
 
 interface WalkNavbarProps {
     onOpen: () => void;

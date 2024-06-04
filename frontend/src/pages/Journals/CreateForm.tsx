@@ -1,6 +1,6 @@
 import { create as createJournal } from '@/api/journal';
 import { deleteImages, getUploadUrl, uploadImage } from '@/api/upload';
-import Cancel from '@/assets/icons/ic-top-cancel.svg';
+import Cancel from '@/assets/icons/ic-cancel.svg';
 import { Button } from '@/components/common/Button';
 import { Divider } from '@/components/common/Divider';
 import {

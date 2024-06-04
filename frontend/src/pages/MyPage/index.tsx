@@ -10,7 +10,7 @@ import LogoutIcon from '@/assets/buttons/btn-logout.svg';
 import NoteIcon from '@/assets/icons/ic-note.svg';
 import MegaphoneIcon from '@/assets/icons/ic-megaphone.svg';
 import HeadphoneIcon from '@/assets/icons/ic-headphone.svg';
-import RightArrowIcon from '@/assets/icons/ic-arrow.svg';
+import RightArrowIcon from '@/assets/icons/ic-arrow-right.svg';
 import CrownIcon from '@/assets/icons/ic-crown.svg';
 import KaKao from '@/assets/icons/ic-provider-kakao.svg';
 import Google from '@/assets/icons/ic-provider-google.svg';

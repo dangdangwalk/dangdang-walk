@@ -3,7 +3,7 @@ import WeatherInfo from '@/components/home/WeatherInfo';
 import { useState } from 'react';
 import { Button } from '@/components/common/Button';
 import { NAV_HEIGHT, TOP_BAR_HEIGHT } from '@/constants/style';
-import Notification from '@/assets/icons/notification.svg';
+import Notification from '@/assets/icons/ic-notification.svg';
 import Topbar from '@/components/common/Topbar';
 import BottomSheet from '@/components/common/BottomSheet';
 import AvailableDogCheckList from '@/components/home/AvailableDogCheckList';

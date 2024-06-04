@@ -3,7 +3,7 @@ import CustomCalendar from '@/components/journals/CustomCalendar';
 import JournalCardList from '@/components/journals/JournalCardList';
 import { NAV_HEIGHT, TOP_BAR_HEIGHT } from '@/constants/style';
 import useJournals from '@/hooks/useJournals';
-import Ic from '@/assets/icons/ic-arrow.svg';
+import Ic from '@/assets/icons/ic-arrow-right.svg';
 import { Dog } from '@/models/dog';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
