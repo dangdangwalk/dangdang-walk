@@ -178,7 +178,7 @@ export default function Join() {
                 case 'DogBasicInfo':
                     return '다음 단계로';
                 case 'DogDetailInfo':
-                    return '가입 완료';
+                    return currentPage ? '등록 완료' : '가입 완료';
             }
         }, [step, haveADog]);
 
