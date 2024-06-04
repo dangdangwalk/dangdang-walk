@@ -13,16 +13,11 @@ import useWalkAvailabeDog from '@/hooks/useWalkAvailabeDog';
 import Spinner from '@/components/commons/Spinner';
 import RegisterCard from '@/components/home/RegisterCard';
 import { queryStringKeys } from '@/constants';
+import { toggleCheckAll, toggleCheckById } from '@/utils/check';
 
 function Home() {
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
-    const {
-        isAvailableDogsLoading,
-        fetchWalkAvailableDogs,
-        availableDogs,
-        toggleCheck: handleToggle,
-        changeCheckAll: handleCheckAll,
-    } = useWalkAvailabeDog();
+    const { isAvailableDogsLoading, fetchWalkAvailableDogs, availableDogs, setAvailableDogs } = useWalkAvailabeDog();
     const { dogs, isDogsPending } = useDogsStatistic();
     const navigate = useNavigate();
     const handleBottomSheet = () => {
@@ -43,6 +38,17 @@ function Home() {
         navigate(`/journals?${queryStringKeys.DOGID}=${dogId}`, {
             state: { dogs, dog: dogs.find((d) => d.id === dogId) },
         });
+    };
+
+    const handleToggle = (id: number) => {
+        if (!availableDogs) return;
+        const newAvailableDogs = toggleCheckById(availableDogs, id, 'isChecked');
+        setAvailableDogs(newAvailableDogs);
+    };
+    const handleCheckAll = (flag: boolean) => {
+        if (!availableDogs) return;
+        const newAvailableDogs = toggleCheckAll(availableDogs, flag, 'isChecked');
+        setAvailableDogs(newAvailableDogs);
     };
 
     return (

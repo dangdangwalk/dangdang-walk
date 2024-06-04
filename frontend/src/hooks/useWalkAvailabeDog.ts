@@ -26,18 +26,6 @@ const useWalkAvailabeDog = () => {
         },
         enabled: false,
     });
-    const toggleCheck = (id: number) => {
-        setAvailableDogs(
-            availableDogs?.map((d: AvailableDog) => (d.id === id ? { ...d, isChecked: !d.isChecked } : d))
-        );
-    };
-    const changeCheckAll = (flag: boolean) => {
-        setAvailableDogs(
-            availableDogs?.map((d: AvailableDog) => {
-                return { ...d, isChecked: flag };
-            })
-        );
-    };
 
     useEffect(() => {
         if (!aavailablDogData) return;
@@ -56,8 +44,6 @@ const useWalkAvailabeDog = () => {
         setAvailableDogs,
         isAvailableDogsLoading: isLoading,
         fetchWalkAvailableDogs: refetch,
-        toggleCheck,
-        changeCheckAll,
     };
 };
 
