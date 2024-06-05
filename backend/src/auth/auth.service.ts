@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Transactional } from 'typeorm-transactional';
 import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
@@ -134,20 +134,16 @@ export class AuthService {
         await this.s3Service.deleteObjectFolder(userId);
     }
 
-    async validateAccessToken(userId: number): Promise<boolean> {
-        try {
-            const result = await this.usersService.findOne({ id: userId });
-            this.logger.debug('validateAccessToken - find User result', { ...result });
-
-            return true;
-        } catch {
-            return false;
-        }
+    async validateAccessToken(userId: number) {
+        const result = await this.usersService.findOne({ id: userId });
+        this.logger.debug('validateAccessToken - find User result', { ...result });
     }
 
-    async validateRefreshToken(token: string, oauthId: string): Promise<boolean> {
+    async validateRefreshToken(token: string, oauthId: string) {
         const { refreshToken } = await this.usersService.findOne({ oauthId });
 
-        return refreshToken === token;
+        if (refreshToken !== token) {
+            throw new UnauthorizedException();
+        }
     }
 }
