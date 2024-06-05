@@ -3,7 +3,15 @@ import * as request from 'supertest';
 import { DataSource } from 'typeorm';
 import { mockUser } from '../src/fixtures/users.fixture';
 import { Users } from '../src/users/users.entity';
-import { TEST_INVALID_PROVIDER, TEST_VALID_PROVIDER, closeTestApp, setupTestApp } from './test-utils';
+import {
+    EXPIRED_ACCESS_TOKEN,
+    INVALID_PROVIDER,
+    MALFORMED_ACCESS_TOKEN,
+    VALID_ACCESS_TOKEN_100_YEARS,
+    VALID_PROVIDER_KAKAO,
+    closeTestApp,
+    setupTestApp,
+} from './test-utils';
 
 const context = describe;
 
@@ -31,7 +39,7 @@ describe('AuthController (e2e)', () => {
                     .post('/auth/login')
                     .send({
                         authorizeCode: 'authorizeCode',
-                        provider: TEST_VALID_PROVIDER,
+                        provider: VALID_PROVIDER_KAKAO,
                     })
                     .expect(404)
                     .expect('set-cookie', /oauthRefreshToken=.+/)
@@ -58,7 +66,7 @@ describe('AuthController (e2e)', () => {
                     .post('/auth/login')
                     .send({
                         authorizeCode: 'authorizeCode',
-                        provider: TEST_VALID_PROVIDER,
+                        provider: VALID_PROVIDER_KAKAO,
                     })
                     .expect(200)
                     .expect('set-cookie', /refreshToken=.+;/);
@@ -73,7 +81,7 @@ describe('AuthController (e2e)', () => {
                 return request(app.getHttpServer())
                     .post('/auth/login')
                     .send({
-                        provider: TEST_VALID_PROVIDER,
+                        provider: VALID_PROVIDER_KAKAO,
                     })
                     .expect(400);
             });
@@ -96,7 +104,7 @@ describe('AuthController (e2e)', () => {
                     .post('/auth/login')
                     .send({
                         authorizeCode: 'authorizeCode',
-                        provider: TEST_INVALID_PROVIDER,
+                        provider: INVALID_PROVIDER,
                     })
                     .expect(400);
             });
@@ -111,7 +119,7 @@ describe('AuthController (e2e)', () => {
                     .set('Cookie', [
                         `oauthRefreshToken=${mockUser.oauthRefreshToken}`,
                         `oauthAccessToken=${mockUser.oauthAccessToken}`,
-                        `provider=${TEST_VALID_PROVIDER}`,
+                        `provider=${VALID_PROVIDER_KAKAO}`,
                     ])
                     .expect(201)
                     .expect('set-cookie', /refreshToken=.+;/);
@@ -135,7 +143,7 @@ describe('AuthController (e2e)', () => {
                     .set('Cookie', [
                         `oauthRefreshToken=${mockUser.oauthRefreshToken}`,
                         `oauthAccessToken=${mockUser.oauthAccessToken}`,
-                        `provider=${TEST_VALID_PROVIDER}`,
+                        `provider=${VALID_PROVIDER_KAKAO}`,
                     ])
                     .expect(409);
             });
@@ -145,7 +153,10 @@ describe('AuthController (e2e)', () => {
             it('401 상태 코드를 반환해야 한다.', () => {
                 return request(app.getHttpServer())
                     .post('/auth/signup')
-                    .set('Cookie', [`oauthAccessToken=${mockUser.oauthAccessToken}`, `provider=${TEST_VALID_PROVIDER}`])
+                    .set('Cookie', [
+                        `oauthAccessToken=${mockUser.oauthAccessToken}`,
+                        `provider=${VALID_PROVIDER_KAKAO}`,
+                    ])
                     .expect(401);
             });
         });
@@ -156,7 +167,7 @@ describe('AuthController (e2e)', () => {
                     .post('/auth/signup')
                     .set('Cookie', [
                         `oauthRefreshToken=${mockUser.oauthRefreshToken}`,
-                        `provider=${TEST_VALID_PROVIDER}`,
+                        `provider=${VALID_PROVIDER_KAKAO}`,
                     ])
                     .expect(401);
             });
@@ -181,9 +192,65 @@ describe('AuthController (e2e)', () => {
                     .set('Cookie', [
                         `oauthRefreshToken=${mockUser.oauthRefreshToken}`,
                         `oauthAccessToken=${mockUser.oauthAccessToken}`,
-                        `provider=${TEST_INVALID_PROVIDER}`,
+                        `provider=${INVALID_PROVIDER}`,
                     ])
                     .expect(400);
+            });
+        });
+    });
+
+    describe('/auth/logout (POST)', () => {
+        context('회원이 유효한 access token을 Authorization header에 담아 로그아웃 요청을 보내면', () => {
+            beforeEach(async () => {
+                const userRepository = dataSource.getRepository(Users);
+                await userRepository.save(mockUser);
+            });
+
+            afterEach(async () => {
+                const userRepository = dataSource.getRepository(Users);
+                await userRepository.query('SET FOREIGN_KEY_CHECKS = 0;');
+                await userRepository.clear();
+                await userRepository.query('SET FOREIGN_KEY_CHECKS = 1;');
+            });
+
+            it('200 상태 코드를 반환해야 한다.', async () => {
+                return request(app.getHttpServer())
+                    .post('/auth/logout')
+                    .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
+                    .expect(200);
+            });
+        });
+
+        context('Authorization header 없이 로그아웃 요청을 보내면', () => {
+            it('401 상태 코드를 반환해야 한다.', async () => {
+                return request(app.getHttpServer()).post('/auth/logout').expect(401);
+            });
+        });
+
+        context('구조가 잘못된 access token을 Authorization header에 담아 로그아웃 요청을 보내면', () => {
+            it('401 상태 코드를 반환해야 한다.', async () => {
+                return request(app.getHttpServer())
+                    .post('/auth/logout')
+                    .set('Authorization', `Bearer ${MALFORMED_ACCESS_TOKEN}`)
+                    .expect(401);
+            });
+        });
+
+        context('만료된 access token을 Authorization header에 담아 로그아웃 요청을 보내면', () => {
+            it('401 상태 코드를 반환해야 한다.', async () => {
+                return request(app.getHttpServer())
+                    .post('/auth/logout')
+                    .set('Authorization', `Bearer ${EXPIRED_ACCESS_TOKEN}`)
+                    .expect(401);
+            });
+        });
+
+        context('존재하지 않는 userId를 가진 access token을 Authorization header에 담아 로그아웃 요청을 보내면', () => {
+            it('401 상태 코드를 반환해야 한다.', async () => {
+                return request(app.getHttpServer())
+                    .post('/auth/logout')
+                    .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
+                    .expect(401);
             });
         });
     });
