@@ -116,7 +116,7 @@ describe('AuthController (e2e)', () => {
 
     describe('/auth/signup (POST)', () => {
         context('비회원이 회원가입 요청을 보내면', () => {
-            it('201 상태 코드와 body에는 access token, cookie에는 refresh token을 반환해야 한다.', async () => {
+            it('201 상태 코드와 body에는 access token, cookie에는 refresh token을 반환하고 Oauth data cookie를 삭제해야 한다.', async () => {
                 const response = await request(app.getHttpServer())
                     .post('/auth/signup')
                     .set('Cookie', [
@@ -125,7 +125,10 @@ describe('AuthController (e2e)', () => {
                         `provider=${VALID_PROVIDER_KAKAO}`,
                     ])
                     .expect(201)
-                    .expect('set-cookie', /refreshToken=.+;/);
+                    .expect('set-cookie', /refreshToken=.+;/)
+                    .expect('set-cookie', /oauthRefreshToken=;/)
+                    .expect('set-cookie', /oauthAccessToken=;/)
+                    .expect('set-cookie', /provider=;/);
 
                 expect(response.body).toHaveProperty('accessToken');
                 expect(typeof response.body.accessToken).toBe('string');
@@ -216,11 +219,12 @@ describe('AuthController (e2e)', () => {
                 await userRepository.query('SET FOREIGN_KEY_CHECKS = 1;');
             });
 
-            it('200 상태 코드를 반환해야 한다.', async () => {
+            it('200 상태 코드를 반환하고 refresh token cookie를 삭제해야 한다.', async () => {
                 return request(app.getHttpServer())
                     .post('/auth/logout')
                     .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
-                    .expect(200);
+                    .expect(200)
+                    .expect('set-cookie', /refreshToken=;/);
             });
         });
 
@@ -313,6 +317,63 @@ describe('AuthController (e2e)', () => {
                 return request(app.getHttpServer())
                     .get('/auth/token')
                     .set('Cookie', [`refreshToken=${VALID_REFRESH_TOKEN_100_YEARS}`])
+                    .expect(401);
+            });
+        });
+    });
+
+    describe('/auth/deactivate (DELETE)', () => {
+        context('회원이 유효한 access token을 Authorization header에 담아 회원탈퇴 요청을 보내면', () => {
+            beforeEach(async () => {
+                const userRepository = dataSource.getRepository(Users);
+                await userRepository.save(mockUser);
+            });
+
+            afterEach(async () => {
+                const userRepository = dataSource.getRepository(Users);
+                await userRepository.query('SET FOREIGN_KEY_CHECKS = 0;');
+                await userRepository.clear();
+                await userRepository.query('SET FOREIGN_KEY_CHECKS = 1;');
+            });
+
+            it('200 상태 코드를 반환하고 refresh token cookie를 삭제해야 한다.', async () => {
+                return request(app.getHttpServer())
+                    .delete('/auth/deactivate')
+                    .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
+                    .expect(200)
+                    .expect('set-cookie', /refreshToken=;/);
+            });
+        });
+
+        context('Authorization header 없이 회원탈퇴 요청을 보내면', () => {
+            it('401 상태 코드를 반환해야 한다.', async () => {
+                return request(app.getHttpServer()).delete('/auth/deactivate').expect(401);
+            });
+        });
+
+        context('구조가 잘못된 access token을 Authorization header에 담아 회원탈퇴 요청을 보내면', () => {
+            it('401 상태 코드를 반환해야 한다.', async () => {
+                return request(app.getHttpServer())
+                    .delete('/auth/deactivate')
+                    .set('Authorization', `Bearer ${MALFORMED_ACCESS_TOKEN}`)
+                    .expect(401);
+            });
+        });
+
+        context('만료된 access token을 Authorization header에 담아 회원탈퇴 요청을 보내면', () => {
+            it('401 상태 코드를 반환해야 한다.', async () => {
+                return request(app.getHttpServer())
+                    .delete('/auth/deactivate')
+                    .set('Authorization', `Bearer ${EXPIRED_ACCESS_TOKEN}`)
+                    .expect(401);
+            });
+        });
+
+        context('존재하지 않는 userId를 가진 access token을 Authorization header에 담아 회원탈퇴 요청을 보내면', () => {
+            it('401 상태 코드를 반환해야 한다.', async () => {
+                return request(app.getHttpServer())
+                    .delete('/auth/deactivate')
+                    .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
                     .expect(401);
             });
         });
