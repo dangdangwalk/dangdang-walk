@@ -10,10 +10,12 @@ const OAUTH_REFRESH_TOKEN =
 
 export const mockUser = new Users({
     id: 1,
-    nickname: '오징어1234',
+    nickname: 'mock_oauth_nickname#12345',
+    email: 'mock_email@example.com',
+    profileImageUrl: 'mock_profile_image.jpg',
     role: ROLE.User,
-    mainDogId: 1,
-    oauthId: '1',
+    mainDogId: null,
+    oauthId: '12345',
     oauthAccessToken: OAUTH_ACCESS_TOKEN,
     oauthRefreshToken: OAUTH_REFRESH_TOKEN,
     refreshToken: REFRESH_TOKEN,
