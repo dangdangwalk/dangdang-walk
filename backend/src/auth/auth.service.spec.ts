@@ -1,5 +1,5 @@
 import { HttpService } from '@nestjs/axios';
-import { NotFoundException } from '@nestjs/common';
+import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -158,38 +158,34 @@ describe('AuthService', () => {
     });
 
     describe('validateAccessToken', () => {
-        it('userId에 해당하는 user가 존재하면 true를 반환해야 한다.', async () => {
-            jest.spyOn(usersService, 'findOne').mockResolvedValue({ id: 1 } as Users);
+        context('userId에 해당하는 user가 존재하지 않으면', () => {
+            it('NotFoundException error를 던져야 한다.', async () => {
+                jest.spyOn(usersService, 'findOne').mockRejectedValue(new NotFoundException());
 
-            const result = await service.validateAccessToken(1);
-
-            expect(result).toEqual(true);
-        });
-
-        it('userId에 해당하는 user가 존재하지 않으면 false를 반환해야 한다.', async () => {
-            jest.spyOn(usersService, 'findOne').mockRejectedValue(new NotFoundException());
-
-            const result = await service.validateAccessToken(1);
-
-            expect(result).toEqual(false);
+                await expect(service.validateAccessToken(1)).rejects.toThrow(NotFoundException);
+            });
         });
     });
 
     describe('validateRefreshToken', () => {
-        beforeEach(() => {
-            jest.spyOn(usersService, 'findOne').mockResolvedValue(mockUser);
+        context('oauthId에 해당하는 user가 존재하지 않으면', () => {
+            it('NotFoundException error를 던져야 한다.', async () => {
+                jest.spyOn(usersService, 'findOne').mockRejectedValue(new NotFoundException());
+
+                await expect(service.validateRefreshToken(mockUser.oauthAccessToken, mockUser.oauthId)).rejects.toThrow(
+                    NotFoundException,
+                );
+            });
         });
 
-        it('oauthId에 해당하는 user의 refresh token과 현재 token이 일치하면 true를 반환해야 한다.', async () => {
-            const result = await service.validateRefreshToken(mockUser.refreshToken, mockUser.oauthId);
+        context('oauthId에 해당하는 user의 refresh token과 현재 token이 일치하지 않으면', () => {
+            it('UnauthorizedException error를 던져야 한다.', async () => {
+                jest.spyOn(usersService, 'findOne').mockResolvedValue(mockUser);
 
-            expect(result).toEqual(true);
-        });
-
-        it('oauthId에 해당하는 user의 refresh token과 현재 token이 일치하지 않으면 false를 반환해야 한다.', async () => {
-            const result = await service.validateRefreshToken(mockUser.oauthAccessToken, mockUser.oauthId);
-
-            expect(result).toEqual(false);
+                await expect(service.validateRefreshToken(mockUser.oauthAccessToken, mockUser.oauthId)).rejects.toThrow(
+                    UnauthorizedException,
+                );
+            });
         });
     });
 });

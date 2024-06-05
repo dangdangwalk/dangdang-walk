@@ -10,7 +10,7 @@ describe('User', () => {
             profileImageUrl: 'mock_profile_image.jpg',
             role: 'USER',
             mainDogId: null,
-            oauthId: '1',
+            oauthId: '12345',
             oauthAccessToken:
                 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2ODc1NzUzNCwiZXhwIjoxNjY4ODQzOTM0fQ.fwjmKJZ7enTKt7tPfNx-ZG_rczvhkz2ktMV5pDNbxkw',
             oauthRefreshToken:
