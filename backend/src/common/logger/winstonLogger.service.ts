@@ -11,6 +11,8 @@ export class WinstonLoggerService implements LoggerService {
 
     constructor() {
         const isDevelopment = process.env.NODE_ENV != 'prod';
+        const isTest = process.env.NODE_ENV == 'test';
+
         const logDir = path.join(process.cwd(), 'log');
         if (!fs.existsSync(logDir)) {
             fs.mkdirSync(logDir, { recursive: true });
@@ -61,9 +63,10 @@ export class WinstonLoggerService implements LoggerService {
         this.logger = winston.createLogger({
             level: 'debug',
             format: winston.format.json(),
-            transports: isDevelopment
-                ? [consoleTransport, fileTransport, errorFileTransport]
-                : [fileTransport, errorFileTransport],
+            transports:
+                isDevelopment && !isTest
+                    ? [consoleTransport, fileTransport, errorFileTransport]
+                    : [fileTransport, errorFileTransport],
         });
     }
 
