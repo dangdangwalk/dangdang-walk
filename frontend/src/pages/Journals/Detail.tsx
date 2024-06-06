@@ -15,7 +15,7 @@ import {
     ModalHeader,
     ModalTitle,
 } from '@/components/commons/Modal';
-import CompanionDogSection, { Dog } from '@/components/journals/CompanionDogSection2';
+import CompanionDogSection, { CompanionDog } from '@/components/journals/CompanionDogSection2';
 import Heading from '@/components/journals/Heading';
 import MemoSection from '@/components/journals/MemoSection';
 import Navbar from '@/components/journals/Navbar';
@@ -62,7 +62,7 @@ export default function Detail() {
 
     const { dogName, journalCnt: journalCount, calories, duration, distance } = receivedState;
 
-    const dogs: Array<Dog> = dogsFromAPI.map((dog) => {
+    const dogs: Array<CompanionDog> = dogsFromAPI.map((dog) => {
         const foundExcrement = excrements.find((excrement) => excrement.dogId === dog.id);
         const fecesCount = foundExcrement?.fecesCnt ?? 0;
         const urineCount = foundExcrement?.urineCnt ?? 0;

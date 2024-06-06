@@ -1,6 +1,7 @@
 import Avatar from '@/components/commons/Avatar';
 import ExcrementDisplay from '@/components/journals/ExcrementDisplay';
 import Heading from '@/components/journals/Heading';
+import { Dog } from '@/models/dog';
 
 export default function CompanionDogSection({ dogs }: Props) {
     return (
@@ -19,13 +20,10 @@ export default function CompanionDogSection({ dogs }: Props) {
 }
 
 interface Props {
-    dogs: Array<Dog>;
+    dogs: Array<CompanionDog>;
 }
 
-export interface Dog {
-    id: number;
-    name: string;
-    profilePhotoUrl: string;
+export interface CompanionDog extends Pick<Dog, 'id' | 'name' | 'profilePhotoUrl'> {
     fecesCount: number;
     urineCount: number;
 }
