@@ -7,9 +7,9 @@ describe('Breed', () => {
         breed.koreanName = '골드리트리버';
         breed.recommendedWalkAmount = 1;
 
-        expect(breed.id).toEqual(1);
-        expect(breed.koreanName).toEqual('골드리트리버');
-        expect(breed.recommendedWalkAmount).toEqual(1);
+        expect(breed.id).toBe(1);
+        expect(breed.koreanName).toBe('골드리트리버');
+        expect(breed.recommendedWalkAmount).toBe(1);
     });
 
     it('breed 정보가 없으면 빈 객체를 리턴해야 한다.', () => {

@@ -11,13 +11,13 @@ describe('DogWalkDay', () => {
         dogWalkDay.sat = 3;
         dogWalkDay.sun = 2;
 
-        expect(dogWalkDay.mon).toEqual(2);
-        expect(dogWalkDay.tue).toEqual(3);
-        expect(dogWalkDay.wed).toEqual(2);
-        expect(dogWalkDay.thr).toEqual(5);
-        expect(dogWalkDay.fri).toEqual(2);
-        expect(dogWalkDay.sat).toEqual(3);
-        expect(dogWalkDay.sun).toEqual(2);
+        expect(dogWalkDay.mon).toBe(2);
+        expect(dogWalkDay.tue).toBe(3);
+        expect(dogWalkDay.wed).toBe(2);
+        expect(dogWalkDay.thr).toBe(5);
+        expect(dogWalkDay.fri).toBe(2);
+        expect(dogWalkDay.sat).toBe(3);
+        expect(dogWalkDay.sun).toBe(2);
     });
     it('dogWalkDay 정보가 없으면 빈 객체를 리턴해야 한다.', () => {
         const dogWalkDay = new DogWalkDay();
