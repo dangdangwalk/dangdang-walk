@@ -4,8 +4,7 @@
 
 body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'NanumGothic', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
-        'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    font-family: 'NanumGothic';
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     /* @apply flex flex-col items-center; */

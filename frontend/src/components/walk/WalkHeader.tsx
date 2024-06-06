@@ -2,7 +2,6 @@ import Topbar from '@/components/commons/Topbar';
 import Ic from '@/assets/icons/ic-arrow-right.svg';
 import { useNavigate } from 'react-router-dom';
 import Notification from '@/assets/icons/ic-notification.svg';
-import { Divider } from '@/components/commons/Divider';
 export default function WalkHeader() {
     const navigate = useNavigate();
 
@@ -11,7 +10,7 @@ export default function WalkHeader() {
     };
     return (
         <>
-            <Topbar>
+            <Topbar className="px-5">
                 <Topbar.Front onClick={goBack}>
                     <img className="rotate-180" src={Ic} alt="back button" />
                 </Topbar.Front>
@@ -22,7 +21,6 @@ export default function WalkHeader() {
                     <img src={Notification} alt="Notification" />
                 </Topbar.Back>
             </Topbar>
-            <Divider className="h-0.5" />
         </>
     );
 }

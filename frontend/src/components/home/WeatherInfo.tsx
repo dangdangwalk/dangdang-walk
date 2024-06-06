@@ -65,7 +65,7 @@ export default function WeatherInfo() {
                         </div>
                         <div className="flex flex-col items-start justify-between pl-1">
                             <p className="text-xs font-normal leading-[18px] text-zinc-500">위치 : {address}</p>
-                            <div className="text-xs font-normal leading-[18px] text-[#999999]">
+                            <div className="text-xs font-normal leading-[18px] text-zinc-500">
                                 대기질 : {getAirStatus(airGrade)}
                             </div>
                         </div>

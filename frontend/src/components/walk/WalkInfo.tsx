@@ -26,17 +26,17 @@ export default function WalkInfo({
         >
             <div className="h-15 flex w-[100px] flex-col items-center justify-center">
                 <div className="text-lg font-bold leading-[27px] text-amber-500">{distance.formatedDistance}</div>
-                <div className="text-center text-xs font-normal leading-[18px] text-stone-500">{distance.unit}</div>
+                <div className="text-center text-xs font-normal leading-[18px] text-zinc-500">{distance.unit}</div>
             </div>
             {isDivider && <Divider orientation={'vertical'} />}
             <div className="flex w-[100px] flex-col items-center justify-center">
                 <div className="text-lg font-bold leading-[27px] text-amber-500">{calories}</div>
-                <div className="text-center text-xs font-normal leading-[18px] text-stone-500">kcal</div>
+                <div className="text-center text-xs font-normal leading-[18px] text-zinc-500">kcal</div>
             </div>
             {isDivider && <Divider orientation={'vertical'} />}
             <div className="flex w-[100px] flex-col items-center justify-center">
                 <div className="text-lg font-bold leading-[27px] text-amber-500">{timeFormat(duration)}</div>
-                <div className="text-center text-xs font-normal leading-[18px] text-stone-500">시간</div>
+                <div className="text-center text-xs font-normal leading-[18px] text-zinc-500">시간</div>
             </div>
         </div>
     );

@@ -152,7 +152,7 @@ export default function Walk() {
             <WalkNavbar onOpen={handleBottomSheet} onStop={handleWalkStop} onChange={handleFileChange} />
 
             <BottomSheet isOpen={isDogBottomsheetOpen} onClose={handleBottomSheet}>
-                <BottomSheet.Header> 강아지 선책</BottomSheet.Header>
+                <BottomSheet.Header> 강아지 산책</BottomSheet.Header>
                 <BottomSheet.Body>
                     {walkingDogs?.map((dog) => (
                         <DogFeceAndUrineCheckList dog={dog} toggleCheck={handleToggle} key={dog.id} />
