@@ -17,7 +17,7 @@ export default function DogFeceAndUrineCheckList({ dog, toggleCheck }: DogFeceAn
             <Divider className="h-0 border border-neutral-200" />
             <li className="flex items-center justify-between py-2" key={dog.id}>
                 <Avatar url={dog.profilePhotoUrl} name={dog.name} />
-                <div className="flex gap-1">
+                <div className="flex gap-4">
                     <Checkbox
                         checked={dog?.isFeceChecked}
                         onCheckedChange={() => {
