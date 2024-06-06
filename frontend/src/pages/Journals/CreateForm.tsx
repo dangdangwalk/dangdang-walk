@@ -84,7 +84,15 @@ export default function CreateForm() {
                     />
                     <WalkInfo distance={distance} calories={calories} duration={duration} />
                     <Divider />
-                    <CompanionDogSection dogs={dogs} />
+                    <CompanionDogSection
+                        dogs={dogs.map((dog) => {
+                            return {
+                                ...dog,
+                                fecesCount: dog.fecesLocations.length,
+                                urineCount: dog.urineLocations.length,
+                            };
+                        })}
+                    />
                     <Divider />
                     <PhotoSection
                         imageFileNames={imageFileNames}

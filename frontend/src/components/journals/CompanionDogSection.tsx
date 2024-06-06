@@ -1,7 +1,7 @@
 import Avatar from '@/components/commons/Avatar';
 import ExcrementDisplay from '@/components/journals/ExcrementDisplay';
 import Heading from '@/components/journals/Heading';
-import { WalkingDog } from '@/models/dog';
+import { Dog } from '@/models/dog';
 
 export default function CompanionDogSection({ dogs }: Props) {
     return (
@@ -11,10 +11,7 @@ export default function CompanionDogSection({ dogs }: Props) {
                 {dogs.map((dog) => (
                     <div key={dog.id} className="flex h-[52px] justify-between">
                         <Avatar url={dog.profilePhotoUrl} name={dog.name} />
-                        <ExcrementDisplay
-                            fecesCount={dog.fecesLocations.length}
-                            urineCount={dog.urineLocations.length}
-                        />
+                        <ExcrementDisplay fecesCount={dog.fecesCount} urineCount={dog.urineCount} />
                     </div>
                 ))}
             </div>
@@ -23,5 +20,10 @@ export default function CompanionDogSection({ dogs }: Props) {
 }
 
 interface Props {
-    dogs: Array<WalkingDog>;
+    dogs: Array<CompanionDog>;
+}
+
+export interface CompanionDog extends Pick<Dog, 'id' | 'name' | 'profilePhotoUrl'> {
+    fecesCount: number;
+    urineCount: number;
 }
