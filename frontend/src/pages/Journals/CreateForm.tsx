@@ -13,7 +13,7 @@ import {
     ModalHeader,
     ModalTitle,
 } from '@/components/commons/Modal';
-import CompanionDogSection from '@/components/journals/CompanionDogSection';
+import CompanionDogSection from '@/components/journals/CompanionDogSection2';
 import Heading from '@/components/journals/Heading';
 import MemoSection from '@/components/journals/MemoSection';
 import PhotoSection from '@/components/journals/PhotoSection';
@@ -84,7 +84,15 @@ export default function CreateForm() {
                     />
                     <WalkInfo distance={distance} calories={calories} duration={duration} />
                     <Divider />
-                    <CompanionDogSection dogs={dogs} />
+                    <CompanionDogSection
+                        dogs={dogs.map((dog) => {
+                            return {
+                                ...dog,
+                                fecesCount: dog.fecesLocations.length,
+                                urineCount: dog.urineLocations.length,
+                            };
+                        })}
+                    />
                     <Divider />
                     <PhotoSection
                         imageFileNames={imageFileNames}
