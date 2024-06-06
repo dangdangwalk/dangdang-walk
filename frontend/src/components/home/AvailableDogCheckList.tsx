@@ -13,7 +13,7 @@ interface AvailableDogCheckListProps {
 export default function AvailableDogCheckList({ dogs, onToggle, checkAll, isCheckedAll }: AvailableDogCheckListProps) {
     return (
         <>
-            <li className="flex items-center justify-between py-2">
+            <li className="flex items-center justify-between py-3">
                 <Avatar url={AllDogs} name={'다 함께'} />
                 <Checkbox
                     checked={isCheckedAll}
