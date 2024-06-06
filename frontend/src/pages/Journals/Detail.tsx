@@ -15,7 +15,7 @@ import {
     ModalHeader,
     ModalTitle,
 } from '@/components/commons/Modal';
-import CompanionDogSection, { CompanionDog } from '@/components/journals/CompanionDogSection2';
+import CompanionDogSection, { CompanionDog } from '@/components/journals/CompanionDogSection';
 import Heading from '@/components/journals/Heading';
 import MemoSection from '@/components/journals/MemoSection';
 import Navbar from '@/components/journals/Navbar';

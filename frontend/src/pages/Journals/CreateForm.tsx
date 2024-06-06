@@ -13,7 +13,7 @@ import {
     ModalHeader,
     ModalTitle,
 } from '@/components/commons/Modal';
-import CompanionDogSection from '@/components/journals/CompanionDogSection2';
+import CompanionDogSection from '@/components/journals/CompanionDogSection';
 import Heading from '@/components/journals/Heading';
 import MemoSection from '@/components/journals/MemoSection';
 import PhotoSection from '@/components/journals/PhotoSection';
