@@ -9,7 +9,7 @@ const useWalkAvailabeDog = () => {
     const [availableDogs, setAvailableDogs] = useState<AvailableDog[] | undefined>([]);
 
     const {
-        data: aavailablDogData,
+        data: availablDogData,
         isLoading,
         refetch,
     } = useQuery({
@@ -28,16 +28,16 @@ const useWalkAvailabeDog = () => {
     });
 
     useEffect(() => {
-        if (!aavailablDogData) return;
+        if (!availablDogData) return;
         setAvailableDogs(
-            aavailablDogData.map((d: AvailableDog) => {
+            availablDogData.map((d: AvailableDog) => {
                 return {
                     ...d,
                     isChecked: false,
                 };
             })
         );
-    }, [aavailablDogData]);
+    }, [availablDogData]);
 
     return {
         availableDogs,
