@@ -59,7 +59,7 @@ function Home() {
 
     return (
         <>
-            <Topbar className="bg-neutral-50">
+            <Topbar className="bg-neutral-50 px-5">
                 <Topbar.Front></Topbar.Front>
                 <Topbar.Center></Topbar.Center>
                 <Topbar.Back>
