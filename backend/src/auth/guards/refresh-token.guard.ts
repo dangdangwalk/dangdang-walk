@@ -24,11 +24,13 @@ export class RefreshTokenGuard implements CanActivate {
 
         try {
             const payload = this.tokenService.verify(token) as RefreshTokenPayload;
-            const isValid = await this.authService.validateRefreshToken(token, payload.oauthId);
+            this.logger.log('Payload', payload);
+
+            await this.authService.validateRefreshToken(token, payload.oauthId);
 
             request.user = payload;
 
-            return isValid;
+            return true;
         } catch (error) {
             if (error instanceof TokenExpiredError || error instanceof JsonWebTokenError) {
                 const trace = { trace: error.stack ?? 'No stack' };
@@ -36,8 +38,8 @@ export class RefreshTokenGuard implements CanActivate {
                 this.logger.error(error.message, trace);
                 throw error;
             } else {
-                error = new UnauthorizedException('No matching user found.');
-                this.logger.error(`No matching user found`, { trace: error.stack ?? 'No stack' });
+                error = new UnauthorizedException();
+                this.logger.error(error.message, { trace: error.stack ?? 'No stack' });
                 throw error;
             }
         }

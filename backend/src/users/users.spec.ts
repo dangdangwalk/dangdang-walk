@@ -1,20 +1,21 @@
-import { mockUser } from '../fixtures/users.fixture';
+import { VALID_REFRESH_TOKEN_100_YEARS } from '../../test/test-utils';
+import { OAUTH_ACCESS_TOKEN, OAUTH_REFRESH_TOKEN, mockUser } from '../fixtures/users.fixture';
+import { ROLE } from './types/role.type';
 import { Users } from './users.entity';
 
 describe('User', () => {
     it('user 정보가 주어지면 user 정보를 리턴해야 한다.', () => {
         expect(mockUser).toEqual({
             id: 1,
-            mainDogId: 1,
-            nickname: '오징어1234',
-            oauthId: '1',
-            oauthAccessToken:
-                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTY2ODc1NzUzNCwiZXhwIjoxNjY4ODQzOTM0fQ.fwjmKJZ7enTKt7tPfNx-ZG_rczvhkz2ktMV5pDNbxkw',
-            oauthRefreshToken:
-                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjY5OTU2MjQxLCJleHAiOjE2NzE3NTYyNDF9.8Nzxs_ev8bhq9bkrAc-nBV9YBTDIxajK3pwwPY5LMRM',
-            refreshToken:
-                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjY5OTU2MjQxLCJleHAiOjE2NzE3NTYyNDF9.8Nzxs_ev8bhq9bkrAc-nBV9YBTDIxajK3pwwPY5LMRM',
-            role: 'USER',
+            nickname: 'mock_oauth_nickname#12345',
+            email: 'mock_email@example.com',
+            profileImageUrl: 'mock_profile_image.jpg',
+            role: ROLE.User,
+            mainDogId: null,
+            oauthId: '12345',
+            oauthAccessToken: OAUTH_ACCESS_TOKEN,
+            oauthRefreshToken: OAUTH_REFRESH_TOKEN,
+            refreshToken: VALID_REFRESH_TOKEN_100_YEARS,
             createdAt: expect.any(Date),
         });
     });

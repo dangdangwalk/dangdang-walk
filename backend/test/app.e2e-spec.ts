@@ -1,26 +1,16 @@
 import { INestApplication } from '@nestjs/common';
-import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
-import { initializeTransactionalContext } from 'typeorm-transactional';
-import { AppModule } from './../src/app.module';
+import { closeTestApp, setupTestApp } from './test-utils';
 
 describe('AppController (e2e)', () => {
     let app: INestApplication;
 
     beforeAll(async () => {
-        initializeTransactionalContext();
-
-        const moduleFixture: TestingModule = await Test.createTestingModule({
-            imports: [AppModule],
-        }).compile();
-
-        app = moduleFixture.createNestApplication();
-
-        await app.init();
+        ({ app } = await setupTestApp());
     });
 
     afterAll(async () => {
-        await app.close();
+        await closeTestApp();
     });
 
     it('/ (GET)', () => {

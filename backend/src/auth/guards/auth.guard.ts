@@ -42,19 +42,19 @@ export class AuthGuard implements CanActivate {
             const payload = this.tokenService.verify(token) as AccessTokenPayload;
             this.logger.log('Payload', payload);
 
-            const isValid = await this.authService.validateAccessToken(payload.userId);
+            await this.authService.validateAccessToken(payload.userId);
 
             request.user = payload;
 
-            return isValid;
+            return true;
         } catch (error) {
             if (error instanceof TokenExpiredError || error instanceof JsonWebTokenError) {
                 error = new UnauthorizedException(error.message);
                 this.logger.error(error.message, { trace: error.stack ?? 'No stack' });
                 throw error;
             } else {
-                error = new UnauthorizedException('No matching user found.');
-                this.logger.error(`No matching user found`, { trace: error.stack ?? 'No stack' });
+                error = new UnauthorizedException();
+                this.logger.error(error.message, { trace: error.stack ?? 'No stack' });
                 throw error;
             }
         }
