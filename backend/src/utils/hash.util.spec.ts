@@ -11,6 +11,6 @@ describe('generateUuid', () => {
         const uuidV1 = generateUuid();
         const uuidV2 = generateUuid();
 
-        expect(uuidV1).not.toEqual(uuidV2);
+        expect(uuidV1).not.toBe(uuidV2);
     });
 });
