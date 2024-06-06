@@ -1,4 +1,4 @@
-import { VALID_REFRESH_TOKEN_100_YEARS } from '../../test/test-utils';
+import { VALID_REFRESH_TOKEN_100_YEARS } from '../../test/constants';
 import { ROLE } from '../users/types/role.type';
 import { Users } from '../users/users.entity';
 

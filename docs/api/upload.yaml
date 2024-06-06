@@ -1,7 +1,7 @@
 post:
   tags:
     - 이미지
-  summary: 이미지 업로드용 presignedUrl 리턴
+  summary: 이미지 업로드용 presignedUrl 반환
   description: S3에 이미지를 업로드 할 수 있는 presignedUrl을 요청합니다.
   parameters:
     - in: cookie
@@ -21,7 +21,7 @@ post:
             example: "jpg"
   responses:
     "200":
-      description: presignedUrl 성공적으로 리턴
+      description: presignedUrl 성공적으로 반환
       content:
         application/json:
           schema:

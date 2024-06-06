@@ -59,7 +59,7 @@ describe('UsersService', () => {
                 jest.spyOn(userRepository, 'findOne').mockResolvedValue(mockUser);
             });
 
-            it('사용자 정보를 리턴해야 한다.', async () => {
+            it('사용자 정보를 반환해야 한다.', async () => {
                 const res = await service.findOne({ id: mockUser.id });
 
                 expect(res).toEqual(mockUser);
@@ -84,7 +84,7 @@ describe('UsersService', () => {
                 jest.spyOn(userRepository, 'update').mockResolvedValue({ affected: 1 } as UpdateResult);
             });
 
-            it('사용자 정보를 업데이트하고 사용자를 리턴해야 한다.', async () => {
+            it('사용자 정보를 업데이트하고 사용자를 반환해야 한다.', async () => {
                 const res = await service.updateAndFindOne(
                     { oauthId: mockUser.oauthId },
                     {

@@ -118,7 +118,7 @@ export class DogsService {
     }
 
     private makeDogsSummaryList(dogs: Dogs[]): DogSummary[] {
-        //TODO: key를 리턴하는 함수 만들어 인자로 넣기
+        //TODO: key를 반환하는 함수 만들어 인자로 넣기
         return makeSubObjectsArray(dogs, ['id', 'name', 'profilePhotoUrl']);
     }
 

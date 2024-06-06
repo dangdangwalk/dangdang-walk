@@ -1,8 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { DataSource } from 'typeorm';
 import { mockUser } from '../src/fixtures/users.fixture';
-import { Users } from '../src/users/users.entity';
 import {
     EXPIRED_ACCESS_TOKEN,
     EXPIRED_REFRESH_TOKEN,
@@ -12,26 +10,20 @@ import {
     VALID_ACCESS_TOKEN_100_YEARS,
     VALID_PROVIDER_KAKAO,
     VALID_REFRESH_TOKEN_100_YEARS,
-    closeTestApp,
-    setupTestApp,
-} from './test-utils';
+} from './constants';
+import { clearUsers, closeTestApp, insertMockUser, setupTestApp } from './test-utils';
 
 const context = describe;
 
 describe('AuthController (e2e)', () => {
     let app: INestApplication;
-    let dataSource: DataSource;
 
     beforeAll(async () => {
-        ({ app, dataSource } = await setupTestApp());
+        ({ app } = await setupTestApp());
     });
 
     afterAll(async () => {
-        const userRepository = dataSource.getRepository(Users);
-        await userRepository.query('SET FOREIGN_KEY_CHECKS = 0;');
-        await userRepository.clear();
-        await userRepository.query('SET FOREIGN_KEY_CHECKS = 1;');
-
+        await clearUsers();
         await closeTestApp();
     });
 
@@ -53,15 +45,11 @@ describe('AuthController (e2e)', () => {
 
         context('회원이 로그인 요청을 보내면', () => {
             beforeEach(async () => {
-                const userRepository = dataSource.getRepository(Users);
-                await userRepository.save(mockUser);
+                await insertMockUser();
             });
 
             afterEach(async () => {
-                const userRepository = dataSource.getRepository(Users);
-                await userRepository.query('SET FOREIGN_KEY_CHECKS = 0;');
-                await userRepository.clear();
-                await userRepository.query('SET FOREIGN_KEY_CHECKS = 1;');
+                await clearUsers();
             });
 
             it('200 상태 코드와 body에는 access token, cookie에는 refresh token을 반환해야 한다.', async () => {
@@ -137,10 +125,7 @@ describe('AuthController (e2e)', () => {
 
         context('회원이 회원가입 요청을 보내면', () => {
             afterEach(async () => {
-                const userRepository = dataSource.getRepository(Users);
-                await userRepository.query('SET FOREIGN_KEY_CHECKS = 0;');
-                await userRepository.clear();
-                await userRepository.query('SET FOREIGN_KEY_CHECKS = 1;');
+                await clearUsers();
             });
 
             it('409 상태 코드를 반환해야 한다.', () => {
@@ -208,15 +193,11 @@ describe('AuthController (e2e)', () => {
     describe('/auth/logout (POST)', () => {
         context('회원이 유효한 access token을 Authorization header에 담아 로그아웃 요청을 보내면', () => {
             beforeEach(async () => {
-                const userRepository = dataSource.getRepository(Users);
-                await userRepository.save(mockUser);
+                await insertMockUser();
             });
 
             afterEach(async () => {
-                const userRepository = dataSource.getRepository(Users);
-                await userRepository.query('SET FOREIGN_KEY_CHECKS = 0;');
-                await userRepository.clear();
-                await userRepository.query('SET FOREIGN_KEY_CHECKS = 1;');
+                await clearUsers();
             });
 
             it('200 상태 코드를 반환하고 refresh token cookie를 삭제해야 한다.', async () => {
@@ -265,15 +246,11 @@ describe('AuthController (e2e)', () => {
     describe('/auth/token (GET)', () => {
         context('회원이 유효한 refresh token을 cookie에 가지고 token 재발급 요청을 보내면', () => {
             beforeEach(async () => {
-                const userRepository = dataSource.getRepository(Users);
-                await userRepository.save(mockUser);
+                await insertMockUser();
             });
 
             afterEach(async () => {
-                const userRepository = dataSource.getRepository(Users);
-                await userRepository.query('SET FOREIGN_KEY_CHECKS = 0;');
-                await userRepository.clear();
-                await userRepository.query('SET FOREIGN_KEY_CHECKS = 1;');
+                await clearUsers();
             });
 
             it('200 상태 코드와 body에는 access token, cookie에는 refresh token을 반환해야 한다.', async () => {
@@ -325,15 +302,11 @@ describe('AuthController (e2e)', () => {
     describe('/auth/deactivate (DELETE)', () => {
         context('회원이 유효한 access token을 Authorization header에 담아 회원탈퇴 요청을 보내면', () => {
             beforeEach(async () => {
-                const userRepository = dataSource.getRepository(Users);
-                await userRepository.save(mockUser);
+                await insertMockUser();
             });
 
             afterEach(async () => {
-                const userRepository = dataSource.getRepository(Users);
-                await userRepository.query('SET FOREIGN_KEY_CHECKS = 0;');
-                await userRepository.clear();
-                await userRepository.query('SET FOREIGN_KEY_CHECKS = 1;');
+                await clearUsers();
             });
 
             it('200 상태 코드를 반환하고 refresh token cookie를 삭제해야 한다.', async () => {

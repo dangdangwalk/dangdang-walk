@@ -43,7 +43,7 @@ patch:
 delete:
   tags:
     - 산책 일지
-  summary: 산책 일지 삭제 
+  summary: 산책 일지 삭제
   description: 산책 일지를 삭제한다
   parameters:
     - in: cookie
@@ -71,7 +71,7 @@ get:
   tags:
     - 산책 일지
   summary: 산책 일지 상세
-  description: 산책 일지의 상세 정보를 리턴한다
+  description: 산책 일지의 상세 정보를 반환한다
   parameters:
     - in: cookie
       name: Authorization
