@@ -22,7 +22,7 @@ export default function DogCard({ dog, pageMove }: DogCardProps) {
                 pageMove(dog.id);
             }}
         >
-            <div className="flex justify-between pl-[15px] pr-5 pt-[5px]">
+            <div className="mb-1 flex justify-between pl-[15px] pr-5 pt-[5px]">
                 <Avatar url={dog.profilePhotoUrl} name={dog.name} />
                 <img src={Ic} alt="ic" />
             </div>
