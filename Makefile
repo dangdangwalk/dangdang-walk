@@ -6,6 +6,11 @@ local-mysql:
     -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=dangdangwalk mysql:8.4.0 \
     --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
 
+local-mysql-e2e:
+	docker run -d --name local-mysql --platform linux/amd64 -p 3306:3306 \
+    -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=test mysql:8.4.0 \
+    --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
 docker-build:
 	docker-compose -f docker-compose-dev.yml build
 
