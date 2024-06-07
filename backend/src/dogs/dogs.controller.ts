@@ -35,12 +35,10 @@ export class DogsController {
         return true;
     }
 
-    @Delete('/:id(\\d+)')
-    @HttpCode(204)
+    @Get('/:id(\\d+)')
     @UseGuards(AuthDogGuard)
-    async delete(@User() { userId }: AccessTokenPayload, @Param('id', ParseIntPipe) dogId: number) {
-        await this.dogsService.deleteDogFromUser(userId, dogId);
-        return true;
+    async getProfile(@Param('id', ParseIntPipe) dogId: number) {
+        return this.dogsService.getProfile(dogId);
     }
 
     @Patch('/:id(\\d+)')
@@ -55,9 +53,11 @@ export class DogsController {
         return true;
     }
 
-    @Get('/:id(\\d+)')
+    @Delete('/:id(\\d+)')
+    @HttpCode(204)
     @UseGuards(AuthDogGuard)
-    async getProfile(@Param('id', ParseIntPipe) dogId: number) {
-        return this.dogsService.getProfile(dogId);
+    async delete(@User() { userId }: AccessTokenPayload, @Param('id', ParseIntPipe) dogId: number) {
+        await this.dogsService.deleteDogFromUser(userId, dogId);
+        return true;
     }
 }
