@@ -1,25 +1,21 @@
-import React, { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import Topbar from '@/components/commons/Topbar';
 import TopBack from '@/assets/icons/ic-arrow-left.svg';
 import Search from '@/assets/icons/ic-search.svg';
 import { useBreed } from '@/hooks/useBreed';
 import DeleteBtn from '@/assets/buttons/btn-delete.svg';
-import { DogCreateForm } from '@/models/dog';
 interface Props {
     isOpen?: boolean;
     setIsOpen?: (state: boolean) => void;
-    setData?: Dispatch<SetStateAction<DogCreateForm>>;
+    handleSetData: (key: string, value: string) => void;
 }
-export default function BreedSearch({ isOpen, setIsOpen, setData }: Props) {
+export default function BreedSearch({ isOpen, setIsOpen, handleSetData }: Props) {
     const { data } = useBreed();
     const [search, setSearch] = useState('');
     const [searched, setSearched] = useState<string[]>([]);
     const handleSetBreed = (item: string) => {
-        if (setData && setIsOpen) {
-            setData((prev) => ({
-                ...prev,
-                breed: item,
-            }));
+        if (setIsOpen) {
+            handleSetData('breed', item);
             setIsOpen(false);
             setSearched([]);
             setSearch('');

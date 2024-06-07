@@ -12,7 +12,7 @@ interface Props {
     allAgreed: boolean;
     handleAllCheck: (checked: boolean) => void;
     agreements: AgreementsProps;
-    handleCheck: (checked: boolean, id: string) => void;
+    handleCheck: (key: string, checked: boolean) => void;
 }
 
 export default function AgreementsPage({ toggle, allAgreed, handleAllCheck, agreements, handleCheck }: Props) {
@@ -40,17 +40,17 @@ export default function AgreementsPage({ toggle, allAgreed, handleAllCheck, agre
                     <div className="flex flex-col gap-1">
                         <Checkbox
                             checked={agreements.service}
-                            onCheckedChange={(checked) => handleCheck(checked, 'service')}
+                            onCheckedChange={(checked) => handleCheck('service', checked)}
                             labelText="서비스 이용약관"
                         />
                         <Checkbox
                             checked={agreements.location}
-                            onCheckedChange={(checked) => handleCheck(checked, 'location')}
+                            onCheckedChange={(checked) => handleCheck('location', checked)}
                             labelText="위치기반 서비스 이용약관"
                         />
                         <Checkbox
                             checked={agreements.personalInfo}
-                            onCheckedChange={(checked) => handleCheck(checked, 'personalInfo')}
+                            onCheckedChange={(checked) => handleCheck('personalInfo', checked)}
                             labelText="개인정보 수집과 이용"
                         />
                     </div>
@@ -61,7 +61,7 @@ export default function AgreementsPage({ toggle, allAgreed, handleAllCheck, agre
                     <div className="inline-flex flex-col items-start justify-start gap-[3.5px]">
                         <Checkbox
                             checked={agreements.marketing}
-                            onCheckedChange={(checked) => handleCheck(checked, 'marketing')}
+                            onCheckedChange={(checked) => handleCheck('marketing', checked)}
                             labelText="마케팅 정보 수신"
                         />
                         <div className="text-[10px] font-normal leading-[15px] text-stone-500">

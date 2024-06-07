@@ -8,7 +8,7 @@ import { queryKeys } from '@/constants';
 import { useAuthStore } from '@/store/authStore';
 import { Dog } from '@/models/dog';
 
-const useRegisterDog = (mutationOptions?: UseMutationCustomOptions) => {
+const useCreateDog = (mutationOptions?: UseMutationCustomOptions) => {
     const navigate = useNavigate();
     return useMutation({
         mutationFn: createDog,
@@ -54,10 +54,10 @@ export const uploadImg = async (file: File | null, dogImgUrl: string) => {
 };
 
 export const useDog = () => {
-    const registerDogMutation = useRegisterDog();
-    const useDogsQuery = useFetchDogs();
-    const deleteDogMutation = useDeleteDog();
-    const updateDogMutation = useUpdateDog();
+    const createDog = useCreateDog();
+    const fetchDog = useFetchDogs();
+    const deleteDog = useDeleteDog();
+    const updateDog = useUpdateDog();
 
-    return { registerDogMutation, useDogsQuery, deleteDogMutation, updateDogMutation };
+    return { createDog, fetchDog, deleteDog, updateDog };
 };

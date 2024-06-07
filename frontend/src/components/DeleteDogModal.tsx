@@ -16,7 +16,7 @@ interface Props {
     setDeleteDogConfirm: (state: boolean) => void;
 }
 export default function DeleteDogModal({ id, name, setDeleteDogConfirm }: Props) {
-    const { deleteDogMutation } = useDog();
+    const { deleteDog } = useDog();
     return (
         <div className="fixed">
             <Modal open={true}>
@@ -29,7 +29,7 @@ export default function DeleteDogModal({ id, name, setDeleteDogConfirm }: Props)
                     </ModalHeader>
                     <ModalFooter>
                         <ModalCancel onClick={() => setDeleteDogConfirm(false)}>취소</ModalCancel>
-                        <ModalAction onClick={() => deleteDogMutation.mutate(id)}>삭제하기</ModalAction>
+                        <ModalAction onClick={() => deleteDog.mutate(id)}>삭제하기</ModalAction>
                     </ModalFooter>
                 </ModalContent>
             </Modal>

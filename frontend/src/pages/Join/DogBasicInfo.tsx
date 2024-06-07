@@ -1,26 +1,20 @@
-import React, { Dispatch, MutableRefObject, SetStateAction, useState } from 'react';
+import React, { MutableRefObject, useState } from 'react';
 import SelectPhoto from '@/assets/icons/ic-select-photo.svg';
 import { Divider } from '@/components/commons/Divider';
 import BreedSearch from '@/components/BreedSearch';
 import { useCropStore } from '@/store/cropStore';
 import ImageCropper from '@/components/ImageCropper';
-import { Dog, DogCreateForm } from '@/models/dog';
+import { Dog } from '@/models/dog';
 
-export type DogBasicInfoProps = Pick<Dog, 'name' | 'breed'>;
+type DogBasicInfoProps = Pick<Dog, 'name' | 'breed'>;
 interface Props {
     data: DogBasicInfoProps;
-    setData: Dispatch<SetStateAction<DogCreateForm>>;
     fileInputRef: MutableRefObject<null>;
+    handleSetData: (key: string, value: string) => void;
 }
 
-export default function DogBasicInfo({ data, setData, fileInputRef }: Props) {
+export default function DogBasicInfo({ data, fileInputRef, handleSetData }: Props) {
     const { dogProfileImgUrl, onSelectFileChange } = useCropStore();
-    const handleNameChange = (name: string) => {
-        setData((prev) => ({
-            ...prev,
-            name,
-        }));
-    };
     const [isOpen, setIsOpen] = useState(false);
     return (
         <>
@@ -58,7 +52,7 @@ export default function DogBasicInfo({ data, setData, fileInputRef }: Props) {
                             className={`w-full font-['NanumGothic'] text-base font-bold leading-normal text-black outline-none placeholder:text-neutral-400`}
                             maxLength={10}
                             value={data.name}
-                            onChange={(event) => handleNameChange(event.target.value)}
+                            onChange={(event) => handleSetData('name', event.target.value)}
                         />
                         <Divider className="absolute bottom-0 h-[1px]" />
                     </div>
@@ -73,7 +67,7 @@ export default function DogBasicInfo({ data, setData, fileInputRef }: Props) {
                     </div>
                 </div>
             </div>
-            <BreedSearch isOpen={isOpen} setIsOpen={setIsOpen} setData={setData} />
+            <BreedSearch isOpen={isOpen} setIsOpen={setIsOpen} handleSetData={handleSetData} />
             <ImageCropper />
         </>
     );

@@ -1,4 +1,4 @@
-import { ResponseDogs, RecentMonthStatisticsResponse } from '@/api/dog';
+import { RecentMonthStatisticsResponse } from '@/api/dog';
 import { getUploadUrl } from '@/api/upload';
 import EditPhoto from '@/assets/buttons/btn-edit-photo.svg';
 import CrownIcon from '@/assets/icons/ic-crown.svg';
@@ -20,17 +20,17 @@ import { useCropStore } from '@/store/cropStore';
 import { dataURLtoFile } from '@/utils/dataUrlToFile';
 import { secondsToTimeFormat } from '@/utils/time';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { DogCreateForm } from '@/models/dog';
+import { Dog, DogCreateForm } from '@/models/dog';
 interface Props {
-    dog: ResponseDogs;
+    dog: Dog;
     statistics: RecentMonthStatisticsResponse;
     isProfileOpen: boolean;
     setIsProfileOpen: (state: boolean) => void;
 }
 export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfileOpen }: Props) {
-    const { updateDogMutation } = useDog();
+    const { updateDog } = useDog();
     const { dogProfileImgUrl, setDogProfileImgUrl, onSelectFileChange } = useCropStore();
-    const { useDogsQuery } = useDog();
+    const { fetchDog } = useDog();
     const [onEdit, setOnEdit] = useState(false);
     window.location.pathname !== '/profile' && setOnEdit(false);
     const [breedSearchOpen, setBreedSearchOpen] = useState(false);
@@ -45,29 +45,38 @@ export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfile
     useEffect(() => {
         setDogProfileImgUrl('');
         setRegisterData(dog);
-    }, [dog, useDogsQuery.data]);
-
+    }, [dog, fetchDog.data]);
+    const handleSetData = (key: string, value: string | boolean | null | number) => {
+        setRegisterData((prev) => ({
+            ...prev,
+            [key]: value,
+        }));
+    };
     const handleSave = async () => {
         if (dogProfileImgUrl) {
             const urlData = await getUploadUrl(['png']);
             const fileName = urlData[0]?.filename;
             const photoUrl = urlData[0]?.url;
+
             if (!fileName || !photoUrl) return;
+
             const file = dataURLtoFile(dogProfileImgUrl, fileName);
+
             setDogProfileImgUrl('');
-            await uploadImg(file, photoUrl).then(() =>
-                updateDogMutation.mutate({
-                    dogId: id,
-                    params: { ...registerData, profilePhotoUrl: fileName },
-                })
-            );
+
+            await uploadImg(file, photoUrl);
+
+            updateDog.mutate({
+                dogId: id,
+                params: { ...registerData, profilePhotoUrl: fileName },
+            });
         } else {
             setDogProfileImgUrl('');
-            profilePhotoUrl &&
-                updateDogMutation.mutate({
-                    dogId: id,
-                    params: { name, breed, birth, gender, isNeutered, weight, profilePhotoUrl: null },
-                });
+
+            updateDog.mutate({
+                dogId: id,
+                params: { name, breed, birth, gender, isNeutered, weight, profilePhotoUrl: null },
+            });
         }
         setOnEdit(false);
         setIsProfileOpen(false);
@@ -328,7 +337,7 @@ export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfile
 
                 {deleteDogConfirm && <DeleteDogModal id={id} name={name} setDeleteDogConfirm={setDeleteDogConfirm} />}
             </div>
-            <BreedSearch isOpen={breedSearchOpen} setIsOpen={setBreedSearchOpen} setData={setRegisterData} />
+            <BreedSearch isOpen={breedSearchOpen} setIsOpen={setBreedSearchOpen} handleSetData={handleSetData} />
             <ImageCropper />
         </>
     );
