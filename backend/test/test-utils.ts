@@ -8,6 +8,8 @@ import { MockOauthService } from '../src/auth/oauth/__mocks__/oauth.service';
 import { GoogleService } from '../src/auth/oauth/google.service';
 import { KakaoService } from '../src/auth/oauth/kakao.service';
 import { NaverService } from '../src/auth/oauth/naver.service';
+import { MockS3Service } from '../src/s3/__mocks__/s3.service';
+import { S3Service } from '../src/s3/s3.service';
 import { AppModule } from './../src/app.module';
 
 let app: INestApplication;
@@ -25,6 +27,8 @@ export const setupTestApp = async () => {
         .useValue(MockOauthService)
         .overrideProvider(NaverService)
         .useValue(MockOauthService)
+        .overrideProvider(S3Service)
+        .useValue(MockS3Service)
         .compile();
 
     app = moduleFixture.createNestApplication();
