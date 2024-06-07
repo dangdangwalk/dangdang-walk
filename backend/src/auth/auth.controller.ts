@@ -23,7 +23,7 @@ import { AccessTokenPayload, RefreshTokenPayload } from './token/token.service';
 
 @Controller('/auth')
 @UseInterceptors(CookieInterceptor)
-@UsePipes(new ValidationPipe({ validateCustomDecorators: true }))
+@UsePipes(new ValidationPipe({ validateCustomDecorators: true, whitelist: true }))
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
 

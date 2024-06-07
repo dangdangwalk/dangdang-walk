@@ -8,7 +8,7 @@ import { WalkCommandDto } from './dtos/walk-command.dto';
 import { WalkService } from './walk.service';
 
 @Controller('/dogs/walks')
-@UsePipes(new ValidationPipe())
+@UsePipes(new ValidationPipe({ whitelist: true }))
 export class WalkController {
     constructor(
         private readonly walkService: WalkService,
