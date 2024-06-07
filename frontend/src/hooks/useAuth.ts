@@ -9,7 +9,7 @@ import {
     requestSignUp,
 } from '@/api/auth';
 import queryClient from '@/api/queryClient';
-import { queryKeys, storageKeys } from '@/constants';
+import { A_DAY, FIFTY_MIN, ONE_HOUR, TEN_TO_A_DAY, queryKeys, storageKeys } from '@/constants';
 import { useAuthStore } from '@/store/authStore';
 import { UseMutationCustomOptions, UseQueryCustomOptions } from '@/types/common';
 import { getStorage, removeStorage } from '@/utils/storage';
@@ -57,11 +57,11 @@ const useSignUp = (mutationOptions?: UseMutationCustomOptions) => {
 const useGetRefreshToken = () => {
     const { storeSignIn, isSignedIn } = useAuthStore();
     const { isSuccess, data } = useQuery({
-        queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN],
+        queryKey: [queryKeys.GET_ACCESS_TOKEN],
         queryFn: refreshAccessToken,
-        gcTime: 1000 * 60 * 60,
-        staleTime: 1000 * 60 * 60 - 1000 * 60 * 10,
-        refetchInterval: 1000 * 60 * 60 - 1000 * 60 * 10,
+        gcTime: ONE_HOUR,
+        staleTime: FIFTY_MIN,
+        refetchInterval: FIFTY_MIN,
         refetchOnReconnect: true,
         refetchIntervalInBackground: true,
         enabled: isSignedIn,
@@ -108,10 +108,10 @@ const useDeactivate = (mutationOptions?: UseMutationCustomOptions) => {
 const useGetProfile = (queryOptions?: UseQueryCustomOptions) => {
     const { isSignedIn } = useAuthStore();
     return useQuery({
-        queryKey: [queryKeys.AUTH, queryKeys.GET_PROFILE],
+        queryKey: [queryKeys.GET_PROFILE],
         queryFn: requestProfile,
-        gcTime: 1000 * 60 * 60 * 24,
-        staleTime: 1000 * 60 * 60 * 24 - 1000 * 60,
+        gcTime: A_DAY,
+        staleTime: TEN_TO_A_DAY,
         enabled: isSignedIn,
         ...queryOptions,
     });
