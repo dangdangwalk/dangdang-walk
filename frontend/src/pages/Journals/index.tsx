@@ -34,7 +34,7 @@ export default function Journals() {
         const dog = dogList.find((dog) => dog.name === dogName);
         if (!dog) return;
         const newSearchParams = new URLSearchParams(searchParams);
-        newSearchParams.set(queryStringKeys.DOGID, String(dog.id));
+        newSearchParams.set(queryStringKeys.DOG_ID, String(dog.id));
         setSearchParams(newSearchParams);
         setSelectedDog(dog);
     };

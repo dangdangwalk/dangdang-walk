@@ -2,10 +2,9 @@ import { fetchDogStatistic } from '@/api/dog';
 import { queryKeys } from '@/constants';
 import { DogStatistic } from '@/models/dog';
 import { useAuthStore } from '@/store/authStore';
-import { UseQueryCustomOptions } from '@/types/common';
 import { useQuery } from '@tanstack/react-query';
 
-const defaultDpgs: DogStatistic[] = [
+const defaultDogs: DogStatistic[] = [
     {
         id: 1,
         name: '덕지',
@@ -24,18 +23,17 @@ const defaultDpgs: DogStatistic[] = [
     },
 ];
 
-const useDogsStatistic = (queryOptions?: UseQueryCustomOptions) => {
+const useDogsStatistic = () => {
     const { isSignedIn } = useAuthStore();
     const { data, isPending } = useQuery({
         queryKey: [queryKeys.DOG_STATISTICS],
         queryFn: fetchDogStatistic,
-        ...queryOptions,
     });
 
     if (!isSignedIn) {
-        return { dogs: defaultDpgs as DogStatistic[], isDogsPending: false };
+        return { dogStatistics: defaultDogs, isDogsPending: false };
     }
-    return { dogs: data as DogStatistic[], isDogsPending: isPending };
+    return { dogStatistics: data, isDogsPending: isPending };
 };
 
 export default useDogsStatistic;

@@ -1,50 +1,40 @@
 import { fetchWalkAvailableDogs } from '@/api/dog';
 import { queryKeys } from '@/constants';
-import { AvailableDog } from '@/models/dog';
+import { WalkAvailableDog } from '@/models/dog';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-const { REACT_APP_BASE_IMAGE_URL = '' } = window._ENV ?? process.env;
 
-const useWalkAvailabeDog = () => {
-    const [availableDogs, setAvailableDogs] = useState<AvailableDog[] | undefined>([]);
+const useWalkAvailable = () => {
+    const [walkAvailableDogs, setWalkAvailableDogs] = useState<WalkAvailableDog[] | undefined>([]);
 
     const {
-        data: availablDogData,
+        data: availableDogData,
         isLoading,
         refetch,
     } = useQuery({
         queryKey: [queryKeys.WALK_AVAILABLE_DOGS],
-        queryFn: async () => {
-            const data = await fetchWalkAvailableDogs();
-
-            return data.map((d: AvailableDog) => {
-                return {
-                    ...d,
-                    profilePhotoUrl: d.profilePhotoUrl ? `${REACT_APP_BASE_IMAGE_URL}/${d.profilePhotoUrl}` : null,
-                };
-            });
-        },
+        queryFn: fetchWalkAvailableDogs,
         enabled: false,
     });
 
     useEffect(() => {
-        if (!availablDogData) return;
-        setAvailableDogs(
-            availablDogData.map((d: AvailableDog) => {
+        if (!availableDogData) return;
+        setWalkAvailableDogs(
+            availableDogData.map((d: WalkAvailableDog) => {
                 return {
                     ...d,
                     isChecked: false,
                 };
             })
         );
-    }, [availablDogData]);
+    }, [availableDogData]);
 
     return {
-        availableDogs,
-        setAvailableDogs,
+        walkAvailableDogs,
+        setWalkAvailableDogs,
         isAvailableDogsLoading: isLoading,
         fetchWalkAvailableDogs: refetch,
     };
 };
 
-export default useWalkAvailabeDog;
+export default useWalkAvailable;

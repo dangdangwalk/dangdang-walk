@@ -28,7 +28,7 @@ export interface DogStatistic extends DogAvatar {
     profilePhotoUrl: string;
 }
 
-export interface AvailableDog extends DogAvatar {
+export interface WalkAvailableDog extends DogAvatar {
     isChecked: boolean;
 }
 

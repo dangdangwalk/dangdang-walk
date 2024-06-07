@@ -11,7 +11,7 @@ const useJournals = () => {
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const date = params.get(queryStringKeys.DATE);
-        const dogId = params.get(queryStringKeys.DOGID);
+        const dogId = params.get(queryStringKeys.DOG_ID);
         if (dogId) {
             fetchJournals(Number(dogId), date ?? formDate(new Date())).then((data) => {
                 if (data) {

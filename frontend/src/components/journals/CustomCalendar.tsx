@@ -23,7 +23,7 @@ export default function CustomCalendar() {
         useCalendar();
     const getStatisticData = async (date: string, period: period) => {
         const params = new URLSearchParams(location.search);
-        const dogId = params.get(queryStringKeys.DOGID);
+        const dogId = params.get(queryStringKeys.DOG_ID);
         if (!dogId) return;
         const data = await fetchDogMonthStatistic(Number(dogId), date, period);
         const newArray = new Set<string>();
@@ -37,7 +37,7 @@ export default function CustomCalendar() {
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
-        const dogId = params.get(queryStringKeys.DOGID);
+        const dogId = params.get(queryStringKeys.DOG_ID);
         if (Number(dogId) === currentDogId) return;
         if (date.getFullYear() <= today.getFullYear() && date.getMonth() <= today.getMonth()) {
             getStatisticData(formDate(date), view);

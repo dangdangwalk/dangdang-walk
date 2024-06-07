@@ -27,7 +27,7 @@ const storageKeys = {
 } as const;
 
 const queryStringKeys = {
-    DOGID: 'dogId',
+    DOG_ID: 'dogId',
     DATE: 'date',
 } as const;
 

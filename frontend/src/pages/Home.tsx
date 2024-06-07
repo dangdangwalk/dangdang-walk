@@ -13,35 +13,43 @@ import Spinner from '@/components/commons/Spinner';
 import RegisterCard from '@/components/home/RegisterCard';
 import { queryStringKeys } from '@/constants';
 import { setFlagValueByKey, toggleCheckById } from '@/utils/check';
-import useWalkAvailabeDog from '@/hooks/useWalkAvailableDog';
+import useWalkAvailable from '@/hooks/useWalkAvailableDog';
 
 function Home() {
-    const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
-    const { isAvailableDogsLoading, fetchWalkAvailableDogs, availableDogs, setAvailableDogs } = useWalkAvailabeDog();
-    const { dogs, isDogsPending } = useDogsStatistic();
+    const [isDogBottomSheetOpen, setIsDogBottomSheetOpen] = useState<boolean>(false);
+    const {
+        isAvailableDogsLoading,
+        fetchWalkAvailableDogs,
+        walkAvailableDogs,
+        setWalkAvailableDogs: setAvailableDogs,
+    } = useWalkAvailable();
+    const { dogStatistics, isDogsPending } = useDogsStatistic();
     const [isAvailableDogsCheckedAll, setIsAvailableDogsCheckedAll] = useState<boolean>(false);
     const navigate = useNavigate();
     const handleBottomSheet = () => {
-        if (!isDogBottomsheetOpen) {
+        if (!isDogBottomSheetOpen) {
             fetchWalkAvailableDogs();
-            setIsDogBottomsheetOpen(true);
+            setIsDogBottomSheetOpen(true);
         } else {
             handleCheckAll(false);
-            setIsDogBottomsheetOpen(false);
+            setIsDogBottomSheetOpen(false);
             setIsAvailableDogsCheckedAll(false);
         }
     };
 
     const handleConfirm = () => {
-        setIsDogBottomsheetOpen(false);
+        setIsDogBottomSheetOpen(false);
         navigate('/walk', {
-            state: { dogs: availableDogs?.length === 1 ? availableDogs : availableDogs?.filter((d) => d.isChecked) },
+            state: {
+                dogs:
+                    walkAvailableDogs?.length === 1 ? walkAvailableDogs : walkAvailableDogs?.filter((d) => d.isChecked),
+            },
         });
     };
 
     const goToJournals = (dogId: number) => {
-        navigate(`/journals?${queryStringKeys.DOGID}=${dogId}`, {
-            state: { dogs, dog: dogs.find((d) => d.id === dogId) },
+        navigate(`/journals?${queryStringKeys.DOG_ID}=${dogId}`, {
+            state: { dogs: dogStatistics, dog: dogStatistics?.find((d) => d.id === dogId) },
         });
     };
 
@@ -74,15 +82,15 @@ function Home() {
                 {/* TODO : Pending 로직 제외하는 방법ㄴ */}
                 {isDogsPending ? (
                     <Spinner />
-                ) : dogs && dogs?.length > 0 ? (
+                ) : dogStatistics && dogStatistics?.length > 0 ? (
                     <>
-                        <DogCardList dogs={dogs} pageMove={goToJournals} />
+                        <DogCardList dogs={dogStatistics} pageMove={goToJournals} />
                         <Button
                             color={'primary'}
                             rounded={'medium'}
                             className={`fixed h-12 w-[120px] text-base font-bold leading-normal text-white`}
                             style={{ bottom: `calc(${NAV_HEIGHT} + 16px)`, left: '50%', translate: '-50%' }}
-                            disabled={dogs?.length === 0}
+                            disabled={dogStatistics?.length === 0}
                             onClick={handleBottomSheet}
                         >
                             산책하기
@@ -93,14 +101,14 @@ function Home() {
                 )}
             </main>
 
-            <BottomSheet isOpen={isDogBottomsheetOpen} onClose={handleBottomSheet}>
+            <BottomSheet isOpen={isDogBottomSheetOpen} onClose={handleBottomSheet}>
                 <BottomSheet.Header> 강아지 산책</BottomSheet.Header>
                 <BottomSheet.Body>
                     {isAvailableDogsLoading ? (
                         <Spinner />
-                    ) : availableDogs && availableDogs?.length > 0 ? (
+                    ) : walkAvailableDogs && walkAvailableDogs?.length > 0 ? (
                         <AvailableDogCheckList
-                            dogs={availableDogs}
+                            dogs={walkAvailableDogs}
                             onToggle={handleToggle}
                             checkAll={handleCheckAll}
                             isCheckedAll={isAvailableDogsCheckedAll}
@@ -111,7 +119,7 @@ function Home() {
                 </BottomSheet.Body>
                 <BottomSheet.ConfirmButton
                     onConfirm={handleConfirm}
-                    disabled={availableDogs?.find((d) => d.isChecked) ? false : true}
+                    disabled={walkAvailableDogs?.find((d) => d.isChecked) ? false : true}
                 >
                     확인
                 </BottomSheet.ConfirmButton>
