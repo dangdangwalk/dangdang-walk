@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Patch, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Patch, UsePipes, ValidationPipe } from '@nestjs/common';
 import { AccessTokenPayload } from '../auth/token/token.service';
 import { User } from '../users/decorators/user.decorator';
 import { UpdateUserDto } from './dtos/update-user.dto';
@@ -15,6 +15,7 @@ export class UsersController {
     }
 
     @Patch('/me')
+    @HttpCode(204)
     async updateUserProfile(@User() { userId }: AccessTokenPayload, @Body() userInfo: UpdateUserDto) {
         return await this.usersService.updateUserProfile(userId, userInfo);
     }
