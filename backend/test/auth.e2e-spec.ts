@@ -1,6 +1,8 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
+import { DataSource } from 'typeorm';
 import { mockUser } from '../src/fixtures/users.fixture';
+import { Users } from '../src/users/users.entity';
 import {
     EXPIRED_ACCESS_TOKEN,
     EXPIRED_REFRESH_TOKEN,
@@ -17,9 +19,10 @@ const context = describe;
 
 describe('AuthController (e2e)', () => {
     let app: INestApplication;
+    let dataSource: DataSource;
 
     beforeAll(async () => {
-        ({ app } = await setupTestApp());
+        ({ app, dataSource } = await setupTestApp());
     });
 
     afterAll(async () => {
@@ -104,6 +107,10 @@ describe('AuthController (e2e)', () => {
 
     describe('/auth/signup (POST)', () => {
         context('비회원이 회원가입 요청을 보내면', () => {
+            afterEach(async () => {
+                await clearUsers();
+            });
+
             it('201 상태 코드와 body에는 access token, cookie에는 refresh token을 반환하고 Oauth data cookie를 삭제해야 한다.', async () => {
                 const response = await request(app.getHttpServer())
                     .post('/auth/signup')
@@ -120,10 +127,16 @@ describe('AuthController (e2e)', () => {
 
                 expect(response.body).toHaveProperty('accessToken');
                 expect(typeof response.body.accessToken).toBe('string');
+
+                expect(await dataSource.getRepository(Users).count()).toBe(1);
             });
         });
 
         context('회원이 회원가입 요청을 보내면', () => {
+            beforeEach(async () => {
+                await insertMockUser();
+            });
+
             afterEach(async () => {
                 await clearUsers();
             });
@@ -310,11 +323,13 @@ describe('AuthController (e2e)', () => {
             });
 
             it('200 상태 코드를 반환하고 refresh token cookie를 삭제해야 한다.', async () => {
-                return request(app.getHttpServer())
+                await request(app.getHttpServer())
                     .delete('/auth/deactivate')
                     .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
                     .expect(200)
                     .expect('set-cookie', /refreshToken=;/);
+
+                expect(await dataSource.getRepository(Users).count()).toBe(0);
             });
         });
 
