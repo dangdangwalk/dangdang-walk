@@ -29,14 +29,14 @@ export default function Join() {
     const location = useLocation();
     const currentPage = location.state;
     const { signUp } = useAuth();
-    const { registerDogMutation } = useDog();
+    const { createDog } = useDog();
     const { spinnerAdd, spinnerRemove } = useSpinnerStore();
     const { cropError, dogProfileImgUrl, setDogProfileImgUrl } = useCropStore();
     const backToPathname = getStorage(storageKeys.REDIRECT_URI) || '';
 
     const fileInputRef = useRef(null);
     const [cancelReg, setCancelReg] = useState(false);
-    const [haveADog, sethaveADog] = useState(true);
+    const [haveADog, setHaveADog] = useState(true);
     const [allAgreed, setAllAgreed] = useState(false);
     const [agreements, setAgreements] = useState({
         service: false,
@@ -57,12 +57,19 @@ export default function Join() {
         currentPage ?? 'Agreements'
     );
 
-    const handleCheck = (checked: boolean, id: string) => {
+    const handleSetData = (key: string, value: string | boolean | null | number) => {
+        setRegisterData((prev) => ({
+            ...prev,
+            [key]: value,
+        }));
+    };
+
+    const handleCheck = (key: string, checked: boolean) => {
         setAgreements((prev) => ({
             ...prev,
-            [id]: checked,
+            [key]: checked,
         }));
-        const allChecked = Object.values({ ...agreements, [id]: checked }).every((value) => value === true);
+        const allChecked = Object.values({ ...agreements, [key]: checked }).every((value) => value === true);
         setAllAgreed(allChecked);
     };
     const handleAllCheck = (checked: boolean) => {
@@ -134,9 +141,9 @@ export default function Join() {
             const file = dogProfileImgUrl && dataURLtoFile(dogProfileImgUrl, fileName);
             setDogProfileImgUrl('');
             file === ''
-                ? registerDogMutation.mutate({ ...registerData, profilePhotoUrl: null })
+                ? createDog.mutate({ ...registerData, profilePhotoUrl: null })
                 : await uploadImg(file, photoUrl).then(() => {
-                      registerDogMutation.mutate({ ...registerData, profilePhotoUrl: fileName });
+                      createDog.mutate({ ...registerData, profilePhotoUrl: fileName });
                   });
             spinnerRemove();
         }
@@ -211,12 +218,12 @@ export default function Join() {
                     />
                 )}
                 {step === 'PetOwner' && (
-                    <PetOwner haveADog={haveADog} handleHaveADogChange={(opt: boolean) => sethaveADog(opt)} />
+                    <PetOwner haveADog={haveADog} handleHaveADogChange={(opt: boolean) => setHaveADog(opt)} />
                 )}
                 {step === 'DogBasicInfo' && (
-                    <DogBasicInfo fileInputRef={fileInputRef} data={registerData} setData={setRegisterData} />
+                    <DogBasicInfo fileInputRef={fileInputRef} data={registerData} handleSetData={handleSetData} />
                 )}
-                {step === 'DogDetailInfo' && <DogDetailInfo data={registerData} setData={setRegisterData} />}
+                {step === 'DogDetailInfo' && <DogDetailInfo data={registerData} handleSetData={handleSetData} />}
             </main>
             <div className="absolute bottom-0 w-full">
                 <Button

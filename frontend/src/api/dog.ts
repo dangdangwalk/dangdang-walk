@@ -20,16 +20,7 @@ export const fetchDogMonthStatistic = async (dogId: number, date: string, period
     const { data } = await httpClient.get(`/dogs/${dogId}/statistics?date=${date}&period=${period}`);
     return data;
 };
-export interface ResponseDogs {
-    id: number;
-    birth: string | null;
-    name: string;
-    breed: string;
-    gender: string;
-    weight: number;
-    isNeutered: boolean;
-    profilePhotoUrl: string | null;
-}
+
 export const fetchDogs = async (): Promise<Dog[]> => {
     const { data } = await httpClient.get<Dog[]>('/dogs');
     return data;

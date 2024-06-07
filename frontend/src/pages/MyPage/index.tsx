@@ -18,12 +18,13 @@ import Naver from '@/assets/icons/ic-provider-naver.svg';
 import { Divider } from '@/components/commons/Divider';
 import DeactivateModal from '@/components/DeactivateModal';
 import DogDetail from '@/pages/MyPage/DogDetail';
-import { ResponseDogs, RecentMonthStatisticsResponse, fetchDogRecentMonthStatistics } from '@/api/dog';
+import { RecentMonthStatisticsResponse, fetchDogRecentMonthStatistics } from '@/api/dog';
+import { Dog } from '@/models/dog';
 function Profile() {
     const navigate = useNavigate();
-    const { useDogsQuery } = useDog();
-    const { data, isSuccess } = useDogsQuery;
-    const [dogs, setDogs] = useState<ResponseDogs[]>([
+    const { fetchDog } = useDog();
+    const { data, isSuccess } = fetchDog;
+    const [dogs, setDogs] = useState<Dog[]>([
         {
             id: 0,
             birth: null,
@@ -45,7 +46,7 @@ function Profile() {
         totalDistance: 0,
         totalTime: 0,
     });
-    const [dogInfo, setDogInfo] = useState<ResponseDogs>({
+    const [dogInfo, setDogInfo] = useState<Dog>({
         id: 0,
         birth: null,
         name: '',
@@ -56,7 +57,7 @@ function Profile() {
         profilePhotoUrl: null,
     });
     const handleProfileOpen = useCallback(
-        (dog: ResponseDogs, data: RecentMonthStatisticsResponse) => {
+        (dog: Dog, data: RecentMonthStatisticsResponse) => {
             setDogInfo(dog);
             setStatistics(data);
             setIsProfileOpen(true);

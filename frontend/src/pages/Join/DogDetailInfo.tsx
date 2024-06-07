@@ -2,51 +2,29 @@ import { Checkbox } from '@/components/commons/Checkbox';
 import { Divider } from '@/components/commons/Divider';
 import FemaleIcon from '@/components/icons/FemaleIcon';
 import { MaleIcon } from '@/components/icons/MaleIcon';
-import { DogCreateForm } from '@/models/dog';
-import { Dispatch, FormEvent, SetStateAction, useState } from 'react';
+import { Dog } from '@/models/dog';
+import { FormEvent, useState } from 'react';
+
+type DogDetailInfoProps = Pick<Dog, 'name' | 'gender' | 'isNeutered'>;
 interface Props {
-    data: DogCreateForm;
-    setData: Dispatch<SetStateAction<DogCreateForm>>;
+    data: DogDetailInfoProps;
+    handleSetData: (key: string, value: string | boolean | null | number) => void;
 }
-export interface DogDetailInfoProps {
-    gender: string;
-    isNeutered: boolean;
-    birth: string | null;
-    weight: number;
-}
+
 export function maxLengthCheck(event: FormEvent<HTMLInputElement>) {
     const object = event.currentTarget;
     if (object.value.length > object.maxLength) {
         object.value = object.value.slice(0, object.maxLength);
     }
 }
-export default function DogDetailInfo({ data, setData }: Props) {
+export default function DogDetailInfo({ data, handleSetData }: Props) {
+    const { name, gender, isNeutered } = data;
     const [weight, setWeight] = useState('');
-
-    const handleGenderChange = (gender: string) => {
-        setData((prev) => ({
-            ...prev,
-            gender,
-        }));
-    };
-    const handleWeightChange = (weight: string) => {
-        setData((prev) => ({
-            ...prev,
-            weight: Number(weight),
-        }));
-    };
-    const handleBirthChange = (birth: string) => {
-        setData((prev) => ({
-            ...prev,
-            birth,
-        }));
-    };
-
     const [birthCheck, setBirthCheck] = useState(false);
     return (
         <div className="flex flex-col bg-white">
             <div>
-                <span className="text-xl font-semibold leading-[30px] text-amber-500">{data.name}의 세부 정보</span>
+                <span className="text-xl font-semibold leading-[30px] text-amber-500">{name}의 세부 정보</span>
                 <span className="text-xl font-semibold leading-[30px] text-neutral-800">
                     를
                     <br />
@@ -56,22 +34,22 @@ export default function DogDetailInfo({ data, setData }: Props) {
             <div className="mt-8 text-sm font-normal leading-[21px] text-stone-500">성별</div>
             <div className="mt-3 inline-flex gap-2">
                 <button
-                    onClick={() => handleGenderChange('MALE')}
+                    onClick={() => handleSetData('gender', 'MALE')}
                     className={`border ${
-                        data.gender === 'MALE' ? 'border-primary' : 'border-secondary'
+                        gender === 'MALE' ? 'border-primary' : 'border-secondary'
                     } flex w-full flex-col items-center justify-center rounded-lg bg-primary-foreground`}
                 >
                     <div className="mx-6 my-5 flex flex-col items-center justify-center gap-1">
                         <div
                             className={`text-base ${
-                                data.gender === 'MALE' ? 'text-neutral-800' : 'text-stone-500'
+                                gender === 'MALE' ? 'text-neutral-800' : 'text-stone-500'
                             } font-bold`}
                         >
-                            <MaleIcon color={`${data.gender === 'MALE' ? '#222222' : '#999999'}`} />
+                            <MaleIcon color={`${gender === 'MALE' ? '#222222' : '#999999'}`} />
                         </div>
                         <div
                             className={`text-xs ${
-                                data.gender === 'MALE' ? 'text-neutral-800' : 'text-neutral-400'
+                                gender === 'MALE' ? 'text-neutral-800' : 'text-neutral-400'
                             } font-normal`}
                         >
                             남아
@@ -79,22 +57,22 @@ export default function DogDetailInfo({ data, setData }: Props) {
                     </div>
                 </button>
                 <button
-                    onClick={() => handleGenderChange('FEMALE')}
+                    onClick={() => handleSetData('gender', 'FEMALE')}
                     className={`border ${
-                        data.gender === 'FEMALE' ? 'border-primary' : 'border-secondary'
+                        gender === 'FEMALE' ? 'border-primary' : 'border-secondary'
                     } flex w-full flex-col items-center justify-center rounded-lg bg-primary-foreground`}
                 >
                     <div className="mx-6 my-5 flex flex-col items-center justify-center gap-1">
                         <div
                             className={`text-base ${
-                                data.gender === 'FEMALE' ? 'text-neutral-800' : 'text-stone-500'
+                                gender === 'FEMALE' ? 'text-neutral-800' : 'text-stone-500'
                             } font-bold`}
                         >
-                            <FemaleIcon color={`${data.gender === 'FEMALE' ? '#222222' : '#999999'}`} />
+                            <FemaleIcon color={`${gender === 'FEMALE' ? '#222222' : '#999999'}`} />
                         </div>
                         <div
                             className={`text-xs ${
-                                data.gender === 'FEMALE' ? 'text-neutral-800' : 'text-neutral-400'
+                                gender === 'FEMALE' ? 'text-neutral-800' : 'text-neutral-400'
                             } font-normal`}
                         >
                             여아
@@ -104,13 +82,8 @@ export default function DogDetailInfo({ data, setData }: Props) {
             </div>
             <div className="mt-2">
                 <Checkbox
-                    checked={data.isNeutered}
-                    onCheckedChange={(checked: boolean) => {
-                        setData((prev) => ({
-                            ...prev,
-                            isNeutered: checked,
-                        }));
-                    }}
+                    checked={isNeutered}
+                    onCheckedChange={(checked: boolean) => handleSetData('isNeutered', checked)}
                     labelText="중성화 했어요"
                 />
             </div>
@@ -120,9 +93,9 @@ export default function DogDetailInfo({ data, setData }: Props) {
                         <>
                             <input
                                 type="date"
-                                placeholder={`${data.name}의 생일이 궁금해요`}
+                                placeholder={`${name}의 생일이 궁금해요`}
                                 className="w-full font-bold outline-none"
-                                onChange={(event) => handleBirthChange(event.target.value)}
+                                onChange={(event) => handleSetData('birth', event.target.value)}
                             />
                             <Divider className="absolute bottom-0 h-[1px]" />
                         </>
@@ -132,11 +105,7 @@ export default function DogDetailInfo({ data, setData }: Props) {
                     checked={birthCheck}
                     onCheckedChange={(checked: boolean) => {
                         setBirthCheck(checked);
-
-                        setData((prev) => ({
-                            ...prev,
-                            birth: null,
-                        }));
+                        handleSetData('birth', null);
                     }}
                     labelText="생일을 몰라요"
                 />
@@ -148,13 +117,13 @@ export default function DogDetailInfo({ data, setData }: Props) {
                         type="number"
                         pattern="\d*"
                         inputMode="numeric"
-                        placeholder={`${data.name}의 체중이 궁금해요`}
+                        placeholder={`${name}의 체중이 궁금해요`}
                         className={`outline-none ${weight && 'w-9'}`}
                         maxLength={3}
                         onInput={(e) => maxLengthCheck(e)}
                         onChange={(event) => {
                             setWeight(event.target.value);
-                            handleWeightChange(event.target.value);
+                            handleSetData('weight', Number(event.target.value));
                         }}
                     />
                     {weight && 'kg'}
