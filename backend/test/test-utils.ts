@@ -8,8 +8,15 @@ import { MockOauthService } from '../src/auth/oauth/__mocks__/oauth.service';
 import { GoogleService } from '../src/auth/oauth/google.service';
 import { KakaoService } from '../src/auth/oauth/kakao.service';
 import { NaverService } from '../src/auth/oauth/naver.service';
+import { DogWalkDay } from '../src/dog-walk-day/dog-walk-day.entity';
+import { Dogs } from '../src/dogs/dogs.entity';
+import { mockDog, mockDog2 } from '../src/fixtures/dogs.fixture';
+import { mockUser } from '../src/fixtures/users.fixture';
 import { MockS3Service } from '../src/s3/__mocks__/s3.service';
 import { S3Service } from '../src/s3/s3.service';
+import { TodayWalkTime } from '../src/today-walk-time/today-walk-time.entity';
+import { UsersDogs } from '../src/users-dogs/users-dogs.entity';
+import { Users } from '../src/users/users.entity';
 import { AppModule } from './../src/app.module';
 
 let app: INestApplication;
@@ -47,19 +54,33 @@ export const closeTestApp = async () => {
     await app.close();
 };
 
-// Access token with maxAge = 100 years, userId = 1, provider = kakao
-export const VALID_ACCESS_TOKEN_100_YEARS =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInByb3ZpZGVyIjoia2FrYW8iLCJpYXQiOjE3MTYxODc5NzAsImV4cCI6NDg3MTk0Nzk3MH0.QlL_1luAr4T-YdA5QfKl8_ivhAlE1_FFlRfSAq2u2Lc';
-export const EXPIRED_ACCESS_TOKEN =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInByb3ZpZGVyIjoia2FrYW8iLCJpYXQiOjE3MTc1OTQ4NTYsImV4cCI6MTcxNzU5NDg2Nn0.KphkJf-oCeJoZTv3fw-XvI5Qo16058r_ak5lWCJrvmg';
-export const MALFORMED_ACCESS_TOKEN = 'malformed_access_token';
+export const insertMockUser = async () => {
+    const usersRepository = dataSource.getRepository(Users);
+    await usersRepository.save(mockUser);
+};
 
-// Refresh token with maxAge = 100 years, oauthId = 12345, provider = kakao
-export const VALID_REFRESH_TOKEN_100_YEARS =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvYXV0aElkIjoiMTIzNDUiLCJwcm92aWRlciI6Imtha2FvIiwiaWF0IjoxNzE3NjAwNzIzLCJleHAiOjQ4NzMzNjA3MjN9.4FVH0-mkQ_qf4J0lmdu9lBrTrOYNk13fy7TJSjyyPV4';
-export const EXPIRED_REFRESH_TOKEN =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvYXV0aElkIjoiMTIzNDUiLCJwcm92aWRlciI6Imtha2FvIiwiaWF0IjoxNzE3NjAwNzczLCJleHAiOjE3MTc2MDA3Nzh9.ESo_BdU8g2K5YayZkkRPw5v6AKPJwx-p6R7_RA1QUvg';
-export const MALFORMED_REFRESH_TOKEN = 'malformed_refresh_token';
+export const clearUsers = async () => {
+    const usersRepository = dataSource.getRepository(Users);
+    await usersRepository.query('SET FOREIGN_KEY_CHECKS = 0;');
+    await usersRepository.clear();
+    await usersRepository.query('SET FOREIGN_KEY_CHECKS = 1;');
+};
 
-export const VALID_PROVIDER_KAKAO = 'kakao';
-export const INVALID_PROVIDER = 'invalid_provider';
+export const insertMockDogs = async () => {
+    const dogsRepository = dataSource.getRepository(Dogs);
+    const usersDogsRepository = dataSource.getRepository(UsersDogs);
+    await dogsRepository.save(mockDog);
+    await usersDogsRepository.save({ userId: 1, dogId: mockDog.id });
+    await dogsRepository.save(mockDog2);
+    await usersDogsRepository.save({ userId: 1, dogId: mockDog2.id });
+};
+
+export const clearDogs = async () => {
+    const dogsRepository = dataSource.getRepository(Dogs);
+    await dogsRepository.query('SET FOREIGN_KEY_CHECKS = 0;');
+    await dataSource.getRepository(DogWalkDay).clear();
+    await dataSource.getRepository(TodayWalkTime).clear();
+    await dogsRepository.clear();
+    await dataSource.getRepository(UsersDogs).clear();
+    await dogsRepository.query('SET FOREIGN_KEY_CHECKS = 1;');
+};

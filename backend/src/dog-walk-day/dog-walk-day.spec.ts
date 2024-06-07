@@ -1,7 +1,7 @@
 import { DogWalkDay } from './dog-walk-day.entity';
 
 describe('DogWalkDay', () => {
-    it('DogWalkDay 정보가 주어지면 dogWalkDay 정보를 리턴해야 한다.', () => {
+    it('DogWalkDay 정보가 주어지면 dogWalkDay 정보를 반환해야 한다.', () => {
         const dogWalkDay = new DogWalkDay();
         dogWalkDay.mon = 2;
         dogWalkDay.tue = 3;
@@ -19,7 +19,7 @@ describe('DogWalkDay', () => {
         expect(dogWalkDay.sat).toBe(3);
         expect(dogWalkDay.sun).toBe(2);
     });
-    it('dogWalkDay 정보가 없으면 빈 객체를 리턴해야 한다.', () => {
+    it('dogWalkDay 정보가 없으면 빈 객체를 반환해야 한다.', () => {
         const dogWalkDay = new DogWalkDay();
 
         expect(dogWalkDay.tue).toBe(undefined);

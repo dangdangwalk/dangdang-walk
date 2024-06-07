@@ -29,7 +29,7 @@ get:
               - week
   responses:
     "200":
-      description: 한달/일주일 산책 횟수 리턴
+      description: 한달/일주일 산책 횟수 반환
       content:
         application/json:
           schema:

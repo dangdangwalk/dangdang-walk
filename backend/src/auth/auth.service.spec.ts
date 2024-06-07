@@ -159,7 +159,7 @@ describe('AuthService', () => {
 
     describe('validateAccessToken', () => {
         context('userId에 해당하는 user가 존재하지 않으면', () => {
-            it('NotFoundException error를 던져야 한다.', async () => {
+            it('NotFoundException 예외를 던져야 한다.', async () => {
                 jest.spyOn(usersService, 'findOne').mockRejectedValue(new NotFoundException());
 
                 await expect(service.validateAccessToken(1)).rejects.toThrow(NotFoundException);
@@ -169,7 +169,7 @@ describe('AuthService', () => {
 
     describe('validateRefreshToken', () => {
         context('oauthId에 해당하는 user가 존재하지 않으면', () => {
-            it('NotFoundException error를 던져야 한다.', async () => {
+            it('NotFoundException 예외를 던져야 한다.', async () => {
                 jest.spyOn(usersService, 'findOne').mockRejectedValue(new NotFoundException());
 
                 await expect(service.validateRefreshToken(mockUser.oauthAccessToken, mockUser.oauthId)).rejects.toThrow(
@@ -179,7 +179,7 @@ describe('AuthService', () => {
         });
 
         context('oauthId에 해당하는 user의 refresh token과 현재 token이 일치하지 않으면', () => {
-            it('UnauthorizedException error를 던져야 한다.', async () => {
+            it('UnauthorizedException 예외를 던져야 한다.', async () => {
                 jest.spyOn(usersService, 'findOne').mockResolvedValue(mockUser);
 
                 await expect(service.validateRefreshToken(mockUser.oauthAccessToken, mockUser.oauthId)).rejects.toThrow(

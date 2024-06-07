@@ -33,7 +33,7 @@ paths:
       security: []
       responses:
         "200":
-          description: 견종 목록 리턴
+          description: 견종 목록 반환
           content:
             application/json:
               schema:
