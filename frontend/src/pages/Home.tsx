@@ -9,11 +9,11 @@ import BottomSheet from '@/components/commons/BottomSheet';
 import AvailableDogCheckList from '@/components/home/AvailableDogCheckList';
 import useDogsStatistic from '@/hooks/useDogsStatistic';
 import { useNavigate } from 'react-router-dom';
-import useWalkAvailabeDog from '@/hooks/useWalkAvailabeDog';
 import Spinner from '@/components/commons/Spinner';
 import RegisterCard from '@/components/home/RegisterCard';
 import { queryStringKeys } from '@/constants';
 import { setFlagValueByKey, toggleCheckById } from '@/utils/check';
+import useWalkAvailabeDog from '@/hooks/useWalkAvailableDog';
 
 function Home() {
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
