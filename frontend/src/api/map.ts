@@ -1,4 +1,5 @@
 import { createClient } from '@/api/http';
+import { getSidoCode } from '@/utils/geo';
 
 const { REACT_APP_KAKAO_CLIENT_ID: KAKAO_CLIENT_ID = '', REACT_APP_KAKAO_MAP_URL: KAKAO_MAP_URL = '' } =
     window._ENV ?? process.env;
@@ -25,8 +26,14 @@ interface KakaoResponseAddress {
     y: string;
 }
 
-export const fetchAddress = async (lat: number, lng: number): Promise<KakaoResponseAddress | undefined> => {
-    const data = (await mapClient.get(`/geo/coord2regioncode.json?x=${lng}&y=${lat}`)).data;
+interface AddressResponse {
+    sido: string;
+    dong: string;
+}
 
-    return data.documents[0];
+export const fetchAddress = async (lat: number, lng: number): Promise<AddressResponse | undefined> => {
+    const data = (await mapClient.get(`/geo/coord2regioncode.json?x=${lng}&y=${lat}`)).data;
+    const document = data.documents[0] as KakaoResponseAddress;
+
+    return { sido: getSidoCode(document.region_1depth_name), dong: document.region_3depth_name };
 };

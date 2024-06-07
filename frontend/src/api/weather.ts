@@ -1,4 +1,4 @@
-import { AirPolution, SunsetSunrise, WeatherData } from '@/models/weather';
+import { AirPollution, SunsetSunrise, WeatherData } from '@/models/weather';
 import { createClient } from './http';
 
 const { REACT_APP_WEATHER_URL: WEATHER_URL = '' } = window._ENV ?? process.env;
@@ -49,7 +49,7 @@ export const fetchSunsetSunrise = async (
     }
 };
 
-export const fetchAirGrade = async (sidoName: string): Promise<AirPolution | undefined> => {
+export const fetchAirGrade = async (sidoName: string): Promise<AirPollution | undefined> => {
     try {
         // console.log(sidoName);
         const response = (

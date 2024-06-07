@@ -17,6 +17,8 @@ const queryKeys = {
     GET_PROFILE: ['auth', 'getProfile'],
     GET_DOG_RECENT_MONTH_STATISTICS: 'getDogRecentMonthStatistic',
     DOG_STATISTICS: 'dogStatistics',
+    ADDRESS: 'address',
+    AIR_GRADE: 'airGrade',
 } as const;
 
 const storageKeys = {

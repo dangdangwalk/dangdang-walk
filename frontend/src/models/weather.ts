@@ -48,7 +48,7 @@ export interface SunsetSunrise {
     suntransit: string;
 }
 
-export interface AirPolution {
+export interface AirPollution {
     so2Grade: number;
     coFlag: string;
     khaiValue: string;

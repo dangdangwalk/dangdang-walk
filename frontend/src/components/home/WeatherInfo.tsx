@@ -10,7 +10,7 @@ import DayClear from '@/assets/icons/ic-dayclear.svg';
 import NightClear from '@/assets/icons/ic-nightclear.svg';
 import NightCloudy from '@/assets/icons/ic-nightcloudy.svg';
 import DayCloudy from '@/assets/icons/ic-daycloudy.svg';
-import useAddressAndAirgrade from '@/hooks/useAddressAndAirgrade';
+import useAddressAndAirGrade from '@/hooks/useAddressAndAirgrade';
 import useSunsetSunrise from '@/hooks/useSunsetSunrise';
 import Spinner from '@/components/commons/Spinner';
 import useGeolocation from '@/hooks/useGeolocation';
@@ -28,7 +28,7 @@ const statusImage = {
 export default function WeatherInfo() {
     const { position } = useGeolocation();
     const { weather, isWeatherPending } = useWeather(position);
-    const { airGrade, address, isAirGradePending } = useAddressAndAirgrade(position);
+    const { airGrade, address, isAirGradePending } = useAddressAndAirGrade(position);
     const { sunset, sunrise, isSunsetSunrisePending } = useSunsetSunrise(position);
 
     const [skyStatus, setSkyStatus] = useState<SkyStatus>();

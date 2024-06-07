@@ -31,9 +31,9 @@ const useDogsStatistic = () => {
     });
 
     if (!isSignedIn) {
-        return { dogStatistics: defaultDogs, isDogsPending: false };
+        return { dogsStatistic: defaultDogs, isDogsPending: false };
     }
-    return { dogStatistics: data, isDogsPending: isPending };
+    return { dogsStatistic: data, isDogsPending: isPending };
 };
 
 export default useDogsStatistic;

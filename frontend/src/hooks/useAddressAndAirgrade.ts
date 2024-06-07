@@ -1,16 +1,16 @@
 import { fetchAddress } from '@/api/map';
 import { fetchAirGrade } from '@/api/weather';
+import { queryKeys } from '@/constants';
 import { Position } from '@/models/location';
-import { getSidoCode } from '@/utils/geo';
 import { useQuery } from '@tanstack/react-query';
 
-const useAddressAndAirgrade = (position: Position | null) => {
+const useAddressAndAirGrade = (position: Position | null) => {
     const {
         data: addressData,
         error: addressError,
-        isLoading: isAdressLoading,
+        isLoading: isAddressLoading,
     } = useQuery({
-        queryKey: ['address'],
+        queryKey: [queryKeys.ADDRESS],
         queryFn: async () => {
             if (!position) return;
             return await fetchAddress(position.lat, position.lng);
@@ -19,27 +19,28 @@ const useAddressAndAirgrade = (position: Position | null) => {
         staleTime: 7200,
     });
 
-    const sidoName = addressData?.region_1depth_name;
-    const sido = getSidoCode(sidoName);
     const {
         data: airGradeData,
         isPending: isAirGradePending,
         error: airGradeError,
     } = useQuery({
-        queryKey: ['airGrade', position?.lat, position?.lng],
-        queryFn: () => fetchAirGrade(sido),
-        enabled: !!sidoName,
+        queryKey: [queryKeys.AIR_GRADE, position?.lat, position?.lng],
+        queryFn: async () => {
+            if (!addressData?.sido) return;
+            return await fetchAirGrade(addressData?.sido);
+        },
+        enabled: !!addressData?.sido,
         staleTime: 7200,
     });
 
     return {
         airGrade: airGradeData?.khaiGrade,
-        address: addressData?.region_3depth_name,
-        isAdressLoading,
+        address: addressData?.dong,
+        isAddressLoading: isAddressLoading,
         isAirGradePending,
         addressError,
         airGradeError,
     };
 };
 
-export default useAddressAndAirgrade;
+export default useAddressAndAirGrade;

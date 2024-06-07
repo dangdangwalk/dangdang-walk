@@ -23,7 +23,7 @@ function Home() {
         walkAvailableDogs,
         setWalkAvailableDogs: setAvailableDogs,
     } = useWalkAvailable();
-    const { dogStatistics, isDogsPending } = useDogsStatistic();
+    const { dogsStatistic, isDogsPending } = useDogsStatistic();
     const [isAvailableDogsCheckedAll, setIsAvailableDogsCheckedAll] = useState<boolean>(false);
     const navigate = useNavigate();
     const handleBottomSheet = () => {
@@ -49,7 +49,7 @@ function Home() {
 
     const goToJournals = (dogId: number) => {
         navigate(`/journals?${queryStringKeys.DOG_ID}=${dogId}`, {
-            state: { dogs: dogStatistics, dog: dogStatistics?.find((d) => d.id === dogId) },
+            state: { dogs: dogsStatistic, dog: dogsStatistic?.find((d) => d.id === dogId) },
         });
     };
 
@@ -82,15 +82,15 @@ function Home() {
                 {/* TODO : Pending 로직 제외하는 방법ㄴ */}
                 {isDogsPending ? (
                     <Spinner />
-                ) : dogStatistics && dogStatistics?.length > 0 ? (
+                ) : dogsStatistic && dogsStatistic?.length > 0 ? (
                     <>
-                        <DogCardList dogs={dogStatistics} pageMove={goToJournals} />
+                        <DogCardList dogs={dogsStatistic} pageMove={goToJournals} />
                         <Button
                             color={'primary'}
                             rounded={'medium'}
                             className={`fixed h-12 w-[120px] text-base font-bold leading-normal text-white`}
                             style={{ bottom: `calc(${NAV_HEIGHT} + 16px)`, left: '50%', translate: '-50%' }}
-                            disabled={dogStatistics?.length === 0}
+                            disabled={dogsStatistic?.length === 0}
                             onClick={handleBottomSheet}
                         >
                             산책하기
