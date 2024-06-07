@@ -20,7 +20,7 @@ const useWalkAvailabeDog = () => {
             return data.map((d: AvailableDog) => {
                 return {
                     ...d,
-                    profilePhotoUrl: d.profilePhotoUrl ? `${REACT_APP_BASE_IMAGE_URL}/${d.profilePhotoUrl}` : undefined,
+                    profilePhotoUrl: d.profilePhotoUrl ? `${REACT_APP_BASE_IMAGE_URL}/${d.profilePhotoUrl}` : null,
                 };
             });
         },

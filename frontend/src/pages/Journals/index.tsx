@@ -47,7 +47,7 @@ export default function Journals() {
                         ...dog,
                         profilePhotoUrl: dog.profilePhotoUrl
                             ? `${REACT_APP_BASE_IMAGE_URL}/${dog.profilePhotoUrl}`
-                            : undefined,
+                            : null,
                     };
                 });
                 setDogList(dogs);

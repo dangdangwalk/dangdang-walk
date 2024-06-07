@@ -2,11 +2,11 @@ import { Checkbox } from '@/components/commons/Checkbox';
 import { Divider } from '@/components/commons/Divider';
 import FemaleIcon from '@/components/icons/FemaleIcon';
 import { MaleIcon } from '@/components/icons/MaleIcon';
-import { DogRegInfo } from '@/pages/Join';
+import { DogCreateForm } from '@/models/dog';
 import { Dispatch, FormEvent, SetStateAction, useState } from 'react';
 interface Props {
-    data: DogRegInfo;
-    setData: Dispatch<SetStateAction<DogRegInfo>>;
+    data: DogCreateForm;
+    setData: Dispatch<SetStateAction<DogCreateForm>>;
 }
 export interface DogDetailInfoProps {
     gender: string;

@@ -1,8 +1,5 @@
 import { httpClient } from '@/api/http';
-import { DogRegInfo } from '@/pages/Join';
-import { AvailableDog, Dog, DogStatistic } from '@/models/dog';
-import { getStorage } from '@/utils/storage';
-import { storageKeys } from '@/constants';
+import { AvailableDog, Dog, DogCreateForm, DogStatistic } from '@/models/dog';
 export type period = 'week' | 'month';
 export const fetchDogStatistic = async (): Promise<DogStatistic[]> => {
     const { data } = await httpClient.get('/dogs/statistics');
@@ -14,7 +11,7 @@ export const fetchWalkAvailableDogs = async (): Promise<AvailableDog[]> => {
     return data;
 };
 
-export const registerDogInfo = async (params: DogRegInfo) => {
+export const createDog = async (params: DogCreateForm) => {
     const { data } = await httpClient.post('/dogs', params);
     return data;
 };
@@ -33,13 +30,8 @@ export interface ResponseDogs {
     isNeutered: boolean;
     profilePhotoUrl: string | null;
 }
-export const fetchDogs = async (): Promise<ResponseDogs[] | undefined> => {
-    const isSignedIn = getStorage(storageKeys.IS_SIGNED_IN) ? true : false;
-    let data: ResponseDogs[] | undefined;
-    if (isSignedIn) {
-        const response = await httpClient.get<ResponseDogs[]>('/dogs');
-        data = response.data;
-    }
+export const fetchDogs = async (): Promise<Dog[]> => {
+    const { data } = await httpClient.get<Dog[]>('/dogs');
     return data;
 };
 
@@ -47,17 +39,19 @@ export const deleteDog = async (dogId: number) => {
     await httpClient.delete(`/dogs/${dogId}`);
 };
 
-export interface ResponseRecentMonthStatistics {
+export interface RecentMonthStatisticsResponse {
     totalWalkCnt: number;
     totalDistance: number;
     totalTime: number;
 }
-export const fetchDogRecentMonthStatistics = async (dogId: number): Promise<ResponseRecentMonthStatistics> => {
-    const { data } = await httpClient.get(`/dogs/${dogId}/statistics/recent?period=month`);
+export const fetchDogRecentMonthStatistics = async (dogId: number): Promise<RecentMonthStatisticsResponse> => {
+    const { data } = await httpClient.get<RecentMonthStatisticsResponse>(
+        `/dogs/${dogId}/statistics/recent?period=month`
+    );
     return data;
 };
 
-export const updateDog = async ({ dogId, params }: { dogId: number; params: DogRegInfo }) => {
+export const updateDog = async ({ dogId, params }: { dogId: number; params: DogCreateForm }) => {
     await httpClient.patch(`/dogs/${dogId}`, params);
 };
 export const fetchDogList = async (): Promise<Dog[]> => {
