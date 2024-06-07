@@ -22,7 +22,7 @@ import { JournalsService } from './journals.service';
 import { JournalInfoForList } from './types/journal-info.type';
 
 @Controller('/journals')
-@UsePipes(new ValidationPipe({ validateCustomDecorators: true }))
+@UsePipes(new ValidationPipe({ validateCustomDecorators: true, whitelist: true }))
 export class JournalsController {
     constructor(private readonly journalsService: JournalsService) {}
 

@@ -5,7 +5,7 @@ import { UpdateUserDto } from './dtos/update-user.dto';
 import { UsersService } from './users.service';
 
 @Controller('/users')
-@UsePipes(ValidationPipe)
+@UsePipes(new ValidationPipe({ whitelist: true }))
 export class UsersController {
     constructor(private readonly usersService: UsersService) {}
 

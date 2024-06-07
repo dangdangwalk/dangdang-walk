@@ -20,7 +20,7 @@ import { UpdateDogDto } from './dtos/update-dog.dto';
 import { AuthDogGuard } from './guards/auth-dog.guard';
 
 @Controller('/dogs')
-@UsePipes(new ValidationPipe({ validateCustomDecorators: true }))
+@UsePipes(new ValidationPipe({ validateCustomDecorators: true, whitelist: true }))
 export class DogsController {
     constructor(private readonly dogsService: DogsService) {}
 
