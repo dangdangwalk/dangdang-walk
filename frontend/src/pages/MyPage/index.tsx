@@ -18,7 +18,7 @@ import Naver from '@/assets/icons/ic-provider-naver.svg';
 import { Divider } from '@/components/commons/Divider';
 import DeactivateModal from '@/components/DeactivateModal';
 import DogDetail from '@/pages/MyPage/DogDetail';
-import { ResponseDogs, ResponseRecentMonthStatistics, fetchDogRecentMonthStatistics } from '@/api/dog';
+import { ResponseDogs, RecentMonthStatisticsResponse, fetchDogRecentMonthStatistics } from '@/api/dog';
 function Profile() {
     const navigate = useNavigate();
     const { useDogsQuery } = useDog();
@@ -40,7 +40,7 @@ function Profile() {
     const provider = profileData?.provider;
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [deactivate, setDeactivate] = useState(false);
-    const [statistics, setStatistics] = useState<ResponseRecentMonthStatistics>({
+    const [statistics, setStatistics] = useState<RecentMonthStatisticsResponse>({
         totalWalkCnt: 0,
         totalDistance: 0,
         totalTime: 0,
@@ -56,7 +56,7 @@ function Profile() {
         profilePhotoUrl: null,
     });
     const handleProfileOpen = useCallback(
-        (dog: ResponseDogs, data: ResponseRecentMonthStatistics) => {
+        (dog: ResponseDogs, data: RecentMonthStatisticsResponse) => {
             setDogInfo(dog);
             setStatistics(data);
             setIsProfileOpen(true);

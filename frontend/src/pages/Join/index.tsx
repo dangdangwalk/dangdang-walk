@@ -17,13 +17,10 @@ import { dataURLtoFile } from '@/utils/dataUrlToFile';
 import { getUploadUrl } from '@/api/upload';
 import CancelRegModal from '@/components/CancelRegModal';
 import { useCropStore } from '@/store/cropStore';
-import DogBasicInfo, { DogBasicInfoProps } from '@/pages/Join/DogBasicInfo';
-import DogDetailInfo, { DogDetailInfoProps } from '@/pages/Join/DogDetailInfo';
+import DogBasicInfo from '@/pages/Join/DogBasicInfo';
+import DogDetailInfo from '@/pages/Join/DogDetailInfo';
 import { useSpinnerStore } from '@/store/spinnerStore';
-
-export interface DogRegInfo extends DogBasicInfoProps, DogDetailInfoProps {
-    profilePhotoUrl?: string | null;
-}
+import { DogCreateForm } from '@/models/dog';
 
 export default function Join() {
     const navigate = useNavigate();
@@ -47,7 +44,7 @@ export default function Join() {
         personalInfo: false,
         marketing: false,
     });
-    const [registerData, setRegisterData] = useState<DogRegInfo>({
+    const [registerData, setRegisterData] = useState<DogCreateForm>({
         name: '',
         breed: '',
         gender: '',

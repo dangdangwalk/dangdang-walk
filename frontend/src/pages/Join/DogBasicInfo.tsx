@@ -1,18 +1,15 @@
 import React, { Dispatch, MutableRefObject, SetStateAction, useState } from 'react';
 import SelectPhoto from '@/assets/icons/ic-select-photo.svg';
 import { Divider } from '@/components/commons/Divider';
-import { DogRegInfo } from '@/pages/Join';
 import BreedSearch from '@/components/BreedSearch';
 import { useCropStore } from '@/store/cropStore';
 import ImageCropper from '@/components/ImageCropper';
+import { Dog, DogCreateForm } from '@/models/dog';
 
-export interface DogBasicInfoProps {
-    name: string;
-    breed: string;
-}
+export type DogBasicInfoProps = Pick<Dog, 'name' | 'breed'>;
 interface Props {
     data: DogBasicInfoProps;
-    setData: Dispatch<SetStateAction<DogRegInfo>>;
+    setData: Dispatch<SetStateAction<DogCreateForm>>;
     fileInputRef: MutableRefObject<null>;
 }
 

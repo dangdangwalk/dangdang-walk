@@ -1,15 +1,17 @@
-import { ResponseDogs, deleteDog, fetchDogs, registerDogInfo, updateDog } from '@/api/dog';
+import { deleteDog, fetchDogs, createDog, updateDog } from '@/api/dog';
 import queryClient from '@/api/queryClient';
 import { uploadImage } from '@/api/upload';
 import { UseMutationCustomOptions } from '@/types/common';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { queryKeys } from '@/constants';
+import { useAuthStore } from '@/store/authStore';
+import { Dog } from '@/models/dog';
 
 const useRegisterDog = (mutationOptions?: UseMutationCustomOptions) => {
     const navigate = useNavigate();
     return useMutation({
-        mutationFn: registerDogInfo,
+        mutationFn: createDog,
         ...mutationOptions,
         onSuccess: async () => {
             navigate('/');
@@ -18,9 +20,11 @@ const useRegisterDog = (mutationOptions?: UseMutationCustomOptions) => {
 };
 
 const useFetchDogs = () => {
-    return useQuery<ResponseDogs[] | undefined>({
+    const { isSignedIn } = useAuthStore();
+    return useQuery<Dog[]>({
         queryKey: [queryKeys.DOGS],
         queryFn: fetchDogs,
+        enabled: isSignedIn,
     });
 };
 

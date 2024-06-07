@@ -1,4 +1,4 @@
-import { ResponseDogs, ResponseRecentMonthStatistics } from '@/api/dog';
+import { ResponseDogs, RecentMonthStatisticsResponse } from '@/api/dog';
 import { getUploadUrl } from '@/api/upload';
 import EditPhoto from '@/assets/buttons/btn-edit-photo.svg';
 import CrownIcon from '@/assets/icons/ic-crown.svg';
@@ -15,15 +15,15 @@ import Topbar from '@/components/commons/Topbar';
 import FemaleIcon from '@/components/icons/FemaleIcon';
 import { MaleIcon } from '@/components/icons/MaleIcon';
 import { uploadImg, useDog } from '@/hooks/useDog';
-import { DogRegInfo } from '@/pages/Join';
 import { maxLengthCheck } from '@/pages/Join/DogDetailInfo';
 import { useCropStore } from '@/store/cropStore';
 import { dataURLtoFile } from '@/utils/dataUrlToFile';
 import { secondsToTimeFormat } from '@/utils/time';
 import { ChangeEvent, useEffect, useState } from 'react';
+import { DogCreateForm } from '@/models/dog';
 interface Props {
     dog: ResponseDogs;
-    statistics: ResponseRecentMonthStatistics;
+    statistics: RecentMonthStatisticsResponse;
     isProfileOpen: boolean;
     setIsProfileOpen: (state: boolean) => void;
 }
@@ -35,7 +35,7 @@ export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfile
     window.location.pathname !== '/profile' && setOnEdit(false);
     const [breedSearchOpen, setBreedSearchOpen] = useState(false);
     const [deleteDogConfirm, setDeleteDogConfirm] = useState(false);
-    const [registerData, setRegisterData] = useState<DogRegInfo>(dog);
+    const [registerData, setRegisterData] = useState<DogCreateForm>(dog);
 
     const { totalDistance, totalTime, totalWalkCnt } = statistics;
     const distance = new Distance(totalDistance);
@@ -66,7 +66,7 @@ export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfile
             profilePhotoUrl &&
                 updateDogMutation.mutate({
                     dogId: id,
-                    params: { name, breed, birth, gender, isNeutered, weight },
+                    params: { name, breed, birth, gender, isNeutered, weight, profilePhotoUrl: null },
                 });
         }
         setOnEdit(false);
