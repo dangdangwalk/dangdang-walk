@@ -1,4 +1,5 @@
 import { httpClient } from '@/api/http';
+import { DogAvatar } from '@/models/dog';
 import { Journal } from '@/models/journal';
 import { Position as NumberPosition, Position } from '@/models/location';
 import { formDate } from '@/utils/date';
@@ -59,14 +60,8 @@ export interface JournalDetail {
         memo: string;
         photoUrls: Array<string>;
     };
-    dogs: Array<Dog>;
+    dogs: Array<DogAvatar>;
     excrements?: Array<ExcrementCounts>;
-}
-
-interface Dog {
-    id: number;
-    name: string;
-    profilePhotoUrl: string;
 }
 
 interface ExcrementCounts {

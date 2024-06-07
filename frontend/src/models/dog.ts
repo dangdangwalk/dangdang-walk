@@ -3,15 +3,16 @@ import { Position } from '@/models/location';
 export interface Dog {
     id: number;
     name: string;
-    profilePhotoUrl?: string | null;
-    gender?: string;
-    birth?: Date;
-    breed?: string;
-    isNeutered?: boolean;
-    weight?: number;
+    profilePhotoUrl: string | null;
+    gender: string;
+    birth: string | null;
+    breed: string;
+    isNeutered: boolean;
+    weight: number;
 }
 
-export interface WalkingDog extends Dog {
+export type DogAvatar = Pick<Dog, 'id' | 'name' | 'profilePhotoUrl'>;
+export interface WalkingDog extends DogAvatar {
     isUrineChecked: boolean;
     isFeceChecked: boolean;
     fecesLocations: Position[];
@@ -20,13 +21,15 @@ export interface WalkingDog extends Dog {
 
 export type Gender = 'MALE' | 'FEMALE' | '';
 
-export interface DogStatistic extends Dog {
+export interface DogStatistic extends DogAvatar {
     recommendedWalkAmount: number;
     todayWalkAmount: number;
     weeklyWalks: number[];
     profilePhotoUrl: string;
 }
 
-export interface AvailableDog extends Dog {
+export interface AvailableDog extends DogAvatar {
     isChecked: boolean;
 }
+
+export type DogCreateForm = Omit<Dog, 'id'>;
