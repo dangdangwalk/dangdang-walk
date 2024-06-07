@@ -31,7 +31,7 @@ export default function Join() {
     if (!provider) navigate('/');
     const location = useLocation();
     const currentPage = location.state;
-    const { signupMustation } = useAuth();
+    const { signUp } = useAuth();
     const { registerDogMutation } = useDog();
     const { spinnerAdd, spinnerRemove } = useSpinnerStore();
     const { cropError, dogProfileImgUrl, setDogProfileImgUrl } = useCropStore();
@@ -121,7 +121,7 @@ export default function Join() {
 
     const handleNextStep = async () => {
         if (step === 'PetOwner') {
-            signupMustation.mutate(null, {
+            signUp.mutate(null, {
                 onSettled: () => {
                     !haveADog && navigate('/');
                 },

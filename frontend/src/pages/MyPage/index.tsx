@@ -35,7 +35,7 @@ function Profile() {
             profilePhotoUrl: null,
         },
     ]);
-    const { logoutMutation, profileData } = useAuth();
+    const { signOut, profileData } = useAuth();
     const nickname = profileData?.nickname.substring(0, profileData?.nickname.indexOf('#'));
     const provider = profileData?.provider;
     const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -94,7 +94,7 @@ function Profile() {
 
                         <img src={ProviderIcon(provider)} alt="provider" />
                     </section>
-                    <div onClick={() => logoutMutation.mutate(null)}>
+                    <div onClick={() => signOut.mutate(null)}>
                         <img src={LogoutIcon} alt="logout" />
                     </div>
                 </section>

@@ -9,7 +9,7 @@ interface Props {
     children: React.ReactNode;
 }
 export default function NavbarProvider({ children }: Props) {
-    const { isLoggedIn } = useAuthStore();
+    const { isSignedIn } = useAuthStore();
     const [isLoginBottomSheetOpen, setLoginBottomSheetState] = useState(false);
     const handleClose = () => {
         setLoginBottomSheetState(false);
@@ -21,7 +21,7 @@ export default function NavbarProvider({ children }: Props) {
         <>
             {children}
             <Navbar />
-            {!isLoggedIn && !isLoginBottomSheetOpen && (
+            {!isSignedIn && !isLoginBottomSheetOpen && (
                 <LoginAlertModal isOpen={isLoginBottomSheetOpen} setToggle={handleToggle} />
             )}
             <BottomSheet isOpen={isLoginBottomSheetOpen} onClose={handleClose}>

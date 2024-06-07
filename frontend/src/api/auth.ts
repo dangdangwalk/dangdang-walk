@@ -1,29 +1,25 @@
 import { httpClient } from './http';
 
-export type ResponseToken = {
+export interface SignInResponse {
     accessToken: string;
-};
-
-const getAccessToken = async (): Promise<ResponseToken> => {
-    const { data } = await httpClient.get('/auth/token');
-    return data;
-};
-
-export interface LoginParams {
-    authorizeCode: string;
-    provider: string;
 }
-const requestLogin = async (params: LoginParams) => {
-    const { data } = await httpClient.post('/auth/login', params);
+
+const refreshAccessToken = async (): Promise<SignInResponse> => {
+    const { data } = await httpClient.get<SignInResponse>('/auth/token');
     return data;
 };
 
-const requestLogout = async () => {
+const requestSignIn = async ({ authorizeCode, provider }: { authorizeCode: string; provider: string }) => {
+    const { data } = await httpClient.post<SignInResponse>('/auth/login', { authorizeCode, provider });
+    return data;
+};
+
+const requestSignOut = async () => {
     await httpClient.post('/auth/logout');
 };
 
-const requestSignup = async () => {
-    const { data } = await httpClient.post('/auth/signup');
+const requestSignUp = async () => {
+    const { data } = await httpClient.post<SignInResponse>('/auth/signup');
     return data;
 };
 
@@ -31,14 +27,14 @@ const requestDeactivate = async () => {
     await httpClient.delete('/auth/deactivate');
 };
 
-export type ResponseProfile = {
+export type ProfileResponse = {
     nickname: string;
     email: string;
     profileImage: string;
     provider: string;
 };
-const requestProfile = async (): Promise<ResponseProfile> => {
-    const { data } = await httpClient.get('/users/me');
+const requestProfile = async (): Promise<ProfileResponse> => {
+    const { data } = await httpClient.get<ProfileResponse>('/users/me');
     return data;
 };
-export { getAccessToken, requestLogin, requestLogout, requestSignup, requestDeactivate, requestProfile };
+export { refreshAccessToken, requestSignIn, requestSignOut, requestSignUp, requestDeactivate, requestProfile };

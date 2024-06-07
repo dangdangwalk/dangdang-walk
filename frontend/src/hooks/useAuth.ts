@@ -1,12 +1,12 @@
 import {
-    ResponseProfile,
-    ResponseToken,
-    getAccessToken,
+    ProfileResponse,
+    SignInResponse,
+    refreshAccessToken,
     requestDeactivate,
-    requestLogin,
-    requestLogout,
+    requestSignIn,
+    requestSignOut,
     requestProfile,
-    requestSignup,
+    requestSignUp,
 } from '@/api/auth';
 import queryClient from '@/api/queryClient';
 import { queryKeys, storageKeys } from '@/constants';
@@ -17,14 +17,14 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const useLogin = (mutationOptions?: UseMutationCustomOptions) => {
-    const { storeLogin } = useAuthStore();
+const useSignIn = (mutationOptions?: UseMutationCustomOptions) => {
+    const { storeSignIn } = useAuthStore();
     const navigate = useNavigate();
     return useMutation({
-        mutationFn: requestLogin,
-        onSuccess: ({ accessToken }: ResponseToken) => {
+        mutationFn: requestSignIn,
+        onSuccess: ({ accessToken }: SignInResponse) => {
             const url = getStorage(storageKeys.REDIRECT_URI) || '';
-            storeLogin(accessToken);
+            storeSignIn(accessToken);
             navigate(url);
         },
         onError: (error) => {
@@ -40,12 +40,12 @@ const useLogin = (mutationOptions?: UseMutationCustomOptions) => {
     });
 };
 
-const useSignup = (mutationOptions?: UseMutationCustomOptions) => {
-    const { storeLogin } = useAuthStore();
+const useSignUp = (mutationOptions?: UseMutationCustomOptions) => {
+    const { storeSignIn } = useAuthStore();
     return useMutation({
-        mutationFn: requestSignup,
-        onSuccess: ({ accessToken }: ResponseToken) => {
-            storeLogin(accessToken);
+        mutationFn: requestSignUp,
+        onSuccess: ({ accessToken }: SignInResponse) => {
+            storeSignIn(accessToken);
         },
         onSettled: () => {
             queryClient.refetchQueries({ queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN] });
@@ -55,32 +55,32 @@ const useSignup = (mutationOptions?: UseMutationCustomOptions) => {
 };
 
 const useGetRefreshToken = () => {
-    const { storeLogin, isLoggedIn } = useAuthStore();
+    const { storeSignIn, isSignedIn } = useAuthStore();
     const { isSuccess, data } = useQuery({
         queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN],
-        queryFn: getAccessToken,
+        queryFn: refreshAccessToken,
         gcTime: 1000 * 60 * 60,
         staleTime: 1000 * 60 * 60 - 1000 * 60 * 10,
         refetchInterval: 1000 * 60 * 60 - 1000 * 60 * 10,
         refetchOnReconnect: true,
         refetchIntervalInBackground: true,
-        enabled: isLoggedIn,
+        enabled: isSignedIn,
     });
     useEffect(() => {
         if (isSuccess) {
-            storeLogin(data?.accessToken);
+            storeSignIn(data?.accessToken);
         }
     }, [isSuccess, data]);
 
     return { isSuccess, data };
 };
 
-const useLogout = (mutationOptions?: UseMutationCustomOptions) => {
-    const { storeLogout } = useAuthStore();
+const useSignOut = (mutationOptions?: UseMutationCustomOptions) => {
+    const { storeSignOut } = useAuthStore();
     return useMutation({
-        mutationFn: requestLogout,
+        mutationFn: requestSignOut,
         onSuccess: () => {
-            storeLogout();
+            storeSignOut();
             removeStorage(storageKeys.REDIRECT_URI);
             removeStorage(storageKeys.PROVIDER);
             queryClient.resetQueries({ queryKey: [queryKeys.AUTH] });
@@ -91,12 +91,12 @@ const useLogout = (mutationOptions?: UseMutationCustomOptions) => {
 };
 
 const useDeactivate = (mutationOptions?: UseMutationCustomOptions) => {
-    const { storeLogout } = useAuthStore();
+    const { storeSignOut } = useAuthStore();
     const navigate = useNavigate();
     return useMutation({
         mutationFn: requestDeactivate,
         onSuccess: () => {
-            storeLogout();
+            storeSignOut();
             queryClient.resetQueries({ queryKey: [queryKeys.AUTH] });
             queryClient.refetchQueries({ queryKey: [queryKeys.DOGS] });
             navigate('/');
@@ -106,29 +106,29 @@ const useDeactivate = (mutationOptions?: UseMutationCustomOptions) => {
 };
 
 const useGetProfile = (queryOptions?: UseQueryCustomOptions) => {
-    const { isLoggedIn } = useAuthStore();
+    const { isSignedIn } = useAuthStore();
     return useQuery({
         queryKey: [queryKeys.AUTH, queryKeys.GET_PROFILE],
         queryFn: requestProfile,
         gcTime: 1000 * 60 * 60 * 24,
         staleTime: 1000 * 60 * 60 * 24 - 1000 * 60,
-        enabled: isLoggedIn,
+        enabled: isSignedIn,
         ...queryOptions,
     });
 };
 export const useAuth = () => {
-    const loginMutation = useLogin();
-    const logoutMutation = useLogout();
-    const signupMustation = useSignup();
+    const signIn = useSignIn();
+    const signOut = useSignOut();
+    const signUp = useSignUp();
     const refreshTokenQuery = useGetRefreshToken();
     const getProfileQuery = useGetProfile();
-    const deactivateMutation = useDeactivate();
+    const deactivate = useDeactivate();
     return {
-        loginMutation,
-        logoutMutation,
-        signupMustation,
+        signIn,
+        signOut,
+        signUp,
         refreshTokenQuery,
-        deactivateMutation,
-        profileData: getProfileQuery.data as ResponseProfile,
+        deactivate,
+        profileData: getProfileQuery.data as ProfileResponse,
     };
 };

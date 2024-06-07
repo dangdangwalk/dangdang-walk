@@ -25,7 +25,7 @@ const defaultDpgs: DogStatistic[] = [
 ];
 
 const useDogsStatistic = (queryOptions?: UseQueryCustomOptions) => {
-    const { isLoggedIn } = useAuthStore();
+    const { isSignedIn } = useAuthStore();
     const { data, isPending } = useQuery({
         queryKey: ['dog-statistic'],
         queryFn: async () => {
@@ -39,7 +39,7 @@ const useDogsStatistic = (queryOptions?: UseQueryCustomOptions) => {
         },
         ...queryOptions,
     });
-    if (!isLoggedIn) {
+    if (!isSignedIn) {
         return { dogs: defaultDpgs as DogStatistic[], isDogsPending: false };
     }
     return { dogs: data as DogStatistic[], isDogsPending: isPending };
