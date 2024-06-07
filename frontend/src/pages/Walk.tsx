@@ -54,15 +54,17 @@ export default function Walk() {
     };
 
     const cancelCheckedAll = () => {
-        if (!walkingDogs?.length) return;
-        const newWalkingDogs = setFlagValueByKey(walkingDogs, false, 'isFeceChecked', 'isUrineChecked');
-        setWalkingDogs(newWalkingDogs);
+        setWalkingDogs((prevWalkingDogs) =>
+            prevWalkingDogs?.length
+                ? setFlagValueByKey(prevWalkingDogs, false, 'isFeceChecked', 'isUrineChecked')
+                : prevWalkingDogs
+        );
     };
 
     const handleToggle = (id: number, key: keyof WalkingDog) => {
-        if (!walkingDogs?.length) return;
-        const newWalkingDogs = toggleCheckById(walkingDogs, id, key);
-        setWalkingDogs(newWalkingDogs);
+        setWalkingDogs((prevWalkingDogs) =>
+            prevWalkingDogs?.length ? toggleCheckById(prevWalkingDogs, id, key) : prevWalkingDogs
+        );
     };
 
     const handleConfirm = () => {

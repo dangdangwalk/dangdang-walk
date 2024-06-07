@@ -46,14 +46,14 @@ function Home() {
     };
 
     const handleToggle = (id: number) => {
-        if (!availableDogs) return;
-        const newAvailableDogs = toggleCheckById(availableDogs, id, 'isChecked');
-        setAvailableDogs(newAvailableDogs);
+        setAvailableDogs((prevAvailableDogs) =>
+            prevAvailableDogs?.length ? toggleCheckById(prevAvailableDogs, id, 'isChecked') : prevAvailableDogs
+        );
     };
     const handleCheckAll = (flag: boolean) => {
-        if (!availableDogs) return;
-        const newAvailableDogs = setFlagValueByKey(availableDogs, flag, 'isChecked');
-        setAvailableDogs(newAvailableDogs);
+        setAvailableDogs((prevAvailableDogs) =>
+            prevAvailableDogs?.length ? setFlagValueByKey(prevAvailableDogs, flag, 'isChecked') : prevAvailableDogs
+        );
         setIsAvailableDogsCheckedAll(flag);
     };
 
