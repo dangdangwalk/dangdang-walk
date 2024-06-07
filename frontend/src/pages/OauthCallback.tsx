@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 export default function OauthCallback() {
-    const { loginMutation } = useAuth();
+    const { signIn } = useAuth();
     const { search } = useLocation();
     const params = new URLSearchParams(search);
     const authorizeCode = params.get('code');
@@ -13,7 +13,7 @@ export default function OauthCallback() {
 
     useEffect(() => {
         if (authorizeCode && provider) {
-            loginMutation.mutate({ authorizeCode, provider });
+            signIn.mutate({ authorizeCode, provider });
         }
     }, []);
 

@@ -4,7 +4,7 @@ const tokenKeys = {
 
 const cookieKeys = {
     EXPIRES_IN: 'expiresIn',
-    IS_LOGGED_IN: 'isLoggedIn',
+    IS_SIGNED_IN: 'isSignedIn',
 } as const;
 
 const queryKeys = {
@@ -22,7 +22,7 @@ const storageKeys = {
     REDIRECT_URI: 'redirectURI',
     PROVIDER: 'provider',
     DOGS: 'dogs',
-    IS_LOGGED_IN: 'isLoggedIn',
+    IS_SIGNED_IN: 'isSignedIn',
 } as const;
 
 const queryStringKeys = {

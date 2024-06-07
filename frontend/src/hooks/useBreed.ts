@@ -4,13 +4,13 @@ import { useAuthStore } from '@/store/authStore';
 import { useQuery } from '@tanstack/react-query';
 
 export const useBreed = () => {
-    const { isLoggedIn } = useAuthStore();
+    const { isSignedIn } = useAuthStore();
     const { data } = useQuery({
         queryKey: [queryKeys.BREEDS],
         queryFn: fetchDogBreeds,
         gcTime: 1000 * 60 * 60 * 24,
         staleTime: 1000 * 60 * 60 * 24 - 1000 * 60,
-        enabled: isLoggedIn,
+        enabled: isSignedIn,
     });
     return { data };
 };

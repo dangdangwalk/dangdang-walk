@@ -34,9 +34,9 @@ export interface ResponseDogs {
     profilePhotoUrl: string | null;
 }
 export const fetchDogs = async (): Promise<ResponseDogs[] | undefined> => {
-    const isLoggedIn = getStorage(storageKeys.IS_LOGGED_IN) ? true : false;
+    const isSignedIn = getStorage(storageKeys.IS_SIGNED_IN) ? true : false;
     let data: ResponseDogs[] | undefined;
-    if (isLoggedIn) {
+    if (isSignedIn) {
         const response = await httpClient.get<ResponseDogs[]>('/dogs');
         data = response.data;
     }

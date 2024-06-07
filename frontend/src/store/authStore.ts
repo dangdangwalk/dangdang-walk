@@ -3,20 +3,20 @@ import { removeHeader, setHeader } from '@/utils/header';
 import { getStorage, removeStorage, setStorage } from '@/utils/storage';
 import { create } from 'zustand';
 interface AuthState {
-    isLoggedIn: boolean;
-    storeLogin: (token: string | undefined) => void;
-    storeLogout: () => void;
+    isSignedIn: boolean;
+    storeSignIn: (token: string | undefined) => void;
+    storeSignOut: () => void;
 }
 export const useAuthStore = create<AuthState>((set) => ({
-    isLoggedIn: getStorage(storageKeys.IS_LOGGED_IN) ? true : false,
-    storeLogin: (token: string | undefined) => {
-        set({ isLoggedIn: true });
+    isSignedIn: getStorage(storageKeys.IS_SIGNED_IN) ? true : false,
+    storeSignIn: (token: string | undefined) => {
+        set({ isSignedIn: true });
         setHeader(tokenKeys.AUTHORIZATION, `Bearer ${token}`);
-        setStorage(storageKeys.IS_LOGGED_IN, 'true');
+        setStorage(storageKeys.IS_SIGNED_IN, 'true');
     },
-    storeLogout: () => {
-        set({ isLoggedIn: false });
-        removeStorage(storageKeys.IS_LOGGED_IN);
+    storeSignOut: () => {
+        set({ isSignedIn: false });
+        removeStorage(storageKeys.IS_SIGNED_IN);
         removeHeader(tokenKeys.AUTHORIZATION);
     },
 }));

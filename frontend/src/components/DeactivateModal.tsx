@@ -12,7 +12,7 @@ import { useAuth } from '@/hooks/useAuth';
 import React from 'react';
 
 export default function DeactivateModal({ setDeactivate }: { setDeactivate: (state: boolean) => void }) {
-    const { deactivateMutation } = useAuth();
+    const { deactivate } = useAuth();
     return (
         <div className="fixed">
             <Modal open={true}>
@@ -23,7 +23,7 @@ export default function DeactivateModal({ setDeactivate }: { setDeactivate: (sta
                     </ModalHeader>
                     <ModalFooter>
                         <ModalCancel onClick={() => setDeactivate(false)}>취소</ModalCancel>
-                        <ModalAction onClick={() => deactivateMutation.mutate(null)}>탈퇴하기</ModalAction>
+                        <ModalAction onClick={() => deactivate.mutate(null)}>탈퇴하기</ModalAction>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
