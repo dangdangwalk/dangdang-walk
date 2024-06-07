@@ -1,5 +1,5 @@
 import { fetchDogBreeds } from '@/api/breed';
-import { queryKeys } from '@/constants';
+import { A_DAY, TEN_TO_A_DAY, queryKeys } from '@/constants';
 import { useAuthStore } from '@/store/authStore';
 import { useQuery } from '@tanstack/react-query';
 
@@ -8,8 +8,8 @@ export const useBreed = () => {
     const { data } = useQuery({
         queryKey: [queryKeys.BREEDS],
         queryFn: fetchDogBreeds,
-        gcTime: 1000 * 60 * 60 * 24,
-        staleTime: 1000 * 60 * 60 * 24 - 1000 * 60,
+        gcTime: A_DAY,
+        staleTime: TEN_TO_A_DAY,
         enabled: isSignedIn,
     });
     return { data };

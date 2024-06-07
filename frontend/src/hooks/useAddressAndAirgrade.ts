@@ -20,18 +20,14 @@ const useAddressAndAirgrade = (position: Position | null) => {
     });
 
     const sidoName = addressData?.region_1depth_name;
+    const sido = getSidoCode(sidoName);
     const {
         data: airGradeData,
         isPending: isAirGradePending,
         error: airGradeError,
     } = useQuery({
         queryKey: ['airGrade', position?.lat, position?.lng],
-        queryFn: async () => {
-            if (!sidoName) return;
-            const sido = getSidoCode(sidoName);
-            const data = await fetchAirGrade(sido);
-            return data;
-        },
+        queryFn: () => fetchAirGrade(sido),
         enabled: !!sidoName,
         staleTime: 7200,
     });

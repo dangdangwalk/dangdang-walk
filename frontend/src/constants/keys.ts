@@ -11,10 +11,10 @@ const queryKeys = {
     AUTH: 'auth',
     DOGS: 'dogs',
     BREEDS: 'breeds',
-    GET_ACCESS_TOKEN: 'getAccessToken',
+    GET_ACCESS_TOKEN: ['auth', 'getAccessToken'],
     GET_IMAGE_URL: 'getImageURL',
     WALK_AVAILABLE_DOGS: 'walkAvailableDogs',
-    GET_PROFILE: 'getProfile',
+    GET_PROFILE: ['auth', 'getProfile'],
     GET_DOG_RECENT_MONTH_STATISTICS: 'getDogRecentMonthStatistic',
 } as const;
 

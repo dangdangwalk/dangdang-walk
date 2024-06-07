@@ -72,6 +72,7 @@ export default function Join() {
         const allChecked = Object.values({ ...agreements, [key]: checked }).every((value) => value === true);
         setAllAgreed(allChecked);
     };
+
     const handleAllCheck = (checked: boolean) => {
         setAgreements((prevAgreements) => ({
             ...prevAgreements,
