@@ -6,13 +6,13 @@ const OLON = 126.0; // 기준점 경도(degree)
 const OLAT = 38.0; // 기준점 위도(degree)
 const XO = 43; // 기준점 X좌표(GRID)
 const YO = 136; // 기1준점 Y좌표(GRID)
-const DEGRAD = Math.PI / 180.0;
+const DEG_TO_RAD = Math.PI / 180.0;
 
 const re = RE / GRID;
-const slat1 = SLAT1 * DEGRAD;
-const slat2 = SLAT2 * DEGRAD;
-const olon = OLON * DEGRAD;
-const olat = OLAT * DEGRAD;
+const slat1 = SLAT1 * DEG_TO_RAD;
+const slat2 = SLAT2 * DEG_TO_RAD;
+const olon = OLON * DEG_TO_RAD;
+const olat = OLAT * DEG_TO_RAD;
 
 interface Grid {
     nx: number;
@@ -26,9 +26,9 @@ export const gpsToGrid = (lat: number, lng: number): Grid => {
     let ro = Math.tan(Math.PI * 0.25 + olat * 0.5);
     ro = (re * sf) / Math.pow(ro, sn);
 
-    let ra = Math.tan(Math.PI * 0.25 + lat * DEGRAD * 0.5);
+    let ra = Math.tan(Math.PI * 0.25 + lat * DEG_TO_RAD * 0.5);
     ra = (re * sf) / Math.pow(ra, sn);
-    let theta = lng * DEGRAD - olon;
+    let theta = lng * DEG_TO_RAD - olon;
     if (theta > Math.PI) theta -= 2.0 * Math.PI;
     if (theta < -Math.PI) theta += 2.0 * Math.PI;
     theta *= sn;
