@@ -18,8 +18,6 @@ module.exports = {
                 roboto: ['"Roboto"', 'sans-serif'],
             },
             animation: {
-                mainToLeft: 'mainToLeft 0.25s ease-in-out',
-                mainToRight: 'mainToRight 0.25s ease-in-out ',
                 fadeOut: 'fadeOut 3s forwards',
             },
             keyframes: {
@@ -41,7 +39,7 @@ module.exports = {
                 },
                 fadeOut: {
                     '0%': { opacity: 1 },
-                    '66%': { opacity: 1 },
+                    '70%': { opacity: 1 },
                     '100%': { opacity: 0 },
                 },
             },
