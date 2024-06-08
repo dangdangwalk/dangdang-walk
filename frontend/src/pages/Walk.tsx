@@ -9,7 +9,7 @@ import useWalkingDogs from '@/hooks/useWalkingDogs';
 import useStopWatch from '@/hooks/useStopWatch';
 import { DEFAULT_WALK_MET, DEFAULT_WEIGHT } from '@/constants/walk';
 
-import DogFeceAndUrineCheckList from '@/components/walk/DogFeceAndUrineCheckList';
+import DogFecesAndUrineCheckList from '@/components/walk/DogFecesAndUrineCheckList';
 import StopToast from '@/components/walk/StopToast';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useToast from '@/hooks/useToast';
@@ -35,7 +35,12 @@ export default function Walk() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const { walkingDogs, saveFecesAndUriens, setDogs, setWalkingDogs } = useWalkingDogs();
+    const {
+        walkingDogs,
+        saveFecesAndUrine: saveFecesAndUriens,
+        initialSetDogs: setDogs,
+        setWalkingDogs,
+    } = useWalkingDogs();
     const { duration, isStart: isWalk, stopClock, startClock, startedAt } = useStopWatch();
     const { distance, position: startPosition, currentPosition, stopGeo, routes, startGeo } = useGeolocation();
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
@@ -56,7 +61,7 @@ export default function Walk() {
     const cancelCheckedAll = () => {
         setWalkingDogs((prevWalkingDogs) =>
             prevWalkingDogs?.length
-                ? setFlagValueByKey(prevWalkingDogs, false, 'isFeceChecked', 'isUrineChecked')
+                ? setFlagValueByKey(prevWalkingDogs, false, 'isFecesChecked', 'isUrineChecked')
                 : prevWalkingDogs
         );
     };
@@ -157,12 +162,12 @@ export default function Walk() {
                 <BottomSheet.Header> 강아지 산책</BottomSheet.Header>
                 <BottomSheet.Body>
                     {walkingDogs?.map((dog) => (
-                        <DogFeceAndUrineCheckList dog={dog} toggleCheck={handleToggle} key={dog.id} />
+                        <DogFecesAndUrineCheckList dog={dog} toggleCheck={handleToggle} key={dog.id} />
                     ))}
                 </BottomSheet.Body>
                 <BottomSheet.ConfirmButton
                     onConfirm={handleConfirm}
-                    disabled={walkingDogs?.find((d) => d.isUrineChecked || d.isFeceChecked) ? false : true}
+                    disabled={walkingDogs?.find((d) => d.isUrineChecked || d.isFecesChecked) ? false : true}
                 >
                     확인
                 </BottomSheet.ConfirmButton>
