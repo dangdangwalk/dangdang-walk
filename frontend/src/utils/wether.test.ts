@@ -67,12 +67,12 @@ describe('weather util test', () => {
             time: '0500',
         });
 
-        expect(status).toBe('dayclear');
+        expect(status).toBe('dayClear');
         expect(status1).toBe('rain');
-        expect(status2).toBe('daycloudy');
+        expect(status2).toBe('dayCloudy');
         expect(status3).toBe('snow');
-        expect(status4).toBe('nightclear');
-        expect(status5).toBe('nightcloudy');
+        expect(status4).toBe('nightClear');
+        expect(status5).toBe('nightCloudy');
         expect(status6).toBe('cloudy');
     });
 });

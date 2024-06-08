@@ -1,5 +1,10 @@
-import { AirGrade } from '@/utils/weather';
-
+export interface Weather {
+    maxTemperature: number;
+    minTemperature: number;
+    sky: number;
+    temperature: number;
+    precipitation: number;
+}
 type weatherCategory =
     | 'POP' //강수확률
     | 'PTY' //강수형태  없음(0) , 비(1) , 눈비(2) ,눈(3) , 빗방울(5) , 빗방울눈날림(6) , 눈날림(7)
@@ -25,59 +30,4 @@ export interface WeatherData {
     fcstValue: string;
     nx: number;
     ny: number;
-}
-
-export interface SunsetSunrise {
-    aste: string;
-    astm: string;
-    civile: string;
-    civilm: string;
-    latitude: string;
-    latitudeNum: number;
-    location: string;
-    locdate: string;
-    longitude: string;
-    longitudeNum: number;
-    moonrise: string;
-    moonset: string;
-    moontransit: string;
-    naute: string;
-    nautm: string;
-    sunrise: string;
-    sunset: string;
-    suntransit: string;
-}
-
-export interface AirPolution {
-    so2Grade: number;
-    coFlag: string;
-    khaiValue: string;
-    so2Value: string;
-    coValue: string;
-    pm25Flag: string;
-    pm10Flag: string;
-    o3Grade: number;
-    pm10Value: string;
-    khaiGrade: AirGrade;
-    pm25Value: string;
-    sidoName: string;
-    no2Flag: string;
-    no2Grade: number;
-    o3Flag: string;
-    pm25Grade: number;
-    so2Flag: string;
-    dataTime: string;
-    coGrade: number;
-    no2Value: string;
-    stationName: string;
-    pm10Grade: number;
-    o3Value: string;
-}
-
-export interface Weather {
-    maxTemperature: number;
-    minTemperature: number;
-    sky: number;
-    temperature: number;
-    precipitation: number;
 }

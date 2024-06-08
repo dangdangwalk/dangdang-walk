@@ -5,28 +5,32 @@ import { useState } from 'react';
 const useWalkingDogs = () => {
     const [walkingDogs, setWalkingDogs] = useState<WalkingDog[] | null>(null);
 
-    const saveFecesAndUriens = (position: Position | null) => {
+    const saveFecesAndUrine = (position: Position | null) => {
         if (!position || !walkingDogs) return;
         const { lat, lng } = position;
-        const updatedDogs = walkingDogs.map((dog: WalkingDog) => ({
-            ...dog,
-            fecesLocations: dog.isFeceChecked ? [...dog.fecesLocations, { lat, lng }] : dog.fecesLocations,
-            urineLocations: dog.isUrineChecked ? [...dog.urineLocations, { lat, lng }] : dog.urineLocations,
-            isFeceChecked: false,
-            isUrineChecked: false,
-        }));
-        setWalkingDogs(updatedDogs);
+
+        setWalkingDogs((prevWalkingDogs) =>
+            prevWalkingDogs?.length
+                ? prevWalkingDogs.map((dog: WalkingDog) => ({
+                      ...dog,
+                      fecesLocations: dog.isFecesChecked ? [...dog.fecesLocations, { lat, lng }] : dog.fecesLocations,
+                      urineLocations: dog.isUrineChecked ? [...dog.urineLocations, { lat, lng }] : dog.urineLocations,
+                      isFecesChecked: false,
+                      isUrineChecked: false,
+                  }))
+                : prevWalkingDogs
+        );
     };
 
-    const setDogs = (dogs: WalkingDog[]) => {
+    const initialSetDogs = (dogs: WalkingDog[]) => {
         setWalkingDogs(
-            dogs.map((d) => {
+            dogs.map((dog) => {
                 return {
-                    ...d,
-                    isFeceChecked: false,
+                    ...dog,
+                    isFecesChecked: false,
                     isUrineChecked: false,
-                    fecesLocations: d.fecesLocations ? d.fecesLocations : [],
-                    urineLocations: d.urineLocations ? d.urineLocations : [],
+                    fecesLocations: dog.fecesLocations ? dog.fecesLocations : [],
+                    urineLocations: dog.urineLocations ? dog.urineLocations : [],
                 };
             })
         );
@@ -35,8 +39,8 @@ const useWalkingDogs = () => {
     return {
         walkingDogs,
         setWalkingDogs,
-        saveFecesAndUriens,
-        setDogs,
+        saveFecesAndUrine,
+        initialSetDogs,
     };
 };
 

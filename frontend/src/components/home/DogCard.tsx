@@ -1,8 +1,8 @@
 import { DogStatistic } from '@/models/dog';
-import { walkPercentFormat } from '@/utils/format';
+import { percentFormat } from '@/utils/format';
 import Ic from '@/assets/icons/ic-arrow-right.svg';
 import Avatar from '@/components/commons/Avatar';
-import DayIcon from '@/components/home/DayIcon';
+import DayIcon, { DayType } from '@/components/home/DayIcon';
 import Walk from '@/assets/icons/ic-walk.svg';
 import Progressbar from '@/components/home/Progressbar';
 
@@ -11,8 +11,8 @@ interface DogCardProps {
     pageMove?: (id: number) => void;
 }
 
-const WEEKDAY = ['월', '화', '수', '목', '금', '토', '일'];
-//TODO navigator 위치
+const WEEKDAY: DayType[] = ['월', '화', '수', '목', '금', '토', '일'];
+
 export default function DogCard({ dog, pageMove }: DogCardProps) {
     return (
         <div
@@ -22,7 +22,7 @@ export default function DogCard({ dog, pageMove }: DogCardProps) {
                 pageMove(dog.id);
             }}
         >
-            <div className="flex justify-between pl-[15px] pr-5 pt-[5px]">
+            <div className="mb-1 flex justify-between pl-[15px] pr-5 pt-[5px]">
                 <Avatar url={dog.profilePhotoUrl} name={dog.name} />
                 <img src={Ic} alt="ic" />
             </div>
@@ -47,7 +47,7 @@ export default function DogCard({ dog, pageMove }: DogCardProps) {
                     <Progressbar percentage={(dog.todayWalkAmount / dog.recommendedWalkAmount) * 100} />
                     <span>
                         <span className="text-sm font-bold leading-[21px] text-amber-500">
-                            {walkPercentFormat(Number(dog.todayWalkAmount) / Number(dog.recommendedWalkAmount))}
+                            {percentFormat(Number(dog.todayWalkAmount), Number(dog.recommendedWalkAmount))}
                         </span>
                         <span className="text-sm font-bold leading-[18px] text-neutral-400">/100</span>
                     </span>

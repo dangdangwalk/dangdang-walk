@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import Topbar from '@/components/commons/Topbar';
+import TopBar from '@/components/commons/Topbar';
 import { useDog } from '@/hooks/useDog';
 import Avatar from '@/components/commons/Avatar';
 import SelectPhoto from '@/assets/icons/ic-select-photo.svg';
@@ -72,13 +72,13 @@ function Profile() {
     }, [isSuccess, data]);
     return (
         <>
-            <Topbar>
-                <Topbar.Front className="w-12" />
-                <Topbar.Center className="text-lg font-bold leading-[27px] text-black">마이페이지</Topbar.Center>
-                <Topbar.Back>
+            <TopBar>
+                <TopBar.Front className="w-12" />
+                <TopBar.Center className="text-lg font-bold leading-[27px] text-black">마이페이지</TopBar.Center>
+                <TopBar.Back>
                     <img src={SettingIcon} alt="setting" />
-                </Topbar.Back>
-            </Topbar>
+                </TopBar.Back>
+            </TopBar>
             <main className={`mb-[60px] flex h-full flex-col`}>
                 <section className="flex items-center justify-between px-5 py-6">
                     <section className="flex justify-start gap-2">

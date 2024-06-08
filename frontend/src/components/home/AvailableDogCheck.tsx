@@ -1,9 +1,9 @@
 import Avatar from '@/components/commons/Avatar';
 import { Checkbox } from '@/components/commons/Checkbox';
 import { Divider } from '@/components/commons/Divider';
-import { AvailableDog } from '@/models/dog';
+import { WalkAvailableDog } from '@/models/dog';
 
-export const AvailableDogCheck = ({ dog, onToggle }: { dog: AvailableDog; onToggle: (id: number) => void }) => {
+export const AvailableDogCheck = ({ dog, onToggle }: { dog: WalkAvailableDog; onToggle: (id: number) => void }) => {
     return (
         <>
             <Divider key={`Divider - ${dog.id}`} className="h-0 border-t border-neutral-200" />

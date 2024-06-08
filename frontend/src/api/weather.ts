@@ -1,5 +1,6 @@
-import { AirPolution, SunsetSunrise, WeatherData } from '@/models/weather';
+import { AirGrade } from '@/utils/weather';
 import { createClient } from './http';
+import { WeatherData } from '@/models/weather';
 
 const { REACT_APP_WEATHER_URL: WEATHER_URL = '' } = window._ENV ?? process.env;
 const { REACT_APP_WEATHER_KEY: WEATHER_KEY = '' } = window._ENV ?? process.env;
@@ -49,7 +50,7 @@ export const fetchSunsetSunrise = async (
     }
 };
 
-export const fetchAirGrade = async (sidoName: string): Promise<AirPolution | undefined> => {
+export const fetchAirGrade = async (sidoName: string): Promise<AirPollution | undefined> => {
     try {
         // console.log(sidoName);
         const response = (
@@ -65,3 +66,50 @@ export const fetchAirGrade = async (sidoName: string): Promise<AirPolution | und
         console.log(e);
     }
 };
+
+interface SunsetSunrise {
+    aste: string;
+    astm: string;
+    civile: string;
+    civilm: string;
+    latitude: string;
+    latitudeNum: number;
+    location: string;
+    locdate: string;
+    longitude: string;
+    longitudeNum: number;
+    moonrise: string;
+    moonset: string;
+    moontransit: string;
+    naute: string;
+    nautm: string;
+    sunrise: string;
+    sunset: string;
+    suntransit: string;
+}
+
+interface AirPollution {
+    so2Grade: number;
+    coFlag: string;
+    khaiValue: string;
+    so2Value: string;
+    coValue: string;
+    pm25Flag: string;
+    pm10Flag: string;
+    o3Grade: number;
+    pm10Value: string;
+    khaiGrade: AirGrade;
+    pm25Value: string;
+    sidoName: string;
+    no2Flag: string;
+    no2Grade: number;
+    o3Flag: string;
+    pm25Grade: number;
+    so2Flag: string;
+    dataTime: string;
+    coGrade: number;
+    no2Value: string;
+    stationName: string;
+    pm10Grade: number;
+    o3Value: string;
+}

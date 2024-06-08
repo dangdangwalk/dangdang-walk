@@ -2,10 +2,10 @@ import AllDogs from '@/assets/icons/ic-default-dog.svg';
 import Avatar from '@/components/commons/Avatar';
 import { Checkbox } from '@/components/commons/Checkbox';
 import { AvailableDogCheck } from '@/components/home/AvailableDogCheck';
-import { AvailableDog } from '@/models/dog';
+import { WalkAvailableDog } from '@/models/dog';
 
 interface AvailableDogCheckListProps {
-    dogs: AvailableDog[] | undefined;
+    dogs: WalkAvailableDog[] | undefined;
     onToggle: (id: number) => void;
     checkAll: (flag: boolean) => void;
     isCheckedAll: boolean;

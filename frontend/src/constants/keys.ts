@@ -16,6 +16,11 @@ const queryKeys = {
     WALK_AVAILABLE_DOGS: 'walkAvailableDogs',
     GET_PROFILE: ['auth', 'getProfile'],
     GET_DOG_RECENT_MONTH_STATISTICS: 'getDogRecentMonthStatistic',
+    DOG_STATISTICS: 'dogStatistics',
+    ADDRESS: 'address',
+    AIR_GRADE: 'airGrade',
+    SUNSET_SUNRISE: 'sunsetSunrise',
+    WEATHER: 'weather',
 } as const;
 
 const storageKeys = {
@@ -26,7 +31,7 @@ const storageKeys = {
 } as const;
 
 const queryStringKeys = {
-    DOGID: 'dogId',
+    DOG_ID: 'dogId',
     DATE: 'date',
 } as const;
 

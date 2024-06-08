@@ -1,7 +1,7 @@
 import { TOP_BAR_HEIGHT } from '@/constants/style';
 import { cn } from '@/utils/tailwindClass';
 
-export default function Topbar({ children, className }: { children: React.ReactNode; className?: string }) {
+export default function TopBar({ children, className }: { children: React.ReactNode; className?: string }) {
     return (
         <header
             className={cn(`flex w-full items-center justify-between px-2 ${className}`)}
@@ -58,6 +58,6 @@ function Back({
     );
 }
 
-Topbar.Front = Front;
-Topbar.Center = Center;
-Topbar.Back = Back;
+TopBar.Front = Front;
+TopBar.Center = Center;
+TopBar.Back = Back;

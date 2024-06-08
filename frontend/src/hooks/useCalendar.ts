@@ -1,6 +1,6 @@
 import { period } from '@/api/dog';
 import { queryStringKeys } from '@/constants';
-import { formDate } from '@/utils/date';
+import { formDate } from '@/utils/time';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 

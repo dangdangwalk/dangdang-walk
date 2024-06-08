@@ -2,7 +2,9 @@ export const temperFormat = (temper: number | undefined): string => {
     return `${temper}°C`;
 };
 
-export const walkPercentFormat = (percent: number): string => {
+export const percentFormat = (num1: number, num2: number): string => {
+    if (num2 === 0) return '0';
+    const percent = num1 / num2;
     if (percent >= 1) return '100';
     return Math.floor(percent * 100)
         .toString()

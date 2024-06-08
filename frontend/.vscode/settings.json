@@ -3,5 +3,26 @@
     "tailwindCSS.experimental.classRegex": [
         ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
         ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+    ],
+    "cSpell.words": [
+        "appkey",
+        "autoload",
+        "clsx",
+        "dapi",
+        "Dnsty",
+        "fcst",
+        "KAKAO",
+        "khai",
+        "locdate",
+        "Mesure",
+        "naver",
+        "normalleading",
+        "OLAT",
+        "OLON",
+        "openapi",
+        "regioncode",
+        "Sido",
+        "tanstack",
+        "Vilage"
     ]
 }

@@ -1,4 +1,4 @@
-import Topbar from '@/components/commons/Topbar';
+import TopBar from '@/components/commons/Topbar';
 import { getStorage } from '@/utils/storage';
 import React, { useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -194,16 +194,16 @@ export default function Join() {
         <div
             className={`relative flex h-dvh w-full flex-col bg-primary-foreground ${switchStep.mainToStep1 ? 'animate-mainToRight' : 'animate-outToMain'}`}
         >
-            <Topbar>
-                <Topbar.Front className="pl-3">
+            <TopBar>
+                <TopBar.Front className="pl-3">
                     <img src={TopBack} alt="ToBack" onClick={handleGoBack} />
-                </Topbar.Front>
+                </TopBar.Front>
                 {step !== 'Agreements' && (
-                    <Topbar.Back>
+                    <TopBar.Back>
                         <img src={Cancel} alt="cancel" onClick={() => setCancelReg(true)} />
-                    </Topbar.Back>
+                    </TopBar.Back>
                 )}
-            </Topbar>
+            </TopBar>
             <Divider
                 className={`w-0 bg-primary duration-500 ease-in-out ${step === 'PetOwner' && 'w-1/3'} ${step === 'DogBasicInfo' && (currentPage ? 'w-1/2' : 'w-2/3')} ${step === 'DogDetailInfo' && 'w-full'}`}
             />

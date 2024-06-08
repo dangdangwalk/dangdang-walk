@@ -5,13 +5,13 @@ import { Feces } from '@/components/icons/Feces';
 import { Urine } from '@/components/icons/Urine';
 import { WalkingDog } from '@/models/dog';
 
-interface DogFeceAndUrineCheckListProps {
+interface DogFecesAndUrineCheckListProps {
     dog: WalkingDog;
     toggleCheck: (id: number, key: keyof WalkingDog) => void;
 }
 
 //Refactor 컴포넌트 이름과 divider 위치
-export default function DogFeceAndUrineCheckList({ dog, toggleCheck }: DogFeceAndUrineCheckListProps) {
+export default function DogFecesAndUrineCheckList({ dog, toggleCheck }: DogFecesAndUrineCheckListProps) {
     return (
         <>
             <Divider className="h-0 border border-neutral-200" />
@@ -19,12 +19,12 @@ export default function DogFeceAndUrineCheckList({ dog, toggleCheck }: DogFeceAn
                 <Avatar url={dog.profilePhotoUrl} name={dog.name} />
                 <div className="flex gap-4">
                     <Checkbox
-                        checked={dog?.isFeceChecked}
+                        checked={dog?.isFecesChecked}
                         onCheckedChange={() => {
-                            toggleCheck(dog.id, 'isFeceChecked');
+                            toggleCheck(dog.id, 'isFecesChecked');
                         }}
                     >
-                        <Feces color={dog.isFeceChecked ? 'primary' : 'secondary'} />
+                        <Feces color={dog.isFecesChecked ? 'primary' : 'secondary'} />
                     </Checkbox>
                     <Checkbox
                         checked={dog?.isUrineChecked}

@@ -3,7 +3,6 @@ import { Position } from '@/models/location';
 import { calculateDistance } from '@/utils/geo';
 import { useEffect, useState } from 'react';
 
-//TODO: 위치저장 localstorage 정장 로직 확인 필요
 const useGeolocation = () => {
     const [startPosition, setStartPosition] = useState<Position | null>(null);
     const [currentPosition, setCurrentPosition] = useState<Position | null>(null);
@@ -57,10 +56,11 @@ const useGeolocation = () => {
     useEffect(() => {
         if (!prevPosition || !currentPosition) return;
         const { lat, lng } = currentPosition;
-        const newDistance = calculateDistance(prevPosition.lat, prevPosition.lng, lat, lng);
-        // if (newDistance < 1.2) return;
-        setDistance(distance + Math.floor(newDistance) / 10);
-        setRoutes([...routes, { lat, lng }]);
+        setDistance((prevDistance) => {
+            const newDistance = calculateDistance(prevPosition.lat, prevPosition.lng, lat, lng);
+            return prevDistance + Math.floor(newDistance) / 10;
+        });
+        setRoutes((prevRoutes) => [...prevRoutes, { lat, lng }]);
         setPrevPosition({ lat, lng });
     }, [currentPosition]);
     return { position: startPosition, distance, routes, currentPosition, stopGeo, startGeo };

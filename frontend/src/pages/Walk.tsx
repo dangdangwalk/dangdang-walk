@@ -9,7 +9,7 @@ import useWalkingDogs from '@/hooks/useWalkingDogs';
 import useStopWatch from '@/hooks/useStopWatch';
 import { DEFAULT_WALK_MET, DEFAULT_WEIGHT } from '@/constants/walk';
 
-import DogFeceAndUrineCheckList from '@/components/walk/DogFeceAndUrineCheckList';
+import DogFecesAndUrineCheckList from '@/components/walk/DogFecesAndUrineCheckList';
 import StopToast from '@/components/walk/StopToast';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useToast from '@/hooks/useToast';
@@ -18,69 +18,73 @@ import { getStorage, removeStorage, setStorage } from '@/utils/storage';
 import { WalkingDog } from '@/models/dog';
 import { Position } from '@/models/location';
 import { storageKeys } from '@/constants';
-import { walkStartRequest, walkStopRequest } from '@/api/walk';
+import { requestWalkStart, requestWalkStop } from '@/api/walk';
 import useImageUpload from '@/hooks/useImageUpload';
 import { useSpinnerStore } from '@/store/spinnerStore';
 import { setFlagValueByKey, toggleCheckById } from '@/utils/check';
 
-export interface DogWalkData {
+interface DogWalkData {
     dogs: WalkingDog[];
     startedAt: string;
     distance: number;
     routes: Position[];
     photoUrls: string[];
 }
+export interface JournalCreateFromState extends DogWalkData {
+    calories: number;
+}
 
 export default function Walk() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const { walkingDogs, saveFecesAndUriens, setDogs, setWalkingDogs } = useWalkingDogs();
+    const { walkingDogs, saveFecesAndUrine, initialSetDogs, setWalkingDogs } = useWalkingDogs();
     const { duration, isStart: isWalk, stopClock, startClock, startedAt } = useStopWatch();
     const { distance, position: startPosition, currentPosition, stopGeo, routes, startGeo } = useGeolocation();
-    const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
+    const [isDogBottomSheetOpen, setIsDogBottomSheetOpen] = useState<boolean>(false);
 
-    const [calories, setCalories] = useState<number>(0);
     const { uploadedImageUrls: photoUrls, handleFileChange, setUploadedImageUrls: setPhotoUrls } = useImageUpload();
     const { showStopAlert, isShowStopAlert } = useStopAlert();
-    const { show } = useToast();
+    const { show: showToast } = useToast();
     const { spinnerAdd, spinnerRemove } = useSpinnerStore();
 
     const handleBottomSheet = () => {
-        setIsDogBottomsheetOpen(!isDogBottomsheetOpen);
-        if (isDogBottomsheetOpen) {
+        setIsDogBottomSheetOpen(!isDogBottomSheetOpen);
+        if (isDogBottomSheetOpen) {
             cancelCheckedAll();
         }
     };
 
     const cancelCheckedAll = () => {
-        if (!walkingDogs?.length) return;
-        const newWalkingDogs = setFlagValueByKey(walkingDogs, false, 'isFeceChecked', 'isUrineChecked');
-        setWalkingDogs(newWalkingDogs);
+        setWalkingDogs((prevWalkingDogs) =>
+            prevWalkingDogs?.length
+                ? setFlagValueByKey(prevWalkingDogs, false, 'isFecesChecked', 'isUrineChecked')
+                : prevWalkingDogs
+        );
     };
 
     const handleToggle = (id: number, key: keyof WalkingDog) => {
-        if (!walkingDogs?.length) return;
-        const newWalkingDogs = toggleCheckById(walkingDogs, id, key);
-        setWalkingDogs(newWalkingDogs);
+        setWalkingDogs((prevWalkingDogs) =>
+            prevWalkingDogs?.length ? toggleCheckById(prevWalkingDogs, id, key) : prevWalkingDogs
+        );
     };
 
     const handleConfirm = () => {
-        saveFecesAndUriens(currentPosition);
-        setIsDogBottomsheetOpen(false);
-        show('용변기록이 저장되었습니다 :)');
+        saveFecesAndUrine(currentPosition);
+        setIsDogBottomSheetOpen(false);
+        showToast('용변기록이 저장되었습니다 :)');
     };
 
     const stopWalk = async (dogs: WalkingDog[] | null) => {
         if (!dogs) return;
         spinnerAdd();
-        const ok = await walkStopRequest(dogs.map((d) => d.id));
+        const ok = await requestWalkStop(dogs.map((d) => d.id));
         if (ok) {
             stopClock();
             stopGeo();
             removeStorage(storageKeys.DOGS);
             navigate('/journals/create', {
-                state: { dogs, distance, duration, calories, startedAt, routes, photoUrls },
+                state: { dogs, distance, duration, calories: getCalories(duration), startedAt, routes, photoUrls },
             });
         }
         spinnerRemove();
@@ -95,15 +99,12 @@ export default function Walk() {
         }
     };
     const handleWalkStart = (dogData: DogWalkData) => {
-        setDogs(dogData.dogs);
+        initialSetDogs(dogData.dogs);
         startClock(dogData.startedAt);
         startGeo(dogData.distance, dogData.routes);
         setPhotoUrls(dogData.photoUrls ?? []);
     };
-
-    useEffect(() => {
-        setCalories(Math.round((DEFAULT_WALK_MET * DEFAULT_WEIGHT * duration) / 3600));
-    }, [duration]);
+    const getCalories = (time: number) => Math.round((DEFAULT_WALK_MET * DEFAULT_WEIGHT * time) / 3600);
 
     useEffect(() => {
         if (!routes || !startedAt || !walkingDogs) return;
@@ -125,8 +126,8 @@ export default function Walk() {
             navigate('/');
             return;
         }
-        const requstWalkStart = async (data: DogWalkData) => {
-            const ok = await walkStartRequest(data.dogs.map((d) => d.id));
+        const startDogWalk = async (data: DogWalkData) => {
+            const ok = await requestWalkStart(data.dogs.map((d) => d.id));
             if (ok) {
                 handleWalkStart(data);
             } else {
@@ -137,30 +138,30 @@ export default function Walk() {
         if (getStorage(storageKeys.DOGS)) {
             handleWalkStart(dogData);
         } else {
-            requstWalkStart(dogData);
+            startDogWalk(dogData);
         }
     }, []);
 
     return (
         <div className="inset-0 h-dvh overflow-hidden">
             <WalkHeader />
-            <WalkInfo duration={duration} calories={calories} distance={distance} />
+            <WalkInfo duration={duration} calories={getCalories(duration)} distance={distance} />
 
             <Map startPosition={startPosition} path={routes} />
 
             <StopToast isVisible={isShowStopAlert} />
             <WalkNavbar onOpen={handleBottomSheet} onStop={handleWalkStop} onChange={handleFileChange} />
 
-            <BottomSheet isOpen={isDogBottomsheetOpen} onClose={handleBottomSheet}>
+            <BottomSheet isOpen={isDogBottomSheetOpen} onClose={handleBottomSheet}>
                 <BottomSheet.Header> 강아지 산책</BottomSheet.Header>
                 <BottomSheet.Body>
                     {walkingDogs?.map((dog) => (
-                        <DogFeceAndUrineCheckList dog={dog} toggleCheck={handleToggle} key={dog.id} />
+                        <DogFecesAndUrineCheckList dog={dog} toggleCheck={handleToggle} key={dog.id} />
                     ))}
                 </BottomSheet.Body>
                 <BottomSheet.ConfirmButton
                     onConfirm={handleConfirm}
-                    disabled={walkingDogs?.find((d) => d.isUrineChecked || d.isFeceChecked) ? false : true}
+                    disabled={walkingDogs?.find((d) => d.isUrineChecked || d.isFecesChecked) ? false : true}
                 >
                     확인
                 </BottomSheet.ConfirmButton>

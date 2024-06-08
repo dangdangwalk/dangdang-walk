@@ -1,11 +1,10 @@
 import { fetchDogStatistic } from '@/api/dog';
+import { queryKeys } from '@/constants';
 import { DogStatistic } from '@/models/dog';
 import { useAuthStore } from '@/store/authStore';
-import { UseQueryCustomOptions } from '@/types/common';
 import { useQuery } from '@tanstack/react-query';
-const { REACT_APP_BASE_IMAGE_URL = '' } = window._ENV ?? process.env;
 
-const defaultDpgs: DogStatistic[] = [
+const defaultDogs: DogStatistic[] = [
     {
         id: 1,
         name: '덕지',
@@ -24,25 +23,17 @@ const defaultDpgs: DogStatistic[] = [
     },
 ];
 
-const useDogsStatistic = (queryOptions?: UseQueryCustomOptions) => {
+const useDogsStatistic = () => {
     const { isSignedIn } = useAuthStore();
     const { data, isPending } = useQuery({
-        queryKey: ['dog-statistic'],
-        queryFn: async () => {
-            const data = await fetchDogStatistic();
-            return data.map((d: DogStatistic) => {
-                return {
-                    ...d,
-                    profilePhotoUrl: d.profilePhotoUrl ? `${REACT_APP_BASE_IMAGE_URL}/${d.profilePhotoUrl}` : undefined,
-                };
-            });
-        },
-        ...queryOptions,
+        queryKey: [queryKeys.DOG_STATISTICS],
+        queryFn: fetchDogStatistic,
     });
+
     if (!isSignedIn) {
-        return { dogs: defaultDpgs as DogStatistic[], isDogsPending: false };
+        return { dogsStatistic: defaultDogs, isDogsPending: false };
     }
-    return { dogs: data as DogStatistic[], isDogsPending: isPending };
+    return { dogsStatistic: data, isDogsPending: isPending };
 };
 
 export default useDogsStatistic;

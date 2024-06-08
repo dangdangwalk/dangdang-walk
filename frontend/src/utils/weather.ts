@@ -6,7 +6,7 @@ export const getAirStatus = (airGrade: AirGrade | undefined) => {
     return airStatus[airGrade];
 };
 
-export type SkyStatus = 'dayclear' | 'daycloudy' | 'cloudy' | 'nightclear' | 'nightcloudy' | 'rain' | 'snow';
+export type SkyStatus = 'dayClear' | 'dayCloudy' | 'cloudy' | 'nightClear' | 'nightCloudy' | 'rain' | 'snow';
 
 interface SkyParams {
     maxTemperature?: number;
@@ -29,10 +29,10 @@ export const getSkyGrade = ({ sky, precipitation, sunset, sunrise, time }: SkyPa
     }
 
     if (Number(time) >= Number(sunrise) && Number(time) <= Number(sunset)) {
-        return sky <= 2 ? 'dayclear' : 'daycloudy';
+        return sky <= 2 ? 'dayClear' : 'dayCloudy';
     }
 
-    return sky <= 2 ? 'nightclear' : 'nightcloudy';
+    return sky <= 2 ? 'nightClear' : 'nightCloudy';
 };
 
 export const weatherStatus = (temperature: number | undefined, precipitation: number | undefined): boolean => {

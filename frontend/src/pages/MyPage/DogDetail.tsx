@@ -11,7 +11,7 @@ import ImageCropper from '@/components/ImageCropper';
 import Avatar from '@/components/commons/Avatar';
 import { Checkbox } from '@/components/commons/Checkbox';
 import { Divider } from '@/components/commons/Divider';
-import Topbar from '@/components/commons/Topbar';
+import TopBar from '@/components/commons/Topbar';
 import FemaleIcon from '@/components/icons/FemaleIcon';
 import { MaleIcon } from '@/components/icons/MaleIcon';
 import { uploadImg, useDog } from '@/hooks/useDog';
@@ -89,8 +89,8 @@ export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfile
             <div
                 className={`fixed -right-full top-0 z-20 max-h-dvh w-full overflow-y-scroll bg-white duration-200 ${isProfileOpen && '-translate-x-full'}`}
             >
-                <Topbar>
-                    <Topbar.Front
+                <TopBar>
+                    <TopBar.Front
                         className="ml-3"
                         onClick={() => {
                             setIsProfileOpen(false);
@@ -98,17 +98,17 @@ export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfile
                         }}
                     >
                         <img src={Back} alt="back" />
-                    </Topbar.Front>
-                    <Topbar.Center className="mr-3 font-bold">{name}</Topbar.Center>
-                    <Topbar.Back
+                    </TopBar.Front>
+                    <TopBar.Center className="mr-3 font-bold">{name}</TopBar.Center>
+                    <TopBar.Back
                         className={`${onEdit && 'w-12'}`}
                         onClick={() => {
                             setOnEdit(true);
                         }}
                     >
                         {!onEdit && <img src={Edit} alt="edit" />}
-                    </Topbar.Back>
-                </Topbar>
+                    </TopBar.Back>
+                </TopBar>
                 {dog && (
                     <main className="mb-[60px] mt-2 flex flex-col">
                         <section className="relative flex flex-col items-center">

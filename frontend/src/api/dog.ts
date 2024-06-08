@@ -1,12 +1,12 @@
 import { httpClient } from '@/api/http';
-import { AvailableDog, Dog, DogCreateForm, DogStatistic } from '@/models/dog';
+import { WalkAvailableDog, Dog, DogCreateForm, DogStatistic } from '@/models/dog';
 export type period = 'week' | 'month';
 export const fetchDogStatistic = async (): Promise<DogStatistic[]> => {
     const { data } = await httpClient.get('/dogs/statistics');
     return data;
 };
 
-export const fetchWalkAvailableDogs = async (): Promise<AvailableDog[]> => {
+export const fetchWalkAvailableDogs = async (): Promise<WalkAvailableDog[]> => {
     const { data } = await httpClient.get('/dogs/walks/available');
     return data;
 };
@@ -44,8 +44,4 @@ export const fetchDogRecentMonthStatistics = async (dogId: number): Promise<Rece
 
 export const updateDog = async ({ dogId, params }: { dogId: number; params: DogCreateForm }) => {
     await httpClient.patch(`/dogs/${dogId}`, params);
-};
-export const fetchDogList = async (): Promise<Dog[]> => {
-    const { data } = await httpClient.get<Dog[]>('/dogs');
-    return data;
 };

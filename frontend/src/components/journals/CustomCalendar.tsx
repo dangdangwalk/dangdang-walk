@@ -6,14 +6,8 @@ import { queryStringKeys } from '@/constants';
 import PrevMonth from '@/assets/buttons/btn-prev-month.svg';
 import NextMonth from '@/assets/buttons/btn-next-month.svg';
 import { fetchDogMonthStatistic, period } from '@/api/dog';
-import { formDate, formDay } from '@/utils/date';
+import { formCalendar, formDate, formDay } from '@/utils/time';
 import useCalendar from '@/hooks/useCalendar';
-
-const formCalendar = (date: Date) => {
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    return `${year}년 ${month}`;
-};
 
 export default function CustomCalendar() {
     const location = useLocation();
@@ -23,7 +17,7 @@ export default function CustomCalendar() {
         useCalendar();
     const getStatisticData = async (date: string, period: period) => {
         const params = new URLSearchParams(location.search);
-        const dogId = params.get(queryStringKeys.DOGID);
+        const dogId = params.get(queryStringKeys.DOG_ID);
         if (!dogId) return;
         const data = await fetchDogMonthStatistic(Number(dogId), date, period);
         const newArray = new Set<string>();
@@ -37,7 +31,7 @@ export default function CustomCalendar() {
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
-        const dogId = params.get(queryStringKeys.DOGID);
+        const dogId = params.get(queryStringKeys.DOG_ID);
         if (Number(dogId) === currentDogId) return;
         if (date.getFullYear() <= today.getFullYear() && date.getMonth() <= today.getMonth()) {
             getStatisticData(formDate(date), view);
