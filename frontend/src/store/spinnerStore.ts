@@ -23,7 +23,7 @@ export const useSpinnerStore = create<State>((set) => ({
             };
         });
     },
-    clear: () => {
+    spinnerClear: () => {
         set((state) => {
             return {
                 spinner: 0,
