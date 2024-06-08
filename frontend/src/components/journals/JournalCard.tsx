@@ -2,20 +2,14 @@ import DefaultProfileImage from '@/components/commons/DefaultProfileImage';
 import WalkInfo from '@/components/walk/WalkInfo';
 import { Dog } from '@/models/dog';
 import { Journal } from '@/models/journal';
-import { formDate, formTime } from '@/utils/date';
+import { getStartTimeToEndTime } from '@/utils/date';
 import { useNavigate } from 'react-router-dom';
 
 const getTitle = (name: string, count: number): string => {
     return `${name}와의 ${count}번째 산책`;
 };
 
-const getStartToEnd = (start: string, seconds: number) => {
-    const startTime = new Date(start);
-    const endTime = new Date(start);
-    endTime.setSeconds(endTime.getSeconds() + seconds);
-    return `${formDate(startTime)} ${formTime(startTime)}-${formTime(endTime)}`;
-};
-interface PageState extends Journal {
+export interface JournalDetailState extends Journal {
     dogName: string;
 }
 
@@ -23,7 +17,7 @@ export default function JournalCard({ journal, dog }: { journal: Journal; dog: D
     const navigate = useNavigate();
     const goToDetail = (id: number) => {
         if (!dog) return;
-        const state: PageState = { ...journal, dogName: dog.name };
+        const state: JournalDetailState = { ...journal, dogName: dog.name };
         navigate(`/journals/${id}`, { state });
     };
     if (!dog) return <></>;
@@ -47,7 +41,7 @@ export default function JournalCard({ journal, dog }: { journal: Journal; dog: D
                         {getTitle(dog.name, journal.journalCnt)}
                     </div>
                     <div className="font-normalleading-[18px] text-xs text-neutral-400">
-                        {getStartToEnd(journal.startedAt, journal.duration)}
+                        {getStartTimeToEndTime(journal.startedAt, journal.duration)}
                     </div>
                 </div>
             </div>

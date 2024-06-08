@@ -3,17 +3,17 @@ export const getCurrentDate = (date: Date) => {
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day = date.getDate().toString().padStart(2, '0');
 
-    const nowdate = `${year}${month}${day}`;
+    const nowDate = `${year}${month}${day}`;
 
-    return nowdate;
+    return nowDate;
 };
 
 export const getCurrentTime = (date: Date) => {
     const hour = date.getHours().toString().padStart(2, '0');
     const minute = date.getMinutes().toString().padStart(2, '0');
-    const nowtime = `${hour}${minute}`;
+    const nowTime = `${hour}${minute}`;
 
-    return nowtime;
+    return nowTime;
 };
 
 export const getHours = (date: Date) => {
@@ -23,9 +23,9 @@ export const getHours = (date: Date) => {
 export const formTime = (date: Date) => {
     const hour = date.getHours().toString().padStart(2, '0');
     const minute = date.getMinutes().toString().padStart(2, '0');
-    const nowtime = `${hour}:${minute}`;
+    const nowTime = `${hour}:${minute}`;
 
-    return nowtime;
+    return nowTime;
 };
 export const getElapsedTime = (start: Date, end: Date) => {
     return (end.getTime() - start.getTime()) / 1000;
@@ -41,4 +41,16 @@ export const formDate = (date: Date) => {
 
 export const formDay = (date: Date): string => {
     return date.getDate().toString();
+};
+export const formCalendar = (date: Date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    return `${year}년 ${month}`;
+};
+
+export const getStartTimeToEndTime = (start: string, seconds: number) => {
+    const startTime = new Date(start);
+    const endTime = new Date(start);
+    endTime.setSeconds(endTime.getSeconds() + seconds);
+    return `${formDate(startTime)} ${formTime(startTime)}-${formTime(endTime)}`;
 };

@@ -2,7 +2,7 @@ import { DogStatistic } from '@/models/dog';
 import { percentFormat } from '@/utils/format';
 import Ic from '@/assets/icons/ic-arrow-right.svg';
 import Avatar from '@/components/commons/Avatar';
-import DayIcon from '@/components/home/DayIcon';
+import DayIcon, { DayType } from '@/components/home/DayIcon';
 import Walk from '@/assets/icons/ic-walk.svg';
 import Progressbar from '@/components/home/Progressbar';
 
@@ -11,7 +11,8 @@ interface DogCardProps {
     pageMove?: (id: number) => void;
 }
 
-const WEEKDAY = ['월', '화', '수', '목', '금', '토', '일'];
+const WEEKDAY: DayType[] = ['월', '화', '수', '목', '금', '토', '일'];
+
 export default function DogCard({ dog, pageMove }: DogCardProps) {
     return (
         <div
