@@ -7,11 +7,11 @@ import Ic from '@/assets/icons/ic-arrow-right.svg';
 import { Dog } from '@/models/dog';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { fetchDogList } from '@/api/dog';
+import { fetchDogs } from '@/api/dog';
 import Avatar from '@/components/commons/Avatar';
 import SelectBox from '@/components/commons/SelectBox';
 import { queryStringKeys } from '@/constants';
-const { REACT_APP_BASE_IMAGE_URL = '' } = window._ENV ?? process.env;
+
 interface ReceivedState {
     dog?: Dog;
     dogs?: Dog[];
@@ -40,16 +40,8 @@ export default function Journals() {
     };
     useEffect(() => {
         if (selectedDog) return;
-        fetchDogList().then((data) => {
-            if (data) {
-                const dogs: Dog[] = data.map((dog) => {
-                    return {
-                        ...dog,
-                        profilePhotoUrl: dog.profilePhotoUrl
-                            ? `${REACT_APP_BASE_IMAGE_URL}/${dog.profilePhotoUrl}`
-                            : null,
-                    };
-                });
+        fetchDogs().then((dogs) => {
+            if (dogs) {
                 setDogList(dogs);
                 setSelectedDog(dogs[0]);
             } else {

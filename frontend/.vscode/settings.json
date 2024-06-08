@@ -4,5 +4,5 @@
         ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
         ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
     ],
-    "cSpell.words": ["fcst", "KAKAO", "khai", "normalleading", "Sido", "tanstack"]
+    "cSpell.words": ["appkey", "autoload", "dapi", "fcst", "KAKAO", "khai", "normalleading", "Sido", "tanstack"]
 }

@@ -45,7 +45,3 @@ export const fetchDogRecentMonthStatistics = async (dogId: number): Promise<Rece
 export const updateDog = async ({ dogId, params }: { dogId: number; params: DogCreateForm }) => {
     await httpClient.patch(`/dogs/${dogId}`, params);
 };
-export const fetchDogList = async (): Promise<Dog[]> => {
-    const { data } = await httpClient.get<Dog[]>('/dogs');
-    return data;
-};
