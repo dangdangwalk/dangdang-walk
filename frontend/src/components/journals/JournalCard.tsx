@@ -5,7 +5,7 @@ import { Journal } from '@/models/journal';
 import { getStartTimeToEndTime } from '@/utils/date';
 import { useNavigate } from 'react-router-dom';
 
-const getTitle = (name: string, count: number): string => {
+const getJournalTitle = (name: string, count: number): string => {
     return `${name}와의 ${count}번째 산책`;
 };
 
@@ -38,7 +38,7 @@ export default function JournalCard({ journal, dog }: { journal: Journal; dog: D
                 </div>
                 <div className="flex flex-col gap-1">
                     <div className="text-sm font-bold leading-[21px] text-neutral-800">
-                        {getTitle(dog.name, journal.journalCnt)}
+                        {getJournalTitle(dog.name, journal.journalCnt)}
                     </div>
                     <div className="font-normalleading-[18px] text-xs text-neutral-400">
                         {getStartTimeToEndTime(journal.startedAt, journal.duration)}

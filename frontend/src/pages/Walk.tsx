@@ -23,12 +23,15 @@ import useImageUpload from '@/hooks/useImageUpload';
 import { useSpinnerStore } from '@/store/spinnerStore';
 import { setFlagValueByKey, toggleCheckById } from '@/utils/check';
 
-export interface DogWalkData {
+interface DogWalkData {
     dogs: WalkingDog[];
     startedAt: string;
     distance: number;
     routes: Position[];
     photoUrls: string[];
+}
+export interface JournalCreateFromState extends DogWalkData {
+    calories: number;
 }
 
 export default function Walk() {
@@ -40,10 +43,9 @@ export default function Walk() {
     const { distance, position: startPosition, currentPosition, stopGeo, routes, startGeo } = useGeolocation();
     const [isDogBottomSheetOpen, setIsDogBottomSheetOpen] = useState<boolean>(false);
 
-    const [calories, setCalories] = useState<number>(0);
     const { uploadedImageUrls: photoUrls, handleFileChange, setUploadedImageUrls: setPhotoUrls } = useImageUpload();
     const { showStopAlert, isShowStopAlert } = useStopAlert();
-    const { show } = useToast();
+    const { show: showToast } = useToast();
     const { spinnerAdd, spinnerRemove } = useSpinnerStore();
 
     const handleBottomSheet = () => {
@@ -70,7 +72,7 @@ export default function Walk() {
     const handleConfirm = () => {
         saveFecesAndUrine(currentPosition);
         setIsDogBottomSheetOpen(false);
-        show('용변기록이 저장되었습니다 :)');
+        showToast('용변기록이 저장되었습니다 :)');
     };
 
     const stopWalk = async (dogs: WalkingDog[] | null) => {
@@ -82,7 +84,7 @@ export default function Walk() {
             stopGeo();
             removeStorage(storageKeys.DOGS);
             navigate('/journals/create', {
-                state: { dogs, distance, duration, calories, startedAt, routes, photoUrls },
+                state: { dogs, distance, duration, calories: getCalories(duration), startedAt, routes, photoUrls },
             });
         }
         spinnerRemove();
@@ -102,10 +104,7 @@ export default function Walk() {
         startGeo(dogData.distance, dogData.routes);
         setPhotoUrls(dogData.photoUrls ?? []);
     };
-
-    useEffect(() => {
-        setCalories(Math.round((DEFAULT_WALK_MET * DEFAULT_WEIGHT * duration) / 3600));
-    }, [duration]);
+    const getCalories = (time: number) => Math.round((DEFAULT_WALK_MET * DEFAULT_WEIGHT * time) / 3600);
 
     useEffect(() => {
         if (!routes || !startedAt || !walkingDogs) return;
@@ -146,7 +145,7 @@ export default function Walk() {
     return (
         <div className="inset-0 h-dvh overflow-hidden">
             <WalkHeader />
-            <WalkInfo duration={duration} calories={calories} distance={distance} />
+            <WalkInfo duration={duration} calories={getCalories(duration)} distance={distance} />
 
             <Map startPosition={startPosition} path={routes} />
 
