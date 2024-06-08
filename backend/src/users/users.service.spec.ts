@@ -130,7 +130,7 @@ describe('UsersService', () => {
     describe('createIfNotExists', () => {
         context('사용자 토큰 정보가 주어지고 사용자가 존재하면', () => {
             beforeEach(() => {
-                jest.spyOn(userRepository, 'findOne').mockResolvedValue(mockUser);
+                jest.spyOn(userRepository, 'findOne').mockResolvedValueOnce(null).mockResolvedValueOnce(mockUser);
             });
 
             it('ConflictException 예외를 던져야 한다.', async () => {
