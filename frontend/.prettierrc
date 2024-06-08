@@ -9,5 +9,5 @@
     "arrowParens": "always",
     "plugins": ["prettier-plugin-tailwindcss"],
     "tailwindConfig": "./tailwind.config.js",
-    "tailwindAttributes": ["animate-fadeOut"]
+    "tailwindAttributes": ["fadeOut"]
 }
