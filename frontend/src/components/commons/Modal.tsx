@@ -45,7 +45,7 @@ const ModalContent = forwardRef<
 ModalContent.displayName = 'CommonModalContent';
 
 const ModalHeader = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => (
-    <div className={cn('flex flex-col space-y-2 text-center sm:text-left', className)} {...props} />
+    <div className={cn('flex flex-col space-y-2 text-left', className)} {...props} />
 );
 ModalHeader.displayName = 'CommonModalHeader';
 
