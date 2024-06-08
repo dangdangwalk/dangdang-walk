@@ -7,7 +7,7 @@ import { useAuth } from '@/hooks/useAuth';
 
 function App() {
     useAuth();
-    const { spinner } = useSpinnerStore();
+    const { spinnerCount } = useSpinnerStore();
 
     useEffect(() => {
         window.oncontextmenu = function (event) {
@@ -20,7 +20,7 @@ function App() {
     return (
         <div className="flex w-full flex-col">
             <Outlet />
-            {spinner > 0 && <Spinner className="absolute z-40 bg-neutral-800/40" />}
+            {spinnerCount > 0 && <Spinner className="absolute z-40 bg-neutral-800/40" />}
             <Toast />
         </div>
     );
