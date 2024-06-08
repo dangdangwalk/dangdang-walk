@@ -2,7 +2,7 @@ import { fetchCurrentWeather } from '@/api/weather';
 import { queryKeys } from '@/constants';
 import { Position } from '@/models/location';
 import { Weather, WeatherData } from '@/models/weather';
-import { getCurrentDate, getHours } from '@/utils/date';
+import { getCurrentDate, getHours } from '@/utils/time';
 import { gpsToGrid } from '@/utils/geo';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';

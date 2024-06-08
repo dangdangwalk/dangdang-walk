@@ -6,7 +6,7 @@ import { queryStringKeys } from '@/constants';
 import PrevMonth from '@/assets/buttons/btn-prev-month.svg';
 import NextMonth from '@/assets/buttons/btn-next-month.svg';
 import { fetchDogMonthStatistic, period } from '@/api/dog';
-import { formCalendar, formDate, formDay } from '@/utils/date';
+import { formCalendar, formDate, formDay } from '@/utils/time';
 import useCalendar from '@/hooks/useCalendar';
 
 export default function CustomCalendar() {

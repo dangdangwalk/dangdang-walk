@@ -2,7 +2,7 @@ import DefaultProfileImage from '@/components/commons/DefaultProfileImage';
 import WalkInfo from '@/components/walk/WalkInfo';
 import { Dog } from '@/models/dog';
 import { Journal } from '@/models/journal';
-import { getStartTimeToEndTime } from '@/utils/date';
+import { getStartTimeToEndTime } from '@/utils/time';
 import { useNavigate } from 'react-router-dom';
 
 const getJournalTitle = (name: string, count: number): string => {

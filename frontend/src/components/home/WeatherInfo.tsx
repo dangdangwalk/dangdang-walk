@@ -1,5 +1,5 @@
 import { useWeather } from '@/hooks/useWeather';
-import { getCurrentTime } from '@/utils/date';
+import { getCurrentTime } from '@/utils/time';
 import { temperFormat } from '@/utils/format';
 import { SkyStatus, getAirStatus, getSkyGrade, weatherStatus } from '@/utils/weather';
 import { useEffect, useState } from 'react';

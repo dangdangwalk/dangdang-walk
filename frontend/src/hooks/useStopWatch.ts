@@ -1,4 +1,4 @@
-import { getElapsedTime } from '@/utils/date';
+import { getElapsedTime } from '@/utils/time';
 import { useEffect, useState } from 'react';
 
 const useStopWatch = () => {
