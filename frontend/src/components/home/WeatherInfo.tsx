@@ -6,10 +6,10 @@ import { useEffect, useState } from 'react';
 import Cloudy from '@/assets/icons/ic-cloudy.svg';
 import Rain from '@/assets/icons/ic-rain.svg';
 import Snow from '@/assets/icons/ic-snow.svg';
-import DayClear from '@/assets/icons/ic-dayclear.svg';
-import NightClear from '@/assets/icons/ic-nightclear.svg';
-import NightCloudy from '@/assets/icons/ic-nightcloudy.svg';
-import DayCloudy from '@/assets/icons/ic-daycloudy.svg';
+import DayClear from '@/assets/icons/ic-day-clear.svg';
+import NightClear from '@/assets/icons/ic-night-clear.svg';
+import NightCloudy from '@/assets/icons/ic-night-cloudy.svg';
+import DayCloudy from '@/assets/icons/ic-day-cloudy.svg';
 import useSunsetSunrise from '@/hooks/useSunsetSunrise';
 import Spinner from '@/components/commons/Spinner';
 import useGeolocation from '@/hooks/useGeolocation';
@@ -18,10 +18,10 @@ import useAddressAndAirGrade from '@/hooks/useAddressAndAirGrade';
 const statusImage = {
     rain: Rain,
     snow: Snow,
-    dayclear: DayClear,
-    daycloudy: DayCloudy,
-    nightclear: NightClear,
-    nightcloudy: NightCloudy,
+    dayClear: DayClear,
+    dayCloudy: DayCloudy,
+    nightClear: NightClear,
+    nightCloudy: NightCloudy,
     cloudy: Cloudy,
 };
 
@@ -41,7 +41,6 @@ export default function WeatherInfo() {
         const skyGrade = getSkyGrade({ ...weather, sunrise, sunset, time });
         setSkyStatus(skyGrade);
     }, [weather, isSunsetSunrisePending]);
-    useEffect(() => {}, [address]);
 
     return (
         <>
@@ -71,7 +70,7 @@ export default function WeatherInfo() {
                         </div>
                     </div>
                     <div className="inline-flex flex-col items-center justify-start gap-3.5">
-                        <img src={statusImage[skyStatus ?? 'dayclear']} alt={skyStatus} />
+                        <img src={statusImage[skyStatus ?? 'dayClear']} alt={skyStatus} />
                         <div className="text-xs font-normal leading-[18px] text-zinc-500">{`최고:${temperFormat(weather?.maxTemperature)} 최저:${weather?.minTemperature}`}</div>
                     </div>
                 </figure>

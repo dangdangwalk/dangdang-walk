@@ -12,7 +12,6 @@ interface DogCardProps {
 }
 
 const WEEKDAY = ['월', '화', '수', '목', '금', '토', '일'];
-//TODO navigator 위치
 export default function DogCard({ dog, pageMove }: DogCardProps) {
     return (
         <div
