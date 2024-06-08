@@ -38,7 +38,7 @@ export default function Walk() {
     const { walkingDogs, saveFecesAndUrine, initialSetDogs, setWalkingDogs } = useWalkingDogs();
     const { duration, isStart: isWalk, stopClock, startClock, startedAt } = useStopWatch();
     const { distance, position: startPosition, currentPosition, stopGeo, routes, startGeo } = useGeolocation();
-    const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
+    const [isDogBottomSheetOpen, setIsDogBottomSheetOpen] = useState<boolean>(false);
 
     const [calories, setCalories] = useState<number>(0);
     const { uploadedImageUrls: photoUrls, handleFileChange, setUploadedImageUrls: setPhotoUrls } = useImageUpload();
@@ -47,8 +47,8 @@ export default function Walk() {
     const { spinnerAdd, spinnerRemove } = useSpinnerStore();
 
     const handleBottomSheet = () => {
-        setIsDogBottomsheetOpen(!isDogBottomsheetOpen);
-        if (isDogBottomsheetOpen) {
+        setIsDogBottomSheetOpen(!isDogBottomSheetOpen);
+        if (isDogBottomSheetOpen) {
             cancelCheckedAll();
         }
     };
@@ -69,7 +69,7 @@ export default function Walk() {
 
     const handleConfirm = () => {
         saveFecesAndUrine(currentPosition);
-        setIsDogBottomsheetOpen(false);
+        setIsDogBottomSheetOpen(false);
         show('용변기록이 저장되었습니다 :)');
     };
 
@@ -153,7 +153,7 @@ export default function Walk() {
             <StopToast isVisible={isShowStopAlert} />
             <WalkNavbar onOpen={handleBottomSheet} onStop={handleWalkStop} onChange={handleFileChange} />
 
-            <BottomSheet isOpen={isDogBottomsheetOpen} onClose={handleBottomSheet}>
+            <BottomSheet isOpen={isDogBottomSheetOpen} onClose={handleBottomSheet}>
                 <BottomSheet.Header> 강아지 산책</BottomSheet.Header>
                 <BottomSheet.Body>
                     {walkingDogs?.map((dog) => (
