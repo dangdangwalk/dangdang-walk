@@ -11,7 +11,7 @@ export default function StopToast({ isVisible }: { isVisible: boolean }) {
                 <br />
                 산책이 종료됩니다
             </div>
-            <img className="h-9 w-9" src={Touch} alt="길게눌러주세요 터치" />
+            <img className="size-9" src={Touch} alt="길게눌러주세요 터치" />
         </div>
     );
 }

@@ -29,9 +29,9 @@ export default function JournalCard({ journal, dog }: { journal: Journal; dog: D
             }}
         >
             <div className="flex w-full justify-start gap-3 px-4">
-                <div className="h-12 w-12 overflow-hidden rounded-lg">
+                <div className="size-12 overflow-hidden rounded-lg">
                     {dog.profilePhotoUrl ? (
-                        <img className="h-12 w-12" src={dog.profilePhotoUrl} alt={dog.name} />
+                        <img className="size-12" src={dog.profilePhotoUrl} alt={dog.name} />
                     ) : (
                         <DefaultProfileImage />
                     )}

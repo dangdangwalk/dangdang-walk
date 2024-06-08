@@ -105,7 +105,7 @@ export default function CreateForm() {
                     <MemoSection textAreaRef={textAreaRef} />
                 </div>
                 <Button rounded="none" className="h-16 w-full" disabled={isSaving} onClick={handleSave}>
-                    <span className="-translate-y-[5px]">저장하기</span>
+                    <span className="translate-y-[-5px]">저장하기</span>
                 </Button>
             </div>
             <Modal open={openModal}>

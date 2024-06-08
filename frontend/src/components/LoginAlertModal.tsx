@@ -8,9 +8,9 @@ interface Props {
 export default function LoginAlertModal({ isOpen, setToggle }: Props) {
     return (
         <div className="fixed right-0 top-0 z-10 h-dvh w-full backdrop-blur-sm">
-            <div className={`absolute z-10 flex h-full w-full flex-col`}>
+            <div className={`absolute z-10 flex size-full flex-col`}>
                 {!isOpen && (
-                    <section className={`mb-[3.75rem] flex h-full w-full flex-col items-center justify-center`}>
+                    <section className={`mb-[3.75rem] flex size-full flex-col items-center justify-center`}>
                         <h1 className="mb-1 text-2xl font-bold">산책기능</h1>
                         <p className="mb-3 text-xs font-semibold text-stone-500">
                             댕댕워크 산책기능은 회원에게만 제공됩니다

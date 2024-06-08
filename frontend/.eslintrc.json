@@ -26,5 +26,11 @@
         "react-hooks/exhaustive-deps": 0,
         "tailwindcss/no-custom-classname": "off"
     },
-    "ignorePatterns": ["vitest.config.ts"]
+    "ignorePatterns": ["vitest.config.ts"],
+    "overrides": [
+        {
+            "files": ["*.ts", "*.tsx", "*.js"],
+            "parser": "@typescript-eslint/parser"
+        }
+    ]
 }

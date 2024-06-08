@@ -9,7 +9,7 @@ export default function AddImageButton({ isLoading, onChange }: Props) {
         <span className="inline-block h-[104px] min-w-[104px] rounded-lg bg-[#F1F1F1]">
             <>
                 <button
-                    className="flex h-full w-full flex-col items-center gap-[10px]"
+                    className="flex size-full flex-col items-center gap-[10px]"
                     disabled={isLoading}
                     onClick={handleClick}
                 >

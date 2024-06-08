@@ -91,7 +91,7 @@ function Profile() {
                     </div>
                 </section>
 
-                <section className="mb-[2.125rem] mt-[0.625rem] flex justify-between px-10">
+                <section className="mb-[2.125rem] mt-2.5 flex justify-between px-10">
                     <div
                         className="flex flex-col items-center"
                         onClick={() => dogs && dogs[0] && navigate(`/journals?dogId=${dogs[0].id}`)}
@@ -110,7 +110,7 @@ function Profile() {
                 </section>
                 <Divider />
                 <section>
-                    <div className="px-5 py-5 text-base font-bold leading-normal text-neutral-800">나의 댕댕이</div>
+                    <div className="p-5 text-base font-bold leading-normal text-neutral-800">나의 댕댕이</div>
                     {dogs &&
                         dogs.map((dog, index) => (
                             <div key={dog.id} className="flex items-center justify-between px-5 py-[6px]">

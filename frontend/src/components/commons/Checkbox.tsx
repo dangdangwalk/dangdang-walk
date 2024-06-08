@@ -13,7 +13,7 @@ const Checkbox = forwardRef<ElementRef<typeof CheckboxPrimitive.Root>, Props>(
                 <CheckboxPrimitive.Root
                     id={idRef.current}
                     ref={ref}
-                    className="h-5 w-5 shrink-0 rounded-full ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="size-5 shrink-0 rounded-full ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                     {...props}
                 >
                     {children ?? <Check color={checked ? 'primary' : 'secondary'} />}
