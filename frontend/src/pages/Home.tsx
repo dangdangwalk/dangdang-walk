@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Button } from '@/components/commons/Button';
 import { NAV_HEIGHT, TOP_BAR_HEIGHT } from '@/constants/style';
 import Notification from '@/assets/icons/ic-notification.svg';
-import TopBar from '@/components/commons/TopBar';
+import TopBar from '@/components/commons/Topbar';
 import BottomSheet from '@/components/commons/BottomSheet';
 import AvailableDogCheckList from '@/components/home/AvailableDogCheckList';
 import useDogsStatistic from '@/hooks/useDogsStatistic';

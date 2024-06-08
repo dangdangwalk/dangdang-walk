@@ -1,4 +1,4 @@
-import TopBar from '@/components/commons/TopBar';
+import TopBar from '@/components/commons/Topbar';
 import CustomCalendar from '@/components/journals/CustomCalendar';
 import JournalCardList from '@/components/journals/JournalCardList';
 import { NAV_HEIGHT, TOP_BAR_HEIGHT } from '@/constants/style';

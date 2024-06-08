@@ -11,7 +11,7 @@ import ImageCropper from '@/components/ImageCropper';
 import Avatar from '@/components/commons/Avatar';
 import { Checkbox } from '@/components/commons/Checkbox';
 import { Divider } from '@/components/commons/Divider';
-import TopBar from '@/components/commons/TopBar';
+import TopBar from '@/components/commons/Topbar';
 import FemaleIcon from '@/components/icons/FemaleIcon';
 import { MaleIcon } from '@/components/icons/MaleIcon';
 import { uploadImg, useDog } from '@/hooks/useDog';

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import TopBar from '@/components/commons/TopBar';
+import TopBar from '@/components/commons/Topbar';
 import { useDog } from '@/hooks/useDog';
 import Avatar from '@/components/commons/Avatar';
 import SelectPhoto from '@/assets/icons/ic-select-photo.svg';

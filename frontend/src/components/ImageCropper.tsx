@@ -1,5 +1,5 @@
 import { Button } from '@/components/commons/Button';
-import TopBar from '@/components/commons/TopBar';
+import TopBar from '@/components/commons/Topbar';
 import { ASPECT_RATIO, MIN_DIMENSION } from '@/constants/cropper';
 import { useCropStore } from '@/store/cropStore';
 import setCanvasPreview from '@/utils/canvasPreview';
