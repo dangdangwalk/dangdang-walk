@@ -1,5 +1,5 @@
 import { DogStatistic } from '@/models/dog';
-import { walkPercentFormat } from '@/utils/format';
+import { percentFormat } from '@/utils/format';
 import Ic from '@/assets/icons/ic-arrow-right.svg';
 import Avatar from '@/components/commons/Avatar';
 import DayIcon from '@/components/home/DayIcon';
@@ -46,7 +46,7 @@ export default function DogCard({ dog, pageMove }: DogCardProps) {
                     <Progressbar percentage={(dog.todayWalkAmount / dog.recommendedWalkAmount) * 100} />
                     <span>
                         <span className="text-sm font-bold leading-[21px] text-amber-500">
-                            {walkPercentFormat(Number(dog.todayWalkAmount) / Number(dog.recommendedWalkAmount))}
+                            {percentFormat(Number(dog.todayWalkAmount), Number(dog.recommendedWalkAmount))}
                         </span>
                         <span className="text-sm font-bold leading-[18px] text-neutral-400">/100</span>
                     </span>

@@ -127,7 +127,7 @@ export default function Walk() {
             navigate('/');
             return;
         }
-        const requstWalkStart = async (data: DogWalkData) => {
+        const startDogWalk = async (data: DogWalkData) => {
             const ok = await requestWalkStart(data.dogs.map((d) => d.id));
             if (ok) {
                 handleWalkStart(data);
@@ -139,7 +139,7 @@ export default function Walk() {
         if (getStorage(storageKeys.DOGS)) {
             handleWalkStart(dogData);
         } else {
-            requstWalkStart(dogData);
+            startDogWalk(dogData);
         }
     }, []);
 
