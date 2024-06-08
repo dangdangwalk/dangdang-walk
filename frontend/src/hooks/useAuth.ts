@@ -33,8 +33,8 @@ const useSignIn = (mutationOptions?: UseMutationCustomOptions) => {
             }
         },
         onSettled: () => {
-            queryClient.refetchQueries({ queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN] });
-            queryClient.invalidateQueries({ queryKey: [queryKeys.AUTH, queryKeys.GET_PROFILE] });
+            queryClient.refetchQueries({ queryKey: [queryKeys.GET_ACCESS_TOKEN] });
+            queryClient.invalidateQueries({ queryKey: [queryKeys.GET_PROFILE] });
         },
         ...mutationOptions,
     });
@@ -48,7 +48,7 @@ const useSignUp = (mutationOptions?: UseMutationCustomOptions) => {
             storeSignIn(accessToken);
         },
         onSettled: () => {
-            queryClient.refetchQueries({ queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN] });
+            queryClient.refetchQueries({ queryKey: [queryKeys.GET_ACCESS_TOKEN] });
         },
         ...mutationOptions,
     });
