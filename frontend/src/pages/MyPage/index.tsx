@@ -24,18 +24,7 @@ function Profile() {
     const navigate = useNavigate();
     const { fetchDog } = useDog();
     const { data, isSuccess } = fetchDog;
-    const [dogs, setDogs] = useState<Dog[]>([
-        {
-            id: 0,
-            birth: null,
-            name: '',
-            breed: '',
-            gender: '',
-            weight: 0,
-            isNeutered: false,
-            profilePhotoUrl: null,
-        },
-    ]);
+    const [dogs, setDogs] = useState<Dog[]>([]);
     const { signOut, profileData } = useAuth();
     const nickname = profileData?.nickname.substring(0, profileData?.nickname.indexOf('#'));
     const provider = profileData?.provider;
@@ -75,6 +64,8 @@ function Profile() {
         }
     };
     useEffect(() => {
+        console.log('data fetched');
+
         if (isSuccess) {
             setDogs(data ?? []);
         }
