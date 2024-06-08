@@ -15,7 +15,7 @@ export default function PetOwner({ haveADog, handleHaveADogChange }: Props) {
                 </span>
             </div>
 
-            <div className="mx-[0.625rem] mt-12 flex flex-col gap-3">
+            <div className="mx-2.5 mt-12 flex flex-col gap-3">
                 <button
                     onClick={() => handleHaveADogChange(true)}
                     className={`border ${

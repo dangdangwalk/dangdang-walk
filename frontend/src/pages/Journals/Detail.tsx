@@ -88,14 +88,14 @@ export default function Detail() {
         <>
             <div className="flex flex-col">
                 <div className="flex h-12 items-center justify-between px-5">
-                    <button className="flex h-12 w-12 items-center justify-center" onClick={handleGoBack}>
+                    <button className="flex size-12 items-center justify-center" onClick={handleGoBack}>
                         <Arrow className="rotate-180" />
                     </button>
-                    <Heading headingNumber={1} className="-translate-x-[15px]">
+                    <Heading headingNumber={1} className="translate-x-[-15px]">
                         {dogName}의 {journalCount}번째 산책
                     </Heading>
                     <button
-                        className="flex h-12 w-12 items-center justify-center"
+                        className="flex size-12 items-center justify-center"
                         onClick={() => setIsBottomsheetOpen(true)}
                     >
                         <Meatball />
@@ -124,7 +124,7 @@ export default function Detail() {
                 </div>
                 {isModifying ? (
                     <Button rounded="none" className="h-16 w-full" disabled={isSaving} onClick={handleSave}>
-                        <span className="-translate-y-[5px]">저장하기</span>
+                        <span className="translate-y-[-5px]">저장하기</span>
                     </Button>
                 ) : (
                     <Navbar />

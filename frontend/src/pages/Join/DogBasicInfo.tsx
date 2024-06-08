@@ -54,7 +54,7 @@ export default function DogBasicInfo({ data, fileInputRef, handleSetData }: Prop
                             value={data.name}
                             onChange={(event) => handleSetData('name', event.target.value)}
                         />
-                        <Divider className="absolute bottom-0 h-[1px]" />
+                        <Divider className="absolute bottom-0 h-px" />
                     </div>
                     <div className="relative py-3">
                         <div
@@ -63,7 +63,7 @@ export default function DogBasicInfo({ data, fileInputRef, handleSetData }: Prop
                         >
                             {data.breed ? data.breed : '견종이 궁금해요'}
                         </div>
-                        <Divider className="absolute bottom-0 h-[1px]" />
+                        <Divider className="absolute bottom-0 h-px" />
                     </div>
                 </div>
             </div>

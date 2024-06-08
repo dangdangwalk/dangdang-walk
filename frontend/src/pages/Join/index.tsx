@@ -208,7 +208,7 @@ export default function Join() {
                 className={`w-0 bg-primary duration-500 ease-in-out ${step === 'PetOwner' && 'w-1/3'} ${step === 'DogBasicInfo' && (currentPage ? 'w-1/2' : 'w-2/3')} ${step === 'DogDetailInfo' && 'w-full'}`}
             />
 
-            <main className="h-full w-full px-5 pt-6">
+            <main className="size-full px-5 pt-6">
                 {step === 'Agreements' && (
                     <Agreements
                         toggle={switchStep.step1ToStep2}

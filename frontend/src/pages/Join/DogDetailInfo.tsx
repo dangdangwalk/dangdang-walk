@@ -97,7 +97,7 @@ export default function DogDetailInfo({ data, handleSetData }: Props) {
                                 className="w-full font-bold outline-none"
                                 onChange={(event) => handleSetData('birth', event.target.value)}
                             />
-                            <Divider className="absolute bottom-0 h-[1px]" />
+                            <Divider className="absolute bottom-0 h-px" />
                         </>
                     )}
                 </div>
@@ -127,7 +127,7 @@ export default function DogDetailInfo({ data, handleSetData }: Props) {
                         }}
                     />
                     {weight && 'kg'}
-                    <Divider className="absolute bottom-0 h-[1px]" />
+                    <Divider className="absolute bottom-0 h-px" />
                 </div>
             </div>
         </div>

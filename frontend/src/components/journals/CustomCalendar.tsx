@@ -40,7 +40,7 @@ export default function CustomCalendar() {
     }, [location.search]);
 
     return (
-        <div className="flex w-full flex-col items-center justify-center overflow-hidden rounded-bl-2xl rounded-br-2xl bg-white px-[30px] pt-4 shadow">
+        <div className="flex w-full flex-col items-center justify-center overflow-hidden rounded-b-2xl bg-white px-[30px] pt-4 shadow">
             {view === 'month' && (
                 <div className="mb-6 flex w-full justify-end gap-2">
                     <button
@@ -85,7 +85,7 @@ export default function CustomCalendar() {
                                 {mark.has(formDate(date)) ? (
                                     <div className="dot"></div>
                                 ) : (
-                                    <div className="h-1 w-1"></div>
+                                    <div className="size-1"></div>
                                 )}
                             </div>
                         </>

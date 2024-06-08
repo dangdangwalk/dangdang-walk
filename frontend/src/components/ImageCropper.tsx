@@ -56,7 +56,7 @@ export default function ImageCropper() {
     const previewCanvasRef = useRef<HTMLCanvasElement>(null);
     return (
         <div
-            className={`fixed -bottom-full left-0 z-50 flex h-full w-full flex-col justify-center bg-white duration-300 ${cropperToggle ? '-translate-y-full' : 'translate-y-0'}`}
+            className={`fixed -bottom-full left-0 z-50 flex size-full flex-col justify-center bg-white duration-300 ${cropperToggle ? '-translate-y-full' : 'translate-y-0'}`}
         >
             <TopBar>
                 <TopBar.Front className="pl-3">
@@ -90,7 +90,7 @@ export default function ImageCropper() {
                 </TopBar.Back>
             </TopBar>
             {cropPrevImgUrl && (
-                <div className="my-auto flex h-full w-full flex-col items-center justify-center">
+                <div className="my-auto flex size-full flex-col items-center justify-center">
                     <ReactCrop
                         className="flex flex-col"
                         crop={crop}

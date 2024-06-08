@@ -46,7 +46,7 @@ export default function BreedSearch({ isOpen, setIsOpen, handleSetData }: Props)
     };
     return (
         <div
-            className={`fixed left-full top-0 z-30 flex h-full w-full flex-col bg-white duration-200 ${isOpen ? '-translate-x-full' : 'translate-x-0'}`}
+            className={`fixed left-full top-0 z-30 flex size-full flex-col bg-white duration-200 ${isOpen ? '-translate-x-full' : 'translate-x-0'}`}
         >
             <TopBar>
                 <TopBar.Front className="pl-3">
