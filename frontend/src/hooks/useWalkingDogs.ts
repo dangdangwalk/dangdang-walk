@@ -8,14 +8,18 @@ const useWalkingDogs = () => {
     const saveFecesAndUrine = (position: Position | null) => {
         if (!position || !walkingDogs) return;
         const { lat, lng } = position;
-        const updatedDogs = walkingDogs.map((dog: WalkingDog) => ({
-            ...dog,
-            fecesLocations: dog.isFecesChecked ? [...dog.fecesLocations, { lat, lng }] : dog.fecesLocations,
-            urineLocations: dog.isUrineChecked ? [...dog.urineLocations, { lat, lng }] : dog.urineLocations,
-            isFecesChecked: false,
-            isUrineChecked: false,
-        }));
-        setWalkingDogs(updatedDogs);
+
+        setWalkingDogs((prevWalkingDogs) =>
+            prevWalkingDogs?.length
+                ? prevWalkingDogs.map((dog: WalkingDog) => ({
+                      ...dog,
+                      fecesLocations: dog.isFecesChecked ? [...dog.fecesLocations, { lat, lng }] : dog.fecesLocations,
+                      urineLocations: dog.isUrineChecked ? [...dog.urineLocations, { lat, lng }] : dog.urineLocations,
+                      isFecesChecked: false,
+                      isUrineChecked: false,
+                  }))
+                : prevWalkingDogs
+        );
     };
 
     const initialSetDogs = (dogs: WalkingDog[]) => {

@@ -18,7 +18,7 @@ import { getStorage, removeStorage, setStorage } from '@/utils/storage';
 import { WalkingDog } from '@/models/dog';
 import { Position } from '@/models/location';
 import { storageKeys } from '@/constants';
-import { walkStartRequest, walkStopRequest } from '@/api/walk';
+import { requestWalkStart, requestWalkStop } from '@/api/walk';
 import useImageUpload from '@/hooks/useImageUpload';
 import { useSpinnerStore } from '@/store/spinnerStore';
 import { setFlagValueByKey, toggleCheckById } from '@/utils/check';
@@ -35,12 +35,7 @@ export default function Walk() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const {
-        walkingDogs,
-        saveFecesAndUrine: saveFecesAndUriens,
-        initialSetDogs: setDogs,
-        setWalkingDogs,
-    } = useWalkingDogs();
+    const { walkingDogs, saveFecesAndUrine, initialSetDogs, setWalkingDogs } = useWalkingDogs();
     const { duration, isStart: isWalk, stopClock, startClock, startedAt } = useStopWatch();
     const { distance, position: startPosition, currentPosition, stopGeo, routes, startGeo } = useGeolocation();
     const [isDogBottomsheetOpen, setIsDogBottomsheetOpen] = useState<boolean>(false);
@@ -73,7 +68,7 @@ export default function Walk() {
     };
 
     const handleConfirm = () => {
-        saveFecesAndUriens(currentPosition);
+        saveFecesAndUrine(currentPosition);
         setIsDogBottomsheetOpen(false);
         show('용변기록이 저장되었습니다 :)');
     };
@@ -81,7 +76,7 @@ export default function Walk() {
     const stopWalk = async (dogs: WalkingDog[] | null) => {
         if (!dogs) return;
         spinnerAdd();
-        const ok = await walkStopRequest(dogs.map((d) => d.id));
+        const ok = await requestWalkStop(dogs.map((d) => d.id));
         if (ok) {
             stopClock();
             stopGeo();
@@ -102,7 +97,7 @@ export default function Walk() {
         }
     };
     const handleWalkStart = (dogData: DogWalkData) => {
-        setDogs(dogData.dogs);
+        initialSetDogs(dogData.dogs);
         startClock(dogData.startedAt);
         startGeo(dogData.distance, dogData.routes);
         setPhotoUrls(dogData.photoUrls ?? []);
@@ -133,7 +128,7 @@ export default function Walk() {
             return;
         }
         const requstWalkStart = async (data: DogWalkData) => {
-            const ok = await walkStartRequest(data.dogs.map((d) => d.id));
+            const ok = await requestWalkStart(data.dogs.map((d) => d.id));
             if (ok) {
                 handleWalkStart(data);
             } else {
