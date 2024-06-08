@@ -13,7 +13,7 @@ import DayCloudy from '@/assets/icons/ic-day-cloudy.svg';
 import useSunsetSunrise from '@/hooks/useSunsetSunrise';
 import Spinner from '@/components/commons/Spinner';
 import useGeolocation from '@/hooks/useGeolocation';
-import useAddressAndAirGrade from '@/hooks/useAddressAndAirGrade';
+import useAddressAndAirGrade from '@/hooks/useAddressAndAirgrade';
 
 const statusImage = {
     rain: Rain,
