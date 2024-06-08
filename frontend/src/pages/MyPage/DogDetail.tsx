@@ -21,6 +21,7 @@ import { dataURLtoFile } from '@/utils/dataUrlToFile';
 import { secondsToTimeFormat } from '@/utils/time';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { Dog, DogCreateForm } from '@/models/dog';
+import useToast from '@/hooks/useToast';
 interface Props {
     dog: Dog;
     statistics: RecentMonthStatisticsResponse;
@@ -29,8 +30,9 @@ interface Props {
 }
 export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfileOpen }: Props) {
     const { updateDog } = useDog();
+    const { show } = useToast();
+
     const { dogProfileImgUrl, setDogProfileImgUrl, onSelectFileChange } = useCropStore();
-    const { fetchDog } = useDog();
     const [onEdit, setOnEdit] = useState(false);
     window.location.pathname !== '/profile' && setOnEdit(false);
     const [breedSearchOpen, setBreedSearchOpen] = useState(false);
@@ -45,7 +47,7 @@ export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfile
     useEffect(() => {
         setDogProfileImgUrl('');
         setRegisterData(dog);
-    }, [dog, fetchDog.data]);
+    }, [dog]);
     const handleSetData = (key: string, value: string | boolean | null | number) => {
         setRegisterData((prev) => ({
             ...prev,
@@ -70,6 +72,7 @@ export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfile
                 dogId: id,
                 params: { ...registerData, profilePhotoUrl: fileName },
             });
+            setRegisterData({ ...registerData, profilePhotoUrl: fileName });
         } else {
             setDogProfileImgUrl('');
 
@@ -79,7 +82,7 @@ export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfile
             });
         }
         setOnEdit(false);
-        setIsProfileOpen(false);
+        show('댕댕이 기록이 변경되었습니다');
     };
     return (
         <>
