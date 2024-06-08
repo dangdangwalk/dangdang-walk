@@ -27,7 +27,7 @@ const useStopWatch = () => {
         let intervalId: NodeJS.Timeout;
         if (isStart) {
             intervalId = setInterval(() => {
-                setDuration(duration + 1);
+                setDuration((prevDuration) => prevDuration + 1);
             }, 1000);
         }
         return () => clearInterval(intervalId);
