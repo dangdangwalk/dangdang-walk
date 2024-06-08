@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useState } from 'react';
-import Topbar from '@/components/commons/Topbar';
+import TopBar from '@/components/commons/TopBar';
 import TopBack from '@/assets/icons/ic-arrow-left.svg';
 import Search from '@/assets/icons/ic-search.svg';
 import { useBreed } from '@/hooks/useBreed';
@@ -48,8 +48,8 @@ export default function BreedSearch({ isOpen, setIsOpen, handleSetData }: Props)
         <div
             className={`fixed left-full top-0 z-30 flex h-full w-full flex-col bg-white duration-200 ${isOpen ? '-translate-x-full' : 'translate-x-0'}`}
         >
-            <Topbar>
-                <Topbar.Front className="pl-3">
+            <TopBar>
+                <TopBar.Front className="pl-3">
                     <img
                         src={TopBack}
                         alt="ToBack"
@@ -59,8 +59,8 @@ export default function BreedSearch({ isOpen, setIsOpen, handleSetData }: Props)
                             setSearched([]);
                         }}
                     />
-                </Topbar.Front>
-            </Topbar>
+                </TopBar.Front>
+            </TopBar>
             <main className="mt-3 flex w-full flex-col items-center justify-center px-5">
                 <div className="inline-flex h-12 w-full items-start justify-start gap-2 rounded-lg border border-neutral-200 bg-white py-3.5 pl-3">
                     <img src={Search} alt="search" />

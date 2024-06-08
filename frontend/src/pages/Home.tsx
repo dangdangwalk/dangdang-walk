@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Button } from '@/components/commons/Button';
 import { NAV_HEIGHT, TOP_BAR_HEIGHT } from '@/constants/style';
 import Notification from '@/assets/icons/ic-notification.svg';
-import Topbar from '@/components/commons/Topbar';
+import TopBar from '@/components/commons/TopBar';
 import BottomSheet from '@/components/commons/BottomSheet';
 import AvailableDogCheckList from '@/components/home/AvailableDogCheckList';
 import useDogsStatistic from '@/hooks/useDogsStatistic';
@@ -67,13 +67,13 @@ function Home() {
 
     return (
         <>
-            <Topbar className="bg-neutral-50 px-5">
-                <Topbar.Front></Topbar.Front>
-                <Topbar.Center></Topbar.Center>
-                <Topbar.Back>
+            <TopBar className="bg-neutral-50 px-5">
+                <TopBar.Front></TopBar.Front>
+                <TopBar.Center></TopBar.Center>
+                <TopBar.Back>
                     <img src={Notification} alt="Notification" />
-                </Topbar.Back>
-            </Topbar>
+                </TopBar.Back>
+            </TopBar>
             <main
                 className="mb-[60px] flex min-h-dvh flex-col bg-neutral-50 px-5"
                 style={{ minHeight: `calc(100dvh - ${NAV_HEIGHT} - ${TOP_BAR_HEIGHT}  )` }}

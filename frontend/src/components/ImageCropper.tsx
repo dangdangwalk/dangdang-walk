@@ -1,5 +1,5 @@
 import { Button } from '@/components/commons/Button';
-import Topbar from '@/components/commons/Topbar';
+import TopBar from '@/components/commons/TopBar';
 import { ASPECT_RATIO, MIN_DIMENSION } from '@/constants/cropper';
 import { useCropStore } from '@/store/cropStore';
 import setCanvasPreview from '@/utils/canvasPreview';
@@ -58,8 +58,8 @@ export default function ImageCropper() {
         <div
             className={`fixed -bottom-full left-0 z-50 flex h-full w-full flex-col justify-center bg-white duration-300 ${cropperToggle ? '-translate-y-full' : 'translate-y-0'}`}
         >
-            <Topbar>
-                <Topbar.Front className="pl-3">
+            <TopBar>
+                <TopBar.Front className="pl-3">
                     <button
                         onClick={() => {
                             setCrop(undefined);
@@ -68,8 +68,8 @@ export default function ImageCropper() {
                     >
                         취소
                     </button>
-                </Topbar.Front>
-                <Topbar.Back>
+                </TopBar.Front>
+                <TopBar.Back>
                     <label
                         htmlFor="input-upload"
                         className="cursor-pointer"
@@ -87,8 +87,8 @@ export default function ImageCropper() {
                         />
                         사진
                     </label>
-                </Topbar.Back>
-            </Topbar>
+                </TopBar.Back>
+            </TopBar>
             {cropPrevImgUrl && (
                 <div className="my-auto flex h-full w-full flex-col items-center justify-center">
                     <ReactCrop
