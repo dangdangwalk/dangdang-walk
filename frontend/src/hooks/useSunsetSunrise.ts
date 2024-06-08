@@ -1,10 +1,11 @@
 import { fetchSunsetSunrise } from '@/api/weather';
+import { queryKeys } from '@/constants';
 import { Position } from '@/models/location';
 import { getCurrentDate } from '@/utils/date';
 import { useQuery } from '@tanstack/react-query';
 
 const useSunsetSunrise = (position: Position | null) => {
-    const queryKey = ['sunsetSunrise', position?.lat, position?.lng];
+    const queryKey = [queryKeys.SUNSET_SUNRISE, position?.lat, position?.lng];
     const {
         data: sunsetSunriseData,
         error: sunsetSunriseError,

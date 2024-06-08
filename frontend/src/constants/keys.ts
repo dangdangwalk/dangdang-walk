@@ -19,6 +19,8 @@ const queryKeys = {
     DOG_STATISTICS: 'dogStatistics',
     ADDRESS: 'address',
     AIR_GRADE: 'airGrade',
+    SUNSET_SUNRISE: 'sunsetSunrise',
+    WEATHER: 'weather',
 } as const;
 
 const storageKeys = {

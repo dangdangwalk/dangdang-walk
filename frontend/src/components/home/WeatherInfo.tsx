@@ -10,10 +10,10 @@ import DayClear from '@/assets/icons/ic-dayclear.svg';
 import NightClear from '@/assets/icons/ic-nightclear.svg';
 import NightCloudy from '@/assets/icons/ic-nightcloudy.svg';
 import DayCloudy from '@/assets/icons/ic-daycloudy.svg';
-import useAddressAndAirGrade from '@/hooks/useAddressAndAirgrade';
 import useSunsetSunrise from '@/hooks/useSunsetSunrise';
 import Spinner from '@/components/commons/Spinner';
 import useGeolocation from '@/hooks/useGeolocation';
+import useAddressAndAirGrade from '@/hooks/useAddressAndAirGrade';
 
 const statusImage = {
     rain: Rain,

@@ -10,7 +10,7 @@ const useWalkingDogs = () => {
         const { lat, lng } = position;
         const updatedDogs = walkingDogs.map((dog: WalkingDog) => ({
             ...dog,
-            fecesLocations: dog.isFeceChecked ? [...dog.fecesLocations, { lat, lng }] : dog.fecesLocations,
+            fecesLocations: dog.isFecesChecked ? [...dog.fecesLocations, { lat, lng }] : dog.fecesLocations,
             urineLocations: dog.isUrineChecked ? [...dog.urineLocations, { lat, lng }] : dog.urineLocations,
             isFeceChecked: false,
             isUrineChecked: false,
