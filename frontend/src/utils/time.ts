@@ -1,4 +1,4 @@
-function secondsToTimeFormat(duration: number): string {
+export const secondsToTimeFormat = (duration: number) => {
     const totalSeconds = parseInt(String(duration));
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -9,9 +9,7 @@ function secondsToTimeFormat(duration: number): string {
     const ss = String(seconds).padStart(2, '0');
 
     return `${hh}:${mm}:${ss}`;
-}
-
-export { secondsToTimeFormat };
+};
 
 export const getCurrentDate = (date: Date) => {
     const year = date.getFullYear();
