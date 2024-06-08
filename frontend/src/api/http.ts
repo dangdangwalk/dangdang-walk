@@ -47,10 +47,11 @@ export const createClient = (config?: AxiosRequestConfig): AxiosInstance => {
         },
         async (error: AxiosError) => {
             const isSignedIn = getStorage('isSignedIn') ? true : false;
+
             if (error.response && error.response.status === 401 && isSignedIn) {
                 try {
                     const data = await queryClient.fetchQuery<{ accessToken: string }>({
-                        queryKey: [queryKeys.AUTH, queryKeys.GET_ACCESS_TOKEN],
+                        queryKey: [queryKeys.GET_ACCESS_TOKEN],
                     });
 
                     if (data) {
