@@ -4,13 +4,14 @@
         "react-app",
         "plugin:react/recommended",
         "prettier",
-        "plugin:prettier/recommended"
+        "plugin:prettier/recommended",
+        "plugin:tailwindcss/recommended"
     ],
     "parserOptions": {
         "ecmaVersion": 2020,
         "project": "./tsconfig.json"
     },
-    "plugins": ["prettier", "@tanstack/query"],
+    "plugins": ["prettier", "@tanstack/query", "tailwindcss"],
     "rules": {
         // TODO: Definition for rule '@tanstack/query/prefer-query-object-syntax' was not found
         "@tanstack/query/exhaustive-deps": "off",
