@@ -1,7 +1,7 @@
 import { Journals } from './journals.entity';
 
 describe('Journals', () => {
-    it('journals가 주어지면 journals 정보를 반환해야 한다. ', () => {
+    it('journals가 주어지면 journals 정보를 반환해야 한다.', () => {
         const journals = new Journals({ id: 1, userId: 1, calories: 11 });
 
         expect(journals.id).toBe(1);

@@ -16,8 +16,6 @@ import {
     testUnauthorizedAccess,
 } from './test-utils';
 
-const context = describe;
-
 describe('DogsController (e2e)', () => {
     let app: INestApplication;
     let dataSource: DataSource;

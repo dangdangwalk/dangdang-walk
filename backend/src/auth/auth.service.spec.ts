@@ -21,8 +21,6 @@ import { OauthAuthorizeData } from './types/oauth-authorize-data.type';
 import { OauthData } from './types/oauth-data.type';
 import { OAUTH_PROVIDERS } from './types/oauth-provider.type';
 
-const context = describe;
-
 describe('AuthService', () => {
     let service: AuthService;
     let usersService: UsersService;
