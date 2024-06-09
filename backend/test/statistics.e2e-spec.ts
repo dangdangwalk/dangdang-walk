@@ -1,5 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
+import { mockDog, mockDog2 } from '../src/fixtures/dogs.fixture';
 import { journalsEntries } from '../src/fixtures/statistics.fixture';
 import { VALID_ACCESS_TOKEN_100_YEARS } from './constants';
 import {
@@ -207,6 +208,36 @@ describe('StatisticsController (e2e)', () => {
                     .get('/dogs/1/statistics?date=2024-05-08&period=year')
                     .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
                     .expect(400);
+            });
+        });
+    });
+
+    describe('/dogs/statistics (GET)', () => {
+        context('사용자가 소유한 강아지들의 일주일 산책 현황 조회 요청을 보내면', () => {
+            it('200 상태 코드와 일주일 산책 현황을 반환해야 한다.', async () => {
+                const response = await request(app.getHttpServer())
+                    .get('/dogs/statistics')
+                    .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
+                    .expect(200);
+
+                expect(response.body).toEqual([
+                    {
+                        id: mockDog.id,
+                        name: mockDog.name,
+                        profilePhotoUrl: mockDog.profilePhotoUrl,
+                        recommendedWalkAmount: 1800,
+                        todayWalkAmount: 0,
+                        weeklyWalks: [0, 0, 0, 0, 0, 0, 0],
+                    },
+                    {
+                        id: mockDog2.id,
+                        name: mockDog2.name,
+                        profilePhotoUrl: mockDog2.profilePhotoUrl,
+                        recommendedWalkAmount: 7200,
+                        todayWalkAmount: 0,
+                        weeklyWalks: [0, 0, 0, 0, 0, 0, 0],
+                    },
+                ]);
             });
         });
     });
