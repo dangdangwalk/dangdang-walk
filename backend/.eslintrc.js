@@ -67,17 +67,14 @@ module.exports = {
       {
         'newlines-between': 'always-and-inside-groups',
         groups: [
-          "type",
           "builtin",
           "external",
-          "internal",
-          "parent",
           "sibling",
-          "index",
-          "unknown"
         ],
         "warnOnUnassignedImports": true
       },
     ],
+    'import/no-duplicates': 'error',
+    'import/prefer-default-export': 'off',
   },
 };
