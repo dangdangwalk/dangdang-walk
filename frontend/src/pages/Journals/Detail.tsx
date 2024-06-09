@@ -144,7 +144,6 @@ export default function Detail() {
             </Modal>
             <BottomSheet isOpen={isBottomsheetOpen} onClose={() => setIsBottomsheetOpen(false)}>
                 <BottomSheet.Body className="h-auto overflow-y-visible px-0">
-                    <Divider className="h-px" />
                     <Button
                         rounded="none"
                         className="w-full bg-white text-base font-normal text-[#222222]"
