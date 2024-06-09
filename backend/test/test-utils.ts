@@ -20,13 +20,13 @@ import { Dogs } from '../src/dogs/dogs.entity';
 import { mockDog, mockDog2 } from '../src/fixtures/dogs.fixture';
 import { journalsDogEntries, journalsEntries } from '../src/fixtures/statistics.fixture';
 import { mockUser } from '../src/fixtures/users.fixture';
-import { JournalsDogs } from '../src/journals-dogs/journals-dogs.entity';
 import { Journals } from '../src/journals/journals.entity';
+import { JournalsDogs } from '../src/journals-dogs/journals-dogs.entity';
 import { MockS3Service } from '../src/s3/__mocks__/s3.service';
 import { S3Service } from '../src/s3/s3.service';
 import { TodayWalkTime } from '../src/today-walk-time/today-walk-time.entity';
-import { UsersDogs } from '../src/users-dogs/users-dogs.entity';
 import { Users } from '../src/users/users.entity';
+import { UsersDogs } from '../src/users-dogs/users-dogs.entity';
 
 let app: INestApplication;
 let dataSource: DataSource;

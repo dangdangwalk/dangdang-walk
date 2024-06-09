@@ -8,6 +8,7 @@ import { AccessTokenPayload } from '../auth/token/token.service';
 import { Serialize } from '../common/interceptors/serialize.interceptor';
 import { DogsService } from '../dogs/dogs.service';
 import { DogSummary } from '../dogs/types/dog-summary.type';
+
 import { User } from '../users/decorators/user.decorator';
 
 @Controller('/dogs/walks')

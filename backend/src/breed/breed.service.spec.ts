@@ -4,9 +4,9 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 
 import { EntityManager, Repository } from 'typeorm';
 
-import { BreedService } from './breed.service';
-import { BreedRepository } from './breed.repository';
 import { Breed } from './breed.entity';
+import { BreedRepository } from './breed.repository';
+import { BreedService } from './breed.service';
 
 import { mockBreed } from '../fixtures/breed.fixture';
 

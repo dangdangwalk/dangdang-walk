@@ -19,9 +19,10 @@ import { AuthJournalGuard } from './guards/auth-journal.guard';
 import { JournalsService } from './journals.service';
 import { JournalInfoForList } from './types/journal-info.type';
 
-import { User } from '../users/decorators/user.decorator';
-import { DateValidationPipe } from '../statistics/pipes/date-validation.pipe';
 import { AccessTokenPayload } from '../auth/token/token.service';
+import { DateValidationPipe } from '../statistics/pipes/date-validation.pipe';
+
+import { User } from '../users/decorators/user.decorator';
 
 @Controller('/journals')
 @UsePipes(new ValidationPipe({ validateCustomDecorators: true, whitelist: true }))

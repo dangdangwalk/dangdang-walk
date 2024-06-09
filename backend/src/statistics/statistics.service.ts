@@ -13,6 +13,7 @@ import { DogSummary } from '../dogs/types/dog-summary.type';
 import { JournalsService } from '../journals/journals.service';
 import { TodayWalkTimeService } from '../today-walk-time/today-walk-time.service';
 import { UsersService } from '../users/users.service';
+
 import { getOneMonthAgo, getStartAndEndOfMonth, getStartAndEndOfWeek } from '../utils/date.util';
 
 @Injectable()
