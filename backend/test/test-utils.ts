@@ -7,6 +7,10 @@ import { AllMethods } from 'supertest/types';
 import { DataSource } from 'typeorm';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 
+import { AppModule } from './../src/app.module';
+
+import { EXPIRED_ACCESS_TOKEN, INVALID_USER_ID_ACCESS_TOKEN, MALFORMED_ACCESS_TOKEN } from './constants';
+
 import { MockOauthService } from '../src/auth/oauth/__mocks__/oauth.service';
 import { GoogleService } from '../src/auth/oauth/google.service';
 import { KakaoService } from '../src/auth/oauth/kakao.service';
@@ -23,9 +27,6 @@ import { S3Service } from '../src/s3/s3.service';
 import { TodayWalkTime } from '../src/today-walk-time/today-walk-time.entity';
 import { UsersDogs } from '../src/users-dogs/users-dogs.entity';
 import { Users } from '../src/users/users.entity';
-
-import { AppModule } from './../src/app.module';
-import { EXPIRED_ACCESS_TOKEN, INVALID_USER_ID_ACCESS_TOKEN, MALFORMED_ACCESS_TOKEN } from './constants';
 
 let app: INestApplication;
 let dataSource: DataSource;

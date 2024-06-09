@@ -1,5 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
+
 import { VALID_ACCESS_TOKEN_100_YEARS } from './constants';
 import { clearUsers, closeTestApp, insertMockUser, setupTestApp, testUnauthorizedAccess } from './test-utils';
 
@@ -27,7 +28,7 @@ describe('S3Controller (e2e)', () => {
                     .send(['jpeg', 'png'])
                     .expect(200);
 
-                expect(response.body.length).toBe(2);
+                expect(response.body).toHaveLength(2);
 
                 expect(response.body[0]).toHaveProperty('filename');
                 expect(response.body[0]).toHaveProperty('url');

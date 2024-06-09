@@ -1,10 +1,8 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 
-import { mockDog, mockDog2 } from '../src/fixtures/dogs.fixture';
-import { journalsEntries } from '../src/fixtures/statistics.fixture';
-
 import { VALID_ACCESS_TOKEN_100_YEARS } from './constants';
+
 import {
     clearDogs,
     clearFakeDate,
@@ -18,6 +16,9 @@ import {
     setupTestApp,
     testUnauthorizedAccess,
 } from './test-utils';
+
+import { mockDog, mockDog2 } from '../src/fixtures/dogs.fixture';
+import { journalsEntries } from '../src/fixtures/statistics.fixture';
 
 describe('StatisticsController (e2e)', () => {
     let app: INestApplication;

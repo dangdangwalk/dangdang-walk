@@ -3,10 +3,10 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
+import { PresignedUrlInfo } from './types/presigned-url-info.type';
+
 import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
 import { generateUuid } from '../utils/hash.util';
-
-import { PresignedUrlInfo } from './types/presigned-url-info.type';
 
 const BUCKET_NAME = 'dangdangwalk';
 

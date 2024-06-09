@@ -2,6 +2,23 @@ import { Injectable } from '@nestjs/common';
 import { DeleteResult, EntityManager, FindOptionsWhere, In } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
+import { Journals } from './journals.entity';
+
+import { JournalsRepository } from './journals.repository';
+
+import { CreateExcrementsInfo, CreateJournalData, CreateJournalInfo } from './types/create-journal-data.type';
+
+import {
+    DogInfoForDetail,
+    ExcrementsInfoForDetail,
+    JournalDetail,
+    JournalInfoForDetail,
+} from './types/journal-detail.type';
+
+import { JournalInfoForList } from './types/journal-info.type';
+
+import { UpdateJournalData } from './types/update-journal-data.type';
+
 import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
 import { DogsService } from '../dogs/dogs.service';
 import { ExcrementsService } from '../excrements/excrements.service';
@@ -13,18 +30,6 @@ import { S3Service } from '../s3/s3.service';
 import { TodayWalkTimeService } from '../today-walk-time/today-walk-time.service';
 import { formatDate, getStartAndEndOfDay } from '../utils/date.util';
 import { checkIfExistsInArr, makeSubObject, makeSubObjectsArray } from '../utils/manipulate.util';
-
-import { Journals } from './journals.entity';
-import { JournalsRepository } from './journals.repository';
-import { CreateExcrementsInfo, CreateJournalData, CreateJournalInfo } from './types/create-journal-data.type';
-import {
-    DogInfoForDetail,
-    ExcrementsInfoForDetail,
-    JournalDetail,
-    JournalInfoForDetail,
-} from './types/journal-detail.type';
-import { JournalInfoForList } from './types/journal-info.type';
-import { UpdateJournalData } from './types/update-journal-data.type';
 
 @Injectable()
 export class JournalsService {

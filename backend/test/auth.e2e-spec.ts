@@ -2,9 +2,6 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { DataSource } from 'typeorm';
 
-import { mockUser } from '../src/fixtures/users.fixture';
-import { Users } from '../src/users/users.entity';
-
 import {
     EXPIRED_REFRESH_TOKEN,
     INVALID_PROVIDER,
@@ -13,7 +10,11 @@ import {
     VALID_PROVIDER_KAKAO,
     VALID_REFRESH_TOKEN_100_YEARS,
 } from './constants';
+
 import { clearUsers, closeTestApp, insertMockUser, setupTestApp, testUnauthorizedAccess } from './test-utils';
+
+import { mockUser } from '../src/fixtures/users.fixture';
+import { Users } from '../src/users/users.entity';
 
 describe('AuthController (e2e)', () => {
     let app: INestApplication;
