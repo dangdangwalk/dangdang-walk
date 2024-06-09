@@ -13,13 +13,13 @@ import {
     ValidationPipe,
 } from '@nestjs/common';
 
-import { AccessTokenPayload } from '../auth/token/token.service';
-import { User } from '../users/decorators/user.decorator';
-
 import { DogsService } from './dogs.service';
 import { CreateDogDto } from './dtos/create-dog.dto';
 import { UpdateDogDto } from './dtos/update-dog.dto';
 import { AuthDogGuard } from './guards/auth-dog.guard';
+
+import { User } from '../users/decorators/user.decorator';
+import { AccessTokenPayload } from '../auth/token/token.service';
 
 @Controller('/dogs')
 @UsePipes(new ValidationPipe({ validateCustomDecorators: true, whitelist: true }))

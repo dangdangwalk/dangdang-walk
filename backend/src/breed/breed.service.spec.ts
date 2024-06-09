@@ -4,11 +4,11 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 
 import { EntityManager, Repository } from 'typeorm';
 
-import { mockBreed } from '../fixtures/breed.fixture';
-
 import { BreedService } from './breed.service';
 import { BreedRepository } from './breed.repository';
 import { Breed } from './breed.entity';
+
+import { mockBreed } from '../fixtures/breed.fixture';
 
 describe('BreedService', () => {
     let service: BreedService;

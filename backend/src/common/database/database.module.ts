@@ -6,10 +6,10 @@ import { DataSource } from 'typeorm';
 import { runSeeders } from 'typeorm-extension';
 import { addTransactionalDataSource, getDataSourceByName } from 'typeorm-transactional';
 
+import BreedSeeder from './seeds/breed.seeder';
+
 import { color } from '../../utils/ansi.util';
 import { WinstonLoggerService } from '../logger/winstonLogger.service';
-
-import BreedSeeder from './seeds/breed.seeder';
 
 @Module({
     imports: [

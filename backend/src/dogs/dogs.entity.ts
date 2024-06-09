@@ -1,10 +1,10 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
+import { GENDER, Gender } from './types/gender.type';
+
 import { Breed } from '../breed/breed.entity';
 import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
 import { TodayWalkTime } from '../today-walk-time/today-walk-time.entity';
-
-import { GENDER, Gender } from './types/gender.type';
 
 @Entity('dogs')
 export class Dogs {

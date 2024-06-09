@@ -1,9 +1,10 @@
+import { Dogs } from './dogs.entity';
+
+import { GENDER } from './types/gender.type';
+
 import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
 import { mockDog } from '../fixtures/dogs.fixture';
 import { TodayWalkTime } from '../today-walk-time/today-walk-time.entity';
-
-import { Dogs } from './dogs.entity';
-import { GENDER } from './types/gender.type';
 
 describe('Dogs', () => {
     it('dogs 정보가 주어지면 dogs 정보를 반환해야 한다.', () => {
