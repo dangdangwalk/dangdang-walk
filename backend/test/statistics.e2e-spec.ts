@@ -19,8 +19,6 @@ import {
     testUnauthorizedAccess,
 } from './test-utils';
 
-const context = describe;
-
 describe('StatisticsController (e2e)', () => {
     let app: INestApplication;
 

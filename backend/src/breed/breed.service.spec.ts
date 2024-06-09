@@ -10,8 +10,6 @@ import { BreedService } from './breed.service';
 import { BreedRepository } from './breed.repository';
 import { Breed } from './breed.entity';
 
-const context = describe;
-
 describe('BreedService', () => {
     let service: BreedService;
     let breedRepository: Repository<Breed>;

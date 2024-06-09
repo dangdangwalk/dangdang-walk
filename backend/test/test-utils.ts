@@ -62,8 +62,6 @@ export const closeTestApp = async () => {
     await app.close();
 };
 
-const context = describe;
-
 export const testUnauthorizedAccess = async (requestName: string, method: AllMethods, endpoint: string) => {
     context(`Authorization header 없이 ${requestName} 요청을 보내면`, () => {
         it('401 상태 코드를 반환해야 한다.', async () => {

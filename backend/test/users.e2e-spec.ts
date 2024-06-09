@@ -8,8 +8,6 @@ import { Users } from '../src/users/users.entity';
 import { VALID_ACCESS_TOKEN_100_YEARS } from './constants';
 import { clearUsers, closeTestApp, insertMockUser, setupTestApp, testUnauthorizedAccess } from './test-utils';
 
-const context = describe;
-
 describe('UsersController (e2e)', () => {
     let app: INestApplication;
     let dataSource: DataSource;

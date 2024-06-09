@@ -14,8 +14,6 @@ import { Users } from './users.entity';
 import { UsersRepository } from './users.repository';
 import { UsersService } from './users.service';
 
-const context = describe;
-
 describe('UsersService', () => {
     let service: UsersService;
     let userRepository: Repository<Users>;

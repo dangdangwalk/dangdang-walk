@@ -7,8 +7,6 @@ import { Breed } from '../src/breed/breed.entity';
 
 import { closeTestApp, setupTestApp } from './test-utils';
 
-const context = describe;
-
 describe('BreedController (e2e)', () => {
     let app: INestApplication;
     let breeds: Omit<Breed, 'id'>[];
