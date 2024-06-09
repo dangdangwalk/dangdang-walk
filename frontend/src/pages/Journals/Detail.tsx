@@ -146,7 +146,7 @@ export default function Detail() {
                 <BottomSheet.Body className="h-auto overflow-y-visible px-0">
                     <Button
                         rounded="none"
-                        className="w-full bg-white text-base font-normal text-[#222222]"
+                        className="h-[60px] w-full bg-white text-base font-normal text-[#222222]"
                         onClick={handleModify}
                     >
                         수정하기
@@ -154,7 +154,7 @@ export default function Detail() {
                     <Divider className="h-px" />
                     <Button
                         rounded="none"
-                        className="w-full bg-white text-base font-normal text-[#222222]"
+                        className="h-[60px] w-full bg-white text-base font-normal text-[#222222]"
                         onClick={() => setOpenModal(true)}
                     >
                         삭제하기
