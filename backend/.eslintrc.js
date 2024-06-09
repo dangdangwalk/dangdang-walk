@@ -5,11 +5,15 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['@typescript-eslint/eslint-plugin', 'import'],
-  extends: ['plugin:@typescript-eslint/recommended', 'plugin:import/typescript'],
+  extends: [
+    'plugin:jest/recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:import/typescript'
+  ],
   root: true,
   env: {
     node: true,
-    jest: true,
+    'jest/globals': true,
   },
   ignorePatterns: ['.eslintrc.js', 'dist'],
   rules: {
@@ -33,6 +37,14 @@ module.exports = {
     'arrow-spacing': ['error', { before: true, after: true }],
     'no-empty-function': 'off',
     'no-useless-constructor': 'off',
+    'jest/no-disabled-tests': 'warn',
+    'jest/no-focused-tests': 'error',
+    'jest/no-identical-title': 'off',
+    'jest/prefer-to-have-length': 'warn',
+    'jest/valid-expect': 'error',
+    'jest/no-mocks-import': 'off',
+    'jest/expect-expect': 'off',
+    'jest/no-export': 'off',
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
