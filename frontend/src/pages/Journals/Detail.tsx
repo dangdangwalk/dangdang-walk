@@ -124,7 +124,7 @@ export default function Detail() {
                 </div>
                 {isModifying ? (
                     <Button rounded="none" className="h-16 w-full" disabled={isSaving} onClick={handleSave}>
-                        <span className="translate-y-[-5px]">저장하기</span>
+                        저장하기
                     </Button>
                 ) : (
                     <Navbar />
@@ -144,10 +144,9 @@ export default function Detail() {
             </Modal>
             <BottomSheet isOpen={isBottomsheetOpen} onClose={() => setIsBottomsheetOpen(false)}>
                 <BottomSheet.Body className="h-auto overflow-y-visible px-0">
-                    <Divider className="h-px" />
                     <Button
                         rounded="none"
-                        className="w-full bg-white text-base font-normal text-[#222222]"
+                        className="h-[60px] w-full bg-white text-base font-normal text-[#222222]"
                         onClick={handleModify}
                     >
                         수정하기
@@ -155,7 +154,7 @@ export default function Detail() {
                     <Divider className="h-px" />
                     <Button
                         rounded="none"
-                        className="w-full bg-white text-base font-normal text-[#222222]"
+                        className="h-[60px] w-full bg-white text-base font-normal text-[#222222]"
                         onClick={() => setOpenModal(true)}
                     >
                         삭제하기
