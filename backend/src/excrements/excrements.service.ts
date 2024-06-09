@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
+
 import { Location } from '../journals/dtos/create-journal.dto';
+
 import { Excrements } from './excrements.entity';
 import { ExcrementsRepository } from './excrements.repository';
 import { Excrement } from './types/excrement.type';

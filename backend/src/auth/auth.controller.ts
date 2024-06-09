@@ -10,7 +10,9 @@ import {
     UsePipes,
     ValidationPipe,
 } from '@nestjs/common';
+
 import { User } from '../users/decorators/user.decorator';
+
 import { AuthService } from './auth.service';
 import { OauthCookies } from './decorators/oauth-data.decorator';
 import { SkipAuthGuard } from './decorators/public.decorator';

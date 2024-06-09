@@ -12,8 +12,10 @@ import {
     UsePipes,
     ValidationPipe,
 } from '@nestjs/common';
+
 import { AccessTokenPayload } from '../auth/token/token.service';
 import { User } from '../users/decorators/user.decorator';
+
 import { DogsService } from './dogs.service';
 import { CreateDogDto } from './dtos/create-dog.dto';
 import { UpdateDogDto } from './dtos/update-dog.dto';

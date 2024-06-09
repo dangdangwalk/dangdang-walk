@@ -1,6 +1,8 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+
 import { Dogs } from '../dogs/dogs.entity';
 import { Journals } from '../journals/journals.entity';
+
 import { EXCREMENT, Excrement } from './types/excrement.type';
 
 @Entity('excrements')

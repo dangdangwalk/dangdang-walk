@@ -1,9 +1,11 @@
+import * as process from 'node:process';
+
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import * as cookieParser from 'cookie-parser';
-import * as process from 'node:process';
 import 'reflect-metadata';
 import { initializeTransactionalContext } from 'typeorm-transactional';
+
 import { AppModule } from './app.module';
 import { WinstonLoggerService } from './common/logger/winstonLogger.service';
 import { PORT } from './config/settings';

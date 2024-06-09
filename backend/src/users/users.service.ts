@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { FindOptionsWhere } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
+
 import { AccessTokenPayload } from '../auth/token/token.service';
 import { S3Service } from '../s3/s3.service';
 import { UsersDogsService } from '../users-dogs/users-dogs.service';
 import { generateUuid } from '../utils/hash.util';
 import { checkIfExistsInArr } from '../utils/manipulate.util';
+
 import { CreateUser } from './types/create-user.type';
 import { ROLE } from './types/role.type';
 import { UpdateUser } from './types/update-user.type';

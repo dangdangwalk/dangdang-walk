@@ -1,4 +1,5 @@
 import { IsBoolean, IsEnum, IsOptional, IsPositive, IsString } from 'class-validator';
+
 import { GENDER, Gender } from '../types/gender.type';
 
 export class UpdateDogDto {

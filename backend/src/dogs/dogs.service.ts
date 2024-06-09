@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { EntityManager, FindOptionsWhere, In } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
+
 import { BreedService } from '../breed/breed.service';
 import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
 import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
@@ -11,6 +12,7 @@ import { TodayWalkTimeService } from '../today-walk-time/today-walk-time.service
 import { UsersDogs } from '../users-dogs/users-dogs.entity';
 import { UsersDogsService } from '../users-dogs/users-dogs.service';
 import { makeSubObjectsArray } from '../utils/manipulate.util';
+
 import { Dogs } from './dogs.entity';
 import { DogsRepository } from './dogs.repository';
 import { DogData } from './types/dog-data.type';

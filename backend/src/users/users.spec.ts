@@ -1,5 +1,6 @@
 import { VALID_REFRESH_TOKEN_100_YEARS } from '../../test/constants';
 import { OAUTH_ACCESS_TOKEN, OAUTH_REFRESH_TOKEN, mockUser } from '../fixtures/users.fixture';
+
 import { ROLE } from './types/role.type';
 import { Users } from './users.entity';
 

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DeleteResult, FindManyOptions, FindOptionsWhere } from 'typeorm';
+
 import { JournalPhotos } from './journal-photos.entity';
 import { JournalPhotosRepository } from './journal-photos.repository';
 

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { In } from 'typeorm';
+
 import { DogsService } from '../dogs/dogs.service';
 import { DogSummary } from '../dogs/types/dog-summary.type';
 import { UsersService } from '../users/users.service';

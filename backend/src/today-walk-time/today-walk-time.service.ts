@@ -1,7 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { FindOptionsWhere, In } from 'typeorm';
+
 import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
 import { getStartOfToday } from '../utils/date.util';
+
 import { TodayWalkTime } from './today-walk-time.entity';
 import { TodayWalkTimeRepository } from './today-walk-time.repository';
 
