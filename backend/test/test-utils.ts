@@ -11,7 +11,10 @@ import { NaverService } from '../src/auth/oauth/naver.service';
 import { DogWalkDay } from '../src/dog-walk-day/dog-walk-day.entity';
 import { Dogs } from '../src/dogs/dogs.entity';
 import { mockDog, mockDog2 } from '../src/fixtures/dogs.fixture';
+import { journalsDogEntries, journalsEntries } from '../src/fixtures/statistics.fixture';
 import { mockUser } from '../src/fixtures/users.fixture';
+import { JournalsDogs } from '../src/journals-dogs/journals-dogs.entity';
+import { Journals } from '../src/journals/journals.entity';
 import { MockS3Service } from '../src/s3/__mocks__/s3.service';
 import { S3Service } from '../src/s3/s3.service';
 import { TodayWalkTime } from '../src/today-walk-time/today-walk-time.entity';
@@ -55,15 +58,13 @@ export const closeTestApp = async () => {
 };
 
 export const insertMockUser = async () => {
-    const usersRepository = dataSource.getRepository(Users);
-    await usersRepository.save(mockUser);
+    await dataSource.getRepository(Users).save(mockUser);
 };
 
 export const clearUsers = async () => {
-    const usersRepository = dataSource.getRepository(Users);
-    await usersRepository.query('SET FOREIGN_KEY_CHECKS = 0;');
-    await usersRepository.clear();
-    await usersRepository.query('SET FOREIGN_KEY_CHECKS = 1;');
+    await dataSource.query('SET FOREIGN_KEY_CHECKS = 0;');
+    await dataSource.getRepository(Users).clear();
+    await dataSource.query('SET FOREIGN_KEY_CHECKS = 1;');
 };
 
 export const insertMockDogs = async () => {
@@ -76,11 +77,52 @@ export const insertMockDogs = async () => {
 };
 
 export const clearDogs = async () => {
-    const dogsRepository = dataSource.getRepository(Dogs);
-    await dogsRepository.query('SET FOREIGN_KEY_CHECKS = 0;');
+    await dataSource.query('SET FOREIGN_KEY_CHECKS = 0;');
     await dataSource.getRepository(DogWalkDay).clear();
     await dataSource.getRepository(TodayWalkTime).clear();
-    await dogsRepository.clear();
+    await dataSource.getRepository(Dogs).clear();
     await dataSource.getRepository(UsersDogs).clear();
-    await dogsRepository.query('SET FOREIGN_KEY_CHECKS = 1;');
+    await dataSource.query('SET FOREIGN_KEY_CHECKS = 1;');
 };
+
+export const insertMockJournals = async () => {
+    await dataSource.query('SET FOREIGN_KEY_CHECKS = 0;');
+    await dataSource.getRepository(Journals).save(journalsEntries);
+    await dataSource.getRepository(JournalsDogs).save(journalsDogEntries);
+    await dataSource.query('SET FOREIGN_KEY_CHECKS = 1;');
+};
+
+export const clearJournals = async () => {
+    await dataSource.query('SET FOREIGN_KEY_CHECKS = 0;');
+    await dataSource.getRepository(JournalsDogs).clear();
+    await dataSource.getRepository(Journals).clear();
+    await dataSource.query('SET FOREIGN_KEY_CHECKS = 1;');
+};
+
+export const setFakeDate = (fakeDate: Date) => {
+    jest.useFakeTimers({
+        /**
+         * Fake only Date
+         * 참고: https://jestjs.io/docs/jest-object#jestusefaketimersfaketimersconfig
+         */
+        doNotFake: [
+            'hrtime',
+            'nextTick',
+            'performance',
+            'queueMicrotask',
+            'requestAnimationFrame',
+            'cancelAnimationFrame',
+            'requestIdleCallback',
+            'cancelIdleCallback',
+            'setImmediate',
+            'clearImmediate',
+            'setInterval',
+            'clearInterval',
+            'setTimeout',
+            'clearTimeout',
+        ],
+        now: fakeDate,
+    });
+};
+
+export const clearFakeDate = jest.useRealTimers;
