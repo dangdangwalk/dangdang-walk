@@ -3,12 +3,11 @@ import queryClient from '@/api/queryClient';
 import Camera from '@/pages/Camera';
 import Health from '@/pages/Health';
 import Home from '@/pages/Home';
-import Join from '@/pages/Join';
 import JournalCreateForm from '@/pages/Journals/CreateForm';
 import Detail from '@/pages/Journals/Detail';
 import Journals from '@/pages/Journals';
 import OauthCallback from '@/pages/OauthCallback';
-import Profile from '@/pages/MyPage';
+import MyPage from '@/pages/MyPage';
 import Walk from '@/pages/Walk';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -18,6 +17,7 @@ import App from './App';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import NavbarProvider from '@/components/NavbarProvider';
+import SignUp from '@/pages/Join';
 const router = createBrowserRouter([
     {
         path: '/',
@@ -33,10 +33,10 @@ const router = createBrowserRouter([
                 ),
             },
             {
-                path: '/profile',
+                path: '/mypage',
                 element: (
                     <NavbarProvider>
-                        <Profile />
+                        <MyPage />
                     </NavbarProvider>
                 ),
             },
@@ -45,8 +45,8 @@ const router = createBrowserRouter([
                 element: <Health />,
             },
             {
-                path: '/join',
-                element: <Join />,
+                path: '/signup',
+                element: <SignUp />,
             },
             {
                 path: '/walk',

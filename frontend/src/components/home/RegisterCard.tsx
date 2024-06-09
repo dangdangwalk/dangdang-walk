@@ -15,7 +15,7 @@ const defaultDpg: DogStatistic = {
 export default function RegisterCard() {
     const navigator = useNavigate();
     const handleClick = () => {
-        navigator('/join', { state: 'DogBasicInfo' });
+        navigator('/signup', { state: 'DogBasicInfo' });
     };
     return (
         <div className="relative">

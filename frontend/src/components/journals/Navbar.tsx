@@ -9,7 +9,7 @@ export default function Navbar() {
                 <Link to="/">
                     <WalkOn />
                 </Link>
-                <Link to="/profile">
+                <Link to="/mypage">
                     <MyPageOff />
                 </Link>
             </div>
