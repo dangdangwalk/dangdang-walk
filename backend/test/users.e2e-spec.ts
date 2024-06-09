@@ -4,7 +4,7 @@ import { DataSource } from 'typeorm';
 import { mockUserProfile } from '../src/fixtures/users.fixture';
 import { Users } from '../src/users/users.entity';
 import { VALID_ACCESS_TOKEN_100_YEARS } from './constants';
-import { clearUsers, closeTestApp, insertMockUser, setupTestApp } from './test-utils';
+import { clearUsers, closeTestApp, insertMockUser, setupTestApp, testUnauthorizedAccess } from './test-utils';
 
 const context = describe;
 
@@ -41,6 +41,8 @@ describe('UsersController (e2e)', () => {
                 expect(response.body).toEqual(mockUserInfo);
             });
         });
+
+        testUnauthorizedAccess('회원 정보 조회', 'get', '/users/me');
     });
 
     describe('/users/me (PATCH)', () => {
@@ -64,5 +66,7 @@ describe('UsersController (e2e)', () => {
                 expect(updatedUser).toMatchObject({ ...mockUserInfo, ...updateMockUser });
             });
         });
+
+        testUnauthorizedAccess('회원 정보 수정', 'patch', '/users/me');
     });
 });
