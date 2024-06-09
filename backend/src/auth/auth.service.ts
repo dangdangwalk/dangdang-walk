@@ -128,9 +128,10 @@ export class AuthService {
     @Transactional()
     private async deleteUserData(userId: number) {
         const dogIds = await this.usersService.getOwnDogsList(userId);
-        dogIds.forEach(async (dogId) => {
+
+        for (const dogId of dogIds) {
             await this.dogsService.deleteDogFromUser(userId, dogId);
-        });
+        }
 
         await this.usersService.delete({ id: userId });
         await this.s3Service.deleteObjectFolder(userId);

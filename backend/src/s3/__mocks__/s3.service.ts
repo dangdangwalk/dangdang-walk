@@ -1,3 +1,4 @@
+import { ForbiddenException } from '@nestjs/common';
 import { generateUuid } from '../../utils/hash.util';
 import { PresignedUrlInfo } from '../types/presigned-url-info.type';
 
@@ -10,7 +11,13 @@ export const MockS3Service = {
         }));
     }),
 
-    deleteObjects: jest.fn(),
+    deleteObjects: jest.fn((userId: number, filenames: string[]) => {
+        for (const curFilename of filenames) {
+            if (parseInt(curFilename.split('/')[0]) !== userId) {
+                throw new ForbiddenException(`User ${userId} is not owner of the file ${curFilename}`);
+            }
+        }
+    }),
 
     deleteSingleObject: jest.fn(),
 

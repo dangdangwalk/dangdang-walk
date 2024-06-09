@@ -1,5 +1,4 @@
-import { Body, Controller, Delete, ParseArrayPipe, Post } from '@nestjs/common';
-
+import { Body, Controller, Delete, HttpCode, ParseArrayPipe, Post } from '@nestjs/common';
 import { AccessTokenPayload } from '../auth/token/token.service';
 import { User } from '../users/decorators/user.decorator';
 
@@ -11,6 +10,7 @@ export class S3Controller {
     constructor(private readonly s3Service: S3Service) {}
 
     @Post('/upload')
+    @HttpCode(200)
     async upload(
         @User() user: AccessTokenPayload,
         @Body(new ParseArrayPipe({ items: String, separator: ',' })) type: string[],
