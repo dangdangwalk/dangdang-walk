@@ -1,8 +1,10 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { DataSource } from 'typeorm';
+
 import { mockUser } from '../src/fixtures/users.fixture';
 import { Users } from '../src/users/users.entity';
+
 import {
     EXPIRED_REFRESH_TOKEN,
     INVALID_PROVIDER,

@@ -1,6 +1,8 @@
 import { Body, Controller, Get, HttpCode, Patch, UsePipes, ValidationPipe } from '@nestjs/common';
+
 import { AccessTokenPayload } from '../auth/token/token.service';
 import { User } from '../users/decorators/user.decorator';
+
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UsersService } from './users.service';
 

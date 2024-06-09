@@ -1,8 +1,10 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { DataSource } from 'typeorm';
+
 import { mockUserProfile } from '../src/fixtures/users.fixture';
 import { Users } from '../src/users/users.entity';
+
 import { VALID_ACCESS_TOKEN_100_YEARS } from './constants';
 import { clearUsers, closeTestApp, insertMockUser, setupTestApp, testUnauthorizedAccess } from './test-utils';
 

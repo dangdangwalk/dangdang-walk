@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+
 import { Journals } from '../journals/journals.entity';
 
 @Entity('journal_photos')

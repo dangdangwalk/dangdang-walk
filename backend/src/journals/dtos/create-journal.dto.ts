@@ -10,6 +10,7 @@ import {
     Min,
     ValidateNested,
 } from 'class-validator';
+
 import { IsWGS84 } from '../validator/WGS84.validator';
 
 export class Location {

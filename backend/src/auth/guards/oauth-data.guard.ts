@@ -1,4 +1,5 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+
 import { WinstonLoggerService } from '../../common/logger/winstonLogger.service';
 
 @Injectable()

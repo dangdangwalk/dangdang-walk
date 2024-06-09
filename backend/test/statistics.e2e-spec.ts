@@ -1,7 +1,9 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
+
 import { mockDog, mockDog2 } from '../src/fixtures/dogs.fixture';
 import { journalsEntries } from '../src/fixtures/statistics.fixture';
+
 import { VALID_ACCESS_TOKEN_100_YEARS } from './constants';
 import {
     clearDogs,

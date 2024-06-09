@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
+
 import { JournalsModule } from '../journals/journals.module';
+
 import { StatisticsController } from './statistics.controller';
 import { StatisticsService } from './statistics.service';
 

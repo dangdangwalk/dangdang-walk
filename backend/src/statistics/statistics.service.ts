@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { In } from 'typeorm';
+
 import { BreedService } from '../breed/breed.service';
 import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
 import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
@@ -9,6 +10,7 @@ import { JournalsService } from '../journals/journals.service';
 import { TodayWalkTimeService } from '../today-walk-time/today-walk-time.service';
 import { UsersService } from '../users/users.service';
 import { getOneMonthAgo, getStartAndEndOfMonth, getStartAndEndOfWeek } from '../utils/date.util';
+
 import { Period } from './pipes/period-validation.pipe';
 import { DogStatistic } from './types/statistic.type';
 

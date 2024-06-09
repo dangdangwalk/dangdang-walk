@@ -5,8 +5,10 @@ import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-clas
 import { DataSource } from 'typeorm';
 import { runSeeders } from 'typeorm-extension';
 import { addTransactionalDataSource, getDataSourceByName } from 'typeorm-transactional';
+
 import { color } from '../../utils/ansi.util';
 import { WinstonLoggerService } from '../logger/winstonLogger.service';
+
 import BreedSeeder from './seeds/breed.seeder';
 
 @Module({

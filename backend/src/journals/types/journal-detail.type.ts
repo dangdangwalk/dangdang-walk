@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer';
 import { IsNotEmpty, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
+
 import { Excrements } from '../../excrements/excrements.entity';
 
 export class PhotoUrlType {

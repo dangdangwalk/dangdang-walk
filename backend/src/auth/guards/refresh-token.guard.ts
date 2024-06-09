@@ -1,5 +1,6 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JsonWebTokenError, TokenExpiredError } from '@nestjs/jwt';
+
 import { WinstonLoggerService } from '../../common/logger/winstonLogger.service';
 import { AuthService } from '../auth.service';
 import { RefreshTokenPayload, TokenService } from '../token/token.service';
