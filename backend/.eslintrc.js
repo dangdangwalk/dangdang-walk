@@ -15,6 +15,16 @@ module.exports = {
     node: true,
     'jest/globals': true,
   },
+  settings: {
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.ts'],
+      },
+    },
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts'],
+    },
+  },
   ignorePatterns: ['.eslintrc.js', 'dist'],
   rules: {
     'no-trailing-spaces': 'error',
@@ -71,7 +81,8 @@ module.exports = {
           "external",
           "sibling",
         ],
-        "warnOnUnassignedImports": true
+        "warnOnUnassignedImports": true,
+        "alphabetize": {"order": "asc", "caseInsensitive": false}
       },
     ],
     'import/no-duplicates': 'error',
