@@ -4,7 +4,15 @@ import { DataSource } from 'typeorm';
 import { Dogs } from '../src/dogs/dogs.entity';
 import { mockDog2Profile, mockDogProfile } from '../src/fixtures/dogs.fixture';
 import { VALID_ACCESS_TOKEN_100_YEARS } from './constants';
-import { clearDogs, clearUsers, closeTestApp, insertMockDogs, insertMockUser, setupTestApp } from './test-utils';
+import {
+    clearDogs,
+    clearUsers,
+    closeTestApp,
+    insertMockDogs,
+    insertMockUser,
+    setupTestApp,
+    testUnauthorizedAccess,
+} from './test-utils';
 
 const context = describe;
 
@@ -52,6 +60,8 @@ describe('DogsController (e2e)', () => {
                 expect(response.body).toEqual([mockDogProfile, mockDog2Profile]);
             });
         });
+
+        testUnauthorizedAccess('강아지 목록', 'get', '/dogs');
     });
 
     describe('/dogs (POST)', () => {
@@ -93,6 +103,8 @@ describe('DogsController (e2e)', () => {
                     .expect(404);
             });
         });
+
+        testUnauthorizedAccess('강아지 등록', 'post', '/dogs');
     });
 
     describe('/dogs/:id (GET)', () => {
@@ -131,6 +143,8 @@ describe('DogsController (e2e)', () => {
                     .expect(403);
             });
         });
+
+        testUnauthorizedAccess('강아지의 프로필 조회', 'get', '/dogs/1');
     });
 
     describe('/dogs/:id (PATCH)', () => {
@@ -188,6 +202,8 @@ describe('DogsController (e2e)', () => {
                     .expect(404);
             });
         });
+
+        testUnauthorizedAccess('강아지의 정보 수정', 'patch', '/dogs/1');
     });
 
     describe('/dogs/:id (DELETE)', () => {
@@ -218,5 +234,7 @@ describe('DogsController (e2e)', () => {
                     .expect(403);
             });
         });
+
+        testUnauthorizedAccess('강아지의 삭제', 'delete', '/dogs/1');
     });
 });

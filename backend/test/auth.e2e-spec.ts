@@ -4,16 +4,14 @@ import { DataSource } from 'typeorm';
 import { mockUser } from '../src/fixtures/users.fixture';
 import { Users } from '../src/users/users.entity';
 import {
-    EXPIRED_ACCESS_TOKEN,
     EXPIRED_REFRESH_TOKEN,
     INVALID_PROVIDER,
-    MALFORMED_ACCESS_TOKEN,
     MALFORMED_REFRESH_TOKEN,
     VALID_ACCESS_TOKEN_100_YEARS,
     VALID_PROVIDER_KAKAO,
     VALID_REFRESH_TOKEN_100_YEARS,
 } from './constants';
-import { clearUsers, closeTestApp, insertMockUser, setupTestApp } from './test-utils';
+import { clearUsers, closeTestApp, insertMockUser, setupTestApp, testUnauthorizedAccess } from './test-utils';
 
 const context = describe;
 
@@ -222,38 +220,7 @@ describe('AuthController (e2e)', () => {
             });
         });
 
-        context('Authorization header 없이 로그아웃 요청을 보내면', () => {
-            it('401 상태 코드를 반환해야 한다.', async () => {
-                return request(app.getHttpServer()).post('/auth/logout').expect(401);
-            });
-        });
-
-        context('구조가 잘못된 access token을 Authorization header에 담아 로그아웃 요청을 보내면', () => {
-            it('401 상태 코드를 반환해야 한다.', async () => {
-                return request(app.getHttpServer())
-                    .post('/auth/logout')
-                    .set('Authorization', `Bearer ${MALFORMED_ACCESS_TOKEN}`)
-                    .expect(401);
-            });
-        });
-
-        context('만료된 access token을 Authorization header에 담아 로그아웃 요청을 보내면', () => {
-            it('401 상태 코드를 반환해야 한다.', async () => {
-                return request(app.getHttpServer())
-                    .post('/auth/logout')
-                    .set('Authorization', `Bearer ${EXPIRED_ACCESS_TOKEN}`)
-                    .expect(401);
-            });
-        });
-
-        context('존재하지 않는 userId를 가진 access token을 Authorization header에 담아 로그아웃 요청을 보내면', () => {
-            it('401 상태 코드를 반환해야 한다.', async () => {
-                return request(app.getHttpServer())
-                    .post('/auth/logout')
-                    .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
-                    .expect(401);
-            });
-        });
+        testUnauthorizedAccess('로그아웃', 'post', '/auth/logout');
     });
 
     describe('/auth/token (GET)', () => {
@@ -333,37 +300,6 @@ describe('AuthController (e2e)', () => {
             });
         });
 
-        context('Authorization header 없이 회원탈퇴 요청을 보내면', () => {
-            it('401 상태 코드를 반환해야 한다.', async () => {
-                return request(app.getHttpServer()).delete('/auth/deactivate').expect(401);
-            });
-        });
-
-        context('구조가 잘못된 access token을 Authorization header에 담아 회원탈퇴 요청을 보내면', () => {
-            it('401 상태 코드를 반환해야 한다.', async () => {
-                return request(app.getHttpServer())
-                    .delete('/auth/deactivate')
-                    .set('Authorization', `Bearer ${MALFORMED_ACCESS_TOKEN}`)
-                    .expect(401);
-            });
-        });
-
-        context('만료된 access token을 Authorization header에 담아 회원탈퇴 요청을 보내면', () => {
-            it('401 상태 코드를 반환해야 한다.', async () => {
-                return request(app.getHttpServer())
-                    .delete('/auth/deactivate')
-                    .set('Authorization', `Bearer ${EXPIRED_ACCESS_TOKEN}`)
-                    .expect(401);
-            });
-        });
-
-        context('존재하지 않는 userId를 가진 access token을 Authorization header에 담아 회원탈퇴 요청을 보내면', () => {
-            it('401 상태 코드를 반환해야 한다.', async () => {
-                return request(app.getHttpServer())
-                    .delete('/auth/deactivate')
-                    .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
-                    .expect(401);
-            });
-        });
+        testUnauthorizedAccess('회원탈퇴', 'delete', '/auth/deactivate');
     });
 });

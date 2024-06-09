@@ -14,6 +14,7 @@ import {
     insertMockUser,
     setFakeDate,
     setupTestApp,
+    testUnauthorizedAccess,
 } from './test-utils';
 
 const context = describe;
@@ -92,6 +93,8 @@ describe('StatisticsController (e2e)', () => {
                     .expect(400);
             });
         });
+
+        testUnauthorizedAccess('강아지의 최근 한달 간 산책 통계 조회', 'get', '/dogs/1/statistics/recent?period=month');
     });
 
     describe('/dogs/:id/statistics (GET)', () => {
@@ -210,6 +213,8 @@ describe('StatisticsController (e2e)', () => {
                     .expect(400);
             });
         });
+
+        testUnauthorizedAccess('강아지의 산책 횟수 조회', 'get', '/dogs/1/statistics?date=2024-05-08&period=month');
     });
 
     describe('/dogs/statistics (GET)', () => {
@@ -240,5 +245,7 @@ describe('StatisticsController (e2e)', () => {
                 ]);
             });
         });
+
+        testUnauthorizedAccess('강아지들의 일주일 산책 현황 조회', 'get', '/dogs/statistics');
     });
 });

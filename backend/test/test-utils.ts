@@ -2,6 +2,8 @@ import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getDataSourceToken } from '@nestjs/typeorm';
 import * as cookieParser from 'cookie-parser';
+import * as request from 'supertest';
+import { AllMethods } from 'supertest/types';
 import { DataSource } from 'typeorm';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 import { MockOauthService } from '../src/auth/oauth/__mocks__/oauth.service';
@@ -21,6 +23,7 @@ import { TodayWalkTime } from '../src/today-walk-time/today-walk-time.entity';
 import { UsersDogs } from '../src/users-dogs/users-dogs.entity';
 import { Users } from '../src/users/users.entity';
 import { AppModule } from './../src/app.module';
+import { EXPIRED_ACCESS_TOKEN, INVALID_USER_ID_ACCESS_TOKEN, MALFORMED_ACCESS_TOKEN } from './constants';
 
 let app: INestApplication;
 let dataSource: DataSource;
@@ -55,6 +58,46 @@ export const setupTestApp = async () => {
 export const closeTestApp = async () => {
     await dataSource.destroy();
     await app.close();
+};
+
+const context = describe;
+
+export const testUnauthorizedAccess = async (requestName: string, method: AllMethods, endpoint: string) => {
+    context(`Authorization header 없이 ${requestName} 요청을 보내면`, () => {
+        it('401 상태 코드를 반환해야 한다.', async () => {
+            return request(app.getHttpServer())[method](endpoint).expect(401);
+        });
+    });
+
+    context(`구조가 잘못된 access token을 Authorization header에 담아 ${requestName} 요청을 보내면`, () => {
+        it('401 상태 코드를 반환해야 한다.', async () => {
+            return request(app.getHttpServer())
+                [method](endpoint)
+                .set('Authorization', `Bearer ${MALFORMED_ACCESS_TOKEN}`)
+                .expect(401);
+        });
+    });
+
+    context(`만료된 access token을 Authorization header에 담아 ${requestName} 요청을 보내면`, () => {
+        it('401 상태 코드를 반환해야 한다.', async () => {
+            return request(app.getHttpServer())
+                [method](endpoint)
+                .set('Authorization', `Bearer ${EXPIRED_ACCESS_TOKEN}`)
+                .expect(401);
+        });
+    });
+
+    context(
+        `존재하지 않는 userId를 가진 access token을 Authorization header에 담아 ${requestName} 요청을 보내면`,
+        () => {
+            it('401 상태 코드를 반환해야 한다.', async () => {
+                return request(app.getHttpServer())
+                    [method](endpoint)
+                    .set('Authorization', `Bearer ${INVALID_USER_ID_ACCESS_TOKEN}`)
+                    .expect(401);
+            });
+        },
+    );
 };
 
 export const insertMockUser = async () => {
