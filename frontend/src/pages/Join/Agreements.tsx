@@ -15,7 +15,7 @@ interface Props {
     handleCheck: (key: string, checked: boolean) => void;
 }
 
-export default function AgreementsPage({ toggle, allAgreed, handleAllCheck, agreements, handleCheck }: Props) {
+export default function Agreements({ toggle, allAgreed, handleAllCheck, agreements, handleCheck }: Props) {
     return (
         <div className={`flex flex-col bg-white ${toggle && 'animate-mainToLeft'}`}>
             <span className="text-xl font-semibold leading-[30px] text-black">

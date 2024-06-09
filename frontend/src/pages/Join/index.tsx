@@ -3,10 +3,8 @@ import { getStorage } from '@/utils/storage';
 import React, { useMemo, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import TopBack from '@/assets/icons/ic-arrow-left.svg';
-import Agreements from '@/pages/Join/Agreements';
 import { Button } from '@/components/commons/Button';
 import { Divider } from '@/components/commons/Divider';
-import PetOwner from '@/pages/Join/PetOwner';
 import Cancel from '@/assets/icons/ic-cancel.svg';
 import { storageKeys } from '@/constants';
 import { useAuth } from '@/hooks/useAuth';
@@ -17,12 +15,14 @@ import { dataURLtoFile } from '@/utils/dataUrlToFile';
 import { getUploadUrl } from '@/api/upload';
 import CancelRegModal from '@/components/CancelRegModal';
 import { useCropStore } from '@/store/cropStore';
-import DogBasicInfo from '@/pages/Join/DogBasicInfo';
-import DogDetailInfo from '@/pages/Join/DogDetailInfo';
 import { useSpinnerStore } from '@/store/spinnerStore';
 import { DogCreateForm } from '@/models/dog';
+import Agreements from '@/pages/Join/Agreements';
+import PetOwner from '@/pages/Join/PetOwner';
+import DogBasicInfo from '@/pages/Join/DogBasicInfo';
+import DogDetailInfo from '@/pages/Join/DogDetailInfo';
 
-export default function Join() {
+export default function SignUp() {
     const navigate = useNavigate();
     const provider = getStorage(storageKeys.PROVIDER);
     if (!provider) navigate('/');

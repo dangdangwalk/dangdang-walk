@@ -29,7 +29,7 @@ const useSignIn = (mutationOptions?: UseMutationCustomOptions) => {
         },
         onError: (error) => {
             if (error.response && error.response.status === 404) {
-                navigate('/join');
+                navigate('/signup');
             }
         },
         onSettled: () => {

@@ -15,13 +15,13 @@ import TopBar from '@/components/commons/Topbar';
 import FemaleIcon from '@/components/icons/FemaleIcon';
 import { MaleIcon } from '@/components/icons/MaleIcon';
 import { uploadImg, useDog } from '@/hooks/useDog';
-import { maxLengthCheck } from '@/pages/Join/DogDetailInfo';
 import { useCropStore } from '@/store/cropStore';
 import { dataURLtoFile } from '@/utils/dataUrlToFile';
 import { secondsToTimeFormat } from '@/utils/time';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { Dog, DogCreateForm } from '@/models/dog';
 import useToast from '@/hooks/useToast';
+import { maxLengthCheck } from '@/pages/Join/DogDetailInfo';
 interface Props {
     dog: Dog;
     statistics: RecentMonthStatisticsResponse;
@@ -34,7 +34,7 @@ export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfile
 
     const { dogProfileImgUrl, setDogProfileImgUrl, onSelectFileChange } = useCropStore();
     const [onEdit, setOnEdit] = useState(false);
-    window.location.pathname !== '/profile' && setOnEdit(false);
+    window.location.pathname !== '/mypage' && setOnEdit(false);
     const [breedSearchOpen, setBreedSearchOpen] = useState(false);
     const [deleteDogConfirm, setDeleteDogConfirm] = useState(false);
     const [registerData, setRegisterData] = useState<DogCreateForm>(dog);

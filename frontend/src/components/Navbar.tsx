@@ -24,8 +24,8 @@ function Navbar() {
                         <img src={WalkOff} alt="Walk Off" />
                     )}
                 </Link>
-                <Link to="/profile">
-                    {location.pathname === '/profile' ? (
+                <Link to="/mypage">
+                    {location.pathname === '/mypage' ? (
                         <img src={myPageOn} alt="MyPage On" />
                     ) : (
                         <img src={myPageOff} alt="MyPage Off" />

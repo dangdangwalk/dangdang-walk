@@ -20,7 +20,7 @@ import DeactivateModal from '@/components/DeactivateModal';
 import DogDetail from '@/pages/MyPage/DogDetail';
 import { RecentMonthStatisticsResponse, fetchDogRecentMonthStatistics } from '@/api/dog';
 import { Dog } from '@/models/dog';
-function Profile() {
+function MyPage() {
     const navigate = useNavigate();
     const { fetchDog } = useDog();
     const { data, isSuccess } = fetchDog;
@@ -61,11 +61,11 @@ function Profile() {
                 return Google;
             case 'naver':
                 return Naver;
+            default:
+                return Google;
         }
     };
     useEffect(() => {
-        console.log('data fetched');
-
         if (isSuccess) {
             setDogs(data ?? []);
         }
@@ -82,7 +82,7 @@ function Profile() {
             <main className={`mb-[60px] flex h-full flex-col`}>
                 <section className="flex items-center justify-between px-5 py-6">
                     <section className="flex justify-start gap-2">
-                        <div className="text-lg font-bold leading-[33px] text-neutral-800">{nickname}님</div>
+                        <div className="text-lg font-bold leading-[33px] text-neutral-800">{nickname ?? '견주'}님</div>
 
                         <img src={ProviderIcon(provider)} alt="provider" />
                     </section>
@@ -131,7 +131,7 @@ function Profile() {
                     {dogs && 5 - dogs?.length > 0 && (
                         <div
                             className="flex items-center justify-between px-5 py-[6px]"
-                            onClick={() => navigate('/join', { state: 'DogBasicInfo' })}
+                            onClick={() => navigate('/signup', { state: 'DogBasicInfo' })}
                         >
                             <Avatar url={SelectPhoto} name={'댕댕이 추가하기'} />
                         </div>
@@ -155,4 +155,4 @@ function Profile() {
     );
 }
 
-export default Profile;
+export default MyPage;
