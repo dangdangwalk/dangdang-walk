@@ -1,6 +1,9 @@
 // Access token with maxAge = 100 years, userId = 1, provider = kakao
 export const VALID_ACCESS_TOKEN_100_YEARS =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInByb3ZpZGVyIjoia2FrYW8iLCJpYXQiOjE3MTYxODc5NzAsImV4cCI6NDg3MTk0Nzk3MH0.QlL_1luAr4T-YdA5QfKl8_ivhAlE1_FFlRfSAq2u2Lc';
+// Access token with maxAge = 100 years, userId = 100, provider = kakao
+export const INVALID_USER_ID_ACCESS_TOKEN =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwMCwicHJvdmlkZXIiOiJrYWthbyIsImlhdCI6MTcxNzkzMTM5OCwiZXhwIjoxNzE3OTM0OTk4fQ.oLl9-M7qkDZNbMmcrCNhyMcQ2Eyxxy751Xo3pBjww_4';
 export const EXPIRED_ACCESS_TOKEN =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInByb3ZpZGVyIjoia2FrYW8iLCJpYXQiOjE3MTc1OTQ4NTYsImV4cCI6MTcxNzU5NDg2Nn0.KphkJf-oCeJoZTv3fw-XvI5Qo16058r_ak5lWCJrvmg';
 export const MALFORMED_ACCESS_TOKEN = 'malformed_access_token';
