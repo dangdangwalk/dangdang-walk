@@ -92,4 +92,122 @@ describe('StatisticsController (e2e)', () => {
             });
         });
     });
+
+    describe('/dogs/:id/statistics (GET)', () => {
+        context('사용자가 소유한 강아지의 한달 산책 횟수 조회 요청을 보내면', () => {
+            it('200 상태 코드와 한달 산책 횟수를 반환해야 한다.', async () => {
+                const response = await request(app.getHttpServer())
+                    .get('/dogs/1/statistics?date=2024-05-08&period=month')
+                    .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
+                    .expect(200);
+
+                expect(response.body).toEqual({
+                    '2024-05-01': 1,
+                    '2024-05-02': 1,
+                    '2024-05-03': 1,
+                    '2024-05-04': 1,
+                    '2024-05-05': 1,
+                    '2024-05-06': 0,
+                    '2024-05-07': 1,
+                    '2024-05-08': 1,
+                    '2024-05-09': 0,
+                    '2024-05-10': 2,
+                    '2024-05-11': 0,
+                    '2024-05-12': 0,
+                    '2024-05-13': 0,
+                    '2024-05-14': 0,
+                    '2024-05-15': 0,
+                    '2024-05-16': 0,
+                    '2024-05-17': 0,
+                    '2024-05-18': 0,
+                    '2024-05-19': 0,
+                    '2024-05-20': 0,
+                    '2024-05-21': 0,
+                    '2024-05-22': 0,
+                    '2024-05-23': 0,
+                    '2024-05-24': 0,
+                    '2024-05-25': 0,
+                    '2024-05-26': 0,
+                    '2024-05-27': 0,
+                    '2024-05-28': 0,
+                    '2024-05-29': 0,
+                    '2024-05-30': 0,
+                    '2024-05-31': 1,
+                });
+            });
+        });
+
+        context('사용자가 소유한 강아지의 일주일 산책 횟수 조회 요청을 보내면', () => {
+            it('200 상태 코드와 일주일 산책 횟수를 반환해야 한다.', async () => {
+                const response = await request(app.getHttpServer())
+                    .get('/dogs/1/statistics?date=2024-05-08&period=week')
+                    .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
+                    .expect(200);
+
+                expect(response.body).toEqual({
+                    '2024-05-05': 1,
+                    '2024-05-06': 0,
+                    '2024-05-07': 1,
+                    '2024-05-08': 1,
+                    '2024-05-09': 0,
+                    '2024-05-10': 2,
+                    '2024-05-11': 0,
+                });
+            });
+        });
+
+        context('사용자가 소유하지 않은 강아지의 한달 산책 횟수 조회 요청을 보내면', () => {
+            it('403 상태 코드를 반환해야 한다.', () => {
+                return request(app.getHttpServer())
+                    .get('/dogs/3/statistics?date=2024-05-08&period=month')
+                    .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
+                    .expect(403);
+            });
+        });
+
+        context('사용자가 소유하지 않은 강아지의 일주일 산책 횟수 조회 요청을 보내면', () => {
+            it('403 상태 코드를 반환해야 한다.', () => {
+                return request(app.getHttpServer())
+                    .get('/dogs/3/statistics?date=2024-05-08&period=week')
+                    .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
+                    .expect(403);
+            });
+        });
+
+        context('date query 없이 강아지의 산책 횟수 조회 요청을 보내면', () => {
+            it('400 상태 코드를 반환해야 한다.', () => {
+                return request(app.getHttpServer())
+                    .get('/dogs/1/statistics?period=month')
+                    .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
+                    .expect(400);
+            });
+        });
+
+        context('YYYY-MM-DD 형식이 아닌 date query로 강아지의 산책 횟수 조회 요청을 보내면', () => {
+            it('400 상태 코드를 반환해야 한다.', () => {
+                return request(app.getHttpServer())
+                    .get('/dogs/1/statistics?date=20240508&period=month')
+                    .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
+                    .expect(400);
+            });
+        });
+
+        context('period query 없이 강아지의 산책 횟수 조회 요청을 보내면', () => {
+            it('400 상태 코드를 반환해야 한다.', () => {
+                return request(app.getHttpServer())
+                    .get('/dogs/1/statistics?date=2024-05-08')
+                    .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
+                    .expect(400);
+            });
+        });
+
+        context('유효하지 않은 period query로 강아지의 산책 횟수 조회 요청을 보내면', () => {
+            it('400 상태 코드를 반환해야 한다.', () => {
+                return request(app.getHttpServer())
+                    .get('/dogs/1/statistics?date=2024-05-08&period=year')
+                    .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
+                    .expect(400);
+            });
+        });
+    });
 });
