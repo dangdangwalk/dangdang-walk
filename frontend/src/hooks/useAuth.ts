@@ -86,20 +86,24 @@ const useSignOut = (mutationOptions?: UseMutationCustomOptions) => {
             queryClient.resetQueries({ queryKey: [queryKeys.AUTH] });
             queryClient.refetchQueries({ queryKey: [queryKeys.DOGS] });
         },
+        onSettled: () => {
+            window.location.href = '/';
+        },
         ...mutationOptions,
     });
 };
 
 const useDeactivate = (mutationOptions?: UseMutationCustomOptions) => {
     const { storeSignOut } = useAuthStore();
-    const navigate = useNavigate();
     return useMutation({
         mutationFn: requestDeactivate,
         onSuccess: () => {
             storeSignOut();
             queryClient.resetQueries({ queryKey: [queryKeys.AUTH] });
             queryClient.refetchQueries({ queryKey: [queryKeys.DOGS] });
-            navigate('/');
+        },
+        onSettled: () => {
+            window.location.href = '/';
         },
         ...mutationOptions,
     });
