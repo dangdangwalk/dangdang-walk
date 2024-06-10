@@ -78,7 +78,7 @@ export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfile
 
             updateDog.mutate({
                 dogId: id,
-                params: { name, breed, birth, gender, isNeutered, weight, profilePhotoUrl: null },
+                params: { name, breed, birth, gender, isNeutered, weight, profilePhotoUrl },
             });
         }
         setOnEdit(false);
