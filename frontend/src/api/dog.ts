@@ -41,7 +41,7 @@ export const fetchDogRecentMonthStatistics = async (dogId: number): Promise<Rece
     );
     return data;
 };
-
-export const updateDog = async ({ dogId, params }: { dogId: number; params: DogCreateForm }) => {
+type DogUpdateForm = Partial<Omit<Dog, 'id'>>;
+export const updateDog = async ({ dogId, params }: { dogId: number; params: DogUpdateForm }) => {
     await httpClient.patch(`/dogs/${dogId}`, params);
 };
