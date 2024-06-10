@@ -4,7 +4,6 @@ import EditPhoto from '@/assets/buttons/btn-edit-photo.svg';
 import CrownIcon from '@/assets/icons/ic-crown.svg';
 import Back from '@/assets/icons/ic-arrow-left.svg';
 import Edit from '@/assets/icons/ic-edit.svg';
-import Distance from '@/classes/Distance';
 import BreedSearch from '@/components/BreedSearch';
 import DeleteDogModal from '@/components/DeleteDogModal';
 import ImageCropper from '@/components/ImageCropper';
@@ -22,6 +21,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { Dog, DogCreateForm } from '@/models/dog';
 import useToast from '@/hooks/useToast';
 import { maxLengthCheck } from '@/pages/Join/DogDetailInfo';
+import { valueWithUnit } from '@/utils/distance';
 interface Props {
     dog: Dog;
     statistics: RecentMonthStatisticsResponse;
@@ -40,7 +40,6 @@ export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfile
     const [registerData, setRegisterData] = useState<DogCreateForm>(dog);
 
     const { totalDistance, totalTime, totalWalkCnt } = statistics;
-    const distance = new Distance(totalDistance);
     const { id } = dog;
     const { name, breed, birth, gender, isNeutered, weight, profilePhotoUrl } = registerData;
 
@@ -310,7 +309,7 @@ export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfile
                                 </div>
                                 <div className="flex justify-between">
                                     <p className="text-sm font-normal text-neutral-400">총 거리</p>
-                                    <p className="text-sm font-bold text-neutral-800">{distance.valueWithUnit}</p>
+                                    <p className="text-sm font-bold text-neutral-800">{valueWithUnit(totalDistance)}</p>
                                 </div>
                                 <div className="flex justify-between">
                                     <p className="text-sm font-normal text-neutral-400">총 시간</p>
