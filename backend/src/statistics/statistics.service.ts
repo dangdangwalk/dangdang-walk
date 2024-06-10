@@ -46,6 +46,7 @@ export class StatisticsService {
                 weeklyWalks: weeklyWalks[i],
             });
         }
+
         return result;
     }
 
