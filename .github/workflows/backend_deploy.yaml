@@ -50,6 +50,12 @@ jobs:
       - name: ECR Login
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
+      - name: ECR Delete
+        run: |
+          IMAGE_TAG=$(aws ecr describe-images --repository-name dangdangwalk | jq '.imageDetails[].imageTags[0]')
+          aws ecr batch-delete-image \      
+                --repository-name ${{ env.IMAGE }} \
+                --image-ids imageTag=$IMAGE_TAG
       - name: Docker build
         run: |
           docker build --platform linux/amd64 -t ${{ env.IMAGE }} --target prod .
