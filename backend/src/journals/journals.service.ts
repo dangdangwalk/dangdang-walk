@@ -68,7 +68,7 @@ export class JournalsService {
         return ownJournals.map((cur) => cur.id);
     }
 
-    async checkJournalOwnership(userId: number, journalIds: number | number[]): Promise<boolean> {
+    async checkJournalOwnership(userId: number, journalIds: number | number[]): Promise<[boolean, number[]]> {
         const myJournalIds = await this.getOwnJournalIds(userId);
         return checkIfExistsInArr(myJournalIds, journalIds);
     }

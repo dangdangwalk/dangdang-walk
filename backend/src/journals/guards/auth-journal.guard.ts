@@ -15,7 +15,7 @@ export class AuthJournalGuard implements CanActivate {
         const { userId } = request.user;
         const journalId = parseInt(request.params.id);
 
-        const owned = await this.journalsService.checkJournalOwnership(userId, journalId);
+        const [owned] = await this.journalsService.checkJournalOwnership(userId, journalId);
 
         if (!owned) {
             const error = new ForbiddenException(`User ${userId} does not have access to journal ${journalId}`);
