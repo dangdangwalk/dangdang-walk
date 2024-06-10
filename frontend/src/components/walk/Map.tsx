@@ -1,6 +1,5 @@
 import Spinner from '@/components/commons/Spinner';
-import { DEFAULT_LAT, DEFAULT_LNG } from '@/constants/location';
-import { NAV_HEIGHT, TOP_BAR_HEIGHT, WALK_INFO_HEIGHT } from '@/constants/style';
+import { NAV_HEIGHT, TOP_BAR_HEIGHT, WALK_INFO_HEIGHT, DEFAULT_LAT, DEFAULT_LNG } from '@/constants';
 import { Position } from '@/models/location';
 import { cn } from '@/utils/tailwindClass';
 import { useEffect, useState } from 'react';

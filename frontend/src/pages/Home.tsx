@@ -2,7 +2,7 @@ import DogCardList from '@/components/home/DogCardList';
 import WeatherInfo from '@/components/home/WeatherInfo';
 import { useState } from 'react';
 import { Button } from '@/components/commons/Button';
-import { NAV_HEIGHT, TOP_BAR_HEIGHT } from '@/constants/style';
+import { NAV_HEIGHT, TOP_BAR_HEIGHT } from '@/constants';
 import Notification from '@/assets/icons/ic-notification.svg';
 import TopBar from '@/components/commons/Topbar';
 import BottomSheet from '@/components/commons/BottomSheet';

@@ -1,4 +1,4 @@
-import { DEFAULT_LAT, DEFAULT_LNG } from '@/constants/location';
+import { DEFAULT_LAT, DEFAULT_LNG } from '@/constants';
 import { Position } from '@/models/location';
 import { calculateDistance } from '@/utils/geo';
 import { useEffect, useState } from 'react';

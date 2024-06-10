@@ -1,7 +1,7 @@
 import TopBar from '@/components/commons/Topbar';
 import CustomCalendar from '@/components/journals/CustomCalendar';
 import JournalCardList from '@/components/journals/JournalCardList';
-import { NAV_HEIGHT, TOP_BAR_HEIGHT } from '@/constants/style';
+import { NAV_HEIGHT, TOP_BAR_HEIGHT } from '@/constants';
 import useJournals from '@/hooks/useJournals';
 import Ic from '@/assets/icons/ic-arrow-right.svg';
 import { Dog } from '@/models/dog';
