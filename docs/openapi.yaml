@@ -75,7 +75,7 @@ paths:
   /journals/{id}:
     $ref: ./journals/id.yaml
 
-  /api/upload:
-    $ref: ./api/upload.yaml
-  /api/delete:
-    $ref: ./api/delete.yaml
+  /images/presigned-url:
+    $ref: ./images/presigned-url.yaml
+  /images:
+    $ref: ./images/delete.yaml

@@ -7,7 +7,7 @@ interface UploadUrlResponse {
 }
 
 export const getUploadUrl = async (type: string[]): Promise<UploadUrlResponse[]> => {
-    const { data } = await httpClient.post(`/api/upload`, type);
+    const { data } = await httpClient.post(`/images/presigned-url`, type);
 
     return data;
 };
@@ -28,5 +28,5 @@ export const uploadImage = async (file: File, url: string | undefined): Promise<
 };
 
 export const deleteImages = async (imageFileNames: Array<ImageFileName>) => {
-    await httpClient.delete('/api/delete', { data: imageFileNames });
+    await httpClient.delete('/images', { data: imageFileNames });
 };
