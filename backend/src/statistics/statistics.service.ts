@@ -35,6 +35,7 @@ export class StatisticsService {
         weeklyWalks: number[][],
     ): DogStatistic[] {
         const result: DogStatistic[] = [];
+
         for (let i = 0; i < dogProfiles.length; i++) {
             result.push({
                 id: dogProfiles[i].id,
