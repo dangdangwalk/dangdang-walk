@@ -11,7 +11,7 @@ import {
     ValidateNested,
 } from 'class-validator';
 
-import { IsWGS84 } from '../validator/WGS84.validator';
+import { IsWGS84 } from '../validators/WGS84.validator';
 
 export class Location {
     @IsWGS84({ message: 'The provided point is not in WGS84 format' })

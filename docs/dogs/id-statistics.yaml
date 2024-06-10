@@ -1,8 +1,8 @@
 get:
   tags:
     - 강아지
-  summary: 강아지의 한달/일주일 산책 횟수를 조회
-  description: 강아지의 한달/일주일 산책 횟수를 조회
+  summary: 강아지의 한달/일주일 산책 횟수 조회
+  description: 강아지의 한달/일주일 산책 횟수 조회
   parameters:
     - in: cookie
       name: Authorization

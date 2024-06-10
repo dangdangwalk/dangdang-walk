@@ -58,7 +58,15 @@ describe('WalkController (e2e)', () => {
             });
         });
 
-        // TODO: invalid request body에 대한 test case 추가하기
+        context('사용자가 유효하지 않은 body로 산책 시작 요청을 보내면', () => {
+            it('400 상태 코드를 반환해야 한다.', () => {
+                return request(app.getHttpServer())
+                    .post('/dogs/walks/start')
+                    .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
+                    .send(['1', 2])
+                    .expect(400);
+            });
+        });
 
         testUnauthorizedAccess('산책 시작', 'post', '/dogs/walks/start');
     });
@@ -86,7 +94,15 @@ describe('WalkController (e2e)', () => {
             });
         });
 
-        // TODO: invalid request body에 대한 test case 추가하기
+        context('사용자가 유효하지 않은 body로 산책 종료 요청을 보내면', () => {
+            it('400 상태 코드를 반환해야 한다.', () => {
+                return request(app.getHttpServer())
+                    .post('/dogs/walks/stop')
+                    .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
+                    .send(['1', 2])
+                    .expect(400);
+            });
+        });
 
         testUnauthorizedAccess('산책 종료', 'post', '/dogs/walks/stop');
     });
