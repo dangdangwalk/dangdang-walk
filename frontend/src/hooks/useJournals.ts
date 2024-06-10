@@ -1,7 +1,7 @@
 import { fetchJournals } from '@/api/journal';
 import { queryStringKeys } from '@/constants';
 import { Journal } from '@/models/journal';
-import { formDate } from '@/utils/time';
+import { formatDate } from '@/utils/time';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -13,7 +13,7 @@ const useJournals = () => {
         const date = params.get(queryStringKeys.DATE);
         const dogId = params.get(queryStringKeys.DOG_ID);
         if (dogId) {
-            fetchJournals(Number(dogId), date ?? formDate(new Date())).then((data) => {
+            fetchJournals(Number(dogId), date ?? formatDate(new Date())).then((data) => {
                 if (data) {
                     setJournals(data);
                 }

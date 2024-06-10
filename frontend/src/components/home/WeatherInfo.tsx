@@ -1,6 +1,6 @@
 import { useWeather } from '@/hooks/useWeather';
 import { getCurrentTime } from '@/utils/time';
-import { temperFormat } from '@/utils/format';
+import { formatTemperature } from '@/utils/format';
 import { SkyStatus, getAirStatus, getSkyGrade, weatherStatus } from '@/utils/weather';
 import { useEffect, useState } from 'react';
 import Cloudy from '@/assets/icons/ic-cloudy.svg';
@@ -71,7 +71,7 @@ export default function WeatherInfo() {
                     </div>
                     <div className="inline-flex flex-col items-center justify-start gap-3.5">
                         <img src={statusImage[skyStatus ?? 'dayClear']} alt={skyStatus} />
-                        <div className="text-xs font-normal leading-[18px] text-zinc-500">{`최고:${temperFormat(weather?.maxTemperature)} 최저:${weather?.minTemperature}`}</div>
+                        <div className="text-xs font-normal leading-[18px] text-zinc-500">{`최고:${formatTemperature(weather?.maxTemperature)} 최저:${weather?.minTemperature}`}</div>
                     </div>
                 </figure>
             )}

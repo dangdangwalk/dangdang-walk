@@ -7,7 +7,7 @@ import useGeolocation from '@/hooks/useGeolocation';
 import BottomSheet from '@/components/commons/BottomSheet';
 import useWalkingDogs from '@/hooks/useWalkingDogs';
 import useStopWatch from '@/hooks/useStopWatch';
-import { DEFAULT_WALK_MET, DEFAULT_WEIGHT } from '@/constants/walk';
+import { DEFAULT_WALK_MET, DEFAULT_WEIGHT } from '@/constants';
 
 import DogFecesAndUrineCheckList from '@/components/walk/DogFecesAndUrineCheckList';
 import StopToast from '@/components/walk/StopToast';

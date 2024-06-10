@@ -6,7 +6,7 @@ import { queryStringKeys } from '@/constants';
 import PrevMonth from '@/assets/buttons/btn-prev-month.svg';
 import NextMonth from '@/assets/buttons/btn-next-month.svg';
 import { fetchDogMonthStatistic, period } from '@/api/dog';
-import { formCalendar, formDate, formDay } from '@/utils/time';
+import { formatYearMonth, formatDate, formatDay } from '@/utils/time';
 import useCalendar from '@/hooks/useCalendar';
 
 export default function CustomCalendar() {
@@ -34,7 +34,7 @@ export default function CustomCalendar() {
         const dogId = params.get(queryStringKeys.DOG_ID);
         if (Number(dogId) === currentDogId) return;
         if (date.getFullYear() <= today.getFullYear() && date.getMonth() <= today.getMonth()) {
-            getStatisticData(formDate(date), view);
+            getStatisticData(formatDate(date), view);
         }
         setCurrentDogId(Number(dogId));
     }, [location.search]);
@@ -51,7 +51,7 @@ export default function CustomCalendar() {
                         <img src={PrevMonth} alt="이전달" />
                     </button>
                     <span className="text-center text-base font-bold leading-normal text-neutral-800">
-                        {formCalendar(date)}
+                        {formatYearMonth(date)}
                     </span>
                     <button
                         onClick={() => {
@@ -81,8 +81,8 @@ export default function CustomCalendar() {
                     return (
                         <>
                             <div className="flex flex-col items-center justify-center gap-2">
-                                <div className="days">{formDay(date)}</div>
-                                {mark.has(formDate(date)) ? (
+                                <div className="days">{formatDay(date)}</div>
+                                {mark.has(formatDate(date)) ? (
                                     <div className="dot"></div>
                                 ) : (
                                     <div className="size-1"></div>

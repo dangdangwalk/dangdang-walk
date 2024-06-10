@@ -1,6 +1,6 @@
 import { period } from '@/api/dog';
 import { queryStringKeys } from '@/constants';
-import { formDate } from '@/utils/time';
+import { formatDate } from '@/utils/time';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
@@ -23,7 +23,7 @@ const useCalendar = () => {
     const handlePrevMonth = async (getData: (date: string, period: period) => Promise<void>) => {
         const prevMonth = new Date(date.getFullYear(), date.getMonth() - 1, 1);
         if (today.getFullYear() >= prevMonth.getFullYear() && today.getMonth() >= prevMonth.getMonth()) {
-            await getData(formDate(prevMonth), 'month');
+            await getData(formatDate(prevMonth), 'month');
         }
         setDate(prevMonth);
     };
@@ -31,7 +31,7 @@ const useCalendar = () => {
     const handleNextMonth = async (getData: (date: string, period: period) => Promise<void>) => {
         const nextMonth = new Date(date.getFullYear(), date.getMonth() + 1, 1);
         if (today.getFullYear() >= nextMonth.getFullYear() && today.getMonth() >= nextMonth.getMonth()) {
-            await getData(formDate(nextMonth), 'month');
+            await getData(formatDate(nextMonth), 'month');
         }
         setDate(nextMonth);
     };
@@ -39,13 +39,13 @@ const useCalendar = () => {
         if (view === 'month') {
             setView('week');
         } else {
-            await getData(formDate(today), 'month');
+            await getData(formatDate(today), 'month');
             setView('month');
         }
     };
 
     const handleClickDay = (value: Date, mark: Set<string>) => {
-        const date = formDate(value);
+        const date = formatDate(value);
         setDate(value);
         if (!mark.has(date)) return;
 

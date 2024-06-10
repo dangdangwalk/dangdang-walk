@@ -1,5 +1,5 @@
 import { Button } from '@/components/commons/Button';
-import { NAV_HEIGHT } from '@/constants/style';
+import { NAV_HEIGHT } from '@/constants';
 import { cn } from '@/utils/tailwindClass';
 
 interface BottomSheetProps {

@@ -1,8 +1,8 @@
-export const temperFormat = (temper: number | undefined): string => {
+export const formatTemperature = (temper: number | undefined): string => {
     return `${temper}°C`;
 };
 
-export const percentFormat = (num1: number, num2: number): string => {
+export const formatPercent = (num1: number, num2: number): string => {
     if (num2 === 0) return '0';
     const percent = num1 / num2;
     if (percent >= 1) return '100';
@@ -11,11 +11,7 @@ export const percentFormat = (num1: number, num2: number): string => {
         .padStart(3, '0');
 };
 
-export const distanceFormat = (distance: number): string => {
-    return distance.toFixed(2);
-};
-
-export const timeFormat = (time: number): string => {
+export const formatTime = (time: number): string => {
     // const hours = Math.floor(time / 3600);
     const minutes = Math.floor((time % 3600) / 60)
         .toString()

@@ -4,7 +4,7 @@ import myPageOff from '@/assets/buttons/btn-mypage-off.svg';
 import myPageOn from '@/assets/buttons/btn-mypage-on.svg';
 import WalkOff from '@/assets/buttons/btn-walk-off.svg';
 import WalkOn from '@/assets/buttons/btn-walk-on.svg';
-import { NAV_HEIGHT } from '@/constants/style';
+import { NAV_HEIGHT } from '@/constants';
 
 function Navbar() {
     const location = useLocation();

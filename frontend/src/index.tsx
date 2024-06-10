@@ -1,6 +1,5 @@
 import { fetchJournal } from '@/api/journal';
 import queryClient from '@/api/queryClient';
-import Camera from '@/pages/Camera';
 import Health from '@/pages/Health';
 import Home from '@/pages/Home';
 import JournalCreateForm from '@/pages/Journals/CreateForm';
@@ -55,10 +54,6 @@ const router = createBrowserRouter([
             {
                 path: '/callback',
                 element: <OauthCallback />,
-            },
-            {
-                path: '/camera',
-                element: <Camera />,
             },
             {
                 path: '/journals/create',

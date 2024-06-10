@@ -2,9 +2,9 @@ import { httpClient } from '@/api/http';
 import { DogAvatar } from '@/models/dog';
 import { Journal } from '@/models/journal';
 import { Position as NumberPosition, Position } from '@/models/location';
-import { formDate } from '@/utils/time';
+import { formatDate } from '@/utils/time';
 
-export const fetchJournals = async (dogId: number, date: string = formDate(new Date())): Promise<Journal[]> => {
+export const fetchJournals = async (dogId: number, date: string = formatDate(new Date())): Promise<Journal[]> => {
     const { data } = await httpClient.get(`/journals?dogId=${dogId}&date=${date}`);
 
     return data;
