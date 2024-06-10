@@ -22,7 +22,7 @@ async function bootstrap() {
             'http://localhost:3000',
             'http://localhost:8080',
             'https://opehn.github.io',
-            'https://dangdang-walk-phi.vercel.app',
+            'https://dangdang-walk.xyz',
         ],
         methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
         allowedHeaders: ['Content-Type', 'Accept', 'Authorization'],
