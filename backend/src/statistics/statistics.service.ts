@@ -91,6 +91,7 @@ export class StatisticsService {
             todayWalkAmount.length !== length && `todayWalkAmount.length = ${todayWalkAmount.length}`,
             weeklyWalks.length !== length && `weeklyWalks.length = ${weeklyWalks.length}`,
         ].filter(Boolean);
+
         if (mismatchedLengths.length > 0) {
             const error = new NotFoundException(`Data missing or mismatched for dogId: ${ownDogIds}.`);
             this.logger.error(
