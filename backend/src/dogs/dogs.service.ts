@@ -141,6 +141,7 @@ export class DogsService {
             .innerJoinAndSelect('dogs.breed', 'breed')
             .where('users_dogs.userId = :userId', { userId })
             .getMany();
+
         return dogProfiles.map((dog) => this.makeProfile(dog));
     }
 
