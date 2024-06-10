@@ -1,4 +1,4 @@
-import { Controller, Get, Param, ParseIntPipe, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 
 import { DateValidationPipe } from './pipes/date-validation.pipe';
 
@@ -18,7 +18,7 @@ export class StatisticsController {
     @UseGuards(AuthDogGuard)
     async getDogStatistics(
         @User() { userId }: AccessTokenPayload,
-        @Param('id', ParseIntPipe) dogId: number,
+        @Param('id') dogId: number,
         @Query('period', PeriodValidationPipe) period: Period,
     ) {
         return await this.statisticsService.getDogStatistics(userId, dogId, period);
@@ -28,7 +28,7 @@ export class StatisticsController {
     @UseGuards(AuthDogGuard)
     async getDogWalkCnt(
         @User() { userId }: AccessTokenPayload,
-        @Param('id', ParseIntPipe) dogId: number,
+        @Param('id') dogId: number,
         @Query('date', DateValidationPipe) date: string,
         @Query('period', PeriodValidationPipe) period: Period,
     ) {
