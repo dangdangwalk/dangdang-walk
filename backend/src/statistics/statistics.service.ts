@@ -51,7 +51,8 @@ export class StatisticsService {
     }
 
     async getDogStatistics(userId: number, dogId: number, period: Period) {
-        let startDate: Date, endDate: Date;
+        let startDate: Date;
+        let endDate: Date;
         startDate = endDate = new Date();
 
         if (period === 'month') {
