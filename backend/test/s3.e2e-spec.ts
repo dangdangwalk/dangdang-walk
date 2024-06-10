@@ -19,11 +19,11 @@ describe('S3Controller (e2e)', () => {
         await closeTestApp();
     });
 
-    describe('/api/upload (POST)', () => {
+    describe('/images/presigned-url (POST)', () => {
         context('사용자가 이미지 업로드를 위한 presignedUrl 요청을 보내면', () => {
             it('200 상태 코드와 presignedUrl을 반환해야 한다.', async () => {
                 const response = await request(app.getHttpServer())
-                    .post('/api/upload')
+                    .post('/images/presigned-url')
                     .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
                     .send(['jpeg', 'png'])
                     .expect(200);
@@ -42,14 +42,14 @@ describe('S3Controller (e2e)', () => {
             });
         });
 
-        testUnauthorizedAccess('이미지 업로드를 위한 presignedUrl', 'post', '/api/upload');
+        testUnauthorizedAccess('이미지 업로드를 위한 presignedUrl', 'post', '/images/presigned-url');
     });
 
-    describe('/api/delete (DELETE)', () => {
+    describe('/images (DELETE)', () => {
         context('사용자가 자신이 소유한 이미지의 삭제 요청을 보내면', () => {
             it('200 상태 코드를 반환해야 한다.', () => {
                 return request(app.getHttpServer())
-                    .delete('/api/delete')
+                    .delete('/images')
                     .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
                     .send(['1/dangdangwalk-1.jpeg', '1/dangdangwalk-2.png'])
                     .expect(200);
@@ -59,13 +59,13 @@ describe('S3Controller (e2e)', () => {
         context('사용자가 자신이 소유하지 않은 이미지의 삭제 요청을 보내면', () => {
             it('403 상태 코드를 반환해야 한다.', () => {
                 return request(app.getHttpServer())
-                    .delete('/api/delete')
+                    .delete('/images')
                     .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
                     .send(['1/dangdangwalk-1.jpeg', '2/dangdangwalk-2.png'])
                     .expect(403);
             });
         });
 
-        testUnauthorizedAccess('이미지 삭제', 'delete', '/api/delete');
+        testUnauthorizedAccess('이미지 삭제', 'delete', '/images');
     });
 });
