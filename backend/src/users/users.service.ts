@@ -70,12 +70,11 @@ export class UsersService {
         return foundDogs.map((cur) => cur.dogId);
     }
 
-    async checkDogOwnership(userId: number, dogId: number | number[]): Promise<boolean> {
+    async checkDogOwnership(userId: number, dogId: number | number[]): Promise<[boolean, number[]]> {
         const ownDogs = await this.usersDogsService.find({ userId });
         const myDogIds = ownDogs.map((cur) => cur.dogId);
 
-        const result = checkIfExistsInArr(myDogIds, dogId);
-        return result;
+        return checkIfExistsInArr(myDogIds, dogId);
     }
 
     async getUserProfile({ userId, provider }: AccessTokenPayload): Promise<UserProfile> {

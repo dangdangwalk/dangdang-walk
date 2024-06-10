@@ -94,16 +94,14 @@ export class DogsService {
         return this.dogsRepository.update({ id: dogId }, updateData);
     }
 
-    async updateIsWalking(dogIds: number[] | number, stateToUpdate: boolean) {
+    async updateIsWalking(dogIds: number | number[], stateToUpdate: boolean) {
+        dogIds = Array.isArray(dogIds) ? dogIds : [dogIds];
+
         const attrs = {
             isWalking: stateToUpdate,
         };
 
-        if (Array.isArray(dogIds)) {
-            await this.dogsRepository.update({ id: In(dogIds) }, attrs);
-        } else {
-            await this.dogsRepository.update({ id: dogIds }, attrs);
-        }
+        await this.dogsRepository.update({ id: In(dogIds) }, attrs);
 
         return dogIds;
     }
