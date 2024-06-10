@@ -32,6 +32,7 @@ async function bootstrap() {
     app.use(cookieParser());
 
     const logger = app.get(Logger);
+
     await (async () => {
         await app.listen(PORT, () => {
             logger.log(`Server running at http://${process.env.MYSQL_HOST}:${PORT}`);
