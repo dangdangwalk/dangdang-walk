@@ -1,11 +1,19 @@
-import { Body, Controller, Get, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Get,
+    HttpCode,
+    ParseArrayPipe,
+    Post,
+    UseGuards,
+    UsePipes,
+    ValidationPipe,
+} from '@nestjs/common';
 
-import { WalkCommandDto } from './dtos/walk-command.dto';
-
+import { AuthDogsGuard } from './guards/auth-dogs.guard';
 import { WalkService } from './walk.service';
 
 import { AccessTokenPayload } from '../auth/token/token.service';
-import { Serialize } from '../common/interceptors/serialize.interceptor';
 import { DogsService } from '../dogs/dogs.service';
 import { DogSummary } from '../dogs/types/dog-summary.type';
 
@@ -19,30 +27,22 @@ export class WalkController {
         private readonly dogsService: DogsService,
     ) {}
 
-    @Serialize(WalkCommandDto)
     @Post('/start')
-    async startWalk(@Body() body: WalkCommandDto): Promise<number[]> {
-        const dogIds = [];
-        for (const curId of body.dogId) {
-            dogIds.push(parseInt(curId));
-        }
-        await this.dogsService.updateIsWalking(dogIds, true);
-        return dogIds;
+    @HttpCode(200)
+    @UseGuards(AuthDogsGuard)
+    async startWalk(@Body(new ParseArrayPipe({ items: Number, separator: ',' })) dogIds: number[]): Promise<number[]> {
+        return this.dogsService.updateIsWalking(dogIds, true);
     }
 
-    @Serialize(WalkCommandDto)
     @Post('/stop')
-    async stopWalk(@Body() body: WalkCommandDto): Promise<number[]> {
-        const dogIds = [];
-        for (const curId of body.dogId) {
-            dogIds.push(parseInt(curId));
-        }
-        await this.dogsService.updateIsWalking(dogIds, false);
-        return dogIds;
+    @HttpCode(200)
+    @UseGuards(AuthDogsGuard)
+    async stopWalk(@Body(new ParseArrayPipe({ items: Number, separator: ',' })) dogIds: number[]): Promise<number[]> {
+        return this.dogsService.updateIsWalking(dogIds, false);
     }
 
     @Get('/available')
     async getAvailableDogs(@User() { userId }: AccessTokenPayload): Promise<DogSummary[]> {
-        return await this.walkService.getAvailableDogs(userId);
+        return this.walkService.getAvailableDogs(userId);
     }
 }
