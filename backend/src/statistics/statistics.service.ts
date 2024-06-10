@@ -60,7 +60,8 @@ export class StatisticsService {
     }
 
     async getDogWalkCnt(userId: number, dogId: number, date: string, period: Period) {
-        let startDate: Date, endDate: Date;
+        let startDate: Date;
+        let endDate: Date;
         startDate = endDate = new Date();
 
         if (period === 'month') {
