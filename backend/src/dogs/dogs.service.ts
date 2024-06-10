@@ -3,15 +3,11 @@ import { EntityManager, FindOptionsWhere, In } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import { Dogs } from './dogs.entity';
-
 import { DogsRepository } from './dogs.repository';
 
 import { DogData } from './types/dog-data.type';
-
 import { DogProfile } from './types/dog-profile.type';
-
 import { DogSummary } from './types/dog-summary.type';
-
 import { Gender } from './types/gender.type';
 
 import { BreedService } from '../breed/breed.service';
@@ -23,6 +19,7 @@ import { TodayWalkTime } from '../today-walk-time/today-walk-time.entity';
 import { TodayWalkTimeService } from '../today-walk-time/today-walk-time.service';
 import { UsersDogs } from '../users-dogs/users-dogs.entity';
 import { UsersDogsService } from '../users-dogs/users-dogs.service';
+
 import { makeSubObjectsArray } from '../utils/manipulate.util';
 
 @Injectable()

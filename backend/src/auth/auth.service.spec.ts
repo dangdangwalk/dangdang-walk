@@ -13,13 +13,13 @@ import { OauthAuthorizeData } from './types/oauth-authorize-data.type';
 import { OauthData } from './types/oauth-data.type';
 import { OAUTH_PROVIDERS } from './types/oauth-provider.type';
 
-import { UsersService } from '../users/users.service';
-import { UsersRepository } from '../users/users.repository';
-import { Users } from '../users/users.entity';
-import { S3Service } from '../s3/s3.service';
-import { mockUser } from '../fixtures/users.fixture';
-import { DogsService } from '../dogs/dogs.service';
 import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
+import { DogsService } from '../dogs/dogs.service';
+import { mockUser } from '../fixtures/users.fixture';
+import { S3Service } from '../s3/s3.service';
+import { Users } from '../users/users.entity';
+import { UsersRepository } from '../users/users.repository';
+import { UsersService } from '../users/users.service';
 
 describe('AuthService', () => {
     let service: AuthService;
