@@ -2,11 +2,6 @@ const tokenKeys = {
     AUTHORIZATION: 'Authorization',
 } as const;
 
-const cookieKeys = {
-    EXPIRES_IN: 'expiresIn',
-    IS_SIGNED_IN: 'isSignedIn',
-} as const;
-
 const queryKeys = {
     AUTH: 'auth',
     DOGS: 'dogs',
@@ -28,6 +23,7 @@ const storageKeys = {
     PROVIDER: 'provider',
     DOGS: 'dogs',
     IS_SIGNED_IN: 'isSignedIn',
+    DATA_URL: 'dataUrl',
 } as const;
 
 const queryStringKeys = {
@@ -35,4 +31,4 @@ const queryStringKeys = {
     DATE: 'date',
 } as const;
 
-export { tokenKeys, cookieKeys, queryKeys, storageKeys, queryStringKeys };
+export { tokenKeys, queryKeys, storageKeys, queryStringKeys };

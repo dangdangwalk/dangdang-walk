@@ -1,5 +1,6 @@
 import { Button } from '@/components/commons/Button';
 import TopBar from '@/components/commons/Topbar';
+import { storageKeys } from '@/constants';
 import { ASPECT_RATIO, MIN_DIMENSION } from '@/constants/cropper';
 import { useCropStore } from '@/store/cropStore';
 import setCanvasPreview from '@/utils/canvasPreview';
@@ -26,8 +27,7 @@ export default function ImageCropper() {
                 convertToPixelCrop(crop, imgRef.current?.width, imgRef.current?.height)
             );
             const dataUrl = previewCanvasRef.current.toDataURL();
-            // const urlData = await getUploadUrl(['png']);
-            setStorage('dataUrl', dataUrl);
+            setStorage(storageKeys.DATA_URL, dataUrl);
             setDogProfileImgUrl(dataUrl);
 
             setCropperToggle(false);

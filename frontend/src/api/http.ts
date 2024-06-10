@@ -1,5 +1,5 @@
 import queryClient from '@/api/queryClient';
-import { queryKeys } from '@/constants';
+import { queryKeys, storageKeys, tokenKeys } from '@/constants';
 import { getStorage } from '@/utils/storage';
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
 
@@ -23,7 +23,7 @@ export const createClient = (config?: AxiosRequestConfig): AxiosInstance => {
             if (request.url?.startsWith(REACT_APP_BASE_IMAGE_URL)) return request;
             if (request.baseURL !== NEST_BASE_URL) return request;
 
-            if (!request.headers['Authorization']) {
+            if (!request.headers[tokenKeys.AUTHORIZATION]) {
                 let data = queryClient.getQueryData<{ accessToken: string }>([
                     queryKeys.AUTH,
                     queryKeys.GET_ACCESS_TOKEN,
@@ -31,7 +31,7 @@ export const createClient = (config?: AxiosRequestConfig): AxiosInstance => {
 
                 if (data) {
                     const { accessToken } = data;
-                    request.headers['Authorization'] = `Bearer ${accessToken}`;
+                    request.headers[tokenKeys.AUTHORIZATION] = `Bearer ${accessToken}`;
                 }
             }
             return request;
@@ -46,7 +46,7 @@ export const createClient = (config?: AxiosRequestConfig): AxiosInstance => {
             return response;
         },
         async (error: AxiosError) => {
-            const isSignedIn = getStorage('isSignedIn') ? true : false;
+            const isSignedIn = getStorage(storageKeys.IS_SIGNED_IN) ? true : false;
 
             if (error.response && error.response.status === 401 && isSignedIn) {
                 try {
@@ -58,7 +58,7 @@ export const createClient = (config?: AxiosRequestConfig): AxiosInstance => {
                         const originalRequest = error.config;
                         if (originalRequest) {
                             const { accessToken } = data;
-                            originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
+                            originalRequest.headers[tokenKeys.AUTHORIZATION] = `Bearer ${accessToken}`;
                             const response = await axiosInstance(originalRequest);
 
                             return response;
