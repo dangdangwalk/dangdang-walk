@@ -21,11 +21,13 @@ export class JournalsDogsService {
         for (const curId of dogIds) {
             await this.createIfNotExists(journalId, curId);
         }
+
         return;
     }
 
     async getDogIdsByJournalId(journalId: number): Promise<number[]> {
         const findResult = await this.journalsDogsRepository.find({ where: { journalId } });
+
         return findResult.map((cur) => cur.dogId);
     }
 }
