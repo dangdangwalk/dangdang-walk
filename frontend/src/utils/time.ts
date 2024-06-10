@@ -16,35 +16,25 @@ export const getCurrentDate = (date: Date) => {
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day = date.getDate().toString().padStart(2, '0');
 
-    const nowDate = `${year}${month}${day}`;
-
-    return nowDate;
+    return `${year}${month}${day}`;
 };
 
 export const getCurrentTime = (date: Date) => {
     const hour = date.getHours().toString().padStart(2, '0');
     const minute = date.getMinutes().toString().padStart(2, '0');
-    const nowTime = `${hour}${minute}`;
-
-    return nowTime;
+    return `${hour}${minute}`;
 };
 
 export const getHours = (date: Date) => {
     const hour = date.getHours().toString().padStart(2, '0');
     return hour;
 };
-export const formTime = (date: Date) => {
-    const hour = date.getHours().toString().padStart(2, '0');
-    const minute = date.getMinutes().toString().padStart(2, '0');
-    const nowTime = `${hour}:${minute}`;
 
-    return nowTime;
-};
 export const getElapsedTime = (start: Date, end: Date) => {
     return (end.getTime() - start.getTime()) / 1000;
 };
 
-export const formDate = (date: Date) => {
+export const formatDate = (date: Date) => {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day = date.getDate().toString().padStart(2, '0');
@@ -52,10 +42,10 @@ export const formDate = (date: Date) => {
     return `${year}-${month}-${day}`;
 };
 
-export const formDay = (date: Date): string => {
+export const formatDay = (date: Date): string => {
     return date.getDate().toString();
 };
-export const formCalendar = (date: Date) => {
+export const formatYearMonth = (date: Date) => {
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     return `${year}년 ${month}`;
@@ -65,5 +55,12 @@ export const getStartTimeToEndTime = (start: string, seconds: number) => {
     const startTime = new Date(start);
     const endTime = new Date(start);
     endTime.setSeconds(endTime.getSeconds() + seconds);
-    return `${formDate(startTime)} ${formTime(startTime)}-${formTime(endTime)}`;
+    return `${formatDate(startTime)} ${formatToHHMM(startTime)}-${formatToHHMM(endTime)}`;
+};
+
+export const formatToHHMM = (date: Date) => {
+    const hour = date.getHours().toString().padStart(2, '0');
+    const minute = date.getMinutes().toString().padStart(2, '0');
+
+    return `${hour}:${minute}`;
 };
