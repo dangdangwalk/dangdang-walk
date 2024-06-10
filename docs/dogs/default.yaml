@@ -79,7 +79,7 @@ get:
       example: "Bearer ${accessToken}"
   responses:
     "200":
-      description: 유저가 소유한 강아지 목록 반환, 없으면 빈배열 반환
+      description: 사용자가 소유한 강아지 목록 반환, 없으면 빈배열 반환
       content:
         application/json:
           schema:

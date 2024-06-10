@@ -21,7 +21,7 @@ async function bootstrap() {
         origin: [
             'http://localhost:3000',
             'http://localhost:8080',
-            'https://opehn.github.io',
+            'https://dangdangwalk.github.io',
             'https://dangdang-walk.xyz',
         ],
         methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
