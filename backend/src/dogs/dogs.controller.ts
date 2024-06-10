@@ -5,7 +5,6 @@ import {
     Get,
     HttpCode,
     Param,
-    ParseIntPipe,
     Patch,
     Post,
     UseGuards,
@@ -39,7 +38,7 @@ export class DogsController {
 
     @Get('/:id(\\d+)')
     @UseGuards(AuthDogGuard)
-    async getProfile(@Param('id', ParseIntPipe) dogId: number) {
+    async getProfile(@Param('id') dogId: number) {
         return this.dogsService.getProfile(dogId);
     }
 
@@ -48,7 +47,7 @@ export class DogsController {
     @UseGuards(AuthDogGuard)
     async update(
         @User() { userId }: AccessTokenPayload,
-        @Param('id', ParseIntPipe) dogId: number,
+        @Param('id') dogId: number,
         @Body() updateDogDto: UpdateDogDto,
     ) {
         await this.dogsService.updateDog(userId, dogId, updateDogDto);
@@ -58,7 +57,7 @@ export class DogsController {
     @Delete('/:id(\\d+)')
     @HttpCode(204)
     @UseGuards(AuthDogGuard)
-    async delete(@User() { userId }: AccessTokenPayload, @Param('id', ParseIntPipe) dogId: number) {
+    async delete(@User() { userId }: AccessTokenPayload, @Param('id') dogId: number) {
         await this.dogsService.deleteDogFromUser(userId, dogId);
         return true;
     }
