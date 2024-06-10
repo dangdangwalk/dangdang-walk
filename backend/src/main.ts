@@ -7,8 +7,8 @@ import 'reflect-metadata';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 
 import { AppModule } from './app.module';
+import { PORT } from './common/config/settings';
 import { WinstonLoggerService } from './common/logger/winstonLogger.service';
-import { PORT } from './config/settings';
 
 async function bootstrap() {
     initializeTransactionalContext();

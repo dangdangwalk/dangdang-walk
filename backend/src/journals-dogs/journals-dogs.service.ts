@@ -29,4 +29,3 @@ export class JournalsDogsService {
         return findResult.map((cur) => cur.dogId);
     }
 }
-
