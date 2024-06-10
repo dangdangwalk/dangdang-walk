@@ -21,7 +21,6 @@ async function bootstrap() {
         origin: [
             'http://localhost:3000',
             'http://localhost:8080',
-            'https://dangdang-walk.vercel.app',
             'https://opehn.github.io',
             'https://dangdang-walk-phi.vercel.app',
         ],
