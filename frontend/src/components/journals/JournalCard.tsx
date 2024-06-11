@@ -9,6 +9,8 @@ const getJournalTitle = (name: string, count: number): string => {
     return `${name}와의 ${count}번째 산책`;
 };
 
+const { REACT_APP_BASE_IMAGE_URL = '' } = window._ENV ?? process.env;
+
 export interface JournalDetailState extends Journal {
     dogName: string;
 }
@@ -31,7 +33,11 @@ export default function JournalCard({ journal, dog }: { journal: Journal; dog: D
             <div className="flex w-full justify-start gap-3 px-4">
                 <div className="size-12 overflow-hidden rounded-lg">
                     {dog.profilePhotoUrl ? (
-                        <img className="size-12" src={dog.profilePhotoUrl} alt={dog.name} />
+                        <img
+                            className="size-12"
+                            src={`${REACT_APP_BASE_IMAGE_URL}/${dog.profilePhotoUrl}`}
+                            alt={dog.name}
+                        />
                     ) : (
                         <DefaultProfileImage />
                     )}
