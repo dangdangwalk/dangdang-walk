@@ -160,7 +160,7 @@ export class JournalsService {
 
     private async updateDogWalkDay(dogIds: number[], operation: (current: number) => number) {
         const dogWalkDayIds = await this.dogsService.getRelatedTableIdList(dogIds, 'walkDayId');
-        await this.dogWalkDayService.updateValues(dogWalkDayIds, operation);
+        await this.dogWalkDayService.updateDailyWalkCount(dogWalkDayIds, operation);
     }
 
     private async updateTodayWalkTime(
