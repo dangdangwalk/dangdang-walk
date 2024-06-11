@@ -16,6 +16,8 @@ import { S3Service } from '../s3/s3.service';
 import { Users } from '../users/users.entity';
 import { UsersService } from '../users/users.service';
 
+const S3_PROFILE_IMAGE_PATH = 'default/profile.png';
+
 @Injectable()
 export class AuthService {
     constructor(
@@ -62,8 +64,8 @@ export class AuthService {
     }
 
     async signup({ oauthAccessToken, oauthRefreshToken, provider }: OauthData): Promise<AuthData> {
-        const { oauthId, oauthNickname, email, profileImageUrl } =
-            await this[`${provider}Service`].requestUserInfo(oauthAccessToken);
+        const { oauthId, oauthNickname, email } = await this[`${provider}Service`].requestUserInfo(oauthAccessToken);
+        const profileImageUrl = S3_PROFILE_IMAGE_PATH;
 
         const refreshToken = this.tokenService.signRefreshToken(oauthId, provider);
         this.logger.debug('signup - signRefreshToken', { refreshToken });
