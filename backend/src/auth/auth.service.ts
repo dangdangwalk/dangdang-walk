@@ -16,6 +16,8 @@ import { S3Service } from '../s3/s3.service';
 import { Users } from '../users/users.entity';
 import { UsersService } from '../users/users.service';
 
+const S3_PROFILE_IMAGE_PATH = 'default/profile.png';
+
 @Injectable()
 export class AuthService {
     constructor(
@@ -30,12 +32,13 @@ export class AuthService {
         private readonly logger: WinstonLoggerService,
     ) {}
 
-    private readonly redirectURI = this.configService.get<string>('CORS_ORIGIN') + '/callback';
+    private readonly REDIRECT_URI = this.configService.get<string>('CORS_ORIGIN') + '/callback';
+    private readonly S3_PROFILE_IMAGE_PATH = 'default/profile.png';
 
     async login({ authorizeCode, provider }: OauthAuthorizeData): Promise<AuthData | OauthData | undefined> {
         const { access_token: oauthAccessToken, refresh_token: oauthRefreshToken } = await this[
             `${provider}Service`
-        ].requestToken(authorizeCode, this.redirectURI);
+        ].requestToken(authorizeCode, this.REDIRECT_URI);
 
         const { oauthId } = await this[`${provider}Service`].requestUserInfo(oauthAccessToken);
 
@@ -62,8 +65,8 @@ export class AuthService {
     }
 
     async signup({ oauthAccessToken, oauthRefreshToken, provider }: OauthData): Promise<AuthData> {
-        const { oauthId, oauthNickname, email, profileImageUrl } =
-            await this[`${provider}Service`].requestUserInfo(oauthAccessToken);
+        const { oauthId, oauthNickname, email } = await this[`${provider}Service`].requestUserInfo(oauthAccessToken);
+        const profileImageUrl = this.S3_PROFILE_IMAGE_PATH;
 
         const refreshToken = this.tokenService.signRefreshToken(oauthId, provider);
         this.logger.debug('signup - signRefreshToken', { refreshToken });
