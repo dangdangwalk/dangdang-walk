@@ -3,33 +3,20 @@ import { JsonWebTokenError, TokenExpiredError } from '@nestjs/jwt';
 
 import { WinstonLoggerService } from '../../common/logger/winstonLogger.service';
 import { AuthService } from '../auth.service';
-import { RefreshTokenPayload, TokenService } from '../token/token.service';
 
 @Injectable()
 export class RefreshTokenGuard implements CanActivate {
     constructor(
-        private tokenService: TokenService,
         private authService: AuthService,
         private logger: WinstonLoggerService,
     ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();
-        const token = request.cookies['refreshToken'];
-
-        if (!token) {
-            const error = new UnauthorizedException('Refresh token not found in cookies.');
-            this.logger.error(`No refreshToken inside cookie.`, { trace: error.stack ?? 'No stack' });
-            throw error;
-        }
+        const token = this.extractRefreshTokenFromCookie(request);
 
         try {
-            const payload = this.tokenService.verify(token) as RefreshTokenPayload;
-            this.logger.log('Payload', payload);
-
-            await this.authService.validateRefreshToken(token, payload.oauthId);
-
-            request.user = payload;
+            request.user = await this.authService.validateRefreshToken(token);
 
             return true;
         } catch (error) {
@@ -44,5 +31,17 @@ export class RefreshTokenGuard implements CanActivate {
                 throw error;
             }
         }
+    }
+
+    private extractRefreshTokenFromCookie(request: any): string {
+        const token = request.cookies['refreshToken'];
+
+        if (!token) {
+            const error = new UnauthorizedException('Refresh token not found in cookies.');
+            this.logger.error(`No refreshToken inside cookie.`, { trace: error.stack ?? 'No stack' });
+            throw error;
+        }
+
+        return token;
     }
 }

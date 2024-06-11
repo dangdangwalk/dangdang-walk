@@ -6,46 +6,24 @@ import { Request } from 'express';
 import { WinstonLoggerService } from '../../common/logger/winstonLogger.service';
 import { AuthService } from '../auth.service';
 import { SKIP } from '../decorators/public.decorator';
-import { AccessTokenPayload, TokenService } from '../token/token.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
     constructor(
-        private tokenService: TokenService,
         private authService: AuthService,
         private reflector: Reflector,
         private logger: WinstonLoggerService,
     ) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
-        const skipAuthGuard = this.reflector.getAllAndOverride<boolean>(SKIP, [
-            context.getHandler(),
-            context.getClass(),
-        ]);
-
-        if (skipAuthGuard) {
+        if (this.shouldSkipAuthGuard(context)) {
             return true;
         }
 
         const request = context.switchToHttp().getRequest();
-        if (request.url === '/metrics') {
-            return true;
-        }
-
-        const token = this.extractTokenFromHeader(request);
-        if (!token) {
-            const error = new UnauthorizedException('Token does not exist in Authorization header.');
-            this.logger.error(`Authorization header is missing or empty.`, { trace: error.stack ?? 'No stack' });
-            throw error;
-        }
-
+        const token = this.extractAccessTokenFromHeader(request);
         try {
-            const payload = this.tokenService.verify(token) as AccessTokenPayload;
-            this.logger.log('Payload', payload);
-
-            await this.authService.validateAccessToken(payload.userId);
-
-            request.user = payload;
+            request.user = await this.authService.validateAccessToken(token);
 
             return true;
         } catch (error) {
@@ -61,9 +39,37 @@ export class AuthGuard implements CanActivate {
         }
     }
 
-    private extractTokenFromHeader(request: Request): string | undefined {
-        const [type, token] = request.headers.authorization?.split(' ') ?? [];
+    private shouldSkipAuthGuard(context: ExecutionContext): boolean {
+        const request = context.switchToHttp().getRequest();
+        const skipAuthGuard = this.reflector.getAllAndOverride<boolean>(SKIP, [
+            context.getHandler(),
+            context.getClass(),
+        ]);
 
-        return type === 'Bearer' ? token : undefined;
+        return skipAuthGuard || request.url === '/metrics';
+    }
+
+    private extractAccessTokenFromHeader(request: Request): string {
+        const authorizationHeader = request.headers.authorization;
+
+        if (!authorizationHeader) {
+            const error = new UnauthorizedException('Authorization header is missing.');
+            this.logger.error(`Authorization header is missing.`, { trace: error.stack ?? 'No stack' });
+            throw error;
+        }
+
+        const [type, token] = authorizationHeader.split(' ');
+
+        if (!token || type !== 'Bearer') {
+            const error = new UnauthorizedException(
+                'Token does not exist in Authorization header or is in an invalid format.',
+            );
+            this.logger.error(`Token does not exist in Authorization header or is in an invalid format.`, {
+                trace: error.stack ?? 'No stack',
+            });
+            throw error;
+        }
+
+        return token;
     }
 }

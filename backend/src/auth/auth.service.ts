@@ -140,16 +140,26 @@ export class AuthService {
         await this.s3Service.deleteObjectFolder(userId);
     }
 
-    async validateAccessToken(userId: number) {
-        const result = await this.usersService.findOne({ id: userId });
+    async validateAccessToken(token: string): Promise<AccessTokenPayload> {
+        const payload = this.tokenService.verify(token) as AccessTokenPayload;
+        this.logger.log('Payload', payload);
+
+        const result = await this.usersService.findOne({ id: payload.userId });
         this.logger.debug('validateAccessToken - find User result', { ...result });
+
+        return payload;
     }
 
-    async validateRefreshToken(token: string, oauthId: string) {
-        const { refreshToken } = await this.usersService.findOne({ oauthId });
+    async validateRefreshToken(token: string): Promise<RefreshTokenPayload> {
+        const payload = this.tokenService.verify(token) as RefreshTokenPayload;
+        this.logger.log('Payload', payload);
+
+        const { refreshToken } = await this.usersService.findOne({ oauthId: payload.oauthId });
 
         if (refreshToken !== token) {
             throw new UnauthorizedException();
         }
+
+        return payload;
     }
 }

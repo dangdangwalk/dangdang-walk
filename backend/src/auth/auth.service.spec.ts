@@ -8,7 +8,7 @@ import { AuthService } from './auth.service';
 import { GoogleService } from './oauth/google.service';
 import { KakaoService } from './oauth/kakao.service';
 import { NaverService } from './oauth/naver.service';
-import { TokenService } from './token/token.service';
+import { AccessTokenPayload, RefreshTokenPayload, TokenService } from './token/token.service';
 import { OauthAuthorizeData } from './types/oauth-authorize-data.type';
 import { OauthData } from './types/oauth-data.type';
 import { OAUTH_PROVIDERS } from './types/oauth-provider.type';
@@ -158,33 +158,45 @@ describe('AuthService', () => {
     });
 
     describe('validateAccessToken', () => {
-        context('userId에 해당하는 user가 존재하지 않으면', () => {
-            it('NotFoundException 예외를 던져야 한다.', async () => {
-                jest.spyOn(usersService, 'findOne').mockRejectedValue(new NotFoundException());
+        context('access token이 주어지면', () => {
+            it('access token을 검증해야 한다.', async () => {
+                const userId = 1;
+                const payload = { userId };
+                jest.spyOn(tokenService, 'verify').mockReturnValue(payload as AccessTokenPayload);
+                jest.spyOn(usersService, 'findOne').mockResolvedValue({ id: userId } as Users);
 
-                await expect(service.validateAccessToken(1)).rejects.toThrow(NotFoundException);
+                const result = await service.validateAccessToken('accessToken');
+                expect(result).toEqual(payload);
             });
         });
     });
 
     describe('validateRefreshToken', () => {
-        context('oauthId에 해당하는 user가 존재하지 않으면', () => {
-            it('NotFoundException 예외를 던져야 한다.', async () => {
-                jest.spyOn(usersService, 'findOne').mockRejectedValue(new NotFoundException());
+        const oauthId = '123';
+        const payload = { oauthId };
 
-                await expect(service.validateRefreshToken(mockUser.oauthAccessToken, mockUser.oauthId)).rejects.toThrow(
-                    NotFoundException,
-                );
+        context('refresh token이 주어지면', () => {
+            it('refresh token을 검증해야 한다.', async () => {
+                jest.spyOn(tokenService, 'verify').mockReturnValue(payload as RefreshTokenPayload);
+                jest.spyOn(usersService, 'findOne').mockResolvedValue({
+                    oauthId: '123',
+                    refreshToken: mockUser.refreshToken,
+                } as Users);
+
+                const result = await service.validateRefreshToken(mockUser.refreshToken);
+                expect(result).toEqual(payload);
             });
         });
 
-        context('oauthId에 해당하는 user의 refresh token과 현재 token이 일치하지 않으면', () => {
+        context('주어진 refresh token이 저장된 refresh token과 다르면', () => {
             it('UnauthorizedException 예외를 던져야 한다.', async () => {
-                jest.spyOn(usersService, 'findOne').mockResolvedValue(mockUser);
+                jest.spyOn(tokenService, 'verify').mockReturnValue(payload as RefreshTokenPayload);
+                jest.spyOn(usersService, 'findOne').mockResolvedValue({
+                    oauthId: '123',
+                    refreshToken: mockUser.refreshToken,
+                } as Users);
 
-                await expect(service.validateRefreshToken(mockUser.oauthAccessToken, mockUser.oauthId)).rejects.toThrow(
-                    UnauthorizedException,
-                );
+                await expect(service.validateRefreshToken('refreshToken')).rejects.toThrow(UnauthorizedException);
             });
         });
     });
