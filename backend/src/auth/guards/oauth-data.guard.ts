@@ -7,6 +7,14 @@ export class OauthDataGuard implements CanActivate {
     constructor(private readonly logger: WinstonLoggerService) {}
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();
+        const oauthData = this.extractOauthDataFromCookies(request);
+
+        request.oauthData = oauthData;
+
+        return true;
+    }
+
+    private extractOauthDataFromCookies(request: any) {
         const oauthAccessToken = request.cookies['oauthAccessToken'];
         const oauthRefreshToken = request.cookies['oauthRefreshToken'];
         const provider = request.cookies['provider'];
@@ -24,8 +32,7 @@ export class OauthDataGuard implements CanActivate {
             this.logger.error(`OAuthDataGuard failed: missing ${missingFields}.`, { trace: error.stack ?? 'No stack' });
             throw error;
         }
-        request.oauthData = { oauthAccessToken, oauthRefreshToken, provider };
 
-        return true;
+        return { oauthAccessToken, oauthRefreshToken, provider };
     }
 }

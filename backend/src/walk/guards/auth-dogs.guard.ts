@@ -14,8 +14,17 @@ export class AuthDogsGuard implements CanActivate {
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();
         const { userId } = request.user;
+        const dogIds: number[] = this.getDogIds(request);
 
-        if (!isTypedArray(request.body, 'number')) {
+        await this.checkDogOwnership(userId, dogIds);
+
+        return true;
+    }
+
+    private getDogIds(request: any): number[] {
+        const body = request.body;
+
+        if (!isTypedArray(body, 'number')) {
             const error = new BadRequestException(
                 'Invalid request body. The request body should be an array of dogIds as numbers.',
             );
@@ -25,8 +34,10 @@ export class AuthDogsGuard implements CanActivate {
             throw error;
         }
 
-        const dogIds: number[] = request.body;
+        return body;
+    }
 
+    private async checkDogOwnership(userId: number, dogIds: number[]): Promise<void> {
         const [owned, notFoundDogIds] = await this.usersService.checkDogOwnership(userId, dogIds);
 
         if (!owned) {
@@ -38,7 +49,5 @@ export class AuthDogsGuard implements CanActivate {
             });
             throw error;
         }
-
-        return true;
     }
 }

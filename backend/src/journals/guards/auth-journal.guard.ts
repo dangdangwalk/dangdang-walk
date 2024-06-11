@@ -15,6 +15,12 @@ export class AuthJournalGuard implements CanActivate {
         const { userId } = request.user;
         const journalId = parseInt(request.params.id);
 
+        await this.checkJournalOwnership(userId, journalId);
+
+        return true;
+    }
+
+    private async checkJournalOwnership(userId: number, journalId: number): Promise<void> {
         const [owned] = await this.journalsService.checkJournalOwnership(userId, journalId);
 
         if (!owned) {
@@ -24,7 +30,5 @@ export class AuthJournalGuard implements CanActivate {
             });
             throw error;
         }
-
-        return true;
     }
 }
