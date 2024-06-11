@@ -31,17 +31,17 @@ export class DogWalkDayService {
         return result;
     }
 
-    async updateValues(dogWalkDayIds: number[], operation: (current: number) => number) {
+    async updateDailyWalkCount(dogWalkDayIds: number[], operation: (current: number) => number): Promise<void> {
         const weekDay = ['sun', 'mon', 'tue', 'wed', 'thr', 'fri', 'sat'];
         const today = new Date().getDay();
         const day = weekDay[today];
 
-        for (const curWalkDayId of dogWalkDayIds) {
-            const curWalkDay = await this.dogWalkDayRepository.findOne({ id: curWalkDayId });
-            const curCnt = curWalkDay[day] as number;
-            const updateCnt = operation(curCnt);
+        for (const dogWalkDayId of dogWalkDayIds) {
+            const findDogWalkDay = await this.dogWalkDayRepository.findOne({ id: dogWalkDayId });
+            const dogWalkDayCount = findDogWalkDay[day] as number;
+            const updateCount = operation(dogWalkDayCount);
 
-            await this.dogWalkDayRepository.update({ id: curWalkDayId }, { [day]: updateCnt });
+            await this.dogWalkDayRepository.update({ id: dogWalkDayId }, { [day]: updateCount });
         }
     }
 
