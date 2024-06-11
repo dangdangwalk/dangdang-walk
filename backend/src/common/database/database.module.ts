@@ -16,6 +16,9 @@ import { WinstonLoggerService } from '../logger/winstonLogger.service';
         TypeOrmModule.forRootAsync({
             inject: [ConfigService],
             useFactory: (config: ConfigService) => {
+                const isTest = config.get<string>('NODE_ENV') === 'test';
+                const isProduction = config.get<string>('NODE_ENV') === 'prod';
+
                 return {
                     type: 'mysql',
                     host: config.get<string>('MYSQL_HOST'),
@@ -23,15 +26,11 @@ import { WinstonLoggerService } from '../logger/winstonLogger.service';
                     username: config.get<string>('MYSQL_ROOT_USER'),
                     password: config.get<string>('MYSQL_ROOT_PASSWORD'),
                     database: config.get<string>('MYSQL_DATABASE'),
-                    entities:
-                        config.get<string>('NODE_ENV') === 'test'
-                            ? ['src/**/*.entity{.ts,.js}']
-                            : ['dist/**/*.entity{.ts,.js}'],
+                    entities: isTest ? ['src/**/*.entity{.ts,.js}'] : ['dist/**/*.entity{.ts,.js}'],
                     synchronize: true,
                     timezone: 'Z',
                     legacySpatialSupport: false,
-                    logging: true,
-                    logger: 'file',
+                    ...(!isProduction ? { logging: true, logger: 'file' } : {}),
                 };
             },
             async dataSourceFactory(options) {
