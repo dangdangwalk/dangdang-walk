@@ -1,14 +1,14 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { EntityManager, Repository } from 'typeorm';
+import { EntityManager, Repository, UpdateResult } from 'typeorm';
 
 import { DogWalkDay } from './dog-walk-day.entity';
 import { DogWalkDayRepository } from './dog-walk-day.repository';
 import { DogWalkDayService } from './dog-walk-day.service';
 
 import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
-import { mockDogWalkDays } from '../fixtures/dogWalkDays.fixture';
+import { mockDogWalkDay, mockDogWalkDays } from '../fixtures/dogWalkDays.fixture';
 
 describe('DogWalkDayService', () => {
     let dogWalkDayService: DogWalkDayService;
@@ -23,10 +23,7 @@ describe('DogWalkDayService', () => {
                 EntityManager,
                 {
                     provide: getRepositoryToken(DogWalkDay),
-                    useValue: {
-                        find: jest.fn(),
-                        update: jest.fn(),
-                    },
+                    useClass: Repository,
                 },
             ],
         }).compile();
@@ -61,6 +58,24 @@ describe('DogWalkDayService', () => {
                 await expect(dogWalkDayService.getWalkDayList([])).rejects.toThrow(
                     new NotFoundException('walkDayIds 값을 찾을 수 없습니다.'),
                 );
+            });
+        });
+    });
+
+    describe('updateDailyWalkCount', () => {
+        context('dogWalkDayIds가 주어지면', () => {
+            const dogWalkDayIds = [1, 2, 3];
+
+            beforeEach(() => {
+                jest.spyOn(repository, 'findOne').mockResolvedValue(mockDogWalkDay);
+            });
+
+            it('update 메서드가 dogWalkDayIds 횟수만큼 호출된다..', async () => {
+                const updateSpy = jest.spyOn(repository, 'update').mockResolvedValue({ affected: 1 } as UpdateResult);
+
+                await dogWalkDayService.updateDailyWalkCount(dogWalkDayIds, () => 1);
+
+                expect(updateSpy).toHaveBeenCalledTimes(3);
             });
         });
     });
