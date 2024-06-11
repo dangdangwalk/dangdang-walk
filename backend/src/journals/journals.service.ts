@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { DeleteResult, EntityManager, FindOptionsWhere, In } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
+import { Transactional } from 'typeorm-transactional';
+
 import { Journals } from './journals.entity';
 
 import { JournalsRepository } from './journals.repository';
@@ -180,7 +182,7 @@ export class JournalsService {
         }
     }
 
-    //@Transactional()
+    @Transactional()
     async createJournal(userId: number, createJournalData: CreateJournalData) {
         const dogIds = createJournalData.dogs;
         const journalData = this.makeJournalData(userId, createJournalData.journalInfo);
@@ -205,7 +207,7 @@ export class JournalsService {
         );
     }
 
-    // @Transactional()
+    @Transactional()
     async updateJournal(journalId: number, updateJournalData: UpdateJournalData) {
         if (updateJournalData.memo) {
             await this.updateAndFindOne({ id: journalId }, { memo: updateJournalData.memo });
