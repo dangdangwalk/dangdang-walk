@@ -30,6 +30,8 @@ import { WinstonLoggerService } from '../logger/winstonLogger.service';
                     synchronize: true,
                     timezone: 'Z',
                     legacySpatialSupport: false,
+                    logging: true,
+                    logger: 'file',
                 };
             },
             async dataSourceFactory(options) {
