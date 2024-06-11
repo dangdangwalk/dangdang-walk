@@ -55,7 +55,7 @@ export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfile
     };
     const handleSave = async () => {
         if (dogProfileImgUrl) {
-            const urlData = await getUploadUrl(['png']);
+            const urlData = await getUploadUrl(['jpeg']);
             const fileName = urlData[0]?.filename;
             const photoUrl = urlData[0]?.url;
 
