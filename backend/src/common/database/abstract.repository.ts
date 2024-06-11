@@ -17,7 +17,7 @@ export abstract class AbstractRepository<T extends ObjectLiteral> {
     ) {}
 
     async create(entity: T): Promise<T> {
-        return this.entityManager.save(entity);
+        return this.entityRepository.save(entity);
     }
 
     /**
