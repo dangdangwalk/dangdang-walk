@@ -8,7 +8,7 @@ import { PresignedUrlInfo } from './types/presigned-url-info.type';
 import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
 import { generateUuid } from '../utils/hash.util';
 
-const BUCKET_NAME = 'dangdangwalk';
+const BUCKET_NAME = 'dangdangbucket';
 
 @Injectable()
 export class S3Service {
