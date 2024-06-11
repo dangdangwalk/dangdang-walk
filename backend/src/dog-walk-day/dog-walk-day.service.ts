@@ -15,21 +15,52 @@ export class DogWalkDayService {
         private readonly logger: WinstonLoggerService,
     ) {}
 
+    async getWalkDayList(walkDayIds: number[]): Promise<number[][]> {
+        const foundDays = await this.dogWalkDayRepository.find({ where: { id: In(walkDayIds) } });
+        if (!foundDays.length) {
+            this.logger.error('walkDayIds 데이터를 찾을 수 없습니다.', '');
+            throw new NotFoundException('walkDayIds 값을 찾을 수 없습니다.');
+        }
+
+        const result: number[][] = [];
+        for (const currentDay of foundDays) {
+            await this.checkWeekPassed(currentDay.updatedAt, currentDay.id);
+            result.push(this.getDayCountOnly(currentDay));
+        }
+
+        return result;
+    }
+
+    async updateValues(dogWalkDayIds: number[], operation: (current: number) => number) {
+        const weekDay = ['sun', 'mon', 'tue', 'wed', 'thr', 'fri', 'sat'];
+        const today = new Date().getDay();
+        const day = weekDay[today];
+
+        for (const curWalkDayId of dogWalkDayIds) {
+            const curWalkDay = await this.dogWalkDayRepository.findOne({ id: curWalkDayId });
+            const curCnt = curWalkDay[day] as number;
+            const updateCnt = operation(curCnt);
+
+            await this.dogWalkDayRepository.update({ id: curWalkDayId }, { [day]: updateCnt });
+        }
+    }
+
     async delete(where: FindOptionsWhere<DogWalkDay>) {
         return this.dogWalkDayRepository.delete(where);
     }
 
-    private getDayCntOnly(walkDay: DogWalkDay): number[] {
-        const dayCntArr = [];
+    private getDayCountOnly(walkDay: DogWalkDay): number[] {
+        const dayCountArray = [];
         for (const key in walkDay) {
             if (key !== 'id' && key !== 'updatedAt') {
-                dayCntArr.push(walkDay[key] as number);
+                dayCountArray.push(walkDay[key] as number);
             }
         }
-        return dayCntArr;
+
+        return dayCountArray;
     }
 
-    private async checkWeekPassed(updatedAt: Date, walkDayId: number) {
+    async checkWeekPassed(updatedAt: Date, walkDayId: number) {
         const lastSunday = getLastSunday();
         if (updatedAt < lastSunday) {
             await this.dogWalkDayRepository.update(
@@ -37,32 +68,5 @@ export class DogWalkDayService {
                 { mon: 0, tue: 0, wed: 0, thr: 0, fri: 0, sat: 0, sun: 0 },
             );
         }
-    }
-
-    async updateValues(dogWalkDayIds: number[], operation: (current: number) => number) {
-        const dayArr = ['sun', 'mon', 'tue', 'wed', 'thr', 'fri', 'sat'];
-        const day = dayArr[new Date().getDay()];
-
-        for (const curWalkDayId of dogWalkDayIds) {
-            const curWalkDay = await this.dogWalkDayRepository.findOne({ id: curWalkDayId });
-            const curCnt = curWalkDay[day] as number;
-            const updateCnt = operation(curCnt);
-            this.dogWalkDayRepository.update({ id: curWalkDayId }, { [day]: updateCnt });
-        }
-    }
-
-    async getWalkDayList(walkDayIds: number[]): Promise<number[][]> {
-        const foundDays = await this.dogWalkDayRepository.find({ where: { id: In(walkDayIds) } });
-        if (!foundDays.length) {
-            this.logger.error('Related table not exists : DogWalkDay ', '');
-            throw new NotFoundException('Related table not exists : DogWalkDay ');
-        }
-
-        const result: number[][] = [];
-        for (const curDays of foundDays) {
-            await this.checkWeekPassed(curDays.updatedAt, curDays.id);
-            result.push(this.getDayCntOnly(curDays));
-        }
-        return result;
     }
 }
