@@ -26,7 +26,7 @@ export default function ImageCropper() {
                 previewCanvasRef.current,
                 convertToPixelCrop(crop, imgRef.current?.width, imgRef.current?.height)
             );
-            const dataUrl = previewCanvasRef.current.toDataURL();
+            const dataUrl = previewCanvasRef.current.toDataURL('image/jpeg', 0.1);
             setStorage(storageKeys.DATA_URL, dataUrl);
             setDogProfileImgUrl(dataUrl);
 
