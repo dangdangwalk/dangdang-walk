@@ -24,7 +24,7 @@ export class DogWalkDayService {
 
         const result: number[][] = [];
         for (const currentDay of foundDays) {
-            await this.checkWeekPassed(currentDay.updatedAt, currentDay.id);
+            await this.resetWeeklyCount(currentDay.updatedAt, currentDay.id);
             result.push(this.getDayCountOnly(currentDay));
         }
 
@@ -60,7 +60,7 @@ export class DogWalkDayService {
         return dayCountArray;
     }
 
-    async checkWeekPassed(updatedAt: Date, walkDayId: number) {
+    async resetWeeklyCount(updatedAt: Date, walkDayId: number) {
         const lastSunday = getLastSunday();
         if (updatedAt < lastSunday) {
             await this.dogWalkDayRepository.update(

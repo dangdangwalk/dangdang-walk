@@ -38,7 +38,7 @@ describe('DogWalkDayService', () => {
     describe('getWalkDayList', () => {
         beforeEach(() => {
             jest.spyOn(repository, 'find').mockResolvedValue(mockDogWalkDays);
-            jest.spyOn(dogWalkDayService, 'checkWeekPassed').mockResolvedValue();
+            jest.spyOn(dogWalkDayService, 'resetWeeklyCount').mockResolvedValue();
         });
 
         context('walkDayIds 값이 주어지면', () => {
