@@ -8,8 +8,6 @@ on:
 
 env:
   IMAGE: dangdangwalk
-  CONTAINER_GREEN: dangdang-api-green
-  CONTAINER_BLUE: dangdang-api-blue
   REPO: 533267282498.dkr.ecr.ap-northeast-2.amazonaws.com
   TAG: ${GITHUB_SHA::7}
 
@@ -52,7 +50,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
       - name: ECR Delete
         run: |
-          IMAGE_TAG=$(aws ecr describe-images --repository-name dangdangwalk | jq '.imageDetails[].imageTags[0]')
+          IMAGE_TAG=$(aws ecr describe-images --repository-name ${{ env.IMAGE }} | jq '.imageDetails[].imageTags[0]')
           if [[ -z "$IMAGE_TAG" ]]; then
             echo "No images found in the repository."
           else
@@ -82,4 +80,4 @@ jobs:
       - name: Deploy to Amazon EC2
         run : |
           chmod 777 /home/ubuntu/run-backend.sh
-          /home/ubuntu/run-backend.sh ${{ env.TAG }} .env.prod
+          /home/ubuntu/run-backend.sh ${{ env.TAG }} .env.prod ${{ env.REPO }} ${{ env.IMAGE }}
