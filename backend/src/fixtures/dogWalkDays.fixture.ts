@@ -1,3 +1,5 @@
+import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
+
 export const mockDogWalkDays = [
     {
         id: 1,
@@ -22,3 +24,15 @@ export const mockDogWalkDays = [
         updatedAt: new Date('2023-06-02T12:00:00Z'),
     },
 ];
+
+export const mockDogWalkDay: DogWalkDay = {
+    id: 1,
+    mon: 1,
+    tue: 2,
+    wed: 1,
+    thr: 3,
+    fri: 2,
+    sat: 1,
+    sun: 0,
+    updatedAt: new Date('2023-06-02T12:00:00Z'),
+};
