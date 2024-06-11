@@ -8,8 +8,6 @@ on:
 
 env:
   IMAGE: dangdangwalk
-  CONTAINER_GREEN: dangdang-api-green
-  CONTAINER_BLUE: dangdang-api-blue
   REPO: 533267282498.dkr.ecr.ap-northeast-2.amazonaws.com
   TAG: ${GITHUB_SHA::7}
 
