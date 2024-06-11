@@ -51,7 +51,7 @@ describe('S3Controller (e2e)', () => {
                 return request(app.getHttpServer())
                     .delete('/images')
                     .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
-                    .send(['1/dangdangwalk-1.jpeg', '1/dangdangwalk-2.png'])
+                    .send(['1/dangdangbucket-1.jpeg', '1/dangdangbucket-2.png'])
                     .expect(200);
             });
         });
@@ -61,7 +61,7 @@ describe('S3Controller (e2e)', () => {
                 return request(app.getHttpServer())
                     .delete('/images')
                     .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
-                    .send(['1/dangdangwalk-1.jpeg', '2/dangdangwalk-2.png'])
+                    .send(['1/dangdangbucket-1.jpeg', '2/dangdangbucket-2.png'])
                     .expect(403);
             });
         });
