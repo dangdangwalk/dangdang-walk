@@ -145,7 +145,7 @@ describe('DogsController (e2e)', () => {
             });
         });
 
-        testUnauthorizedAccess('강아지의 프로필 조회', 'get', '/dogs/1');
+        testUnauthorizedAccess('강아지 프로필 조회', 'get', '/dogs/1');
     });
 
     describe('/dogs/:id (PATCH)', () => {
@@ -204,7 +204,7 @@ describe('DogsController (e2e)', () => {
             });
         });
 
-        testUnauthorizedAccess('강아지의 정보 수정', 'patch', '/dogs/1');
+        testUnauthorizedAccess('강아지 정보 수정', 'patch', '/dogs/1');
     });
 
     describe('/dogs/:id (DELETE)', () => {
@@ -236,6 +236,6 @@ describe('DogsController (e2e)', () => {
             });
         });
 
-        testUnauthorizedAccess('강아지의 삭제', 'delete', '/dogs/1');
+        testUnauthorizedAccess('강아지 삭제', 'delete', '/dogs/1');
     });
 });

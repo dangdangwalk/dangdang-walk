@@ -1,4 +1,14 @@
-import { Body, Controller, Get, HttpCode, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Get,
+    HttpCode,
+    ParseArrayPipe,
+    Post,
+    UseGuards,
+    UsePipes,
+    ValidationPipe,
+} from '@nestjs/common';
 
 import { AuthDogsGuard } from './guards/auth-dogs.guard';
 import { WalkService } from './walk.service';
@@ -20,14 +30,14 @@ export class WalkController {
     @Post('/start')
     @HttpCode(200)
     @UseGuards(AuthDogsGuard)
-    async startWalk(@Body() dogIds: number[]): Promise<number[]> {
+    async startWalk(@Body(new ParseArrayPipe({ items: Number, separator: ',' })) dogIds: number[]): Promise<number[]> {
         return this.dogsService.updateIsWalking(dogIds, true);
     }
 
     @Post('/stop')
     @HttpCode(200)
     @UseGuards(AuthDogsGuard)
-    async stopWalk(@Body() dogIds: number[]): Promise<number[]> {
+    async stopWalk(@Body(new ParseArrayPipe({ items: Number, separator: ',' })) dogIds: number[]): Promise<number[]> {
         return this.dogsService.updateIsWalking(dogIds, false);
     }
 

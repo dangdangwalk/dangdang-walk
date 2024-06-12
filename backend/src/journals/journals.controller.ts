@@ -3,6 +3,7 @@ import {
     Controller,
     Delete,
     Get,
+    HttpCode,
     Param,
     ParseIntPipe,
     Patch,
@@ -20,9 +21,11 @@ import { JournalsService } from './journals.service';
 import { JournalInfoForList } from './types/journal-info.type';
 
 import { AccessTokenPayload } from '../auth/token/token.service';
+import { AuthDogGuard } from '../dogs/guards/auth-dog.guard';
 import { DateValidationPipe } from '../statistics/pipes/date-validation.pipe';
 
 import { User } from '../users/decorators/user.decorator';
+import { AuthDogsGuard } from '../walk/guards/auth-dogs.guard';
 
 @Controller('/journals')
 @UsePipes(new ValidationPipe({ validateCustomDecorators: true, whitelist: true }))
@@ -30,6 +33,7 @@ export class JournalsController {
     constructor(private readonly journalsService: JournalsService) {}
 
     @Get()
+    @UseGuards(AuthDogGuard)
     async getJournalList(
         @Query('dogId', ParseIntPipe) dogId: number,
         @Query('date', DateValidationPipe) date: string,
@@ -38,6 +42,7 @@ export class JournalsController {
     }
 
     @Post()
+    @UseGuards(AuthDogsGuard)
     async createJournal(@User() user: AccessTokenPayload, @Body() body: CreateJournalDto) {
         await this.journalsService.createJournal(user.userId, body);
         return true;
@@ -45,18 +50,22 @@ export class JournalsController {
 
     @Get('/:id(\\d+)')
     @UseGuards(AuthJournalGuard)
-    getJournalDetail(@Param('id') journalId: number) {
+    getJournalDetail(@Param('id', ParseIntPipe) journalId: number) {
         return this.journalsService.getJournalDetail(journalId);
     }
 
     @Patch('/:id(\\d+)')
-    async updateJournal(@Param('id') journalId: number, @Body() body: UpdateJournalDto) {
+    @HttpCode(204)
+    @UseGuards(AuthJournalGuard)
+    async updateJournal(@Param('id', ParseIntPipe) journalId: number, @Body() body: UpdateJournalDto) {
         await this.journalsService.updateJournal(journalId, body);
         return true;
     }
 
     @Delete('/:id(\\d+)')
-    async deleteJournal(@User() user: AccessTokenPayload, @Param('id') journalId: number) {
+    @HttpCode(204)
+    @UseGuards(AuthJournalGuard)
+    async deleteJournal(@User() user: AccessTokenPayload, @Param('id', ParseIntPipe) journalId: number) {
         await this.journalsService.deleteJournal(user.userId, journalId);
         return true;
     }

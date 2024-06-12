@@ -20,8 +20,8 @@ export class ExcrementsService {
         ]);
     }
 
-    private makeCoordinate(lat: string, lag: string): string {
-        return `POINT(${lat} ${lag})`;
+    private makeCoordinate(lat: string, lng: string): string {
+        return `POINT(${lat} ${lng})`;
     }
 
     async createNewExcrements(

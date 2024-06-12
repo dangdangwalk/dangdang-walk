@@ -329,6 +329,7 @@ export class JournalsService {
         if (!journalIds.length) {
             return [];
         }
+
         const journalInfosRaw = await this.journalsRepository.find({ where: { id: In(journalIds) } });
         const journalInfos = await makeSubObjectsArray(
             journalInfosRaw,

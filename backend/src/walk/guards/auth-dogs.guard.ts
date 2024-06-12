@@ -22,7 +22,7 @@ export class AuthDogsGuard implements CanActivate {
     }
 
     private getDogIds(request: any): number[] {
-        const body = request.body;
+        const body = request.body.dogs || request.body;
 
         if (!isTypedArray(body, 'number')) {
             const error = new BadRequestException(

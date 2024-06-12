@@ -18,7 +18,7 @@ import {
 } from './test-utils';
 
 import { mockDog, mockDog2 } from '../src/fixtures/dogs.fixture';
-import { journalsEntries } from '../src/fixtures/statistics.fixture';
+import { mockJournals } from '../src/fixtures/statistics.fixture';
 
 describe('StatisticsController (e2e)', () => {
     let app: INestApplication;
@@ -61,9 +61,9 @@ describe('StatisticsController (e2e)', () => {
                     .expect(200);
 
                 expect(response.body).toEqual({
-                    totalWalkCnt: journalsEntries.length,
-                    totalDistance: journalsEntries.reduce((acc, journal) => acc + journal.distance, 0),
-                    totalTime: journalsEntries.reduce((acc, journal) => acc + journal.duration, 0),
+                    totalWalkCnt: mockJournals.length,
+                    totalDistance: mockJournals.reduce((acc, journal) => acc + journal.distance, 0),
+                    totalTime: mockJournals.reduce((acc, journal) => acc + journal.duration, 0),
                 });
             });
         });

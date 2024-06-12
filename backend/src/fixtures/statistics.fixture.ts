@@ -1,4 +1,4 @@
-export const journalsEntries = [
+export const mockJournals = [
     {
         userId: 1,
         routes: '[{"lat": 200.7749, "lag" : 200.4839}, {"lat": 100.7749, "lag" : 204.4839}]',
@@ -88,7 +88,7 @@ export const journalsEntries = [
     },
 ];
 
-export const journalsDogEntries = [
+export const mockJournalsDog = [
     { journalId: 1, dogId: 1 },
     { journalId: 2, dogId: 1 },
     { journalId: 3, dogId: 1 },
