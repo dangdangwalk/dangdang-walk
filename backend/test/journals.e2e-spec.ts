@@ -18,6 +18,7 @@ import {
     testUnauthorizedAccess,
 } from './test-utils';
 
+import { DogWalkDay } from '../src/dog-walk-day/dog-walk-day.entity';
 import { Excrements } from '../src/excrements/excrements.entity';
 import { createMockJournal, mockJournalProfile } from '../src/fixtures/journals.fixture';
 import { mockJournals } from '../src/fixtures/statistics.fixture';
@@ -181,11 +182,40 @@ describe('JournalsController (e2e)', () => {
                     .send(createMockJournal)
                     .expect(201);
 
-                expect(await dataSource.getRepository(Journals).count({})).toBe(1);
+                expect(await dataSource.getRepository(Journals).count()).toBe(1);
                 expect(await dataSource.getRepository(JournalsDogs).count()).toBe(2);
                 expect(await dataSource.getRepository(JournalPhotos).count()).toBe(2);
                 expect(await dataSource.getRepository(Excrements).count({ where: { dogId: 1 } })).toBe(2);
                 expect(await dataSource.getRepository(Excrements).count({ where: { dogId: 2 } })).toBe(1);
+
+                const today = new Date();
+                const dayOfWeek = today.getDay();
+                const days = ['sun', 'mon', 'tue', 'wed', 'thr', 'fri', 'sat'];
+                const todayString = days[dayOfWeek];
+
+                const dog1WalkDay = await dataSource
+                    .getRepository(DogWalkDay)
+                    .findOne({ where: { id: 1 }, select: days });
+                if (!dog1WalkDay) throw new Error('dog1WalkDay not found');
+
+                const dog2WalkDay = await dataSource
+                    .getRepository(DogWalkDay)
+                    .findOne({ where: { id: 2 }, select: days });
+                if (!dog2WalkDay) throw new Error('dog2WalkDay not found');
+
+                const expectedWalkDays = {
+                    mon: 0,
+                    tue: 0,
+                    wed: 0,
+                    thr: 0,
+                    fri: 0,
+                    sat: 0,
+                    sun: 0,
+                    [todayString]: 1,
+                };
+
+                expect(dog1WalkDay).toEqual(expectedWalkDays);
+                expect(dog2WalkDay).toEqual(expectedWalkDays);
             });
         });
 
@@ -317,6 +347,31 @@ describe('JournalsController (e2e)', () => {
                     .expect(204);
 
                 expect(await dataSource.getRepository(Journals).count()).toBe(0);
+
+                const days = ['sun', 'mon', 'tue', 'wed', 'thr', 'fri', 'sat'];
+
+                const dog1WalkDay = await dataSource
+                    .getRepository(DogWalkDay)
+                    .findOne({ where: { id: 1 }, select: days });
+                if (!dog1WalkDay) throw new Error('dog1WalkDay not found');
+
+                const dog2WalkDay = await dataSource
+                    .getRepository(DogWalkDay)
+                    .findOne({ where: { id: 2 }, select: days });
+                if (!dog2WalkDay) throw new Error('dog2WalkDay not found');
+
+                const expectedWalkDays = {
+                    mon: 0,
+                    tue: 0,
+                    wed: 0,
+                    thr: 0,
+                    fri: 0,
+                    sat: 0,
+                    sun: 0,
+                };
+
+                expect(dog1WalkDay).toEqual(expectedWalkDays);
+                expect(dog2WalkDay).toEqual(expectedWalkDays);
             });
         });
 
