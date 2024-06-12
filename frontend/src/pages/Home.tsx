@@ -51,7 +51,7 @@ function Home() {
     const IsDogsWalking = (now: Date, startTime: Date): boolean => {
         const diff = now.getTime() - startTime.getTime();
         const hour = diff / 1000 / 60 / 60;
-        return hour > 3;
+        return hour <= 3;
     };
 
     const handleConfirm = () => {
@@ -84,13 +84,7 @@ function Home() {
 
     return (
         <>
-            <TopBar className="bg-neutral-50 px-5">
-                <TopBar.Front></TopBar.Front>
-                <TopBar.Center></TopBar.Center>
-                <TopBar.Back>
-                    <img src={Notification} alt="Notification" />
-                </TopBar.Back>
-            </TopBar>
+            <HomeHeader />
             <main
                 className="mb-[60px] flex min-h-dvh flex-col bg-neutral-50 px-5"
                 style={{ minHeight: `calc(100dvh - ${NAV_HEIGHT} - ${TOP_BAR_HEIGHT}  )` }}
@@ -146,3 +140,15 @@ function Home() {
 }
 
 export default Home;
+
+const HomeHeader = () => {
+    return (
+        <TopBar className="bg-neutral-50 px-5">
+            <TopBar.Front></TopBar.Front>
+            <TopBar.Center></TopBar.Center>
+            <TopBar.Back>
+                <img src={Notification} alt="알림" />
+            </TopBar.Back>
+        </TopBar>
+    );
+};

@@ -27,7 +27,12 @@ export const useWeather = (position: Position | null) => {
     });
 
     const getWeather = (weatherDataList: WeatherData[], hour: string) => {
-        let maxTemperature, minTemperature, temperature, sky, precipitation;
+        let maxTemperature: number = 0,
+            minTemperature: number = 0,
+            temperature: number = 0,
+            sky: number = 0,
+            precipitation: number = 0;
+
         weatherDataList.forEach((weatherData) => {
             if (hour === weatherData.fcstTime.slice(0, 2)) {
                 if (weatherData.category === 'TMP') {
@@ -48,11 +53,11 @@ export const useWeather = (position: Position | null) => {
             }
         });
         return {
-            maxTemperature: maxTemperature ?? 28,
-            minTemperature: minTemperature ?? 0,
-            temperature: temperature ?? 15,
-            precipitation: precipitation ?? 0,
-            sky: sky ?? 1,
+            maxTemperature: maxTemperature,
+            minTemperature: minTemperature,
+            temperature: temperature,
+            precipitation: precipitation,
+            sky: sky,
         };
     };
 
