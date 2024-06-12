@@ -47,20 +47,20 @@ export class JournalsController {
 
     @Get('/:id(\\d+)')
     @UseGuards(AuthJournalGuard)
-    getJournalDetail(@Param('id') journalId: number) {
+    getJournalDetail(@Param('id', ParseIntPipe) journalId: number) {
         return this.journalsService.getJournalDetail(journalId);
     }
 
     @Patch('/:id(\\d+)')
     @UseGuards(AuthJournalGuard)
-    async updateJournal(@Param('id') journalId: number, @Body() body: UpdateJournalDto) {
+    async updateJournal(@Param('id', ParseIntPipe) journalId: number, @Body() body: UpdateJournalDto) {
         await this.journalsService.updateJournal(journalId, body);
         return true;
     }
 
     @Delete('/:id(\\d+)')
     @UseGuards(AuthJournalGuard)
-    async deleteJournal(@User() user: AccessTokenPayload, @Param('id') journalId: number) {
+    async deleteJournal(@User() user: AccessTokenPayload, @Param('id', ParseIntPipe) journalId: number) {
         await this.journalsService.deleteJournal(user.userId, journalId);
         return true;
     }
