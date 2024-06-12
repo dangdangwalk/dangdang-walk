@@ -79,13 +79,13 @@ const useSignOut = (mutationOptions?: UseMutationCustomOptions) => {
     return useMutation({
         mutationFn: requestSignOut,
         onSuccess: () => {
-            storeSignOut();
             removeStorage(storageKeys.REDIRECT_URI);
             removeStorage(storageKeys.PROVIDER);
             queryClient.resetQueries({ queryKey: [queryKeys.AUTH] });
             queryClient.refetchQueries({ queryKey: [queryKeys.DOGS] });
         },
         onSettled: () => {
+            storeSignOut();
             window.location.href = '/';
         },
         ...mutationOptions,
@@ -97,11 +97,11 @@ const useDeactivate = (mutationOptions?: UseMutationCustomOptions) => {
     return useMutation({
         mutationFn: requestDeactivate,
         onSuccess: () => {
-            storeSignOut();
             queryClient.resetQueries({ queryKey: [queryKeys.AUTH] });
             queryClient.refetchQueries({ queryKey: [queryKeys.DOGS] });
         },
         onSettled: () => {
+            storeSignOut();
             window.location.href = '/';
         },
         ...mutationOptions,
