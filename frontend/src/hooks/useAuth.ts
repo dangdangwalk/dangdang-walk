@@ -56,7 +56,7 @@ const useSignUp = (mutationOptions?: UseMutationCustomOptions) => {
 
 const useGetRefreshToken = () => {
     const { storeSignIn, isSignedIn } = useAuthStore();
-    const { isSuccess, data } = useQuery({
+    const { isSuccess, data, isLoading } = useQuery({
         queryKey: [queryKeys.GET_ACCESS_TOKEN],
         queryFn: refreshAccessToken,
         gcTime: ONE_HOUR,
@@ -72,7 +72,7 @@ const useGetRefreshToken = () => {
         }
     }, [isSuccess, data]);
 
-    return { isSuccess, data };
+    return { isSuccess, data, isLoading };
 };
 
 const useSignOut = (mutationOptions?: UseMutationCustomOptions) => {
