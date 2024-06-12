@@ -16,8 +16,12 @@ import { setFlagValueByKey, toggleCheckById } from '@/utils/check';
 import useWalkAvailable from '@/hooks/useWalkAvailableDog';
 import { getStorage, removeStorage } from '@/utils/storage';
 import { DogWalkData } from '@/pages/Walk';
+<<<<<<< HEAD
 import useGeolocation from '@/hooks/useGeolocation';
 import useToast from '@/hooks/useToast';
+=======
+import { DogStatistic } from '@/models/dog';
+>>>>>>> 4791b09 (refactor: dogStatisticsView로 분리)
 
 function Home() {
     const [isDogBottomSheetOpen, setIsDogBottomSheetOpen] = useState<boolean>(false);
@@ -71,12 +75,6 @@ function Home() {
         navigate('/walk', { state: { dogs } });
     };
 
-    const goToJournals = (dogId: number) => {
-        navigate(`/journals?${queryStringKeys.DOG_ID}=${dogId}`, {
-            state: { dogs: dogsStatistic, dog: dogsStatistic?.find((d) => d.id === dogId) },
-        });
-    };
-
     const handleToggle = (id: number) => {
         setAvailableDogs((prevAvailableDogs) =>
             prevAvailableDogs?.length ? toggleCheckById(prevAvailableDogs, id, 'isChecked') : prevAvailableDogs
@@ -96,26 +94,18 @@ function Home() {
                 className="mb-[60px] flex min-h-dvh flex-col bg-neutral-50 px-5"
                 style={{ minHeight: `calc(100dvh - ${NAV_HEIGHT} - ${TOP_BAR_HEIGHT}  )` }}
             >
-                <WeatherInfo position={position} />
-                {/* TODO : Pending 로직 제외하는 방법ㄴ */}
-                {isDogsPending ? (
-                    <Spinner />
-                ) : dogsStatistic && dogsStatistic?.length > 0 ? (
-                    <>
-                        <DogCardList dogs={dogsStatistic} pageMove={goToJournals} />
-                        <Button
-                            color={'primary'}
-                            rounded={'medium'}
-                            className={`fixed h-12 w-[120px] text-base font-bold leading-normal text-white`}
-                            style={{ bottom: `calc(${NAV_HEIGHT} + 16px)`, left: '50%', translate: '-50%' }}
-                            disabled={dogsStatistic?.length === 0}
-                            onClick={handleBottomSheet}
-                        >
-                            산책하기
-                        </Button>
-                    </>
-                ) : (
-                    <RegisterCard />
+                <WeatherInfo position={position}/>
+                <DogStatisticsView dogsStatistic={dogsStatistic} isPending={isDogsPending} />
+                {dogsStatistic && dogsStatistic?.length > 0 && (
+                    <Button
+                        color={'primary'}
+                        rounded={'medium'}
+                        className={`fixed h-12 w-[120px] text-base font-bold leading-normal text-white`}
+                        style={{ bottom: `calc(${NAV_HEIGHT} + 16px)`, left: '50%', translate: '-50%' }}
+                        onClick={handleBottomSheet}
+                    >
+                        산책하기
+                    </Button>
                 )}
             </main>
 
@@ -157,5 +147,32 @@ const HomeHeader = () => {
                 <img src={Notification} alt="알림" />
             </TopBar.Back>
         </TopBar>
+    );
+};
+
+interface DogStatisticsViewProps {
+    isPending: boolean;
+    dogsStatistic: DogStatistic[] | undefined;
+}
+
+const DogStatisticsView = ({ isPending, dogsStatistic }: DogStatisticsViewProps) => {
+    const navigate = useNavigate();
+    const goToJournals = (dogId: number) => {
+        navigate(`/journals?${queryStringKeys.DOG_ID}=${dogId}`, {
+            state: { dogs: dogsStatistic, dog: dogsStatistic?.find((d) => d.id === dogId) },
+        });
+    };
+    if (isPending) {
+        <Spinner />;
+        return;
+    }
+    return (
+        <>
+            {dogsStatistic && dogsStatistic?.length > 0 ? (
+                <DogCardList dogsStatistic={dogsStatistic} pageMove={goToJournals} />
+            ) : (
+                <RegisterCard />
+            )}
+        </>
     );
 };
