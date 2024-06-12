@@ -4,6 +4,8 @@ import { WalkAvailableDog } from '@/models/dog';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
+type AvailableDogData = ReadonlyArray<Omit<WalkAvailableDog, 'isChecked'>>;
+
 const useWalkAvailable = () => {
     const [walkAvailableDogs, setWalkAvailableDogs] = useState<WalkAvailableDog[] | undefined>([]);
 
@@ -11,7 +13,7 @@ const useWalkAvailable = () => {
         data: availableDogData,
         isLoading,
         refetch,
-    } = useQuery({
+    } = useQuery<AvailableDogData>({
         queryKey: [queryKeys.WALK_AVAILABLE_DOGS],
         queryFn: fetchWalkAvailableDogs,
         enabled: false,
@@ -20,9 +22,9 @@ const useWalkAvailable = () => {
     useEffect(() => {
         if (!availableDogData) return;
         setWalkAvailableDogs(
-            availableDogData.map((d: WalkAvailableDog) => {
+            availableDogData.map((availableDog) => {
                 return {
-                    ...d,
+                    ...availableDog,
                     isChecked: false,
                 };
             })
