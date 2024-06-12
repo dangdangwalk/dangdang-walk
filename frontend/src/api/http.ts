@@ -1,6 +1,6 @@
 import queryClient from '@/api/queryClient';
 import { queryKeys, storageKeys, tokenKeys } from '@/constants';
-import { getStorage } from '@/utils/storage';
+import { getStorage, removeStorage } from '@/utils/storage';
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
 
 const { REACT_APP_NEST_BASE_URL: NEST_BASE_URL = '' } = window._ENV ?? process.env;
@@ -40,7 +40,9 @@ export const createClient = (config?: AxiosRequestConfig): AxiosInstance => {
             return Promise.reject(error);
         }
     );
-
+    interface ErrorDataResponse {
+        message?: string;
+    }
     axiosInstance.interceptors.response.use(
         (response) => {
             return response;
@@ -49,6 +51,12 @@ export const createClient = (config?: AxiosRequestConfig): AxiosInstance => {
             const isSignedIn = getStorage(storageKeys.IS_SIGNED_IN) ? true : false;
 
             if (error.response && error.response.status === 401 && isSignedIn) {
+                const errorData = error.response.data as ErrorDataResponse;
+                if (errorData.message === 'Refresh token not found in cookies.') {
+                    removeStorage(storageKeys.IS_SIGNED_IN);
+                    return window.location.reload();
+                }
+
                 try {
                     const data = await queryClient.fetchQuery<{ accessToken: string }>({
                         queryKey: [queryKeys.GET_ACCESS_TOKEN],

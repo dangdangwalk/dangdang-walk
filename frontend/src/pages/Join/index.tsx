@@ -134,7 +134,7 @@ export default function SignUp() {
         }
         if (step === 'DogDetailInfo') {
             spinnerAdd();
-            const urlData = await getUploadUrl(['png']);
+            const urlData = await getUploadUrl(['jpeg']);
             const fileName = urlData[0]?.filename;
             const photoUrl = urlData[0]?.url;
 
