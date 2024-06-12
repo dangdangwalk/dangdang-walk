@@ -30,7 +30,7 @@ export default function BreedSearch({ isOpen, setIsOpen, handleSetData }: Props)
         const formattedData = filteredData.map((item: string) => (
             <div
                 key={item}
-                className="font-NanumGothic flex h-[2.125rem] w-full items-center border-b border-b-zinc-300 py-3 pl-1 text-sm font-bold"
+                className="font-NanumGothic flex h-[2.125rem] w-full items-center border-b border-b-zinc-300 py-3 pl-1 text-sm font-bold duration-100 active:scale-[0.98] active:rounded-md active:bg-primary/15"
                 onClick={() => handleSetBreed(item)}
             >
                 <span

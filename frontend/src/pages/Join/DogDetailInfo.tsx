@@ -37,7 +37,7 @@ export default function DogDetailInfo({ data, handleSetData }: Props) {
                     onClick={() => handleSetData('gender', 'MALE')}
                     className={`border ${
                         gender === 'MALE' ? 'border-primary' : 'border-secondary'
-                    } flex w-full flex-col items-center justify-center rounded-lg bg-primary-foreground`}
+                    } flex w-full flex-col items-center justify-center rounded-lg bg-primary-foreground duration-100 active:scale-95`}
                 >
                     <div className="mx-6 my-5 flex flex-col items-center justify-center gap-1">
                         <div
@@ -60,7 +60,7 @@ export default function DogDetailInfo({ data, handleSetData }: Props) {
                     onClick={() => handleSetData('gender', 'FEMALE')}
                     className={`border ${
                         gender === 'FEMALE' ? 'border-primary' : 'border-secondary'
-                    } flex w-full flex-col items-center justify-center rounded-lg bg-primary-foreground`}
+                    } flex w-full flex-col items-center justify-center rounded-lg bg-primary-foreground duration-100 active:scale-95`}
                 >
                     <div className="mx-6 my-5 flex flex-col items-center justify-center gap-1">
                         <div
