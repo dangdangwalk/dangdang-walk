@@ -23,7 +23,7 @@ import useImageUpload from '@/hooks/useImageUpload';
 import { useSpinnerStore } from '@/store/spinnerStore';
 import { setFlagValueByKey, toggleCheckById } from '@/utils/check';
 
-interface DogWalkData {
+export interface DogWalkData {
     dogs: WalkingDog[];
     startedAt: string;
     distance: number;

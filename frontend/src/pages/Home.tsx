@@ -2,7 +2,7 @@ import DogCardList from '@/components/home/DogCardList';
 import WeatherInfo from '@/components/home/WeatherInfo';
 import { useState } from 'react';
 import { Button } from '@/components/commons/Button';
-import { NAV_HEIGHT, TOP_BAR_HEIGHT } from '@/constants';
+import { NAV_HEIGHT, TOP_BAR_HEIGHT, storageKeys } from '@/constants';
 import Notification from '@/assets/icons/ic-notification.svg';
 import TopBar from '@/components/commons/Topbar';
 import BottomSheet from '@/components/commons/BottomSheet';
@@ -14,6 +14,8 @@ import RegisterCard from '@/components/home/RegisterCard';
 import { queryStringKeys } from '@/constants';
 import { setFlagValueByKey, toggleCheckById } from '@/utils/check';
 import useWalkAvailable from '@/hooks/useWalkAvailableDog';
+import { getStorage, removeStorage } from '@/utils/storage';
+import { DogWalkData } from '@/pages/Walk';
 
 function Home() {
     const [isDogBottomSheetOpen, setIsDogBottomSheetOpen] = useState<boolean>(false);
@@ -26,15 +28,30 @@ function Home() {
     const { dogsStatistic, isDogsPending } = useDogsStatistic();
     const [isAvailableDogsCheckedAll, setIsAvailableDogsCheckedAll] = useState<boolean>(false);
     const navigate = useNavigate();
+    const dogData: DogWalkData | undefined = getStorage(storageKeys.DOGS)
+        ? JSON.parse(getStorage(storageKeys.DOGS) ?? '')
+        : undefined;
+
     const handleBottomSheet = () => {
         if (!isDogBottomSheetOpen) {
+            if (dogData && dogData?.startedAt && IsDogsWalking(new Date(), new Date(dogData.startedAt))) {
+                navigate('/walk');
+                return;
+            }
             fetchWalkAvailableDogs();
             setIsDogBottomSheetOpen(true);
+            removeStorage(storageKeys.DOGS);
         } else {
             handleCheckAll(false);
             setIsDogBottomSheetOpen(false);
             setIsAvailableDogsCheckedAll(false);
         }
+    };
+
+    const IsDogsWalking = (now: Date, startTime: Date): boolean => {
+        const diff = now.getTime() - startTime.getTime();
+        const hour = diff / 1000 / 60 / 60;
+        return hour <= 3;
     };
 
     const handleConfirm = () => {
@@ -67,13 +84,7 @@ function Home() {
 
     return (
         <>
-            <TopBar className="bg-neutral-50 px-5">
-                <TopBar.Front></TopBar.Front>
-                <TopBar.Center></TopBar.Center>
-                <TopBar.Back>
-                    <img src={Notification} alt="Notification" />
-                </TopBar.Back>
-            </TopBar>
+            <HomeHeader />
             <main
                 className="mb-[60px] flex min-h-dvh flex-col bg-neutral-50 px-5"
                 style={{ minHeight: `calc(100dvh - ${NAV_HEIGHT} - ${TOP_BAR_HEIGHT}  )` }}
@@ -129,3 +140,15 @@ function Home() {
 }
 
 export default Home;
+
+const HomeHeader = () => {
+    return (
+        <TopBar className="bg-neutral-50 px-5">
+            <TopBar.Front></TopBar.Front>
+            <TopBar.Center></TopBar.Center>
+            <TopBar.Back>
+                <img src={Notification} alt="알림" />
+            </TopBar.Back>
+        </TopBar>
+    );
+};

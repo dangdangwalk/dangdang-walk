@@ -43,20 +43,18 @@ export default function WeatherInfo() {
         setSkyStatus(skyGrade);
     }, [weather, isSunsetSunrisePending]);
 
+    if (isLoading) {
+        return <Spinner className="h-[164px]" />;
+    }
+
     return (
-        <>
-            {isLoading ? (
-                <Spinner className="h-[164px]" />
-            ) : (
-                <figure className="flex justify-between py-4">
-                    <div className="inline-flex flex-col items-start justify-between">
-                        <WeatherMessage temperature={weather?.temperature} precipitation={weather?.precipitation} />
-                        <WeatherLocationInfo address={address} airGrade={airGrade} />
-                    </div>
-                    <WeatherIconAndTemperature weather={weather} skyStatus={skyStatus} />
-                </figure>
-            )}
-        </>
+        <figure className="flex justify-between py-4">
+            <div className="inline-flex flex-col items-start justify-between">
+                <WeatherMessage temperature={weather?.temperature} precipitation={weather?.precipitation} />
+                <WeatherLocationInfo address={address} airGrade={airGrade} />
+            </div>
+            <WeatherIconAndTemperature weather={weather} skyStatus={skyStatus} />
+        </figure>
     );
 }
 
@@ -99,7 +97,9 @@ interface WeatherIconAndTemperatureProps {
 }
 const WeatherIconAndTemperature = ({ weather, skyStatus }: WeatherIconAndTemperatureProps) => (
     <div className="inline-flex flex-col items-center justify-start gap-3.5">
-        <img src={statusImage[skyStatus ?? 'dayClear']} alt={skyStatus} />
+        <div className="flex size-[100px] items-center justify-center">
+            {skyStatus && <img src={statusImage[skyStatus]} alt={skyStatus} />}
+        </div>
         <div className="text-xs font-normal leading-[18px] text-zinc-500">{`최고:${formatTemperature(weather?.maxTemperature)} 최저:${formatTemperature(weather?.minTemperature)}`}</div>
     </div>
 );
