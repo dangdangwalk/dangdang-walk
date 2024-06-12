@@ -49,14 +49,17 @@ export const createClient = (config?: AxiosRequestConfig): AxiosInstance => {
         },
         async (error: AxiosError) => {
             const isSignedIn = getStorage(storageKeys.IS_SIGNED_IN) ? true : false;
+            console.log(error.response?.config.url);
 
             if (error.response && error.response.status === 401 && isSignedIn) {
                 const errorData = error.response.data as ErrorDataResponse;
-                if (errorData.message === 'Refresh token not found in cookies.') {
+                if (
+                    errorData.message === 'Refresh token not found in cookies.' ||
+                    error.response?.config.url === '/auth/token'
+                ) {
                     removeStorage(storageKeys.IS_SIGNED_IN);
                     return window.location.reload();
                 }
-
                 try {
                     const data = await queryClient.fetchQuery<{ accessToken: string }>({
                         queryKey: [queryKeys.GET_ACCESS_TOKEN],
