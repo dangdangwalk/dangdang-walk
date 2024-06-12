@@ -4,7 +4,7 @@ import { uploadImage } from '@/api/upload';
 import { UseMutationCustomOptions } from '@/types/common';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { queryKeys } from '@/constants';
+import { FIFTY_MIN, ONE_HOUR, queryKeys } from '@/constants';
 import { useAuthStore } from '@/store/authStore';
 import { Dog } from '@/models/dog';
 
@@ -24,6 +24,8 @@ const useFetchDogs = () => {
     return useQuery<Dog[]>({
         queryKey: [queryKeys.DOGS],
         queryFn: fetchDogs,
+        gcTime: ONE_HOUR,
+        staleTime: FIFTY_MIN,
         enabled: isSignedIn,
     });
 };

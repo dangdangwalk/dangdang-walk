@@ -9,7 +9,7 @@ import {
     requestSignUp,
 } from '@/api/auth';
 import queryClient from '@/api/queryClient';
-import { A_DAY, FIFTY_MIN, ONE_HOUR, TEN_TO_A_DAY, queryKeys, storageKeys } from '@/constants';
+import { ONE_DAY_IN_MS, FIFTY_MIN, ONE_HOUR, TEN_TO_A_DAY, queryKeys, storageKeys } from '@/constants';
 import { useAuthStore } from '@/store/authStore';
 import { UseMutationCustomOptions, UseQueryCustomOptions } from '@/types/common';
 import { getStorage, removeStorage } from '@/utils/storage';
@@ -114,7 +114,7 @@ const useGetProfile = (queryOptions?: UseQueryCustomOptions) => {
     return useQuery({
         queryKey: [queryKeys.GET_PROFILE],
         queryFn: requestProfile,
-        gcTime: A_DAY,
+        gcTime: ONE_DAY_IN_MS,
         staleTime: TEN_TO_A_DAY,
         enabled: isSignedIn,
         ...queryOptions,
