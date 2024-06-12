@@ -4,7 +4,7 @@ import { getDataSourceToken } from '@nestjs/typeorm';
 import * as cookieParser from 'cookie-parser';
 import * as request from 'supertest';
 import { AllMethods } from 'supertest/types';
-import { DataSource } from 'typeorm';
+import { DataSource, In } from 'typeorm';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 
 import { AppModule } from './../src/app.module';
@@ -152,11 +152,13 @@ export const insertMockJournal = async () => {
     await dataSource.getRepository(JournalsDogs).save(mockJournalDogs);
     await dataSource.getRepository(JournalPhotos).save(mockJournalPhotos);
     await dataSource.getRepository(Excrements).save(mockExcrements);
+    await dataSource.getRepository(DogWalkDay).update({ id: In([1, 2]) }, { wed: 1 });
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 1;');
 };
 
 export const clearJournal = async () => {
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 0;');
+    await dataSource.getRepository(DogWalkDay).update({ id: In([1, 2]) }, { wed: 0 });
     await dataSource.getRepository(Excrements).clear();
     await dataSource.getRepository(JournalPhotos).clear();
     await dataSource.getRepository(JournalsDogs).clear();
