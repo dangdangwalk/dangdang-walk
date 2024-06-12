@@ -24,7 +24,7 @@ const useAddressAndAirGrade = (position: Position | null) => {
         isPending: isAirGradePending,
         error: airGradeError,
     } = useQuery({
-        queryKey: [queryKeys.AIR_GRADE, position?.lat, position?.lng],
+        queryKey: [queryKeys.AIR_GRADE],
         queryFn: async () => {
             if (!addressData?.sido) return;
             return await fetchAirGrade(addressData?.sido);

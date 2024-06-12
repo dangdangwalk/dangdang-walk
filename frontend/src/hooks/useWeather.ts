@@ -15,7 +15,7 @@ export const useWeather = (position: Position | null) => {
         error: weatherError,
         isPending: isWeatherPending,
     } = useQuery({
-        queryKey: [queryKeys.WEATHER, position?.lat, position?.lng],
+        queryKey: [queryKeys.WEATHER],
         queryFn: async () => {
             if (!position) return;
             const { nx, ny } = gpsToGrid(position.lat, position.lng);

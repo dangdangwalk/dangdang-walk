@@ -5,7 +5,7 @@ import { getCurrentDate } from '@/utils/time';
 import { useQuery } from '@tanstack/react-query';
 
 const useSunsetSunrise = (position: Position | null) => {
-    const queryKey = [queryKeys.SUNSET_SUNRISE, position?.lat, position?.lng];
+    const queryKey = [queryKeys.SUNSET_SUNRISE];
     const {
         data: sunsetSunriseData,
         error: sunsetSunriseError,
