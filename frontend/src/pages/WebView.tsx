@@ -2,8 +2,8 @@ import React from 'react';
 
 const WebView = () => {
     const sendMessageToWebView = () => {
-        const messageData = { key: 'value' };
-        window.postMessage(JSON.stringify(messageData));
+        const messageData = { key: 'value' }; // 보낼 데이터
+        window.postMessage(JSON.stringify(messageData), '*'); // '*'는 모든 출처를 의미
     };
 
     return (
