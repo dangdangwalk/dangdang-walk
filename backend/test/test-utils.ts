@@ -17,9 +17,12 @@ import { KakaoService } from '../src/auth/oauth/kakao.service';
 import { NaverService } from '../src/auth/oauth/naver.service';
 import { DogWalkDay } from '../src/dog-walk-day/dog-walk-day.entity';
 import { Dogs } from '../src/dogs/dogs.entity';
+import { Excrements } from '../src/excrements/excrements.entity';
 import { mockDog, mockDog2 } from '../src/fixtures/dogs.fixture';
-import { journalsDogEntries, journalsEntries } from '../src/fixtures/statistics.fixture';
+import { mockExcrements, mockJournal, mockJournalDogs, mockJournalPhotos } from '../src/fixtures/journals.fixture';
+import { mockJournals, mockJournalsDog } from '../src/fixtures/statistics.fixture';
 import { mockUser } from '../src/fixtures/users.fixture';
+import { JournalPhotos } from '../src/journal-photos/journal-photos.entity';
 import { Journals } from '../src/journals/journals.entity';
 import { JournalsDogs } from '../src/journals-dogs/journals-dogs.entity';
 import { MockS3Service } from '../src/s3/__mocks__/s3.service';
@@ -131,13 +134,31 @@ export const clearDogs = async () => {
 
 export const insertMockJournals = async () => {
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 0;');
-    await dataSource.getRepository(Journals).save(journalsEntries);
-    await dataSource.getRepository(JournalsDogs).save(journalsDogEntries);
+    await dataSource.getRepository(Journals).save(mockJournals);
+    await dataSource.getRepository(JournalsDogs).save(mockJournalsDog);
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 1;');
 };
 
 export const clearJournals = async () => {
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 0;');
+    await dataSource.getRepository(JournalsDogs).clear();
+    await dataSource.getRepository(Journals).clear();
+    await dataSource.query('SET FOREIGN_KEY_CHECKS = 1;');
+};
+
+export const insertMockJournal = async () => {
+    await dataSource.query('SET FOREIGN_KEY_CHECKS = 0;');
+    await dataSource.getRepository(Journals).save(mockJournal);
+    await dataSource.getRepository(JournalsDogs).save(mockJournalDogs);
+    await dataSource.getRepository(JournalPhotos).save(mockJournalPhotos);
+    await dataSource.getRepository(Excrements).save(mockExcrements);
+    await dataSource.query('SET FOREIGN_KEY_CHECKS = 1;');
+};
+
+export const clearJournal = async () => {
+    await dataSource.query('SET FOREIGN_KEY_CHECKS = 0;');
+    await dataSource.getRepository(Excrements).clear();
+    await dataSource.getRepository(JournalPhotos).clear();
     await dataSource.getRepository(JournalsDogs).clear();
     await dataSource.getRepository(Journals).clear();
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 1;');
