@@ -20,7 +20,6 @@ import DeactivateModal from '@/components/DeactivateModal';
 import DogDetail from '@/pages/MyPage/DogDetail';
 import { RecentMonthStatisticsResponse, fetchDogRecentMonthStatistics } from '@/api/dog';
 import { Dog } from '@/models/dog';
-import WebView from '@/pages/WebView';
 function MyPage() {
     const navigate = useNavigate();
     const { fetchDog } = useDog();
@@ -138,7 +137,6 @@ function MyPage() {
                         </div>
                     )}
                 </section>
-                <WebView />
                 <button
                     onClick={() => setDeactivate(true)}
                     className="mx-5 my-8 flex items-center justify-center rounded-lg border border-neutral-200 py-[13px] text-sm font-normal leading-[21px] text-neutral-400 duration-100 active:scale-[0.97]"
