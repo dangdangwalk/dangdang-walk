@@ -17,7 +17,7 @@ import { uploadImg, useDog } from '@/hooks/useDog';
 import { useCropStore } from '@/store/cropStore';
 import { dataURLtoFile } from '@/utils/dataUrlToFile';
 import { secondsToTimeFormat } from '@/utils/time';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { Dog, DogCreateForm } from '@/models/dog';
 import useToast from '@/hooks/useToast';
 import { maxLengthCheck } from '@/pages/Join/DogDetailInfo';
