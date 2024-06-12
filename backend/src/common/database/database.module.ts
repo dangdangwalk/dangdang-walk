@@ -2,7 +2,7 @@ import { DynamicModule, Inject, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule, getDataSourceToken } from '@nestjs/typeorm';
 import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
-import { DataSource } from 'typeorm';
+import { DataSource, FileLogger } from 'typeorm';
 import { runSeeders } from 'typeorm-extension';
 import { addTransactionalDataSource, getDataSourceByName } from 'typeorm-transactional';
 
@@ -14,10 +14,11 @@ import { WinstonLoggerService } from '../logger/winstonLogger.service';
 @Module({
     imports: [
         TypeOrmModule.forRootAsync({
-            inject: [ConfigService],
-            useFactory: (config: ConfigService) => {
-                const isTest = config.get<string>('NODE_ENV') === 'test';
-                const isProduction = config.get<string>('NODE_ENV') === 'prod';
+            inject: [ConfigService, WinstonLoggerService],
+            useFactory: (config: ConfigService, winston: WinstonLoggerService) => {
+                const nodeEnv = config.get<string>('NODE_ENV');
+                const isTest = nodeEnv === 'test';
+                const isLocal = nodeEnv === 'local';
 
                 return {
                     type: 'mysql',
@@ -30,7 +31,9 @@ import { WinstonLoggerService } from '../logger/winstonLogger.service';
                     synchronize: true,
                     timezone: 'Z',
                     legacySpatialSupport: false,
-                    ...(!isProduction ? { logging: true, logger: 'file' } : {}),
+                    ...(isTest || isLocal
+                        ? { logger: new FileLogger(true, { logPath: `log/ormlogs.${nodeEnv}.log` }) }
+                        : {}),
                 };
             },
             async dataSourceFactory(options) {
