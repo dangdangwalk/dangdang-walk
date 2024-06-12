@@ -1,7 +1,7 @@
 import { useWeather } from '@/hooks/useWeather';
 import { getCurrentTime } from '@/utils/time';
 import { formatTemperature } from '@/utils/format';
-import { SkyStatus, getAirStatus, getSkyGrade, weatherStatus } from '@/utils/weather';
+import { AirGrade, SkyStatus, getAirStatus, getSkyGrade, weatherStatus } from '@/utils/weather';
 import { useEffect, useState } from 'react';
 import Cloudy from '@/assets/icons/ic-cloudy.svg';
 import Rain from '@/assets/icons/ic-rain.svg';
@@ -14,6 +14,7 @@ import useSunsetSunrise from '@/hooks/useSunsetSunrise';
 import Spinner from '@/components/commons/Spinner';
 import useGeolocation from '@/hooks/useGeolocation';
 import useAddressAndAirGrade from '@/hooks/useAddressAndAirgrade';
+import { Weather } from '@/models/weather';
 
 const statusImage = {
     rain: Rain,
@@ -49,32 +50,56 @@ export default function WeatherInfo() {
             ) : (
                 <figure className="flex justify-between py-4">
                     <div className="inline-flex flex-col items-start justify-between">
-                        <div className="text-[28px] font-bold leading-[42px] text-black">
-                            {weatherStatus(weather?.temperature, weather?.precipitation) ? (
-                                <div>
-                                    산책하기 좋은 <br /> 날씨에요
-                                </div>
-                            ) : (
-                                <div>
-                                    오늘은 집에서
-                                    <br />
-                                    쉬고 싶어요!
-                                </div>
-                            )}
-                        </div>
-                        <div className="flex flex-col items-start justify-between pl-1">
-                            <p className="text-xs font-normal leading-[18px] text-zinc-500">위치 : {address}</p>
-                            <div className="text-xs font-normal leading-[18px] text-zinc-500">
-                                대기질 : {getAirStatus(airGrade)}
-                            </div>
-                        </div>
+                        <WeatherMessage temperature={weather?.temperature} precipitation={weather?.precipitation} />
+                        <WeatherLocationInfo address={address} airGrade={airGrade} />
                     </div>
-                    <div className="inline-flex flex-col items-center justify-start gap-3.5">
-                        <img src={statusImage[skyStatus ?? 'dayClear']} alt={skyStatus} />
-                        <div className="text-xs font-normal leading-[18px] text-zinc-500">{`최고:${formatTemperature(weather?.maxTemperature)} 최저:${weather?.minTemperature}`}</div>
-                    </div>
+                    <WeatherIconAndTemperature weather={weather} skyStatus={skyStatus} />
                 </figure>
             )}
         </>
     );
 }
+
+interface WeatherMessageProps {
+    temperature?: number;
+    precipitation?: number;
+}
+
+const WeatherMessage = ({ temperature, precipitation }: WeatherMessageProps) => (
+    <div className="text-[28px] font-bold leading-[42px] text-black">
+        {weatherStatus(temperature, precipitation) ? (
+            <div>
+                산책하기 좋은 <br /> 날씨에요
+            </div>
+        ) : (
+            <div>
+                오늘은 집에서
+                <br />
+                쉬고 싶어요!
+            </div>
+        )}
+    </div>
+);
+
+interface WeatherLocationInfoProps {
+    address: string | undefined;
+    airGrade: AirGrade | undefined;
+}
+
+const WeatherLocationInfo = ({ address, airGrade }: WeatherLocationInfoProps) => (
+    <div className="flex flex-col items-start justify-between pl-1">
+        <p className="text-xs font-normal leading-[18px] text-zinc-500">위치 : {address}</p>
+        <div className="text-xs font-normal leading-[18px] text-zinc-500">대기질 : {getAirStatus(airGrade)}</div>
+    </div>
+);
+
+interface WeatherIconAndTemperatureProps {
+    weather?: Weather | null;
+    skyStatus?: SkyStatus;
+}
+const WeatherIconAndTemperature = ({ weather, skyStatus }: WeatherIconAndTemperatureProps) => (
+    <div className="inline-flex flex-col items-center justify-start gap-3.5">
+        <img src={statusImage[skyStatus ?? 'dayClear']} alt={skyStatus} />
+        <div className="text-xs font-normal leading-[18px] text-zinc-500">{`최고:${formatTemperature(weather?.maxTemperature)} 최저:${formatTemperature(weather?.minTemperature)}`}</div>
+    </div>
+);

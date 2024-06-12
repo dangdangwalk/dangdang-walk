@@ -22,12 +22,13 @@ const defaultDogs: DogStatistic[] = [
         weeklyWalks: [0, 2, 0, 0, 3, 0, 0],
     },
 ];
-
+const MINUTE = 1000 * 60;
 const useDogsStatistic = () => {
     const { isSignedIn } = useAuthStore();
     const { data, isPending } = useQuery({
         queryKey: [queryKeys.DOG_STATISTICS],
         queryFn: fetchDogStatistic,
+        staleTime: MINUTE,
     });
 
     if (!isSignedIn) {

@@ -13,12 +13,18 @@ const useGeolocation = () => {
 
     useEffect(() => {
         if ('geolocation' in navigator) {
-            navigator.geolocation.getCurrentPosition((position: GeolocationPosition) => {
-                const { latitude: lat, longitude: lng } = position.coords;
-                setStartPosition({ lat, lng });
-                setPrevPosition({ lat, lng });
-                setRoutes([...routes, { lat, lng }]);
-            });
+            navigator.geolocation.getCurrentPosition(
+                (position: GeolocationPosition) => {
+                    const { latitude: lat, longitude: lng } = position.coords;
+                    setStartPosition({ lat, lng });
+                    setPrevPosition({ lat, lng });
+                    setRoutes([...routes, { lat, lng }]);
+                },
+                (error) => {
+                    console.log(error);
+                    setStartPosition({ lat: DEFAULT_LAT, lng: DEFAULT_LNG });
+                }
+            );
         } else {
             console.log('no geolocation');
             setStartPosition({ lat: DEFAULT_LAT, lng: DEFAULT_LNG });
