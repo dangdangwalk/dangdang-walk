@@ -45,7 +45,7 @@ const OAuthButton = ({ provider, name }: Props) => {
     };
     return (
         <button
-            className={`relative flex h-[3.25rem] w-full items-center justify-center rounded-lg ${bgColor(
+            className={`relative flex h-[3.25rem] w-full items-center justify-center rounded-lg duration-100 active:scale-[0.97] ${bgColor(
                 provider
             )} ${provider === 'google' && 'border border-neutral-200'}`}
             onClick={() => {

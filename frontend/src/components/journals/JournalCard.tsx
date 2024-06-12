@@ -25,7 +25,7 @@ export default function JournalCard({ journal, dog }: { journal: Journal; dog: D
     if (!dog) return <></>;
     return (
         <button
-            className="relative flex h-[140px] w-full flex-col items-center rounded-lg bg-white pb-2 pt-4 shadow"
+            className="relative flex h-[140px] w-full flex-col items-center rounded-lg bg-white pb-2 pt-4 shadow duration-100 active:scale-[0.97]"
             onClick={() => {
                 goToDetail(journal.journalId);
             }}

@@ -135,31 +135,33 @@ export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfile
                         <section className="mt-9 px-5 pb-5 pt-[10px]">
                             <div className="text-base font-bold text-neutral-800">댕댕이 정보</div>
                             <section className="mt-6 flex flex-col gap-4">
-                                <div className="flex justify-between">
+                                <div className="flex items-center justify-between">
                                     <p className="text-sm font-normal text-neutral-400">이름</p>
                                     <input
                                         disabled={!onEdit}
                                         type="text"
                                         value={name}
+                                        size={registerData.name.length === 0 ? 1 : registerData.name.length * 2}
+                                        maxLength={10}
                                         onChange={(e: ChangeEvent<HTMLInputElement>) =>
                                             setRegisterData((prev) => ({
                                                 ...prev,
                                                 name: e.target.value,
                                             }))
                                         }
-                                        className="bg-white text-right text-sm font-bold text-neutral-800 outline-none"
+                                        className={`text-sm font-bold text-neutral-800 outline-none ${onEdit ? 'rounded-md bg-slate-200 p-2 text-center duration-100 active:scale-95' : 'text-right'}`}
                                     />
                                 </div>
-                                <div className="flex justify-between">
+                                <div className="flex items-center justify-between">
                                     <p className="text-sm font-normal text-neutral-400">견종</p>
                                     <p
-                                        className="text-sm font-bold text-neutral-800"
+                                        className={`text-sm font-bold text-neutral-800 duration-100 ${onEdit && 'rounded-md bg-slate-200 p-2 active:scale-95'}`}
                                         onClick={() => onEdit && setBreedSearchOpen(true)}
                                     >
                                         {breed}
                                     </p>
                                 </div>
-                                <div className="flex justify-between">
+                                <div className="flex items-center justify-between">
                                     <p className="text-sm font-normal text-neutral-400">성별</p>
                                     {onEdit ? (
                                         <div className="flex h-7 gap-2">
@@ -249,7 +251,7 @@ export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfile
                                         />
                                     </div>
                                 )}
-                                <div className="flex justify-between">
+                                <div className="flex items-center justify-between">
                                     <p className="text-sm font-normal text-neutral-400">생일</p>
                                     {onEdit ? (
                                         <input
@@ -269,16 +271,19 @@ export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfile
                                         </p>
                                     )}
                                 </div>
-                                <div className="flex justify-between">
+                                <div className="flex items-center justify-between">
                                     <p className="text-sm font-normal text-neutral-400">체중</p>
                                     {onEdit ? (
-                                        <div className="flex">
+                                        <div
+                                            className={`flex items-center ${onEdit && 'rounded-md bg-slate-200 p-2 duration-100 active:scale-95'}`}
+                                        >
                                             <input
-                                                className={`bg-white text-end outline-none`}
+                                                className={`w-7 text-end outline-none ${onEdit && 'bg-slate-200'}`}
                                                 type="number"
                                                 pattern="\d*"
                                                 inputMode="numeric"
                                                 maxLength={3}
+                                                size={4}
                                                 value={weight}
                                                 onInput={(e) => maxLengthCheck(e)}
                                                 onChange={(event) =>
@@ -323,14 +328,14 @@ export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfile
                         {onEdit && (
                             <button
                                 onClick={handleSave}
-                                className="mx-5 mb-2 mt-8 flex items-center justify-center rounded-lg bg-primary py-[13px] text-sm font-bold leading-[21px] text-white"
+                                className="mx-5 mb-2 mt-8 flex items-center justify-center rounded-lg bg-primary py-[13px] text-sm font-bold leading-[21px] text-white duration-100 active:scale-[0.97]"
                             >
                                 저장하기
                             </button>
                         )}
                         <button
                             onClick={() => setDeleteDogConfirm(true)}
-                            className={`${!onEdit && 'mt-8'} mx-5 mb-8 flex items-center justify-center rounded-lg border border-neutral-200 py-[13px] text-sm font-normal leading-[21px] text-neutral-400`}
+                            className={`${!onEdit && 'mt-8'} mx-5 mb-8 flex items-center justify-center rounded-lg border border-neutral-200 py-[13px] text-sm font-normal leading-[21px] text-neutral-400 duration-100 active:scale-[0.97]`}
                         >
                             댕댕이 삭제
                         </button>

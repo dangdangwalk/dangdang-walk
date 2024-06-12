@@ -16,7 +16,7 @@ const WEEKDAY: DayType[] = ['월', '화', '수', '목', '금', '토', '일'];
 export default function DogCard({ dog, pageMove }: DogCardProps) {
     return (
         <div
-            className="relative flex-col rounded-lg bg-white shadow"
+            className="relative flex-col rounded-lg bg-white shadow duration-100 active:scale-[0.97]"
             onClick={() => {
                 if (!pageMove) return;
                 pageMove(dog.id);

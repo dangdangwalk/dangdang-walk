@@ -86,24 +86,24 @@ function MyPage() {
 
                         <img src={ProviderIcon(provider)} alt="provider" />
                     </section>
-                    <div onClick={() => signOut.mutate(null)}>
+                    <div onClick={() => signOut.mutate(null)} className="duration-100 active:scale-95">
                         <img src={LogoutIcon} alt="logout" />
                     </div>
                 </section>
 
                 <section className="mb-[2.125rem] mt-2.5 flex justify-between px-10">
                     <div
-                        className="flex flex-col items-center"
+                        className="flex flex-col items-center p-2 duration-100 active:scale-95 active:rounded-md active:bg-primary/15"
                         onClick={() => dogs && dogs[0] && navigate(`/journals?dogId=${dogs[0].id}`)}
                     >
                         <img src={NoteIcon} alt="note" className="size-12" />
                         <p className="text-sm font-normal leading-[21px] text-neutral-800">산책기록</p>
                     </div>
-                    <div className="flex flex-col items-center">
+                    <div className="flex flex-col items-center p-2 duration-100 active:scale-95 active:rounded-md active:bg-primary/15">
                         <img src={MegaphoneIcon} alt="megaphone" className="size-12" />
                         <p className="text-sm font-normal leading-[21px] text-neutral-800">공지사항</p>
                     </div>
-                    <div className="flex flex-col items-center">
+                    <div className="flex flex-col items-center p-2 duration-100 active:scale-95 active:rounded-md active:bg-primary/15">
                         <img src={HeadphoneIcon} alt="headphone" className="size-12" />
                         <p className="text-sm font-normal leading-[21px] text-neutral-800">문의하기</p>
                     </div>
@@ -113,24 +113,24 @@ function MyPage() {
                     <div className="p-5 text-base font-bold leading-normal text-neutral-800">나의 댕댕이</div>
                     {dogs &&
                         dogs.map((dog, index) => (
-                            <div key={dog.id} className="flex items-center justify-between px-5 py-[6px]">
+                            <div
+                                key={dog.id}
+                                className="flex items-center justify-between px-5 py-[6px] duration-100 active:scale-95 active:rounded-md active:bg-yellow-600/15"
+                                onClick={async () => {
+                                    const data = await fetchDogRecentMonthStatistics(dog.id);
+                                    handleProfileOpen(dog, data);
+                                }}
+                            >
                                 <div className="flex justify-start gap-2">
                                     <Avatar url={dog.profilePhotoUrl} name={dog.name} />
                                     {index === 0 && <img src={CrownIcon} alt="crown" />}
                                 </div>
-                                <img
-                                    src={RightArrowIcon}
-                                    alt="rightArrow"
-                                    onClick={async () => {
-                                        const data = await fetchDogRecentMonthStatistics(dog.id);
-                                        handleProfileOpen(dog, data);
-                                    }}
-                                />
+                                <img src={RightArrowIcon} alt="rightArrow" />
                             </div>
                         ))}
                     {dogs && 5 - dogs?.length > 0 && (
                         <div
-                            className="flex items-center justify-between px-5 py-[6px]"
+                            className="flex items-center justify-between px-5 py-[6px] duration-100 active:scale-95 active:rounded-md active:bg-yellow-600/15"
                             onClick={() => navigate('/signup', { state: 'DogBasicInfo' })}
                         >
                             <Avatar url={SelectPhoto} name={'댕댕이 추가하기'} />
@@ -139,7 +139,7 @@ function MyPage() {
                 </section>
                 <button
                     onClick={() => setDeactivate(true)}
-                    className="mx-5 my-8 flex items-center justify-center rounded-lg border border-neutral-200 py-[13px] text-sm font-normal leading-[21px] text-neutral-400"
+                    className="mx-5 my-8 flex items-center justify-center rounded-lg border border-neutral-200 py-[13px] text-sm font-normal leading-[21px] text-neutral-400 duration-100 active:scale-[0.97]"
                 >
                     회원탈퇴
                 </button>
