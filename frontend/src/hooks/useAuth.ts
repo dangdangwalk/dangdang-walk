@@ -55,7 +55,7 @@ const useSignUp = (mutationOptions?: UseMutationCustomOptions) => {
 };
 
 const useGetRefreshToken = () => {
-    const { storeSignIn, isSignedIn } = useAuthStore();
+    const { storeSignIn } = useAuthStore();
     const { isSuccess, data, isLoading } = useQuery({
         queryKey: [queryKeys.GET_ACCESS_TOKEN],
         queryFn: refreshAccessToken,
@@ -64,7 +64,6 @@ const useGetRefreshToken = () => {
         refetchInterval: FIFTY_MIN,
         refetchOnReconnect: true,
         refetchIntervalInBackground: true,
-        enabled: isSignedIn,
     });
     useEffect(() => {
         if (isSuccess) {
