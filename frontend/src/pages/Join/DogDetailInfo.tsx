@@ -85,10 +85,11 @@ export default function DogDetailInfo({ data, handleSetData }: Props) {
                     checked={isNeutered}
                     onCheckedChange={(checked: boolean) => handleSetData('isNeutered', checked)}
                     labelText="중성화 했어요"
+                    className="duration-100 active:scale-[0.97] active:rounded-md active:bg-primary/40 active:px-1"
                 />
             </div>
             <div className={`${birthCheck ? 'mt-4' : 'mt-8'}`}>
-                <div className={`${birthCheck ? '' : 'relative mb-2 py-3'} `}>
+                <div className={`duration-100 ${birthCheck ? '' : 'relative mb-2 py-3'} `}>
                     {!birthCheck && (
                         <>
                             <input
@@ -108,6 +109,7 @@ export default function DogDetailInfo({ data, handleSetData }: Props) {
                         handleSetData('birth', null);
                     }}
                     labelText="생일을 몰라요"
+                    className="duration-100 active:rounded-md active:bg-primary/40 active:px-1"
                 />
             </div>
             <div className="mt-9">

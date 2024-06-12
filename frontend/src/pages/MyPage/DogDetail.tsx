@@ -126,7 +126,11 @@ export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfile
                                             accept="image/*"
                                             onChange={onSelectFileChange}
                                         />
-                                        <img src={EditPhoto} alt="editphoto" className="m-1 size-[22px]" />
+                                        <img
+                                            src={EditPhoto}
+                                            alt="editphoto"
+                                            className="m-1 size-[22px] duration-100 hover:scale-90"
+                                        />
                                     </label>
                                 </div>
                             )}
@@ -149,13 +153,13 @@ export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfile
                                                 name: e.target.value,
                                             }))
                                         }
-                                        className={`text-sm font-bold text-neutral-800 outline-none ${onEdit ? 'rounded-md bg-slate-200 p-2 text-center duration-100 active:scale-95' : 'text-right'}`}
+                                        className={`text-sm font-bold text-neutral-800 outline-none ${onEdit ? 'rounded-md bg-primary/40 p-2 text-center duration-100 active:scale-90' : 'bg-transparent text-right'}`}
                                     />
                                 </div>
                                 <div className="flex items-center justify-between">
                                     <p className="text-sm font-normal text-neutral-400">견종</p>
                                     <p
-                                        className={`text-sm font-bold text-neutral-800 duration-100 ${onEdit && 'rounded-md bg-slate-200 p-2 active:scale-95'}`}
+                                        className={`text-sm font-bold text-neutral-800 duration-100 ${onEdit && 'rounded-md bg-primary/40 p-2 active:scale-90'}`}
                                         onClick={() => onEdit && setBreedSearchOpen(true)}
                                     >
                                         {breed}
@@ -172,7 +176,7 @@ export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfile
                                                         gender: 'MALE',
                                                     }))
                                                 }
-                                                className={`border ${
+                                                className={`border duration-100 active:scale-95 ${
                                                     gender === 'MALE' ? 'border-primary' : 'border-secondary'
                                                 } flex w-full items-center justify-center rounded-lg bg-primary-foreground px-[9px] py-[7px]`}
                                             >
@@ -203,7 +207,7 @@ export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfile
                                                         gender: 'FEMALE',
                                                     }))
                                                 }
-                                                className={`border ${
+                                                className={`border duration-100 active:scale-95 ${
                                                     gender === 'FEMALE' ? 'border-primary' : 'border-secondary'
                                                 } flex w-full items-center justify-center rounded-lg bg-primary-foreground px-[9px] py-[7px]`}
                                             >
@@ -238,9 +242,10 @@ export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfile
                                     )}
                                 </div>
                                 {onEdit && (
-                                    <div className="flex justify-between">
+                                    <div className="flex items-center justify-between">
                                         <p className="text-sm font-normal text-neutral-400">중성화 유무</p>
                                         <Checkbox
+                                            className="duration-100 active:scale-90"
                                             checked={isNeutered}
                                             onCheckedChange={(checked: boolean) =>
                                                 setRegisterData((prev) => ({
@@ -275,10 +280,10 @@ export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfile
                                     <p className="text-sm font-normal text-neutral-400">체중</p>
                                     {onEdit ? (
                                         <div
-                                            className={`flex items-center ${onEdit && 'rounded-md bg-slate-200 p-2 duration-100 active:scale-95'}`}
+                                            className={`flex items-center ${onEdit && 'rounded-md bg-primary/40 p-2 duration-100 active:scale-90'}`}
                                         >
                                             <input
-                                                className={`w-7 text-end outline-none ${onEdit && 'bg-slate-200'}`}
+                                                className={`w-7 text-end outline-none ${onEdit && 'bg-transparent'}`}
                                                 type="number"
                                                 pattern="\d*"
                                                 inputMode="numeric"

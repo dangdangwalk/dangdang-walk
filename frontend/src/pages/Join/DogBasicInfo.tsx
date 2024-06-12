@@ -40,7 +40,7 @@ export default function DogBasicInfo({ data, fileInputRef, handleSetData }: Prop
                         <img
                             src={dogProfileImgUrl ? dogProfileImgUrl : SelectPhoto}
                             alt="selectphoto"
-                            className="size-[7.5rem] rounded-full"
+                            className="size-[7.5rem] rounded-full duration-100 active:scale-90"
                         />
                     </label>
                 </div>
