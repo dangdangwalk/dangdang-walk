@@ -55,6 +55,9 @@ function Home() {
             setIsAvailableDogsCheckedAll(false);
         }
     };
+    const handlePageMove = (key: string, state: any) => {
+        navigate(key, { state });
+    };
 
     const IsDogsWalking = (now: Date, startTime: Date): boolean => {
         const diff = now.getTime() - startTime.getTime();
@@ -95,7 +98,7 @@ function Home() {
                 style={{ minHeight: `calc(100dvh - ${NAV_HEIGHT} - ${TOP_BAR_HEIGHT}  )` }}
             >
                 <WeatherInfo position={position}/>
-                <DogStatisticsView dogsStatistic={dogsStatistic} isPending={isDogsPending} />
+                <DogStatisticsView dogsStatistic={dogsStatistic} isPending={isDogsPending} pageMove={handlePageMove} />
                 {dogsStatistic && dogsStatistic?.length > 0 && (
                     <Button
                         color={'primary'}
@@ -153,14 +156,14 @@ const HomeHeader = () => {
 interface DogStatisticsViewProps {
     isPending: boolean;
     dogsStatistic: DogStatistic[] | undefined;
+    pageMove: (url: string, state: any) => void;
 }
 
-const DogStatisticsView = ({ isPending, dogsStatistic }: DogStatisticsViewProps) => {
-    const navigate = useNavigate();
+const DogStatisticsView = ({ isPending, dogsStatistic, pageMove }: DogStatisticsViewProps) => {
     const goToJournals = (dogId: number) => {
-        navigate(`/journals?${queryStringKeys.DOG_ID}=${dogId}`, {
-            state: { dogs: dogsStatistic, dog: dogsStatistic?.find((d) => d.id === dogId) },
-        });
+        const url = `/journals?${queryStringKeys.DOG_ID}=${dogId}`;
+        const state = { dogs: dogsStatistic, dog: dogsStatistic?.find((d) => d.id === dogId) };
+        pageMove(url, state);
     };
     if (isPending) {
         <Spinner />;
@@ -171,7 +174,7 @@ const DogStatisticsView = ({ isPending, dogsStatistic }: DogStatisticsViewProps)
             {dogsStatistic && dogsStatistic?.length > 0 ? (
                 <DogCardList dogsStatistic={dogsStatistic} pageMove={goToJournals} />
             ) : (
-                <RegisterCard />
+                <RegisterCard pageMove={pageMove} />
             )}
         </>
     );
