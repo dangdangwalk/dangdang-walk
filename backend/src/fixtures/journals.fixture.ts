@@ -2,7 +2,7 @@ import { EXCREMENT } from '../excrements/types/excrement.type';
 
 export const mockJournal = {
     userId: 1,
-    routes: '[{"lat": 200.4, "lng" : 200.222}, {"lat": 100.23, "lng" : 204.4839}]',
+    routes: '[{"lat": 87.4, "lng" : 85.222}, {"lat": 75.23, "lng" : 104.4839}]',
     calories: 500,
     memo: 'Enjoyed the walk with Buddy!',
     startedAt: '2024-06-12T00:00:00Z',
@@ -31,19 +31,19 @@ export const mockExcrements = [
         journalId: 1,
         dogId: 1,
         type: EXCREMENT.Feces,
-        coordinate: `POINT(200.4 200.222)`,
+        coordinate: `POINT(87.4 85.222)`,
     },
     {
         journalId: 1,
         dogId: 1,
         type: EXCREMENT.Urine,
-        coordinate: `POINT(200.4 200.222)`,
+        coordinate: `POINT(87.4 85.222)`,
     },
     {
         journalId: 1,
         dogId: 2,
         type: EXCREMENT.Feces,
-        coordinate: `POINT(100.23 204.4839)`,
+        coordinate: `POINT(75.23 104.4839)`,
     },
 ];
 
@@ -55,8 +55,8 @@ export const createMockJournal = {
         startedAt: '2024-06-12T00:00:00Z',
         duration: 3600,
         routes: [
-            { lat: 200.4, lng: 200.222 },
-            { lat: 100.23, lng: 204.4839 },
+            { lat: 87.4, lng: 85.222 },
+            { lat: 75.23, lng: 104.4839 },
         ],
         photoUrls: ['1/photo1.jpeg', '1/photo2.png'],
         memo: 'Enjoyed the walk with Buddy!',
@@ -64,12 +64,12 @@ export const createMockJournal = {
     excrements: [
         {
             dogId: 1,
-            fecesLocations: [{ lat: '200.4', lng: '200.222' }],
-            urineLocations: [{ lat: '200.4', lng: '200.222' }],
+            fecesLocations: [{ lat: '87.4', lng: '85.222' }],
+            urineLocations: [{ lat: '87.4', lng: '85.222' }],
         },
         {
             dogId: 2,
-            fecesLocations: [{ lat: '100.23', lng: '204.4839' }],
+            fecesLocations: [{ lat: '75.23', lng: '104.4839' }],
             urineLocations: [],
         },
     ],
@@ -80,12 +80,12 @@ export const mockJournalProfile = {
         id: 1,
         routes: [
             {
-                lat: 200.4,
-                lng: 200.222,
+                lat: 87.4,
+                lng: 85.222,
             },
             {
-                lat: 100.23,
-                lng: 204.4839,
+                lat: 75.23,
+                lng: 104.4839,
             },
         ],
         memo: 'Enjoyed the walk with Buddy!',
