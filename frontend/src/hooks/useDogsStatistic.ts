@@ -1,5 +1,5 @@
 import { fetchDogStatistic } from '@/api/dog';
-import { queryKeys } from '@/constants';
+import { FIFTEEN_MIN, queryKeys } from '@/constants';
 import { DogStatistic } from '@/models/dog';
 import { useAuthStore } from '@/store/authStore';
 import { useQuery } from '@tanstack/react-query';
@@ -28,6 +28,7 @@ const useDogsStatistic = () => {
     const { data, isPending } = useQuery({
         queryKey: [queryKeys.DOG_STATISTICS],
         queryFn: fetchDogStatistic,
+        staleTime: FIFTEEN_MIN,
     });
 
     if (!isSignedIn) {

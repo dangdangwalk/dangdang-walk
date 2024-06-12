@@ -1,5 +1,5 @@
 import { fetchCurrentWeather } from '@/api/weather';
-import { queryKeys } from '@/constants';
+import { ONE_HOUR, queryKeys } from '@/constants';
 import { Position } from '@/models/location';
 import { Weather, WeatherData } from '@/models/weather';
 import { getCurrentDate, getHours } from '@/utils/time';
@@ -23,6 +23,7 @@ export const useWeather = (position: Position | null) => {
             return await fetchCurrentWeather(date, nx, ny);
         },
         enabled: !!position,
+        staleTime: ONE_HOUR,
     });
 
     const getWeather = (weatherDataList: WeatherData[], hour: string) => {

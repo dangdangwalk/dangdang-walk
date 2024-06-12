@@ -1,6 +1,6 @@
 import { fetchAddress } from '@/api/map';
 import { fetchAirGrade } from '@/api/weather';
-import { queryKeys } from '@/constants';
+import { ONE_HOUR, queryKeys } from '@/constants';
 import { Position } from '@/models/location';
 import { useQuery } from '@tanstack/react-query';
 
@@ -16,7 +16,7 @@ const useAddressAndAirGrade = (position: Position | null) => {
             return await fetchAddress(position.lat, position.lng);
         },
         enabled: !!position,
-        staleTime: 7200,
+        staleTime: ONE_HOUR,
     });
 
     const {
@@ -30,7 +30,7 @@ const useAddressAndAirGrade = (position: Position | null) => {
             return await fetchAirGrade(addressData?.sido);
         },
         enabled: !!addressData?.sido,
-        staleTime: 7200,
+        staleTime: ONE_HOUR,
     });
 
     return {
