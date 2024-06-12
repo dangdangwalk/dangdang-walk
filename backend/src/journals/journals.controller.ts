@@ -3,6 +3,7 @@ import {
     Controller,
     Delete,
     Get,
+    HttpCode,
     Param,
     ParseIntPipe,
     Patch,
@@ -54,6 +55,7 @@ export class JournalsController {
     }
 
     @Patch('/:id(\\d+)')
+    @HttpCode(204)
     @UseGuards(AuthJournalGuard)
     async updateJournal(@Param('id', ParseIntPipe) journalId: number, @Body() body: UpdateJournalDto) {
         await this.journalsService.updateJournal(journalId, body);
@@ -61,6 +63,7 @@ export class JournalsController {
     }
 
     @Delete('/:id(\\d+)')
+    @HttpCode(204)
     @UseGuards(AuthJournalGuard)
     async deleteJournal(@User() user: AccessTokenPayload, @Param('id', ParseIntPipe) journalId: number) {
         await this.journalsService.deleteJournal(user.userId, journalId);
