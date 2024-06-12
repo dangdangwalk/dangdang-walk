@@ -14,7 +14,8 @@ const useCreateDog = (mutationOptions?: UseMutationCustomOptions) => {
         mutationFn: createDog,
         ...mutationOptions,
         onSuccess: async () => {
-            navigate('/');
+            queryClient.invalidateQueries({ queryKey: [queryKeys.DOGS] });
+            navigate(-1);
         },
     });
 };
