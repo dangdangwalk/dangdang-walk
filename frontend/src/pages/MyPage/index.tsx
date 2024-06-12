@@ -93,17 +93,17 @@ function MyPage() {
 
                 <section className="mb-[2.125rem] mt-2.5 flex justify-between px-10">
                     <div
-                        className="flex flex-col items-center p-2 duration-100 active:scale-95 active:rounded-md active:bg-primary/15"
+                        className="flex flex-col items-center p-2 duration-100 active:scale-95 active:rounded-md active:bg-primary/40"
                         onClick={() => dogs && dogs[0] && navigate(`/journals?dogId=${dogs[0].id}`)}
                     >
                         <img src={NoteIcon} alt="note" className="size-12" />
                         <p className="text-sm font-normal leading-[21px] text-neutral-800">산책기록</p>
                     </div>
-                    <div className="flex flex-col items-center p-2 duration-100 active:scale-95 active:rounded-md active:bg-primary/15">
+                    <div className="flex flex-col items-center p-2 duration-100 active:scale-95 active:rounded-md active:bg-primary/40">
                         <img src={MegaphoneIcon} alt="megaphone" className="size-12" />
                         <p className="text-sm font-normal leading-[21px] text-neutral-800">공지사항</p>
                     </div>
-                    <div className="flex flex-col items-center p-2 duration-100 active:scale-95 active:rounded-md active:bg-primary/15">
+                    <div className="flex flex-col items-center p-2 duration-100 active:scale-95 active:rounded-md active:bg-primary/40">
                         <img src={HeadphoneIcon} alt="headphone" className="size-12" />
                         <p className="text-sm font-normal leading-[21px] text-neutral-800">문의하기</p>
                     </div>
@@ -115,7 +115,7 @@ function MyPage() {
                         dogs.map((dog, index) => (
                             <div
                                 key={dog.id}
-                                className="flex items-center justify-between px-5 py-[6px] duration-100 active:scale-95 active:rounded-md active:bg-yellow-600/15"
+                                className="flex items-center justify-between px-5 py-[6px] duration-100 active:scale-95 active:rounded-md active:bg-primary/40"
                                 onClick={async () => {
                                     const data = await fetchDogRecentMonthStatistics(dog.id);
                                     handleProfileOpen(dog, data);
@@ -130,7 +130,7 @@ function MyPage() {
                         ))}
                     {dogs && 5 - dogs?.length > 0 && (
                         <div
-                            className="flex items-center justify-between px-5 py-[6px] duration-100 active:scale-95 active:rounded-md active:bg-yellow-600/15"
+                            className="flex items-center justify-between px-5 py-[6px] duration-100 active:scale-95 active:rounded-md active:bg-primary/40"
                             onClick={() => navigate('/signup', { state: 'DogBasicInfo' })}
                         >
                             <Avatar url={SelectPhoto} name={'댕댕이 추가하기'} />

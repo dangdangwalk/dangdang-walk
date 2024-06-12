@@ -99,7 +99,7 @@ export default function SignUp() {
                 setSwitchStep({ ...switchStep, step1ToStep2: false });
                 break;
             case 'DogBasicInfo':
-                currentPage ? navigate(-1) : setSwitchStep({ ...switchStep, step2ToStep3: false });
+                currentPage ? navigate(-1) : setCancelReg(true);
                 break;
             case 'DogDetailInfo':
                 setSwitchStep({ ...switchStep, step3ToStep4: false });
@@ -113,9 +113,6 @@ export default function SignUp() {
                     break;
                 case 'PetOwner':
                     setStep('Agreements');
-                    break;
-                case 'DogBasicInfo':
-                    setStep('PetOwner');
                     break;
                 case 'DogDetailInfo':
                     setStep('DogBasicInfo');
@@ -238,7 +235,7 @@ export default function SignUp() {
                 </Button>
             </div>
             {cropError && <CropperModal fileInputRef={fileInputRef} />}
-            {cancelReg && <CancelRegModal setCancelReg={setCancelReg} />}
+            {cancelReg && <CancelRegModal currentPage={currentPage} setCancelReg={setCancelReg} />}
         </div>
     );
 }

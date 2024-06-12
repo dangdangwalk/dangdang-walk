@@ -18,7 +18,7 @@ export default function PetOwner({ haveADog, handleHaveADogChange }: Props) {
             <div className="mx-2.5 mt-12 flex flex-col gap-3">
                 <button
                     onClick={() => handleHaveADogChange(true)}
-                    className={`border ${
+                    className={`border duration-100 active:scale-95 ${
                         haveADog ? 'border-primary' : 'border-secondary'
                     } flex w-full flex-col items-center justify-center rounded-lg bg-primary-foreground`}
                 >
@@ -33,7 +33,7 @@ export default function PetOwner({ haveADog, handleHaveADogChange }: Props) {
                 </button>
                 <button
                     onClick={() => handleHaveADogChange(false)}
-                    className={`border ${
+                    className={`border duration-100 active:scale-95 ${
                         !haveADog ? 'border-primary' : 'border-secondary'
                     } flex w-full flex-col items-center justify-center rounded-lg bg-primary-foreground`}
                 >
