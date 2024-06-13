@@ -21,7 +21,7 @@ export default function Journals() {
     const receivedState = location.state as JournalsState;
     const [dogList, setDogList] = useState<DogAvatar[]>(receivedState?.dogs ?? []);
     const [selectedDog, setSelectedDog] = useState<DogAvatar | undefined>(receivedState?.selectedDog);
-    const { journals } = useJournals();
+    const { journals, isJournalsLoading } = useJournals();
 
     const goBack = () => {
         navigate('/');
@@ -72,7 +72,7 @@ export default function Journals() {
                 style={{ minHeight: `calc(100dvh - ${NAV_HEIGHT} - ${TOP_BAR_HEIGHT}  )` }}
             >
                 <CustomCalendar />
-                <JournalCardList journals={journals} dog={selectedDog} />
+                <JournalCardList journals={journals} dog={selectedDog} isLoading={isJournalsLoading} />
             </main>
         </>
     );
