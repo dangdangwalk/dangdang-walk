@@ -29,6 +29,7 @@ export class Journals {
     @Column({ type: 'mediumtext' })
     routes: string;
 
+    //TODO: 지우기
     @Column({ nullable: true })
     memo: string;
 

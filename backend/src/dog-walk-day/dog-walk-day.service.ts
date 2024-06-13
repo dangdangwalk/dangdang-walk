@@ -36,6 +36,7 @@ export class DogWalkDayService {
         const today = new Date().getDay();
         const day = weekDay[today];
 
+        //TODO: for 문을 안 쓰는 방향으로..? batch 업데이트? 알고리즘까지.. (log N -> 상수시간?)
         for (const dogWalkDayId of dogWalkDayIds) {
             const findDogWalkDay = await this.dogWalkDayRepository.findOne({ id: dogWalkDayId });
             const dogWalkDayCount = findDogWalkDay[day] as number;
@@ -60,6 +61,7 @@ export class DogWalkDayService {
         return dayCountArray;
     }
 
+    //TODO: 비즈니스 로직으로 reset 연산 처리 하기
     async resetWeeklyCount(updatedAt: Date, walkDayId: number) {
         const lastSunday = getLastSunday();
         if (updatedAt < lastSunday) {

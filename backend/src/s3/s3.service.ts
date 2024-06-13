@@ -64,7 +64,7 @@ export class S3Service {
         const command = new DeleteObjectsCommand(input);
         try {
             await this.s3Client.send(command);
-            this.logger.log(`Successfuly deleted ${objectArray.map((cur) => cur.Key)}`);
+            this.logger.log(`Successfully deleted ${objectArray.map((cur) => cur.Key)}`);
         } catch (error) {
             this.logger.error(`Can't delete files from S3 bucket ${BUCKET_NAME}`, error ?? error.stack);
         }
@@ -82,7 +82,7 @@ export class S3Service {
 
         try {
             await this.s3Client.send(command);
-            this.logger.log(`Successfuly deleted ${filename}`);
+            this.logger.log(`Successfully deleted ${filename}`);
         } catch (error) {
             this.logger.error(`Can't delete ${filename} from S3 bucket ${BUCKET_NAME}`, error ?? error.stack);
         }
@@ -98,7 +98,7 @@ export class S3Service {
 
         try {
             await this.s3Client.send(command);
-            this.logger.log(`Successfuly deleted ${filename}`);
+            this.logger.log(`Successfully deleted ${filename}`);
         } catch (error) {
             this.logger.error(`Can't delete ${filename} from S3 bucket ${BUCKET_NAME}`, error ?? error.stack);
         }

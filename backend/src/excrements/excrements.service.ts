@@ -13,11 +13,7 @@ export class ExcrementsService {
     private async createIfNotExists(data: Partial<Excrements>) {
         const newEntity = new Excrements(data);
 
-        return this.excrementsRepository.createIfNotExists(newEntity, [
-            'journalId' as keyof Excrements,
-            'dogId' as keyof Excrements,
-            'type' as keyof Excrements,
-        ]);
+        return this.excrementsRepository.createIfNotExists(newEntity, ['journalId', 'dogId', 'type']);
     }
 
     private makeCoordinate(lat: string, lng: string): string {
@@ -36,6 +32,7 @@ export class ExcrementsService {
         return this.createIfNotExists(data);
     }
 
+    //TODO: typeorm의 count? 함수 찾아서 적용하기
     async getExcrementsCnt(journalId: number, dogId: number, type: Excrement): Promise<number> {
         const excrements = await this.excrementsRepository.find({ where: { journalId, dogId, type } });
 

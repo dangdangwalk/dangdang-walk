@@ -15,6 +15,7 @@ export class WalkService {
     ) {}
 
     private async checkAvailableDogs(dogIds: number[]) {
+        //TODO: batch 로 변경 for문 없애기
         for (const curDogId of dogIds) {
             const curDogInfo = await this.dogsService.findOne({ id: curDogId });
             const updatedAt = curDogInfo.updatedAt;

@@ -17,6 +17,7 @@ export class JournalsDogsService {
         return this.journalsDogsRepository.find(where);
     }
 
+    //TODO: batch create 하게 바꾸기, return도 없애기
     async createNewJournalDogs(journalId: number, dogIds: number[]) {
         for (const curId of dogIds) {
             await this.createIfNotExists(journalId, curId);
@@ -25,6 +26,7 @@ export class JournalsDogsService {
         return;
     }
 
+    //TODO: map 안쓰게 select 사용
     async getDogIdsByJournalId(journalId: number): Promise<number[]> {
         const findResult = await this.journalsDogsRepository.find({ where: { journalId } });
 

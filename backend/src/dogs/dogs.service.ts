@@ -8,7 +8,6 @@ import { DogsRepository } from './dogs.repository';
 import { DogData } from './types/dog-data.type';
 import { DogProfile } from './types/dog-profile.type';
 import { DogSummary } from './types/dog-summary.type';
-import { Gender } from './types/gender.type';
 
 import { BreedService } from '../breed/breed.service';
 import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
@@ -58,6 +57,7 @@ export class DogsService {
         }
     }
 
+    //TODO: Promise all 사용하여 병렬적으로 삭제 쿼리 날리기
     @Transactional()
     async deleteDogFromUser(userId: number, dogId: number) {
         const dog = await this.dogsRepository.findOne({ id: dogId });
@@ -111,7 +111,7 @@ export class DogsService {
             id: dogInfo.id,
             name: dogInfo.name,
             breed: dogInfo.breed.koreanName,
-            gender: dogInfo.gender as Gender,
+            gender: dogInfo.gender,
             isNeutered: dogInfo.isNeutered,
             birth: dogInfo.birth,
             weight: dogInfo.weight,
@@ -123,17 +123,19 @@ export class DogsService {
         //TODO: key를 반환하는 함수 만들어 인자로 넣기
         return makeSubObjectsArray(dogs, ['id', 'name', 'profilePhotoUrl']);
     }
-
+    //TODO: DogSummary에 해당하는 컬럼을 애초에 select 해서 가져오기
     async getDogsSummaryList(where: FindOptionsWhere<Dogs>): Promise<DogSummary[]> {
         const dogInfos = await this.dogsRepository.find({ where });
         return this.makeDogsSummaryList(dogInfos);
     }
 
+    //TODO : makeProfile 함수로 하지 않고 애초에 select 해서 가져오기
     async getProfile(dogId: number): Promise<DogProfile> {
         const dogInfo = await this.dogsRepository.findOne({ id: dogId });
         return this.makeProfile(dogInfo);
     }
 
+    //TODO: 쿼리 빌더를 쓸 것인지, 각자 테이블에서 가져와서 코드상으로 가공할 것인지 성능 테스트?
     async getProfileList(userId: number): Promise<DogProfile[]> {
         const dogProfiles = await this.entityManager
             .createQueryBuilder(Dogs, 'dogs')

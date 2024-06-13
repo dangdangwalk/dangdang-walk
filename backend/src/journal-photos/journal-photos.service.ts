@@ -28,6 +28,7 @@ export class JournalPhotosService {
         const keys: (keyof JournalPhotos)[] = ['journalId', 'photoUrl'];
         const data: Partial<JournalPhotos> = {};
 
+        //TODO: batch create 하기 (for문 없애기)
         data.journalId = journalId;
         for (const curUrl of photoUrls) {
             data.photoUrl = curUrl;
@@ -35,6 +36,7 @@ export class JournalPhotosService {
         }
     }
 
+    //TODO: map을 쓰지 않도록 select 조건 추가하기
     async getPhotoUrlsByJournalId(journalId: number): Promise<string[]> {
         const findResult = await this.journalPhotosRepository.find({ where: { journalId } });
         return findResult.map((cur) => {
