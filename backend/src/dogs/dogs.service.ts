@@ -111,7 +111,7 @@ export class DogsService {
             id: dogInfo.id,
             name: dogInfo.name,
             breed: dogInfo.breed.koreanName,
-            gender: dogInfo.gender as Gender,
+            gender: dogInfo.gender,
             isNeutered: dogInfo.isNeutered,
             birth: dogInfo.birth,
             weight: dogInfo.weight,

@@ -13,11 +13,7 @@ export class ExcrementsService {
     private async createIfNotExists(data: Partial<Excrements>) {
         const newEntity = new Excrements(data);
 
-        return this.excrementsRepository.createIfNotExists(newEntity, [
-            'journalId' as keyof Excrements,
-            'dogId' as keyof Excrements,
-            'type' as keyof Excrements,
-        ]);
+        return this.excrementsRepository.createIfNotExists(newEntity, ['journalId', 'dogId', 'type']);
     }
 
     private makeCoordinate(lat: string, lng: string): string {
