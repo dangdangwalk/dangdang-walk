@@ -9,6 +9,9 @@
 
 # 🎯 프로젝트 소개
 
+👉 <a href="https://youtu.be/wcczysMP-lo?si=FqYNWPWIGU9U33Pq"><img alt="youtube" src="https://github.com/dangdangwalk/dangdang-walk/assets/71831926/4ec6e31f-f2dc-460d-b25a-db623d9cbbdc" width="18"> 발표 영상 바로가기</a>
+<br><br>
+
 ## 💡 서비스 기획 배경
 
 최근 1인 가구의 증가와 함께 반려동물 시장도 꾸준히 성장하고 있습니다. 그중에서도 개의 양육 비율이 가장 높은 것을 확인하여, 반려견 애플리케이션을 개발하기로 결정했습니다.
