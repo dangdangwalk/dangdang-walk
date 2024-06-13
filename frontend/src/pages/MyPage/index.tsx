@@ -104,7 +104,7 @@ function MyPage() {
                         <p
                             className="text-sm font-normal leading-[21px] text-neutral-800"
                             onClick={() => {
-                                window.ReactNativeWebView.postMessage('Hello!');
+                                window.ReactNativeWebView.postMessage(JSON.stringify({ data: 'hello!' }));
                             }}
                         >
                             공지사항
