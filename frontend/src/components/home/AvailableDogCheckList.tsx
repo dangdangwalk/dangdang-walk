@@ -5,12 +5,12 @@ import { AvailableDogCheck } from '@/components/home/AvailableDogCheck';
 import { WalkAvailableDog } from '@/models/dog';
 
 interface AvailableDogCheckListProps {
-    dogs: WalkAvailableDog[] | undefined;
+    dogs: WalkAvailableDog[];
     onToggle: (id: number) => void;
     checkAll: (flag: boolean) => void;
-    isCheckedAll: boolean;
 }
-export default function AvailableDogCheckList({ dogs, onToggle, checkAll, isCheckedAll }: AvailableDogCheckListProps) {
+export default function AvailableDogCheckList({ dogs, onToggle, checkAll }: AvailableDogCheckListProps) {
+    const isCheckedAll = dogs.length === dogs.filter((dog) => dog.isChecked).length;
     return (
         <>
             <li className="flex items-center justify-between py-3">
@@ -22,7 +22,9 @@ export default function AvailableDogCheckList({ dogs, onToggle, checkAll, isChec
                     }}
                 ></Checkbox>
             </li>
-            {dogs?.map((dog) => <AvailableDogCheck dog={dog} key={dog.id} onToggle={onToggle} />)}
+            {dogs.map((dog) => (
+                <AvailableDogCheck dog={dog} key={dog.id} onToggle={onToggle} />
+            ))}
         </>
     );
 }

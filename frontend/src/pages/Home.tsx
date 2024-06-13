@@ -30,7 +30,6 @@ function Home() {
         setWalkAvailableDogs: setAvailableDogs,
     } = useWalkAvailable();
     const { dogsStatistic, isDogsPending } = useDogsStatistic();
-    const [isAvailableDogsCheckedAll, setIsAvailableDogsCheckedAll] = useState<boolean>(false);
     const navigate = useNavigate();
     const { show: showToast } = useToast();
     const storedData = getStorage(storageKeys.DOGS);
@@ -48,7 +47,6 @@ function Home() {
         } else {
             handleCheckAll(false);
             setIsDogBottomSheetOpen(false);
-            setIsAvailableDogsCheckedAll(false);
         }
     };
     const handlePageMove = (url: string, state: any) => {
@@ -66,7 +64,6 @@ function Home() {
         if (isLocationDisabled) {
             showToast('위치정보를 동의 해주세요 :) !!!');
             handleCheckAll(false);
-            setIsAvailableDogsCheckedAll(false);
             return;
         }
         const dogs =
@@ -83,7 +80,6 @@ function Home() {
         setAvailableDogs((prevAvailableDogs) =>
             prevAvailableDogs?.length ? setFlagValueByKey(prevAvailableDogs, flag, 'isChecked') : prevAvailableDogs
         );
-        setIsAvailableDogsCheckedAll(flag);
     };
 
     return (
@@ -118,7 +114,6 @@ function Home() {
                             dogs={walkAvailableDogs}
                             onToggle={handleToggle}
                             checkAll={handleCheckAll}
-                            isCheckedAll={isAvailableDogsCheckedAll}
                         />
                     ) : (
                         <div>모든 강아지가 산책중입니다</div>
