@@ -16,9 +16,12 @@ import { setFlagValueByKey, toggleCheckById } from '@/utils/check';
 import useWalkAvailable from '@/hooks/useWalkAvailableDog';
 import { getStorage, removeStorage } from '@/utils/storage';
 import { DogWalkData } from '@/pages/Walk';
+import useGeolocation from '@/hooks/useGeolocation';
+import useToast from '@/hooks/useToast';
 
 function Home() {
     const [isDogBottomSheetOpen, setIsDogBottomSheetOpen] = useState<boolean>(false);
+    const { position, isLocationDisabled } = useGeolocation();
     const {
         isAvailableDogsLoading,
         fetchWalkAvailableDogs,
@@ -28,6 +31,7 @@ function Home() {
     const { dogsStatistic, isDogsPending } = useDogsStatistic();
     const [isAvailableDogsCheckedAll, setIsAvailableDogsCheckedAll] = useState<boolean>(false);
     const navigate = useNavigate();
+    const { show: showToast } = useToast();
     const dogData: DogWalkData | undefined = getStorage(storageKeys.DOGS)
         ? JSON.parse(getStorage(storageKeys.DOGS) ?? '')
         : undefined;
@@ -56,12 +60,15 @@ function Home() {
 
     const handleConfirm = () => {
         setIsDogBottomSheetOpen(false);
-        navigate('/walk', {
-            state: {
-                dogs:
-                    walkAvailableDogs?.length === 1 ? walkAvailableDogs : walkAvailableDogs?.filter((d) => d.isChecked),
-            },
-        });
+        if (isLocationDisabled) {
+            showToast('위치정보를 동의 해주세요 :) !!!');
+            handleCheckAll(false);
+            setIsAvailableDogsCheckedAll(false);
+            return;
+        }
+        const dogs =
+            walkAvailableDogs?.length === 1 ? walkAvailableDogs : walkAvailableDogs?.filter((d) => d.isChecked);
+        navigate('/walk', { state: { dogs } });
     };
 
     const goToJournals = (dogId: number) => {
@@ -89,7 +96,7 @@ function Home() {
                 className="mb-[60px] flex min-h-dvh flex-col bg-neutral-50 px-5"
                 style={{ minHeight: `calc(100dvh - ${NAV_HEIGHT} - ${TOP_BAR_HEIGHT}  )` }}
             >
-                <WeatherInfo />
+                <WeatherInfo position={position} />
                 {/* TODO : Pending 로직 제외하는 방법ㄴ */}
                 {isDogsPending ? (
                     <Spinner />
