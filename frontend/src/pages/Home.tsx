@@ -30,7 +30,7 @@ function Home() {
 
     const handleBottomSheet = () => {
         if (!isDogBottomSheetOpen) {
-            if (dogData && dogData?.startedAt && IsDogsWalking(new Date(), new Date(dogData.startedAt))) {
+            if (isDogsWalking(dogData)) {
                 navigate('/walk');
                 return;
             }
@@ -48,8 +48,10 @@ function Home() {
         navigate(url, { state });
     };
 
-    const IsDogsWalking = (now: Date, startTime: Date): boolean => {
-        const diff = now.getTime() - startTime.getTime();
+    const isDogsWalking = (dogData: DogWalkData | undefined): boolean => {
+        if (!dogData || !dogData.startedAt) return false;
+
+        const diff = new Date().getTime() - new Date(dogData.startedAt).getTime();
         const hour = diff / 1000 / 60 / 60;
         return hour <= 3;
     };
