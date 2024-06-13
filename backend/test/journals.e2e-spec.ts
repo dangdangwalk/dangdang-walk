@@ -6,6 +6,7 @@ import { VALID_ACCESS_TOKEN_100_YEARS } from './constants';
 
 import {
     clearDogs,
+    clearFakeDate,
     clearJournal,
     clearJournals,
     clearUsers,
@@ -14,6 +15,7 @@ import {
     insertMockJournal,
     insertMockJournals,
     insertMockUser,
+    setFakeDate,
     setupTestApp,
     testUnauthorizedAccess,
 } from './test-utils';
@@ -333,9 +335,12 @@ describe('JournalsController (e2e)', () => {
             beforeEach(async () => {
                 await insertMockDogs();
                 await insertMockJournal();
+                const fakeDate = new Date('2024-06-12T00:00:00Z');
+                setFakeDate(fakeDate);
             });
 
             afterEach(async () => {
+                clearFakeDate();
                 await clearJournal();
                 await clearDogs();
             });
