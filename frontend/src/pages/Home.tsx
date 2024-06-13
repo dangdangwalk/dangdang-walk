@@ -19,16 +19,13 @@ import { DogWalkData } from '@/pages/Walk';
 import useGeolocation from '@/hooks/useGeolocation';
 import useToast from '@/hooks/useToast';
 import { DogStatistic } from '@/models/dog';
+import { isArrayNotEmpty } from '@/utils/validate';
 
 function Home() {
     const [isDogBottomSheetOpen, setIsDogBottomSheetOpen] = useState<boolean>(false);
     const { position, isLocationDisabled } = useGeolocation();
-    const {
-        isAvailableDogsLoading,
-        fetchWalkAvailableDogs,
-        walkAvailableDogs,
-        setWalkAvailableDogs: setAvailableDogs,
-    } = useWalkAvailable();
+    const { isAvailableDogsLoading, fetchWalkAvailableDogs, walkAvailableDogs, setWalkAvailableDogs } =
+        useWalkAvailable();
     const { dogsStatistic, isDogsPending } = useDogsStatistic();
     const navigate = useNavigate();
     const { show: showToast } = useToast();
@@ -72,12 +69,12 @@ function Home() {
     };
 
     const handleToggle = (id: number) => {
-        setAvailableDogs((prevAvailableDogs) =>
+        setWalkAvailableDogs((prevAvailableDogs) =>
             prevAvailableDogs?.length ? toggleCheckById(prevAvailableDogs, id, 'isChecked') : prevAvailableDogs
         );
     };
     const handleCheckAll = (flag: boolean) => {
-        setAvailableDogs((prevAvailableDogs) =>
+        setWalkAvailableDogs((prevAvailableDogs) =>
             prevAvailableDogs?.length ? setFlagValueByKey(prevAvailableDogs, flag, 'isChecked') : prevAvailableDogs
         );
     };
@@ -91,7 +88,7 @@ function Home() {
             >
                 <WeatherInfo position={position} />
                 <DogStatisticsView dogsStatistic={dogsStatistic} isPending={isDogsPending} pageMove={handlePageMove} />
-                {dogsStatistic && dogsStatistic?.length > 0 && (
+                {isArrayNotEmpty(dogsStatistic) && (
                     <Button
                         color={'primary'}
                         rounded={'medium'}
@@ -109,7 +106,7 @@ function Home() {
                 <BottomSheet.Body>
                     {isAvailableDogsLoading ? (
                         <Spinner />
-                    ) : walkAvailableDogs && walkAvailableDogs?.length > 0 ? (
+                    ) : isArrayNotEmpty(walkAvailableDogs) ? (
                         <AvailableDogCheckList
                             dogs={walkAvailableDogs}
                             onToggle={handleToggle}
@@ -161,7 +158,7 @@ const DogStatisticsView = ({ isPending, dogsStatistic, pageMove }: DogStatistics
     }
     return (
         <>
-            {dogsStatistic && dogsStatistic?.length > 0 ? (
+            {isArrayNotEmpty(dogsStatistic) ? (
                 <DogCardList dogsStatistic={dogsStatistic} pageMove={goToJournals} />
             ) : (
                 <RegisterCard pageMove={pageMove} />
