@@ -45,7 +45,6 @@ export class JournalsController {
     @UseGuards(AuthDogsGuard)
     async createJournal(@User() user: AccessTokenPayload, @Body() body: CreateJournalDto) {
         await this.journalsService.createJournal(user.userId, body);
-        return true;
     }
 
     @Get('/:id(\\d+)')
@@ -59,7 +58,6 @@ export class JournalsController {
     @UseGuards(AuthJournalGuard)
     async updateJournal(@Param('id', ParseIntPipe) journalId: number, @Body() body: UpdateJournalDto) {
         await this.journalsService.updateJournal(journalId, body);
-        return true;
     }
 
     @Delete('/:id(\\d+)')
@@ -67,6 +65,5 @@ export class JournalsController {
     @UseGuards(AuthJournalGuard)
     async deleteJournal(@User() user: AccessTokenPayload, @Param('id', ParseIntPipe) journalId: number) {
         await this.journalsService.deleteJournal(user.userId, journalId);
-        return true;
     }
 }

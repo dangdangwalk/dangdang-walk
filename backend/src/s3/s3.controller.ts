@@ -21,11 +21,11 @@ export class S3Controller {
     }
 
     @Delete()
+    @HttpCode(204)
     async delete(
         @User() { userId }: AccessTokenPayload,
         @Body(new ParseArrayPipe({ items: String, separator: ',' })) filenames: string[],
-    ): Promise<boolean> {
+    ) {
         await this.s3Service.deleteObjects(userId, filenames);
-        return true;
     }
 }

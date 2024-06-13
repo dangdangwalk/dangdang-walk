@@ -34,7 +34,6 @@ export class DogsController {
     @Post()
     async create(@User() { userId }: AccessTokenPayload, @Body() createDogDto: CreateDogDto) {
         await this.dogsService.createDogToUser(userId, createDogDto);
-        return true;
     }
 
     @Get('/:id(\\d+)')
@@ -52,7 +51,6 @@ export class DogsController {
         @Body() updateDogDto: UpdateDogDto,
     ) {
         await this.dogsService.updateDog(userId, dogId, updateDogDto);
-        return true;
     }
 
     @Delete('/:id(\\d+)')
@@ -60,6 +58,5 @@ export class DogsController {
     @UseGuards(AuthDogGuard)
     async delete(@User() { userId }: AccessTokenPayload, @Param('id', ParseIntPipe) dogId: number) {
         await this.dogsService.deleteDogFromUser(userId, dogId);
-        return true;
     }
 }
