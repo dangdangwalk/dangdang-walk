@@ -99,18 +99,14 @@ function MyPage() {
                         <img src={NoteIcon} alt="note" className="size-12" />
                         <p className="text-sm font-normal leading-[21px] text-neutral-800">산책기록</p>
                     </div>
-                    <div className="flex flex-col items-center p-2 duration-100 active:scale-95 active:rounded-md active:bg-primary/40">
+                    <div
+                        className="flex flex-col items-center p-2 duration-100 active:scale-95 active:rounded-md active:bg-primary/40"
+                        onClick={() => {
+                            window.ReactNativeWebView.postMessage(JSON.stringify({ data: 'hello!' }));
+                        }}
+                    >
                         <img src={MegaphoneIcon} alt="megaphone" className="size-12" />
-                        <p
-                            className="text-sm font-normal leading-[21px] text-neutral-800"
-                            onClick={() => {
-                                window.ReactNativeWebView.postMessage(
-                                    JSON.stringify({ data: 'hello!', timestamp: Date.now() })
-                                );
-                            }}
-                        >
-                            공지사항
-                        </p>
+                        <p className="text-sm font-normal leading-[21px] text-neutral-800">공지사항</p>
                     </div>
                     <div className="flex flex-col items-center p-2 duration-100 active:scale-95 active:rounded-md active:bg-primary/40">
                         <img src={HeadphoneIcon} alt="headphone" className="size-12" />
