@@ -22,6 +22,7 @@ import { Dog, DogCreateForm } from '@/models/dog';
 import useToast from '@/hooks/useToast';
 import { maxLengthCheck } from '@/pages/Join/DogDetailInfo';
 import { valueWithUnit } from '@/utils/distance';
+import { useSpinnerStore } from '@/store/spinnerStore';
 interface Props {
     dog: Dog;
     statistics: RecentMonthStatisticsResponse;
@@ -31,7 +32,7 @@ interface Props {
 export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfileOpen }: Props) {
     const { updateDog } = useDog();
     const { show } = useToast();
-
+    const { spinnerAdd, spinnerRemove } = useSpinnerStore();
     const { dogProfileImgUrl, setDogProfileImgUrl, onSelectFileChange } = useCropStore();
     const [onEdit, setOnEdit] = useState(false);
     window.location.pathname !== '/mypage' && setOnEdit(false);
@@ -42,7 +43,6 @@ export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfile
     const { totalDistance, totalTime, totalWalkCnt } = statistics;
     const { id } = dog;
     const { name, breed, birth, gender, isNeutered, weight, profilePhotoUrl } = registerData;
-
     useEffect(() => {
         setDogProfileImgUrl('');
         setRegisterData(dog);
@@ -54,6 +54,7 @@ export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfile
         }));
     };
     const handleSave = async () => {
+        spinnerAdd();
         if (dogProfileImgUrl) {
             const urlData = await getUploadUrl(['jpeg']);
             const fileName = urlData[0]?.filename;
@@ -80,6 +81,7 @@ export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfile
                 params: { name, breed, birth, gender, isNeutered, weight },
             });
         }
+        spinnerRemove();
         setOnEdit(false);
         show('댕댕이 기록이 변경되었습니다');
     };
