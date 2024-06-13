@@ -64,19 +64,10 @@ export class JournalInfoForDetail {
 }
 
 export class JournalDetail {
-    @IsNotEmpty()
-    @ValidateNested()
-    @Type(() => JournalInfoForDetail)
     journalInfo: JournalInfoForDetail;
 
-    @IsNotEmpty()
-    @ValidateNested()
-    @Type(() => DogInfoForDetail)
     dogs: DogInfoForDetail[];
 
-    @IsOptional()
-    @ValidateNested()
-    @Type(() => Excrements)
     excrements: ExcrementsInfoForDetail[];
 
     constructor(journalInfo: JournalInfoForDetail, dogInfo: DogInfoForDetail[], excrements: ExcrementsInfoForDetail[]) {

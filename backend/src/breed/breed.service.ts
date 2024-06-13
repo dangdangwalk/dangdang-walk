@@ -18,6 +18,7 @@ export class BreedService {
     }
 
     async getRecommendedWalkAmountList(breedIds: number[]): Promise<number[]> {
+        //TODO: select 조건 걸기, 리팩토링
         const breeds = await this.breedRepository.find({ where: { id: In(breedIds) } });
 
         if (!breeds.length) {

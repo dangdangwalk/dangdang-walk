@@ -19,6 +19,7 @@ export class TodayWalkTimeService {
         return this.todayWalkTimeRepository.delete(where);
     }
 
+    //TODO: 이름에 update 넣어서 명확하게 하기
     private async checkDayPassed(walkTimeId: number, updatedAt: Date) {
         const startOfToday = getStartOfToday();
         if (updatedAt < startOfToday) {
@@ -31,6 +32,7 @@ export class TodayWalkTimeService {
         duration: number,
         operation: (current: number, operand: number) => number,
     ) {
+        //TODO: batch 업데이트
         for (const curWalkTimeId of todayWalkTimeIds) {
             const walkTimeInfo = await this.todayWalkTimeRepository.findOne({ id: curWalkTimeId });
             const updateDuration = operation(walkTimeInfo.duration, duration);
@@ -47,11 +49,12 @@ export class TodayWalkTimeService {
             });
             throw error;
         }
-
+        //TODO: batch 업데이트 되게 바꾸기
         for (const curWalkTime of walkTimeListBeforeCheck) {
             await this.checkDayPassed(curWalkTime.id, curWalkTime.updatedAt);
         }
 
+        //TODO: select로 바꾸기
         const walkTimeList = await this.todayWalkTimeRepository.find({ where: { id: In(walkTimeIds) } });
         return walkTimeList.map((cur) => {
             return cur.duration;

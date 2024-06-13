@@ -66,11 +66,13 @@ export class UsersService {
     }
 
     async getOwnDogsList(userId: number): Promise<number[]> {
+        //TODO: select로 변경
         const foundDogs = await this.usersDogsService.find({ userId });
         return foundDogs.map((cur) => cur.dogId);
     }
 
     async checkDogOwnership(userId: number, dogId: number | number[]): Promise<[boolean, number[]]> {
+        //TODO: select로 변경
         const ownDogs = await this.usersDogsService.find({ userId });
         const myDogIds = ownDogs.map((cur) => cur.dogId);
 
@@ -78,6 +80,7 @@ export class UsersService {
     }
 
     async getUserProfile({ userId, provider }: AccessTokenPayload): Promise<UserProfile> {
+        //TODO: select로 변경
         const { nickname, email, profileImageUrl } = await this.usersRepository.findOne({ id: userId });
         return { nickname, email, profileImageUrl, provider };
     }
@@ -92,7 +95,7 @@ export class UsersService {
 
         if (profileImageUrl) {
             const curUserInfo = await this.usersRepository.findOne({ id: userId });
-            if (curUserInfo && curUserInfo.profileImageUrl && !curUserInfo.profileImageUrl.startsWith('http')) {
+            if (curUserInfo && curUserInfo.profileImageUrl) {
                 await this.s3Service.deleteSingleObject(userId, curUserInfo.profileImageUrl);
             }
         }
