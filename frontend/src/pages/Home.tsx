@@ -8,7 +8,6 @@ import BottomSheet from '@/components/commons/BottomSheet';
 import AvailableDogCheckList from '@/components/home/AvailableDogCheckList';
 import useDogsStatistic from '@/hooks/useDogsStatistic';
 import { useNavigate } from 'react-router-dom';
-import Spinner from '@/components/commons/Spinner';
 import { setFlagValueByKey, toggleCheckById } from '@/utils/check';
 import useWalkAvailable from '@/hooks/useWalkAvailableDog';
 import { getStorage, removeStorage } from '@/utils/storage';
@@ -102,10 +101,8 @@ function Home() {
 
             <BottomSheet isOpen={isDogBottomSheetOpen} onClose={handleBottomSheet}>
                 <BottomSheet.Header> 강아지 산책</BottomSheet.Header>
-                <BottomSheet.Body>
-                    {isAvailableDogsLoading ? (
-                        <Spinner />
-                    ) : isArrayNotEmpty(walkAvailableDogs) ? (
+                <BottomSheet.Body isLoading={isAvailableDogsLoading}>
+                    {isArrayNotEmpty(walkAvailableDogs) ? (
                         <AvailableDogCheckList
                             dogs={walkAvailableDogs}
                             onToggle={handleToggle}

@@ -78,10 +78,10 @@ export default function Walk() {
     const stopWalk = async (dogs: WalkingDog[] | null) => {
         if (!dogs) return;
         spinnerAdd();
+        stopClock();
+        stopGeo();
         const ok = await requestWalkStop(dogs.map((d) => d.id));
         if (ok) {
-            stopClock();
-            stopGeo();
             removeStorage(storageKeys.DOGS);
             navigate('/journals/create', {
                 state: { dogs, distance, duration, calories: getCalories(duration), startedAt, routes, photoUrls },
@@ -127,7 +127,7 @@ export default function Walk() {
             return;
         }
         const startDogWalk = async (data: DogWalkData) => {
-            const ok = await requestWalkStart(data.dogs.map((d) => d.id));
+            const ok = await requestWalkStart(data.dogs.map((dog) => dog.id));
             if (ok) {
                 handleWalkStart(data);
             } else {
