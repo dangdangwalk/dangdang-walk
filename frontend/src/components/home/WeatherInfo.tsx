@@ -12,9 +12,9 @@ import NightCloudy from '@/assets/icons/ic-night-cloudy.svg';
 import DayCloudy from '@/assets/icons/ic-day-cloudy.svg';
 import useSunsetSunrise from '@/hooks/useSunsetSunrise';
 import Spinner from '@/components/commons/Spinner';
-import useGeolocation from '@/hooks/useGeolocation';
 import useAddressAndAirGrade from '@/hooks/useAddressAndAirgrade';
 import { Weather } from '@/models/weather';
+import { Position } from '@/models/location';
 
 const statusImage = {
     rain: Rain,
@@ -26,8 +26,7 @@ const statusImage = {
     cloudy: Cloudy,
 };
 
-export default function WeatherInfo() {
-    const { position } = useGeolocation();
+export default function WeatherInfo({ position }: { position: Position | null }) {
     const { weather, isWeatherPending } = useWeather(position);
     const { airGrade, address, isAirGradePending } = useAddressAndAirGrade(position);
     const { sunset, sunrise, isSunsetSunrisePending } = useSunsetSunrise(position);

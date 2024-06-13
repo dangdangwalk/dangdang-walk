@@ -10,6 +10,7 @@ const useGeolocation = () => {
     const [routes, setRoutes] = useState<Position[]>([]);
     const [isStartGeo, setIsStartGeo] = useState<boolean>(false);
     const [prevPosition, setPrevPosition] = useState<Position | null>(null);
+    const [isLocationDisabled, setIsLocationDisabled] = useState<boolean>(false);
 
     useEffect(() => {
         if ('geolocation' in navigator) {
@@ -23,11 +24,13 @@ const useGeolocation = () => {
                 (error) => {
                     console.log(error);
                     setStartPosition({ lat: DEFAULT_LAT, lng: DEFAULT_LNG });
+                    setIsLocationDisabled(true);
                 }
             );
         } else {
             console.log('no geolocation');
             setStartPosition({ lat: DEFAULT_LAT, lng: DEFAULT_LNG });
+            setIsLocationDisabled(true);
         }
     }, []);
 
@@ -69,7 +72,15 @@ const useGeolocation = () => {
         setRoutes((prevRoutes) => [...prevRoutes, { lat, lng }]);
         setPrevPosition({ lat, lng });
     }, [currentPosition]);
-    return { position: startPosition, distance, routes, currentPosition, stopGeo, startGeo };
+    return {
+        position: startPosition,
+        distance,
+        routes,
+        currentPosition,
+        stopGeo,
+        startGeo,
+        isLocationDisabled,
+    };
 };
 
 export default useGeolocation;
