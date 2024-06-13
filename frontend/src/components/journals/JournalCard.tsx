@@ -1,6 +1,6 @@
 import DefaultProfileImage from '@/components/commons/DefaultProfileImage';
 import WalkInfo from '@/components/walk/WalkInfo';
-import { Dog } from '@/models/dog';
+import { DogAvatar } from '@/models/dog';
 import { Journal } from '@/models/journal';
 import { getStartTimeToEndTime } from '@/utils/time';
 import { useNavigate } from 'react-router-dom';
@@ -15,13 +15,19 @@ export interface JournalDetailState extends Journal {
     dogName: string;
 }
 
-export default function JournalCard({ journal, dog }: { journal: Journal; dog: Dog | undefined }) {
+interface JournalCardProps {
+    journal: Journal;
+    dog: DogAvatar | undefined;
+}
+
+export default function JournalCard({ journal, dog }: JournalCardProps) {
     const navigate = useNavigate();
     const goToDetail = (id: number) => {
         if (!dog) return;
         const state: JournalDetailState = { ...journal, dogName: dog.name };
         navigate(`/journals/${id}`, { state });
     };
+
     if (!dog) return <></>;
     return (
         <button

@@ -1,9 +1,8 @@
 import { Button } from '@/components/commons/Button';
 import DogCard from '@/components/home/DogCard';
 import { DogStatistic } from '@/models/dog';
-import { useNavigate } from 'react-router-dom';
 
-const defaultDpg: DogStatistic = {
+const defaultDog: DogStatistic = {
     id: 0,
     name: '덕지',
     profilePhotoUrl: '',
@@ -12,14 +11,15 @@ const defaultDpg: DogStatistic = {
     weeklyWalks: [0, 0, 0, 0, 0, 0, 0],
 };
 
-export default function RegisterCard() {
-    const navigator = useNavigate();
+export default function RegisterCard({ pageMove }: { pageMove: (url: string, state: any) => void }) {
     const handleClick = () => {
-        navigator('/signup', { state: 'DogBasicInfo' });
+        const url = '/signup';
+        const state = 'DogBasicInfo';
+        pageMove(url, state);
     };
     return (
         <div className="relative">
-            <DogCard dog={defaultDpg} />
+            <DogCard dog={defaultDog} />
             <div className="absolute left-0 top-0 z-20 flex size-full flex-col items-center justify-center rounded-lg backdrop-blur-sm">
                 <div className="mb-1 text-lg font-bold leading-[27px] text-black">산책기록</div>
                 <div className="mb-3 text-xs font-semibold leading-[18px] text-stone-500">

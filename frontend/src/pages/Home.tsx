@@ -1,4 +1,3 @@
-import DogCardList from '@/components/home/DogCardList';
 import WeatherInfo from '@/components/home/WeatherInfo';
 import { useState } from 'react';
 import { Button } from '@/components/commons/Button';
@@ -9,36 +8,29 @@ import BottomSheet from '@/components/commons/BottomSheet';
 import AvailableDogCheckList from '@/components/home/AvailableDogCheckList';
 import useDogsStatistic from '@/hooks/useDogsStatistic';
 import { useNavigate } from 'react-router-dom';
-import Spinner from '@/components/commons/Spinner';
-import RegisterCard from '@/components/home/RegisterCard';
-import { queryStringKeys } from '@/constants';
 import { setFlagValueByKey, toggleCheckById } from '@/utils/check';
 import useWalkAvailable from '@/hooks/useWalkAvailableDog';
 import { getStorage, removeStorage } from '@/utils/storage';
 import { DogWalkData } from '@/pages/Walk';
 import useGeolocation from '@/hooks/useGeolocation';
 import useToast from '@/hooks/useToast';
+import { isArrayNotEmpty } from '@/utils/validate';
+import DogStatisticsView from '@/components/home/DogStatisticsView';
 
 function Home() {
     const [isDogBottomSheetOpen, setIsDogBottomSheetOpen] = useState<boolean>(false);
     const { position, isLocationDisabled } = useGeolocation();
-    const {
-        isAvailableDogsLoading,
-        fetchWalkAvailableDogs,
-        walkAvailableDogs,
-        setWalkAvailableDogs: setAvailableDogs,
-    } = useWalkAvailable();
+    const { isAvailableDogsLoading, fetchWalkAvailableDogs, walkAvailableDogs, setWalkAvailableDogs } =
+        useWalkAvailable();
     const { dogsStatistic, isDogsPending } = useDogsStatistic();
-    const [isAvailableDogsCheckedAll, setIsAvailableDogsCheckedAll] = useState<boolean>(false);
     const navigate = useNavigate();
     const { show: showToast } = useToast();
-    const dogData: DogWalkData | undefined = getStorage(storageKeys.DOGS)
-        ? JSON.parse(getStorage(storageKeys.DOGS) ?? '')
-        : undefined;
+    const storedData = getStorage(storageKeys.DOGS);
+    const dogData: DogWalkData | undefined = storedData ? JSON.parse(storedData) : undefined;
 
     const handleBottomSheet = () => {
         if (!isDogBottomSheetOpen) {
-            if (dogData && dogData?.startedAt && IsDogsWalking(new Date(), new Date(dogData.startedAt))) {
+            if (isDogsWalking(dogData)) {
                 navigate('/walk');
                 return;
             }
@@ -48,12 +40,18 @@ function Home() {
         } else {
             handleCheckAll(false);
             setIsDogBottomSheetOpen(false);
-            setIsAvailableDogsCheckedAll(false);
         }
     };
 
-    const IsDogsWalking = (now: Date, startTime: Date): boolean => {
-        const diff = now.getTime() - startTime.getTime();
+    //TODO state Type generic으로 변경
+    const handlePageMove = (url: string, state: any) => {
+        navigate(url, { state });
+    };
+
+    const isDogsWalking = (dogData: DogWalkData | undefined): boolean => {
+        if (!dogData || !dogData.startedAt) return false;
+
+        const diff = new Date().getTime() - new Date(dogData.startedAt).getTime();
         const hour = diff / 1000 / 60 / 60;
         return hour <= 3;
     };
@@ -63,7 +61,6 @@ function Home() {
         if (isLocationDisabled) {
             showToast('위치정보를 동의 해주세요 :) !!!');
             handleCheckAll(false);
-            setIsAvailableDogsCheckedAll(false);
             return;
         }
         const dogs =
@@ -71,22 +68,15 @@ function Home() {
         navigate('/walk', { state: { dogs } });
     };
 
-    const goToJournals = (dogId: number) => {
-        navigate(`/journals?${queryStringKeys.DOG_ID}=${dogId}`, {
-            state: { dogs: dogsStatistic, dog: dogsStatistic?.find((d) => d.id === dogId) },
-        });
-    };
-
     const handleToggle = (id: number) => {
-        setAvailableDogs((prevAvailableDogs) =>
+        setWalkAvailableDogs((prevAvailableDogs) =>
             prevAvailableDogs?.length ? toggleCheckById(prevAvailableDogs, id, 'isChecked') : prevAvailableDogs
         );
     };
     const handleCheckAll = (flag: boolean) => {
-        setAvailableDogs((prevAvailableDogs) =>
+        setWalkAvailableDogs((prevAvailableDogs) =>
             prevAvailableDogs?.length ? setFlagValueByKey(prevAvailableDogs, flag, 'isChecked') : prevAvailableDogs
         );
-        setIsAvailableDogsCheckedAll(flag);
     };
 
     return (
@@ -97,42 +87,31 @@ function Home() {
                 style={{ minHeight: `calc(100dvh - ${NAV_HEIGHT} - ${TOP_BAR_HEIGHT}  )` }}
             >
                 <WeatherInfo position={position} />
-                {/* TODO : Pending 로직 제외하는 방법ㄴ */}
-                {isDogsPending ? (
-                    <Spinner />
-                ) : dogsStatistic && dogsStatistic?.length > 0 ? (
-                    <>
-                        <DogCardList dogs={dogsStatistic} pageMove={goToJournals} />
-                        <Button
-                            color={'primary'}
-                            rounded={'medium'}
-                            className={`fixed h-12 w-[120px] text-base font-bold leading-normal text-white`}
-                            style={{ bottom: `calc(${NAV_HEIGHT} + 16px)`, left: '50%', translate: '-50%' }}
-                            disabled={dogsStatistic?.length === 0}
-                            onClick={handleBottomSheet}
-                        >
-                            산책하기
-                        </Button>
-                    </>
-                ) : (
-                    <RegisterCard />
+                <DogStatisticsView dogsStatistic={dogsStatistic} isPending={isDogsPending} pageMove={handlePageMove} />
+                {isArrayNotEmpty(dogsStatistic) && (
+                    <Button
+                        color={'primary'}
+                        rounded={'medium'}
+                        className={`fixed h-12 w-[120px] text-base font-bold leading-normal text-white`}
+                        style={{ bottom: `calc(${NAV_HEIGHT} + 16px)`, left: '50%', translate: '-50%' }}
+                        onClick={handleBottomSheet}
+                    >
+                        산책하기
+                    </Button>
                 )}
             </main>
 
             <BottomSheet isOpen={isDogBottomSheetOpen} onClose={handleBottomSheet}>
                 <BottomSheet.Header> 강아지 산책</BottomSheet.Header>
-                <BottomSheet.Body>
-                    {isAvailableDogsLoading ? (
-                        <Spinner />
-                    ) : walkAvailableDogs && walkAvailableDogs?.length > 0 ? (
+                <BottomSheet.Body isLoading={isAvailableDogsLoading}>
+                    {isArrayNotEmpty(walkAvailableDogs) ? (
                         <AvailableDogCheckList
                             dogs={walkAvailableDogs}
                             onToggle={handleToggle}
                             checkAll={handleCheckAll}
-                            isCheckedAll={isAvailableDogsCheckedAll}
                         />
                     ) : (
-                        <div>산책할 강아지가없습니다</div>
+                        <div>모든 강아지가 산책중입니다</div>
                     )}
                 </BottomSheet.Body>
                 <BottomSheet.ConfirmButton

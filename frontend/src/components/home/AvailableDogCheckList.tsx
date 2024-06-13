@@ -8,9 +8,9 @@ interface AvailableDogCheckListProps {
     dogs: WalkAvailableDog[] | undefined;
     onToggle: (id: number) => void;
     checkAll: (flag: boolean) => void;
-    isCheckedAll: boolean;
 }
-export default function AvailableDogCheckList({ dogs, onToggle, checkAll, isCheckedAll }: AvailableDogCheckListProps) {
+export default function AvailableDogCheckList({ dogs, onToggle, checkAll }: AvailableDogCheckListProps) {
+    const isCheckedAll = dogs?.length === dogs?.filter((dog) => dog.isChecked).length;
     return (
         <>
             <li className="flex items-center justify-between py-3">

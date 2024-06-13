@@ -1,4 +1,5 @@
 import { Button } from '@/components/commons/Button';
+import Spinner from '@/components/commons/Spinner';
 import { NAV_HEIGHT } from '@/constants';
 import { cn } from '@/utils/tailwindClass';
 
@@ -28,7 +29,15 @@ export default function BottomSheet({ isOpen, onClose, children }: BottomSheetPr
 function Header({ children }: { children?: React.ReactNode }) {
     return <div className="mb-4 text-center text-base font-semibold leading-normal text-black">{children}</div>;
 }
-function Body({ children, className }: { children?: React.ReactNode; className?: string }) {
+
+interface BodyProps {
+    children?: React.ReactNode;
+    className?: string;
+    isLoading?: boolean;
+}
+
+function Body({ children, className, isLoading }: BodyProps) {
+    if (isLoading) return <Spinner className="h-[180px]" />;
     return <ul className={cn(`flex h-[180px] flex-col overflow-y-scroll px-5 ${className}`)}>{children}</ul>;
 }
 function Footer({ children }: { children?: React.ReactNode }) {
