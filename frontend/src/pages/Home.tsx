@@ -16,12 +16,9 @@ import { setFlagValueByKey, toggleCheckById } from '@/utils/check';
 import useWalkAvailable from '@/hooks/useWalkAvailableDog';
 import { getStorage, removeStorage } from '@/utils/storage';
 import { DogWalkData } from '@/pages/Walk';
-<<<<<<< HEAD
 import useGeolocation from '@/hooks/useGeolocation';
 import useToast from '@/hooks/useToast';
-=======
 import { DogStatistic } from '@/models/dog';
->>>>>>> 4791b09 (refactor: dogStatisticsView로 분리)
 
 function Home() {
     const [isDogBottomSheetOpen, setIsDogBottomSheetOpen] = useState<boolean>(false);
@@ -36,9 +33,8 @@ function Home() {
     const [isAvailableDogsCheckedAll, setIsAvailableDogsCheckedAll] = useState<boolean>(false);
     const navigate = useNavigate();
     const { show: showToast } = useToast();
-    const dogData: DogWalkData | undefined = getStorage(storageKeys.DOGS)
-        ? JSON.parse(getStorage(storageKeys.DOGS) ?? '')
-        : undefined;
+    const storedData = getStorage(storageKeys.DOGS);
+    const dogData: DogWalkData | undefined = storedData ? JSON.parse(storedData) : undefined;
 
     const handleBottomSheet = () => {
         if (!isDogBottomSheetOpen) {
@@ -55,8 +51,8 @@ function Home() {
             setIsAvailableDogsCheckedAll(false);
         }
     };
-    const handlePageMove = (key: string, state: any) => {
-        navigate(key, { state });
+    const handlePageMove = (url: string, state: any) => {
+        navigate(url, { state });
     };
 
     const IsDogsWalking = (now: Date, startTime: Date): boolean => {
@@ -97,7 +93,7 @@ function Home() {
                 className="mb-[60px] flex min-h-dvh flex-col bg-neutral-50 px-5"
                 style={{ minHeight: `calc(100dvh - ${NAV_HEIGHT} - ${TOP_BAR_HEIGHT}  )` }}
             >
-                <WeatherInfo position={position}/>
+                <WeatherInfo position={position} />
                 <DogStatisticsView dogsStatistic={dogsStatistic} isPending={isDogsPending} pageMove={handlePageMove} />
                 {dogsStatistic && dogsStatistic?.length > 0 && (
                     <Button
@@ -125,7 +121,7 @@ function Home() {
                             isCheckedAll={isAvailableDogsCheckedAll}
                         />
                     ) : (
-                        <div>산책할 강아지가없습니다</div>
+                        <div>모든 강아지가 산책중입니다</div>
                     )}
                 </BottomSheet.Body>
                 <BottomSheet.ConfirmButton
@@ -166,8 +162,7 @@ const DogStatisticsView = ({ isPending, dogsStatistic, pageMove }: DogStatistics
         pageMove(url, state);
     };
     if (isPending) {
-        <Spinner />;
-        return;
+        return <Spinner />;
     }
     return (
         <>
