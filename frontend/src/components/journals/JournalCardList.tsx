@@ -1,8 +1,8 @@
 import JournalCard from '@/components/journals/JournalCard';
-import { Dog } from '@/models/dog';
+import { DogAvatar } from '@/models/dog';
 import { Journal } from '@/models/journal';
 
-export default function JournalCardList({ journals, dog }: { journals: Journal[]; dog: Dog | undefined }) {
+export default function JournalCardList({ journals, dog }: { journals: Journal[]; dog: DogAvatar | undefined }) {
     return (
         <div className="flex flex-col items-center justify-start gap-3 px-5 py-[14px]">
             {journals.map((journal) => {

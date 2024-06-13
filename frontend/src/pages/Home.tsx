@@ -1,4 +1,3 @@
-import DogCardList from '@/components/home/DogCardList';
 import WeatherInfo from '@/components/home/WeatherInfo';
 import { useState } from 'react';
 import { Button } from '@/components/commons/Button';
@@ -10,16 +9,14 @@ import AvailableDogCheckList from '@/components/home/AvailableDogCheckList';
 import useDogsStatistic from '@/hooks/useDogsStatistic';
 import { useNavigate } from 'react-router-dom';
 import Spinner from '@/components/commons/Spinner';
-import RegisterCard from '@/components/home/RegisterCard';
-import { queryStringKeys } from '@/constants';
 import { setFlagValueByKey, toggleCheckById } from '@/utils/check';
 import useWalkAvailable from '@/hooks/useWalkAvailableDog';
 import { getStorage, removeStorage } from '@/utils/storage';
 import { DogWalkData } from '@/pages/Walk';
 import useGeolocation from '@/hooks/useGeolocation';
 import useToast from '@/hooks/useToast';
-import { DogStatistic } from '@/models/dog';
 import { isArrayNotEmpty } from '@/utils/validate';
+import DogStatisticsView from '@/components/home/DogStatisticsView';
 
 function Home() {
     const [isDogBottomSheetOpen, setIsDogBottomSheetOpen] = useState<boolean>(false);
@@ -46,6 +43,8 @@ function Home() {
             setIsDogBottomSheetOpen(false);
         }
     };
+
+    //TODO state Type generic으로 변경
     const handlePageMove = (url: string, state: any) => {
         navigate(url, { state });
     };
@@ -138,31 +137,5 @@ const HomeHeader = () => {
                 <img src={Notification} alt="알림" />
             </TopBar.Back>
         </TopBar>
-    );
-};
-
-interface DogStatisticsViewProps {
-    isPending: boolean;
-    dogsStatistic: DogStatistic[] | undefined;
-    pageMove: (url: string, state: any) => void;
-}
-
-const DogStatisticsView = ({ isPending, dogsStatistic, pageMove }: DogStatisticsViewProps) => {
-    const goToJournals = (dogId: number) => {
-        const url = `/journals?${queryStringKeys.DOG_ID}=${dogId}`;
-        const state = { dogs: dogsStatistic, dog: dogsStatistic?.find((d) => d.id === dogId) };
-        pageMove(url, state);
-    };
-    if (isPending) {
-        return <Spinner />;
-    }
-    return (
-        <>
-            {isArrayNotEmpty(dogsStatistic) ? (
-                <DogCardList dogsStatistic={dogsStatistic} pageMove={goToJournals} />
-            ) : (
-                <RegisterCard pageMove={pageMove} />
-            )}
-        </>
     );
 };

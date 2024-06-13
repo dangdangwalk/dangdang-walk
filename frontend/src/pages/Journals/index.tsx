@@ -4,27 +4,23 @@ import JournalCardList from '@/components/journals/JournalCardList';
 import { NAV_HEIGHT, TOP_BAR_HEIGHT } from '@/constants';
 import useJournals from '@/hooks/useJournals';
 import Ic from '@/assets/icons/ic-arrow-right.svg';
-import { Dog } from '@/models/dog';
+import { DogAvatar } from '@/models/dog';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { fetchDogs } from '@/api/dog';
 import Avatar from '@/components/commons/Avatar';
 import SelectBox from '@/components/commons/SelectBox';
 import { queryStringKeys } from '@/constants';
-
-interface ReceivedState {
-    dog?: Dog;
-    dogs?: Dog[];
-}
+import { JournalsState } from '@/components/home/DogStatisticsView';
 
 export default function Journals() {
     const location = useLocation();
     const navigate = useNavigate();
 
     const [searchParams, setSearchParams] = useSearchParams();
-    const receivedState = location.state as ReceivedState;
-    const [dogList, setDogList] = useState<Dog[]>(receivedState?.dogs ?? []);
-    const [selectedDog, setSelectedDog] = useState<Dog | undefined>(receivedState?.dog);
+    const receivedState = location.state as JournalsState;
+    const [dogList, setDogList] = useState<DogAvatar[]>(receivedState?.dogs ?? []);
+    const [selectedDog, setSelectedDog] = useState<DogAvatar | undefined>(receivedState?.selectedDog);
     const { journals } = useJournals();
 
     const goBack = () => {
