@@ -1,5 +1,4 @@
 import {
-    ValidationArguments,
     ValidationOptions,
     ValidatorConstraint,
     ValidatorConstraintInterface,
@@ -9,7 +8,7 @@ import {
 @ValidatorConstraint({ async: false })
 export class IsWGS84Constraint implements ValidatorConstraintInterface {
     private regexWgs84 = /^-?\d+\.*\d*/;
-    validate(point: string, validationArguments?: ValidationArguments | undefined): boolean {
+    validate(point: string): boolean {
         return this.regexWgs84.test(point);
     }
 }

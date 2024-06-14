@@ -1,7 +1,4 @@
-import { Type } from 'class-transformer';
-import { IsNotEmpty, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
-
-import { Excrements } from '../../excrements/excrements.entity';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class PhotoUrlType {
     @IsNotEmpty()

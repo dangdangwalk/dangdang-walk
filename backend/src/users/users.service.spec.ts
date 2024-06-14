@@ -19,8 +19,6 @@ import { UsersDogsService } from '../users-dogs/users-dogs.service';
 describe('UsersService', () => {
     let service: UsersService;
     let userRepository: Repository<Users>;
-    let usersDogsRepository: Repository<UsersDogs>;
-    let usersDogsService: UsersDogsService;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
@@ -51,8 +49,6 @@ describe('UsersService', () => {
 
         service = module.get<UsersService>(UsersService);
         userRepository = module.get<Repository<Users>>(getRepositoryToken(Users));
-        usersDogsRepository = module.get<Repository<UsersDogs>>(getRepositoryToken(UsersDogs));
-        usersDogsService = module.get<UsersDogsService>(UsersDogsService);
     });
 
     describe('findOne', () => {

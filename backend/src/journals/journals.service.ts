@@ -1,15 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { DeleteResult, EntityManager, FindOptionsWhere, In } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
-
 import { Transactional } from 'typeorm-transactional';
 
 import { Journals } from './journals.entity';
-
 import { JournalsRepository } from './journals.repository';
-
 import { CreateExcrementsInfo, CreateJournalData, CreateJournalInfo } from './types/create-journal-data.type';
-
 import {
     DogInfoForDetail,
     ExcrementsInfoForDetail,
@@ -18,7 +14,6 @@ import {
 } from './types/journal-detail.type';
 
 import { JournalInfoForList } from './types/journal-info.type';
-
 import { UpdateJournalData } from './types/update-journal-data.type';
 
 import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
