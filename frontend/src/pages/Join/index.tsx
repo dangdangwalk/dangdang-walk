@@ -144,6 +144,7 @@ export default function SignUp() {
                       createDog.mutate({ ...registerData, profilePhotoUrl: fileName });
                   });
             spinnerRemove();
+            currentPage ? navigate(-1) : navigate('/');
         }
 
         switch (step) {
