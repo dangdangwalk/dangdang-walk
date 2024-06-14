@@ -13,7 +13,6 @@ import { mockBreed } from '../fixtures/breed.fixture';
 describe('BreedService', () => {
     let service: BreedService;
     let breedRepository: Repository<Breed>;
-    let repository: BreedRepository;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
