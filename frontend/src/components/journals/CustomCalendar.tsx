@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import './CustomCalendar.css'; // Custom CSS for transitions
-import { useLocation } from 'react-router-dom';
-import { queryStringKeys } from '@/constants';
 import PrevMonth from '@/assets/buttons/btn-prev-month.svg';
 import NextMonth from '@/assets/buttons/btn-next-month.svg';
 import { fetchDogMonthStatistic, period } from '@/api/dog';
@@ -14,13 +12,10 @@ interface CalendarProps {
 }
 
 export default function CustomCalendar({ dogId }: CalendarProps) {
-    const location = useLocation();
     const [mark, setMark] = useState<Set<string>>(new Set<string>());
     const { toggleViewSwitch, handlePrevMonth, handleNextMonth, today, handleClickDay, date, currentWeek, view } =
         useCalendar();
     const getStatisticData = async (date: string, period: period) => {
-        const params = new URLSearchParams(location.search);
-        const dogId = params.get(queryStringKeys.DOG_ID);
         if (!dogId) return;
         const data = await fetchDogMonthStatistic(Number(dogId), date, period);
         const newArray = new Set<string>();
