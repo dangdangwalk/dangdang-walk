@@ -55,7 +55,7 @@ module.exports = {
         '@typescript-eslint/explicit-function-return-type': 'off',
         '@typescript-eslint/explicit-module-boundary-types': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
-        '@typescript-eslint/no-unused-vars': 'off',
+        '@typescript-eslint/no-unused-vars': 'error',
         'import/prefer-default-export': 'off',
         'import/no-unresolved': [0, { commonjs: false }],
         'import/extensions': [
@@ -80,9 +80,5 @@ module.exports = {
         'import/no-duplicates': 'error',
         'import/prefer-default-export': 'off',
         'unused-imports/no-unused-imports': 'error',
-        'unused-imports/no-unused-vars': [
-            'error',
-            { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' },
-        ],
     },
 };
