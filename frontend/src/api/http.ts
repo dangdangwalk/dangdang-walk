@@ -49,7 +49,7 @@ export const createClient = (config?: AxiosRequestConfig): AxiosInstance => {
         },
         async (error: AxiosError) => {
             const isSignedIn = getStorage(storageKeys.IS_SIGNED_IN) ? true : false;
-            console.log(error.response?.config.url);
+            console.error(error.response?.config.url);
 
             if (error.response && error.response.status === 401 && isSignedIn) {
                 const errorData = error.response.data as ErrorDataResponse;
