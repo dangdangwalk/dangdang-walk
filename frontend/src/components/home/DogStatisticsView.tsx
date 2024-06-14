@@ -1,7 +1,6 @@
 import Spinner from '@/components/commons/Spinner';
 import DogCardList from '@/components/home/DogCardList';
 import RegisterCard from '@/components/home/RegisterCard';
-import { queryStringKeys } from '@/constants';
 import { DogAvatar, DogStatistic } from '@/models/dog';
 import { isArrayNotEmpty } from '@/utils/validate';
 
@@ -18,7 +17,7 @@ interface DogStatisticsViewProps {
 
 const DogStatisticsView = ({ isPending, dogsStatistic, pageMove }: DogStatisticsViewProps) => {
     const goToJournals = (dogId: number) => {
-        const url = `/journals?${queryStringKeys.DOG_ID}=${dogId}`;
+        const url = `/journals`;
         const state: JournalsState = { dogs: dogsStatistic, selectedDog: dogsStatistic?.find((d) => d.id === dogId) };
         pageMove(url, state);
     };

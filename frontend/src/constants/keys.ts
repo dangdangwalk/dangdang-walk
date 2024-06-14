@@ -27,9 +27,4 @@ const storageKeys = {
     DATA_URL: 'dataUrl',
 } as const;
 
-const queryStringKeys = {
-    DOG_ID: 'dogId',
-    DATE: 'date',
-} as const;
-
-export { tokenKeys, queryKeys, storageKeys, queryStringKeys };
+export { tokenKeys, queryKeys, storageKeys };
