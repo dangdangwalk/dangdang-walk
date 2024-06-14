@@ -65,8 +65,6 @@ export default function Map({ startPosition, path, className, height }: MapProps
     useEffect(() => {
         if (!map || !path.length) return;
         polyline.setPath(path.map((position) => new window.kakao.maps.LatLng(position.lat, position.lng)));
-        const lastPosition = path[path.length - 1];
-        map.setCenter(new window.kakao.maps.LatLng(lastPosition?.lat, lastPosition?.lng));
     }, [path, map]);
     return (
         <>
