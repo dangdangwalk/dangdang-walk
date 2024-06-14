@@ -1,7 +1,7 @@
 import Heading from '@/components/journals/Heading';
 import { RefObject } from 'react';
 
-export default function MemoSection({ textAreaRef, readonly = false }: Props) {
+export default function MemoSection({ textAreaRef, disabled = false }: Props) {
     return (
         <div className="px-5 py-[10px]">
             <Heading headingNumber={2}>메모</Heading>
@@ -9,7 +9,7 @@ export default function MemoSection({ textAreaRef, readonly = false }: Props) {
                 name="memo"
                 className="my-2 h-[100px] w-full rounded-lg border border-[#E4E4E4] px-4 py-3 text-xs placeholder:text-[#BABABA]"
                 placeholder="오늘 산책에 대해서 자유롭게 메모해보세요."
-                readOnly={readonly}
+                disabled={disabled}
                 ref={textAreaRef}
             />
         </div>
@@ -18,5 +18,5 @@ export default function MemoSection({ textAreaRef, readonly = false }: Props) {
 
 interface Props {
     textAreaRef: RefObject<HTMLTextAreaElement>;
-    readonly?: boolean;
+    disabled?: boolean;
 }
