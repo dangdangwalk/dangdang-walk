@@ -88,9 +88,8 @@ describe('AuthService', () => {
         }
 
         jest.spyOn(kakaoService, 'requestUnlink').mockResolvedValue();
-
-        jest.spyOn(tokenService, 'signRefreshToken').mockReturnValue(mockUser.refreshToken);
-        jest.spyOn(tokenService, 'signAccessToken').mockReturnValue(mockUser.refreshToken);
+        jest.spyOn(tokenService, 'signRefreshToken').mockResolvedValue(Promise.resolve(mockUser.refreshToken));
+        jest.spyOn(tokenService, 'signAccessToken').mockResolvedValue(Promise.resolve(mockUser.refreshToken));
     });
 
     const authorizeCode = 'authorizeCode';
@@ -158,7 +157,9 @@ describe('AuthService', () => {
             it('access token을 검증해야 한다.', async () => {
                 const userId = 1;
                 const payload = { userId };
-                jest.spyOn(tokenService, 'verify').mockReturnValue(payload as AccessTokenPayload);
+                jest.spyOn(tokenService, 'verify').mockImplementation(() =>
+                    Promise.resolve(payload as AccessTokenPayload),
+                );
                 jest.spyOn(usersService, 'findOne').mockResolvedValue({ id: userId } as Users);
 
                 const result = await service.validateAccessToken('accessToken');
@@ -173,7 +174,7 @@ describe('AuthService', () => {
 
         context('refresh token이 주어지면', () => {
             it('refresh token을 검증해야 한다.', async () => {
-                jest.spyOn(tokenService, 'verify').mockReturnValue(payload as RefreshTokenPayload);
+                jest.spyOn(tokenService, 'verify').mockReturnValue(Promise.resolve(payload as RefreshTokenPayload));
                 jest.spyOn(usersService, 'findOne').mockResolvedValue({
                     oauthId: '123',
                     refreshToken: mockUser.refreshToken,
@@ -186,7 +187,7 @@ describe('AuthService', () => {
 
         context('주어진 refresh token이 저장된 refresh token과 다르면', () => {
             it('UnauthorizedException 예외를 던져야 한다.', async () => {
-                jest.spyOn(tokenService, 'verify').mockReturnValue(payload as RefreshTokenPayload);
+                jest.spyOn(tokenService, 'verify').mockReturnValue(Promise.resolve(payload as RefreshTokenPayload));
                 jest.spyOn(usersService, 'findOne').mockResolvedValue({
                     oauthId: '123',
                     refreshToken: mockUser.refreshToken,
