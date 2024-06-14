@@ -25,25 +25,25 @@ function Home() {
     const { dogsStatistic, isDogsPending } = useDogsStatistic();
     const navigate = useNavigate();
     const { show: showToast } = useToast();
-    const storedData = getStorage(storageKeys.DOGS);
-    const dogData: DogWalkData | undefined = storedData ? JSON.parse(storedData) : undefined;
 
-    const handleBottomSheet = () => {
-        if (!isDogBottomSheetOpen) {
-            if (isDogsWalking(dogData)) {
-                navigate('/walk');
-                return;
-            }
-            fetchWalkAvailableDogs();
-            setIsDogBottomSheetOpen(true);
-            removeStorage(storageKeys.DOGS);
-        } else {
-            handleCheckAll(false);
-            setIsDogBottomSheetOpen(false);
+    const handleBottomSheetOpen = () => {
+        const storedData = getStorage(storageKeys.DOGS);
+        const dogData: DogWalkData | undefined = storedData ? JSON.parse(storedData) : undefined;
+
+        if (isDogsWalking(dogData)) {
+            navigate('/walk');
+            return;
         }
+        fetchWalkAvailableDogs();
+        setIsDogBottomSheetOpen(true);
+        removeStorage(storageKeys.DOGS);
     };
 
-    //TODO state Type generic으로 변경
+    const handleBottomSheetClose = () => {
+        handleCheckAll(false);
+        setIsDogBottomSheetOpen(false);
+    };
+
     const handlePageMove = (url: string, state: any) => {
         navigate(url, { state });
     };
@@ -90,18 +90,18 @@ function Home() {
                 <DogStatisticsView dogsStatistic={dogsStatistic} isPending={isDogsPending} pageMove={handlePageMove} />
                 {isArrayNotEmpty(dogsStatistic) && (
                     <Button
-                        color={'primary'}
-                        rounded={'medium'}
+                        color="primary"
+                        rounded="medium"
                         className={`fixed h-12 w-[120px] text-base font-bold leading-normal text-white`}
                         style={{ bottom: `calc(${NAV_HEIGHT} + 16px)`, left: '50%', translate: '-50%' }}
-                        onClick={handleBottomSheet}
+                        onClick={handleBottomSheetOpen}
                     >
                         산책하기
                     </Button>
                 )}
             </main>
 
-            <BottomSheet isOpen={isDogBottomSheetOpen} onClose={handleBottomSheet}>
+            <BottomSheet isOpen={isDogBottomSheetOpen} onClose={handleBottomSheetClose}>
                 <BottomSheet.Header> 강아지 산책</BottomSheet.Header>
                 <BottomSheet.Body isLoading={isAvailableDogsLoading}>
                     {isArrayNotEmpty(walkAvailableDogs) ? (
