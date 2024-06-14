@@ -72,7 +72,7 @@ const getStartOfWeek = (date: Date) => {
     return new Date(startDate.setDate(diff));
 };
 
-export const getCurrentWeek = (date: Date) => {
+export const getCurrentWeek = (date: Date): Date[] => {
     const startOfWeek = getStartOfWeek(date);
     return Array.from({ length: 7 }).map((_, index) => {
         const day = new Date(startOfWeek);

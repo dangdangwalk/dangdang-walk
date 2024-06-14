@@ -1,6 +1,6 @@
 import { httpClient } from '@/api/http';
 import { WalkAvailableDog, Dog, DogCreateForm, DogStatistic } from '@/models/dog';
-export type period = 'week' | 'month';
+export type Period = 'week' | 'month';
 export const fetchDogStatistic = async (): Promise<DogStatistic[]> => {
     const { data } = await httpClient.get('/dogs/statistics');
     return data;
@@ -16,7 +16,7 @@ export const createDog = async (params: DogCreateForm) => {
     return data;
 };
 
-export const fetchDogMonthStatistic = async (dogId: number, date: string, period: period) => {
+export const fetchDogMonthStatistic = async (dogId: number, date: string, period: Period) => {
     const { data } = await httpClient.get(`/dogs/${dogId}/statistics?date=${date}&period=${period}`);
     return data;
 };

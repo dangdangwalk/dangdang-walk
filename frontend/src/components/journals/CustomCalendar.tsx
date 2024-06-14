@@ -3,9 +3,8 @@ import Calendar from 'react-calendar';
 import './CustomCalendar.css'; // Custom CSS for transitions
 import PrevMonth from '@/assets/buttons/btn-prev-month.svg';
 import NextMonth from '@/assets/buttons/btn-next-month.svg';
-import { fetchDogMonthStatistic, period } from '@/api/dog';
 import { formatYearMonth, formatDate, formatDay, getCurrentWeek } from '@/utils/time';
-import { viewMode } from '@/hooks/useCalendar';
+import { useDogStatistic } from '@/hooks/useDogStatistic';
 
 interface CalendarProps {
     dogId: number;
@@ -13,29 +12,26 @@ interface CalendarProps {
     handleDate: (date: Date) => void;
 }
 
+type ViewMode = 'week' | 'month';
+
 export default function CustomCalendar({ dogId, date, handleDate }: CalendarProps) {
     const [mark, setMark] = useState<Set<string>>(new Set<string>());
-    const today = new Date();
     const currentWeek: Date[] = getCurrentWeek(date);
+    const [view, setView] = useState<ViewMode>('week');
 
-    const [view, setView] = useState<viewMode>('week');
+    const { data } = useDogStatistic(dogId, date, view);
 
     const handlePrevMonth = async () => {
         const prevMonth = new Date(date.getFullYear(), date.getMonth() - 1, 1);
-        if (today.getFullYear() >= prevMonth.getFullYear() && today.getMonth() >= prevMonth.getMonth()) {
-            await getStatisticData(formatDate(prevMonth), 'month');
-        }
         handleDate(prevMonth);
     };
 
     const handleNextMonth = async () => {
         const nextMonth = new Date(date.getFullYear(), date.getMonth() + 1, 1);
-        if (today.getFullYear() >= nextMonth.getFullYear() && today.getMonth() >= nextMonth.getMonth()) {
-            await getStatisticData(formatDate(nextMonth), 'month');
-        }
         handleDate(nextMonth);
     };
-    const toggleViewSwitch = async () => {
+
+    const toggleViewSwitch = () => {
         if (view === 'month') {
             setView('week');
         } else {
@@ -49,9 +45,8 @@ export default function CustomCalendar({ dogId, date, handleDate }: CalendarProp
         if (!mark.has(date)) return;
     };
 
-    const getStatisticData = async (date: string, period: period) => {
-        if (!dogId) return;
-        const data = await fetchDogMonthStatistic(dogId, date, period);
+    useEffect(() => {
+        if (!data) return;
         const newArray = new Set<string>();
         Object.keys(data).forEach((v) => {
             if (data[v]) {
@@ -59,18 +54,7 @@ export default function CustomCalendar({ dogId, date, handleDate }: CalendarProp
             }
         });
         setMark(newArray);
-    };
-    useEffect(() => {
-        if (view === 'week') return;
-        getStatisticData(formatDate(today), 'month');
-    }, [view]);
-
-    useEffect(() => {
-        if (!dogId) return;
-        if (date.getFullYear() <= today.getFullYear() && date.getMonth() <= today.getMonth()) {
-            getStatisticData(formatDate(date), view);
-        }
-    }, [dogId]);
+    }, [data]);
     return (
         <div className="flex w-full flex-col items-center justify-center overflow-hidden rounded-b-2xl bg-white px-[30px] pt-4 shadow">
             {view === 'month' && (
