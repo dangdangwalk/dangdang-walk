@@ -120,7 +120,7 @@ export default function Detail() {
                         onDeleteImage={handleDeleteImage}
                     />
                     <Divider />
-                    <MemoSection textAreaRef={textAreaRef} readonly={!isModifying} />
+                    <MemoSection textAreaRef={textAreaRef} disabled={!isModifying} />
                 </div>
                 {isModifying ? (
                     <Button rounded="none" className="h-16 w-full" disabled={isSaving} onClick={handleSave}>
