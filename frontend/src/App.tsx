@@ -1,5 +1,4 @@
 import { Toast } from '@/components/commons/Toast';
-import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useSpinnerStore } from '@/store/spinnerStore';
 import Spinner from '@/components/commons/Spinner';
