@@ -21,9 +21,8 @@ export default function Health() {
 
         try {
             const res = await axios.get(`${NEST_BASE_URL}/health`);
-            console.log(res);
-
             setIsSuccess(true);
+            return res;
         } catch (err) {
             console.error(err);
 

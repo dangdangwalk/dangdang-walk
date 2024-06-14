@@ -23,7 +23,7 @@ export const fetchCurrentWeather = async (date: string, nx: number, ny: number):
         }
         return response.body.items.item;
     } catch (e) {
-        console.log(e);
+        console.error(e);
     }
 };
 
@@ -46,13 +46,12 @@ export const fetchSunsetSunrise = async (
 
         return body.items.item;
     } catch (e) {
-        console.log(e);
+        console.error(e);
     }
 };
 
 export const fetchAirGrade = async (sidoName: string): Promise<AirPollution | undefined> => {
     try {
-        // console.log(sidoName);
         const response = (
             await weatherClient.get(
                 `/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?serviceKey=${WEATHER_KEY}&returnType=json&numOfRows=1&pageNum=1&sidoName=${sidoName}&ver=1.0`
@@ -63,7 +62,7 @@ export const fetchAirGrade = async (sidoName: string): Promise<AirPollution | un
         }
         return response?.body?.items[0];
     } catch (e) {
-        console.log(e);
+        console.error(e);
     }
 };
 

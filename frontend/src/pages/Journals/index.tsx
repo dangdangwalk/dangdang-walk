@@ -71,7 +71,7 @@ export default function Journals() {
                 className="mb-[60px] flex min-h-dvh flex-col bg-neutral-50"
                 style={{ minHeight: `calc(100dvh - ${NAV_HEIGHT} - ${TOP_BAR_HEIGHT}  )` }}
             >
-                <CustomCalendar />
+                <CustomCalendar dogId={selectedDog?.id} />
                 <JournalCardList journals={journals} dog={selectedDog} isLoading={isJournalsLoading} />
             </main>
         </>

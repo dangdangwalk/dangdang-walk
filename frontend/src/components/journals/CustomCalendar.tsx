@@ -9,10 +9,13 @@ import { fetchDogMonthStatistic, period } from '@/api/dog';
 import { formatYearMonth, formatDate, formatDay } from '@/utils/time';
 import useCalendar from '@/hooks/useCalendar';
 
-export default function CustomCalendar() {
+interface CalendarProps {
+    dogId?: number | null;
+}
+
+export default function CustomCalendar({ dogId }: CalendarProps) {
     const location = useLocation();
     const [mark, setMark] = useState<Set<string>>(new Set<string>());
-    const [currentDogId, setCurrentDogId] = useState<number | null>(null);
     const { toggleViewSwitch, handlePrevMonth, handleNextMonth, today, handleClickDay, date, currentWeek, view } =
         useCalendar();
     const getStatisticData = async (date: string, period: period) => {
@@ -30,14 +33,11 @@ export default function CustomCalendar() {
     };
 
     useEffect(() => {
-        const params = new URLSearchParams(location.search);
-        const dogId = params.get(queryStringKeys.DOG_ID);
-        if (Number(dogId) === currentDogId) return;
+        if (!dogId) return;
         if (date.getFullYear() <= today.getFullYear() && date.getMonth() <= today.getMonth()) {
             getStatisticData(formatDate(date), view);
         }
-        setCurrentDogId(Number(dogId));
-    }, [location.search]);
+    }, [dogId]);
 
     return (
         <div className="flex w-full flex-col items-center justify-center overflow-hidden rounded-b-2xl bg-white px-[30px] pt-4 shadow">
