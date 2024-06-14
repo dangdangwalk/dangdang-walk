@@ -9,14 +9,6 @@ function App() {
     useAuth();
     const { spinnerCount } = useSpinnerStore();
 
-    useEffect(() => {
-        window.oncontextmenu = function (event) {
-            event.preventDefault();
-            event.stopPropagation();
-            return false;
-        };
-    }, []);
-
     return (
         <div className="flex w-full flex-col">
             <Outlet />
