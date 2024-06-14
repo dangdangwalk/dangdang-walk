@@ -47,12 +47,12 @@ describe('S3Controller (e2e)', () => {
 
     describe('/images (DELETE)', () => {
         context('사용자가 자신이 소유한 이미지의 삭제 요청을 보내면', () => {
-            it('200 상태 코드를 반환해야 한다.', () => {
+            it('204 상태 코드를 반환해야 한다.', () => {
                 return request(app.getHttpServer())
                     .delete('/images')
                     .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
                     .send(['1/dangdangbucket-1.jpeg', '1/dangdangbucket-2.png'])
-                    .expect(200);
+                    .expect(204);
             });
         });
 
