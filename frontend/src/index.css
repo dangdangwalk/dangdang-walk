@@ -7,8 +7,11 @@ body {
     font-family: 'NanumGothic';
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* @apply flex flex-col items-center; */
     -webkit-touch-callout: none !important;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 #root {
     /* @apply w-full h-dvh max-w-screen-sm px-5; */
