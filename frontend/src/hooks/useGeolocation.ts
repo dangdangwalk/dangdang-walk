@@ -22,13 +22,11 @@ const useGeolocation = () => {
                     setRoutes([...routes, { lat, lng }]);
                 },
                 (error) => {
-                    console.log(error);
                     setStartPosition({ lat: DEFAULT_LAT, lng: DEFAULT_LNG });
                     setIsLocationDisabled(true);
                 }
             );
         } else {
-            console.log('no geolocation');
             setStartPosition({ lat: DEFAULT_LAT, lng: DEFAULT_LNG });
             setIsLocationDisabled(true);
         }
@@ -42,9 +40,7 @@ const useGeolocation = () => {
             setCurrentPosition({ lat, lng });
         };
 
-        const onError = (error: GeolocationPositionError) => {
-            console.log(error);
-        };
+        const onError = (error: GeolocationPositionError) => {};
 
         const watchId = navigator.geolocation.watchPosition(onSuccess, onError, { enableHighAccuracy: true });
 
