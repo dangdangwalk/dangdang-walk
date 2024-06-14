@@ -16,8 +16,6 @@ import { S3Service } from '../s3/s3.service';
 import { Users } from '../users/users.entity';
 import { UsersService } from '../users/users.service';
 
-const S3_PROFILE_IMAGE_PATH = 'default/profile.png';
-
 @Injectable()
 export class AuthService {
     constructor(
@@ -42,7 +40,7 @@ export class AuthService {
 
         const { oauthId } = await this[`${provider}Service`].requestUserInfo(oauthAccessToken);
 
-        const refreshToken = this.tokenService.signRefreshToken(oauthId, provider);
+        const refreshToken = await this.tokenService.signRefreshToken(oauthId, provider);
         this.logger.debug('login - signRefreshToken', { refreshToken });
 
         try {
@@ -51,7 +49,7 @@ export class AuthService {
                 { oauthAccessToken, oauthRefreshToken, refreshToken },
             );
 
-            const accessToken = this.tokenService.signAccessToken(userId, provider);
+            const accessToken = await this.tokenService.signAccessToken(userId, provider);
             this.logger.debug('login - signAccessToken', { accessToken });
 
             return { accessToken, refreshToken };
@@ -68,7 +66,7 @@ export class AuthService {
         const { oauthId, oauthNickname, email } = await this[`${provider}Service`].requestUserInfo(oauthAccessToken);
         const profileImageUrl = this.S3_PROFILE_IMAGE_PATH;
 
-        const refreshToken = this.tokenService.signRefreshToken(oauthId, provider);
+        const refreshToken = await this.tokenService.signRefreshToken(oauthId, provider);
         this.logger.debug('signup - signRefreshToken', { refreshToken });
 
         const { id: userId } = await this.usersService.createIfNotExists({
@@ -81,7 +79,7 @@ export class AuthService {
             refreshToken,
         });
 
-        const accessToken = this.tokenService.signAccessToken(userId, provider);
+        const accessToken = await this.tokenService.signAccessToken(userId, provider);
         this.logger.debug('signup - signAccessToken', { accessToken });
 
         return { accessToken, refreshToken };
@@ -99,19 +97,29 @@ export class AuthService {
     async reissueTokens({ oauthId, provider }: RefreshTokenPayload): Promise<AuthData> {
         const { id: userId, oauthRefreshToken } = await this.usersService.findOne({ oauthId });
 
+        // TODO: Promise.all로 병렬처리 한 후 성능 비교하기
+        // const [
+        //     { access_token: newOauthAccessToken, refresh_token: newOauthRefreshToken },
+        //     newAccessToken,
+        //     newRefreshToken,
+        // ] = await Promise.all([
+        //     this[`${provider}Service`].requestTokenRefresh(oauthRefreshToken),
+        //     this.tokenService.signAccessToken(userId, provider),
+        //     this.tokenService.signRefreshToken(oauthId, provider),
+        // ]);
         const { access_token: newOauthAccessToken, refresh_token: newOauthRefreshToken } =
             await this[`${provider}Service`].requestTokenRefresh(oauthRefreshToken);
 
-        const newAccessToken = this.tokenService.signAccessToken(userId, provider);
-        const newRefreshToken = this.tokenService.signRefreshToken(oauthId, provider);
+        const newAccessToken = await this.tokenService.signAccessToken(userId, provider);
+        const newRefreshToken = await this.tokenService.signRefreshToken(oauthId, provider);
 
-        const attr: Partial<Users> = { oauthAccessToken: newOauthAccessToken, refreshToken: newRefreshToken };
+        const attributes: Partial<Users> = { oauthAccessToken: newOauthAccessToken, refreshToken: newRefreshToken };
 
         if (newOauthRefreshToken) {
-            attr.oauthRefreshToken = newOauthRefreshToken;
+            attributes.oauthRefreshToken = newOauthRefreshToken;
         }
 
-        this.usersService.update({ id: userId }, attr);
+        this.usersService.update({ id: userId }, attributes);
 
         return { accessToken: newAccessToken, refreshToken: newRefreshToken };
     }
@@ -132,16 +140,18 @@ export class AuthService {
     private async deleteUserData(userId: number) {
         const dogIds = await this.usersService.getOwnDogsList(userId);
 
+        // TODO: for문 없애고 batch delete 하기
         for (const dogId of dogIds) {
             await this.dogsService.deleteDogFromUser(userId, dogId);
         }
 
+        // TODO: Promise.all로 병렬 처리
         await this.usersService.delete({ id: userId });
         await this.s3Service.deleteObjectFolder(userId);
     }
 
     async validateAccessToken(token: string): Promise<AccessTokenPayload> {
-        const payload = this.tokenService.verify(token) as AccessTokenPayload;
+        const payload = (await this.tokenService.verify(token)) as AccessTokenPayload;
         this.logger.log('Payload', payload);
 
         const result = await this.usersService.findOne({ id: payload.userId });
@@ -151,7 +161,7 @@ export class AuthService {
     }
 
     async validateRefreshToken(token: string): Promise<RefreshTokenPayload> {
-        const payload = this.tokenService.verify(token) as RefreshTokenPayload;
+        const payload = (await this.tokenService.verify(token)) as RefreshTokenPayload;
         this.logger.log('Payload', payload);
 
         const { refreshToken } = await this.usersService.findOne({ oauthId: payload.oauthId });

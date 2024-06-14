@@ -4,7 +4,7 @@
   <img src="https://github.com/jihwooon/dangdang-walk/assets/71831926/eb7dcd0a-7808-4597-9b8c-b8bd962e0868" alt="dangdangwalk-logo">
 </p>
 
-<p align="center"> 견주와 반려견이 함께 산책을 통해 건강을 관리하자 “DangDangWalk App” ​입니다. <p/>
+<p align="center"> 견주와 반려견이 함께 산책을 통해 건강을 관리할 수 있는 "DangDangWalk App"​입니다. </p>
 <br><br>
 
 # 🎯 프로젝트 소개

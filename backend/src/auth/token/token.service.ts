@@ -40,34 +40,34 @@ export class TokenService {
         };
     }
 
-    signAccessToken(userId: number, provider: OauthProvider) {
+    async signAccessToken(userId: number, provider: OauthProvider) {
         const payload: AccessTokenPayload = {
             userId,
             provider,
         };
 
-        const newToken = this.jwtService.sign(payload, {
+        const newToken = await this.jwtService.signAsync(payload, {
             expiresIn: TokenService.TOKEN_LIFETIME_MAP.access.expiresIn,
         });
 
         return newToken;
     }
 
-    signRefreshToken(oauthId: string, provider: OauthProvider) {
+    async signRefreshToken(oauthId: string, provider: OauthProvider) {
         const payload: RefreshTokenPayload = {
             oauthId,
             provider,
         };
 
-        const newToken = this.jwtService.sign(payload, {
+        const newToken = await this.jwtService.signAsync(payload, {
             expiresIn: TokenService.TOKEN_LIFETIME_MAP.refresh.expiresIn,
         });
 
         return newToken;
     }
 
-    verify(token: string): AccessTokenPayload | RefreshTokenPayload {
-        const payload = this.jwtService.verify(token, {
+    async verify(token: string): Promise<AccessTokenPayload | RefreshTokenPayload> {
+        const payload = await this.jwtService.verifyAsync(token, {
             ignoreExpiration: false,
         });
 
