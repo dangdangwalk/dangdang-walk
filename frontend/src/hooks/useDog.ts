@@ -3,19 +3,16 @@ import queryClient from '@/api/queryClient';
 import { uploadImage } from '@/api/upload';
 import { UseMutationCustomOptions } from '@/types/common';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
 import { FIFTY_MIN, ONE_HOUR, queryKeys } from '@/constants';
 import { useAuthStore } from '@/store/authStore';
 import { Dog } from '@/models/dog';
 
 const useCreateDog = (mutationOptions?: UseMutationCustomOptions) => {
-    const navigate = useNavigate();
     return useMutation({
         mutationFn: createDog,
         ...mutationOptions,
         onSuccess: async () => {
             queryClient.invalidateQueries({ queryKey: [queryKeys.DOGS] });
-            navigate(-1);
         },
     });
 };
