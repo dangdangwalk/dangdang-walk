@@ -31,7 +31,7 @@ describe('UsersController (e2e)', () => {
 
     describe('/users/me (GET)', () => {
         context('사용자가 회원 정보 조회 요청을 보내면', () => {
-            const { id, ...mockUserInfo } = mockUserProfile;
+            const { ...mockUserInfo } = mockUserProfile;
 
             it('200 상태 코드와 사용자 정보를 반환해야 한다.', async () => {
                 const response = await request(app.getHttpServer())
@@ -48,7 +48,7 @@ describe('UsersController (e2e)', () => {
 
     describe('/users/me (PATCH)', () => {
         context('사용자가 회원 정보 수정 요청을 보내면', () => {
-            const { id, provider, ...mockUserInfo } = mockUserProfile;
+            const { ...mockUserInfo } = mockUserProfile;
             const updateMockUser = {
                 nickname: 'new_mock_nickname',
                 profileImageUrl: 'new_mock_profile_image.jpg',

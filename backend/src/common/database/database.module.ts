@@ -15,7 +15,7 @@ import { WinstonLoggerService } from '../logger/winstonLogger.service';
     imports: [
         TypeOrmModule.forRootAsync({
             inject: [ConfigService, WinstonLoggerService],
-            useFactory: (config: ConfigService, winston: WinstonLoggerService) => {
+            useFactory: (config: ConfigService) => {
                 const nodeEnv = config.get<string>('NODE_ENV');
                 const isTest = nodeEnv === 'test';
                 const isLocal = nodeEnv === 'local';

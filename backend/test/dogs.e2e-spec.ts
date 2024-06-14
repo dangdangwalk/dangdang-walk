@@ -71,7 +71,7 @@ describe('DogsController (e2e)', () => {
                 await clearDogs();
             });
 
-            const { id, ...createMockDog } = mockDogProfile;
+            const { ...createMockDog } = mockDogProfile;
 
             it('201 상태 코드를 반환해야 한다.', async () => {
                 await request(app.getHttpServer())
@@ -93,7 +93,7 @@ describe('DogsController (e2e)', () => {
                 await clearDogs();
             });
 
-            const { id, ...createMockDog } = mockDogProfile;
+            const { ...createMockDog } = mockDogProfile;
             createMockDog.breed = '시고르자브종';
 
             it('404 상태 코드를 반환해야 한다.', () => {
@@ -158,7 +158,7 @@ describe('DogsController (e2e)', () => {
                 await clearDogs();
             });
 
-            const { id, ...updateMockDog } = mockDog2Profile;
+            const { ...updateMockDog } = mockDog2Profile;
 
             it('204 상태 코드를 반환해야 한다.', async () => {
                 await request(app.getHttpServer())
@@ -192,7 +192,7 @@ describe('DogsController (e2e)', () => {
                 await clearDogs();
             });
 
-            const { id, ...updateMockDog } = mockDog2Profile;
+            const { ...updateMockDog } = mockDog2Profile;
             updateMockDog.breed = '시고르자브종';
 
             it('404 상태 코드를 반환해야 한다.', () => {

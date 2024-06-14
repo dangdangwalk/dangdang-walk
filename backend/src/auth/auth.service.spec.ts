@@ -24,12 +24,10 @@ import { UsersService } from '../users/users.service';
 describe('AuthService', () => {
     let service: AuthService;
     let usersService: UsersService;
-    let dogsService: DogsService;
     let tokenService: TokenService;
     let googleService: GoogleService;
     let kakaoService: KakaoService;
     let naverService: NaverService;
-    let loggerService: WinstonLoggerService;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
@@ -61,12 +59,10 @@ describe('AuthService', () => {
 
         service = module.get<AuthService>(AuthService);
         usersService = module.get<UsersService>(UsersService);
-        dogsService = module.get<DogsService>(DogsService);
         tokenService = module.get<TokenService>(TokenService);
         googleService = module.get<GoogleService>(GoogleService);
         kakaoService = module.get<KakaoService>(KakaoService);
         naverService = module.get<NaverService>(NaverService);
-        loggerService = module.get<WinstonLoggerService>(WinstonLoggerService);
 
         const oauthServiceList = [googleService, kakaoService, naverService];
 
