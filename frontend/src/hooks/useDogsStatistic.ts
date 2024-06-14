@@ -26,7 +26,7 @@ const MINUTE = 1000 * 60;
 const useDogsStatistic = () => {
     const { isSignedIn } = useAuthStore();
     const { data, isPending } = useQuery({
-        queryKey: [queryKeys.DOG_STATISTICS],
+        queryKey: [queryKeys.DOGS, queryKeys.DOG_STATISTICS],
         queryFn: fetchDogStatistic,
         staleTime: MINUTE,
     });
