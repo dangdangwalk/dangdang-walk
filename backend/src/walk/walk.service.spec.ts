@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { TestWalkService } from './test.walk.service';
 import { WalkService } from './walk.service';
 
 import { Dogs } from '../dogs/dogs.entity';
@@ -10,7 +11,7 @@ import { DogSummary } from '../dogs/types/dog-summary.type';
 import { UsersService } from '../users/users.service';
 
 describe('WalkService', () => {
-    let service: WalkService;
+    let service: TestWalkService;
     let usersService: UsersService;
     let dogsService: DogsService;
     let dogRepository: Repository<Dogs>;
@@ -41,7 +42,7 @@ describe('WalkService', () => {
             ],
         }).compile();
 
-        service = module.get<WalkService>(WalkService);
+        service = module.get<TestWalkService>(WalkService);
         usersService = module.get<UsersService>(UsersService);
         dogsService = module.get<DogsService>(DogsService);
         dogRepository = module.get<Repository<Dogs>>(getRepositoryToken(Dogs));

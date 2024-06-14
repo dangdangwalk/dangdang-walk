@@ -21,7 +21,7 @@ export class WalkService {
         return await this.dogsService.getDogsSummaryList({ id: In(ownDogIds), isWalking: false });
     }
 
-    async checkAvailableDogs(dogIds: number[]) {
+    protected async checkAvailableDogs(dogIds: number[]) {
         //TODO: batch 로 변경 for문 없애기
         for (const curDogId of dogIds) {
             const curDogInfo = await this.dogsService.findOne({ id: curDogId });
