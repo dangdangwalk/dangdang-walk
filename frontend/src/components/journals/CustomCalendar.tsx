@@ -9,9 +9,10 @@ import useCalendar from '@/hooks/useCalendar';
 
 interface CalendarProps {
     dogId?: number | null;
+    currentDate: Date;
 }
 
-export default function CustomCalendar({ dogId }: CalendarProps) {
+export default function CustomCalendar({ dogId, currentDate }: CalendarProps) {
     const [mark, setMark] = useState<Set<string>>(new Set<string>());
     const { toggleViewSwitch, handlePrevMonth, handleNextMonth, today, handleClickDay, date, currentWeek, view } =
         useCalendar();
