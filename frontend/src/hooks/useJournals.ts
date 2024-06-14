@@ -1,26 +1,19 @@
 import { fetchJournals } from '@/api/journal';
-import { Journal } from '@/models/journal';
-import { formatDate } from '@/utils/time';
-import { useEffect, useState } from 'react';
+import { queryKeys } from '@/constants';
+import { useQuery } from '@tanstack/react-query';
 
 const useJournals = (dogId: number | undefined, date: string) => {
-    const [journals, setJournals] = useState<Journal[]>([]);
-    const [isJournalsLoading, setIsJournalsLoading] = useState<boolean>(false);
+    const { data, isLoading } = useQuery({
+        queryKey: [queryKeys.JOURNALS, dogId, date],
+        queryFn: async () => {
+            if (!dogId) return;
+            return await fetchJournals(dogId, date);
+        },
+        enabled: !!dogId,
+        staleTime: 1000 * 60,
+    });
 
-    useEffect(() => {
-        if (!dogId) return;
-        setIsJournalsLoading(true);
-        if (dogId) {
-            fetchJournals(Number(dogId), date ?? formatDate(new Date())).then((data) => {
-                if (data) {
-                    setJournals(data);
-                    setIsJournalsLoading(false);
-                }
-            });
-        }
-    }, [dogId, date]);
-
-    return { journals, isJournalsLoading };
+    return { journals: data, isJournalsLoading: isLoading };
 };
 
 export default useJournals;
