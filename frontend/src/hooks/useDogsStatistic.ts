@@ -29,6 +29,7 @@ const useDogsStatistic = () => {
         queryKey: [queryKeys.DOGS, queryKeys.DOG_STATISTICS],
         queryFn: fetchDogStatistic,
         staleTime: MINUTE,
+        enabled: isSignedIn,
     });
 
     if (!isSignedIn) {

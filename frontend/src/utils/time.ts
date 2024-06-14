@@ -64,3 +64,19 @@ export const formatToHHMM = (date: Date) => {
 
     return `${hour}:${minute}`;
 };
+
+const getStartOfWeek = (date: Date) => {
+    const startDate = new Date(date);
+    const day = startDate.getDay();
+    const diff = startDate.getDate() - day;
+    return new Date(startDate.setDate(diff));
+};
+
+export const getCurrentWeek = (date: Date): Date[] => {
+    const startOfWeek = getStartOfWeek(date);
+    return Array.from({ length: 7 }).map((_, index) => {
+        const day = new Date(startOfWeek);
+        day.setDate(startOfWeek.getDate() + index);
+        return day;
+    });
+};

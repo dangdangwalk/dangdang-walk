@@ -25,7 +25,7 @@
         // useEffect 변경시 모두 추가해야되는거 제거 나중에 변경 필요
         "react-hooks/exhaustive-deps": 0,
         "tailwindcss/no-custom-classname": "off",
-        "no-console": ["error", { "allow": ["warn", "error"] }]
+        "no-console": ["warn", { "allow": ["warn", "error"] }]
     },
     "ignorePatterns": ["vitest.config.ts"],
     "overrides": [

@@ -5,39 +5,43 @@ import { NAV_HEIGHT, TOP_BAR_HEIGHT } from '@/constants';
 import useJournals from '@/hooks/useJournals';
 import Ic from '@/assets/icons/ic-arrow-right.svg';
 import { DogAvatar } from '@/models/dog';
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { fetchDogs } from '@/api/dog';
 import Avatar from '@/components/commons/Avatar';
 import SelectBox from '@/components/commons/SelectBox';
-import { queryStringKeys } from '@/constants';
 import { JournalsState } from '@/components/home/DogStatisticsView';
+import { formatDate } from '@/utils/time';
 
 export default function Journals() {
     const location = useLocation();
     const navigate = useNavigate();
-
-    const [searchParams, setSearchParams] = useSearchParams();
-    const receivedState = location.state as JournalsState;
-    const [dogList, setDogList] = useState<DogAvatar[]>(receivedState?.dogs ?? []);
-    const [selectedDog, setSelectedDog] = useState<DogAvatar | undefined>(receivedState?.selectedDog);
-    const { journals, isJournalsLoading } = useJournals();
+    const [dogList, setDogList] = useState<DogAvatar[]>([]);
+    const [selectedDog, setSelectedDog] = useState<DogAvatar | undefined>();
+    const [date, setDate] = useState<Date>(new Date());
+    const { journals, isJournalsLoading } = useJournals(selectedDog?.id, formatDate(date));
 
     const goBack = () => {
-        navigate('/');
+        navigate(-1);
     };
     const handleSelectDog = (dogName: string) => {
         const dog = dogList.find((dog) => dog.name === dogName);
         if (!dog) return;
-        const newSearchParams = new URLSearchParams(searchParams);
-        newSearchParams.set(queryStringKeys.DOG_ID, String(dog.id));
-        setSearchParams(newSearchParams);
         setSelectedDog(dog);
     };
+    const handleDate = (newDate: Date) => {
+        setDate(newDate);
+    };
+
     useEffect(() => {
-        if (selectedDog) return;
+        const receivedState = location.state as JournalsState;
+        if (receivedState) {
+            setSelectedDog(receivedState.selectedDog);
+            setDogList(receivedState.dogs ?? []);
+            return;
+        }
         fetchDogs().then((dogs) => {
-            if (dogs) {
+            if (dogs?.length > 0) {
                 setDogList(dogs);
                 setSelectedDog(dogs[0]);
             } else {
@@ -45,6 +49,9 @@ export default function Journals() {
             }
         });
     }, []);
+
+    if (!selectedDog) return <></>;
+
     return (
         <>
             <TopBar className="bg-white px-5">
@@ -71,7 +78,7 @@ export default function Journals() {
                 className="mb-[60px] flex min-h-dvh flex-col bg-neutral-50"
                 style={{ minHeight: `calc(100dvh - ${NAV_HEIGHT} - ${TOP_BAR_HEIGHT}  )` }}
             >
-                <CustomCalendar dogId={selectedDog?.id} />
+                <CustomCalendar dogId={selectedDog.id} date={date} handleDate={handleDate} />
                 <JournalCardList journals={journals} dog={selectedDog} isLoading={isJournalsLoading} />
             </main>
         </>
