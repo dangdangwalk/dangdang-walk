@@ -16,9 +16,8 @@ import { formatDate } from '@/utils/time';
 export default function Journals() {
     const location = useLocation();
     const navigate = useNavigate();
-    const receivedState = location.state as JournalsState;
-    const [dogList, setDogList] = useState<DogAvatar[]>(receivedState?.dogs ?? []);
-    const [selectedDog, setSelectedDog] = useState<DogAvatar | undefined>(receivedState?.selectedDog);
+    const [dogList, setDogList] = useState<DogAvatar[]>([]);
+    const [selectedDog, setSelectedDog] = useState<DogAvatar | undefined>();
     const [date, setDate] = useState<Date>(new Date());
     const { journals, isJournalsLoading } = useJournals(selectedDog?.id, formatDate(date));
 
@@ -30,9 +29,17 @@ export default function Journals() {
         if (!dog) return;
         setSelectedDog(dog);
     };
+    const handleDate = (newDate: Date) => {
+        setDate(newDate);
+    };
 
     useEffect(() => {
-        if (selectedDog) return;
+        const receivedState = location.state as JournalsState;
+        if (receivedState) {
+            setSelectedDog(receivedState.selectedDog);
+            setDogList(receivedState.dogs ?? []);
+            return;
+        }
         fetchDogs().then((dogs) => {
             if (dogs?.length > 0) {
                 setDogList(dogs);
@@ -71,7 +78,7 @@ export default function Journals() {
                 className="mb-[60px] flex min-h-dvh flex-col bg-neutral-50"
                 style={{ minHeight: `calc(100dvh - ${NAV_HEIGHT} - ${TOP_BAR_HEIGHT}  )` }}
             >
-                <CustomCalendar dogId={selectedDog.id} currentDate={date} />
+                <CustomCalendar dogId={selectedDog.id} date={date} handleDate={handleDate} />
                 <JournalCardList journals={journals} dog={selectedDog} isLoading={isJournalsLoading} />
             </main>
         </>
