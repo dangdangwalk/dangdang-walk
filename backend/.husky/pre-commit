@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 NC='\033[0m'
 GREEN='\033[0;32m'
@@ -18,14 +18,14 @@ echo -e "${GREEN}[INFO]${NC} 현재 branch name: ${BLUE}${current_branch}${NC}"
 
 # Check if the current branch name follows project's naming convention
 if [[ ! $current_branch =~ ^(frontend|backend|infra)\/DANG-[1-9][0-9]*$ ]]; then
-  echo -e "${RED}[ERROR]${NC} 현재 branch name의 형식이 맞지 않습니다. (ex. frontend/DANG-1, backend/DANG-26, infra/DANG-72)"
-  exit 1
+	echo -e "${RED}[ERROR]${NC} 현재 branch name의 형식이 맞지 않습니다. (ex. frontend/DANG-1, backend/DANG-26, infra/DANG-72)"
+	exit 1
 fi
 
 # Check if the current branch starts with "backend"
 if [[ $current_branch == frontend* ]]; then
-  echo -e "${YELLOW}[WARNING]${NC} frontend 폴더에서 작업하셨나요? 현재 실행 중인 스크립트가 backend 폴더에 위치하고 있습니다."
-  echo -e "${YELLOW}[WARNING]${NC} frontend 설정으로 스크립트를 실행하려면 ${PINK}frontend 폴더에서${NC} ${MAGENTA}npm run prepare${NC}를 실행 한 뒤 다시 ${MAGENTA}git commit${NC}을 시도하세요."
+	echo -e "${YELLOW}[WARNING]${NC} frontend 폴더에서 작업하셨나요? 현재 실행 중인 스크립트가 backend 폴더에 위치하고 있습니다."
+	echo -e "${YELLOW}[WARNING]${NC} frontend 설정으로 스크립트를 실행하려면 ${PINK}frontend 폴더에서${NC} ${MAGENTA}npm run prepare${NC}를 실행 한 뒤 다시 ${MAGENTA}git commit${NC}을 시도하세요."
 fi
 
 cd backend
