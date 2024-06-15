@@ -5,8 +5,11 @@ GREEN='\033[0;32m'
 RED='\033[0;31m'
 
 check_and_start_mysql_container() {
-    if [ "$(docker ps -aq -f name=local-mysql)" ]; then
-		if [ "$(docker ps -q -f name=local-mysql)" ]; then
+	local_mysql_container_exists=$(docker ps -aq -f name=local-mysql)	# Get local-mysql container ID
+	local_mysql_container_running=$(docker ps -q -f name=local-mysql)	# Get running local-mysql container ID
+
+    if [ "$local_mysql_container_exists" ]; then
+		if [ "$local_mysql_container_running" ]; then
             echo -e "${GREEN}[INFO]${NC} 'local-mysql' container가 실행 중입니다."
 		else
             echo -e "${GREEN}[INFO]${NC} 'local-mysql' container를 시작합니다..."
