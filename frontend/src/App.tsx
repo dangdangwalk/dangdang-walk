@@ -3,10 +3,19 @@ import { Outlet } from 'react-router-dom';
 import { useSpinnerStore } from '@/store/spinnerStore';
 import Spinner from '@/components/commons/Spinner';
 import { useAuth } from '@/hooks/useAuth';
+import { useEffect } from 'react';
 
 function App() {
     useAuth();
     const { spinnerCount } = useSpinnerStore();
+
+    useEffect(() => {
+        window.oncontextmenu = function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
+        };
+    }, []);
 
     return (
         <div className="flex w-full flex-col">
