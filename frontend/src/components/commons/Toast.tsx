@@ -1,8 +1,8 @@
-import { useToastStore } from '@/store/toastStore';
+import { useStore } from '@/store';
 
 function Toast() {
-    const isShowing = useToastStore((state) => state.isShowing);
-    const text = useToastStore((state) => state.text);
+    const isShowing = useStore((state) => state.isShowing);
+    const text = useStore((state) => state.text);
 
     return (
         <>

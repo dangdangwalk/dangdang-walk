@@ -1,7 +1,7 @@
-import { useToastStore } from '@/store/toastStore';
+import { useStore } from '@/store';
 
 export default function useToast() {
-    const show = useToastStore((state) => state.show);
+    const show = useStore((state) => state.show);
 
     return { show };
 }
