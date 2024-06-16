@@ -73,7 +73,6 @@ export const createCropSlice: StateCreator<CropState> = (set) => ({
     setCropPrevImgUrl: (cropPrevImgUrl: string) => set({ cropPrevImgUrl }),
     setDogProfileImgUrl: (url: string) => set({ dogProfileImgUrl: url }),
     onSelectFileChange: (e: ChangeEvent<HTMLInputElement>) => {
-        const { cropError } = useCropStore.getState();
         const files = e.target.files?.[0];
 
         if (!files) return;
@@ -85,14 +84,16 @@ export const createCropSlice: StateCreator<CropState> = (set) => ({
             imageElement.src = imageUrl;
 
             imageElement.addEventListener('load', (e) => {
-                if (cropError) set({ cropError: false });
-                const { naturalWidth, naturalHeight } = e.currentTarget as HTMLImageElement;
-                if (naturalWidth < MIN_DIMENSION || naturalHeight < MIN_DIMENSION) {
-                    set({ crop: undefined, cropError: true, cropperToggle: false });
-                    return;
-                } else {
-                    set({ cropPrevImgUrl: imageUrl, cropperToggle: true });
-                }
+                set((state) => {
+                    const cropError = state.cropError;
+                    if (cropError) return { cropError: false };
+                    const { naturalWidth, naturalHeight } = e.currentTarget as HTMLImageElement;
+                    if (naturalWidth < MIN_DIMENSION || naturalHeight < MIN_DIMENSION) {
+                        return { crop: undefined, cropError: true, cropperToggle: false };
+                    } else {
+                        return { cropPrevImgUrl: imageUrl, cropperToggle: true };
+                    }
+                });
             });
         });
 
