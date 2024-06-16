@@ -1,11 +1,11 @@
-import { deleteDog, fetchDogs, createDog, updateDog } from '@/api/dog';
+import { createDog, deleteDog, fetchDogs, updateDog } from '@/api/dog';
 import queryClient from '@/api/queryClient';
 import { uploadImage } from '@/api/upload';
+import { FIFTY_MIN, ONE_HOUR, queryKeys } from '@/constants';
+import { Dog } from '@/models/dog';
+import { useStore } from '@/store';
 import { UseMutationCustomOptions } from '@/types/common';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { FIFTY_MIN, ONE_HOUR, queryKeys } from '@/constants';
-import { useAuthStore } from '@/store/authStore';
-import { Dog } from '@/models/dog';
 
 const useCreateDog = (mutationOptions?: UseMutationCustomOptions) => {
     return useMutation({
@@ -18,7 +18,7 @@ const useCreateDog = (mutationOptions?: UseMutationCustomOptions) => {
 };
 
 const useFetchDogs = () => {
-    const { isSignedIn } = useAuthStore();
+    const isSignedIn = useStore((state) => state.isSignedIn);
     return useQuery<Dog[]>({
         queryKey: [queryKeys.DOGS],
         queryFn: fetchDogs,

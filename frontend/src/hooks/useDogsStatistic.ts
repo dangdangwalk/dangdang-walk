@@ -1,7 +1,7 @@
 import { fetchDogStatistic } from '@/api/dog';
 import { queryKeys } from '@/constants';
 import { DogStatistic } from '@/models/dog';
-import { useAuthStore } from '@/store/authStore';
+import { useStore } from '@/store';
 import { useQuery } from '@tanstack/react-query';
 
 const defaultDogs: DogStatistic[] = [
@@ -24,7 +24,7 @@ const defaultDogs: DogStatistic[] = [
 ];
 const MINUTE = 1000 * 60;
 const useDogsStatistic = () => {
-    const { isSignedIn } = useAuthStore();
+    const isSignedIn = useStore((state) => state.isSignedIn);
     const { data, isPending } = useQuery({
         queryKey: [queryKeys.DOGS, queryKeys.DOG_STATISTICS],
         queryFn: fetchDogStatistic,

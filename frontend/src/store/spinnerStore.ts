@@ -1,12 +1,12 @@
-import { create } from 'zustand';
+import { StateCreator } from 'zustand';
 
-interface State {
+export interface State {
     spinnerCount: number;
     spinnerAdd: () => void;
     spinnerRemove: () => void;
 }
 
-export const useSpinnerStore = create<State>((set) => ({
+export const createSpinnerSlice: StateCreator<State> = (set) => ({
     spinnerCount: 0,
 
     spinnerAdd: () => {
@@ -30,4 +30,4 @@ export const useSpinnerStore = create<State>((set) => ({
             };
         });
     },
-}));
+});

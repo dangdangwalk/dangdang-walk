@@ -3,14 +3,14 @@ import {
     SignInResponse,
     refreshAccessToken,
     requestDeactivate,
+    requestProfile,
     requestSignIn,
     requestSignOut,
-    requestProfile,
     requestSignUp,
 } from '@/api/auth';
 import queryClient from '@/api/queryClient';
-import { ONE_DAY_IN_MS, FIFTY_MIN, ONE_HOUR, TEN_TO_A_DAY, queryKeys, storageKeys } from '@/constants';
-import { useAuthStore } from '@/store/authStore';
+import { FIFTY_MIN, ONE_DAY_IN_MS, ONE_HOUR, TEN_TO_A_DAY, queryKeys, storageKeys } from '@/constants';
+import { useStore } from '@/store';
 import { UseMutationCustomOptions, UseQueryCustomOptions } from '@/types/common';
 import { getStorage, removeStorage } from '@/utils/storage';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -18,7 +18,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const useSignIn = (mutationOptions?: UseMutationCustomOptions) => {
-    const { storeSignIn } = useAuthStore();
+    const storeSignIn = useStore((state) => state.storeSignIn);
     const navigate = useNavigate();
     return useMutation({
         mutationFn: requestSignIn,
@@ -41,7 +41,7 @@ const useSignIn = (mutationOptions?: UseMutationCustomOptions) => {
 };
 
 const useSignUp = (mutationOptions?: UseMutationCustomOptions) => {
-    const { storeSignIn } = useAuthStore();
+    const storeSignIn = useStore((state) => state.storeSignIn);
     return useMutation({
         mutationFn: requestSignUp,
         onSuccess: ({ accessToken }: SignInResponse) => {
@@ -55,7 +55,7 @@ const useSignUp = (mutationOptions?: UseMutationCustomOptions) => {
 };
 
 const useGetRefreshToken = () => {
-    const { storeSignIn } = useAuthStore();
+    const storeSignIn = useStore((state) => state.storeSignIn);
     const { isSuccess, data, isLoading } = useQuery({
         queryKey: [queryKeys.GET_ACCESS_TOKEN],
         queryFn: refreshAccessToken,
@@ -75,7 +75,7 @@ const useGetRefreshToken = () => {
 };
 
 const useSignOut = (mutationOptions?: UseMutationCustomOptions) => {
-    const { storeSignOut } = useAuthStore();
+    const storeSignOut = useStore((state) => state.storeSignOut);
     return useMutation({
         mutationFn: requestSignOut,
         onSuccess: () => {
@@ -93,7 +93,7 @@ const useSignOut = (mutationOptions?: UseMutationCustomOptions) => {
 };
 
 const useDeactivate = (mutationOptions?: UseMutationCustomOptions) => {
-    const { storeSignOut } = useAuthStore();
+    const storeSignOut = useStore((state) => state.storeSignOut);
     return useMutation({
         mutationFn: requestDeactivate,
         onSuccess: () => {
@@ -109,7 +109,7 @@ const useDeactivate = (mutationOptions?: UseMutationCustomOptions) => {
 };
 
 const useGetProfile = (queryOptions?: UseQueryCustomOptions) => {
-    const { isSignedIn } = useAuthStore();
+    const isSignedIn = useStore((state) => state.isSignedIn);
     return useQuery({
         queryKey: [queryKeys.GET_PROFILE],
         queryFn: requestProfile,

@@ -22,7 +22,7 @@ import WalkInfo from '@/components/walk/WalkInfo';
 import useToast from '@/hooks/useToast';
 import { WalkingDog } from '@/models/dog';
 import { Position } from '@/models/location';
-import { useSpinnerStore } from '@/store/spinnerStore';
+import { useStore } from '@/store';
 import { getFileName } from '@/utils/url';
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -32,8 +32,8 @@ export default function CreateForm() {
     const location = useLocation();
     const { show: showToast } = useToast();
 
-    const addSpinner = useSpinnerStore((state) => state.spinnerAdd);
-    const removeSpinner = useSpinnerStore((state) => state.spinnerRemove);
+    const addSpinner = useStore((state) => state.spinnerAdd);
+    const removeSpinner = useStore((state) => state.spinnerRemove);
 
     const [openModal, setOpenModal] = useState(false);
     const [imageFileNames, setImageFileNames] = useState<Array<ImageFileName>>([]);

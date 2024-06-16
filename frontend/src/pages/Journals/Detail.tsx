@@ -23,7 +23,7 @@ import PhotoSection from '@/components/journals/PhotoSection';
 import Map from '@/components/walk/Map';
 import WalkInfo from '@/components/walk/WalkInfo';
 import useToast from '@/hooks/useToast';
-import { useSpinnerStore } from '@/store/spinnerStore';
+import { useStore } from '@/store';
 import { getFileName } from '@/utils/url';
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import { useLoaderData, useLocation, useNavigate } from 'react-router-dom';
@@ -37,8 +37,8 @@ export default function Detail() {
     const location = useLocation();
     const { show: showToast } = useToast();
 
-    const addSpinner = useSpinnerStore((state) => state.spinnerAdd);
-    const removeSpinner = useSpinnerStore((state) => state.spinnerRemove);
+    const addSpinner = useStore((state) => state.spinnerAdd);
+    const removeSpinner = useStore((state) => state.spinnerRemove);
 
     const [openModal, setOpenModal] = useState(false);
     const [isBottomsheetOpen, setIsBottomsheetOpen] = useState(false);

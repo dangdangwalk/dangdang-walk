@@ -1,26 +1,25 @@
-import TopBar from '@/components/commons/Topbar';
-import { getStorage } from '@/utils/storage';
-import React, { useMemo, useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { getUploadUrl } from '@/api/upload';
 import TopBack from '@/assets/icons/ic-arrow-left.svg';
+import Cancel from '@/assets/icons/ic-cancel.svg';
+import CancelRegModal from '@/components/CancelRegModal';
+import CropperModal from '@/components/CropperModal';
 import { Button } from '@/components/commons/Button';
 import { Divider } from '@/components/commons/Divider';
-import Cancel from '@/assets/icons/ic-cancel.svg';
+import TopBar from '@/components/commons/Topbar';
 import { storageKeys } from '@/constants';
 import { useAuth } from '@/hooks/useAuth';
-import 'react-image-crop/dist/ReactCrop.css';
-import CropperModal from '@/components/CropperModal';
 import { uploadImg, useDog } from '@/hooks/useDog';
-import { dataURLtoFile } from '@/utils/dataUrlToFile';
-import { getUploadUrl } from '@/api/upload';
-import CancelRegModal from '@/components/CancelRegModal';
-import { useCropStore } from '@/store/cropStore';
-import { useSpinnerStore } from '@/store/spinnerStore';
 import { DogCreateForm } from '@/models/dog';
 import Agreements from '@/pages/Join/Agreements';
-import PetOwner from '@/pages/Join/PetOwner';
 import DogBasicInfo from '@/pages/Join/DogBasicInfo';
 import DogDetailInfo from '@/pages/Join/DogDetailInfo';
+import PetOwner from '@/pages/Join/PetOwner';
+import { useStore } from '@/store';
+import { dataURLtoFile } from '@/utils/dataUrlToFile';
+import { getStorage } from '@/utils/storage';
+import { useMemo, useRef, useState } from 'react';
+import 'react-image-crop/dist/ReactCrop.css';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function SignUp() {
     const navigate = useNavigate();
@@ -30,8 +29,11 @@ export default function SignUp() {
     const currentPage = location.state;
     const { signUp } = useAuth();
     const { createDog } = useDog();
-    const { spinnerAdd, spinnerRemove } = useSpinnerStore();
-    const { cropError, dogProfileImgUrl, setDogProfileImgUrl } = useCropStore();
+    const spinnerAdd = useStore((state) => state.spinnerAdd);
+    const spinnerRemove = useStore((state) => state.spinnerRemove);
+    const cropError = useStore((state) => state.cropError);
+    const dogProfileImgUrl = useStore((state) => state.dogProfileImgUrl);
+    const setDogProfileImgUrl = useStore((state) => state.setDogProfileImgUrl);
     const backToPathname = getStorage(storageKeys.REDIRECT_URI) || '';
 
     const fileInputRef = useRef(null);

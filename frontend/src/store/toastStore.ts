@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { StateCreator } from 'zustand';
 
 const initialState: State = {
     isShowing: false,
@@ -6,7 +6,7 @@ const initialState: State = {
     timeoutID: null,
 };
 
-const useToastStore = create<StateAndActions>()((set) => ({
+const createToastSlice: StateCreator<StateAndActions> = (set) => ({
     ...initialState,
 
     show: (text, duration = 3000) => {
@@ -27,7 +27,7 @@ const useToastStore = create<StateAndActions>()((set) => ({
             return { timeoutID: newTimeoutId };
         });
     },
-}));
+});
 
 type Text = string;
 
@@ -41,6 +41,6 @@ interface Actions {
     show: (text: Text, duration?: number) => void;
 }
 
-interface StateAndActions extends State, Actions {}
+export interface StateAndActions extends State, Actions {}
 
-export { useToastStore };
+export { createToastSlice };

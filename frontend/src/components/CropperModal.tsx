@@ -9,14 +9,15 @@ import {
     ModalTitle,
 } from '@/components/commons/Modal';
 import { MIN_DIMENSION } from '@/constants/cropper';
-import { useCropStore } from '@/store/cropStore';
-import React, { MutableRefObject } from 'react';
+import { useStore } from '@/store';
+import { MutableRefObject } from 'react';
 
 interface Props {
     fileInputRef: MutableRefObject<HTMLInputElement | null>;
 }
 export default function CropperModal({ fileInputRef }: Props) {
-    const { setCrop, setCropError } = useCropStore();
+    const setCrop = useStore((state) => state.setCrop);
+    const setCropError = useStore((state) => state.setCropError);
     const handleChange = () => {
         fileInputRef.current?.click();
         setCropError(false);

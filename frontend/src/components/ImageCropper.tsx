@@ -2,25 +2,23 @@ import { Button } from '@/components/commons/Button';
 import TopBar from '@/components/commons/Topbar';
 import { storageKeys } from '@/constants';
 import { ASPECT_RATIO, MIN_DIMENSION } from '@/constants/cropper';
-import { useCropStore } from '@/store/cropStore';
-import { useSpinnerStore } from '@/store/spinnerStore';
+import { useStore } from '@/store';
 import setCanvasPreview from '@/utils/canvasPreview';
 import { setStorage } from '@/utils/storage';
-import React, { SyntheticEvent, useRef } from 'react';
+import { SyntheticEvent, useRef } from 'react';
 import ReactCrop, { centerCrop, convertToPixelCrop, makeAspectCrop } from 'react-image-crop';
 
 export default function ImageCropper() {
-    const {
-        crop,
-        setCrop,
-        cropperToggle,
-        setCropperToggle,
-        setDogProfileImgUrl,
-        cropPrevImgUrl,
-        setCropPrevImgUrl,
-        onSelectFileChange,
-    } = useCropStore();
-    const { spinnerAdd, spinnerRemove } = useSpinnerStore();
+    const crop = useStore((state) => state.crop);
+    const setCrop = useStore((state) => state.setCrop);
+    const cropperToggle = useStore((state) => state.cropperToggle);
+    const setCropperToggle = useStore((state) => state.setCropperToggle);
+    const setDogProfileImgUrl = useStore((state) => state.setDogProfileImgUrl);
+    const cropPrevImgUrl = useStore((state) => state.cropPrevImgUrl);
+    const setCropPrevImgUrl = useStore((state) => state.setCropPrevImgUrl);
+    const onSelectFileChange = useStore((state) => state.onSelectFileChange);
+    const spinnerAdd = useStore((state) => state.spinnerAdd);
+    const spinnerRemove = useStore((state) => state.spinnerRemove);
     const handleCrop = async () => {
         spinnerAdd();
         if (imgRef.current && previewCanvasRef.current && crop) {
