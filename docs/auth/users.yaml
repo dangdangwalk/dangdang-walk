@@ -64,7 +64,7 @@ patch:
               type: string
               description: 사용자 프로필 이미지 url
   responses:
-    "200":
+    "204":
       description: 회원 정보가 정상적으로 수정된 경우
     "401":
       description: Authorization header가 없거나 유효한 access token이 아닌 경우
