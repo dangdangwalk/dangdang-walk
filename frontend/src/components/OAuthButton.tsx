@@ -1,18 +1,17 @@
-import { setStorage } from '@/utils/storage';
-import React from 'react';
 import icGoogle from '@/assets/icons/ic-google.svg';
 import icKakao from '@/assets/icons/ic-kakao.svg';
 import icNaver from '@/assets/icons/ic-naver.svg';
-import { useLoginBottomSheetStateStore } from '@/store/loginBottomSheetStore';
-import { getAuthorizeCodeCallbackUrl } from '@/utils/oauth';
 import { storageKeys } from '@/constants';
+import { useStore } from '@/store';
+import { getAuthorizeCodeCallbackUrl } from '@/utils/oauth';
+import { setStorage } from '@/utils/storage';
 
 type Props = {
     provider: string;
     name: string;
 };
 const OAuthButton = ({ provider, name }: Props) => {
-    const { setLoginBottomSheetState } = useLoginBottomSheetStateStore();
+    const setLoginBottomSheetState = useStore((state) => state.setLoginBottomSheetState);
     const btnLogin = (provider: string) => {
         switch (provider) {
             case 'google':
