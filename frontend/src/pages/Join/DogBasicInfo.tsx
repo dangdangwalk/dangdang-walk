@@ -1,10 +1,10 @@
-import React, { MutableRefObject, useState } from 'react';
 import SelectPhoto from '@/assets/icons/ic-select-photo.svg';
-import { Divider } from '@/components/commons/Divider';
 import BreedSearch from '@/components/BreedSearch';
-import { useCropStore } from '@/store/cropStore';
 import ImageCropper from '@/components/ImageCropper';
+import { Divider } from '@/components/commons/Divider';
 import { Dog } from '@/models/dog';
+import { useStore } from '@/store';
+import { MutableRefObject, useState } from 'react';
 
 type DogBasicInfoProps = Pick<Dog, 'name' | 'breed'>;
 interface Props {
@@ -14,7 +14,8 @@ interface Props {
 }
 
 export default function DogBasicInfo({ data, fileInputRef, handleSetData }: Props) {
-    const { dogProfileImgUrl, onSelectFileChange } = useCropStore();
+    const dogProfileImgUrl = useStore((state) => state.dogProfileImgUrl);
+    const onSelectFileChange = useStore((state) => state.onSelectFileChange);
     const [isOpen, setIsOpen] = useState(false);
     return (
         <>
