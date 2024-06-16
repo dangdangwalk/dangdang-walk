@@ -1,4 +1,4 @@
-import { useRef, useState, MouseEvent, TouchEvent, ChangeEvent } from 'react';
+import { useState, ChangeEvent } from 'react';
 import Pause from '@/assets/icons/ic-pause.svg';
 import Camera from '@/assets/icons/ic-camera.svg';
 import Poop from '@/assets/icons/ic-poop.svg';
@@ -12,46 +12,31 @@ const LONG_CLICK_TIME = 1000;
 //refactor onStop 네이밍 TODO
 export default function WalkNavbar({ onOpen, onStop, onChange }: WalkNavbarProps) {
     const [isLongPress, setIsLongPress] = useState(false);
-    const timeoutRef = useRef<number | null>(null);
+    const [pressTimer, setPressTimer] = useState<NodeJS.Timeout | null>(null);
+    const [isPressed, setIsPressed] = useState<boolean>(false);
 
-    const handleMouseDown = (e: MouseEvent<HTMLElement>) => {
-        e.preventDefault();
-        e.stopPropagation();
-
-        timeoutRef.current = window.setTimeout(() => {
-            setIsLongPress(true);
-        }, LONG_CLICK_TIME);
+    const handleLongPress = () => {
+        setIsLongPress(true);
+        onStop(true);
     };
 
-    const handleMouseUp = () => {
-        if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current);
-            if (isLongPress) {
-                onStop(true);
-            } else {
-                onStop(false);
-            }
+    const startPressTimer = () => {
+        setIsPressed(true);
+        setPressTimer(setTimeout(handleLongPress, LONG_CLICK_TIME));
+    };
+
+    const cancelPressTimer = () => {
+        if (pressTimer) {
+            clearTimeout(pressTimer);
+            setPressTimer(null);
         }
-        timeoutRef.current = null;
         setIsLongPress(false);
     };
-
-    const handleTouchStart = (e: TouchEvent) => {
-        timeoutRef.current = window.setTimeout(() => {
-            setIsLongPress(true);
-        }, LONG_CLICK_TIME);
-    };
-
-    const handleTouchEnd = () => {
-        if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current);
-            if (isLongPress) {
-                onStop(true);
-            } else {
-                onStop(false);
-            }
+    const handleSingleClick = () => {
+        if (!isLongPress) {
+            onStop(false);
         }
-        timeoutRef.current = null;
+        setIsPressed(false);
         setIsLongPress(false);
     };
 
@@ -61,14 +46,14 @@ export default function WalkNavbar({ onOpen, onStop, onChange }: WalkNavbarProps
                 <img src={Poop} alt="배소변 버튼" />
             </button>
             <button
-                onMouseDown={(e) => {
-                    handleMouseDown(e);
-                }}
-                onMouseUp={handleMouseUp}
-                onTouchStart={(e) => {
-                    handleTouchStart(e);
-                }}
-                onTouchEnd={handleTouchEnd}
+                onMouseDown={startPressTimer}
+                onMouseUp={cancelPressTimer}
+                onMouseLeave={cancelPressTimer}
+                onTouchStart={startPressTimer}
+                onTouchEnd={cancelPressTimer}
+                onTouchCancel={cancelPressTimer}
+                onClick={handleSingleClick}
+                className={`transition-transform duration-1000 ease-out ${isPressed ? 'scale-125' : 'scale-100'}`}
             >
                 <img src={Pause} alt="정지 버튼" />
             </button>
