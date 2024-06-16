@@ -15,7 +15,6 @@ import DogBasicInfo from '@/pages/Join/DogBasicInfo';
 import DogDetailInfo from '@/pages/Join/DogDetailInfo';
 import PetOwner from '@/pages/Join/PetOwner';
 import { useStore } from '@/store';
-import { useSpinnerStore } from '@/store/spinnerStore';
 import { dataURLtoFile } from '@/utils/dataUrlToFile';
 import { getStorage } from '@/utils/storage';
 import { useMemo, useRef, useState } from 'react';
@@ -30,7 +29,8 @@ export default function SignUp() {
     const currentPage = location.state;
     const { signUp } = useAuth();
     const { createDog } = useDog();
-    const { spinnerAdd, spinnerRemove } = useSpinnerStore();
+    const spinnerAdd = useStore((state) => state.spinnerAdd);
+    const spinnerRemove = useStore((state) => state.spinnerRemove);
     const cropError = useStore((state) => state.cropError);
     const dogProfileImgUrl = useStore((state) => state.dogProfileImgUrl);
     const setDogProfileImgUrl = useStore((state) => state.setDogProfileImgUrl);

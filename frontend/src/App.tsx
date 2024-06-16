@@ -1,13 +1,13 @@
-import { Toast } from '@/components/commons/Toast';
-import { Outlet } from 'react-router-dom';
-import { useSpinnerStore } from '@/store/spinnerStore';
 import Spinner from '@/components/commons/Spinner';
+import { Toast } from '@/components/commons/Toast';
 import { useAuth } from '@/hooks/useAuth';
+import { useStore } from '@/store';
 import { useEffect } from 'react';
+import { Outlet } from 'react-router-dom';
 
 function App() {
     useAuth();
-    const { spinnerCount } = useSpinnerStore();
+    const spinnerCount = useStore((state) => state.spinnerCount);
 
     useEffect(() => {
         window.oncontextmenu = function (event) {

@@ -3,7 +3,6 @@ import TopBar from '@/components/commons/Topbar';
 import { storageKeys } from '@/constants';
 import { ASPECT_RATIO, MIN_DIMENSION } from '@/constants/cropper';
 import { useStore } from '@/store';
-import { useSpinnerStore } from '@/store/spinnerStore';
 import setCanvasPreview from '@/utils/canvasPreview';
 import { setStorage } from '@/utils/storage';
 import { SyntheticEvent, useRef } from 'react';
@@ -18,7 +17,8 @@ export default function ImageCropper() {
     const cropPrevImgUrl = useStore((state) => state.cropPrevImgUrl);
     const setCropPrevImgUrl = useStore((state) => state.setCropPrevImgUrl);
     const onSelectFileChange = useStore((state) => state.onSelectFileChange);
-    const { spinnerAdd, spinnerRemove } = useSpinnerStore();
+    const spinnerAdd = useStore((state) => state.spinnerAdd);
+    const spinnerRemove = useStore((state) => state.spinnerRemove);
     const handleCrop = async () => {
         spinnerAdd();
         if (imgRef.current && previewCanvasRef.current && crop) {

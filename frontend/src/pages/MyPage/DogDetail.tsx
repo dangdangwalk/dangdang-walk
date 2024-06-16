@@ -18,7 +18,6 @@ import useToast from '@/hooks/useToast';
 import { Dog, DogCreateForm } from '@/models/dog';
 import { maxLengthCheck } from '@/pages/Join/DogDetailInfo';
 import { useStore } from '@/store';
-import { useSpinnerStore } from '@/store/spinnerStore';
 import { dataURLtoFile } from '@/utils/dataUrlToFile';
 import { valueWithUnit } from '@/utils/distance';
 import { secondsToTimeFormat } from '@/utils/time';
@@ -32,7 +31,8 @@ interface Props {
 export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfileOpen }: Props) {
     const { updateDog } = useDog();
     const { show } = useToast();
-    const { spinnerAdd, spinnerRemove } = useSpinnerStore();
+    const spinnerAdd = useStore((state) => state.spinnerAdd);
+    const spinnerRemove = useStore((state) => state.spinnerRemove);
     const onSelectFileChange = useStore((state) => state.onSelectFileChange);
     const dogProfileImgUrl = useStore((state) => state.dogProfileImgUrl);
     const setDogProfileImgUrl = useStore((state) => state.setDogProfileImgUrl);

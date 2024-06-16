@@ -1,27 +1,27 @@
-import WalkInfo from '@/components/walk/WalkInfo';
-import Map from '@/components/walk/Map';
-import WalkNavbar from '@/components/walk/WalkNavbar';
-import WalkHeader from '@/components/walk/WalkHeader';
-import { useEffect, useState } from 'react';
-import useGeolocation from '@/hooks/useGeolocation';
 import BottomSheet from '@/components/commons/BottomSheet';
-import useWalkingDogs from '@/hooks/useWalkingDogs';
-import useStopWatch from '@/hooks/useStopWatch';
+import Map from '@/components/walk/Map';
+import WalkHeader from '@/components/walk/WalkHeader';
+import WalkInfo from '@/components/walk/WalkInfo';
+import WalkNavbar from '@/components/walk/WalkNavbar';
 import { DEFAULT_WALK_MET, DEFAULT_WEIGHT } from '@/constants';
+import useGeolocation from '@/hooks/useGeolocation';
+import useStopWatch from '@/hooks/useStopWatch';
+import useWalkingDogs from '@/hooks/useWalkingDogs';
+import { useEffect, useState } from 'react';
 
+import { requestWalkStart, requestWalkStop } from '@/api/walk';
 import DogFecesAndUrineCheckList from '@/components/walk/DogFecesAndUrineCheckList';
 import StopToast from '@/components/walk/StopToast';
-import { useLocation, useNavigate } from 'react-router-dom';
-import useToast from '@/hooks/useToast';
+import { storageKeys } from '@/constants';
+import useImageUpload from '@/hooks/useImageUpload';
 import useStopAlert from '@/hooks/useStopAlert';
-import { getStorage, removeStorage, setStorage } from '@/utils/storage';
+import useToast from '@/hooks/useToast';
 import { WalkingDog } from '@/models/dog';
 import { Position } from '@/models/location';
-import { storageKeys } from '@/constants';
-import { requestWalkStart, requestWalkStop } from '@/api/walk';
-import useImageUpload from '@/hooks/useImageUpload';
-import { useSpinnerStore } from '@/store/spinnerStore';
+import { useStore } from '@/store';
 import { setFlagValueByKey, toggleCheckById } from '@/utils/check';
+import { getStorage, removeStorage, setStorage } from '@/utils/storage';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export interface DogWalkData {
     dogs: WalkingDog[];
@@ -46,7 +46,8 @@ export default function Walk() {
     const { uploadedImageUrls: photoUrls, handleFileChange, setUploadedImageUrls: setPhotoUrls } = useImageUpload();
     const { showStopAlert, isShowStopAlert } = useStopAlert();
     const { show: showToast } = useToast();
-    const { spinnerAdd, spinnerRemove } = useSpinnerStore();
+    const spinnerAdd = useStore((state) => state.spinnerAdd);
+    const spinnerRemove = useStore((state) => state.spinnerRemove);
 
     const handleBottomSheet = () => {
         setIsDogBottomSheetOpen(!isDogBottomSheetOpen);
