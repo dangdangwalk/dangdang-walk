@@ -8,7 +8,7 @@ interface WalkNavbarProps {
     onStop: (isStop: boolean) => void;
     onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
-const LONG_CLICK_TIME = 500;
+const LONG_CLICK_TIME = 1000;
 export default function WalkNavbar({ onOpen, onStop, onChange }: WalkNavbarProps) {
     const [isLongPress, setIsLongPress] = useState(false);
     const [pressTimer, setPressTimer] = useState<NodeJS.Timeout | null>(null);
