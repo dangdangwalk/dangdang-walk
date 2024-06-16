@@ -8,8 +8,7 @@ interface WalkNavbarProps {
     onStop: (isStop: boolean) => void;
     onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
-const LONG_CLICK_TIME = 1000;
-//refactor onStop 네이밍 TODO
+const LONG_CLICK_TIME = 500;
 export default function WalkNavbar({ onOpen, onStop, onChange }: WalkNavbarProps) {
     const [isLongPress, setIsLongPress] = useState(false);
     const [pressTimer, setPressTimer] = useState<NodeJS.Timeout | null>(null);
@@ -20,7 +19,8 @@ export default function WalkNavbar({ onOpen, onStop, onChange }: WalkNavbarProps
         onStop(true);
     };
 
-    const startPressTimer = () => {
+    const startPressTimer = (event: React.MouseEvent | React.TouchEvent) => {
+        event.preventDefault();
         setIsPressed(true);
         setPressTimer(setTimeout(handleLongPress, LONG_CLICK_TIME));
     };
@@ -39,6 +39,9 @@ export default function WalkNavbar({ onOpen, onStop, onChange }: WalkNavbarProps
         setIsPressed(false);
         setIsLongPress(false);
     };
+    const preventContextMenu = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        event.preventDefault();
+    };
 
     return (
         <nav className="absolute bottom-0 left-0 z-40 flex w-full items-center justify-between bg-white px-[60px] py-3">
@@ -53,6 +56,7 @@ export default function WalkNavbar({ onOpen, onStop, onChange }: WalkNavbarProps
                 onTouchEnd={cancelPressTimer}
                 onTouchCancel={cancelPressTimer}
                 onClick={handleSingleClick}
+                onContextMenu={preventContextMenu}
                 className={`transition-transform duration-1000 ease-out ${isPressed ? 'scale-125' : 'scale-100'}`}
             >
                 <img src={Pause} alt="정지 버튼" />
