@@ -13,7 +13,7 @@ function Navbar() {
 
     return (
         <div
-            className={`fixed bottom-0 left-0 z-20 w-full border-t border-neutral-200 bg-white px-5`}
+            className={`fixed bottom-0 z-20 w-full max-w-screen-sm border-t border-neutral-200 bg-white px-5`}
             style={{ height: `${NAV_HEIGHT}` }}
         >
             <div className="flex items-center justify-around">
