@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from 'react';
+import { useState, ChangeEvent, useEffect } from 'react';
 import Pause from '@/assets/icons/ic-pause.svg';
 import Camera from '@/assets/icons/ic-camera.svg';
 import Poop from '@/assets/icons/ic-poop.svg';
@@ -9,10 +9,20 @@ interface WalkNavbarProps {
     onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 const LONG_CLICK_TIME = 1000;
+const LEFT_CLICK = 0;
+
 export default function WalkNavbar({ onOpen, onStop, onChange }: WalkNavbarProps) {
     const [isLongPress, setIsLongPress] = useState(false);
     const [pressTimer, setPressTimer] = useState<NodeJS.Timeout | null>(null);
     const [isPressed, setIsPressed] = useState<boolean>(false);
+    const [isMobile, setIsMobile] = useState<boolean>(false);
+
+    useEffect(() => {
+        const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera;
+        if (/android/i.test(userAgent) || /iPad|iPhone|iPod/.test(userAgent)) {
+            setIsMobile(true);
+        }
+    }, []);
 
     const handleLongPress = () => {
         setIsLongPress(true);
@@ -20,9 +30,14 @@ export default function WalkNavbar({ onOpen, onStop, onChange }: WalkNavbarProps
     };
 
     const startPressTimer = (event: React.MouseEvent | React.TouchEvent) => {
-        event.preventDefault();
+        if ('button' in event && event.button !== LEFT_CLICK) {
+            return;
+        }
+
         setIsPressed(true);
-        setPressTimer(setTimeout(handleLongPress, LONG_CLICK_TIME));
+        if (!isMobile) {
+            setPressTimer(setTimeout(handleLongPress, LONG_CLICK_TIME));
+        }
     };
 
     const cancelPressTimer = () => {
@@ -39,8 +54,12 @@ export default function WalkNavbar({ onOpen, onStop, onChange }: WalkNavbarProps
         setIsPressed(false);
         setIsLongPress(false);
     };
-    const preventContextMenu = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        event.preventDefault();
+    const handleContextMenu = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        if (isMobile) {
+            handleLongPress();
+        } else {
+            event.preventDefault();
+        }
     };
 
     return (
@@ -56,7 +75,7 @@ export default function WalkNavbar({ onOpen, onStop, onChange }: WalkNavbarProps
                 onTouchEnd={cancelPressTimer}
                 onTouchCancel={cancelPressTimer}
                 onClick={handleSingleClick}
-                onContextMenu={preventContextMenu}
+                onContextMenu={handleContextMenu}
                 className={`transition-transform duration-1000 ease-out ${isPressed ? 'scale-125' : 'scale-100'}`}
             >
                 <img src={Pause} alt="정지 버튼" />
