@@ -15,7 +15,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import App from './App';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import SignUp from '@/pages/Join';
+import SignUp from '@/pages/SignUp';
 import AuthLayout from '@/components/AuthLayout';
 const router = createBrowserRouter([
     {

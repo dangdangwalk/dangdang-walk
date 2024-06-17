@@ -1,22 +1,20 @@
 import SelectPhoto from '@/assets/icons/ic-select-photo.svg';
-import BreedSearch from '@/components/BreedSearch';
-import ImageCropper from '@/components/ImageCropper';
 import { Divider } from '@/components/commons/Divider';
+import React, { MutableRefObject } from 'react';
 import { Dog } from '@/models/dog';
 import { useStore } from '@/store';
-import { MutableRefObject, useState } from 'react';
 
 type DogBasicInfoProps = Pick<Dog, 'name' | 'breed'>;
 interface Props {
     data: DogBasicInfoProps;
     fileInputRef: MutableRefObject<null>;
     handleSetData: (key: string, value: string) => void;
+    setIsOpen: (state: boolean) => void;
 }
 
-export default function DogBasicInfo({ data, fileInputRef, handleSetData }: Props) {
+export default function DogBasicInfo({ data, fileInputRef, handleSetData, setIsOpen }: Props) {
     const dogProfileImgUrl = useStore((state) => state.dogProfileImgUrl);
     const onSelectFileChange = useStore((state) => state.onSelectFileChange);
-    const [isOpen, setIsOpen] = useState(false);
     return (
         <>
             <div className="flex flex-col bg-white">
@@ -68,8 +66,6 @@ export default function DogBasicInfo({ data, fileInputRef, handleSetData }: Prop
                     </div>
                 </div>
             </div>
-            <BreedSearch isOpen={isOpen} setIsOpen={setIsOpen} handleSetData={handleSetData} />
-            <ImageCropper />
         </>
     );
 }

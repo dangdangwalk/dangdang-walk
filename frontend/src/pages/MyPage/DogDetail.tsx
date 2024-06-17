@@ -16,7 +16,7 @@ import { MaleIcon } from '@/components/icons/MaleIcon';
 import { uploadImg, useDog } from '@/hooks/useDog';
 import useToast from '@/hooks/useToast';
 import { Dog, DogCreateForm } from '@/models/dog';
-import { maxLengthCheck } from '@/pages/Join/DogDetailInfo';
+import { maxLengthCheck } from '@/pages/SignUp/DogDetailInfo';
 import { useStore } from '@/store';
 import { dataURLtoFile } from '@/utils/dataUrlToFile';
 import { valueWithUnit } from '@/utils/distance';
