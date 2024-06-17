@@ -17,3 +17,7 @@ export const MALFORMED_REFRESH_TOKEN = 'malformed_refresh_token';
 
 export const VALID_PROVIDER_KAKAO = 'kakao';
 export const INVALID_PROVIDER = 'invalid_provider';
+
+export const AUTHORIZE_CODE = 'authorizeCode';
+export const OAUTH_ACCESS_TOKEN = 'oauth_access_token';
+export const OAUTH_REFRESH_TOKEN = 'oauth_refresh_token';
