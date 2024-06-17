@@ -18,12 +18,9 @@ import { NaverService } from '../src/auth/oauth/naver.service';
 import { DogWalkDay } from '../src/dog-walk-day/dog-walk-day.entity';
 import { Dogs } from '../src/dogs/dogs.entity';
 import { Excrements } from '../src/excrements/excrements.entity';
-import { mockDog, mockDog2 } from '../src/fixtures/dogs.fixture';
-import { mockExcrements, mockJournal, mockJournalDogs, mockJournalPhotos } from '../src/fixtures/journals.fixture';
-import { mockJournals, mockJournalsDog } from '../src/fixtures/statistics.fixture';
-import { mockUser } from '../src/fixtures/users.fixture';
 import { JournalPhotos } from '../src/journal-photos/journal-photos.entity';
 import { Journals } from '../src/journals/journals.entity';
+import { CreateExcrementsInfo } from '../src/journals/types/create-journal-data.type';
 import { JournalsDogs } from '../src/journals-dogs/journals-dogs.entity';
 import { MockS3Service } from '../src/s3/__mocks__/s3.service';
 import { S3Service } from '../src/s3/s3.service';
@@ -104,8 +101,13 @@ export const testUnauthorizedAccess = async (requestName: string, method: AllMet
     );
 };
 
-export const insertMockUser = async () => {
-    await dataSource.getRepository(Users).save(mockUser);
+interface InsertMockUsersParams {
+    mockUsers: Users | Users[];
+}
+
+// mockUsers 생성
+export const insertMockUsers = async ({ mockUsers }: InsertMockUsersParams) => {
+    await dataSource.getRepository(Users).insert(mockUsers);
 };
 
 export const clearUsers = async () => {
@@ -114,13 +116,19 @@ export const clearUsers = async () => {
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 1;');
 };
 
-export const insertMockDogs = async () => {
-    const dogsRepository = dataSource.getRepository(Dogs);
-    const usersDogsRepository = dataSource.getRepository(UsersDogs);
-    await dogsRepository.save(mockDog);
-    await usersDogsRepository.save({ userId: 1, dogId: mockDog.id });
-    await dogsRepository.save(mockDog2);
-    await usersDogsRepository.save({ userId: 1, dogId: mockDog2.id });
+interface InsertMockDogsParams {
+    mockDogs: Dogs | Dogs[];
+    userId: number;
+}
+
+// userId에게 mockDogs를 생성
+export const insertMockDogs = async ({ mockDogs, userId }: InsertMockDogsParams) => {
+    mockDogs = Array.isArray(mockDogs) ? mockDogs : [mockDogs];
+
+    const mockUsersDog = mockDogs.map((dog) => ({ userId, dogId: dog.id }));
+
+    await dataSource.getRepository(Dogs).save(mockDogs);
+    await dataSource.getRepository(UsersDogs).save(mockUsersDog);
 };
 
 export const clearDogs = async () => {
@@ -132,7 +140,17 @@ export const clearDogs = async () => {
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 1;');
 };
 
-export const insertMockJournals = async () => {
+interface InsertMockJournalsParams {
+    mockJournals: Journals | Journals[];
+    dogId: number;
+}
+
+// dogId에게 mockJournals 생성
+export const insertMockJournals = async ({ mockJournals, dogId }: InsertMockJournalsParams) => {
+    mockJournals = Array.isArray(mockJournals) ? mockJournals : [mockJournals];
+
+    const mockJournalsDog = mockJournals.map((journal) => ({ dogId, journalId: journal.id }));
+
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 0;');
     await dataSource.getRepository(Journals).save(mockJournals);
     await dataSource.getRepository(JournalsDogs).save(mockJournalsDog);
@@ -146,19 +164,42 @@ export const clearJournals = async () => {
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 1;');
 };
 
-export const insertMockJournal = async () => {
+interface InsertMockJournalWithPhotosAndExcrementsParams {
+    mockJournal: Journals;
+    dogIds: number | number[];
+    photoUrls: string | string[];
+    excrements: CreateExcrementsInfo | CreateExcrementsInfo[];
+}
+
+// dogIds에게 mockJournal 생성
+export const insertMockJournalWithPhotosAndExcrements = async ({
+    mockJournal,
+    dogIds,
+    photoUrls,
+    excrements,
+}: InsertMockJournalWithPhotosAndExcrementsParams) => {
+    dogIds = Array.isArray(dogIds) ? dogIds : [dogIds];
+    photoUrls = Array.isArray(photoUrls) ? photoUrls : [photoUrls];
+    excrements = Array.isArray(excrements) ? excrements : [excrements];
+
+    const mockJournalDogs = dogIds.map((dogId) => ({ dogId, journalId: mockJournal.id }));
+    const mockJournalPhotos = photoUrls.map((photoUrl) => ({ photoUrl, journalId: mockJournal.id }));
+    const mockExcrements = excrements.map((excrements) => ({ ...excrements, journalId: mockJournal.id }));
+
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 0;');
     await dataSource.getRepository(Journals).save(mockJournal);
     await dataSource.getRepository(JournalsDogs).save(mockJournalDogs);
     await dataSource.getRepository(JournalPhotos).save(mockJournalPhotos);
     await dataSource.getRepository(Excrements).save(mockExcrements);
-    await dataSource.getRepository(DogWalkDay).update({ id: In([1, 2]) }, { wed: 1 });
+    await dataSource.getRepository(DogWalkDay).update({ id: In(dogIds) }, { wed: 1 });
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 1;');
 };
 
-export const clearJournal = async () => {
+export const clearJournal = async ({ dogIds }: Pick<InsertMockJournalWithPhotosAndExcrementsParams, 'dogIds'>) => {
+    dogIds = Array.isArray(dogIds) ? dogIds : [dogIds];
+
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 0;');
-    await dataSource.getRepository(DogWalkDay).update({ id: In([1, 2]) }, { wed: 0 });
+    await dataSource.getRepository(DogWalkDay).update({ id: In(dogIds) }, { wed: 0 });
     await dataSource.getRepository(Excrements).clear();
     await dataSource.getRepository(JournalPhotos).clear();
     await dataSource.getRepository(JournalsDogs).clear();

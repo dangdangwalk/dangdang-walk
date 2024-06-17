@@ -12,9 +12,9 @@ import {
     clearUsers,
     closeTestApp,
     insertMockDogs,
-    insertMockJournal,
+    insertMockJournalWithPhotosAndExcrements,
     insertMockJournals,
-    insertMockUser,
+    insertMockUsers,
     setFakeDate,
     setupTestApp,
     testUnauthorizedAccess,
@@ -34,7 +34,7 @@ describe('JournalsController (e2e)', () => {
 
     beforeAll(async () => {
         ({ app, dataSource } = await setupTestApp());
-        await insertMockUser();
+        await insertMockUsers();
     });
 
     afterAll(async () => {
@@ -242,7 +242,7 @@ describe('JournalsController (e2e)', () => {
         context('사용자가 자신이 소유한 산책 일지의 상세 요청을 보내면', () => {
             beforeEach(async () => {
                 await insertMockDogs();
-                await insertMockJournal();
+                await insertMockJournalWithPhotosAndExcrements();
             });
 
             afterEach(async () => {
@@ -284,7 +284,7 @@ describe('JournalsController (e2e)', () => {
         context('사용자가 자신이 소유한 산책 일지의 정보 수정 요청을 보내면', () => {
             beforeEach(async () => {
                 await insertMockDogs();
-                await insertMockJournal();
+                await insertMockJournalWithPhotosAndExcrements();
             });
 
             afterEach(async () => {
@@ -334,7 +334,7 @@ describe('JournalsController (e2e)', () => {
         context('사용자가 자신이 소유한 산책 일지의 삭제 요청을 보내면', () => {
             beforeEach(async () => {
                 await insertMockDogs();
-                await insertMockJournal();
+                await insertMockJournalWithPhotosAndExcrements();
                 const fakeDate = new Date('2024-06-12T00:00:00Z');
                 setFakeDate(fakeDate);
             });

@@ -14,7 +14,7 @@ import {
     VALID_REFRESH_TOKEN_100_YEARS,
 } from './constants';
 
-import { clearUsers, closeTestApp, insertMockUser, setupTestApp, testUnauthorizedAccess } from './test-utils';
+import { clearUsers, closeTestApp, insertMockUsers, setupTestApp, testUnauthorizedAccess } from './test-utils';
 
 import { ROLE } from '../src/users/types/role.type';
 import { Users } from '../src/users/users.entity';
@@ -50,7 +50,7 @@ describe('AuthController (e2e)', () => {
 
         context('회원이 로그인 요청을 보내면', () => {
             beforeEach(async () => {
-                await insertMockUser();
+                await insertMockUsers();
             });
 
             afterEach(async () => {
@@ -146,7 +146,7 @@ describe('AuthController (e2e)', () => {
 
         context('회원이 회원가입 요청을 보내면', () => {
             beforeEach(async () => {
-                await insertMockUser();
+                await insertMockUsers();
             });
 
             afterEach(async () => {
@@ -212,7 +212,7 @@ describe('AuthController (e2e)', () => {
     describe('/auth/logout (POST)', () => {
         context('회원이 유효한 access token을 Authorization header에 담아 로그아웃 요청을 보내면', () => {
             beforeEach(async () => {
-                await insertMockUser();
+                await insertMockUsers();
             });
 
             afterEach(async () => {
@@ -234,7 +234,7 @@ describe('AuthController (e2e)', () => {
     describe('/auth/token (GET)', () => {
         context('회원이 유효한 refresh token을 cookie에 가지고 token 재발급 요청을 보내면', () => {
             beforeEach(async () => {
-                await insertMockUser();
+                await insertMockUsers();
             });
 
             afterEach(async () => {
@@ -289,7 +289,7 @@ describe('AuthController (e2e)', () => {
     describe('/auth/deactivate (DELETE)', () => {
         context('회원이 유효한 access token을 Authorization header에 담아 회원탈퇴 요청을 보내면', () => {
             beforeEach(async () => {
-                await insertMockUser();
+                await insertMockUsers();
             });
 
             afterEach(async () => {

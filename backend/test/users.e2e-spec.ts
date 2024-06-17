@@ -4,7 +4,7 @@ import { DataSource } from 'typeorm';
 
 import { VALID_ACCESS_TOKEN_100_YEARS, VALID_PROVIDER_KAKAO } from './constants';
 
-import { clearUsers, closeTestApp, insertMockUser, setupTestApp, testUnauthorizedAccess } from './test-utils';
+import { clearUsers, closeTestApp, insertMockUsers, setupTestApp, testUnauthorizedAccess } from './test-utils';
 
 import { Users } from '../src/users/users.entity';
 
@@ -17,7 +17,7 @@ describe('UsersController (e2e)', () => {
     });
 
     beforeEach(async () => {
-        await insertMockUser();
+        await insertMockUsers();
     });
 
     afterEach(async () => {
