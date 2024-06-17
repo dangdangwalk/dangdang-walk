@@ -16,17 +16,17 @@ export interface CropState {
     onSelectFileChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const createCropSlice: StateCreator<CropState> = (set) => ({
+export const createCropSlice: StateCreator<CropState, [['zustand/devtools', never]]> = (set) => ({
     crop: undefined,
     cropError: false,
     cropperToggle: false,
     cropPrevImgUrl: '',
     dogProfileImgUrl: '',
-    setCrop: (crop: PercentCrop | undefined) => set({ crop }),
-    setCropError: (state: boolean) => set({ cropError: state }),
-    setCropperToggle: (toggle: boolean) => set({ cropperToggle: toggle }),
-    setCropPrevImgUrl: (cropPrevImgUrl: string) => set({ cropPrevImgUrl }),
-    setDogProfileImgUrl: (url: string) => set({ dogProfileImgUrl: url }),
+    setCrop: (crop: PercentCrop | undefined) => set({ crop }, false, 'crop/setCrop'),
+    setCropError: (state: boolean) => set({ cropError: state }, false, 'crop/setCropError'),
+    setCropperToggle: (toggle: boolean) => set({ cropperToggle: toggle }, false, 'crop/setCropperToggle'),
+    setCropPrevImgUrl: (cropPrevImgUrl: string) => set({ cropPrevImgUrl }, false, 'crop/setCropPrevImgUrl'),
+    setDogProfileImgUrl: (url: string) => set({ dogProfileImgUrl: url }, false, 'crop/setDogProfileImgUrl'),
     onSelectFileChange: (e: ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files?.[0];
 
@@ -39,16 +39,20 @@ export const createCropSlice: StateCreator<CropState> = (set) => ({
             imageElement.src = imageUrl;
 
             imageElement.addEventListener('load', (e) => {
-                set((state) => {
-                    const cropError = state.cropError;
-                    if (cropError) return { cropError: false };
-                    const { naturalWidth, naturalHeight } = e.currentTarget as HTMLImageElement;
-                    if (naturalWidth < MIN_DIMENSION || naturalHeight < MIN_DIMENSION) {
-                        return { crop: undefined, cropError: true, cropperToggle: false };
-                    } else {
-                        return { cropPrevImgUrl: imageUrl, cropperToggle: true };
-                    }
-                });
+                set(
+                    (state) => {
+                        const cropError = state.cropError;
+                        if (cropError) return { cropError: false };
+                        const { naturalWidth, naturalHeight } = e.currentTarget as HTMLImageElement;
+                        if (naturalWidth < MIN_DIMENSION || naturalHeight < MIN_DIMENSION) {
+                            return { crop: undefined, cropError: true, cropperToggle: false };
+                        } else {
+                            return { cropPrevImgUrl: imageUrl, cropperToggle: true };
+                        }
+                    },
+                    false,
+                    'crop/onSelectFileChange'
+                );
             });
         });
 
