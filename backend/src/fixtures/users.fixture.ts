@@ -1,9 +1,11 @@
-import { VALID_PROVIDER_KAKAO, VALID_REFRESH_TOKEN_100_YEARS } from '../../test/constants';
+import {
+    OAUTH_ACCESS_TOKEN,
+    OAUTH_REFRESH_TOKEN,
+    VALID_PROVIDER_KAKAO,
+    VALID_REFRESH_TOKEN_100_YEARS,
+} from '../../test/constants';
 import { ROLE } from '../users/types/role.type';
 import { Users } from '../users/users.entity';
-
-export const OAUTH_ACCESS_TOKEN = 'oauth_access_token';
-export const OAUTH_REFRESH_TOKEN = 'oauth_refresh_token';
 
 export const mockUser = new Users({
     id: 1,
