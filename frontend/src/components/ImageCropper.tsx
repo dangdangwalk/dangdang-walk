@@ -58,7 +58,7 @@ export default function ImageCropper() {
     const previewCanvasRef = useRef<HTMLCanvasElement>(null);
     return (
         <div
-            className={`fixed -bottom-full left-0 z-50 flex size-full flex-col justify-center bg-white duration-300 ${cropperToggle ? '-translate-y-full' : 'translate-y-0'}`}
+            className={`fixed -bottom-full z-50 flex size-full max-w-screen-sm flex-col justify-center bg-white duration-300 ${cropperToggle ? '-translate-y-full' : 'translate-y-0'}`}
         >
             <TopBar>
                 <TopBar.Front className="pl-3">

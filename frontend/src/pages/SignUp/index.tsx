@@ -10,16 +10,18 @@ import { storageKeys } from '@/constants';
 import { useAuth } from '@/hooks/useAuth';
 import { uploadImg, useDog } from '@/hooks/useDog';
 import { DogCreateForm } from '@/models/dog';
-import Agreements from '@/pages/Join/Agreements';
-import DogBasicInfo from '@/pages/Join/DogBasicInfo';
-import DogDetailInfo from '@/pages/Join/DogDetailInfo';
-import PetOwner from '@/pages/Join/PetOwner';
+import Agreements from '@/pages/SignUp/Agreements';
+import DogBasicInfo from '@/pages/SignUp/DogBasicInfo';
+import DogDetailInfo from '@/pages/SignUp/DogDetailInfo';
+import PetOwner from '@/pages/SignUp/PetOwner';
 import { useStore } from '@/store';
 import { dataURLtoFile } from '@/utils/dataUrlToFile';
 import { getStorage } from '@/utils/storage';
 import { useMemo, useRef, useState } from 'react';
 import 'react-image-crop/dist/ReactCrop.css';
 import { useLocation, useNavigate } from 'react-router-dom';
+import BreedSearch from '@/components/BreedSearch';
+import ImageCropper from '@/components/ImageCropper';
 
 export default function SignUp() {
     const navigate = useNavigate();
@@ -37,6 +39,7 @@ export default function SignUp() {
     const backToPathname = getStorage(storageKeys.REDIRECT_URI) || '';
 
     const fileInputRef = useRef(null);
+    const [isBreedOpen, setIsBreedOpen] = useState(false);
     const [cancelReg, setCancelReg] = useState(false);
     const [haveADog, setHaveADog] = useState(true);
     const [allAgreed, setAllAgreed] = useState(false);
@@ -189,56 +192,73 @@ export default function SignUp() {
 
         return buttonText;
     };
-
     return (
-        <div
-            className={`relative flex h-dvh w-full flex-col bg-primary-foreground ${switchStep.mainToStep1 ? 'animate-mainToRight' : 'animate-outToMain'}`}
-        >
-            <TopBar>
-                <TopBar.Front className="pl-3">
-                    <img src={TopBack} alt="ToBack" onClick={handleGoBack} />
-                </TopBar.Front>
-                {step !== 'Agreements' && (
-                    <TopBar.Back>
-                        <img src={Cancel} alt="cancel" onClick={() => setCancelReg(true)} />
-                    </TopBar.Back>
-                )}
-            </TopBar>
-            <Divider
-                className={`w-0 bg-primary duration-500 ease-in-out ${step === 'PetOwner' && 'w-1/3'} ${step === 'DogBasicInfo' && (currentPage ? 'w-1/2' : 'w-2/3')} ${step === 'DogDetailInfo' && 'w-full'}`}
-            />
-
-            <main className="size-full px-5 pt-6">
-                {step === 'Agreements' && (
-                    <Agreements
-                        toggle={switchStep.step1ToStep2}
-                        allAgreed={allAgreed}
-                        handleAllCheck={handleAllCheck}
-                        agreements={agreements}
-                        handleCheck={handleCheck}
-                    />
-                )}
-                {step === 'PetOwner' && (
-                    <PetOwner haveADog={haveADog} handleHaveADogChange={(opt: boolean) => setHaveADog(opt)} />
-                )}
-                {step === 'DogBasicInfo' && (
-                    <DogBasicInfo fileInputRef={fileInputRef} data={registerData} handleSetData={handleSetData} />
-                )}
-                {step === 'DogDetailInfo' && <DogDetailInfo data={registerData} handleSetData={handleSetData} />}
-            </main>
-            <div className="absolute bottom-0 w-full">
-                <Button
-                    className="w-full"
-                    disabled={disabled()}
-                    color="primary"
-                    rounded="none"
-                    onClick={handleNextStep}
+        <div className="overflow-x-hidden">
+            <div className="flex w-fit">
+                <div
+                    className={`relative flex h-dvh w-dvw flex-col bg-primary-foreground sm:w-[640px] ${switchStep.mainToStep1 ? 'animate-mainToRight' : 'animate-outToMain'}`}
                 >
-                    {ButtonText()}
-                </Button>
+                    <TopBar>
+                        <TopBar.Front className="pl-3">
+                            <img src={TopBack} alt="ToBack" onClick={handleGoBack} />
+                        </TopBar.Front>
+                        {step !== 'Agreements' && (
+                            <TopBar.Back>
+                                <img src={Cancel} alt="cancel" onClick={() => setCancelReg(true)} />
+                            </TopBar.Back>
+                        )}
+                    </TopBar>
+                    <Divider
+                        className={`w-0 bg-primary duration-500 ease-in-out ${step === 'PetOwner' && 'w-1/3'} ${step === 'DogBasicInfo' && (currentPage ? 'w-1/2' : 'w-2/3')} ${step === 'DogDetailInfo' && 'w-full'}`}
+                    />
+
+                    <main className="size-full px-5 pt-6">
+                        {step === 'Agreements' && (
+                            <Agreements
+                                toggle={switchStep.step1ToStep2}
+                                allAgreed={allAgreed}
+                                handleAllCheck={handleAllCheck}
+                                agreements={agreements}
+                                handleCheck={handleCheck}
+                            />
+                        )}
+                        {step === 'PetOwner' && (
+                            <PetOwner haveADog={haveADog} handleHaveADogChange={(opt: boolean) => setHaveADog(opt)} />
+                        )}
+                        {step === 'DogBasicInfo' && (
+                            <DogBasicInfo
+                                setIsOpen={setIsBreedOpen}
+                                fileInputRef={fileInputRef}
+                                data={registerData}
+                                handleSetData={handleSetData}
+                            />
+                        )}
+                        {step === 'DogDetailInfo' && (
+                            <DogDetailInfo data={registerData} handleSetData={handleSetData} />
+                        )}
+                    </main>
+                    <div className="absolute bottom-0 w-full">
+                        <Button
+                            className="w-full"
+                            disabled={disabled()}
+                            color="primary"
+                            rounded="none"
+                            onClick={handleNextStep}
+                        >
+                            {ButtonText()}
+                        </Button>
+                    </div>
+                    {cropError && <CropperModal fileInputRef={fileInputRef} />}
+                    {cancelReg && <CancelRegModal currentPage={currentPage} setCancelReg={setCancelReg} />}
+                </div>
+                <BreedSearch
+                    state="create"
+                    isOpen={isBreedOpen}
+                    setIsOpen={setIsBreedOpen}
+                    handleSetData={handleSetData}
+                />
+                <ImageCropper />
             </div>
-            {cropError && <CropperModal fileInputRef={fileInputRef} />}
-            {cancelReg && <CancelRegModal currentPage={currentPage} setCancelReg={setCancelReg} />}
         </div>
     );
 }

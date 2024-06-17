@@ -7,7 +7,7 @@ interface Props {
 }
 export default function LoginAlertModal({ isOpen, setToggle }: Props) {
     return (
-        <div className="fixed right-0 top-0 z-10 h-dvh w-full backdrop-blur-sm">
+        <div className="fixed top-0 z-10 h-dvh w-full max-w-screen-sm backdrop-blur-sm">
             <div className={`absolute z-10 flex size-full flex-col`}>
                 {!isOpen && (
                     <section className={`mb-[3.75rem] flex size-full flex-col items-center justify-center`}>

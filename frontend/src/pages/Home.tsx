@@ -16,6 +16,7 @@ import useGeolocation from '@/hooks/useGeolocation';
 import useToast from '@/hooks/useToast';
 import { isArrayNotEmpty } from '@/utils/validate';
 import DogStatisticsView from '@/components/home/DogStatisticsView';
+import Navbar from '@/components/Navbar';
 
 function Home() {
     const [isDogBottomSheetOpen, setIsDogBottomSheetOpen] = useState<boolean>(false);
@@ -100,7 +101,7 @@ function Home() {
                     </Button>
                 )}
             </main>
-
+            <Navbar />
             <BottomSheet isOpen={isDogBottomSheetOpen} onClose={handleBottomSheetClose}>
                 <BottomSheet.Header> 강아지 산책</BottomSheet.Header>
                 <BottomSheet.Body isLoading={isAvailableDogsLoading}>
