@@ -9,15 +9,15 @@ export interface AuthState {
     storeSignOut: () => void;
 }
 
-export const createAuthSlice: StateCreator<AuthState> = (set) => ({
+export const createAuthSlice: StateCreator<AuthState, [['zustand/devtools', never]]> = (set) => ({
     isSignedIn: getStorage(storageKeys.IS_SIGNED_IN) ? true : false,
     storeSignIn: (token: string | undefined) => {
-        set({ isSignedIn: true });
+        set({ isSignedIn: true }, false, 'auth/storeSignIn');
         setHeader(tokenKeys.AUTHORIZATION, `Bearer ${token}`);
         setStorage(storageKeys.IS_SIGNED_IN, 'true');
     },
     storeSignOut: () => {
-        set({ isSignedIn: false });
+        set({ isSignedIn: false }, false, 'auth/storeSignOut');
         removeStorage(storageKeys.IS_SIGNED_IN);
         removeHeader(tokenKeys.AUTHORIZATION);
     },

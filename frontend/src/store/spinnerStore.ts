@@ -6,28 +6,40 @@ export interface State {
     spinnerRemove: () => void;
 }
 
-export const createSpinnerSlice: StateCreator<State> = (set) => ({
+export const createSpinnerSlice: StateCreator<State, [['zustand/devtools', never]]> = (set) => ({
     spinnerCount: 0,
 
     spinnerAdd: () => {
-        set((state) => {
-            return {
-                spinnerCount: state.spinnerCount + 1,
-            };
-        });
+        set(
+            (state) => {
+                return {
+                    spinnerCount: state.spinnerCount + 1,
+                };
+            },
+            false,
+            'spinner/spinnerAdd'
+        );
     },
     spinnerRemove: () => {
-        set((state) => {
-            return {
-                spinnerCount: state.spinnerCount - 1,
-            };
-        });
+        set(
+            (state) => {
+                return {
+                    spinnerCount: state.spinnerCount - 1,
+                };
+            },
+            false,
+            'spinner/spinnerRemove'
+        );
     },
     spinnerClear: () => {
-        set((state) => {
-            return {
-                spinnerCount: 0,
-            };
-        });
+        set(
+            (state) => {
+                return {
+                    spinnerCount: 0,
+                };
+            },
+            false,
+            'spinner/spinnerClear'
+        );
     },
 });

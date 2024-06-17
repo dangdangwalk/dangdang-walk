@@ -6,26 +6,30 @@ const initialState: State = {
     timeoutID: null,
 };
 
-const createToastSlice: StateCreator<StateAndActions> = (set) => ({
+const createToastSlice: StateCreator<StateAndActions, [['zustand/devtools', never]]> = (set) => ({
     ...initialState,
 
     show: (text, duration = 3000) => {
-        set({ isShowing: true, text: text });
+        set({ isShowing: true, text: text }, false, 'toast/show/start');
 
         const newTimeoutId = setTimeout(() => {
-            set(initialState);
+            set(initialState, false, 'toast/show/end');
         }, duration);
 
-        set((state) => {
-            const oldTimeoutId = state.timeoutID;
+        set(
+            (state) => {
+                const oldTimeoutId = state.timeoutID;
 
-            if (oldTimeoutId === null) {
+                if (oldTimeoutId === null) {
+                    return { timeoutID: newTimeoutId };
+                }
+                clearTimeout(oldTimeoutId);
+
                 return { timeoutID: newTimeoutId };
-            }
-            clearTimeout(oldTimeoutId);
-
-            return { timeoutID: newTimeoutId };
-        });
+            },
+            false,
+            'toast/show/setTimeoutID'
+        );
     },
 });
 

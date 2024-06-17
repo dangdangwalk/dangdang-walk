@@ -5,9 +5,9 @@ export interface ModalState {
     setLoginBottomSheetState: (state: boolean) => void;
 }
 
-export const createLoginBottomSheetStateSlice: StateCreator<ModalState> = (set) => ({
+export const createLoginBottomSheetStateSlice: StateCreator<ModalState, [['zustand/devtools', never]]> = (set) => ({
     isLoginBottomSheetOpen: false,
     setLoginBottomSheetState: (state: boolean) => {
-        set({ isLoginBottomSheetOpen: state });
+        set({ isLoginBottomSheetOpen: state }, false, 'loginBottomSheetState/setLoginBottomSheetState');
     },
 });
