@@ -7,9 +7,10 @@ import DeleteBtn from '@/assets/buttons/btn-delete.svg';
 interface Props {
     isOpen?: boolean;
     setIsOpen?: (state: boolean) => void;
+    state: string;
     handleSetData: (key: string, value: string) => void;
 }
-export default function BreedSearch({ isOpen, setIsOpen, handleSetData }: Props) {
+export default function BreedSearch({ isOpen, setIsOpen, handleSetData, state }: Props) {
     const { data } = useBreed();
     const [search, setSearch] = useState('');
     const [searched, setSearched] = useState<string[]>([]);
@@ -46,7 +47,7 @@ export default function BreedSearch({ isOpen, setIsOpen, handleSetData }: Props)
     };
     return (
         <div
-            className={`fixed left-full top-0 z-30 flex size-full flex-col bg-white duration-200 ${isOpen ? '-translate-x-full' : 'translate-x-0'}`}
+            className={`z-20 flex h-dvh w-dvw flex-col bg-white duration-200 sm:w-[640px] ${isOpen && (state === 'update' ? 'translate-x-[-200%]' : '-translate-x-full')}`}
         >
             <TopBar>
                 <TopBar.Front className="pl-3">
