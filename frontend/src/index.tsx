@@ -16,7 +16,7 @@ import App from './App';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import SignUp from '@/pages/Join';
-import AuthLayout from '@/components/NavbarProvider';
+import AuthLayout from '@/components/AuthLayout';
 const router = createBrowserRouter([
     {
         path: '/',
