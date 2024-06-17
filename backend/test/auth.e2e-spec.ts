@@ -3,9 +3,12 @@ import * as request from 'supertest';
 import { DataSource } from 'typeorm';
 
 import {
+    AUTHORIZE_CODE,
     EXPIRED_REFRESH_TOKEN,
     INVALID_PROVIDER,
     MALFORMED_REFRESH_TOKEN,
+    OAUTH_ACCESS_TOKEN,
+    OAUTH_REFRESH_TOKEN,
     VALID_ACCESS_TOKEN_100_YEARS,
     VALID_PROVIDER_KAKAO,
     VALID_REFRESH_TOKEN_100_YEARS,
@@ -13,7 +16,7 @@ import {
 
 import { clearUsers, closeTestApp, insertMockUser, setupTestApp, testUnauthorizedAccess } from './test-utils';
 
-import { mockUser } from '../src/fixtures/users.fixture';
+import { ROLE } from '../src/users/types/role.type';
 import { Users } from '../src/users/users.entity';
 
 describe('AuthController (e2e)', () => {
@@ -35,7 +38,7 @@ describe('AuthController (e2e)', () => {
                 return request(app.getHttpServer())
                     .post('/auth/login')
                     .send({
-                        authorizeCode: 'authorizeCode',
+                        authorizeCode: AUTHORIZE_CODE,
                         provider: VALID_PROVIDER_KAKAO,
                     })
                     .expect(404)
@@ -58,14 +61,13 @@ describe('AuthController (e2e)', () => {
                 const response = await request(app.getHttpServer())
                     .post('/auth/login')
                     .send({
-                        authorizeCode: 'authorizeCode',
+                        authorizeCode: AUTHORIZE_CODE,
                         provider: VALID_PROVIDER_KAKAO,
                     })
                     .expect(200)
                     .expect('set-cookie', /refreshToken=.+;/);
 
-                expect(response.body).toHaveProperty('accessToken');
-                expect(typeof response.body.accessToken).toBe('string');
+                expect(response.body).toEqual({ accessToken: expect.any(String) });
             });
         });
 
@@ -85,7 +87,7 @@ describe('AuthController (e2e)', () => {
                 return request(app.getHttpServer())
                     .post('/auth/login')
                     .send({
-                        authorizeCode: 'authorizeCode',
+                        authorizeCode: AUTHORIZE_CODE,
                     })
                     .expect(400);
             });
@@ -96,7 +98,7 @@ describe('AuthController (e2e)', () => {
                 return request(app.getHttpServer())
                     .post('/auth/login')
                     .send({
-                        authorizeCode: 'authorizeCode',
+                        authorizeCode: AUTHORIZE_CODE,
                         provider: INVALID_PROVIDER,
                     })
                     .expect(400);
@@ -114,8 +116,8 @@ describe('AuthController (e2e)', () => {
                 const response = await request(app.getHttpServer())
                     .post('/auth/signup')
                     .set('Cookie', [
-                        `oauthRefreshToken=${mockUser.oauthRefreshToken}`,
-                        `oauthAccessToken=${mockUser.oauthAccessToken}`,
+                        `oauthRefreshToken=${OAUTH_REFRESH_TOKEN}`,
+                        `oauthAccessToken=${OAUTH_ACCESS_TOKEN}`,
                         `provider=${VALID_PROVIDER_KAKAO}`,
                     ])
                     .expect(201)
@@ -124,10 +126,21 @@ describe('AuthController (e2e)', () => {
                     .expect('set-cookie', /oauthAccessToken=;/)
                     .expect('set-cookie', /provider=;/);
 
-                expect(response.body).toHaveProperty('accessToken');
-                expect(typeof response.body.accessToken).toBe('string');
+                expect(response.body).toEqual({ accessToken: expect.any(String) });
 
-                expect(await dataSource.getRepository(Users).count()).toBe(1);
+                expect(await dataSource.getRepository(Users).findOne({ where: { id: 1 } })).toEqual({
+                    id: 1,
+                    nickname: expect.any(String),
+                    email: 'mock_email@example.com',
+                    profileImageUrl: 'default/profile.png',
+                    role: ROLE.User,
+                    mainDogId: null,
+                    oauthId: '12345',
+                    oauthAccessToken: OAUTH_ACCESS_TOKEN,
+                    oauthRefreshToken: OAUTH_REFRESH_TOKEN,
+                    refreshToken: expect.any(String),
+                    createdAt: expect.any(Date),
+                });
             });
         });
 
@@ -144,8 +157,8 @@ describe('AuthController (e2e)', () => {
                 return request(app.getHttpServer())
                     .post('/auth/signup')
                     .set('Cookie', [
-                        `oauthRefreshToken=${mockUser.oauthRefreshToken}`,
-                        `oauthAccessToken=${mockUser.oauthAccessToken}`,
+                        `oauthRefreshToken=${OAUTH_REFRESH_TOKEN}`,
+                        `oauthAccessToken=${OAUTH_ACCESS_TOKEN}`,
                         `provider=${VALID_PROVIDER_KAKAO}`,
                     ])
                     .expect(409);
@@ -156,10 +169,7 @@ describe('AuthController (e2e)', () => {
             it('401 상태 코드를 반환해야 한다.', () => {
                 return request(app.getHttpServer())
                     .post('/auth/signup')
-                    .set('Cookie', [
-                        `oauthAccessToken=${mockUser.oauthAccessToken}`,
-                        `provider=${VALID_PROVIDER_KAKAO}`,
-                    ])
+                    .set('Cookie', [`oauthAccessToken=${OAUTH_ACCESS_TOKEN}`, `provider=${VALID_PROVIDER_KAKAO}`])
                     .expect(401);
             });
         });
@@ -168,10 +178,7 @@ describe('AuthController (e2e)', () => {
             it('401 상태 코드를 반환해야 한다.', () => {
                 return request(app.getHttpServer())
                     .post('/auth/signup')
-                    .set('Cookie', [
-                        `oauthRefreshToken=${mockUser.oauthRefreshToken}`,
-                        `provider=${VALID_PROVIDER_KAKAO}`,
-                    ])
+                    .set('Cookie', [`oauthRefreshToken=${OAUTH_REFRESH_TOKEN}`, `provider=${VALID_PROVIDER_KAKAO}`])
                     .expect(401);
             });
         });
@@ -181,8 +188,8 @@ describe('AuthController (e2e)', () => {
                 return request(app.getHttpServer())
                     .post('/auth/signup')
                     .set('Cookie', [
-                        `oauthRefreshToken=${mockUser.oauthRefreshToken}`,
-                        `oauthAccessToken=${mockUser.oauthAccessToken}`,
+                        `oauthRefreshToken=${OAUTH_REFRESH_TOKEN}`,
+                        `oauthAccessToken=${OAUTH_ACCESS_TOKEN}`,
                     ])
                     .expect(401);
             });
@@ -193,8 +200,8 @@ describe('AuthController (e2e)', () => {
                 return request(app.getHttpServer())
                     .post('/auth/signup')
                     .set('Cookie', [
-                        `oauthRefreshToken=${mockUser.oauthRefreshToken}`,
-                        `oauthAccessToken=${mockUser.oauthAccessToken}`,
+                        `oauthRefreshToken=${OAUTH_REFRESH_TOKEN}`,
+                        `oauthAccessToken=${OAUTH_ACCESS_TOKEN}`,
                         `provider=${INVALID_PROVIDER}`,
                     ])
                     .expect(400);
@@ -241,8 +248,7 @@ describe('AuthController (e2e)', () => {
                     .expect(200)
                     .expect('set-cookie', /refreshToken=.+;/);
 
-                expect(response.body).toHaveProperty('accessToken');
-                expect(typeof response.body.accessToken).toBe('string');
+                expect(response.body).toEqual({ accessToken: expect.any(String) });
             });
         });
 
@@ -297,7 +303,7 @@ describe('AuthController (e2e)', () => {
                     .expect(200)
                     .expect('set-cookie', /refreshToken=;/);
 
-                expect(await dataSource.getRepository(Users).count()).toBe(0);
+                expect(await dataSource.getRepository(Users).findOne({ where: { id: 1 } })).toBe(null);
             });
         });
 
