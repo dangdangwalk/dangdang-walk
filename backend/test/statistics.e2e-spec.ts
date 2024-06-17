@@ -1,6 +1,8 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 
+import { DataSource } from 'typeorm';
+
 import { VALID_ACCESS_TOKEN_100_YEARS } from './constants';
 
 import {
@@ -17,14 +19,14 @@ import {
     testUnauthorizedAccess,
 } from './test-utils';
 
-import { mockDog, mockDog2 } from '../src/fixtures/dogs.fixture';
-import { mockJournals } from '../src/fixtures/statistics.fixture';
+import { Journals } from '../src/journals/journals.entity';
 
 describe('StatisticsController (e2e)', () => {
     let app: INestApplication;
+    let dataSource: DataSource;
 
     beforeAll(async () => {
-        ({ app } = await setupTestApp());
+        ({ app, dataSource } = await setupTestApp());
     });
 
     beforeEach(async () => {
@@ -59,6 +61,8 @@ describe('StatisticsController (e2e)', () => {
                     .get('/dogs/1/statistics/recent?period=month')
                     .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
                     .expect(200);
+
+                const mockJournals = await dataSource.getRepository(Journals).find();
 
                 expect(response.body).toEqual({
                     totalWalkCnt: mockJournals.length,
@@ -228,17 +232,17 @@ describe('StatisticsController (e2e)', () => {
 
                 expect(response.body).toEqual([
                     {
-                        id: mockDog.id,
-                        name: mockDog.name,
-                        profilePhotoUrl: mockDog.profilePhotoUrl,
+                        id: 1,
+                        name: '덕지',
+                        profilePhotoUrl: 'mock_profile_photo.jpg',
                         recommendedWalkAmount: 1800,
                         todayWalkAmount: 0,
                         weeklyWalks: [0, 0, 0, 0, 0, 0, 0],
                     },
                     {
-                        id: mockDog2.id,
-                        name: mockDog2.name,
-                        profilePhotoUrl: mockDog2.profilePhotoUrl,
+                        id: 2,
+                        name: '루이',
+                        profilePhotoUrl: 'mock_profile_photo2.jpg',
                         recommendedWalkAmount: 7200,
                         todayWalkAmount: 0,
                         weeklyWalks: [0, 0, 0, 0, 0, 0, 0],
