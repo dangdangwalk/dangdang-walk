@@ -90,7 +90,7 @@ export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfile
     return (
         <>
             <div
-                className={`fixed -right-full top-0 z-20 max-h-dvh w-full overflow-y-scroll bg-white duration-200 ${isProfileOpen && '-translate-x-full'}`}
+                className={`flex w-dvw flex-col bg-white duration-200 sm:w-[640px] ${isProfileOpen && '-translate-x-full'}`}
             >
                 <TopBar>
                     <TopBar.Front
@@ -112,8 +112,9 @@ export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfile
                         {!onEdit && <img src={Edit} alt="edit" />}
                     </TopBar.Back>
                 </TopBar>
+
                 {dog && (
-                    <main className="mb-[60px] mt-2 flex flex-col">
+                    <main className="mb-[60px] mt-2 flex h-[calc(100dvh-3rem-4rem)] flex-col overflow-y-auto">
                         <section className="relative flex flex-col items-center">
                             <img className="size-7" src={CrownIcon} alt="crown" />
 
@@ -350,10 +351,15 @@ export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfile
                         </button>
                     </main>
                 )}
-
                 {deleteDogConfirm && <DeleteDogModal id={id} name={name} setDeleteDogConfirm={setDeleteDogConfirm} />}
             </div>
-            <BreedSearch isOpen={breedSearchOpen} setIsOpen={setBreedSearchOpen} handleSetData={handleSetData} />
+            <BreedSearch
+                state="update"
+                isOpen={breedSearchOpen}
+                setIsOpen={setBreedSearchOpen}
+                handleSetData={handleSetData}
+            />
+
             <ImageCropper />
         </>
     );
