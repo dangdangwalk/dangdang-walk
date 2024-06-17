@@ -1,5 +1,4 @@
 import LoginAlertModal from '@/components/LoginAlertModal';
-import Navbar from '@/components/Navbar';
 import OAuthButton from '@/components/OAuthButton';
 import BottomSheet from '@/components/commons/BottomSheet';
 import { OAUTH } from '@/constants';
@@ -8,7 +7,7 @@ import React, { useState } from 'react';
 interface Props {
     children: React.ReactNode;
 }
-export default function NavbarProvider({ children }: Props) {
+export default function AuthLayout({ children }: Props) {
     const { refreshTokenQuery } = useAuth();
     const [isLoginBottomSheetOpen, setLoginBottomSheetState] = useState(false);
     const handleClose = () => {
@@ -18,9 +17,8 @@ export default function NavbarProvider({ children }: Props) {
         setLoginBottomSheetState(toggle);
     };
     return (
-        <>
+        <div className="flex max-w-screen-sm flex-col overflow-x-hidden">
             {children}
-            <Navbar />
             {!refreshTokenQuery.isSuccess && !refreshTokenQuery.isLoading && !isLoginBottomSheetOpen && (
                 <LoginAlertModal isOpen={isLoginBottomSheetOpen} setToggle={handleToggle} />
             )}
@@ -33,6 +31,6 @@ export default function NavbarProvider({ children }: Props) {
                     </div>
                 </BottomSheet.Body>
             </BottomSheet>
-        </>
+        </div>
     );
 }

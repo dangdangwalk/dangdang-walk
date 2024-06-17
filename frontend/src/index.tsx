@@ -15,8 +15,8 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import App from './App';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import NavbarProvider from '@/components/NavbarProvider';
 import SignUp from '@/pages/Join';
+import AuthLayout from '@/components/NavbarProvider';
 const router = createBrowserRouter([
     {
         path: '/',
@@ -26,17 +26,17 @@ const router = createBrowserRouter([
                 index: true,
                 path: '/',
                 element: (
-                    <NavbarProvider>
+                    <AuthLayout>
                         <Home />
-                    </NavbarProvider>
+                    </AuthLayout>
                 ),
             },
             {
                 path: '/mypage',
                 element: (
-                    <NavbarProvider>
+                    <AuthLayout>
                         <MyPage />
-                    </NavbarProvider>
+                    </AuthLayout>
                 ),
             },
             {
@@ -62,9 +62,9 @@ const router = createBrowserRouter([
             {
                 path: '/journals',
                 element: (
-                    <NavbarProvider>
+                    <AuthLayout>
                         <Journals />
-                    </NavbarProvider>
+                    </AuthLayout>
                 ),
             },
             {
