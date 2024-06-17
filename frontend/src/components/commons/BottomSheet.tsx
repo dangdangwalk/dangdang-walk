@@ -13,12 +13,12 @@ export default function BottomSheet({ isOpen, onClose, children }: BottomSheetPr
         <>
             {isOpen && (
                 <div
-                    className={`fixed top-0 z-30 size-full bg-neutral-800/40 backdrop-blur-sm`}
+                    className={`fixed top-0 z-30 size-full max-w-screen-sm bg-neutral-800/40 backdrop-blur-sm`}
                     onClick={onClose}
                 ></div>
             )}
             <div
-                className={`fixed z-40 duration-300 ${isOpen ? 'bottom-0' : '-bottom-full'} inset-x-0 rounded-t-2xl bg-white pt-6`}
+                className={`fixed z-40 w-full max-w-screen-sm rounded-t-2xl bg-white pt-6 duration-300 ${isOpen ? 'bottom-0' : '-bottom-full'} `}
             >
                 {children}
             </div>
