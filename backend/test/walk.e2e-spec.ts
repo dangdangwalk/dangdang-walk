@@ -12,8 +12,6 @@ import {
     testUnauthorizedAccess,
 } from './test-utils';
 
-import { mockDog2Profile, mockDogProfile } from '../src/fixtures/dogs.fixture';
-
 describe('WalkController (e2e)', () => {
     let app: INestApplication;
 
@@ -118,14 +116,14 @@ describe('WalkController (e2e)', () => {
 
                 expect(response.body).toEqual([
                     {
-                        id: mockDogProfile.id,
-                        name: mockDogProfile.name,
-                        profilePhotoUrl: mockDogProfile.profilePhotoUrl,
+                        id: 1,
+                        name: '덕지',
+                        profilePhotoUrl: 'mock_profile_photo.jpg',
                     },
                     {
-                        id: mockDog2Profile.id,
-                        name: mockDog2Profile.name,
-                        profilePhotoUrl: mockDog2Profile.profilePhotoUrl,
+                        id: 2,
+                        name: '루이',
+                        profilePhotoUrl: 'mock_profile_photo2.jpg',
                     },
                 ]);
             });
