@@ -22,6 +22,9 @@ export default function WalkNavbar({ onOpen, onStop, onChange }: WalkNavbarProps
         if (/android/i.test(userAgent) || /iPad|iPhone|iPod/.test(userAgent)) {
             setIsMobile(true);
         }
+        return () => {
+            pressTimer && clearTimeout(pressTimer);
+        };
     }, []);
 
     const handleLongPress = () => {
@@ -56,10 +59,13 @@ export default function WalkNavbar({ onOpen, onStop, onChange }: WalkNavbarProps
     };
     const handleContextMenu = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         if (isMobile) {
-            handleLongPress();
-        } else {
-            event.preventDefault();
+            setPressTimer(setTimeout(handleLongPress));
         }
+
+        if (navigator.vibrate) {
+            navigator.vibrate(200); // 진동 수행 1000 = 1초
+        }
+        event.preventDefault();
     };
 
     return (
