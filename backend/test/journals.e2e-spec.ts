@@ -22,7 +22,6 @@ import {
 
 import { DogWalkDay } from '../src/dog-walk-day/dog-walk-day.entity';
 import { Excrements } from '../src/excrements/excrements.entity';
-import { createMockJournal } from '../src/fixtures/journals.fixture';
 import { JournalPhotos } from '../src/journal-photos/journal-photos.entity';
 import { Journals } from '../src/journals/journals.entity';
 import { JournalsDogs } from '../src/journals-dogs/journals-dogs.entity';
@@ -97,7 +96,6 @@ describe('JournalsController (e2e)', () => {
                     .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
                     .expect(200);
 
-                console.log(response.body);
                 expect(response.body).toEqual(expectJournals);
             });
         });
@@ -177,11 +175,39 @@ describe('JournalsController (e2e)', () => {
                 await clearDogs();
             });
 
+            const createJournalMock = {
+                dogs: [1, 2],
+                journalInfo: {
+                    distance: 5,
+                    calories: 500,
+                    startedAt: '2024-06-12T00:00:00Z',
+                    duration: 3600,
+                    routes: [
+                        { lat: 87.4, lng: 85.222 },
+                        { lat: 75.23, lng: 104.4839 },
+                    ],
+                    photoUrls: ['1/photo1.jpeg', '1/photo2.png'],
+                    memo: 'Enjoyed the walk with Buddy!',
+                },
+                excrements: [
+                    {
+                        dogId: 1,
+                        fecesLocations: [{ lat: '87.4', lng: '85.222' }],
+                        urineLocations: [{ lat: '87.4', lng: '85.222' }],
+                    },
+                    {
+                        dogId: 2,
+                        fecesLocations: [{ lat: '75.23', lng: '104.4839' }],
+                        urineLocations: [],
+                    },
+                ],
+            };
+
             it('201 상태 코드를 반환해야 한다.', async () => {
                 await request(app.getHttpServer())
                     .post('/journals')
                     .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
-                    .send(createMockJournal)
+                    .send(createJournalMock)
                     .expect(201);
 
                 expect(await dataSource.getRepository(Journals).count()).toBe(1);
@@ -226,11 +252,39 @@ describe('JournalsController (e2e)', () => {
                 await clearDogs();
             });
 
+            const createJournalMock = {
+                dogs: [1, 2],
+                journalInfo: {
+                    distance: 5,
+                    calories: 500,
+                    startedAt: '2024-06-12T00:00:00Z',
+                    duration: 3600,
+                    routes: [
+                        { lat: 87.4, lng: 85.222 },
+                        { lat: 75.23, lng: 104.4839 },
+                    ],
+                    photoUrls: ['1/photo1.jpeg', '1/photo2.png'],
+                    memo: 'Enjoyed the walk with Buddy!',
+                },
+                excrements: [
+                    {
+                        dogId: 1,
+                        fecesLocations: [{ lat: '87.4', lng: '85.222' }],
+                        urineLocations: [{ lat: '87.4', lng: '85.222' }],
+                    },
+                    {
+                        dogId: 2,
+                        fecesLocations: [{ lat: '75.23', lng: '104.4839' }],
+                        urineLocations: [],
+                    },
+                ],
+            };
+
             it('403 상태 코드를 반환해야 한다.', () => {
                 return request(app.getHttpServer())
                     .post('/journals')
                     .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
-                    .send(createMockJournal)
+                    .send(createJournalMock)
                     .expect(403);
             });
         });
@@ -296,6 +350,7 @@ describe('JournalsController (e2e)', () => {
                     .get('/journals/1')
                     .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
                     .expect(200);
+
                 expect(response.body).toEqual(expectDetail);
             });
         });
@@ -332,7 +387,7 @@ describe('JournalsController (e2e)', () => {
                 await clearDogs();
             });
 
-            const updateMockJournal = {
+            const updateJournalMock = {
                 memo: '메모 수정',
                 photoUrls: ['1/test1.png', '1/test2.jpeg'],
             };
@@ -341,19 +396,21 @@ describe('JournalsController (e2e)', () => {
                 await request(app.getHttpServer())
                     .patch('/journals/1')
                     .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
-                    .send(updateMockJournal)
+                    .send(updateJournalMock)
                     .expect(204);
 
                 const updatedJournal = await dataSource.getRepository(Journals).findOne({ where: { id: 1 } });
                 if (!updatedJournal) throw new Error('Journal not found');
+
                 const updatedJournalPhotos = await dataSource
                     .getRepository(JournalPhotos)
                     .find({ where: { journalId: 1 } });
                 if (!updatedJournalPhotos) throw new Error('Journal Photo not found');
-                expect(updatedJournal.memo).toBe(updateMockJournal.memo);
-                expect(updatedJournalPhotos).toHaveLength(updateMockJournal.photoUrls.length);
+
+                expect(updatedJournal.memo).toBe(updateJournalMock.memo);
+                expect(updatedJournalPhotos).toHaveLength(updateJournalMock.photoUrls.length);
                 expect(updatedJournalPhotos.map((journalPhoto) => journalPhoto.photoUrl)).toMatchObject(
-                    updateMockJournal.photoUrls,
+                    updateJournalMock.photoUrls,
                 );
             });
         });
