@@ -13,7 +13,7 @@ import {
     closeTestApp,
     insertMockDogs,
     insertMockJournals,
-    insertMockUser,
+    insertMockUsers,
     setFakeDate,
     setupTestApp,
     testUnauthorizedAccess,
@@ -30,7 +30,7 @@ describe('StatisticsController (e2e)', () => {
     });
 
     beforeEach(async () => {
-        await insertMockUser();
+        await insertMockUsers();
         await insertMockDogs();
         await insertMockJournals();
     });

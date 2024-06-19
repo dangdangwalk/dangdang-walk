@@ -9,7 +9,7 @@ import {
     clearUsers,
     closeTestApp,
     insertMockDogs,
-    insertMockUser,
+    insertMockUsers,
     setupTestApp,
     testUnauthorizedAccess,
 } from './test-utils';
@@ -23,7 +23,7 @@ describe('DogsController (e2e)', () => {
 
     beforeAll(async () => {
         ({ app, dataSource } = await setupTestApp());
-        await insertMockUser();
+        await insertMockUsers();
     });
 
     afterAll(async () => {

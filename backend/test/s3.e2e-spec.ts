@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 
 import { VALID_ACCESS_TOKEN_100_YEARS } from './constants';
-import { clearUsers, closeTestApp, insertMockUser, setupTestApp, testUnauthorizedAccess } from './test-utils';
+import { clearUsers, closeTestApp, insertMockUsers, setupTestApp, testUnauthorizedAccess } from './test-utils';
 
 const context = describe;
 
@@ -11,7 +11,7 @@ describe('S3Controller (e2e)', () => {
 
     beforeAll(async () => {
         ({ app } = await setupTestApp());
-        await insertMockUser();
+        await insertMockUsers();
     });
 
     afterAll(async () => {

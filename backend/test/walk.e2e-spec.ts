@@ -7,7 +7,7 @@ import {
     clearUsers,
     closeTestApp,
     insertMockDogs,
-    insertMockUser,
+    insertMockUsers,
     setupTestApp,
     testUnauthorizedAccess,
 } from './test-utils';
@@ -22,7 +22,7 @@ describe('WalkController (e2e)', () => {
     });
 
     beforeEach(async () => {
-        await insertMockUser();
+        await insertMockUsers();
         await insertMockDogs();
     });
 
