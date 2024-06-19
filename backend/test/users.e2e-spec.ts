@@ -2,11 +2,10 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { DataSource } from 'typeorm';
 
-import { VALID_ACCESS_TOKEN_100_YEARS } from './constants';
+import { VALID_ACCESS_TOKEN_100_YEARS, VALID_PROVIDER_KAKAO } from './constants';
 
 import { clearUsers, closeTestApp, insertMockUser, setupTestApp, testUnauthorizedAccess } from './test-utils';
 
-import { mockUserProfile } from '../src/fixtures/users.fixture';
 import { Users } from '../src/users/users.entity';
 
 describe('UsersController (e2e)', () => {
@@ -31,7 +30,12 @@ describe('UsersController (e2e)', () => {
 
     describe('/users/me (GET)', () => {
         context('사용자가 회원 정보 조회 요청을 보내면', () => {
-            const { id: _id, ...mockUserInfo } = mockUserProfile;
+            const mockUserInfo = {
+                nickname: 'mock_oauth_nickname#12345',
+                email: 'mock_email@example.com',
+                profileImageUrl: 'mock_profile_image.jpg',
+                provider: VALID_PROVIDER_KAKAO,
+            };
 
             it('200 상태 코드와 사용자 정보를 반환해야 한다.', async () => {
                 const response = await request(app.getHttpServer())
@@ -48,7 +52,11 @@ describe('UsersController (e2e)', () => {
 
     describe('/users/me (PATCH)', () => {
         context('사용자가 회원 정보 수정 요청을 보내면', () => {
-            const { id: _id, provider: _provider, ...mockUserInfo } = mockUserProfile;
+            const mockUserInfo = {
+                nickname: 'mock_oauth_nickname#12345',
+                email: 'mock_email@example.com',
+                profileImageUrl: 'mock_profile_image.jpg',
+            };
             const updateMockUser = {
                 nickname: 'new_mock_nickname',
                 profileImageUrl: 'new_mock_profile_image.jpg',

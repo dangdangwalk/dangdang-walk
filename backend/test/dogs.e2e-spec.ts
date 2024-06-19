@@ -71,13 +71,21 @@ describe('DogsController (e2e)', () => {
                 await clearDogs();
             });
 
-            const { id: _id, ...createMockDog } = mockDogProfile;
+            const createDogMock = {
+                name: '덕지',
+                breed: '아펜핀셔',
+                gender: 'MALE',
+                isNeutered: true,
+                birth: null,
+                weight: 2,
+                profilePhotoUrl: 'mock_profile_photo.jpg',
+            };
 
             it('201 상태 코드를 반환해야 한다.', async () => {
                 await request(app.getHttpServer())
                     .post('/dogs')
                     .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
-                    .send(createMockDog)
+                    .send(createDogMock)
                     .expect(201);
 
                 expect(await dataSource.getRepository(Dogs).count()).toBe(1);
@@ -93,14 +101,21 @@ describe('DogsController (e2e)', () => {
                 await clearDogs();
             });
 
-            const { id: _id, ...createMockDog } = mockDogProfile;
-            createMockDog.breed = '시고르자브종';
+            const invalidBreedMock = {
+                name: '덕지',
+                breed: '시고르자브종',
+                gender: 'MALE',
+                isNeutered: true,
+                birth: null,
+                weight: 2,
+                profilePhotoUrl: 'mock_profile_photo.jpg',
+            };
 
             it('404 상태 코드를 반환해야 한다.', () => {
                 return request(app.getHttpServer())
                     .post('/dogs')
                     .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
-                    .send(createMockDog)
+                    .send(invalidBreedMock)
                     .expect(404);
             });
         });
@@ -158,19 +173,41 @@ describe('DogsController (e2e)', () => {
                 await clearDogs();
             });
 
-            const { id: _id, ...updateMockDog } = mockDog2Profile;
+            const updateData = {
+                name: '루이',
+                breed: '아프간 하운드',
+                gender: 'FEMALE',
+                isNeutered: false,
+                birth: null,
+                weight: 1,
+                profilePhotoUrl: 'mock_profile_photo2.jpg',
+            };
 
             it('204 상태 코드를 반환해야 한다.', async () => {
                 await request(app.getHttpServer())
                     .patch('/dogs/1')
                     .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
-                    .send(updateMockDog)
+                    .send(updateData)
                     .expect(204);
 
                 const updatedDog = await dataSource.getRepository(Dogs).findOne({ where: { id: 1 } });
                 if (!updatedDog) throw new Error('Dog not found');
                 updatedDog.breed = (updatedDog.breed as any).koreanName;
-                expect(updatedDog).toMatchObject(updateMockDog);
+                expect(updatedDog).toEqual({
+                    id: 1,
+                    walkDayId: 1,
+                    todayWalkTimeId: 1,
+                    name: '루이',
+                    breed: '아프간 하운드',
+                    gender: 'FEMALE',
+                    isNeutered: false,
+                    birth: null,
+                    weight: 1,
+                    profilePhotoUrl: 'mock_profile_photo2.jpg',
+                    breedId: 2,
+                    isWalking: false,
+                    updatedAt: expect.any(Date),
+                });
             });
         });
 
@@ -192,14 +229,21 @@ describe('DogsController (e2e)', () => {
                 await clearDogs();
             });
 
-            const { id: _id, ...updateMockDog } = mockDog2Profile;
-            updateMockDog.breed = '시고르자브종';
+            const invalidDogMock = {
+                name: '루이',
+                breed: '시고르자브종',
+                gender: 'FEMALE',
+                isNeutered: false,
+                birth: null,
+                weight: 1,
+                profilePhotoUrl: 'mock_profile_photo2.jpg',
+            };
 
             it('404 상태 코드를 반환해야 한다.', () => {
                 return request(app.getHttpServer())
                     .patch('/dogs/1')
                     .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
-                    .send(updateMockDog)
+                    .send(invalidDogMock)
                     .expect(404);
             });
         });
