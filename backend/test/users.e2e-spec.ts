@@ -2,10 +2,17 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { DataSource } from 'typeorm';
 
-import { VALID_ACCESS_TOKEN_100_YEARS, VALID_PROVIDER_KAKAO } from './constants';
+import {
+    OAUTH_ACCESS_TOKEN,
+    OAUTH_REFRESH_TOKEN,
+    VALID_ACCESS_TOKEN_100_YEARS,
+    VALID_PROVIDER_KAKAO,
+    VALID_REFRESH_TOKEN_100_YEARS,
+} from './constants';
 
 import { clearUsers, closeTestApp, insertMockUsers, setupTestApp, testUnauthorizedAccess } from './test-utils';
 
+import { ROLE } from '../src/users/types/role.type';
 import { Users } from '../src/users/users.entity';
 
 describe('UsersController (e2e)', () => {
@@ -17,7 +24,21 @@ describe('UsersController (e2e)', () => {
     });
 
     beforeEach(async () => {
-        await insertMockUsers();
+        await insertMockUsers({
+            mockUsers: new Users({
+                id: 1,
+                nickname: 'mock_oauth_nickname#12345',
+                email: 'mock_email@example.com',
+                profileImageUrl: 'mock_profile_image.jpg',
+                role: ROLE.User,
+                mainDogId: null,
+                oauthId: '12345',
+                oauthAccessToken: OAUTH_ACCESS_TOKEN,
+                oauthRefreshToken: OAUTH_REFRESH_TOKEN,
+                refreshToken: VALID_REFRESH_TOKEN_100_YEARS,
+                createdAt: new Date('2019-01-01'),
+            }),
+        });
     });
 
     afterEach(async () => {

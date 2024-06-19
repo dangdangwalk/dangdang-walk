@@ -50,7 +50,21 @@ describe('AuthController (e2e)', () => {
 
         context('회원이 로그인 요청을 보내면', () => {
             beforeEach(async () => {
-                await insertMockUsers();
+                await insertMockUsers({
+                    mockUsers: new Users({
+                        id: 1,
+                        nickname: 'mock_oauth_nickname#12345',
+                        email: 'mock_email@example.com',
+                        profileImageUrl: 'mock_profile_image.jpg',
+                        role: ROLE.User,
+                        mainDogId: null,
+                        oauthId: '12345',
+                        oauthAccessToken: OAUTH_ACCESS_TOKEN,
+                        oauthRefreshToken: OAUTH_REFRESH_TOKEN,
+                        refreshToken: VALID_REFRESH_TOKEN_100_YEARS,
+                        createdAt: new Date('2019-01-01'),
+                    }),
+                });
             });
 
             afterEach(async () => {
@@ -146,7 +160,21 @@ describe('AuthController (e2e)', () => {
 
         context('회원이 회원가입 요청을 보내면', () => {
             beforeEach(async () => {
-                await insertMockUsers();
+                await insertMockUsers({
+                    mockUsers: new Users({
+                        id: 1,
+                        nickname: 'mock_oauth_nickname#12345',
+                        email: 'mock_email@example.com',
+                        profileImageUrl: 'mock_profile_image.jpg',
+                        role: ROLE.User,
+                        mainDogId: null,
+                        oauthId: '12345',
+                        oauthAccessToken: OAUTH_ACCESS_TOKEN,
+                        oauthRefreshToken: OAUTH_REFRESH_TOKEN,
+                        refreshToken: VALID_REFRESH_TOKEN_100_YEARS,
+                        createdAt: new Date('2019-01-01'),
+                    }),
+                });
             });
 
             afterEach(async () => {
@@ -212,7 +240,21 @@ describe('AuthController (e2e)', () => {
     describe('/auth/logout (POST)', () => {
         context('회원이 유효한 access token을 Authorization header에 담아 로그아웃 요청을 보내면', () => {
             beforeEach(async () => {
-                await insertMockUsers();
+                await insertMockUsers({
+                    mockUsers: new Users({
+                        id: 1,
+                        nickname: 'mock_oauth_nickname#12345',
+                        email: 'mock_email@example.com',
+                        profileImageUrl: 'mock_profile_image.jpg',
+                        role: ROLE.User,
+                        mainDogId: null,
+                        oauthId: '12345',
+                        oauthAccessToken: OAUTH_ACCESS_TOKEN,
+                        oauthRefreshToken: OAUTH_REFRESH_TOKEN,
+                        refreshToken: VALID_REFRESH_TOKEN_100_YEARS,
+                        createdAt: new Date('2019-01-01'),
+                    }),
+                });
             });
 
             afterEach(async () => {
@@ -234,7 +276,21 @@ describe('AuthController (e2e)', () => {
     describe('/auth/token (GET)', () => {
         context('회원이 유효한 refresh token을 cookie에 가지고 token 재발급 요청을 보내면', () => {
             beforeEach(async () => {
-                await insertMockUsers();
+                await insertMockUsers({
+                    mockUsers: new Users({
+                        id: 1,
+                        nickname: 'mock_oauth_nickname#12345',
+                        email: 'mock_email@example.com',
+                        profileImageUrl: 'mock_profile_image.jpg',
+                        role: ROLE.User,
+                        mainDogId: null,
+                        oauthId: '12345',
+                        oauthAccessToken: OAUTH_ACCESS_TOKEN,
+                        oauthRefreshToken: OAUTH_REFRESH_TOKEN,
+                        refreshToken: VALID_REFRESH_TOKEN_100_YEARS,
+                        createdAt: new Date('2019-01-01'),
+                    }),
+                });
             });
 
             afterEach(async () => {
@@ -289,7 +345,21 @@ describe('AuthController (e2e)', () => {
     describe('/auth/deactivate (DELETE)', () => {
         context('회원이 유효한 access token을 Authorization header에 담아 회원탈퇴 요청을 보내면', () => {
             beforeEach(async () => {
-                await insertMockUsers();
+                await insertMockUsers({
+                    mockUsers: new Users({
+                        id: 1,
+                        nickname: 'mock_oauth_nickname#12345',
+                        email: 'mock_email@example.com',
+                        profileImageUrl: 'mock_profile_image.jpg',
+                        role: ROLE.User,
+                        mainDogId: null,
+                        oauthId: '12345',
+                        oauthAccessToken: OAUTH_ACCESS_TOKEN,
+                        oauthRefreshToken: OAUTH_REFRESH_TOKEN,
+                        refreshToken: VALID_REFRESH_TOKEN_100_YEARS,
+                        createdAt: new Date('2019-01-01'),
+                    }),
+                });
             });
 
             afterEach(async () => {

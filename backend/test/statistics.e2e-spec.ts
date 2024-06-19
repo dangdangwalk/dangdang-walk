@@ -3,7 +3,12 @@ import * as request from 'supertest';
 
 import { DataSource } from 'typeorm';
 
-import { VALID_ACCESS_TOKEN_100_YEARS } from './constants';
+import {
+    OAUTH_ACCESS_TOKEN,
+    OAUTH_REFRESH_TOKEN,
+    VALID_ACCESS_TOKEN_100_YEARS,
+    VALID_REFRESH_TOKEN_100_YEARS,
+} from './constants';
 
 import {
     clearDogs,
@@ -19,7 +24,13 @@ import {
     testUnauthorizedAccess,
 } from './test-utils';
 
+import { DogWalkDay } from '../src/dog-walk-day/dog-walk-day.entity';
+import { Dogs } from '../src/dogs/dogs.entity';
+import { GENDER } from '../src/dogs/types/gender.type';
 import { Journals } from '../src/journals/journals.entity';
+import { TodayWalkTime } from '../src/today-walk-time/today-walk-time.entity';
+import { ROLE } from '../src/users/types/role.type';
+import { Users } from '../src/users/users.entity';
 
 describe('StatisticsController (e2e)', () => {
     let app: INestApplication;
@@ -30,9 +41,98 @@ describe('StatisticsController (e2e)', () => {
     });
 
     beforeEach(async () => {
-        await insertMockUsers();
-        await insertMockDogs();
-        await insertMockJournals();
+        await insertMockUsers({
+            mockUsers: new Users({
+                id: 1,
+                nickname: 'mock_oauth_nickname#12345',
+                email: 'mock_email@example.com',
+                profileImageUrl: 'mock_profile_image.jpg',
+                role: ROLE.User,
+                mainDogId: null,
+                oauthId: '12345',
+                oauthAccessToken: OAUTH_ACCESS_TOKEN,
+                oauthRefreshToken: OAUTH_REFRESH_TOKEN,
+                refreshToken: VALID_REFRESH_TOKEN_100_YEARS,
+                createdAt: new Date('2019-01-01'),
+            }),
+        });
+        await insertMockDogs({
+            mockDogs: [
+                new Dogs({
+                    id: 1,
+                    walkDay: new DogWalkDay(),
+                    todayWalkTime: new TodayWalkTime(),
+                    name: '덕지',
+                    breedId: 1,
+                    gender: GENDER.Male,
+                    birth: null,
+                    isNeutered: true,
+                    weight: 2,
+                    profilePhotoUrl: 'mock_profile_photo.jpg',
+                    isWalking: false,
+                    updatedAt: new Date('2019-01-01'),
+                }),
+                new Dogs({
+                    id: 2,
+                    walkDay: new DogWalkDay(),
+                    todayWalkTime: new TodayWalkTime(),
+                    name: '루이',
+                    breedId: 2,
+                    gender: GENDER.Female,
+                    birth: null,
+                    isNeutered: false,
+                    weight: 1,
+                    profilePhotoUrl: 'mock_profile_photo2.jpg',
+                    isWalking: false,
+                    updatedAt: new Date('2019-01-01'),
+                }),
+            ],
+            userId: 1,
+        });
+        await insertMockJournals({
+            mockJournals: [
+                new Journals({
+                    id: 1,
+                    userId: 1,
+                    routes: '[{"lat": 60.7749, "lng" : 120.4839}, {"lat": 60.7749, "lng" : 104.4839}]',
+                    calories: 500,
+                    memo: '좋은 날씨',
+                    startedAt: new Date('2024-05-05T10:00:00Z'),
+                    duration: 30,
+                    distance: 2000,
+                }),
+                new Journals({
+                    id: 2,
+                    userId: 1,
+                    routes: '[{"lat": 60.7749, "lng" : 120.4839}, {"lat": 60.7749, "lng" : 104.4839}]',
+                    calories: 700,
+                    startedAt: new Date('2024-05-07T12:00:00Z'),
+                    duration: 60,
+                    distance: 3000,
+                }),
+                new Journals({
+                    id: 3,
+                    userId: 1,
+                    routes: '[{"lat": 60.7749, "lng" : 120.4839}, {"lat": 60.7749, "lng" : 104.4839}]',
+                    calories: 1200,
+                    memo: '산책 중에 친구 만남',
+                    startedAt: new Date('2024-05-09T17:00:00Z'),
+                    duration: 135,
+                    distance: 5500,
+                }),
+                new Journals({
+                    id: 4,
+                    userId: 1,
+                    routes: '[{"lat": 60.7749, "lng" : 120.4839}, {"lat": 60.7749, "lng" : 104.4839}]',
+                    calories: 1300,
+                    memo: '산책 후 독서',
+                    startedAt: new Date('2024-05-09T18:00:00Z'),
+                    duration: 150,
+                    distance: 6000,
+                }),
+            ],
+            dogId: 1,
+        });
     });
 
     afterEach(async () => {
@@ -111,14 +211,14 @@ describe('StatisticsController (e2e)', () => {
                     .expect(200);
 
                 expect(response.body).toEqual({
-                    '2024-05-01': 1,
-                    '2024-05-02': 1,
-                    '2024-05-03': 1,
-                    '2024-05-04': 1,
+                    '2024-05-01': 0,
+                    '2024-05-02': 0,
+                    '2024-05-03': 0,
+                    '2024-05-04': 0,
                     '2024-05-05': 1,
                     '2024-05-06': 0,
                     '2024-05-07': 1,
-                    '2024-05-08': 1,
+                    '2024-05-08': 0,
                     '2024-05-09': 0,
                     '2024-05-10': 2,
                     '2024-05-11': 0,
@@ -141,7 +241,7 @@ describe('StatisticsController (e2e)', () => {
                     '2024-05-28': 0,
                     '2024-05-29': 0,
                     '2024-05-30': 0,
-                    '2024-05-31': 1,
+                    '2024-05-31': 0,
                 });
             });
         });
@@ -157,7 +257,7 @@ describe('StatisticsController (e2e)', () => {
                     '2024-05-05': 1,
                     '2024-05-06': 0,
                     '2024-05-07': 1,
-                    '2024-05-08': 1,
+                    '2024-05-08': 0,
                     '2024-05-09': 0,
                     '2024-05-10': 2,
                     '2024-05-11': 0,

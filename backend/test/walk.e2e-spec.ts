@@ -1,7 +1,13 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 
-import { VALID_ACCESS_TOKEN_100_YEARS } from './constants';
+import {
+    OAUTH_ACCESS_TOKEN,
+    OAUTH_REFRESH_TOKEN,
+    VALID_ACCESS_TOKEN_100_YEARS,
+    VALID_REFRESH_TOKEN_100_YEARS,
+} from './constants';
+
 import {
     clearDogs,
     clearUsers,
@@ -12,6 +18,13 @@ import {
     testUnauthorizedAccess,
 } from './test-utils';
 
+import { DogWalkDay } from '../src/dog-walk-day/dog-walk-day.entity';
+import { Dogs } from '../src/dogs/dogs.entity';
+import { GENDER } from '../src/dogs/types/gender.type';
+import { TodayWalkTime } from '../src/today-walk-time/today-walk-time.entity';
+import { ROLE } from '../src/users/types/role.type';
+import { Users } from '../src/users/users.entity';
+
 describe('WalkController (e2e)', () => {
     let app: INestApplication;
 
@@ -20,8 +33,54 @@ describe('WalkController (e2e)', () => {
     });
 
     beforeEach(async () => {
-        await insertMockUsers();
-        await insertMockDogs();
+        await insertMockUsers({
+            mockUsers: new Users({
+                id: 1,
+                nickname: 'mock_oauth_nickname#12345',
+                email: 'mock_email@example.com',
+                profileImageUrl: 'mock_profile_image.jpg',
+                role: ROLE.User,
+                mainDogId: null,
+                oauthId: '12345',
+                oauthAccessToken: OAUTH_ACCESS_TOKEN,
+                oauthRefreshToken: OAUTH_REFRESH_TOKEN,
+                refreshToken: VALID_REFRESH_TOKEN_100_YEARS,
+                createdAt: new Date('2019-01-01'),
+            }),
+        });
+        await insertMockDogs({
+            mockDogs: [
+                new Dogs({
+                    id: 1,
+                    walkDay: new DogWalkDay(),
+                    todayWalkTime: new TodayWalkTime(),
+                    name: '덕지',
+                    breedId: 1,
+                    gender: GENDER.Male,
+                    birth: null,
+                    isNeutered: true,
+                    weight: 2,
+                    profilePhotoUrl: 'mock_profile_photo.jpg',
+                    isWalking: false,
+                    updatedAt: new Date('2019-01-01'),
+                }),
+                new Dogs({
+                    id: 2,
+                    walkDay: new DogWalkDay(),
+                    todayWalkTime: new TodayWalkTime(),
+                    name: '루이',
+                    breedId: 2,
+                    gender: GENDER.Female,
+                    birth: null,
+                    isNeutered: false,
+                    weight: 1,
+                    profilePhotoUrl: 'mock_profile_photo2.jpg',
+                    isWalking: false,
+                    updatedAt: new Date('2019-01-01'),
+                }),
+            ],
+            userId: 1,
+        });
     });
 
     afterEach(async () => {
