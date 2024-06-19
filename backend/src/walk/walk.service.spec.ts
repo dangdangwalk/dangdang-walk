@@ -14,7 +14,6 @@ describe('WalkService', () => {
     let service: TestWalkService;
     let usersService: UsersService;
     let dogsService: DogsService;
-    let dogRepository: Repository<Dogs>;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
@@ -45,7 +44,6 @@ describe('WalkService', () => {
         service = module.get<TestWalkService>(WalkService);
         usersService = module.get<UsersService>(UsersService);
         dogsService = module.get<DogsService>(DogsService);
-        dogRepository = module.get<Repository<Dogs>>(getRepositoryToken(Dogs));
     });
 
     describe('getAvailableDogs', () => {

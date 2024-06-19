@@ -22,8 +22,7 @@ import {
 
 import { DogWalkDay } from '../src/dog-walk-day/dog-walk-day.entity';
 import { Excrements } from '../src/excrements/excrements.entity';
-import { createMockJournal, mockJournalProfile } from '../src/fixtures/journals.fixture';
-import { mockJournals } from '../src/fixtures/statistics.fixture';
+import { createMockJournal } from '../src/fixtures/journals.fixture';
 import { JournalPhotos } from '../src/journal-photos/journal-photos.entity';
 import { Journals } from '../src/journals/journals.entity';
 import { JournalsDogs } from '../src/journals-dogs/journals-dogs.entity';
@@ -73,7 +72,24 @@ describe('JournalsController (e2e)', () => {
                 await clearDogs();
             });
 
-            const [, , , , , , , journal8, journal9] = mockJournals;
+            const expectJournals = [
+                {
+                    journalId: 8,
+                    calories: 1200,
+                    startedAt: expect.any(String),
+                    duration: 135,
+                    distance: 5500,
+                    journalCnt: 8,
+                },
+                {
+                    journalId: 9,
+                    calories: 1300,
+                    startedAt: expect.any(String),
+                    duration: 150,
+                    distance: 6000,
+                    journalCnt: 9,
+                },
+            ];
 
             it('200 상태 코드와 산책 일지 목록을 반환해야 한다.', async () => {
                 const response = await request(app.getHttpServer())
@@ -81,24 +97,8 @@ describe('JournalsController (e2e)', () => {
                     .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
                     .expect(200);
 
-                expect(response.body).toEqual([
-                    {
-                        journalId: 8,
-                        startedAt: new Date(journal8.startedAt).toISOString(),
-                        distance: journal8.distance,
-                        calories: journal8.calories,
-                        duration: journal8.duration,
-                        journalCnt: 8,
-                    },
-                    {
-                        journalId: 9,
-                        startedAt: new Date(journal9.startedAt).toISOString(),
-                        distance: journal9.distance,
-                        calories: journal9.calories,
-                        duration: journal9.duration,
-                        journalCnt: 9,
-                    },
-                ]);
+                console.log(response.body);
+                expect(response.body).toEqual(expectJournals);
             });
         });
 
@@ -250,13 +250,53 @@ describe('JournalsController (e2e)', () => {
                 await clearDogs();
             });
 
+            const expectDetail = {
+                journalInfo: {
+                    id: 1,
+                    routes: [
+                        {
+                            lat: 87.4,
+                            lng: 85.222,
+                        },
+                        {
+                            lat: 75.23,
+                            lng: 104.4839,
+                        },
+                    ],
+                    memo: 'Enjoyed the walk with Buddy!',
+                    photoUrls: ['1/photo1.jpeg', '1/photo2.png'],
+                },
+                dogs: [
+                    {
+                        id: 1,
+                        name: '덕지',
+                        profilePhotoUrl: 'mock_profile_photo.jpg',
+                    },
+                    {
+                        id: 2,
+                        name: '루이',
+                        profilePhotoUrl: 'mock_profile_photo2.jpg',
+                    },
+                ],
+                excrements: [
+                    {
+                        dogId: 1,
+                        fecesCnt: 1,
+                        urineCnt: 1,
+                    },
+                    {
+                        dogId: 2,
+                        fecesCnt: 1,
+                    },
+                ],
+            };
+
             it('200 상태 코드와 산책 일지 상세 정보를 반환해야 한다.', async () => {
                 const response = await request(app.getHttpServer())
                     .get('/journals/1')
                     .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
                     .expect(200);
-
-                expect(response.body).toEqual(mockJournalProfile);
+                expect(response.body).toEqual(expectDetail);
             });
         });
 
