@@ -22,6 +22,9 @@ export default function WalkNavbar({ onOpen, onStop, onChange }: WalkNavbarProps
         if (/android/i.test(userAgent) || /iPad|iPhone|iPod/.test(userAgent)) {
             setIsMobile(true);
         }
+        return () => {
+            pressTimer && clearTimeout(pressTimer);
+        };
     }, []);
 
     const handleLongPress = () => {
@@ -56,14 +59,17 @@ export default function WalkNavbar({ onOpen, onStop, onChange }: WalkNavbarProps
     };
     const handleContextMenu = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         if (isMobile) {
-            handleLongPress();
-        } else {
-            event.preventDefault();
+            setPressTimer(setTimeout(handleLongPress));
         }
+
+        if (navigator.vibrate) {
+            navigator.vibrate(200); // 진동 수행 1000 = 1초
+        }
+        event.preventDefault();
     };
 
     return (
-        <nav className="absolute bottom-0 left-0 z-40 flex w-full items-center justify-between bg-white px-[60px] py-3">
+        <nav className="absolute z-40 flex w-full items-center justify-between bg-white px-[60px] py-3 sm:w-[640px]">
             <button onClick={onOpen}>
                 <img src={Poop} alt="배소변 버튼" />
             </button>
