@@ -2,7 +2,12 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { DataSource } from 'typeorm';
 
-import { VALID_ACCESS_TOKEN_100_YEARS } from './constants';
+import {
+    OAUTH_ACCESS_TOKEN,
+    OAUTH_REFRESH_TOKEN,
+    VALID_ACCESS_TOKEN_100_YEARS,
+    VALID_REFRESH_TOKEN_100_YEARS,
+} from './constants';
 
 import {
     clearDogs,
@@ -21,10 +26,16 @@ import {
 } from './test-utils';
 
 import { DogWalkDay } from '../src/dog-walk-day/dog-walk-day.entity';
+import { Dogs } from '../src/dogs/dogs.entity';
+import { GENDER } from '../src/dogs/types/gender.type';
 import { Excrements } from '../src/excrements/excrements.entity';
+import { EXCREMENT } from '../src/excrements/types/excrement.type';
 import { JournalPhotos } from '../src/journal-photos/journal-photos.entity';
 import { Journals } from '../src/journals/journals.entity';
 import { JournalsDogs } from '../src/journals-dogs/journals-dogs.entity';
+import { TodayWalkTime } from '../src/today-walk-time/today-walk-time.entity';
+import { ROLE } from '../src/users/types/role.type';
+import { Users } from '../src/users/users.entity';
 
 describe('JournalsController (e2e)', () => {
     let app: INestApplication;
@@ -32,7 +43,21 @@ describe('JournalsController (e2e)', () => {
 
     beforeAll(async () => {
         ({ app, dataSource } = await setupTestApp());
-        await insertMockUsers();
+        await insertMockUsers({
+            mockUsers: new Users({
+                id: 1,
+                nickname: 'mock_oauth_nickname#12345',
+                email: 'mock_email@example.com',
+                profileImageUrl: 'mock_profile_image.jpg',
+                role: ROLE.User,
+                mainDogId: null,
+                oauthId: '12345',
+                oauthAccessToken: OAUTH_ACCESS_TOKEN,
+                oauthRefreshToken: OAUTH_REFRESH_TOKEN,
+                refreshToken: VALID_REFRESH_TOKEN_100_YEARS,
+                createdAt: new Date('2019-01-01'),
+            }),
+        });
     });
 
     afterAll(async () => {
@@ -43,7 +68,23 @@ describe('JournalsController (e2e)', () => {
     describe('/journals (GET)', () => {
         context('사용자가 산책을 하지 않은 날의 산책 일지 목록 조회 요청을 보내면', () => {
             beforeEach(async () => {
-                await insertMockDogs();
+                await insertMockDogs({
+                    mockDogs: new Dogs({
+                        id: 1,
+                        walkDay: new DogWalkDay(),
+                        todayWalkTime: new TodayWalkTime(),
+                        name: '덕지',
+                        breedId: 1,
+                        gender: GENDER.Male,
+                        birth: null,
+                        isNeutered: true,
+                        weight: 2,
+                        profilePhotoUrl: 'mock_profile_photo.jpg',
+                        isWalking: false,
+                        updatedAt: new Date('2019-01-01'),
+                    }),
+                    userId: 1,
+                });
             });
 
             afterEach(async () => {
@@ -62,8 +103,83 @@ describe('JournalsController (e2e)', () => {
 
         context('사용자가 산책 일지 목록 조회 요청을 보내면', () => {
             beforeEach(async () => {
-                await insertMockDogs();
-                await insertMockJournals();
+                await insertMockDogs({
+                    mockDogs: [
+                        new Dogs({
+                            id: 1,
+                            walkDay: new DogWalkDay(),
+                            todayWalkTime: new TodayWalkTime(),
+                            name: '덕지',
+                            breedId: 1,
+                            gender: GENDER.Male,
+                            birth: null,
+                            isNeutered: true,
+                            weight: 2,
+                            profilePhotoUrl: 'mock_profile_photo.jpg',
+                            isWalking: false,
+                            updatedAt: new Date('2019-01-01'),
+                        }),
+                        new Dogs({
+                            id: 2,
+                            walkDay: new DogWalkDay(),
+                            todayWalkTime: new TodayWalkTime(),
+                            name: '루이',
+                            breedId: 2,
+                            gender: GENDER.Female,
+                            birth: null,
+                            isNeutered: false,
+                            weight: 1,
+                            profilePhotoUrl: 'mock_profile_photo2.jpg',
+                            isWalking: false,
+                            updatedAt: new Date('2019-01-01'),
+                        }),
+                    ],
+                    userId: 1,
+                });
+                await insertMockJournals({
+                    mockJournals: [
+                        new Journals({
+                            id: 1,
+                            userId: 1,
+                            routes: '[{"lat": 60.7749, "lng" : 120.4839}, {"lat": 60.7749, "lng" : 104.4839}]',
+                            calories: 500,
+                            memo: '좋은 날씨',
+                            startedAt: new Date('2024-05-05T10:00:00Z'),
+                            duration: 30,
+                            distance: 2000,
+                        }),
+                        new Journals({
+                            id: 2,
+                            userId: 1,
+                            routes: '[{"lat": 60.7749, "lng" : 120.4839}, {"lat": 60.7749, "lng" : 104.4839}]',
+                            calories: 700,
+                            startedAt: new Date('2024-05-07T12:00:00Z'),
+                            duration: 60,
+                            distance: 3000,
+                        }),
+                        new Journals({
+                            id: 3,
+                            userId: 1,
+                            routes: '[{"lat": 60.7749, "lng" : 120.4839}, {"lat": 60.7749, "lng" : 104.4839}]',
+                            calories: 1200,
+                            memo: '산책 중에 친구 만남',
+                            startedAt: new Date('2024-05-09T17:00:00Z'),
+                            duration: 135,
+                            distance: 5500,
+                        }),
+                        new Journals({
+                            id: 4,
+                            userId: 1,
+                            routes: '[{"lat": 60.7749, "lng" : 120.4839}, {"lat": 60.7749, "lng" : 104.4839}]',
+                            calories: 1300,
+                            memo: '산책 후 독서',
+                            startedAt: new Date('2024-05-09T18:00:00Z'),
+                            duration: 150,
+                            distance: 6000,
+                        }),
+                    ],
+                    dogId: 1,
+                });
             });
 
             afterEach(async () => {
@@ -73,20 +189,20 @@ describe('JournalsController (e2e)', () => {
 
             const expectJournals = [
                 {
-                    journalId: 8,
+                    journalId: 3,
                     calories: 1200,
                     startedAt: expect.any(String),
                     duration: 135,
                     distance: 5500,
-                    journalCnt: 8,
+                    journalCnt: 3,
                 },
                 {
-                    journalId: 9,
+                    journalId: 4,
                     calories: 1300,
                     startedAt: expect.any(String),
                     duration: 150,
                     distance: 6000,
-                    journalCnt: 9,
+                    journalCnt: 4,
                 },
             ];
 
@@ -103,7 +219,7 @@ describe('JournalsController (e2e)', () => {
         context('사용자가 소유하지 않은 강아지로 산책 일지 목록 조회 요청을 보내면', () => {
             it('403 상태 코드를 반환해야 한다.', () => {
                 return request(app.getHttpServer())
-                    .get('/journals?dogId=3&date=2024-06-11')
+                    .get('/journals?dogId=1&date=2024-06-11')
                     .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
                     .expect(403);
             });
@@ -129,7 +245,39 @@ describe('JournalsController (e2e)', () => {
 
         context('date query 없이 산책 일지 목록 조회 요청을 보내면', () => {
             beforeEach(async () => {
-                await insertMockDogs();
+                await insertMockDogs({
+                    mockDogs: [
+                        new Dogs({
+                            id: 1,
+                            walkDay: new DogWalkDay(),
+                            todayWalkTime: new TodayWalkTime(),
+                            name: '덕지',
+                            breedId: 1,
+                            gender: GENDER.Male,
+                            birth: null,
+                            isNeutered: true,
+                            weight: 2,
+                            profilePhotoUrl: 'mock_profile_photo.jpg',
+                            isWalking: false,
+                            updatedAt: new Date('2019-01-01'),
+                        }),
+                        new Dogs({
+                            id: 2,
+                            walkDay: new DogWalkDay(),
+                            todayWalkTime: new TodayWalkTime(),
+                            name: '루이',
+                            breedId: 2,
+                            gender: GENDER.Female,
+                            birth: null,
+                            isNeutered: false,
+                            weight: 1,
+                            profilePhotoUrl: 'mock_profile_photo2.jpg',
+                            isWalking: false,
+                            updatedAt: new Date('2019-01-01'),
+                        }),
+                    ],
+                    userId: 1,
+                });
             });
 
             afterEach(async () => {
@@ -146,7 +294,23 @@ describe('JournalsController (e2e)', () => {
 
         context('YYYY-MM-DD 형식이 아닌 date query로 산책 일지 목록 조회 요청을 보내면', () => {
             beforeEach(async () => {
-                await insertMockDogs();
+                await insertMockDogs({
+                    mockDogs: new Dogs({
+                        id: 1,
+                        walkDay: new DogWalkDay(),
+                        todayWalkTime: new TodayWalkTime(),
+                        name: '덕지',
+                        breedId: 1,
+                        gender: GENDER.Male,
+                        birth: null,
+                        isNeutered: true,
+                        weight: 2,
+                        profilePhotoUrl: 'mock_profile_photo.jpg',
+                        isWalking: false,
+                        updatedAt: new Date('2019-01-01'),
+                    }),
+                    userId: 1,
+                });
             });
 
             afterEach(async () => {
@@ -167,11 +331,43 @@ describe('JournalsController (e2e)', () => {
     describe('/journals (POST)', () => {
         context('사용자가 산책 일지 생성 요청을 보내면', () => {
             beforeEach(async () => {
-                await insertMockDogs();
+                await insertMockDogs({
+                    mockDogs: [
+                        new Dogs({
+                            id: 1,
+                            walkDay: new DogWalkDay(),
+                            todayWalkTime: new TodayWalkTime(),
+                            name: '덕지',
+                            breedId: 1,
+                            gender: GENDER.Male,
+                            birth: null,
+                            isNeutered: true,
+                            weight: 2,
+                            profilePhotoUrl: 'mock_profile_photo.jpg',
+                            isWalking: false,
+                            updatedAt: new Date('2019-01-01'),
+                        }),
+                        new Dogs({
+                            id: 2,
+                            walkDay: new DogWalkDay(),
+                            todayWalkTime: new TodayWalkTime(),
+                            name: '루이',
+                            breedId: 2,
+                            gender: GENDER.Female,
+                            birth: null,
+                            isNeutered: false,
+                            weight: 1,
+                            profilePhotoUrl: 'mock_profile_photo2.jpg',
+                            isWalking: false,
+                            updatedAt: new Date('2019-01-01'),
+                        }),
+                    ],
+                    userId: 1,
+                });
             });
 
             afterEach(async () => {
-                await clearJournal();
+                await clearJournal({ dogIds: [1, 2] });
                 await clearDogs();
             });
 
@@ -248,10 +444,6 @@ describe('JournalsController (e2e)', () => {
         });
 
         context('사용자가 소유하지 않은 강아지가 포함된 산책 일지 생성 요청을 보내면', () => {
-            afterEach(async () => {
-                await clearDogs();
-            });
-
             const createJournalMock = {
                 dogs: [1, 2],
                 journalInfo: {
@@ -295,12 +487,74 @@ describe('JournalsController (e2e)', () => {
     describe('/journals/:id (GET)', () => {
         context('사용자가 자신이 소유한 산책 일지의 상세 요청을 보내면', () => {
             beforeEach(async () => {
-                await insertMockDogs();
-                await insertMockJournalWithPhotosAndExcrements();
+                await insertMockDogs({
+                    mockDogs: [
+                        new Dogs({
+                            id: 1,
+                            walkDay: new DogWalkDay(),
+                            todayWalkTime: new TodayWalkTime(),
+                            name: '덕지',
+                            breedId: 1,
+                            gender: GENDER.Male,
+                            birth: null,
+                            isNeutered: true,
+                            weight: 2,
+                            profilePhotoUrl: 'mock_profile_photo.jpg',
+                            isWalking: false,
+                            updatedAt: new Date('2019-01-01'),
+                        }),
+                        new Dogs({
+                            id: 2,
+                            walkDay: new DogWalkDay(),
+                            todayWalkTime: new TodayWalkTime(),
+                            name: '루이',
+                            breedId: 2,
+                            gender: GENDER.Female,
+                            birth: null,
+                            isNeutered: false,
+                            weight: 1,
+                            profilePhotoUrl: 'mock_profile_photo2.jpg',
+                            isWalking: false,
+                            updatedAt: new Date('2019-01-01'),
+                        }),
+                    ],
+                    userId: 1,
+                });
+                await insertMockJournalWithPhotosAndExcrements({
+                    mockJournal: new Journals({
+                        id: 1,
+                        userId: 1,
+                        routes: '[{"lat": 87.4, "lng" : 85.222}, {"lat": 75.23, "lng" : 104.4839}]',
+                        calories: 500,
+                        memo: 'Enjoyed the walk with Buddy!',
+                        startedAt: new Date('2024-06-12T00:00:00Z'),
+                        duration: 30,
+                        distance: 5,
+                    }),
+                    dogIds: [1, 2],
+                    photoUrls: ['1/photo1.jpeg', '1/photo2.png'],
+                    excrements: [
+                        {
+                            dogId: 1,
+                            type: EXCREMENT.Feces,
+                            coordinate: `POINT(87.4 85.222)`,
+                        },
+                        {
+                            dogId: 1,
+                            type: EXCREMENT.Urine,
+                            coordinate: `POINT(87.4 85.222)`,
+                        },
+                        {
+                            dogId: 2,
+                            type: EXCREMENT.Feces,
+                            coordinate: `POINT(75.23 104.4839)`,
+                        },
+                    ],
+                });
             });
 
             afterEach(async () => {
-                await clearJournal();
+                await clearJournal({ dogIds: [1, 2] });
                 await clearDogs();
             });
 
@@ -356,17 +610,9 @@ describe('JournalsController (e2e)', () => {
         });
 
         context('사용자가 자신이 소유하지 않은 산책 일지의 상세 요청을 보내면', () => {
-            beforeEach(async () => {
-                await insertMockDogs();
-            });
-
-            afterEach(async () => {
-                await clearDogs();
-            });
-
             it('403 상태 코드를 반환해야 한다.', () => {
                 return request(app.getHttpServer())
-                    .get('/journals/3')
+                    .get('/journals/1')
                     .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
                     .expect(403);
             });
@@ -378,12 +624,74 @@ describe('JournalsController (e2e)', () => {
     describe('/journals/:id (PATCH)', () => {
         context('사용자가 자신이 소유한 산책 일지의 정보 수정 요청을 보내면', () => {
             beforeEach(async () => {
-                await insertMockDogs();
-                await insertMockJournalWithPhotosAndExcrements();
+                await insertMockDogs({
+                    mockDogs: [
+                        new Dogs({
+                            id: 1,
+                            walkDay: new DogWalkDay(),
+                            todayWalkTime: new TodayWalkTime(),
+                            name: '덕지',
+                            breedId: 1,
+                            gender: GENDER.Male,
+                            birth: null,
+                            isNeutered: true,
+                            weight: 2,
+                            profilePhotoUrl: 'mock_profile_photo.jpg',
+                            isWalking: false,
+                            updatedAt: new Date('2019-01-01'),
+                        }),
+                        new Dogs({
+                            id: 2,
+                            walkDay: new DogWalkDay(),
+                            todayWalkTime: new TodayWalkTime(),
+                            name: '루이',
+                            breedId: 2,
+                            gender: GENDER.Female,
+                            birth: null,
+                            isNeutered: false,
+                            weight: 1,
+                            profilePhotoUrl: 'mock_profile_photo2.jpg',
+                            isWalking: false,
+                            updatedAt: new Date('2019-01-01'),
+                        }),
+                    ],
+                    userId: 1,
+                });
+                await insertMockJournalWithPhotosAndExcrements({
+                    mockJournal: new Journals({
+                        id: 1,
+                        userId: 1,
+                        routes: '[{"lat": 87.4, "lng" : 85.222}, {"lat": 75.23, "lng" : 104.4839}]',
+                        calories: 500,
+                        memo: 'Enjoyed the walk with Buddy!',
+                        startedAt: new Date('2024-06-12T00:00:00Z'),
+                        duration: 30,
+                        distance: 5,
+                    }),
+                    dogIds: [1, 2],
+                    photoUrls: ['1/photo1.jpeg', '1/photo2.png'],
+                    excrements: [
+                        {
+                            dogId: 1,
+                            type: EXCREMENT.Feces,
+                            coordinate: `POINT(87.4 85.222)`,
+                        },
+                        {
+                            dogId: 1,
+                            type: EXCREMENT.Urine,
+                            coordinate: `POINT(87.4 85.222)`,
+                        },
+                        {
+                            dogId: 2,
+                            type: EXCREMENT.Feces,
+                            coordinate: `POINT(75.23 104.4839)`,
+                        },
+                    ],
+                });
             });
 
             afterEach(async () => {
-                await clearJournal();
+                await clearJournal({ dogIds: [1, 2] });
                 await clearDogs();
             });
 
@@ -418,7 +726,7 @@ describe('JournalsController (e2e)', () => {
         context('사용자가 자신이 소유하지 않은 산책 일지의 정보 수정 요청을 보내면', () => {
             it('403 상태 코드를 반환해야 한다.', () => {
                 return request(app.getHttpServer())
-                    .patch('/journals/3')
+                    .patch('/journals/1')
                     .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
                     .expect(403);
             });
@@ -430,15 +738,77 @@ describe('JournalsController (e2e)', () => {
     describe('/journals/:id (DELETE)', () => {
         context('사용자가 자신이 소유한 산책 일지의 삭제 요청을 보내면', () => {
             beforeEach(async () => {
-                await insertMockDogs();
-                await insertMockJournalWithPhotosAndExcrements();
+                await insertMockDogs({
+                    mockDogs: [
+                        new Dogs({
+                            id: 1,
+                            walkDay: new DogWalkDay(),
+                            todayWalkTime: new TodayWalkTime(),
+                            name: '덕지',
+                            breedId: 1,
+                            gender: GENDER.Male,
+                            birth: null,
+                            isNeutered: true,
+                            weight: 2,
+                            profilePhotoUrl: 'mock_profile_photo.jpg',
+                            isWalking: false,
+                            updatedAt: new Date('2019-01-01'),
+                        }),
+                        new Dogs({
+                            id: 2,
+                            walkDay: new DogWalkDay(),
+                            todayWalkTime: new TodayWalkTime(),
+                            name: '루이',
+                            breedId: 2,
+                            gender: GENDER.Female,
+                            birth: null,
+                            isNeutered: false,
+                            weight: 1,
+                            profilePhotoUrl: 'mock_profile_photo2.jpg',
+                            isWalking: false,
+                            updatedAt: new Date('2019-01-01'),
+                        }),
+                    ],
+                    userId: 1,
+                });
+                await insertMockJournalWithPhotosAndExcrements({
+                    mockJournal: new Journals({
+                        id: 1,
+                        userId: 1,
+                        routes: '[{"lat": 87.4, "lng" : 85.222}, {"lat": 75.23, "lng" : 104.4839}]',
+                        calories: 500,
+                        memo: 'Enjoyed the walk with Buddy!',
+                        startedAt: new Date('2024-06-12T00:00:00Z'),
+                        duration: 30,
+                        distance: 5,
+                    }),
+                    dogIds: [1, 2],
+                    photoUrls: ['1/photo1.jpeg', '1/photo2.png'],
+                    excrements: [
+                        {
+                            dogId: 1,
+                            type: EXCREMENT.Feces,
+                            coordinate: `POINT(87.4 85.222)`,
+                        },
+                        {
+                            dogId: 1,
+                            type: EXCREMENT.Urine,
+                            coordinate: `POINT(87.4 85.222)`,
+                        },
+                        {
+                            dogId: 2,
+                            type: EXCREMENT.Feces,
+                            coordinate: `POINT(75.23 104.4839)`,
+                        },
+                    ],
+                });
                 const fakeDate = new Date('2024-06-12T00:00:00Z');
                 setFakeDate(fakeDate);
             });
 
             afterEach(async () => {
                 clearFakeDate();
-                await clearJournal();
+                await clearJournal({ dogIds: [1, 2] });
                 await clearDogs();
             });
 
@@ -480,7 +850,7 @@ describe('JournalsController (e2e)', () => {
         context('사용자가 자신이 소유하지 않은 산책 일지의 삭제 요청을 보내면', () => {
             it('403 상태 코드를 반환해야 한다.', () => {
                 return request(app.getHttpServer())
-                    .delete('/journals/3')
+                    .delete('/journals/1')
                     .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
                     .expect(403);
             });

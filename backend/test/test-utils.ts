@@ -18,9 +18,9 @@ import { NaverService } from '../src/auth/oauth/naver.service';
 import { DogWalkDay } from '../src/dog-walk-day/dog-walk-day.entity';
 import { Dogs } from '../src/dogs/dogs.entity';
 import { Excrements } from '../src/excrements/excrements.entity';
+import { Excrement } from '../src/excrements/types/excrement.type';
 import { JournalPhotos } from '../src/journal-photos/journal-photos.entity';
 import { Journals } from '../src/journals/journals.entity';
-import { CreateExcrementsInfo } from '../src/journals/types/create-journal-data.type';
 import { JournalsDogs } from '../src/journals-dogs/journals-dogs.entity';
 import { MockS3Service } from '../src/s3/__mocks__/s3.service';
 import { S3Service } from '../src/s3/s3.service';
@@ -164,11 +164,17 @@ export const clearJournals = async () => {
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 1;');
 };
 
+interface ExcrementData {
+    dogId: number;
+    type: Excrement;
+    coordinate: string;
+}
+
 interface InsertMockJournalWithPhotosAndExcrementsParams {
     mockJournal: Journals;
     dogIds: number | number[];
     photoUrls: string | string[];
-    excrements: CreateExcrementsInfo | CreateExcrementsInfo[];
+    excrements: ExcrementData | ExcrementData[];
 }
 
 // dogIds에게 mockJournal 생성
