@@ -14,6 +14,10 @@ export class BreedService {
 
     async getKoreanNames(): Promise<string[]> {
         const breeds = await this.breedRepository.find({ select: ['koreanName'] });
+        if (!breeds.length) {
+            throw new NotFoundException(`견종 목록을 찾을 수 없습니다.`);
+        }
+
         return breeds.map((breed) => breed.koreanName);
     }
 
@@ -22,7 +26,7 @@ export class BreedService {
         const breeds = await this.breedRepository.find({ where: { id: In(breedIds) } });
 
         if (!breeds.length) {
-            throw new NotFoundException();
+            throw new NotFoundException(`${breedIds} 해당 견종을 찾을 수 없습니다.`);
         }
 
         const breedMap = new Map(breeds.map((breed: Breed) => [breed.id, breed.recommendedWalkAmount]));
@@ -31,7 +35,7 @@ export class BreedService {
             const recommendedWalkAmount = breedMap.get(breedId);
 
             if (!recommendedWalkAmount) {
-                throw new NotFoundException(`Recommended walk amount not found for breedId: ${breedId}.`);
+                throw new NotFoundException(`${breedId}에 대한 권장 산책량을 찾을 수 없습니다.`);
             }
 
             return recommendedWalkAmount;
