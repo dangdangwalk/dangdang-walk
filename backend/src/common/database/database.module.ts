@@ -8,6 +8,16 @@ import { addTransactionalDataSource, getDataSourceByName } from 'typeorm-transac
 
 import BreedSeeder from './seeds/breed.seeder';
 
+import { Breed } from '../../breed/breed.entity';
+import { DogWalkDay } from '../../dog-walk-day/dog-walk-day.entity';
+import { Dogs } from '../../dogs/dogs.entity';
+import { Excrements } from '../../excrements/excrements.entity';
+import { JournalPhotos } from '../../journal-photos/journal-photos.entity';
+import { Journals } from '../../journals/journals.entity';
+import { JournalsDogs } from '../../journals-dogs/journals-dogs.entity';
+import { TodayWalkTime } from '../../today-walk-time/today-walk-time.entity';
+import { Users } from '../../users/users.entity';
+import { UsersDogs } from '../../users-dogs/users-dogs.entity';
 import { color } from '../../utils/ansi.util';
 import { WinstonLoggerService } from '../logger/winstonLogger.service';
 
@@ -27,7 +37,18 @@ import { WinstonLoggerService } from '../logger/winstonLogger.service';
                     username: config.get<string>('MYSQL_ROOT_USER'),
                     password: config.get<string>('MYSQL_ROOT_PASSWORD'),
                     database: config.get<string>('MYSQL_DATABASE'),
-                    entities: isTest ? ['src/**/*.entity{.ts,.js}'] : ['dist/**/*.entity{.ts,.js}'],
+                    entities: [
+                        Breed,
+                        DogWalkDay,
+                        Dogs,
+                        Excrements,
+                        JournalPhotos,
+                        Journals,
+                        JournalsDogs,
+                        TodayWalkTime,
+                        Users,
+                        UsersDogs,
+                    ],
                     synchronize: true,
                     timezone: 'Z',
                     legacySpatialSupport: false,
