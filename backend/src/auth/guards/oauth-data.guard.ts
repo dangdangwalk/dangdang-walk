@@ -28,8 +28,10 @@ export class OauthDataGuard implements CanActivate {
                 .filter(Boolean)
                 .join(', ');
 
-            const error = new UnauthorizedException(`OAuth data missing in cookies: ${missingFields}.`);
-            this.logger.error(`OAuthDataGuard failed: missing ${missingFields}.`, { trace: error.stack ?? 'No stack' });
+            const error = new UnauthorizedException(`쿠키에 OAuth 데이터가 없습니다: ${missingFields}`);
+            this.logger.error(`OAuthDataGuard : ${missingFields} 필드가 없습니다`, {
+                trace: error.stack ?? '스택 없음',
+            });
             throw error;
         }
 

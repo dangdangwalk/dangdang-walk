@@ -75,11 +75,11 @@ export class KakaoService implements OauthService {
             return data;
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
-                this.logger.error(`Kakao: Failed to request token.`, {
-                    trace: error.stack ?? 'No stack',
+                this.logger.error(`Kakao: Token 발급 요청이 실패했습니다`, {
+                    trace: error.stack ?? '스택 없음',
                     response: error.response.data,
                 });
-                error = new BadRequestException('Kakao: Failed to request token.');
+                error = new BadRequestException('Kakao: Token 발급 요청이 실패했습니다');
             }
             throw error;
         }
@@ -105,11 +105,11 @@ export class KakaoService implements OauthService {
             };
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
-                this.logger.error('Kakao: Failed to request userInfo.', {
+                this.logger.error('Kakao: 유저 정보 조회 요청이 실패했습니다', {
                     trace: error.stack ?? 'No stack',
                     response: error.response.data,
                 });
-                error = new BadRequestException('Kakao: Failed to request userInfo.');
+                error = new BadRequestException('Kakao: 유저 정보 조회 요청이 실패했습니다');
             }
             throw error;
         }
@@ -131,11 +131,11 @@ export class KakaoService implements OauthService {
             );
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
-                this.logger.error('Kakao: Failed to request token expiration.', {
+                this.logger.error('Kakao: Token 만료 기간 조회 요청이 실패했습니다', {
                     trace: error.stack ?? 'No stack',
                     response: error.response.data,
                 });
-                error = new BadRequestException('Kakao: Failed to request token expiration.');
+                error = new BadRequestException('Kakao: Token 만료 기간 조회 요청이 실패했습니다');
             }
             throw error;
         }
@@ -157,11 +157,11 @@ export class KakaoService implements OauthService {
             );
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
-                this.logger.error('Kakao: Failed to request unlink.', {
+                this.logger.error('Kakao: 계정 연결 끊기 요청이 실패했습니다', {
                     trace: error.stack ?? 'No stack',
                     response: error.response.data,
                 });
-                error = new BadRequestException('Kakao: Failed to request unlink.');
+                error = new BadRequestException('Kakao: 계정 연결 끊기 요청이 실패했습니다');
             }
             throw error;
         }
@@ -189,11 +189,11 @@ export class KakaoService implements OauthService {
             return data;
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
-                this.logger.error('Kakao: Failed to request token refresh.', {
+                this.logger.error('Kakao: Token 갱신 요청이 실패했습니다', {
                     trace: error.stack ?? 'No stack',
                     response: error.response.data,
                 });
-                error = new BadRequestException('Kakao: Failed to request token refresh.');
+                error = new BadRequestException('Kakao: Token 갱신 요청이 실패했습니다');
             }
             throw error;
         }

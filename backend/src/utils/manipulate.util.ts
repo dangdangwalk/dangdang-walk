@@ -45,7 +45,7 @@ export function makeSubObjectsArray(
     Array.isArray(newAttributes) ? newAttributes : [newAttributes];
 
     if (srcAttributes.length != newAttributes.length) {
-        throw new Error('srcAttributes and targetAttributes must have same length');
+        throw new Error('srcAttributes와 targetAttributes의 길이가 다릅니다');
     }
     targetArr.map((cur) => {
         const obj: { [key: string]: any } = {};

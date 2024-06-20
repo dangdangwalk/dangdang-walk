@@ -62,11 +62,11 @@ export class NaverService implements OauthService {
             return data;
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
-                this.logger.error('Naver: Failed to request token.', {
+                this.logger.error('Naver: Token 발급 요청이 실패했습니다', {
                     trace: error.stack ?? 'No stack',
                     response: error.response.data,
                 });
-                error = new BadRequestException('Naver: Failed to request token.');
+                error = new BadRequestException('Naver: Token 발급 요청이 실패했습니다');
             }
             throw error;
         }
@@ -92,11 +92,11 @@ export class NaverService implements OauthService {
             };
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
-                this.logger.error('Naver: Failed to request userInfo.', {
+                this.logger.error('Naver: 유저 정보 조회 요청이 실패했습니다', {
                     trace: error.stack ?? 'No stack',
                     response: error.response.data,
                 });
-                error = new BadRequestException('Naver: Failed to request userInfo.');
+                error = new BadRequestException('Naver: 유저 정보 조회 요청이 실패했습니다');
             }
             throw error;
         }
@@ -117,11 +117,11 @@ export class NaverService implements OauthService {
             );
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
-                this.logger.error('Naver: Failed to request token expiration.', {
+                this.logger.error('Naver: Token 만료 기간 조회 요청이 실패했습니다', {
                     trace: error.stack ?? 'No stack',
                     response: error.response.data,
                 });
-                error = new BadRequestException('Naver: Failed to request token expiration.');
+                error = new BadRequestException('Naver: Token 만료 기간 조회 요청이 실패했습니다');
             }
             throw error;
         }
@@ -143,11 +143,11 @@ export class NaverService implements OauthService {
             return data;
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
-                this.logger.error('Naver: Failed to request token refresh.', {
+                this.logger.error('Naver: Token 갱신 요청이 실패했습니다', {
                     trace: error.stack ?? 'No stack',
                     response: error.response.data,
                 });
-                error = new BadRequestException('Naver: Failed to request token refresh.');
+                error = new BadRequestException('Naver: Token 갱신 요청이 실패했습니다');
             }
             throw error;
         }

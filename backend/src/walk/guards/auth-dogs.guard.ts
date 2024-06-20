@@ -25,10 +25,8 @@ export class AuthDogsGuard implements CanActivate {
         const body = request.body.dogs || request.body;
 
         if (!isTypedArray(body, 'number')) {
-            const error = new BadRequestException(
-                'Invalid request body. The request body should be an array of dogIds as numbers.',
-            );
-            this.logger.error('Invalid request body. The request body should be an array of dogIds as numbers.', {
+            const error = new BadRequestException('유효하지 않은 request body: dogIds가 number 타입의 배열이 아닙니다');
+            this.logger.error('유효하지 않은 request body: dogIds가 number 타입의 배열이 아닙니다', {
                 trace: error.stack ?? 'No stack',
             });
             throw error;
@@ -42,11 +40,14 @@ export class AuthDogsGuard implements CanActivate {
 
         if (!owned) {
             const error = new ForbiddenException(
-                `User ${userId} does not own the following dog(s): ${notFoundDogIds.join(', ')}.`,
+                `유저 ${userId}은/는 다음 강아지(들)에 대한 접근 권한이 없습니다: ${notFoundDogIds.join(', ')}`,
             );
-            this.logger.error(`User ${userId} does not own the following dog(s): ${notFoundDogIds.join(', ')}.`, {
-                trace: error.stack ?? 'No stack',
-            });
+            this.logger.error(
+                `유저 ${userId}은/는 다음 강아지(들)에 대한 접근 권한이 없습니다: ${notFoundDogIds.join(', ')}`,
+                {
+                    trace: error.stack ?? 'No stack',
+                },
+            );
             throw error;
         }
     }

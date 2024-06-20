@@ -38,7 +38,7 @@ import { WinstonLoggerService } from '../logger/winstonLogger.service';
             },
             async dataSourceFactory(options) {
                 if (!options) {
-                    throw new Error('Invalid options passed');
+                    throw new Error('옵션이 없습니다');
                 }
 
                 return getDataSourceByName('default') || addTransactionalDataSource(new DataSource(options));

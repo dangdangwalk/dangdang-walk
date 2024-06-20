@@ -24,9 +24,11 @@ export class AuthJournalGuard implements CanActivate {
         const [owned] = await this.journalsService.checkJournalOwnership(userId, journalId);
 
         if (!owned) {
-            const error = new ForbiddenException(`User ${userId} does not have access to journal ${journalId}`);
-            this.logger.error(`User ${userId} does not have access to journal ${journalId}`, {
-                trace: error.stack ?? 'No stack',
+            const error = new ForbiddenException(
+                `유저 ${userId}은/는 산책일지 ${journalId}에 대한 접근 권한이 없습니다`,
+            );
+            this.logger.error(`유저 ${userId}은/는 산책일지 ${journalId}에 대한 접근 권한이 없습니다`, {
+                trace: error.stack ?? '스택 없음',
             });
             throw error;
         }

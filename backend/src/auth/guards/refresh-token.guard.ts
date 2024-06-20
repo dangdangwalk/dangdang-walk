@@ -37,8 +37,8 @@ export class RefreshTokenGuard implements CanActivate {
         const token = request.cookies['refreshToken'];
 
         if (!token) {
-            const error = new UnauthorizedException('Refresh token not found in cookies.');
-            this.logger.error(`No refreshToken inside cookie.`, { trace: error.stack ?? 'No stack' });
+            const error = new UnauthorizedException('쿠키에 refreshToken이 없습니다');
+            this.logger.error(`쿠키에 refreshToken이 없습니다`, { trace: error.stack ?? '스택 없음' });
             throw error;
         }
 

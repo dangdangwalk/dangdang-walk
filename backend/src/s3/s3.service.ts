@@ -49,7 +49,7 @@ export class S3Service {
     async deleteObjects(userId: number, filenames: string[]) {
         const objectArray = filenames.map((curFilename) => {
             if (!this.checkUserIdInFilename(userId, curFilename)) {
-                throw new ForbiddenException(`User ${userId} is not owner of the file ${curFilename}`);
+                throw new ForbiddenException(`유저 ${userId}은 ${curFilename}에 대한 접근 권한이 없습니다`);
             }
             return { Key: curFilename };
         });
@@ -64,15 +64,15 @@ export class S3Service {
         const command = new DeleteObjectsCommand(input);
         try {
             await this.s3Client.send(command);
-            this.logger.log(`Successfully deleted ${objectArray.map((cur) => cur.Key)}`);
+            this.logger.log(`${BUCKET_NAME} 버킷에서 ${filenames} 파일을 성공적으로 삭제했습니다`);
         } catch (error) {
-            this.logger.error(`Can't delete files from S3 bucket ${BUCKET_NAME}`, error ?? error.stack);
+            this.logger.error(`${BUCKET_NAME} 버킷에서 ${filenames} 파일 삭제에 실패했습니다`, error ?? error.stack);
         }
     }
 
     async deleteSingleObject(userId: number, filename: string) {
         if (!this.checkUserIdInFilename(userId, filename)) {
-            throw new ForbiddenException(`User ${userId} is not owner of the file ${filename}`);
+            throw new ForbiddenException(`유저 ${userId}은/는 ${filename}에 대한 접근 권한이 없습니다`);
         }
 
         const command = new DeleteObjectCommand({
@@ -82,9 +82,9 @@ export class S3Service {
 
         try {
             await this.s3Client.send(command);
-            this.logger.log(`Successfully deleted ${filename}`);
+            this.logger.log(`${BUCKET_NAME} 버킷에서 ${filename} 파일을 성공적으로 삭제했습니다`);
         } catch (error) {
-            this.logger.error(`Can't delete ${filename} from S3 bucket ${BUCKET_NAME}`, error ?? error.stack);
+            this.logger.error(`${BUCKET_NAME} 버킷에서 ${filename} 파일 삭제에 실패했습니다`, error ?? error.stack);
         }
     }
 
@@ -98,9 +98,9 @@ export class S3Service {
 
         try {
             await this.s3Client.send(command);
-            this.logger.log(`Successfully deleted ${filename}`);
+            this.logger.log(`${BUCKET_NAME} 버킷에서 ${filename} 파일을 성공적으로 삭제했습니다`);
         } catch (error) {
-            this.logger.error(`Can't delete ${filename} from S3 bucket ${BUCKET_NAME}`, error ?? error.stack);
+            this.logger.error(`${BUCKET_NAME} 버킷에서 ${filename} 파일 삭제에 실패했습니다`, error ?? error.stack);
         }
     }
 }
