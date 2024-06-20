@@ -5,6 +5,7 @@ import { WinstonLoggerService } from '../../common/logger/winstonLogger.service'
 @Injectable()
 export class OauthDataGuard implements CanActivate {
     constructor(private readonly logger: WinstonLoggerService) {}
+
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request = context.switchToHttp().getRequest();
         const oauthData = this.extractOauthDataFromCookies(request);
