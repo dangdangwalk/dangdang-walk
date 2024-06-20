@@ -51,6 +51,35 @@ describe('BreedService', () => {
         });
     });
 
+    describe('getKoreanNames', () => {
+        context('견종의 한국어 이름을 조회할 때', () => {
+            const mockBreedList = [
+                {
+                    englishName: 'Poodle',
+                    id: 1,
+                    koreanName: '푸들',
+                    recommendedWalkAmount: 60,
+                },
+                {
+                    englishName: 'Airedale Terrier',
+                    id: 2,
+                    koreanName: '에어데일 테리어',
+                    recommendedWalkAmount: 1800,
+                },
+            ];
+
+            beforeEach(() => {
+                jest.spyOn(breedRepository, 'find').mockResolvedValue(mockBreedList);
+            });
+
+            it('견종의 한국어 이름 리스트를 반환한다.', async () => {
+                const breed = await service.getKoreanNames();
+
+                expect(breed).toEqual(['푸들', '에어데일 테리어']);
+            });
+        });
+    });
+
     describe('getRecommendedWalkAmountList', () => {
         const mockBreedList = [
             {
