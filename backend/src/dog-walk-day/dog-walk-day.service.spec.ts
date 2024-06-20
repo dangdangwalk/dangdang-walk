@@ -49,22 +49,28 @@ describe('DogWalkDayService', () => {
             });
         });
 
-        context('올바른 값이 주어지지 않으면', () => {
+        context('빈 배열이 주어지면', () => {
             beforeEach(() => {
                 jest.spyOn(repository, 'find').mockResolvedValue([]);
             });
 
-            it('walkDayIds 배열이 비어있을 때 NotFoundException을 던져야 한다.', async () => {
+            it('NotFoundException을 던져야 한다.', async () => {
                 await expect(dogWalkDayService.getWalkDayList([])).rejects.toThrow(
                     new NotFoundException('walkDayIds에 값이 없습니다'),
                 );
             });
+        });
+    });
 
-            it('id가 존재하지 않을 때 NotFoundException 던져야 한다.', async () => {
-                await expect(dogWalkDayService.getWalkDayList([3, 4])).rejects.toThrow(
-                    new NotFoundException('id가 3,4인 레코드를 찾을 수 없습니다'),
-                );
-            });
+    context('존재하지 않는 id가 포함된 배열이 주어지면', () => {
+        beforeEach(() => {
+            jest.spyOn(repository, 'find').mockResolvedValue([]);
+        });
+
+        it('NotFoundException을 던져야 한다.', async () => {
+            await expect(dogWalkDayService.getWalkDayList([3, 4])).rejects.toThrow(
+                new NotFoundException('id가 3,4인 레코드를 찾을 수 없습니다'),
+            );
         });
     });
 
