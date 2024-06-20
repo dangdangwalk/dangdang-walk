@@ -157,11 +157,11 @@ export class KakaoService implements OauthService {
             );
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
-                this.logger.error('Kakao: 계정 unlink 요청이 실패했습니다', {
+                this.logger.error('Kakao: 계정 연결 끊기 요청이 실패했습니다', {
                     trace: error.stack ?? 'No stack',
                     response: error.response.data,
                 });
-                error = new BadRequestException('Kakao: 계정 unlink 요청이 실패했습니다');
+                error = new BadRequestException('Kakao: 계정 연결 끊기 요청이 실패했습니다');
             }
             throw error;
         }

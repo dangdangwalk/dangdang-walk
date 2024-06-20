@@ -52,7 +52,7 @@ export class DogsService {
 
             return this.usersDogsService.create({ userId, dogId: dog.id });
         } catch (error) {
-            this.logger.error(`존재하지 않는 breed입니다`, { trace: error.stack ?? '스택 없음' });
+            this.logger.error(`존재하지 않는 견종입니다`, { trace: error.stack ?? '스택 없음' });
             throw error;
         }
     }

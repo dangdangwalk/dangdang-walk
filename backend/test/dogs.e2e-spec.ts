@@ -292,7 +292,7 @@ describe('DogsController (e2e)', () => {
                     .expect(204);
 
                 const updatedDog = await dataSource.getRepository(Dogs).findOne({ where: { id: 1 } });
-                if (!updatedDog) throw new Error('강아지 1을 찾을 수 없습니다');
+                if (!updatedDog) throw new Error('id가 1인 강아지를 찾을 수 없습니다');
                 updatedDog.breed = (updatedDog.breed as any).koreanName;
 
                 expect(updatedDog).toEqual({

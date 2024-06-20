@@ -40,11 +40,14 @@ export class AuthDogsGuard implements CanActivate {
 
         if (!owned) {
             const error = new ForbiddenException(
-                `유저 ${userId}은/는 다음 강아지(들)의 주인이 아닙니다: ${notFoundDogIds.join(', ')}`,
+                `유저 ${userId}은/는 다음 강아지(들)에 대한 접근 권한이 없습니다: ${notFoundDogIds.join(', ')}`,
             );
-            this.logger.error(`유저 ${userId}은/는 다음 강아지(들)의 주인이 아닙니다: ${notFoundDogIds.join(', ')}`, {
-                trace: error.stack ?? 'No stack',
-            });
+            this.logger.error(
+                `유저 ${userId}은/는 다음 강아지(들)에 대한 접근 권한이 없습니다: ${notFoundDogIds.join(', ')}`,
+                {
+                    trace: error.stack ?? 'No stack',
+                },
+            );
             throw error;
         }
     }

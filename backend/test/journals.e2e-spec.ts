@@ -420,12 +420,12 @@ describe('JournalsController (e2e)', () => {
                 const dog1WalkDay = await dataSource
                     .getRepository(DogWalkDay)
                     .findOne({ where: { id: 1 }, select: days });
-                if (!dog1WalkDay) throw new Error('dog1WalkDay를 찾을 수 없습니다');
+                if (!dog1WalkDay) throw new Error('id가 1인 산책일지를 찾을 수 없습니다');
 
                 const dog2WalkDay = await dataSource
                     .getRepository(DogWalkDay)
                     .findOne({ where: { id: 2 }, select: days });
-                if (!dog2WalkDay) throw new Error('dog2WalkDay를 찾을 수 없습니다');
+                if (!dog2WalkDay) throw new Error('id가 2인 산책일지를 찾을 수 없습니다');
 
                 const expectedWalkDays = {
                     mon: 0,
@@ -708,12 +708,12 @@ describe('JournalsController (e2e)', () => {
                     .expect(204);
 
                 const updatedJournal = await dataSource.getRepository(Journals).findOne({ where: { id: 1 } });
-                if (!updatedJournal) throw new Error('산책일지 1을 찾을 수 없습니다');
+                if (!updatedJournal) throw new Error('id가 1인 산책일지를 찾을 수 없습니다');
 
                 const updatedJournalPhotos = await dataSource
                     .getRepository(JournalPhotos)
                     .find({ where: { journalId: 1 } });
-                if (!updatedJournalPhotos) throw new Error('산책일지 1의 사진을 찾을 수 없습니다');
+                if (!updatedJournalPhotos) throw new Error('id가 1인 산책일지를 찾을 수 없습니다');
 
                 expect(updatedJournal.memo).toBe(updateJournalMock.memo);
                 expect(updatedJournalPhotos).toHaveLength(updateJournalMock.photoUrls.length);
@@ -825,12 +825,12 @@ describe('JournalsController (e2e)', () => {
                 const dog1WalkDay = await dataSource
                     .getRepository(DogWalkDay)
                     .findOne({ where: { id: 1 }, select: days });
-                if (!dog1WalkDay) throw new Error('dog1WalkDay를 찾을 수 없습니다');
+                if (!dog1WalkDay) throw new Error('id가 1인 산책일지를 찾을 수 없습니다');
 
                 const dog2WalkDay = await dataSource
                     .getRepository(DogWalkDay)
                     .findOne({ where: { id: 2 }, select: days });
-                if (!dog2WalkDay) throw new Error('dog2WalkDay를 찾을 수 없습니다');
+                if (!dog2WalkDay) throw new Error('id가 2인 산책일지를 찾을 수 없습니다');
 
                 const expectedWalkDays = {
                     mon: 0,
