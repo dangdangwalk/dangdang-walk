@@ -24,9 +24,9 @@ export class AuthDogGuard implements CanActivate {
         const id = request.query.dogId || request.params.id;
 
         if (!this.isInt(id)) {
-            const error = new BadRequestException('Invalid dogId.');
-            this.logger.error('Invalid dogId.', {
-                trace: error.stack ?? 'No stack',
+            const error = new BadRequestException('dogId가 정수가 아닙니다');
+            this.logger.error('dogId가 정수가 아닙니다', {
+                trace: error.stack ?? '스택 없음',
             });
             throw error;
         }
@@ -38,8 +38,8 @@ export class AuthDogGuard implements CanActivate {
         const [owned] = await this.usersService.checkDogOwnership(userId, dogId);
 
         if (!owned) {
-            const error = new ForbiddenException(`User ${userId} does not own the dog ${dogId}.`);
-            this.logger.error(`User ${userId} does not own the dog ${dogId}.`, { trace: error.stack ?? 'No stack' });
+            const error = new ForbiddenException(`유저 ${userId}은/는 강아지${dogId}의 주인이 아닙니다`);
+            this.logger.error(`유저 ${userId}은/는 ${dogId}의 주인이 아닙니다`, { trace: error.stack ?? '스택 없음' });
             throw error;
         }
     }

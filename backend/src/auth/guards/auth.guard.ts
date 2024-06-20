@@ -53,8 +53,8 @@ export class AuthGuard implements CanActivate {
         const authorizationHeader = request.headers.authorization;
 
         if (!authorizationHeader) {
-            const error = new UnauthorizedException('Authorization header is missing.');
-            this.logger.error(`Authorization header is missing.`, { trace: error.stack ?? 'No stack' });
+            const error = new UnauthorizedException('헤더에 Authorization 필드가 없습니다');
+            this.logger.error(`헤더에 Authorization 필드가 없습니다`, { trace: error.stack ?? 'No stack' });
             throw error;
         }
 
@@ -64,7 +64,7 @@ export class AuthGuard implements CanActivate {
             const error = new UnauthorizedException(
                 'Token does not exist in Authorization header or is in an invalid format.',
             );
-            this.logger.error(`Token does not exist in Authorization header or is in an invalid format.`, {
+            this.logger.error(`헤더의 Authorization 필드에 토큰이 없거나, 형식이 잘못되었습니다`, {
                 trace: error.stack ?? 'No stack',
             });
             throw error;

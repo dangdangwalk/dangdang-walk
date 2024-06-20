@@ -91,7 +91,7 @@ describe('UsersController (e2e)', () => {
                     .expect(204);
 
                 const updatedUser = await dataSource.getRepository(Users).findOne({ where: { id: 1 } });
-                if (!updatedUser) throw new Error('User not found');
+                if (!updatedUser) throw new Error('유저 1을 찾을 수 없습니다');
                 updatedUser.nickname = updatedUser.nickname.split('#')[0];
                 expect(updatedUser).toMatchObject({ ...mockUserInfo, ...updateMockUser });
             });

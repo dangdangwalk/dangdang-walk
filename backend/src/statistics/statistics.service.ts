@@ -101,10 +101,10 @@ export class StatisticsService {
         ].filter(Boolean);
 
         if (mismatchedLengths.length > 0) {
-            const error = new NotFoundException(`Data missing or mismatched for dogId: ${ownDogIds}.`);
+            const error = new NotFoundException(`dogId: ${ownDogIds}에 대한 데이터가 누락되었거나 일치하지 않습니다.`);
             this.logger.error(
-                `Data missing or mismatched for dogId: ${ownDogIds}. Expected length: ${length}. Mismatched data: ${mismatchedLengths.join(', ')}`,
-                { trace: error.stack ?? 'No stack' },
+                `dogId: ${ownDogIds}에 대한 데이터가 누락되었거나 일치하지 않습니다. 올바른 길이: ${length}. 일치하지 않는 데이터: ${mismatchedLengths.join(', ')}`,
+                { trace: error.stack ?? '스택 없음' },
             );
             throw error;
         }

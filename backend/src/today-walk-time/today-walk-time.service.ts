@@ -43,9 +43,9 @@ export class TodayWalkTimeService {
     async getWalkTimeList(walkTimeIds: number[]) {
         const walkTimeListBeforeCheck = await this.todayWalkTimeRepository.find({ where: { id: In(walkTimeIds) } });
         if (!walkTimeListBeforeCheck.length) {
-            const error = new NotFoundException(`No walkTime found for the provided IDs: ${walkTimeIds}.`);
-            this.logger.error(`No walkTime found for the provided IDs: ${walkTimeIds}.`, {
-                trace: error.stack ?? 'No stack',
+            const error = new NotFoundException(`id: ${walkTimeIds}와 일치하는 레코드가 없습니다`);
+            this.logger.error(`id: ${walkTimeIds}와 일치하는 레코드가 없습니다`, {
+                trace: error.stack ?? '스택 없음',
             });
             throw error;
         }

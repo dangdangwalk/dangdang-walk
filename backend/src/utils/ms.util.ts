@@ -58,11 +58,11 @@ function msFn(value: StringValue): number {
         if (typeof value === 'string') {
             return parse(value);
         }
-        throw new Error('Value provided to ms() must be a string or number.');
+        throw new Error('인자의 타입이 string 또는 number가 아닙니다');
     } catch (error) {
         const message = isError(error)
             ? `${error.message}. value=${JSON.stringify(value)}`
-            : 'An unknown error has occurred.';
+            : '알 수 없는 에러가 발생했습니다';
         throw new Error(message);
     }
 }

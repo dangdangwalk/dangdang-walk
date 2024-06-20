@@ -18,8 +18,8 @@ export class DogWalkDayService {
     async getWalkDayList(walkDayIds: number[]): Promise<number[][]> {
         const foundDays = await this.dogWalkDayRepository.find({ where: { id: In(walkDayIds) } });
         if (!foundDays.length) {
-            this.logger.error('walkDayIds 데이터를 찾을 수 없습니다.', '');
-            throw new NotFoundException('walkDayIds 값을 찾을 수 없습니다.');
+            this.logger.error(`id가 ${walkDayIds}인 레코드를 찾을 수 없습니다`, '');
+            throw new NotFoundException(`id가 ${walkDayIds}인 레코드를 찾을 수 없습니다`);
         }
 
         const result: number[][] = [];

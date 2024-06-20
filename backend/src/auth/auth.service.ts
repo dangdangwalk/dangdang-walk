@@ -57,7 +57,7 @@ export class AuthService {
             if (error instanceof NotFoundException) {
                 return { oauthAccessToken, oauthRefreshToken, provider };
             }
-            this.logger.error(`Login error`, { trace: error.stack ?? 'No stack' });
+            this.logger.error(`로그인 에러`, { trace: error.stack ?? '스택 없음' });
             throw error;
         }
     }

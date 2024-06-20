@@ -44,8 +44,11 @@ export class CookieInterceptor implements NestInterceptor {
                 } else if ('oauthAccessToken' in data && 'oauthRefreshToken' in data && 'provider' in data) {
                     this.setOauthCookies(response, data);
 
-                    const error = new NotFoundException('No matching user found. Please sign up for an account.');
-                    this.logger.error(`No matching user found`, error.stack ?? 'No Stack');
+                    const error = new NotFoundException('일치하는 유저를 찾을 수 없습니다. 계정을 생성해주세요');
+                    this.logger.error(
+                        `일치하는 유저를 찾을 수 없습니다. 계정을 생성해주세요`,
+                        error.stack ?? '스택 없음',
+                    );
                     throw error;
                 }
             }),
