@@ -56,7 +56,7 @@ describe('DogWalkDayService', () => {
 
             it('NotFoundException 던져야 한다.', async () => {
                 await expect(dogWalkDayService.getWalkDayList([])).rejects.toThrow(
-                    new NotFoundException('walkDayIds 값을 찾을 수 없습니다.'),
+                    new NotFoundException('id가 인 레코드를 찾을 수 없습니다'),
                 );
             });
         });
