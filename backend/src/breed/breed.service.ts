@@ -14,6 +14,10 @@ export class BreedService {
 
     async getKoreanNames(): Promise<string[]> {
         const breeds = await this.breedRepository.find({ select: ['koreanName'] });
+        if (!breeds.length) {
+            throw new NotFoundException(`견종 목록을 찾을 수 없습니다.`);
+        }
+
         return breeds.map((breed) => breed.koreanName);
     }
 

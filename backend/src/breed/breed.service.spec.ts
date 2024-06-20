@@ -78,6 +78,18 @@ describe('BreedService', () => {
                 expect(breed).toEqual(['푸들', '에어데일 테리어']);
             });
         });
+
+        context('견종 목록이 존재하지 않으면', () => {
+            beforeEach(() => {
+                jest.spyOn(breedRepository, 'find').mockResolvedValue([]);
+            });
+
+            it('NotFoundException 예외를 던져야 한다.', async () => {
+                await expect(service.getKoreanNames()).rejects.toThrow(
+                    new NotFoundException('견종 목록을 찾을 수 없습니다.'),
+                );
+            });
+        });
     });
 
     describe('getRecommendedWalkAmountList', () => {
