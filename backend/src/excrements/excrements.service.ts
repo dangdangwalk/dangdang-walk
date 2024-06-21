@@ -10,16 +10,6 @@ import { Location } from '../journals/dtos/create-journal.dto';
 export class ExcrementsService {
     constructor(private readonly excrementsRepository: ExcrementsRepository) {}
 
-    private async createIfNotExists(data: Partial<Excrements>) {
-        const newEntity = new Excrements(data);
-
-        return this.excrementsRepository.createIfNotExists(newEntity, ['journalId', 'dogId', 'type']);
-    }
-
-    private makeCoordinate(lat: string, lng: string): string {
-        return `POINT(${lat} ${lng})`;
-    }
-
     async createNewExcrements(
         journalId: number,
         dogId: number,
@@ -28,14 +18,25 @@ export class ExcrementsService {
     ): Promise<Excrements> {
         const coordinate = this.makeCoordinate(location.lat, location.lng);
         const data: Partial<Excrements> = { journalId, dogId, type, coordinate };
+        const excrementsPromise = await this.createIfNotExists(data);
 
-        return this.createIfNotExists(data);
+        return excrementsPromise;
     }
 
     //TODO: typeorm의 count? 함수 찾아서 적용하기
-    async getExcrementsCnt(journalId: number, dogId: number, type: Excrement): Promise<number> {
+    async getExcrementsCount(journalId: number, dogId: number, type: Excrement): Promise<number> {
         const excrements = await this.excrementsRepository.find({ where: { journalId, dogId, type } });
 
         return excrements.length;
+    }
+
+    protected async createIfNotExists(data: Partial<Excrements>): Promise<Excrements> {
+        const newEntity = new Excrements(data);
+
+        return this.excrementsRepository.createIfNotExists(newEntity, ['journalId', 'dogId', 'type']);
+    }
+
+    protected makeCoordinate(lat: string, lng: string): string {
+        return `POINT(${lat} ${lng})`;
     }
 }
