@@ -25,7 +25,9 @@ export default function ImageCropper() {
             setCanvasPreview(
                 imgRef.current,
                 previewCanvasRef.current,
-                convertToPixelCrop(crop, imgRef.current?.width, imgRef.current?.height)
+                convertToPixelCrop(crop, imgRef.current?.width, imgRef.current?.height),
+                132,
+                132
             );
             const dataUrl = previewCanvasRef.current.toDataURL('image/jpeg', 0.1);
             setStorage(storageKeys.DATA_URL, dataUrl);
@@ -122,8 +124,8 @@ export default function ImageCropper() {
                         display: 'none',
                         border: '1px solid black',
                         objectFit: 'contain',
-                        width: 120,
-                        height: 120,
+                        width: 132,
+                        height: 132,
                     }}
                 />
             )}
