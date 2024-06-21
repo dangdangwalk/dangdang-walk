@@ -13,6 +13,35 @@ module.exports = {
                 kakao: '#FEE500',
                 google: '#FFFFFF',
                 naver: '#03C75A',
+
+                primary: {
+                    normal: '##9900',
+                    strong: '#FF8A00',
+                },
+                label: {
+                    normal: '#22222',
+                    strong: '#000000',
+                    neutral: '#545454',
+                    alternative: '#888888',
+                    assistive: '#999999',
+                    disabled: '#BBBBBB',
+                },
+                line: {
+                    normal: '#E4E4E4',
+                    alternative: 'F6F6F6',
+                },
+                status: {
+                    destructive: '#E82626',
+                    positive: '#FF9900',
+                },
+                fill: {
+                    normal: '#F2F2F2',
+                    disabled: '#E5E5E5',
+                },
+                dimmer: '#222222',
+                shadow: {
+                    normal: '#FFFFFF',
+                },
             },
             fontFamily: {
                 roboto: ['"Roboto"', 'sans-serif'],
