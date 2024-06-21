@@ -50,7 +50,7 @@
 이 프로젝트를 다운로드 받습니다.
 
 ```bash
-git clone https://github.com/jihwooon/dangdang-walk.git
+git clone https://github.com/dangdangwalk/dangdang-walk.git
 ```
 
 ## 📋 Requirements
