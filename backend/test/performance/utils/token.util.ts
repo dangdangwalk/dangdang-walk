@@ -6,29 +6,41 @@ import { OauthProvider } from '../../../src/auth/types/oauth-provider.type';
 
 dotenv.config({ path: '.env.test' });
 
-const signTestAccessToken = (userId: number = 1, provider: OauthProvider = 'kakao') => {
+const signTestAccessToken = (
+    userId: number = 1,
+    provider: OauthProvider = 'kakao',
+    expiresIn: string | number = '100y',
+) => {
+    console.log(`userId=${userId}, provider=${provider}, expiresIn=${expiresIn}`);
+
     const payload: AccessTokenPayload = {
         userId,
         provider,
     };
 
-    const testAccessToken = jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: '100y' });
-    console.log('test access token:', testAccessToken);
+    const testAccessToken = jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn });
+    console.log(`> test access token: ${testAccessToken}\n`);
 };
 
-const signTestRefreshToken = (oauthId: string = '1', provider: OauthProvider = 'kakao') => {
+const signTestRefreshToken = (
+    oauthId: string = '1',
+    provider: OauthProvider = 'kakao',
+    expiresIn: string | number = '100y',
+) => {
+    console.log(`oauthId=${oauthId}, provider=${provider}, expiresIn=${expiresIn}`);
+
     const payload: RefreshTokenPayload = {
         oauthId,
         provider,
     };
 
-    const testRefreshToken = jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: '100y' });
-    console.log('test refresh token:', testRefreshToken);
+    const testRefreshToken = jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn });
+    console.log(`> test refresh token: ${testRefreshToken}\n`);
 };
 
 /**
  * 사용 예시
- * $ ts-node './test/performance/utils/token.util.ts' userId=1 oauthId=1 provider=kakao
+ * $ ts-node './test/performance/utils/token.util.ts' userId=1 oauthId=1 provider=kakao expiresIn=100y
  */
 const args = process.argv.slice(2).reduce(
     (acc, arg) => {
@@ -39,18 +51,8 @@ const args = process.argv.slice(2).reduce(
     {} as { [key: string]: string },
 );
 
-const { userId, oauthId, provider } = args;
-console.log(args);
+const { userId, oauthId, provider, expiresIn } = args;
+console.log(`args=${JSON.stringify(args)}\n`);
 
-if (userId) {
-    signTestAccessToken(parseInt(userId), (provider as OauthProvider) || 'kakao');
-}
-
-if (oauthId) {
-    signTestRefreshToken(oauthId, (provider as OauthProvider) || 'kakao');
-}
-
-if (!userId && !oauthId) {
-    signTestAccessToken();
-    signTestRefreshToken();
-}
+signTestAccessToken(userId ? parseInt(userId) : undefined, provider as OauthProvider, expiresIn);
+signTestRefreshToken(oauthId, provider as OauthProvider, expiresIn);
