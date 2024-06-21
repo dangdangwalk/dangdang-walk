@@ -4,14 +4,16 @@
         "react-app",
         "plugin:react/recommended",
         "prettier",
-        "plugin:prettier/recommended",
-        "plugin:tailwindcss/recommended"
+        "plugin:tailwindcss/recommended",
+        "plugin:testing-library/react",
+        "plugin:jest-dom/recommended",
+        "plugin:prettier/recommended"
     ],
     "parserOptions": {
         "ecmaVersion": 2020,
         "project": "./tsconfig.json"
     },
-    "plugins": ["prettier", "@tanstack/query", "tailwindcss"],
+    "plugins": ["prettier", "@tanstack/query", "tailwindcss", "jest-dom", "testing-library"],
     "rules": {
         // TODO: Definition for rule '@tanstack/query/prefer-query-object-syntax' was not found
         "@tanstack/query/exhaustive-deps": "off",
@@ -24,7 +26,11 @@
         "react/jsx-one-expression-per-line": 0,
         // useEffect 변경시 모두 추가해야되는거 제거 나중에 변경 필요
         "react-hooks/exhaustive-deps": 0,
+        "testing-library/consistent-data-testid": "off",
         "tailwindcss/no-custom-classname": "off",
+        "testing-library/utils-module": "off",
+        "testing-library/custom-renders": "off",
+        "testing-library/custom-queries": "off",
         "no-console": ["warn", { "allow": ["warn", "error"] }]
     },
     "ignorePatterns": ["vitest.config.ts"],
