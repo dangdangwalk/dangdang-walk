@@ -1,4 +1,4 @@
-import { formatDistance, valueWithUnit } from './distance';
+import { formatDistance, valueWithUnit } from '@/utils/distance';
 import { describe, expect, it } from 'vitest';
 
 describe('Distance 관련 test', () => {

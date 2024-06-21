@@ -1,5 +1,5 @@
+import { getSkyGrade, weatherStatus } from '@/utils/weather';
 import { describe, expect, it } from 'vitest';
-import { getSkyGrade, weatherStatus } from './weather';
 
 describe('weather util test', () => {
     it('산책하기 좋은지 확인하기', () => {
