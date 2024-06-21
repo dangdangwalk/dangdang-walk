@@ -7,7 +7,7 @@ const meta = {
     tags: ['autodocs'],
     argTypes: {
         color: {
-            type: { name: 'enum', value: ['primary', 'secondary'] },
+            type: { name: 'enum', value: ['primary', 'fill-disabled'] },
             table: {
                 defaultValue: { summary: 'primary' },
             },
@@ -33,7 +33,7 @@ export const Primary: Story = {
 
 export const Secondary: Story = {
     args: {
-        color: 'secondary',
+        color: 'disabled',
         className: 'w-16',
     },
 };

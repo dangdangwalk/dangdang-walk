@@ -9,15 +9,12 @@ module.exports = {
                 primary: '#ff9900',
                 'primary-foreground': colors.white,
                 secondary: '#e4e4e4',
+                'primary-strong': '#FF8A00',
                 'secondary-foreground': '#545454',
                 kakao: '#FEE500',
                 google: '#FFFFFF',
                 naver: '#03C75A',
 
-                primary: {
-                    normal: '##9900',
-                    strong: '#FF8A00',
-                },
                 label: {
                     normal: '#22222',
                     strong: '#000000',
