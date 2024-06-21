@@ -33,7 +33,7 @@ export class ExcrementsService {
     }
 
     //TODO: typeorm의 count? 함수 찾아서 적용하기
-    async getExcrementsCnt(journalId: number, dogId: number, type: Excrement): Promise<number> {
+    async getExcrementsCount(journalId: number, dogId: number, type: Excrement): Promise<number> {
         const excrements = await this.excrementsRepository.find({ where: { journalId, dogId, type } });
 
         return excrements.length;
