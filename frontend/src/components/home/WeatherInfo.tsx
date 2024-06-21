@@ -24,7 +24,7 @@ const statusImage = {
     nightClear: NightClear,
     nightCloudy: NightCloudy,
     cloudy: Cloudy,
-};
+} as const;
 
 export default function WeatherInfo({ position }: { position: Position | null }) {
     const { weather, isWeatherPending } = useWeather(position);
@@ -91,7 +91,7 @@ const WeatherLocationInfo = ({ address, airGrade }: WeatherLocationInfoProps) =>
 );
 
 interface WeatherIconAndTemperatureProps {
-    weather?: Weather | null;
+    weather?: Weather | null | undefined;
     skyStatus?: SkyStatus;
 }
 const WeatherIconAndTemperature = ({ weather, skyStatus }: WeatherIconAndTemperatureProps) => (

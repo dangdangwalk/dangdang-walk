@@ -5,7 +5,7 @@ import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 import { ComponentPropsWithoutRef, ElementRef, forwardRef, useRef } from 'react';
 
 const Checkbox = forwardRef<ElementRef<typeof CheckboxPrimitive.Root>, Props>(
-    ({ checked, labelText, className, children, ...props }, ref) => {
+    ({ checked, labelText, className, children, testId, ...props }, ref) => {
         const idRef = useRef<string | undefined>(labelText ? generateId() : undefined);
 
         return (
@@ -14,12 +14,22 @@ const Checkbox = forwardRef<ElementRef<typeof CheckboxPrimitive.Root>, Props>(
                     id={idRef.current}
                     ref={ref}
                     className="size-5 shrink-0 rounded-full ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    data-testid={testId ? `${testId}-checkbox` : 'checkbox-root'}
                     {...props}
                 >
-                    {children ?? <Check color={checked ? 'primary' : 'secondary'} />}
+                    {children ?? (
+                        <Check
+                            color={checked ? 'primary' : 'secondary'}
+                            data-testid={testId ? `${testId}-icon` : 'check-icon'}
+                        />
+                    )}
                 </CheckboxPrimitive.Root>
                 {labelText && (
-                    <label htmlFor={idRef.current} className="text-sm">
+                    <label
+                        htmlFor={idRef.current}
+                        className="text-sm"
+                        data-testid={testId ? `${testId}-label` : 'check-label'}
+                    >
                         {labelText}
                     </label>
                 )}
@@ -37,6 +47,7 @@ interface Props extends Omit<ComponentPropsWithoutRef<typeof CheckboxPrimitive.R
     checked: boolean;
     onCheckedChange: (checked: boolean) => void;
     labelText?: string;
+    testId?: string | number | undefined;
 }
 
 export { Checkbox };

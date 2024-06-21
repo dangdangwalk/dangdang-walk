@@ -16,6 +16,7 @@ export default function AvailableDogCheckList({ dogs, onToggle, checkAll }: Avai
             <li className="flex items-center justify-between py-3">
                 <Avatar url={AllDogs} name={'다 함께'} />
                 <Checkbox
+                    key={'checkAll'}
                     checked={isCheckedAll}
                     onCheckedChange={() => {
                         checkAll(!isCheckedAll);
