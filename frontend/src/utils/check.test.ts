@@ -1,5 +1,5 @@
+import { setFlagValueByKey, toggleCheckById } from '@/utils/check';
 import { describe, expect, it } from 'vitest';
-import { setFlagValueByKey, toggleCheckById } from './check';
 
 describe('check util test', () => {
     it('check ', () => {

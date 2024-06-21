@@ -1,4 +1,4 @@
-import { calculateDistance, getSidoCode, gpsToGrid } from './geo';
+import { calculateDistance, getSidoCode, gpsToGrid } from '@/utils/geo';
 import { describe, expect, it } from 'vitest';
 
 const result = [

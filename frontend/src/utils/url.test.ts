@@ -1,5 +1,5 @@
+import { isImageFileName } from '@/utils/url';
 import { describe, expect, test } from 'vitest';
-import { isImageFileName } from './url';
 
 describe('유틸 함수 isImageFileName은', () => {
     test('S3에 업로드된 이미지의 fileName 형식에 대해 true를 반환한다.', () => {
