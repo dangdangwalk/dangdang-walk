@@ -6,7 +6,7 @@ const SVGVariants = cva('', {
     variants: {
         color: {
             primary: 'fill-primary',
-            secondary: 'fill-[#e5e5e5]',
+            disabled: 'fill-fill-disabled',
         },
     },
     defaultVariants: {
