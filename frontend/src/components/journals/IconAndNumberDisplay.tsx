@@ -5,8 +5,8 @@ import { ReactNode } from 'react';
 const variants = cva('text', {
     variants: {
         color: {
-            primary: 'text-[#222222]',
-            secondary: 'text-[#BBBBBB]',
+            primary: 'text-label-normal',
+            secondary: 'text-label-disabled',
         },
     },
 });

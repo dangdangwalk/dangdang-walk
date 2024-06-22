@@ -16,7 +16,7 @@ module.exports = {
                 naver: '#03C75A',
 
                 label: {
-                    normal: '#22222',
+                    normal: '#222222',
                     strong: '#000000',
                     neutral: '#545454',
                     alternative: '#888888',
