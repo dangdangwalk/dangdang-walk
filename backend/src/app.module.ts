@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './common/database/database.module';
 import { HealthController } from './common/health/health.controller';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { ProfilingInterceptor } from './common/interceptors/profilingInterceptor';
 import { PrometheusInterceptor } from './common/interceptors/prometheus.interceptor';
 import { WinstonLoggerModule } from './common/logger/winstonLogger.module';
 import { StatisticsModule } from './statistics/statistics.module';
@@ -42,6 +43,14 @@ import { WalkModule } from './walk/walk.module';
             scope: Scope.REQUEST,
             useClass: LoggingInterceptor,
         },
+        ...(process.env.NODE_ENV === 'test'
+            ? [
+                  {
+                      provide: APP_INTERCEPTOR,
+                      useClass: ProfilingInterceptor,
+                  },
+              ]
+            : []),
     ],
 })
 export class AppModule {}
