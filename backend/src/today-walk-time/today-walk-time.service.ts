@@ -28,15 +28,16 @@ export class TodayWalkTimeService {
     }
 
     async updateDurations(
-        todayWalkTimeIds: number[],
+        walkTimeIds: number[],
         duration: number,
         operation: (current: number, operand: number) => number,
-    ) {
+    ): Promise<void> {
         //TODO: batch 업데이트
-        for (const curWalkTimeId of todayWalkTimeIds) {
-            const walkTimeInfo = await this.todayWalkTimeRepository.findOne({ id: curWalkTimeId });
-            const updateDuration = operation(walkTimeInfo.duration, duration);
-            this.todayWalkTimeRepository.update({ id: curWalkTimeId }, { duration: updateDuration });
+        for (const walkTimeId of walkTimeIds) {
+            const todayWalkTime = await this.todayWalkTimeRepository.findOne({ id: walkTimeId });
+            const updateDuration = operation(todayWalkTime.duration, duration);
+
+            await this.todayWalkTimeRepository.update({ id: walkTimeId }, { duration: updateDuration });
         }
     }
 

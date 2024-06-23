@@ -1,7 +1,7 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { EntityManager, FindManyOptions, FindOperator, Repository } from 'typeorm';
+import { EntityManager, FindManyOptions, FindOperator, Repository, UpdateResult } from 'typeorm';
 
 import { TodayWalkTime } from './today-walk-time.entity';
 import { TodayWalkTimeRepository } from './today-walk-time.repository';
@@ -88,6 +88,34 @@ describe('ExcrementsService', () => {
                 await expect(service.getWalkDurations([0])).rejects.toThrow(
                     new NotFoundException('id: 0와 일치하는 레코드가 없습니다'),
                 );
+            });
+        });
+    });
+
+    describe('updateDurations', () => {
+        const mockTodayWalkTime = {
+            id: 1,
+            duration: 4109,
+            updatedAt: new Date('2024-06-23T00:00:00Z'),
+            setUpdatedAtBeforeUpdate: function (): void {
+                this.updatedAt = new Date();
+            },
+        };
+
+        beforeEach(() => {
+            jest.spyOn(todayWalkTimeRepository, 'findOne').mockResolvedValue(mockTodayWalkTime);
+            jest.spyOn(todayWalkTimeRepository, 'update').mockResolvedValue({ affected: 1 } as UpdateResult);
+        });
+
+        context('특정 todayWalkTimeIds가 주어지면', () => {
+            it('기존 duration에 새로운 duration을 더한 값으로 업데이트 해야 한다.', async () => {
+                await service.updateDurations(
+                    [1, 2, 3, 4, 5],
+                    10,
+                    (current: number, operand: number) => current + operand,
+                );
+
+                expect(todayWalkTimeRepository.update).toHaveBeenNthCalledWith(1, { id: 1 }, { duration: 4119 });
             });
         });
     });
