@@ -34,7 +34,7 @@ export class TodayWalkTimeService {
     ): Promise<void> {
         //TODO: batch 업데이트
         const todayWalkTimes = await this.findWalkTimesByIds(walkTimeIds);
-        if (!walkTimeIds.length) {
+        if (!todayWalkTimes.length) {
             const error = new NotFoundException(`id: ${walkTimeIds}와 일치하는 레코드가 없습니다`);
             this.logger.error(`id: ${walkTimeIds}와 일치하는 레코드가 없습니다`, {
                 trace: error.stack ?? '스택 없음',
