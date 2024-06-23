@@ -51,6 +51,7 @@
         "@types/react-router-dom": "^5.3.3",
         "@typescript-eslint/parser": "^5.62.0",
         "@vitejs/plugin-react": "^4.2.1",
+        "babel-plugin-react-remove-properties": "^0.3.0",
         "chromatic": "^11.4.0",
         "craco-alias": "^3.0.1",
         "eslint-config-prettier": "^9.1.0",
