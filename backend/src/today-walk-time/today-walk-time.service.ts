@@ -40,7 +40,7 @@ export class TodayWalkTimeService {
         }
     }
 
-    async getWalkTimeList(walkTimeIds: number[]) {
+    async getWalkTimeList(walkTimeIds: number[]): Promise<number[]> {
         const walkTimeListBeforeCheck = await this.todayWalkTimeRepository.find({ where: { id: In(walkTimeIds) } });
         if (!walkTimeListBeforeCheck.length) {
             const error = new NotFoundException(`id: ${walkTimeIds}와 일치하는 레코드가 없습니다`);
@@ -50,14 +50,14 @@ export class TodayWalkTimeService {
             throw error;
         }
         //TODO: batch 업데이트 되게 바꾸기
-        for (const curWalkTime of walkTimeListBeforeCheck) {
-            await this.checkDayPassed(curWalkTime.id, curWalkTime.updatedAt);
+        for (const currentTodayWalk of walkTimeListBeforeCheck) {
+            await this.checkDayPassed(currentTodayWalk.id, currentTodayWalk.updatedAt);
         }
 
         //TODO: select로 바꾸기
-        const walkTimeList = await this.todayWalkTimeRepository.find({ where: { id: In(walkTimeIds) } });
-        return walkTimeList.map((cur) => {
-            return cur.duration;
+        const todayWalkTimes = await this.todayWalkTimeRepository.find({ where: { id: In(walkTimeIds) } });
+        return todayWalkTimes.map((todayWalkTime) => {
+            return todayWalkTime.duration;
         });
     }
 }
