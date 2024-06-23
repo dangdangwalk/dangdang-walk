@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { FindOptionsWhere, In } from 'typeorm';
+import { FindOptionsWhere, In, UpdateResult } from 'typeorm';
 
 import { TodayWalkTime } from './today-walk-time.entity';
 
@@ -28,21 +28,32 @@ export class TodayWalkTimeService {
     }
 
     async updateDurations(
-        todayWalkTimeIds: number[],
+        walkTimeIds: number[],
         duration: number,
         operation: (current: number, operand: number) => number,
-    ) {
+    ): Promise<void> {
         //TODO: batch 업데이트
-        for (const curWalkTimeId of todayWalkTimeIds) {
-            const walkTimeInfo = await this.todayWalkTimeRepository.findOne({ id: curWalkTimeId });
-            const updateDuration = operation(walkTimeInfo.duration, duration);
-            this.todayWalkTimeRepository.update({ id: curWalkTimeId }, { duration: updateDuration });
+        const todayWalkTimes = await this.findWalkTimesByIds(walkTimeIds);
+        if (!walkTimeIds.length) {
+            const error = new NotFoundException(`id: ${walkTimeIds}와 일치하는 레코드가 없습니다`);
+            this.logger.error(`id: ${walkTimeIds}와 일치하는 레코드가 없습니다`, {
+                trace: error.stack ?? '스택 없음',
+            });
+            throw error;
         }
+
+        await Promise.all(
+            todayWalkTimes.map(async (walkTime): Promise<UpdateResult> => {
+                const updateDuration = operation(walkTime.duration, duration);
+
+                return this.todayWalkTimeRepository.update({ id: walkTime.id }, { duration: updateDuration });
+            }),
+        );
     }
 
-    async getWalkTimeList(walkTimeIds: number[]) {
-        const walkTimeListBeforeCheck = await this.todayWalkTimeRepository.find({ where: { id: In(walkTimeIds) } });
-        if (!walkTimeListBeforeCheck.length) {
+    async getWalkDurations(walkTimeIds: number[]): Promise<number[]> {
+        const todayWalkTimes = await this.findWalkTimesByIds(walkTimeIds);
+        if (!todayWalkTimes.length) {
             const error = new NotFoundException(`id: ${walkTimeIds}와 일치하는 레코드가 없습니다`);
             this.logger.error(`id: ${walkTimeIds}와 일치하는 레코드가 없습니다`, {
                 trace: error.stack ?? '스택 없음',
@@ -50,14 +61,16 @@ export class TodayWalkTimeService {
             throw error;
         }
         //TODO: batch 업데이트 되게 바꾸기
-        for (const curWalkTime of walkTimeListBeforeCheck) {
-            await this.checkDayPassed(curWalkTime.id, curWalkTime.updatedAt);
+        for (const currentTodayWalk of todayWalkTimes) {
+            await this.checkDayPassed(currentTodayWalk.id, currentTodayWalk.updatedAt);
         }
 
-        //TODO: select로 바꾸기
-        const walkTimeList = await this.todayWalkTimeRepository.find({ where: { id: In(walkTimeIds) } });
-        return walkTimeList.map((cur) => {
-            return cur.duration;
+        return todayWalkTimes.map((todayWalkTime) => {
+            return todayWalkTime.duration;
         });
+    }
+
+    private async findWalkTimesByIds(walkTimeIds: number[]): Promise<TodayWalkTime[]> {
+        return await this.todayWalkTimeRepository.find({ where: { id: In(walkTimeIds) } });
     }
 }
