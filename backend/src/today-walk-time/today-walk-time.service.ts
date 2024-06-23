@@ -41,8 +41,8 @@ export class TodayWalkTimeService {
     }
 
     async getWalkTimeList(walkTimeIds: number[]): Promise<number[]> {
-        const walkTimeListBeforeCheck = await this.todayWalkTimeRepository.find({ where: { id: In(walkTimeIds) } });
-        if (!walkTimeListBeforeCheck.length) {
+        const todayWalkTimes = await this.todayWalkTimeRepository.find({ where: { id: In(walkTimeIds) } });
+        if (!todayWalkTimes.length) {
             const error = new NotFoundException(`id: ${walkTimeIds}와 일치하는 레코드가 없습니다`);
             this.logger.error(`id: ${walkTimeIds}와 일치하는 레코드가 없습니다`, {
                 trace: error.stack ?? '스택 없음',
@@ -50,12 +50,10 @@ export class TodayWalkTimeService {
             throw error;
         }
         //TODO: batch 업데이트 되게 바꾸기
-        for (const currentTodayWalk of walkTimeListBeforeCheck) {
+        for (const currentTodayWalk of todayWalkTimes) {
             await this.checkDayPassed(currentTodayWalk.id, currentTodayWalk.updatedAt);
         }
 
-        //TODO: select로 바꾸기
-        const todayWalkTimes = await this.todayWalkTimeRepository.find({ where: { id: In(walkTimeIds) } });
         return todayWalkTimes.map((todayWalkTime) => {
             return todayWalkTime.duration;
         });
