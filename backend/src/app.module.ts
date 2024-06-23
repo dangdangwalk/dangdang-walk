@@ -43,7 +43,7 @@ import { WalkModule } from './walk/walk.module';
             scope: Scope.REQUEST,
             useClass: LoggingInterceptor,
         },
-        ...(process.env.NODE_ENV === 'test'
+        ...(process.env.ENABLE_PROFILING === 'true'
             ? [
                   {
                       provide: APP_INTERCEPTOR,
