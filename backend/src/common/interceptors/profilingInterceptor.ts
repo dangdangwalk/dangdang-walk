@@ -14,17 +14,16 @@ export class ProfilingInterceptor implements NestInterceptor {
         const originUrl = context.switchToHttp().getRequest().url.toString();
         const method = context.switchToHttp().getRequest().method.toString();
 
-        return from(this.dataSource.query('SET profiling = 1')).pipe(
+        return from(this.initProfiling()).pipe(
             switchMap(() => {
                 const now = Date.now();
-                return next.handle().pipe(
-                    concatMap((result) =>
-                        from(this.logProfilingData(method, originUrl, now)).pipe(
-                            switchMap(() => this.clearProfilingHistory()),
-                            switchMap(() => from([result])),
+                return next
+                    .handle()
+                    .pipe(
+                        concatMap((result) =>
+                            from(this.logProfilingData(method, originUrl, now)).pipe(switchMap(() => from([result]))),
                         ),
-                    ),
-                );
+                    );
             }),
         );
     }
@@ -48,9 +47,10 @@ export class ProfilingInterceptor implements NestInterceptor {
         );
     }
 
-    private async clearProfilingHistory(): Promise<void> {
+    private async initProfiling(): Promise<void> {
         await this.dataSource.query('SET profiling_history_size = 0');
         await this.dataSource.query('SET profiling = 0');
         await this.dataSource.query('SET profiling_history_size = 1000');
+        await this.dataSource.query('SET profiling = 1');
     }
 }
