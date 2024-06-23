@@ -146,20 +146,24 @@ export default function DogDetail({ dog, statistics, isProfileOpen, setIsProfile
                             <section className="mt-6 flex flex-col gap-4">
                                 <div className="flex items-center justify-between">
                                     <p className="text-sm font-normal text-neutral-400">이름</p>
-                                    <input
-                                        disabled={!onEdit}
-                                        type="text"
-                                        value={name}
-                                        size={registerData.name.length === 0 ? 1 : registerData.name.length * 2}
-                                        maxLength={10}
-                                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                                            setRegisterData((prev) => ({
-                                                ...prev,
-                                                name: e.target.value,
-                                            }))
-                                        }
-                                        className={`text-sm font-bold text-neutral-800 outline-none ${onEdit ? 'rounded-md bg-primary/40 p-2 text-center duration-100 active:scale-90' : 'bg-transparent text-right'}`}
-                                    />
+                                    {onEdit ? (
+                                        <input
+                                            disabled={!onEdit}
+                                            type="text"
+                                            value={name}
+                                            size={registerData.name.length === 0 ? 1 : registerData.name.length * 2}
+                                            maxLength={10}
+                                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                                setRegisterData((prev) => ({
+                                                    ...prev,
+                                                    name: e.target.value,
+                                                }))
+                                            }
+                                            className={`active:scale-90} rounded-md bg-primary/40 p-2 text-center text-sm font-bold text-neutral-800 outline-none duration-100`}
+                                        />
+                                    ) : (
+                                        <p className="text-sm font-bold text-neutral-800">{name}</p>
+                                    )}
                                 </div>
                                 <div className="flex items-center justify-between">
                                     <p className="text-sm font-normal text-neutral-400">견종</p>
