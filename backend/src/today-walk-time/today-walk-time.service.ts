@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { FindOptionsWhere, In } from 'typeorm';
+import { FindOptionsWhere, In, UpdateResult } from 'typeorm';
 
 import { TodayWalkTime } from './today-walk-time.entity';
 
@@ -33,16 +33,26 @@ export class TodayWalkTimeService {
         operation: (current: number, operand: number) => number,
     ): Promise<void> {
         //TODO: batch 업데이트
-        for (const walkTimeId of walkTimeIds) {
-            const todayWalkTime = await this.todayWalkTimeRepository.findOne({ id: walkTimeId });
-            const updateDuration = operation(todayWalkTime.duration, duration);
-
-            await this.todayWalkTimeRepository.update({ id: walkTimeId }, { duration: updateDuration });
+        const todayWalkTimes = await this.findWalkTimesByIds(walkTimeIds);
+        if (!walkTimeIds.length) {
+            const error = new NotFoundException(`id: ${walkTimeIds}와 일치하는 레코드가 없습니다`);
+            this.logger.error(`id: ${walkTimeIds}와 일치하는 레코드가 없습니다`, {
+                trace: error.stack ?? '스택 없음',
+            });
+            throw error;
         }
+
+        await Promise.all(
+            todayWalkTimes.map(async (walkTime): Promise<UpdateResult> => {
+                const updateDuration = operation(walkTime.duration, duration);
+
+                return this.todayWalkTimeRepository.update({ id: walkTime.id }, { duration: updateDuration });
+            }),
+        );
     }
 
     async getWalkDurations(walkTimeIds: number[]): Promise<number[]> {
-        const todayWalkTimes = await this.todayWalkTimeRepository.find({ where: { id: In(walkTimeIds) } });
+        const todayWalkTimes = await this.findWalkTimesByIds(walkTimeIds);
         if (!todayWalkTimes.length) {
             const error = new NotFoundException(`id: ${walkTimeIds}와 일치하는 레코드가 없습니다`);
             this.logger.error(`id: ${walkTimeIds}와 일치하는 레코드가 없습니다`, {
@@ -58,5 +68,9 @@ export class TodayWalkTimeService {
         return todayWalkTimes.map((todayWalkTime) => {
             return todayWalkTime.duration;
         });
+    }
+
+    private async findWalkTimesByIds(walkTimeIds: number[]): Promise<TodayWalkTime[]> {
+        return await this.todayWalkTimeRepository.find({ where: { id: In(walkTimeIds) } });
     }
 }

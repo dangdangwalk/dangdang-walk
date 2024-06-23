@@ -31,34 +31,34 @@ describe('ExcrementsService', () => {
         todayWalkTimeRepository = module.get<Repository<TodayWalkTime>>(getRepositoryToken(TodayWalkTime));
     });
 
-    describe('getWalkDurations', () => {
-        const mockWalkTimes: TodayWalkTime[] = [
-            {
-                id: 1,
-                duration: 4109,
-                updatedAt: new Date('2024-06-23T00:00:00Z'),
-                setUpdatedAtBeforeUpdate: function (): void {
-                    this.updatedAt = new Date();
-                },
+    const mockWalkTimes: TodayWalkTime[] = [
+        {
+            id: 1,
+            duration: 4109,
+            updatedAt: new Date('2024-06-23T00:00:00Z'),
+            setUpdatedAtBeforeUpdate: function (): void {
+                this.updatedAt = new Date();
             },
-            {
-                id: 2,
-                duration: 5000,
-                updatedAt: new Date('2024-06-23T05:17:07.000Z'),
-                setUpdatedAtBeforeUpdate: function (): void {
-                    this.updatedAt = new Date();
-                },
+        },
+        {
+            id: 2,
+            duration: 5000,
+            updatedAt: new Date('2024-06-23T05:17:07.000Z'),
+            setUpdatedAtBeforeUpdate: function (): void {
+                this.updatedAt = new Date();
             },
-            {
-                id: 3,
-                duration: 5,
-                updatedAt: new Date('2024-06-23T05:17:07.000Z'),
-                setUpdatedAtBeforeUpdate: function (): void {
-                    this.updatedAt = new Date();
-                },
+        },
+        {
+            id: 3,
+            duration: 5,
+            updatedAt: new Date('2024-06-23T05:17:07.000Z'),
+            setUpdatedAtBeforeUpdate: function (): void {
+                this.updatedAt = new Date();
             },
-        ];
+        },
+    ];
 
+    describe('getWalkDurations', () => {
         beforeEach(() => {
             jest.spyOn(todayWalkTimeRepository, 'find').mockImplementation(
                 (options?: FindManyOptions<TodayWalkTime>) => {
@@ -93,17 +93,8 @@ describe('ExcrementsService', () => {
     });
 
     describe('updateDurations', () => {
-        const mockTodayWalkTime = {
-            id: 1,
-            duration: 4109,
-            updatedAt: new Date('2024-06-23T00:00:00Z'),
-            setUpdatedAtBeforeUpdate: function (): void {
-                this.updatedAt = new Date();
-            },
-        };
-
         beforeEach(() => {
-            jest.spyOn(todayWalkTimeRepository, 'findOne').mockResolvedValue(mockTodayWalkTime);
+            jest.spyOn(todayWalkTimeRepository, 'find').mockResolvedValue(mockWalkTimes);
             jest.spyOn(todayWalkTimeRepository, 'update').mockResolvedValue({ affected: 1 } as UpdateResult);
         });
 
@@ -116,6 +107,16 @@ describe('ExcrementsService', () => {
                 );
 
                 expect(todayWalkTimeRepository.update).toHaveBeenNthCalledWith(1, { id: 1 }, { duration: 4119 });
+                expect(todayWalkTimeRepository.update).toHaveBeenNthCalledWith(2, { id: 2 }, { duration: 5010 });
+                expect(todayWalkTimeRepository.update).toHaveBeenNthCalledWith(3, { id: 3 }, { duration: 15 });
+            });
+        });
+
+        context('존재하지 않는 walkTimeIds가 주어지면', () => {
+            it('NotFoundException 예외를 던져야 한다.', async () => {
+                await expect(
+                    service.updateDurations([], 10, (current: number, operand: number) => current + operand),
+                ).rejects.toThrow(new NotFoundException('id: 와 일치하는 레코드가 없습니다'));
             });
         });
     });
