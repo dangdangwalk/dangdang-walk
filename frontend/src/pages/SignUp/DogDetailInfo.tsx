@@ -120,7 +120,7 @@ export default function DogDetailInfo({ data, handleSetData }: Props) {
                         pattern="\d*"
                         inputMode="numeric"
                         placeholder={`${name}의 체중이 궁금해요`}
-                        className={`outline-none ${weight && 'w-9'}`}
+                        className={`outline-none ${weight ? 'w-9' : 'w-full'}`}
                         maxLength={3}
                         onInput={(e) => maxLengthCheck(e)}
                         onChange={(event) => {
