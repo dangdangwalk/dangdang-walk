@@ -103,8 +103,8 @@ describe('ExcrementsService', () => {
         context('존재하지 않는 walkTimeIds가 주어지면', () => {
             it('NotFoundException 예외를 던져야 한다.', async () => {
                 await expect(
-                    service.updateDurations([], 10, (current: number, operand: number) => current + operand),
-                ).rejects.toThrow(new NotFoundException('id: 와 일치하는 레코드가 없습니다'));
+                    service.updateDurations([99, 100], 10, (current: number, operand: number) => current + operand),
+                ).rejects.toThrow(new NotFoundException('id: 99,100와 일치하는 레코드가 없습니다'));
             });
         });
     });
