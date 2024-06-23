@@ -37,10 +37,14 @@ export class ProfilingInterceptor implements NestInterceptor {
             this.dataSource.query(`SHOW PROFILE FOR QUERY ${profile.Query_ID}`),
         );
         const profileDetails = await Promise.all(profileDetailsPromises);
+        const profilesWithDetails = profiles.map((profile: any, index: number) => ({
+            ...profile,
+            Details: profileDetails[index],
+        }));
 
         fs.appendFileSync(
             'log/query-profiling.log',
-            `>> ${method} ${originUrl}\nAPI Call Duration: ${duration}ms\nProfiles: ${JSON.stringify(profiles, null, 2)}\nDetails: ${JSON.stringify(profileDetails, null, 2)}\n\n`,
+            `>> ${method} ${originUrl}\nAPI Call Duration: ${duration}ms\nProfiles: ${JSON.stringify(profilesWithDetails, null, 2)}\n\n`,
         );
     }
 }
