@@ -31,7 +31,7 @@ describe('ExcrementsService', () => {
         todayWalkTimeRepository = module.get<Repository<TodayWalkTime>>(getRepositoryToken(TodayWalkTime));
     });
 
-    describe('getWalkTimeList', () => {
+    describe('getWalkDurations', () => {
         const mockWalkTimes: TodayWalkTime[] = [
             {
                 id: 1,
@@ -77,7 +77,7 @@ describe('ExcrementsService', () => {
 
         context('특정 walkTimeIds가 주어지면', () => {
             it('해당 ID들의 duration을 정확히 반환해야 한다.', async () => {
-                const excrements = await service.getWalkTimeList([1, 2]);
+                const excrements = await service.getWalkDurations([1, 2]);
 
                 expect(excrements).toEqual([4109, 5000]);
             });
@@ -85,7 +85,7 @@ describe('ExcrementsService', () => {
 
         context('존재하지 않는 walkTimeId가 주어지면', () => {
             it('NotFoundException 예외를 던져야 한다.', async () => {
-                await expect(service.getWalkTimeList([0])).rejects.toThrow(
+                await expect(service.getWalkDurations([0])).rejects.toThrow(
                     new NotFoundException('id: 0와 일치하는 레코드가 없습니다'),
                 );
             });

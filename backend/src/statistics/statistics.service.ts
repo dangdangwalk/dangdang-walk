@@ -89,7 +89,7 @@ export class StatisticsService {
 
         const dogSummaries = await this.dogsService.getDogsSummaryList({ id: In(ownDogIds) });
         const recommendedWalkAmount = await this.breedService.getRecommendedWalkAmountList(breedIds);
-        const todayWalkAmount = await this.todayWalkTimeService.getWalkTimeList(todayWalkTimeIds);
+        const todayWalkAmount = await this.todayWalkTimeService.getWalkDurations(todayWalkTimeIds);
         const weeklyWalks = await this.dogWalkDayService.getWalkDayList(dogWalkDayIds);
 
         const length = ownDogIds.length;

@@ -40,7 +40,7 @@ export class TodayWalkTimeService {
         }
     }
 
-    async getWalkTimeList(walkTimeIds: number[]): Promise<number[]> {
+    async getWalkDurations(walkTimeIds: number[]): Promise<number[]> {
         const todayWalkTimes = await this.todayWalkTimeRepository.find({ where: { id: In(walkTimeIds) } });
         if (!todayWalkTimes.length) {
             const error = new NotFoundException(`id: ${walkTimeIds}와 일치하는 레코드가 없습니다`);
