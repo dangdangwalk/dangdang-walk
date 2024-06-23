@@ -3,10 +3,9 @@
         "eslint:recommended",
         "react-app",
         "plugin:react/recommended",
-        "prettier",
-        "plugin:tailwindcss/recommended",
         "plugin:testing-library/react",
         "plugin:jest-dom/recommended",
+        "plugin:tailwindcss/recommended",
         "plugin:prettier/recommended"
     ],
     "parserOptions": {
@@ -24,10 +23,10 @@
         "react/prefer-stateless-function": 0,
         "react/jsx-filename-extension": 0,
         "react/jsx-one-expression-per-line": 0,
-        // useEffect 변경시 모두 추가해야되는거 제거 나중에 변경 필요
         "react-hooks/exhaustive-deps": 0,
         "testing-library/consistent-data-testid": "off",
         "tailwindcss/no-custom-classname": "off",
+        "tailwindcss/classnames-order": "off",
         "testing-library/utils-module": "off",
         "testing-library/custom-renders": "off",
         "testing-library/custom-queries": "off",
