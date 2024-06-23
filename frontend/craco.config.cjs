@@ -12,4 +12,11 @@ module.exports = {
             },
         },
     ],
+    babel: {
+        plugins: [
+            ...(process.env.NODE_ENV === 'production'
+                ? [['babel-plugin-react-remove-properties', { properties: ['data-testid'] }]]
+                : []),
+        ],
+    },
 };
