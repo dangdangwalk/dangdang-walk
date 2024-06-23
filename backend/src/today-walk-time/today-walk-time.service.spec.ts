@@ -60,19 +60,7 @@ describe('ExcrementsService', () => {
 
     describe('getWalkDurations', () => {
         beforeEach(() => {
-            jest.spyOn(todayWalkTimeRepository, 'find').mockImplementation(
-                (options?: FindManyOptions<TodayWalkTime>) => {
-                    if (!options?.where) {
-                        return Promise.resolve(mockWalkTimes);
-                    }
-
-                    const whereClause = options.where as Record<string, unknown>;
-                    const findOperator = whereClause.id as FindOperator<number[]>;
-                    const idList = (findOperator as any)._value;
-
-                    return Promise.resolve(mockWalkTimes.filter((walkTime) => idList.includes(walkTime.id)));
-                },
-            );
+            jest.spyOn(todayWalkTimeRepository, 'find').mockImplementation(createMockFindImplementation());
         });
 
         context('특정 walkTimeIds가 주어지면', () => {
@@ -94,7 +82,7 @@ describe('ExcrementsService', () => {
 
     describe('updateDurations', () => {
         beforeEach(() => {
-            jest.spyOn(todayWalkTimeRepository, 'find').mockResolvedValue(mockWalkTimes);
+            jest.spyOn(todayWalkTimeRepository, 'find').mockImplementation(createMockFindImplementation());
             jest.spyOn(todayWalkTimeRepository, 'update').mockResolvedValue({ affected: 1 } as UpdateResult);
         });
 
@@ -120,4 +108,18 @@ describe('ExcrementsService', () => {
             });
         });
     });
+
+    const createMockFindImplementation = () => {
+        return (options?: FindManyOptions<TodayWalkTime>) => {
+            if (!options?.where) {
+                return Promise.resolve(mockWalkTimes);
+            }
+
+            const whereClause = options.where as Record<string, unknown>;
+            const findOperator = whereClause.id as FindOperator<number[]>;
+            const idList = (findOperator as any)._value;
+
+            return Promise.resolve(mockWalkTimes.filter((walkTime) => idList.includes(walkTime.id)));
+        };
+    };
 });
