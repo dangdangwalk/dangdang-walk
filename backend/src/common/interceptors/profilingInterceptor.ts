@@ -20,7 +20,7 @@ export class ProfilingInterceptor implements NestInterceptor {
                 return next.handle().pipe(
                     concatMap((result) =>
                         from(this.logProfilingData(method, originUrl, now)).pipe(
-                            switchMap(() => from(this.dataSource.query('SET profiling = 0'))),
+                            switchMap(() => this.clearProfilingHistory()),
                             switchMap(() => from([result])),
                         ),
                     ),
@@ -46,5 +46,11 @@ export class ProfilingInterceptor implements NestInterceptor {
             'log/query-profiling.log',
             `>> ${method} ${originUrl}\nAPI Call Duration: ${duration}ms\nProfiles: ${JSON.stringify(profilesWithDetails, null, 2)}\n\n`,
         );
+    }
+
+    private async clearProfilingHistory(): Promise<void> {
+        await this.dataSource.query('SET profiling_history_size = 0');
+        await this.dataSource.query('SET profiling = 0');
+        await this.dataSource.query('SET profiling_history_size = 1000');
     }
 }
