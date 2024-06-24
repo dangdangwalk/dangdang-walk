@@ -23,6 +23,7 @@ async function bootstrap() {
             'http://localhost:8080',
             'https://dangdangwalk.github.io',
             'https://dangdang-walk.xyz',
+            'https://dangdang.surge.sh/',
         ],
         methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
         allowedHeaders: ['Content-Type', 'Accept', 'Authorization'],
