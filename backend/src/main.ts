@@ -20,6 +20,7 @@ async function bootstrap() {
     app.enableCors({
         origin: [
             'http://localhost:3000',
+            'https://localhost:3000',
             'http://localhost:8080',
             'https://dangdangwalk.github.io',
             'https://dangdang-walk.xyz',
