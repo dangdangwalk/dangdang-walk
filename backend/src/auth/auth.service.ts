@@ -86,7 +86,7 @@ export class AuthService {
     }
 
     async logout({ userId, provider }: AccessTokenPayload): Promise<void> {
-        const { oauthAccessToken } = await this.usersService.findOne({ id: userId });
+        const { oauthAccessToken } = await this.usersService.findOne({ where: { id: userId } });
         this.logger.debug('logout - oauthAccessToken', { oauthAccessToken });
 
         if (provider === 'kakao') {
@@ -95,7 +95,7 @@ export class AuthService {
     }
 
     async reissueTokens({ oauthId, provider }: RefreshTokenPayload): Promise<AuthData> {
-        const { id: userId, oauthRefreshToken } = await this.usersService.findOne({ oauthId });
+        const { id: userId, oauthRefreshToken } = await this.usersService.findOne({ where: { oauthId } });
 
         // TODO: Promise.all로 병렬처리 한 후 성능 비교하기
         // const [
@@ -125,7 +125,7 @@ export class AuthService {
     }
 
     async deactivate({ userId, provider }: AccessTokenPayload): Promise<void> {
-        const { oauthAccessToken } = await this.usersService.findOne({ id: userId });
+        const { oauthAccessToken } = await this.usersService.findOne({ where: { id: userId } });
 
         if (provider === 'kakao') {
             await this.kakaoService.requestUnlink(oauthAccessToken);
@@ -154,7 +154,7 @@ export class AuthService {
         const payload = (await this.tokenService.verify(token)) as AccessTokenPayload;
         this.logger.log('Payload', payload);
 
-        const result = await this.usersService.findOne({ id: payload.userId });
+        const result = await this.usersService.findOne({ where: { id: payload.userId } });
         this.logger.debug('validateAccessToken - find User result', { ...result });
 
         return payload;
@@ -164,7 +164,7 @@ export class AuthService {
         const payload = (await this.tokenService.verify(token)) as RefreshTokenPayload;
         this.logger.log('Payload', payload);
 
-        const { refreshToken } = await this.usersService.findOne({ oauthId: payload.oauthId });
+        const { refreshToken } = await this.usersService.findOne({ where: { oauthId: payload.oauthId } });
 
         if (refreshToken !== token) {
             throw new UnauthorizedException();

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { EntityManager, FindOptionsWhere, In } from 'typeorm';
+import { EntityManager, FindOneOptions, FindOptionsWhere, In } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import { Dogs } from './dogs.entity';
@@ -39,7 +39,7 @@ export class DogsService {
         try {
             const { breed: breedName, ...otherAttributes } = dogDto;
 
-            const breed = await this.breedService.findOne({ koreanName: breedName });
+            const breed = await this.breedService.findOne({ where: { koreanName: breedName } });
 
             const newDog = new Dogs({
                 breed,
@@ -60,7 +60,7 @@ export class DogsService {
     //TODO: Promise all 사용하여 병렬적으로 삭제 쿼리 날리기
     @Transactional()
     async deleteDogFromUser(userId: number, dogId: number) {
-        const dog = await this.dogsRepository.findOne({ id: dogId });
+        const dog = await this.dogsRepository.findOne({ where: { id: dogId } });
 
         await this.dogWalkDayService.delete({ id: dog.walkDayId });
         await this.todayWalkTimeService.delete({ id: dog.todayWalkTimeId });
@@ -71,7 +71,7 @@ export class DogsService {
         return dog;
     }
 
-    async findOne(where: FindOptionsWhere<Dogs>) {
+    async findOne(where: FindOneOptions<Dogs>) {
         return this.dogsRepository.findOne(where);
     }
 
@@ -80,11 +80,11 @@ export class DogsService {
         let breed;
 
         if (breedName) {
-            breed = await this.breedService.findOne({ koreanName: breedName });
+            breed = await this.breedService.findOne({ where: { koreanName: breedName } });
         }
 
         if (dogDto.profilePhotoUrl) {
-            const curDogInfo = await this.dogsRepository.findOne({ id: dogId });
+            const curDogInfo = await this.dogsRepository.findOne({ where: { id: dogId } });
             if (curDogInfo && curDogInfo.profilePhotoUrl) {
                 await this.s3Service.deleteSingleObject(userId, curDogInfo.profilePhotoUrl);
             }
@@ -131,7 +131,7 @@ export class DogsService {
 
     //TODO : makeProfile 함수로 하지 않고 애초에 select 해서 가져오기
     async getProfile(dogId: number): Promise<DogProfile> {
-        const dogInfo = await this.dogsRepository.findOne({ id: dogId });
+        const dogInfo = await this.dogsRepository.findOne({ where: { id: dogId } });
         return this.makeProfile(dogInfo);
     }
 

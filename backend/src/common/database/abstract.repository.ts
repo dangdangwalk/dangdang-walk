@@ -3,6 +3,7 @@ import {
     DeleteResult,
     EntityManager,
     FindManyOptions,
+    FindOneOptions,
     FindOptionsWhere,
     ObjectLiteral,
     Repository,
@@ -49,8 +50,8 @@ export abstract class AbstractRepository<T extends ObjectLiteral> {
         return this.entityRepository.findOne({ where });
     }
 
-    async findOne(where: FindOptionsWhere<T>): Promise<T> {
-        const entity = await this.entityRepository.findOne({ where });
+    async findOne(where: FindOneOptions<T>): Promise<T> {
+        const entity = await this.entityRepository.findOne(where);
 
         if (!entity) {
             throw new NotFoundException('findOne: Entity not found');
@@ -89,7 +90,8 @@ export abstract class AbstractRepository<T extends ObjectLiteral> {
         if (!updateResult.affected) {
             throw new NotFoundException('update: Entity not found');
         }
+        const options: FindOneOptions = { where };
 
-        return this.findOne(where);
+        return this.findOne(options);
     }
 }

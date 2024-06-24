@@ -39,7 +39,7 @@ describe('BreedService', () => {
             });
 
             it('견종 정보를 반환해야 한다.', async () => {
-                const breed = await service.findOne({ id: 1 });
+                const breed = await service.findOne({ where: { id: 1 } });
 
                 expect(breed).toEqual({
                     id: 1,
