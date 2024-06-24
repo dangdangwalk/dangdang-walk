@@ -20,9 +20,11 @@ async function bootstrap() {
     app.enableCors({
         origin: [
             'http://localhost:3000',
+            'https://localhost:3000',
             'http://localhost:8080',
             'https://dangdangwalk.github.io',
             'https://dangdang-walk.xyz',
+            'https://dangdang.surge.sh/',
         ],
         methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
         allowedHeaders: ['Content-Type', 'Accept', 'Authorization'],
