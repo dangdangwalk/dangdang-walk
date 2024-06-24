@@ -61,6 +61,7 @@ describe('ExcrementsService', () => {
     describe('getWalkDurations', () => {
         beforeEach(() => {
             jest.spyOn(todayWalkTimeRepository, 'find').mockImplementation(createMockFindImplementation());
+            jest.spyOn(todayWalkTimeRepository, 'update').mockResolvedValue({ affected: 1 } as UpdateResult);
         });
 
         context('특정 walkTimeIds가 주어지면', () => {
