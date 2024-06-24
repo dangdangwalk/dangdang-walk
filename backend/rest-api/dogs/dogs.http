@@ -1,0 +1,43 @@
+### POST 강아지 등록
+POST http://localhost:3333/dogs HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwicHJvdmlkZXIiOiJuYXZlciJ9.Sp-NnB31pcPuMOcdePQewssrHNd28h8RNvyTeL3EUEY
+Content-Type: application/json
+
+{
+  "name": "덕지",
+  "breed": "시츄",
+  "gender": "MALE",
+  "isNeutered": true,
+  "birth": "2024-03-01",
+  "weight": 10,
+  "profilePhotoUrl": "https://path/to/profile-photo"
+}
+
+### GET 강아지 목록 조회
+GET http://localhost:3333/dogs HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwicHJvdmlkZXIiOiJuYXZlciJ9.Sp-NnB31pcPuMOcdePQewssrHNd28h8RNvyTeL3EUEY
+Content-Type: application/json
+
+### GET 강아지 프로필 조회
+GET http://localhost:3333/dogs/2 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwicHJvdmlkZXIiOiJuYXZlciJ9.Sp-NnB31pcPuMOcdePQewssrHNd28h8RNvyTeL3EUEY
+Content-Type: application/json
+
+### PATH 강아지 프로필 수정
+PATCH  http://localhost:3333/dogs/2 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwicHJvdmlkZXIiOiJuYXZlciJ9.Sp-NnB31pcPuMOcdePQewssrHNd28h8RNvyTeL3EUEY
+Content-Type: application/json
+
+{
+  "name": "덕지",
+  "breed": "아프간 하운드",
+  "gender": "MALE",
+  "isNeutered": true,
+  "birth": "2024-03-01",
+  "weight": 10
+}
+
+### DELETE 강아지 삭제
+DELETE http://localhost:3333/dogs/2 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwicHJvdmlkZXIiOiJuYXZlciJ9.Sp-NnB31pcPuMOcdePQewssrHNd28h8RNvyTeL3EUEY
+Content-Type: application/json
