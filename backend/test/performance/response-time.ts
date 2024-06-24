@@ -13,15 +13,16 @@ import { MockOauthService } from './__mocks__/oauth.service';
 
 import { MockS3Service } from './__mocks__/s3.service';
 
+import { createMockDogsForUsers, createMockUsers } from './utils/createMockEntity.util';
+
 import { AppModule } from '../../src/app.module';
 import { GoogleService } from '../../src/auth/oauth/google.service';
 import { KakaoService } from '../../src/auth/oauth/kakao.service';
 import { NaverService } from '../../src/auth/oauth/naver.service';
+import { Dogs } from '../../src/dogs/dogs.entity';
 import { S3Service } from '../../src/s3/s3.service';
-import { ROLE } from '../../src/users/types/role.type';
 import { Users } from '../../src/users/users.entity';
-import { generateUuid } from '../../src/utils/hash.util';
-import { OAUTH_ACCESS_TOKEN, OAUTH_REFRESH_TOKEN, VALID_REFRESH_TOKEN_100_YEARS } from '../constants';
+import { UsersDogs } from '../../src/users-dogs/users-dogs.entity';
 
 const execPromisified = promisify(exec);
 
@@ -63,23 +64,19 @@ export const closeTestApp = async () => {
 };
 
 export const insertTestData = async (n: number): Promise<void> => {
-    const mockUsers = Array(n)
-        .fill(undefined)
-        .map((_, i) => ({
-            nickname: `${i + 1}#${generateUuid()}`,
-            email: 'test@mail.com',
-            profileImageUrl: 'default/profile.png',
-            role: ROLE.User,
-            mainDogId: null,
-            oauthId: (i + 1).toString(),
-            oauthAccessToken: OAUTH_ACCESS_TOKEN,
-            oauthRefreshToken: OAUTH_REFRESH_TOKEN,
-            refreshToken: VALID_REFRESH_TOKEN_100_YEARS,
-        }));
+    const mockUsers = createMockUsers(n);
+    const [mockDogs, mockUsersDogs] = createMockDogsForUsers(mockUsers);
 
-    await dataSource.getRepository(Users).insert(mockUsers);
+    await dataSource.getRepository(Users).save(mockUsers);
+    await dataSource.getRepository(Dogs).save(mockDogs);
+    await dataSource.getRepository(UsersDogs).save(mockUsersDogs);
 
-    console.log(`Inserted ${n} test data into each entity table`);
+    console.log('Successfully inserted test data:');
+    console.table([
+        { Entity: 'Users', Count: n },
+        { Entity: 'Dogs', Count: mockDogs.length },
+        { Entity: 'UserDogs', Count: mockUsersDogs.length },
+    ]);
 };
 
 export const deleteTestData = async (): Promise<void> => {
