@@ -1,5 +1,4 @@
-import { useState, ChangeEvent, useEffect } from 'react';
-import Pause from '@/assets/icons/ic-pause.svg';
+import { useState, ChangeEvent } from 'react';
 import Camera from '@/assets/icons/ic-camera.svg';
 import Poop from '@/assets/icons/ic-poop.svg';
 
@@ -15,21 +14,17 @@ export default function WalkNavbar({ onOpen, onStop, onChange }: WalkNavbarProps
     const [isLongPress, setIsLongPress] = useState(false);
     const [pressTimer, setPressTimer] = useState<NodeJS.Timeout | null>(null);
     const [isPressed, setIsPressed] = useState<boolean>(false);
-    const [isMobile, setIsMobile] = useState<boolean>(false);
-
-    useEffect(() => {
-        const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera;
-        if (/android/i.test(userAgent) || /iPad|iPhone|iPod/.test(userAgent)) {
-            setIsMobile(true);
-        }
-        return () => {
-            pressTimer && clearTimeout(pressTimer);
-        };
-    }, []);
 
     const handleLongPress = () => {
+        if (pressTimer) {
+            clearTimeout(pressTimer);
+            setPressTimer(null);
+        }
         setIsLongPress(true);
         onStop(true);
+        if (navigator.vibrate) {
+            navigator.vibrate(200);
+        }
     };
 
     const startPressTimer = (event: React.MouseEvent | React.TouchEvent) => {
@@ -38,9 +33,7 @@ export default function WalkNavbar({ onOpen, onStop, onChange }: WalkNavbarProps
         }
 
         setIsPressed(true);
-        if (!isMobile) {
-            setPressTimer(setTimeout(handleLongPress, LONG_CLICK_TIME));
-        }
+        setPressTimer(setTimeout(handleLongPress, LONG_CLICK_TIME));
     };
 
     const cancelPressTimer = () => {
@@ -57,16 +50,6 @@ export default function WalkNavbar({ onOpen, onStop, onChange }: WalkNavbarProps
         setIsPressed(false);
         setIsLongPress(false);
     };
-    const handleContextMenu = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        if (isMobile) {
-            setPressTimer(setTimeout(handleLongPress));
-        }
-
-        if (navigator.vibrate) {
-            navigator.vibrate(200); // 진동 수행 1000 = 1초
-        }
-        event.preventDefault();
-    };
 
     return (
         <nav className="absolute z-40 flex w-full items-center justify-between bg-white px-[60px] py-3 sm:w-[640px]">
@@ -81,10 +64,9 @@ export default function WalkNavbar({ onOpen, onStop, onChange }: WalkNavbarProps
                 onTouchEnd={cancelPressTimer}
                 onTouchCancel={cancelPressTimer}
                 onClick={handleSingleClick}
-                onContextMenu={handleContextMenu}
                 className={`transition-transform duration-1000 ease-out ${isPressed ? 'scale-125' : 'scale-100'}`}
             >
-                <img src={Pause} alt="정지 버튼" />
+                <PauseIcon />
             </button>
             <button>
                 <input
@@ -103,3 +85,17 @@ export default function WalkNavbar({ onOpen, onStop, onChange }: WalkNavbarProps
         </nav>
     );
 }
+const PauseIcon = () => (
+    <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g id="btn / walk / pause" clipPath="url(#clip0_2_2975)">
+            <rect width="56" height="56" fill="white" />
+            <circle id="Ellipse 113" cx="28" cy="28" r="28" fill="#FF9900" />
+            <rect id="Rectangle 14807" x="18" y="18" width="20" height="20" rx="2" fill="white" />
+        </g>
+        <defs>
+            <clipPath id="clip0_2_2975">
+                <rect width="56" height="56" fill="white" />
+            </clipPath>
+        </defs>
+    </svg>
+);
