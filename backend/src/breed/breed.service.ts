@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { FindOptionsWhere, In } from 'typeorm';
+import { FindOneOptions, In } from 'typeorm';
 
 import { Breed } from './breed.entity';
 import { BreedRepository } from './breed.repository';
@@ -8,7 +8,7 @@ import { BreedRepository } from './breed.repository';
 export class BreedService {
     constructor(private readonly breedRepository: BreedRepository) {}
 
-    async findOne(where: FindOptionsWhere<Breed>): Promise<Breed> {
+    async findOne(where: FindOneOptions<Breed>): Promise<Breed> {
         return this.breedRepository.findOne(where);
     }
 

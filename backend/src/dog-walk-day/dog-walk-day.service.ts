@@ -44,7 +44,7 @@ export class DogWalkDayService {
 
         //TODO: for 문을 안 쓰는 방향으로..? batch 업데이트? 알고리즘까지.. (log N -> 상수시간?)
         for (const dogWalkDayId of dogWalkDayIds) {
-            const findDogWalkDay = await this.dogWalkDayRepository.findOne({ id: dogWalkDayId });
+            const findDogWalkDay = await this.dogWalkDayRepository.findOne({ where: { id: dogWalkDayId } });
             const dogWalkDayCount = findDogWalkDay[day] as number;
             const updateCount = operation(dogWalkDayCount);
 

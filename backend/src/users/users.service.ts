@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { FindOptionsWhere } from 'typeorm';
+import { FindOneOptions, FindOptionsWhere } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 import { CreateUser } from './types/create-user.type';
@@ -23,7 +23,7 @@ export class UsersService {
         private readonly s3Service: S3Service,
     ) {}
 
-    async findOne(where: FindOptionsWhere<Users>) {
+    async findOne(where: FindOneOptions<Users>) {
         return this.usersRepository.findOne(where);
     }
 
@@ -81,7 +81,7 @@ export class UsersService {
 
     async getUserProfile({ userId, provider }: AccessTokenPayload): Promise<UserProfile> {
         //TODO: select로 변경
-        const { nickname, email, profileImageUrl } = await this.usersRepository.findOne({ id: userId });
+        const { nickname, email, profileImageUrl } = await this.usersRepository.findOne({ where: { id: userId } });
         return { nickname, email, profileImageUrl, provider };
     }
 
@@ -94,7 +94,7 @@ export class UsersService {
         }
 
         if (profileImageUrl) {
-            const curUserInfo = await this.usersRepository.findOne({ id: userId });
+            const curUserInfo = await this.usersRepository.findOne({ where: { id: userId } });
             if (curUserInfo && curUserInfo.profileImageUrl) {
                 await this.s3Service.deleteSingleObject(userId, curUserInfo.profileImageUrl);
             }

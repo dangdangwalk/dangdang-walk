@@ -73,7 +73,7 @@ export class JournalsService {
 
     //TODO: select 적용하기
     async getJournalInfoForDetail(journalId: number): Promise<JournalInfoForDetail> {
-        const journalInfoRaw = await this.journalsRepository.findOne({ id: journalId });
+        const journalInfoRaw = await this.journalsRepository.findOne({ where: { id: journalId } });
         const journalInfo = makeSubObject(journalInfoRaw, JournalInfoForDetail.getKeysForJournalTable());
         journalInfo.id = journalId;
         journalInfo.routes = JSON.parse(journalInfo.routes);
@@ -100,7 +100,7 @@ export class JournalsService {
     }
 
     async getDogsInfoForDetail(dogId: number): Promise<DogInfoForDetail> {
-        const dogInfoRaw = await this.dogsService.findOne({ id: dogId });
+        const dogInfoRaw = await this.dogsService.findOne({ where: { id: dogId } });
         //TODO: select로 바꾸기
         const dogInfo: DogInfoForDetail = makeSubObject(dogInfoRaw, DogInfoForDetail.getKeysForDogTable());
 
@@ -235,7 +235,7 @@ export class JournalsService {
     async deleteJournal(userId: number, journalId: number) {
         const photoUrls: string[] = await this.journalPhotosService.getPhotoUrlsByJournalId(journalId);
         const dogIds: number[] = await this.journalsDogsService.getDogIdsByJournalId(journalId);
-        const journalInfo = await this.journalsRepository.findOne({ id: journalId });
+        const journalInfo = await this.journalsRepository.findOne({ where: { id: journalId } });
 
         //TODO: promise-all로 병렬 처리하기
         await this.updateDogWalkDay(dogIds, (current: number) => (current -= 1));

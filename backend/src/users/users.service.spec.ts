@@ -58,7 +58,7 @@ describe('UsersService', () => {
             });
 
             it('사용자 정보를 반환해야 한다.', async () => {
-                const res = await service.findOne({ id: mockUser.id });
+                const res = await service.findOne({ where: { id: mockUser.id } });
 
                 expect(res).toEqual(mockUser);
             });
@@ -70,7 +70,7 @@ describe('UsersService', () => {
             });
 
             it('NotFoundException 예외를 던져야 한다.', async () => {
-                await expect(service.findOne({ id: 1 })).rejects.toThrow(NotFoundException);
+                await expect(service.findOne({ where: { id: 1 } })).rejects.toThrow(NotFoundException);
             });
         });
     });
