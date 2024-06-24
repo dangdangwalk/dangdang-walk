@@ -3,7 +3,7 @@ import * as fs from 'node:fs';
 import { CallHandler, ExecutionContext, Inject, Injectable, NestInterceptor } from '@nestjs/common';
 import { getDataSourceToken } from '@nestjs/typeorm';
 import { Observable, from } from 'rxjs';
-import { concatMap, switchMap } from 'rxjs/operators';
+import { concatMap, finalize, switchMap } from 'rxjs/operators';
 import { DataSource } from 'typeorm';
 
 @Injectable()
@@ -17,15 +17,15 @@ export class ProfilingInterceptor implements NestInterceptor {
         return from(this.dataSource.query('SET profiling = 1')).pipe(
             switchMap(() => {
                 const now = Date.now();
-                return next.handle().pipe(
-                    concatMap((result) =>
-                        from(this.logProfilingData(method, originUrl, now)).pipe(
-                            switchMap(() => from(this.dataSource.query('SET profiling = 0'))),
-                            switchMap(() => from([result])),
+                return next
+                    .handle()
+                    .pipe(
+                        concatMap((result) =>
+                            from(this.logProfilingData(method, originUrl, now)).pipe(switchMap(() => from([result]))),
                         ),
-                    ),
-                );
+                    );
             }),
+            finalize(() => from(this.clearProfileHistory())),
         );
     }
 
@@ -46,5 +46,11 @@ export class ProfilingInterceptor implements NestInterceptor {
             'log/query-profiling.log',
             `>> ${method} ${originUrl}\nAPI Call Duration: ${duration}ms\nProfiles: ${JSON.stringify(profilesWithDetails, null, 2)}\n\n`,
         );
+    }
+
+    private async clearProfileHistory(): Promise<void> {
+        await this.dataSource.query('SET profiling = 0');
+        await this.dataSource.query('SET profiling_history_size = 0');
+        await this.dataSource.query('SET profiling_history_size = 100');
     }
 }
