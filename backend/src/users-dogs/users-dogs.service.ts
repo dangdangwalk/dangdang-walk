@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { FindOptionsWhere } from 'typeorm';
+import { FindManyOptions } from 'typeorm';
 
 import { UsersDogs } from './users-dogs.entity';
 import { UsersDogsRepository } from './users-dogs.repository';
@@ -13,7 +13,7 @@ export class UsersDogsService {
         return this.usersDogsRepository.create(userDog);
     }
 
-    async find(where: FindOptionsWhere<UsersDogs>) {
-        return this.usersDogsRepository.find({ where });
+    async find(where: FindManyOptions<UsersDogs>) {
+        return this.usersDogsRepository.find(where);
     }
 }

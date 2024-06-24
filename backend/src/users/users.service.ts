@@ -67,13 +67,13 @@ export class UsersService {
 
     async getOwnDogsList(userId: number): Promise<number[]> {
         //TODO: select로 변경
-        const foundDogs = await this.usersDogsService.find({ userId });
+        const foundDogs = await this.usersDogsService.find({ where: { userId } });
         return foundDogs.map((cur) => cur.dogId);
     }
 
     async checkDogOwnership(userId: number, dogId: number | number[]): Promise<[boolean, number[]]> {
         //TODO: select로 변경
-        const ownDogs = await this.usersDogsService.find({ userId });
+        const ownDogs = await this.usersDogsService.find({ where: { userId } });
         const myDogIds = ownDogs.map((cur) => cur.dogId);
 
         return checkIfExistsInArr(myDogIds, dogId);
