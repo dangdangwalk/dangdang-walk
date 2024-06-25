@@ -1,11 +1,14 @@
 import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
 
-const allowedPeriods = ['month', 'week'] as const;
-export type Period = (typeof allowedPeriods)[number];
+export type Period = 'month' | 'week';
 
 @Injectable()
 export class PeriodValidationPipe implements PipeTransform<Period, Period> {
-    readonly allowedPeriods = allowedPeriods;
+    private readonly allowedPeriods;
+
+    constructor(allowedPeriods: Period[]) {
+        this.allowedPeriods = allowedPeriods;
+    }
 
     transform(value: Period): Period {
         if (!value) {

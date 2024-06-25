@@ -197,6 +197,13 @@ describe('StatisticsController (e2e)', () => {
                     .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
                     .expect(400);
             });
+
+            it('400 상태 코드를 반환해야 한다.', () => {
+                return request(app.getHttpServer())
+                    .get('/dogs/1/statistics/recent?period=week')
+                    .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
+                    .expect(400);
+            });
         });
 
         testUnauthorizedAccess('강아지의 최근 한달 간 산책 통계 조회', 'get', '/dogs/1/statistics/recent?period=month');
