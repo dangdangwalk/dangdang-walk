@@ -13,19 +13,19 @@ const useGeolocation = () => {
     const [isLocationDisabled, setIsLocationDisabled] = useState<boolean>(false);
 
     useEffect(() => {
+        const onSuccess = (position: GeolocationPosition) => {
+            const { latitude: lat, longitude: lng } = position.coords;
+            setStartPosition({ lat, lng });
+            setPrevPosition({ lat, lng });
+            setRoutes([...routes, { lat, lng }]);
+        };
+        const onError = (error: GeolocationPositionError) => {
+            setStartPosition({ lat: DEFAULT_LAT, lng: DEFAULT_LNG });
+            setIsLocationDisabled(true);
+        };
+
         if ('geolocation' in navigator) {
-            navigator.geolocation.getCurrentPosition(
-                (position: GeolocationPosition) => {
-                    const { latitude: lat, longitude: lng } = position.coords;
-                    setStartPosition({ lat, lng });
-                    setPrevPosition({ lat, lng });
-                    setRoutes([...routes, { lat, lng }]);
-                },
-                (error) => {
-                    setStartPosition({ lat: DEFAULT_LAT, lng: DEFAULT_LNG });
-                    setIsLocationDisabled(true);
-                }
-            );
+            navigator.geolocation.getCurrentPosition(onSuccess, onError);
         } else {
             setStartPosition({ lat: DEFAULT_LAT, lng: DEFAULT_LNG });
             setIsLocationDisabled(true);
@@ -76,6 +76,7 @@ const useGeolocation = () => {
         stopGeo,
         startGeo,
         isLocationDisabled,
+        isStartGeo,
     };
 };
 
