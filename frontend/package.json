@@ -76,7 +76,6 @@
         "start": "env-cmd -f .env.local craco start",
         "build": "craco build",
         "start:dev": "env-cmd -f .env.dev craco start",
-        "build:prod": "NODE_ENV=production craco build",
         "start:prod": "env-cmd -f .env.prod craco start",
         "test": "vitest",
         "eject": "react-scripts eject",
