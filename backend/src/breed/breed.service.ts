@@ -14,6 +14,7 @@ export class BreedService {
 
     async getKoreanNames(): Promise<string[]> {
         const breeds = await this.breedRepository.find({ select: ['koreanName'] });
+
         if (!breeds.length) {
             throw new NotFoundException(`견종 목록을 찾을 수 없습니다.`);
         }
@@ -22,8 +23,10 @@ export class BreedService {
     }
 
     async getRecommendedWalkAmountList(breedIds: number[]): Promise<number[]> {
-        //TODO: select 조건 걸기, 리팩토링
-        const breeds = await this.breedRepository.find({ where: { id: In(breedIds) } });
+        const breeds = await this.breedRepository.find({
+            where: { id: In(breedIds) },
+            select: ['id', 'recommendedWalkAmount'],
+        });
 
         if (!breeds.length) {
             throw new NotFoundException(`${breedIds} 해당 견종을 찾을 수 없습니다.`);
