@@ -1,0 +1,8 @@
+### POST 산책 시작
+POST http://localhost:3333/dogs/walks/start HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwicHJvdmlkZXIiOiJuYXZlciJ9.Sp-NnB31pcPuMOcdePQewssrHNd28h8RNvyTeL3EUEY
+Content-Type: application/json
+
+[
+  2
+]

@@ -1,0 +1,22 @@
+### GET 강아지 일주일 산책 현황 목록 조회
+GET  http://localhost:3333/dogs/statistics HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwicHJvdmlkZXIiOiJuYXZlciJ9.Sp-NnB31pcPuMOcdePQewssrHNd28h8RNvyTeL3EUEY
+Content-Type: application/json
+
+
+### GET 강아지 한달/일주일 산책 횟수 조회
+GET  http://localhost:3333/dogs/2/statistics?date=2024-06-26&period=week HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwicHJvdmlkZXIiOiJuYXZlciJ9.Sp-NnB31pcPuMOcdePQewssrHNd28h8RNvyTeL3EUEY
+Content-Type: application/json
+
+
+### GET 강아지의 최근 한달 간 산책 통계
+GET  http://localhost:3333/dogs/2/statistics/recent?period=month HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwicHJvdmlkZXIiOiJuYXZlciJ9.Sp-NnB31pcPuMOcdePQewssrHNd28h8RNvyTeL3EUEY
+Content-Type: application/json
+
+
+### GET 강아지의 최근 일주일 간 산책 통계
+GET  http://localhost:3333/dogs/2/statistics/recent?period=week HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwicHJvdmlkZXIiOiJuYXZlciJ9.Sp-NnB31pcPuMOcdePQewssrHNd28h8RNvyTeL3EUEY
+Content-Type: application/json

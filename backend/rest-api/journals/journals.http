@@ -1,0 +1,70 @@
+### POST 산책 일지 등록
+POST http://localhost:3333/journals HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwicHJvdmlkZXIiOiJuYXZlciJ9.Sp-NnB31pcPuMOcdePQewssrHNd28h8RNvyTeL3EUEY
+Content-Type: application/json
+
+{
+  "dogs": [
+    2
+  ],
+  "journalInfo": {
+    "distance": 100,
+    "calories": 400,
+    "startedAt": "2024-06-25T16:41:44.586Z",
+    "duration": 3600,
+    "routes": [
+      {
+        "lat": 303,
+        "lng": 100
+      }
+    ],
+    "photoUrls": [
+      "/1/sdofijwoejf.jpg"
+    ],
+    "memo": "오늘 산책 즐거웠습니다."
+  },
+  "excrements": [
+    {
+      "dogId": 2,
+      "fecesLocations": [
+        {
+          "lat": "75.23",
+          "lng": "104.4839"
+        }
+      ],
+      "urineLocations": [
+        {
+          "lat": "202",
+          "lng": "120"
+        }
+      ]
+    }
+  ]
+}
+
+### GET 산책 목록
+GET http://localhost:3333/journals?dogId=2&date=2024-06-25 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwicHJvdmlkZXIiOiJuYXZlciJ9.Sp-NnB31pcPuMOcdePQewssrHNd28h8RNvyTeL3EUEY
+Content-Type: application/json
+
+### GET 산책 일지 상세
+GET http://localhost:3333/journals/2 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwicHJvdmlkZXIiOiJuYXZlciJ9.Sp-NnB31pcPuMOcdePQewssrHNd28h8RNvyTeL3EUEY
+Content-Type: application/json
+
+### PATCH 산책 일지 수정
+PATCH http://localhost:3333/journals/2 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwicHJvdmlkZXIiOiJuYXZlciJ9.Sp-NnB31pcPuMOcdePQewssrHNd28h8RNvyTeL3EUEY
+Content-Type: application/json
+
+{
+  "memo": "오늘 산책 힘들었습니다.",
+  "photoUrls": [
+    "1/randomName.jpg"
+  ]
+}
+
+### DELETE 산책 일지 삭제
+DELETE http://localhost:3333/journals/2 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyIiwicHJvdmlkZXIiOiJuYXZlciJ9.Sp-NnB31pcPuMOcdePQewssrHNd28h8RNvyTeL3EUEY
+Content-Type: application/json
