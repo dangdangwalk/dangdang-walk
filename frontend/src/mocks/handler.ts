@@ -23,4 +23,17 @@ export const handlers = [
             },
         ]);
     }),
+    http.post(`${NEST_BASE_URL}/images/presigned-url`, async ({ request }) => {
+        const newRequest = (await request.json()) as Promise<string[]>;
+        const res = (await newRequest).map((res) => {
+            return {
+                url: 'uploadUrl',
+                filename: `filename.${res}`,
+            };
+        });
+        return HttpResponse.json(res);
+    }),
+    http.put('uploadUrl', async ({ request }) => {
+        return HttpResponse.json(request);
+    }),
 ];
