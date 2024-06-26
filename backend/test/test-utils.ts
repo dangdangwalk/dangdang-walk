@@ -107,7 +107,9 @@ interface InsertMockUsersParams {
 
 // mockUsers 생성
 export const insertMockUsers = async ({ mockUsers }: InsertMockUsersParams) => {
-    await dataSource.getRepository(Users).insert(mockUsers);
+    mockUsers = Array.isArray(mockUsers) ? mockUsers : [mockUsers];
+
+    await dataSource.getRepository(Users).save(mockUsers);
 };
 
 export const clearUsers = async () => {
