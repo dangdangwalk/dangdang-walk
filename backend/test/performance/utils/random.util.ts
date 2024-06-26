@@ -119,3 +119,24 @@ export function getRandomElements<T>(
 
     return arrayCopy.slice(min);
 }
+
+export function getRandomElement<T>(array: ReadonlyArray<T>): T {
+    if (array == null) {
+        throw new Error('No array given.');
+    }
+
+    if (array.length === 0) {
+        throw new Error('Cannot get value from empty dataset.');
+    }
+
+    const index = array.length > 1 ? getRandomInt({ max: array.length - 1 }) : 0;
+
+    return array[index];
+}
+
+export function getObjectValue<T extends Record<string, unknown>>(object: T): T[keyof T] {
+    const array: Array<keyof T> = Object.keys(object);
+    const key = getRandomElement(array);
+
+    return object[key];
+}
