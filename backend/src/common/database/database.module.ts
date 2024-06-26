@@ -27,8 +27,7 @@ import { WinstonLoggerService } from '../logger/winstonLogger.service';
             inject: [ConfigService],
             useFactory: (config: ConfigService) => {
                 const nodeEnv = config.get<string>('NODE_ENV');
-                const isTest = nodeEnv === 'test';
-                const isLocal = nodeEnv === 'local';
+                const enableQueryLogger = config.get<boolean>('ENABLE_QUERY_LOGGER');
 
                 return {
                     type: 'mysql',
@@ -52,7 +51,7 @@ import { WinstonLoggerService } from '../logger/winstonLogger.service';
                     synchronize: true,
                     timezone: 'Z',
                     legacySpatialSupport: false,
-                    ...(isTest || isLocal
+                    ...(enableQueryLogger
                         ? { logger: new FileLogger(true, { logPath: `log/ormlogs.${nodeEnv}.log` }) }
                         : {}),
                 };
