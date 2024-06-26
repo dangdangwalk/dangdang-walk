@@ -13,16 +13,14 @@ import { MockOauthService } from './__mocks__/oauth.service';
 
 import { MockS3Service } from './__mocks__/s3.service';
 
-import { createMockDogsForUsers, createMockUsers } from './utils/createMockEntity.util';
+import { CreateMockEntity } from './utils/createMockEntity.util';
 
 import { AppModule } from '../../src/app.module';
 import { GoogleService } from '../../src/auth/oauth/google.service';
 import { KakaoService } from '../../src/auth/oauth/kakao.service';
 import { NaverService } from '../../src/auth/oauth/naver.service';
-import { Dogs } from '../../src/dogs/dogs.entity';
 import { S3Service } from '../../src/s3/s3.service';
-import { Users } from '../../src/users/users.entity';
-import { UsersDogs } from '../../src/users-dogs/users-dogs.entity';
+import { color } from '../../src/utils/ansi.util';
 
 const execPromisified = promisify(exec);
 
@@ -56,6 +54,8 @@ export const setupTestApp = async () => {
     })();
 
     dataSource = app.get(getDataSourceToken());
+
+    console.log(`Connected database:`, color(process.env.MYSQL_DATABASE!, 'Yellow'));
 };
 
 export const closeTestApp = async () => {
@@ -64,26 +64,33 @@ export const closeTestApp = async () => {
 };
 
 export const insertTestData = async (n: number): Promise<void> => {
-    const mockUsers = createMockUsers(n);
-    const [mockDogs, mockUsersDogs] = createMockDogsForUsers(mockUsers);
+    const mockEntityCreator = new CreateMockEntity(dataSource, n);
 
-    await dataSource.getRepository(Users).save(mockUsers);
-    await dataSource.getRepository(Dogs).save(mockDogs);
-    await dataSource.getRepository(UsersDogs).save(mockUsersDogs);
+    const startTime = Date.now();
 
-    console.log('Successfully inserted test data:');
-    console.table([
-        { Entity: 'Users', Count: n },
-        { Entity: 'Dogs', Count: mockDogs.length },
-        { Entity: 'UserDogs', Count: mockUsersDogs.length },
-    ]);
+    const userResults = await mockEntityCreator.createMockUsers();
+    const dogResults = await mockEntityCreator.createMockDogs();
+    const journalResults = await mockEntityCreator.createMockJournals();
+
+    const endTime = Date.now();
+    const duration = endTime - startTime;
+
+    console.log(`Successfully inserted test data (${color(`+${duration}ms`, 'Cyan')}):`);
+
+    const table = [...userResults, ...dogResults, ...journalResults];
+    const totalSize = table.reduce((count, entity) => count + entity.Count, 0);
+
+    console.table(table);
+    console.log('Total data size:', totalSize);
 };
 
-export const deleteTestData = async (): Promise<void> => {
+export const clearTestData = async (): Promise<void> => {
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 0;');
 
     for (const entityMetadata of dataSource.entityMetadatas) {
-        await dataSource.getRepository(entityMetadata.name).clear();
+        if (entityMetadata.name !== 'Breed') {
+            await dataSource.getRepository(entityMetadata.name).clear();
+        }
     }
 
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 1;');
@@ -138,7 +145,7 @@ const runTests = async () => {
     } catch (error) {
         console.error('Error during test execution:', error);
     } finally {
-        await deleteTestData();
+        await clearTestData();
         await app.close();
     }
 };
