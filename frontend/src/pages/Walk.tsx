@@ -16,7 +16,7 @@ import { storageKeys } from '@/constants';
 import useImageUpload from '@/hooks/useImageUpload';
 import useAlertToast from '@/hooks/useAlertToast';
 import useToast from '@/hooks/useToast';
-import { WalkingDog } from '@/models/dog';
+import { DogAvatar, WalkingDog } from '@/models/dog';
 import { Position } from '@/models/location';
 import { useStore } from '@/store';
 import { setFlagValueByKey, toggleCheckById } from '@/utils/check';
@@ -24,11 +24,11 @@ import { getStorage, removeStorage, setStorage } from '@/utils/storage';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export interface DogWalkData {
-    dogs: WalkingDog[];
-    startedAt: string;
-    distance: number;
-    routes: Position[];
-    photoUrls: string[];
+    dogs: WalkingDog[] | DogAvatar[];
+    startedAt: string | undefined;
+    distance: number | undefined;
+    routes: Position[] | undefined;
+    photoUrls: string[] | undefined;
 }
 export interface JournalCreateFromState extends DogWalkData {
     calories: number;
