@@ -14,7 +14,7 @@ import DogFecesAndUrineCheckList from '@/components/walk/DogFecesAndUrineCheckLi
 import StopToast from '@/components/walk/StopToast';
 import { storageKeys } from '@/constants';
 import useImageUpload from '@/hooks/useImageUpload';
-import useStopAlert from '@/hooks/useStopAlert';
+import useAlertToast from '@/hooks/useAlertToast';
 import useToast from '@/hooks/useToast';
 import { WalkingDog } from '@/models/dog';
 import { Position } from '@/models/location';
@@ -44,7 +44,7 @@ export default function Walk() {
     const [isDogBottomSheetOpen, setIsDogBottomSheetOpen] = useState<boolean>(false);
 
     const { uploadedImageUrls: photoUrls, handleFileChange, setUploadedImageUrls: setPhotoUrls } = useImageUpload();
-    const { showStopAlert, isShowStopAlert } = useStopAlert();
+    const { showAlertToast: showStopAlert, isShowAlert: isShowStopAlert } = useAlertToast();
     const { show: showToast } = useToast();
     const spinnerAdd = useStore((state) => state.spinnerAdd);
     const spinnerRemove = useStore((state) => state.spinnerRemove);
