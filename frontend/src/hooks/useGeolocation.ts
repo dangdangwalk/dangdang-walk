@@ -13,19 +13,19 @@ const useGeolocation = () => {
     const [isLocationDisabled, setIsLocationDisabled] = useState<boolean>(false);
 
     useEffect(() => {
-        if ('geolocation' in navigator) {
-            navigator.geolocation.getCurrentPosition(
-                (position: GeolocationPosition) => {
-                    const { latitude: lat, longitude: lng } = position.coords;
-                    setStartPosition({ lat, lng });
-                    setPrevPosition({ lat, lng });
-                    setRoutes([...routes, { lat, lng }]);
-                },
-                (error) => {
-                    setStartPosition({ lat: DEFAULT_LAT, lng: DEFAULT_LNG });
-                    setIsLocationDisabled(true);
-                }
-            );
+        const onSuccess = (position: GeolocationPosition) => {
+            const { latitude: lat, longitude: lng } = position.coords;
+            setStartPosition({ lat, lng });
+            setPrevPosition({ lat, lng });
+            setRoutes([...routes, { lat, lng }]);
+        };
+        const onError = (error: GeolocationPositionError) => {
+            setStartPosition({ lat: DEFAULT_LAT, lng: DEFAULT_LNG });
+            setIsLocationDisabled(true);
+        };
+
+        if (navigator?.geolocation) {
+            navigator.geolocation.getCurrentPosition(onSuccess, onError);
         } else {
             setStartPosition({ lat: DEFAULT_LAT, lng: DEFAULT_LNG });
             setIsLocationDisabled(true);
@@ -33,7 +33,8 @@ const useGeolocation = () => {
     }, []);
 
     useEffect(() => {
-        if (!startPosition || !isStartGeo) return;
+        if (!startPosition || !isStartGeo || !navigator.geolocation) return;
+
         const onSuccess = (position: GeolocationPosition) => {
             if (!isStartGeo) return;
             const { latitude: lat, longitude: lng } = position.coords;
@@ -58,16 +59,18 @@ const useGeolocation = () => {
     const stopGeo = () => {
         setIsStartGeo(false);
     };
+
     useEffect(() => {
         if (!prevPosition || !currentPosition) return;
         const { lat, lng } = currentPosition;
         setDistance((prevDistance) => {
             const newDistance = calculateDistance(prevPosition.lat, prevPosition.lng, lat, lng);
-            return prevDistance + Math.floor(newDistance) / 10;
+            return prevDistance + Math.floor(newDistance);
         });
         setRoutes((prevRoutes) => [...prevRoutes, { lat, lng }]);
         setPrevPosition({ lat, lng });
     }, [currentPosition]);
+
     return {
         position: startPosition,
         distance,
@@ -76,6 +79,8 @@ const useGeolocation = () => {
         stopGeo,
         startGeo,
         isLocationDisabled,
+        isStartGeo,
+        setCurrentPosition,
     };
 };
 

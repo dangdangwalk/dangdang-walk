@@ -2,7 +2,7 @@ import { getUploadUrl, uploadImage } from '@/api/upload';
 import useToast from '@/hooks/useToast';
 import { ChangeEvent, useEffect, useState } from 'react';
 
-//TODO: react-query 적용 and 멀티 이미지 업로드
+//TODO: react-query 적용
 const useImageUpload = () => {
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const [uploadedImageUrls, setUploadedImageUrls] = useState<string[]>([]);
@@ -31,7 +31,6 @@ const useImageUpload = () => {
                     }
                 }
             });
-
             setUploadedImageUrls(uploadedImageUrls ? [...uploadedImageUrls, ...newImages] : [...newImages]);
             setSelectedFiles([]);
             showToast('사진이 저장되었습니다 :)');

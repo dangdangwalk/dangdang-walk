@@ -8,7 +8,6 @@ const useStopWatch = () => {
 
     const stopClock = () => {
         setIsStart(false);
-        localStorage.removeItem('startedAt');
     };
 
     const startClock = (startTime: string | undefined) => {

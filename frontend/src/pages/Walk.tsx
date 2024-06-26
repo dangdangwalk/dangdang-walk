@@ -14,21 +14,20 @@ import DogFecesAndUrineCheckList from '@/components/walk/DogFecesAndUrineCheckLi
 import StopToast from '@/components/walk/StopToast';
 import { storageKeys } from '@/constants';
 import useImageUpload from '@/hooks/useImageUpload';
-import useStopAlert from '@/hooks/useStopAlert';
+import useAlertToast from '@/hooks/useAlertToast';
 import useToast from '@/hooks/useToast';
-import { WalkingDog } from '@/models/dog';
+import { DogAvatar, WalkingDog } from '@/models/dog';
 import { Position } from '@/models/location';
 import { useStore } from '@/store';
-import { setFlagValueByKey, toggleCheckById } from '@/utils/check';
 import { getStorage, removeStorage, setStorage } from '@/utils/storage';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export interface DogWalkData {
-    dogs: WalkingDog[];
-    startedAt: string;
-    distance: number;
-    routes: Position[];
-    photoUrls: string[];
+    dogs: WalkingDog[] | DogAvatar[];
+    startedAt: string | undefined;
+    distance: number | undefined;
+    routes: Position[] | undefined;
+    photoUrls: string[] | undefined;
 }
 export interface JournalCreateFromState extends DogWalkData {
     calories: number;
@@ -38,13 +37,13 @@ export default function Walk() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const { walkingDogs, saveFecesAndUrine, initialSetDogs, setWalkingDogs } = useWalkingDogs();
+    const { walkingDogs, saveFecesAndUrine, initialSetDogs, handleToggle, cancelCheckedAll } = useWalkingDogs();
     const { duration, isStart: isWalk, stopClock, startClock, startedAt } = useStopWatch();
     const { distance, position: startPosition, currentPosition, stopGeo, routes, startGeo } = useGeolocation();
     const [isDogBottomSheetOpen, setIsDogBottomSheetOpen] = useState<boolean>(false);
 
     const { uploadedImageUrls: photoUrls, handleFileChange, setUploadedImageUrls: setPhotoUrls } = useImageUpload();
-    const { showStopAlert, isShowStopAlert } = useStopAlert();
+    const { showAlertToast: showStopAlert, isShowAlert: isShowStopAlert } = useAlertToast();
     const { show: showToast } = useToast();
     const spinnerAdd = useStore((state) => state.spinnerAdd);
     const spinnerRemove = useStore((state) => state.spinnerRemove);
@@ -54,20 +53,6 @@ export default function Walk() {
         if (isDogBottomSheetOpen) {
             cancelCheckedAll();
         }
-    };
-
-    const cancelCheckedAll = () => {
-        setWalkingDogs((prevWalkingDogs) =>
-            prevWalkingDogs?.length
-                ? setFlagValueByKey(prevWalkingDogs, false, 'isFecesChecked', 'isUrineChecked')
-                : prevWalkingDogs
-        );
-    };
-
-    const handleToggle = (id: number, key: keyof WalkingDog) => {
-        setWalkingDogs((prevWalkingDogs) =>
-            prevWalkingDogs?.length ? toggleCheckById(prevWalkingDogs, id, key) : prevWalkingDogs
-        );
     };
 
     const handleConfirm = () => {
