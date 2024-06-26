@@ -19,7 +19,6 @@ import useToast from '@/hooks/useToast';
 import { DogAvatar, WalkingDog } from '@/models/dog';
 import { Position } from '@/models/location';
 import { useStore } from '@/store';
-import { setFlagValueByKey, toggleCheckById } from '@/utils/check';
 import { getStorage, removeStorage, setStorage } from '@/utils/storage';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -38,7 +37,7 @@ export default function Walk() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const { walkingDogs, saveFecesAndUrine, initialSetDogs, setWalkingDogs } = useWalkingDogs();
+    const { walkingDogs, saveFecesAndUrine, initialSetDogs, handleToggle, cancelCheckedAll } = useWalkingDogs();
     const { duration, isStart: isWalk, stopClock, startClock, startedAt } = useStopWatch();
     const { distance, position: startPosition, currentPosition, stopGeo, routes, startGeo } = useGeolocation();
     const [isDogBottomSheetOpen, setIsDogBottomSheetOpen] = useState<boolean>(false);
@@ -54,20 +53,6 @@ export default function Walk() {
         if (isDogBottomSheetOpen) {
             cancelCheckedAll();
         }
-    };
-
-    const cancelCheckedAll = () => {
-        setWalkingDogs((prevWalkingDogs) =>
-            prevWalkingDogs?.length
-                ? setFlagValueByKey(prevWalkingDogs, false, 'isFecesChecked', 'isUrineChecked')
-                : prevWalkingDogs
-        );
-    };
-
-    const handleToggle = (id: number, key: keyof WalkingDog) => {
-        setWalkingDogs((prevWalkingDogs) =>
-            prevWalkingDogs?.length ? toggleCheckById(prevWalkingDogs, id, key) : prevWalkingDogs
-        );
     };
 
     const handleConfirm = () => {

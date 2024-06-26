@@ -1,5 +1,6 @@
 import { DogAvatar, WalkingDog } from '@/models/dog';
 import { Position } from '@/models/location';
+import { setFlagValueByKey, toggleCheckById } from '@/utils/check';
 import { useState } from 'react';
 
 const useWalkingDogs = () => {
@@ -22,6 +23,20 @@ const useWalkingDogs = () => {
         );
     };
 
+    const cancelCheckedAll = () => {
+        setWalkingDogs((prevWalkingDogs) =>
+            prevWalkingDogs?.length
+                ? setFlagValueByKey(prevWalkingDogs, false, 'isFecesChecked', 'isUrineChecked')
+                : prevWalkingDogs
+        );
+    };
+
+    const handleToggle = (id: number, key: keyof WalkingDog) => {
+        setWalkingDogs((prevWalkingDogs) =>
+            prevWalkingDogs?.length ? toggleCheckById(prevWalkingDogs, id, key) : prevWalkingDogs
+        );
+    };
+
     const initialSetDogs = (dogs: WalkingDog[] | DogAvatar[]) => {
         setWalkingDogs(
             dogs.map((dog) => {
@@ -38,9 +53,10 @@ const useWalkingDogs = () => {
 
     return {
         walkingDogs,
-        setWalkingDogs,
         saveFecesAndUrine,
         initialSetDogs,
+        handleToggle,
+        cancelCheckedAll,
     };
 };
 
