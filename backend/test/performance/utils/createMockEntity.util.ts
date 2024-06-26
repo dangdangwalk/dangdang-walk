@@ -2,8 +2,6 @@ import * as fs from 'node:fs';
 
 import { DataSource } from 'typeorm';
 
-import { Transactional } from 'typeorm-transactional';
-
 import { getObjectValue, getRandomElements, getRandomInt, getRandomPastDate } from './random.util';
 
 import { DogWalkDay } from '../../../src/dog-walk-day/dog-walk-day.entity';
@@ -45,31 +43,27 @@ export class CreateMockEntity {
         private readonly n: number,
     ) {}
 
-    @Transactional()
     async createMockUsers(): Promise<ConsoleTableRowFormat[]> {
-        this.users = Array(this.n)
-            .fill(undefined)
-            .map(
-                (_, i) =>
-                    new Users({
-                        nickname: `test-user${i + 1}#${generateUuid()}`,
-                        email: `test-user${i + 1}@mail.com`,
-                        profileImageUrl: 'default/profile.png',
-                        role: ROLE.User,
-                        mainDogId: null,
-                        oauthId: (i + 1).toString(),
-                        oauthAccessToken: OAUTH_ACCESS_TOKEN,
-                        oauthRefreshToken: OAUTH_REFRESH_TOKEN,
-                        refreshToken: VALID_REFRESH_TOKEN_100_YEARS,
-                    }),
-            );
+        this.users = Array.from({ length: this.n }).map(
+            (_, i) =>
+                new Users({
+                    nickname: `test-user${i + 1}#${generateUuid()}`,
+                    email: `test-user${i + 1}@mail.com`,
+                    profileImageUrl: 'default/profile.png',
+                    role: ROLE.User,
+                    mainDogId: null,
+                    oauthId: (i + 1).toString(),
+                    oauthAccessToken: OAUTH_ACCESS_TOKEN,
+                    oauthRefreshToken: OAUTH_REFRESH_TOKEN,
+                    refreshToken: VALID_REFRESH_TOKEN_100_YEARS,
+                }),
+        );
 
         await this.dataSource.getRepository(Users).save(this.users);
 
         return [{ Entity: 'Users', Count: this.users.length }];
     }
 
-    @Transactional()
     async createMockDogs(): Promise<ConsoleTableRowFormat[]> {
         const breedData = JSON.parse(fs.readFileSync('resources/breedData.json', 'utf-8'));
         const breedsLength = breedData.length;
@@ -114,7 +108,6 @@ export class CreateMockEntity {
             .getRawMany();
     }
 
-    @Transactional()
     async createMockJournals() {
         const usersWithDogs = await this.getUsersWithDogs();
 
