@@ -1,6 +1,4 @@
-/**
- * Modified from https://github.com/vercel/ms/blob/main/src/index.ts
- */
+// Modified from https://github.com/vercel/ms/blob/main/src/index.ts
 
 // Helpers.
 const s = 1000;
