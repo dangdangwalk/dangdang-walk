@@ -95,25 +95,27 @@ export class CreateMockEntity {
             }
         }
 
-        await this.dataSource.createQueryBuilder(Dogs, 'dogs').insert().values(this.dogs).updateEntity(false).execute();
-        await this.dataSource
-            .createQueryBuilder(UsersDogs, 'usersDogs')
-            .insert()
-            .values(this.usersDogs)
-            .updateEntity(false)
-            .execute();
-        await this.dataSource
-            .createQueryBuilder(DogWalkDay, 'dogWalkDay')
-            .insert()
-            .values(Array(this.n).fill(new DogWalkDay()))
-            .updateEntity(false)
-            .execute();
-        await this.dataSource
-            .createQueryBuilder(TodayWalkTime, 'todayWalkTime')
-            .insert()
-            .values(Array(this.n).fill(new TodayWalkTime()))
-            .updateEntity(false)
-            .execute();
+        await Promise.all([
+            this.dataSource.createQueryBuilder(Dogs, 'dogs').insert().values(this.dogs).updateEntity(false).execute(),
+            this.dataSource
+                .createQueryBuilder(UsersDogs, 'usersDogs')
+                .insert()
+                .values(this.usersDogs)
+                .updateEntity(false)
+                .execute(),
+            this.dataSource
+                .createQueryBuilder(DogWalkDay, 'dogWalkDay')
+                .insert()
+                .values(Array(this.n).fill(new DogWalkDay()))
+                .updateEntity(false)
+                .execute(),
+            this.dataSource
+                .createQueryBuilder(TodayWalkTime, 'todayWalkTime')
+                .insert()
+                .values(Array(this.n).fill(new TodayWalkTime()))
+                .updateEntity(false)
+                .execute(),
+        ]);
 
         return [
             { Entity: 'Dogs', Count: this.dogs.length },
@@ -176,10 +178,12 @@ export class CreateMockEntity {
             }
         }
 
-        await this.dataSource.getRepository(Journals).insert(this.journals);
-        await this.dataSource.getRepository(JournalsDogs).insert(this.journalsDogs);
-        await this.dataSource.getRepository(JournalPhotos).insert(this.journalPhotos);
-        await this.dataSource.getRepository(Excrements).insert(this.excrements);
+        await Promise.all([
+            this.dataSource.getRepository(Journals).insert(this.journals),
+            this.dataSource.getRepository(JournalsDogs).insert(this.journalsDogs),
+            this.dataSource.getRepository(JournalPhotos).insert(this.journalPhotos),
+            this.dataSource.getRepository(Excrements).insert(this.excrements),
+        ]);
 
         return [
             { Entity: 'Journals', Count: this.journals.length },
