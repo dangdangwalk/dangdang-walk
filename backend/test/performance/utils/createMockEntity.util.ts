@@ -59,7 +59,12 @@ export class CreateMockEntity {
                 }),
         );
 
-        await this.dataSource.getRepository(Users).save(this.users);
+        await this.dataSource
+            .createQueryBuilder(Users, 'users')
+            .insert()
+            .values(this.users)
+            .updateEntity(false)
+            .execute();
 
         return [{ Entity: 'Users', Count: this.users.length }];
     }
@@ -73,8 +78,8 @@ export class CreateMockEntity {
 
             for (let i = 0; i < numberOfDogs; i++) {
                 const dog = new Dogs({
-                    walkDay: new DogWalkDay(),
-                    todayWalkTime: new TodayWalkTime(),
+                    walkDayId: this.dogs.length + 1,
+                    todayWalkTimeId: this.dogs.length + 1,
                     name: `test-dog${this.dogs.length + 1}`,
                     breedId: getRandomInt({ min: 1, max: breedsLength }),
                     gender: GENDER.Male,
@@ -90,8 +95,25 @@ export class CreateMockEntity {
             }
         }
 
-        await this.dataSource.getRepository(Dogs).save(this.dogs);
-        await this.dataSource.getRepository(UsersDogs).save(this.usersDogs);
+        await this.dataSource.createQueryBuilder(Dogs, 'dogs').insert().values(this.dogs).updateEntity(false).execute();
+        await this.dataSource
+            .createQueryBuilder(UsersDogs, 'usersDogs')
+            .insert()
+            .values(this.usersDogs)
+            .updateEntity(false)
+            .execute();
+        await this.dataSource
+            .createQueryBuilder(DogWalkDay, 'dogWalkDay')
+            .insert()
+            .values(Array(this.n).fill(new DogWalkDay()))
+            .updateEntity(false)
+            .execute();
+        await this.dataSource
+            .createQueryBuilder(TodayWalkTime, 'todayWalkTime')
+            .insert()
+            .values(Array(this.n).fill(new TodayWalkTime()))
+            .updateEntity(false)
+            .execute();
 
         return [
             { Entity: 'Dogs', Count: this.dogs.length },
@@ -154,10 +176,10 @@ export class CreateMockEntity {
             }
         }
 
-        await this.dataSource.getRepository(Journals).save(this.journals);
-        await this.dataSource.getRepository(JournalsDogs).save(this.journalsDogs);
-        await this.dataSource.getRepository(JournalPhotos).save(this.journalPhotos);
-        await this.dataSource.getRepository(Excrements).save(this.excrements);
+        await this.dataSource.getRepository(Journals).insert(this.journals);
+        await this.dataSource.getRepository(JournalsDogs).insert(this.journalsDogs);
+        await this.dataSource.getRepository(JournalPhotos).insert(this.journalPhotos);
+        await this.dataSource.getRepository(Excrements).insert(this.excrements);
 
         return [
             { Entity: 'Journals', Count: this.journals.length },

@@ -64,7 +64,7 @@ export const closeTestApp = async () => {
 };
 
 export const insertTestData = async (n: number): Promise<void> => {
-    await dataSource.query('SET FOREIGN_KEY_CHECKS = 0;');
+    await dataSource.query('SET GLOBAL FOREIGN_KEY_CHECKS = 0;');
 
     const mockEntityCreator = new CreateMockEntity(dataSource, n);
 
@@ -81,7 +81,7 @@ export const insertTestData = async (n: number): Promise<void> => {
 
     console.log(`Successfully inserted test data (${color(`+${duration}ms`, 'Cyan')}):`);
 
-    await dataSource.query('SET FOREIGN_KEY_CHECKS = 1;');
+    await dataSource.query('SET GLOBAL FOREIGN_KEY_CHECKS = 1;');
 
     const table = [...userResults, ...dogResults, ...journalResults];
     const totalSize = table.reduce((count, entity) => count + entity.Count, 0);
