@@ -21,6 +21,8 @@
         "test:e2e-watch": "cross-env NODE_ENV=test jest --watch --config ./test/jest-e2e.json --maxWorkers=1",
         "test:only-changed": "cross-env NODE_ENV=test jest --onlyChanged",
         "test:response-time": "cross-env NODE_ENV=test ts-node ./test/performance/response-time.ts",
+        "test:insert": "cross-env NODE_ENV=test ts-node ./test/performance/insert-test-data.ts",
+        "test:clear": "cross-env NODE_ENV=test ts-node ./test/performance/clear-database.ts",
         "prepare": "cd .. && husky backend/.husky"
     },
     "lint-staged": {
