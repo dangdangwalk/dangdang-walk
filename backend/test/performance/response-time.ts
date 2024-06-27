@@ -51,12 +51,10 @@ const runResponseTimeTest = async () => {
     await testApp.start();
 
     try {
-        await testApp.insertTestData(DATA_SIZE);
         await runPostmanCollectionWithNewman(COLLECTION_ID, REQUEST_OR_FOLDER_ID, ITERATION_COUNT);
     } catch (error) {
         console.error('Error during test execution:', error);
     } finally {
-        await testApp.clearTestData();
         await testApp.terminate();
     }
 };
