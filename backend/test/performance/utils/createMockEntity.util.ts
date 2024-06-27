@@ -132,7 +132,7 @@ export class CreateMockEntity {
             .getRawMany();
     }
 
-    async createMockJournals() {
+    async createMockJournals(): Promise<ConsoleTableRowFormat[]> {
         const usersWithDogs = await this.getUsersWithDogs();
 
         let journalId = 0;
