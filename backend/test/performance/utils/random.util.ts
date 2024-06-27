@@ -61,3 +61,82 @@ export function getRandomPastDate(
 
     return date;
 }
+
+function shuffle<T>(list: T[], options: { inplace?: boolean } = {}): T[] {
+    const { inplace = false } = options;
+
+    if (!inplace) {
+        list = [...list];
+    }
+
+    for (let i = list.length - 1; i > 0; --i) {
+        const j = getRandomInt(i);
+        [list[i], list[j]] = [list[j], list[i]];
+    }
+
+    return list;
+}
+
+export function getRandomElements<T>(
+    array: ReadonlyArray<T>,
+    count?:
+        | number
+        | {
+              min: number; // default 1
+              max: number; // default array.length
+          },
+): T[] {
+    if (array == null) {
+        throw new Error('No array given.');
+    }
+
+    if (array.length === 0) {
+        return [];
+    }
+
+    const numElements = getRandomInt(count ?? { min: 1, max: array.length });
+
+    const arrayCopy = [...array];
+
+    if (numElements >= array.length) {
+        return shuffle(arrayCopy);
+    } else if (numElements <= 0) {
+        return [];
+    }
+
+    let i = array.length;
+    const min = i - numElements;
+    let temp: T;
+    let index: number;
+
+    // Shuffle the last `count` elements of the array
+    while (i-- > min) {
+        index = getRandomInt(i);
+        temp = arrayCopy[index];
+        arrayCopy[index] = arrayCopy[i];
+        arrayCopy[i] = temp;
+    }
+
+    return arrayCopy.slice(min);
+}
+
+export function getRandomElement<T>(array: ReadonlyArray<T>): T {
+    if (array == null) {
+        throw new Error('No array given.');
+    }
+
+    if (array.length === 0) {
+        throw new Error('Cannot get value from empty dataset.');
+    }
+
+    const index = array.length > 1 ? getRandomInt({ max: array.length - 1 }) : 0;
+
+    return array[index];
+}
+
+export function getObjectValue<T extends Record<string, unknown>>(object: T): T[keyof T] {
+    const array: Array<keyof T> = Object.keys(object);
+    const key = getRandomElement(array);
+
+    return object[key];
+}
