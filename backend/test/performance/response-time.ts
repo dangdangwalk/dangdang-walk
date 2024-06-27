@@ -2,107 +2,9 @@ import { exec } from 'node:child_process';
 
 import { promisify } from 'node:util';
 
-import { INestApplication } from '@nestjs/common';
-import { Test, TestingModule } from '@nestjs/testing';
-import { getDataSourceToken } from '@nestjs/typeorm';
-import * as cookieParser from 'cookie-parser';
-import { DataSource } from 'typeorm';
-import { initializeTransactionalContext } from 'typeorm-transactional';
-
-import { MockOauthService } from './__mocks__/oauth.service';
-
-import { MockS3Service } from './__mocks__/s3.service';
-
-import { CreateMockEntity } from './utils/createMockEntity.util';
-
-import { AppModule } from '../../src/app.module';
-import { GoogleService } from '../../src/auth/oauth/google.service';
-import { KakaoService } from '../../src/auth/oauth/kakao.service';
-import { NaverService } from '../../src/auth/oauth/naver.service';
-import { S3Service } from '../../src/s3/s3.service';
-import { color } from '../../src/utils/ansi.util';
+import { TestApp } from './utils/testApp.util';
 
 const execPromisified = promisify(exec);
-
-let app: INestApplication;
-let dataSource: DataSource;
-
-export const setupTestApp = async () => {
-    initializeTransactionalContext();
-
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-        imports: [AppModule],
-    })
-        .overrideProvider(GoogleService)
-        .useValue(MockOauthService)
-        .overrideProvider(KakaoService)
-        .useValue(MockOauthService)
-        .overrideProvider(NaverService)
-        .useValue(MockOauthService)
-        .overrideProvider(S3Service)
-        .useValue(MockS3Service)
-        .compile();
-
-    app = moduleFixture.createNestApplication();
-
-    app.use(cookieParser());
-
-    await (async () => {
-        await app.listen(process.env.PORT!, () => {
-            console.log(`Test server running at http://${process.env.MYSQL_HOST}:${process.env.PORT}`);
-        });
-    })();
-
-    dataSource = app.get(getDataSourceToken());
-
-    console.log(`Connected database:`, color(process.env.MYSQL_DATABASE!, 'Yellow'));
-};
-
-export const closeTestApp = async () => {
-    await dataSource.destroy();
-    await app.close();
-};
-
-export const insertTestData = async (n: number): Promise<void> => {
-    await dataSource.query('SET GLOBAL FOREIGN_KEY_CHECKS = 0;');
-
-    const mockEntityCreator = new CreateMockEntity(dataSource, n);
-
-    const startTime = Date.now();
-
-    const [userResults, dogResults] = await Promise.all([
-        mockEntityCreator.createMockUsers(),
-        mockEntityCreator.createMockDogs(),
-    ]);
-    const journalResults = await mockEntityCreator.createMockJournals();
-
-    const endTime = Date.now();
-    const duration = endTime - startTime;
-
-    console.log(`Successfully inserted test data (${color(`+${duration}ms`, 'Cyan')}):`);
-
-    await dataSource.query('SET GLOBAL FOREIGN_KEY_CHECKS = 1;');
-
-    const table = [...userResults, ...dogResults, ...journalResults];
-    const totalSize = table.reduce((count, entity) => count + entity.Count, 0);
-
-    console.table(table);
-    console.log('Total data size:', totalSize);
-};
-
-export const clearTestData = async (): Promise<void> => {
-    await dataSource.query('SET FOREIGN_KEY_CHECKS = 0;');
-
-    for (const entityMetadata of dataSource.entityMetadatas) {
-        if (entityMetadata.name !== 'Breed') {
-            await dataSource.getRepository(entityMetadata.name).clear();
-        }
-    }
-
-    await dataSource.query('SET FOREIGN_KEY_CHECKS = 1;');
-
-    console.log('Cleared all test data');
-};
 
 const runPostmanCollectionWithNewman = async (
     collectionId: string,
@@ -141,19 +43,22 @@ const validateParameters = () => {
     }
 };
 
-const runTests = async () => {
+const runResponseTimeTest = async () => {
     validateParameters();
-    await setupTestApp();
+
+    const testApp = new TestApp();
+
+    await testApp.start();
 
     try {
-        await insertTestData(DATA_SIZE);
+        await testApp.insertTestData(DATA_SIZE);
         await runPostmanCollectionWithNewman(COLLECTION_ID, REQUEST_OR_FOLDER_ID, ITERATION_COUNT);
     } catch (error) {
         console.error('Error during test execution:', error);
     } finally {
-        await clearTestData();
-        await app.close();
+        await testApp.clearTestData();
+        await testApp.terminate();
     }
 };
 
-runTests();
+runResponseTimeTest();
