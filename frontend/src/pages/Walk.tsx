@@ -41,11 +41,12 @@ export default function Walk() {
     const { duration, isStart: isWalk, stopClock, startClock, startedAt } = useStopWatch();
     const { distance, position: startPosition, currentPosition, stopGeo, routes, startGeo } = useGeolocation();
     const [isDogBottomSheetOpen, setIsDogBottomSheetOpen] = useState<boolean>(false);
-    const [photoUrls, setPhotoUrls] = useState<string[]>([]);
     const { showAlertToast: showStopAlert, isShowAlert: isShowStopAlert } = useAlertToast();
     const { show: showToast } = useToast();
     const spinnerAdd = useStore((state) => state.spinnerAdd);
     const spinnerRemove = useStore((state) => state.spinnerRemove);
+    const photoUrls = useStore((state) => state.photoUrls);
+    const setPhotoUrls = useStore((state) => state.setPhotoUrls);
 
     const handleBottomSheet = () => {
         setIsDogBottomSheetOpen(!isDogBottomSheetOpen);
@@ -105,7 +106,7 @@ export default function Walk() {
         await Promise.allSettled(uploadImagePromises);
 
         const filenames = uploadUrlResponses.map((uploadUrlResponse) => uploadUrlResponse.filename);
-        setPhotoUrls((prevPhotoUrls) => [...prevPhotoUrls, ...filenames]);
+        setPhotoUrls(filenames);
         showToast('사진이 저장되었습니다 :)');
     }
 
