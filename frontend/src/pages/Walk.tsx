@@ -88,7 +88,7 @@ export default function Walk() {
     };
     const handleWalkStart = (dogData: DogWalkData) => {
         initialSetDogs(dogData.dogs);
-        startClock(dogData.startedAt);
+        startClock();
         startGeo();
     };
     const getCalories = (time: number) => Math.round((DEFAULT_WALK_MET * DEFAULT_WEIGHT * time) / 3600);

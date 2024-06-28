@@ -119,7 +119,7 @@ describe('useGeolocation', () => {
         ]);
     });
 
-    test('localStorage 설정 correctly', async () => {
+    test('storage 저장된 데이터 설정 correctly', async () => {
         const startPosition = { coords: { latitude: 10, longitude: 20 } };
 
         mockGeolocation.getCurrentPosition.mockImplementationOnce((success) => success(startPosition));

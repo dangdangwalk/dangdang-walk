@@ -13,13 +13,13 @@ const useStopWatch = () => {
         setIsStart(false);
     };
 
-    const startClock = (startTime: string | undefined) => {
-        if (startTime) {
-            const timeDiff = getElapsedTime(new Date(startTime), new Date());
-            setStartedAt(startTime);
-            setDuration(timeDiff);
-        } else {
+    const startClock = () => {
+        if (startedAt === '') {
             setStartedAt(new Date().toString());
+        } else {
+            const timeDiff = getElapsedTime(new Date(startedAt), new Date());
+            setStartedAt(startedAt);
+            setDuration(timeDiff);
         }
 
         setIsStart(true);
