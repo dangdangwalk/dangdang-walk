@@ -27,7 +27,7 @@ describe('useWalkingDogs', () => {
         },
     ];
     beforeEach(() => {
-        useStore.setState({ dogs: [] });
+        useStore.setState({ walkingDogs: [] });
     });
 
     it('initializes walking dogs correctly', () => {

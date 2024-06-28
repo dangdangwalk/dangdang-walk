@@ -5,7 +5,7 @@ import { State as SpinnerState, createSpinnerSlice } from '@/store/spinnerStore'
 import { StateAndActions as ToastState, createToastSlice } from '@/store/toastStore';
 import { StateAndActions as WalkState, createWalkSlice } from '@/store/walkStore';
 import { create } from 'zustand';
-import { devtools } from 'zustand/middleware';
+import { createJSONStorage, devtools, persist } from 'zustand/middleware';
 
 export const useStore = create<AuthState & CropState & LoginBottomSheetState & SpinnerState & ToastState & WalkState>()(
     devtools((...args) => ({
@@ -14,6 +14,16 @@ export const useStore = create<AuthState & CropState & LoginBottomSheetState & S
         ...createLoginBottomSheetStateSlice(...args),
         ...createSpinnerSlice(...args),
         ...createToastSlice(...args),
-        ...createWalkSlice(...args),
+        ...persist(createWalkSlice, {
+            name: 'walk-storage', // Key for localStorage
+            partialize: (state) => ({
+                walkingDogs: state.walkingDogs,
+                routes: state.routes,
+                distance: state.distance,
+                startedAt: state.startedAt,
+                photoUrls: state.photoUrls,
+            }),
+            storage: createJSONStorage(() => localStorage),
+        })(...args),
     }))
 );

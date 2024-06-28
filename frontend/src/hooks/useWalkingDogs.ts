@@ -4,9 +4,9 @@ import { useStore } from '@/store';
 import { setFlagValueByKey, toggleCheckById } from '@/utils/check';
 
 const useWalkingDogs = () => {
-    const walkingDogs = useStore((state) => state.dogs);
-    const setWalkingDogs = useStore((state) => state.setDogs);
-    const updateDogs = useStore((state) => state.updateDogs);
+    const walkingDogs = useStore((state) => state.walkingDogs);
+    const setWalkingDogs = useStore((state) => state.setWalkingDogs);
+    const updateDogs = useStore((state) => state.updateWalkingDogs);
 
     const saveFecesAndUrine = (position: Position | null) => {
         if (!position || !walkingDogs) return;

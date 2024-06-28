@@ -62,8 +62,8 @@ export default function Walk() {
         showToast('용변기록이 저장되었습니다 :)');
     };
 
-    const stopWalk = async (dogs: WalkingDog[] | null) => {
-        if (!dogs) return;
+    const stopWalk = async (dogs: WalkingDog[]) => {
+        if (!dogs.length) return;
         spinnerAdd();
         stopClock();
         stopGeo();
@@ -90,7 +90,6 @@ export default function Walk() {
         initialSetDogs(dogData.dogs);
         startClock(dogData.startedAt);
         startGeo(dogData.distance, dogData.routes);
-        setPhotoUrls(dogData.photoUrls ?? []);
     };
     const getCalories = (time: number) => Math.round((DEFAULT_WALK_MET * DEFAULT_WEIGHT * time) / 3600);
 
