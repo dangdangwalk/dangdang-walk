@@ -1,5 +1,6 @@
 import { Checkbox } from '@/components/commons/Checkbox';
 import { Divider } from '@/components/commons/Divider';
+import { DogRegHeader } from '@/components/dogRegistration/DogRegHeader';
 import FemaleIcon from '@/components/icons/FemaleIcon';
 import { MaleIcon } from '@/components/icons/MaleIcon';
 import { Dog } from '@/models/dog';
@@ -23,14 +24,14 @@ export default function DogDetailInfo({ data, handleSetData }: Props) {
     const [birthCheck, setBirthCheck] = useState(false);
     return (
         <div className="flex flex-col bg-white">
-            <div>
-                <span className="text-xl font-semibold leading-[30px] text-amber-500">{name}의 세부 정보</span>
-                <span className="text-xl font-semibold leading-[30px] text-neutral-800">
+            <DogRegHeader>
+                <DogRegHeader.Section1>{name}의 세부 정보</DogRegHeader.Section1>
+                <DogRegHeader.Section2>
                     를
                     <br />
                     알려주세요 :)
-                </span>
-            </div>
+                </DogRegHeader.Section2>
+            </DogRegHeader>
             <div className="mt-8 text-sm font-normal leading-[21px] text-stone-500">성별</div>
             <div className="mt-3 inline-flex gap-2">
                 <button
