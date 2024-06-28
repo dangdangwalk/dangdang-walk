@@ -3,6 +3,7 @@ import { Divider } from '@/components/commons/Divider';
 import React, { MutableRefObject } from 'react';
 import { Dog } from '@/models/dog';
 import { useStore } from '@/store';
+import { DogRegHeader } from '@/components/dogRegistration/DogRegHeader';
 
 type DogBasicInfoProps = Pick<Dog, 'name' | 'breed'>;
 interface Props {
@@ -18,14 +19,14 @@ export default function DogBasicInfo({ data, fileInputRef, handleSetData, setIsO
     return (
         <>
             <div className="flex flex-col bg-white">
-                <div>
-                    <span className="text-xl font-semibold leading-[30px] text-amber-500">반려견의 기본 정보</span>
-                    <span className="text-xl font-semibold leading-[30px] text-neutral-800">
+                <DogRegHeader>
+                    <DogRegHeader.Section1>반려견의 기본 정보</DogRegHeader.Section1>
+                    <DogRegHeader.Section2>
                         를
                         <br />
                         알려주세요 :)
-                    </span>
-                </div>
+                    </DogRegHeader.Section2>
+                </DogRegHeader>
                 <div className="mb-6 mt-8 flex justify-center">
                     <label htmlFor="input-upload" ref={fileInputRef}>
                         <input
