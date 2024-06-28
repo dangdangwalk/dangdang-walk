@@ -6,10 +6,8 @@ import { useEffect, useState } from 'react';
 
 const useGeolocation = () => {
     const addRoutes = useStore((state) => state.addRoutes);
-    const setRoutes = useStore((state) => state.setRoutes);
     const routes = useStore((state) => state.routes);
     const distance = useStore((state) => state.distance);
-    const setDistance = useStore((state) => state.setDistance);
     const addDistance = useStore((state) => state.addDistance);
 
     const [startPosition, setStartPosition] = useState<Position | null>(null);
@@ -53,16 +51,11 @@ const useGeolocation = () => {
         };
     }, [startPosition, isStartGeo]);
 
-    const startGeo = (distance: number | undefined, routes: Position[] | undefined) => {
-        setDistance(distance ? distance : 0);
+    const startGeo = () => {
         setIsStartGeo(true);
-
         if (routes?.length) {
             const position: Position = routes[routes.length - 1] as Position;
-            setRoutes(routes);
             setPrevPosition(position);
-        } else {
-            setRoutes([]);
         }
     };
 
