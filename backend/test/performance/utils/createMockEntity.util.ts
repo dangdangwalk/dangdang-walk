@@ -95,7 +95,6 @@ export class CreateMockEntity {
             }
         }
 
-        await this.dataSource.query('SET FOREIGN_KEY_CHECKS = 0;');
         await Promise.all([
             this.dataSource.createQueryBuilder(Dogs, 'dogs').insert().values(this.dogs).updateEntity(false).execute(),
             this.dataSource
@@ -117,7 +116,6 @@ export class CreateMockEntity {
                 .updateEntity(false)
                 .execute(),
         ]);
-        await this.dataSource.query('SET FOREIGN_KEY_CHECKS = 1;');
 
         return [
             { Entity: 'Dogs', Count: this.dogs.length },
@@ -180,14 +178,12 @@ export class CreateMockEntity {
             }
         }
 
-        await this.dataSource.query('SET FOREIGN_KEY_CHECKS = 0;');
         await Promise.all([
             this.dataSource.getRepository(Journals).insert(this.journals),
             this.dataSource.getRepository(JournalsDogs).insert(this.journalsDogs),
             this.dataSource.getRepository(JournalPhotos).insert(this.journalPhotos),
             this.dataSource.getRepository(Excrements).insert(this.excrements),
         ]);
-        await this.dataSource.query('SET FOREIGN_KEY_CHECKS = 1;');
 
         return [
             { Entity: 'Journals', Count: this.journals.length },

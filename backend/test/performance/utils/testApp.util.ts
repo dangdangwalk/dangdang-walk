@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getDataSourceToken } from '@nestjs/typeorm';
 import * as cookieParser from 'cookie-parser';
 import { DataSource, EntityMetadata } from 'typeorm';
-import { initializeTransactionalContext } from 'typeorm-transactional';
+import { Transactional, initializeTransactionalContext } from 'typeorm-transactional';
 
 import { CreateMockEntity } from './createMockEntity.util';
 
@@ -59,8 +59,9 @@ export class TestApp {
         await this.app.close();
     }
 
+    @Transactional()
     async insertTestData(n: number): Promise<void> {
-        await this.dataSource.query('SET GLOBAL FOREIGN_KEY_CHECKS = 0;');
+        await this.dataSource.query('SET FOREIGN_KEY_CHECKS = 0;');
 
         const mockEntityCreator = new CreateMockEntity(this.dataSource, n);
 
@@ -77,7 +78,7 @@ export class TestApp {
 
         console.log(`Successfully inserted test data (${color(`+${duration}ms`, 'Cyan')}):`);
 
-        await this.dataSource.query('SET GLOBAL FOREIGN_KEY_CHECKS = 1;');
+        await this.dataSource.query('SET FOREIGN_KEY_CHECKS = 1;');
 
         const table = [...userResults, ...dogResults, ...journalResults];
         const totalSize = table.reduce((count, entity) => count + entity.Count, 0);
