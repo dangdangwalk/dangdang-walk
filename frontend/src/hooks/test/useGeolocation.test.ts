@@ -35,9 +35,7 @@ afterEach(() => {
 
 describe('useGeolocation', () => {
     beforeEach(() => {
-        useStore.setState({
-            routes: [],
-        });
+        useStore.setState({ routes: [], distance: 0 });
     });
 
     test('sets initial position and handles geolocation success', async () => {
@@ -136,6 +134,7 @@ describe('useGeolocation', () => {
                 { lat: 30, lng: 40 },
             ]);
         });
+
         expect(result.current.isStartGeo).toBe(true);
         expect(result.current.distance).toBe(4);
         expect(result.current.routes).toEqual([

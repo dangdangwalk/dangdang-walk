@@ -5,15 +5,18 @@ import { calculateDistance } from '@/utils/geo';
 import { useEffect, useState } from 'react';
 
 const useGeolocation = () => {
-    const [startPosition, setStartPosition] = useState<Position | null>(null);
-    const [currentPosition, setCurrentPosition] = useState<Position | null>(null);
-    const [distance, setDistance] = useState<number>(0);
-    const [isStartGeo, setIsStartGeo] = useState<boolean>(false);
-    const [prevPosition, setPrevPosition] = useState<Position | null>(null);
-    const [isLocationDisabled, setIsLocationDisabled] = useState<boolean>(false);
     const addRoutes = useStore((state) => state.addRoutes);
     const setRoutes = useStore((state) => state.setRoutes);
     const routes = useStore((state) => state.routes);
+    const distance = useStore((state) => state.distance);
+    const setDistance = useStore((state) => state.setDistance);
+    const addDistance = useStore((state) => state.addDistance);
+
+    const [startPosition, setStartPosition] = useState<Position | null>(null);
+    const [currentPosition, setCurrentPosition] = useState<Position | null>(null);
+    const [isStartGeo, setIsStartGeo] = useState<boolean>(false);
+    const [prevPosition, setPrevPosition] = useState<Position | null>(null);
+    const [isLocationDisabled, setIsLocationDisabled] = useState<boolean>(false);
 
     useEffect(() => {
         const onSuccess = (position: GeolocationPosition) => {
@@ -72,10 +75,8 @@ const useGeolocation = () => {
         const { lat, lng } = currentPosition;
 
         if (prevPosition) {
-            setDistance((prevDistance) => {
-                const newDistance = calculateDistance(prevPosition.lat, prevPosition.lng, lat, lng);
-                return prevDistance + Math.floor(newDistance);
-            });
+            const newDistance = calculateDistance(prevPosition.lat, prevPosition.lng, lat, lng);
+            addDistance(newDistance);
         }
         addRoutes({ lat, lng });
         setPrevPosition({ lat, lng });
