@@ -1,6 +1,7 @@
 import useWalkingDogs from '@/hooks/useWalkingDogs';
 import { DogAvatar, WalkingDog } from '@/models/dog';
 import { Position } from '@/models/location';
+import { useStore } from '@/store';
 import { renderHook } from '@testing-library/react';
 import { act } from 'react';
 
@@ -25,6 +26,9 @@ describe('useWalkingDogs', () => {
             urineLocations: [],
         },
     ];
+    beforeEach(() => {
+        useStore.setState({ dogs: [] });
+    });
 
     it('initializes walking dogs correctly', () => {
         const { result } = renderHook(() => useWalkingDogs());
@@ -193,6 +197,6 @@ describe('useWalkingDogs', () => {
             result.current.saveFecesAndUrine(position);
         });
 
-        expect(result.current.walkingDogs).toBeNull();
+        expect(result.current.walkingDogs).toHaveLength(0);
     });
 });

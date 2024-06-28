@@ -47,6 +47,7 @@ export default function Walk() {
     const spinnerRemove = useStore((state) => state.spinnerRemove);
     const photoUrls = useStore((state) => state.photoUrls);
     const setPhotoUrls = useStore((state) => state.setPhotoUrls);
+    const resetWalkData = useStore((state) => state.resetWalkData);
 
     const handleBottomSheet = () => {
         setIsDogBottomSheetOpen(!isDogBottomSheetOpen);
@@ -69,6 +70,7 @@ export default function Walk() {
         const ok = await requestWalkStop(dogs.map((d) => d.id));
         if (ok) {
             removeStorage(storageKeys.DOGS);
+            resetWalkData();
             navigate('/journals/create', {
                 state: { dogs, distance, duration, calories: getCalories(duration), startedAt, routes, photoUrls },
             });

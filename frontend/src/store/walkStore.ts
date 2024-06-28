@@ -1,4 +1,4 @@
-import { DogAvatar, WalkingDog } from '@/models/dog';
+import { WalkingDog } from '@/models/dog';
 import { Position } from '@/models/location';
 import { DogWalkData } from '@/pages/Walk';
 import { StateCreator } from 'zustand';
@@ -14,21 +14,10 @@ const initialState: State = {
 const createWalkSlice: StateCreator<StateAndActions, [['zustand/devtools', never]]> = (set) => ({
     ...initialState,
 
-    initialSetDogs: (dogs) => {
-        set(
-            {
-                dogs: dogs.map((dog) => ({
-                    ...dog,
-                    isFecesChecked: false,
-                    isUrineChecked: false,
-                    fecesLocations: (dog as WalkingDog).fecesLocations || [],
-                    urineLocations: (dog as WalkingDog).urineLocations || [],
-                })),
-            },
-            false,
-            'walk/initialSetDogs'
-        );
+    setDogs: (dogs: WalkingDog[]) => {
+        set({ dogs }, false, 'walk/setWalkingDogs');
     },
+    updateDogs: (updateFn) => set((state) => ({ dogs: updateFn(state.dogs) }), false, 'walk/updateDogs'),
     setDistance: (distance: number) => {
         set({ distance }, false, 'walk/setDistance');
     },
@@ -60,7 +49,8 @@ interface State extends DogWalkData {
     photoUrls: string[];
 }
 interface Actions {
-    initialSetDogs: (dogs: WalkingDog[] | DogAvatar[]) => void;
+    setDogs: (dogs: WalkingDog[]) => void;
+    updateDogs: (updateFn: (dogs: WalkingDog[]) => WalkingDog[]) => void;
     setDistance: (distance: number) => void;
     addDistance: (distance: number) => void;
     addRoutes: (routes: Position) => void;
