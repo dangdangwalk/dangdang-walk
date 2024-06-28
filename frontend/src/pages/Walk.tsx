@@ -7,13 +7,12 @@ import { DEFAULT_WALK_MET, DEFAULT_WEIGHT } from '@/constants';
 import useGeolocation from '@/hooks/useGeolocation';
 import useStopWatch from '@/hooks/useStopWatch';
 import useWalkingDogs from '@/hooks/useWalkingDogs';
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 
 import { requestWalkStart, requestWalkStop } from '@/api/walk';
 import DogFecesAndUrineCheckList from '@/components/walk/DogFecesAndUrineCheckList';
 import StopToast from '@/components/walk/StopToast';
 import { storageKeys } from '@/constants';
-import useImageUpload from '@/hooks/useImageUpload';
 import useAlertToast from '@/hooks/useAlertToast';
 import useToast from '@/hooks/useToast';
 import { DogAvatar, WalkingDog } from '@/models/dog';
@@ -21,6 +20,7 @@ import { Position } from '@/models/location';
 import { useStore } from '@/store';
 import { getStorage, removeStorage, setStorage } from '@/utils/storage';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { getUploadUrl, uploadImage } from '@/api/upload';
 
 export interface DogWalkData {
     dogs: WalkingDog[] | DogAvatar[];
@@ -41,8 +41,7 @@ export default function Walk() {
     const { duration, isStart: isWalk, stopClock, startClock, startedAt } = useStopWatch();
     const { distance, position: startPosition, currentPosition, stopGeo, routes, startGeo } = useGeolocation();
     const [isDogBottomSheetOpen, setIsDogBottomSheetOpen] = useState<boolean>(false);
-
-    const { uploadedImageUrls: photoUrls, handleFileChange, setUploadedImageUrls: setPhotoUrls } = useImageUpload();
+    const [photoUrls, setPhotoUrls] = useState<string[]>([]);
     const { showAlertToast: showStopAlert, isShowAlert: isShowStopAlert } = useAlertToast();
     const { show: showToast } = useToast();
     const spinnerAdd = useStore((state) => state.spinnerAdd);
@@ -92,6 +91,24 @@ export default function Walk() {
     };
     const getCalories = (time: number) => Math.round((DEFAULT_WALK_MET * DEFAULT_WEIGHT * time) / 3600);
 
+    async function handleAddImages(e: FormEvent<HTMLInputElement>) {
+        const files = e.currentTarget.files;
+        if (files === null) return;
+
+        const fileTypes = Array.from(files).map((file) => file.type);
+        const uploadUrlResponses = await getUploadUrl(fileTypes);
+        const uploadUrls = uploadUrlResponses.map((uploadUrlResponse) => uploadUrlResponse.url);
+
+        const uploadImagePromises = uploadUrls.map((uploadUrl, index) => {
+            return uploadImage(files[index]!, uploadUrl);
+        });
+        await Promise.allSettled(uploadImagePromises);
+
+        const filenames = uploadUrlResponses.map((uploadUrlResponse) => uploadUrlResponse.filename);
+        setPhotoUrls((prevPhotoUrls) => [...prevPhotoUrls, ...filenames]);
+        showToast('사진이 저장되었습니다 :)');
+    }
+
     useEffect(() => {
         if (!routes || !startedAt || !walkingDogs) return;
         const walkDogData: DogWalkData = {
@@ -136,7 +153,7 @@ export default function Walk() {
             <Map startPosition={startPosition} path={routes} />
 
             <StopToast isVisible={isShowStopAlert} />
-            <WalkNavbar onOpen={handleBottomSheet} onStop={handleWalkStop} onChange={handleFileChange} />
+            <WalkNavbar onOpen={handleBottomSheet} onStop={handleWalkStop} onChange={handleAddImages} />
 
             <BottomSheet isOpen={isDogBottomSheetOpen} onClose={handleBottomSheet}>
                 <BottomSheet.Header> 강아지 산책</BottomSheet.Header>
