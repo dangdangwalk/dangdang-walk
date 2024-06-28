@@ -1,8 +1,11 @@
+import { useStore } from '@/store';
 import { getElapsedTime } from '@/utils/time';
 import { useEffect, useState } from 'react';
 
 const useStopWatch = () => {
-    const [startedAt, setStartedAt] = useState<string>('');
+    const startedAt = useStore((state) => state.startedAt);
+    const setStartedAt = useStore((state) => state.setStartedAt);
+
     const [duration, setDuration] = useState<number>(0);
     const [isStart, setIsStart] = useState<boolean>(false);
 

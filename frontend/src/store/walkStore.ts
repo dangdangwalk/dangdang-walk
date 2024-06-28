@@ -60,12 +60,19 @@ const createWalkSlice: StateCreator<StateAndActions, [['zustand/devtools', never
     setRoutes: (routes: Position[]) => {
         set({ routes }, false, 'walk/setRoutes');
     },
+    setStartedAt: (startedAt: string) => {
+        set({ startedAt }, false, 'walk/setStartedAt');
+    },
+    resetWalkData: () => {
+        set(initialState, false, 'walk/resetWalkData');
+    },
 });
 
 interface State extends DogWalkData {
     dogs: WalkingDog[];
     routes: Position[];
     distance: number;
+    startedAt: string;
 }
 interface Actions {
     initialSetDogs: (dogs: WalkingDog[] | DogAvatar[]) => void;
@@ -73,6 +80,8 @@ interface Actions {
     addDistance: (distance: number) => void;
     addRoutes: (routes: Position) => void;
     setRoutes: (routes: Position[]) => void;
+    setStartedAt: (startedAt: string) => void;
+    resetWalkData: () => void;
 }
 export interface StateAndActions extends State, Actions {}
 

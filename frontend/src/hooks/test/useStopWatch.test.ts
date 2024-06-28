@@ -1,4 +1,5 @@
 import useStopWatch from '@/hooks/useStopWatch';
+import { useStore } from '@/store';
 import { renderHook } from '@testing-library/react';
 import { act } from 'react';
 import { vi } from 'vitest';
@@ -10,6 +11,7 @@ vi.mock('@/utils/time', () => ({
 describe('useStopWatch', () => {
     beforeEach(() => {
         vi.useFakeTimers();
+        useStore.setState({ startedAt: '' });
     });
 
     afterEach(() => {
