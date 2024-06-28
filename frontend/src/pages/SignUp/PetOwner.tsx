@@ -1,3 +1,4 @@
+import { DogRegHeader } from '@/components/dogRegistration/DogRegHeader';
 import React from 'react';
 interface Props {
     haveADog: boolean;
@@ -6,14 +7,14 @@ interface Props {
 export default function PetOwner({ haveADog, handleHaveADogChange }: Props) {
     return (
         <div className={`flex flex-col bg-white`}>
-            <div>
-                <span className="text-xl font-semibold leading-[30px] text-amber-500">해당되는 항목</span>
-                <span className="text-xl font-semibold leading-[30px] text-neutral-800">
+            <DogRegHeader>
+                <DogRegHeader.Section1>해당되는 항목</DogRegHeader.Section1>
+                <DogRegHeader.Section2>
                     을
                     <br />
                     선택해주세요!
-                </span>
-            </div>
+                </DogRegHeader.Section2>
+            </DogRegHeader>
 
             <div className="mx-2.5 mt-12 flex flex-col gap-3">
                 <button
