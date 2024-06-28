@@ -1,40 +1,36 @@
 import { DogAvatar, WalkingDog } from '@/models/dog';
 import { Position } from '@/models/location';
+import { useStore } from '@/store';
 import { setFlagValueByKey, toggleCheckById } from '@/utils/check';
-import { useState } from 'react';
 
 const useWalkingDogs = () => {
-    const [walkingDogs, setWalkingDogs] = useState<WalkingDog[] | null>(null);
+    const walkingDogs = useStore((state) => state.walkingDogs);
+    const setWalkingDogs = useStore((state) => state.setWalkingDogs);
+    const updateDogs = useStore((state) => state.updateWalkingDogs);
 
     const saveFecesAndUrine = (position: Position | null) => {
         if (!position || !walkingDogs) return;
         const { lat, lng } = position;
 
-        setWalkingDogs((prevWalkingDogs) =>
-            prevWalkingDogs?.length
-                ? prevWalkingDogs.map((dog: WalkingDog) => ({
-                      ...dog,
-                      fecesLocations: dog.isFecesChecked ? [...dog.fecesLocations, { lat, lng }] : dog.fecesLocations,
-                      urineLocations: dog.isUrineChecked ? [...dog.urineLocations, { lat, lng }] : dog.urineLocations,
-                      isFecesChecked: false,
-                      isUrineChecked: false,
-                  }))
-                : prevWalkingDogs
+        updateDogs((prevWalkingDogs: WalkingDog[]) =>
+            prevWalkingDogs.map((dog: WalkingDog) => ({
+                ...dog,
+                fecesLocations: dog.isFecesChecked ? [...dog.fecesLocations, { lat, lng }] : dog.fecesLocations,
+                urineLocations: dog.isUrineChecked ? [...dog.urineLocations, { lat, lng }] : dog.urineLocations,
+                isFecesChecked: false,
+                isUrineChecked: false,
+            }))
         );
     };
 
     const cancelCheckedAll = () => {
-        setWalkingDogs((prevWalkingDogs) =>
-            prevWalkingDogs?.length
-                ? setFlagValueByKey(prevWalkingDogs, false, 'isFecesChecked', 'isUrineChecked')
-                : prevWalkingDogs
+        updateDogs((prevWalkingDogs: WalkingDog[]) =>
+            setFlagValueByKey(prevWalkingDogs, false, 'isFecesChecked', 'isUrineChecked')
         );
     };
 
     const handleToggle = (id: number, key: keyof WalkingDog) => {
-        setWalkingDogs((prevWalkingDogs) =>
-            prevWalkingDogs?.length ? toggleCheckById(prevWalkingDogs, id, key) : prevWalkingDogs
-        );
+        updateDogs((prevWalkingDogs: WalkingDog[]) => toggleCheckById(prevWalkingDogs, id, key));
     };
 
     const initialSetDogs = (dogs: WalkingDog[] | DogAvatar[]) => {

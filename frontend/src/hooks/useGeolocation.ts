@@ -1,13 +1,17 @@
 import { DEFAULT_LAT, DEFAULT_LNG } from '@/constants';
 import { Position } from '@/models/location';
+import { useStore } from '@/store';
 import { calculateDistance } from '@/utils/geo';
 import { useEffect, useState } from 'react';
 
 const useGeolocation = () => {
+    const addRoutes = useStore((state) => state.addRoutes);
+    const routes = useStore((state) => state.routes);
+    const distance = useStore((state) => state.distance);
+    const addDistance = useStore((state) => state.addDistance);
+
     const [startPosition, setStartPosition] = useState<Position | null>(null);
     const [currentPosition, setCurrentPosition] = useState<Position | null>(null);
-    const [distance, setDistance] = useState<number>(0);
-    const [routes, setRoutes] = useState<Position[]>([]);
     const [isStartGeo, setIsStartGeo] = useState<boolean>(false);
     const [prevPosition, setPrevPosition] = useState<Position | null>(null);
     const [isLocationDisabled, setIsLocationDisabled] = useState<boolean>(false);
@@ -16,8 +20,6 @@ const useGeolocation = () => {
         const onSuccess = (position: GeolocationPosition) => {
             const { latitude: lat, longitude: lng } = position.coords;
             setStartPosition({ lat, lng });
-            setPrevPosition({ lat, lng });
-            setRoutes([...routes, { lat, lng }]);
         };
         const onError = (error: GeolocationPositionError) => {
             setStartPosition({ lat: DEFAULT_LAT, lng: DEFAULT_LNG });
@@ -34,7 +36,6 @@ const useGeolocation = () => {
 
     useEffect(() => {
         if (!startPosition || !isStartGeo || !navigator.geolocation) return;
-
         const onSuccess = (position: GeolocationPosition) => {
             if (!isStartGeo) return;
             const { latitude: lat, longitude: lng } = position.coords;
@@ -50,9 +51,11 @@ const useGeolocation = () => {
         };
     }, [startPosition, isStartGeo]);
 
-    const startGeo = (distance: number | undefined, routes: Position[] | undefined) => {
-        setDistance(distance ? distance : 0);
-        setRoutes(routes ? routes : []);
+    const startGeo = () => {
+        if (routes?.length) {
+            const position: Position = routes[routes.length - 1] as Position;
+            setPrevPosition(position);
+        }
         setIsStartGeo(true);
     };
 
@@ -61,13 +64,14 @@ const useGeolocation = () => {
     };
 
     useEffect(() => {
-        if (!prevPosition || !currentPosition) return;
+        if (!currentPosition) return;
         const { lat, lng } = currentPosition;
-        setDistance((prevDistance) => {
+
+        if (prevPosition) {
             const newDistance = calculateDistance(prevPosition.lat, prevPosition.lng, lat, lng);
-            return prevDistance + Math.floor(newDistance);
-        });
-        setRoutes((prevRoutes) => [...prevRoutes, { lat, lng }]);
+            addDistance(newDistance);
+        }
+        addRoutes({ lat, lng });
         setPrevPosition({ lat, lng });
     }, [currentPosition]);
 

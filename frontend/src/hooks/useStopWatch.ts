@@ -1,8 +1,11 @@
+import { useStore } from '@/store';
 import { getElapsedTime } from '@/utils/time';
 import { useEffect, useState } from 'react';
 
 const useStopWatch = () => {
-    const [startedAt, setStartedAt] = useState<string>('');
+    const startedAt = useStore((state) => state.startedAt);
+    const setStartedAt = useStore((state) => state.setStartedAt);
+
     const [duration, setDuration] = useState<number>(0);
     const [isStart, setIsStart] = useState<boolean>(false);
 
@@ -10,15 +13,13 @@ const useStopWatch = () => {
         setIsStart(false);
     };
 
-    const startClock = (startTime: string | undefined) => {
-        if (startTime) {
-            const timeDiff = getElapsedTime(new Date(startTime), new Date());
-            setStartedAt(startTime);
-            setDuration(timeDiff);
-        } else {
+    const startClock = () => {
+        if (startedAt === '') {
             setStartedAt(new Date().toString());
+        } else {
+            const timeDiff = getElapsedTime(new Date(startedAt), new Date());
+            setDuration(timeDiff);
         }
-
         setIsStart(true);
     };
 
@@ -31,11 +32,6 @@ const useStopWatch = () => {
         }
         return () => clearInterval(intervalId);
     }, [isStart, duration]);
-
-    useEffect(() => {
-        const startTime = localStorage.getItem('startedAt');
-        if (!startTime) return;
-    }, []);
 
     return { isStart, duration, stopClock, startClock, startedAt };
 };

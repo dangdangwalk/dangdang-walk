@@ -1,5 +1,6 @@
 import { DEFAULT_LAT, DEFAULT_LNG } from '@/constants';
 import useGeolocation from '@/hooks/useGeolocation';
+import { useStore } from '@/store';
 import { renderHook } from '@testing-library/react';
 import { act } from 'react';
 import { vi, expect } from 'vitest';
@@ -33,6 +34,10 @@ afterEach(() => {
 });
 
 describe('useGeolocation', () => {
+    beforeEach(() => {
+        useStore.setState({ routes: [], distance: 0 });
+    });
+
     test('sets initial position and handles geolocation success', async () => {
         const startPosition = { coords: { latitude: 10, longitude: 20 } };
 
@@ -54,12 +59,11 @@ describe('useGeolocation', () => {
     });
 
     test('starts and stops geolocation tracking', async () => {
-        const position1 = { coords: { latitude: 10, longitude: 20 } };
-        const position2 = { coords: { latitude: 15, longitude: 25 } };
+        const position = { coords: { latitude: 10, longitude: 20 } };
 
-        mockGeolocation.getCurrentPosition.mockImplementationOnce((success) => success(position1));
+        mockGeolocation.getCurrentPosition.mockImplementationOnce((success) => success(position));
         mockGeolocation.watchPosition.mockImplementation((success) => {
-            success(position2);
+            success(position);
             return 1; // watchId
         });
         const { result, unmount } = renderHook(() => useGeolocation());
@@ -67,14 +71,14 @@ describe('useGeolocation', () => {
         expect(result.current.currentPosition).toEqual(null);
 
         act(() => {
-            result.current.startGeo(0, []);
+            result.current.startGeo();
         });
 
         expect(result.current.position).toEqual({ lat: 10, lng: 20 });
-        expect(result.current.currentPosition).toEqual({ lat: 15, lng: 25 });
+        expect(result.current.currentPosition).toEqual({ lat: 10, lng: 20 });
         expect(result.current.isStartGeo).toBe(true);
 
-        expect(result.current.distance).toBe(1);
+        expect(result.current.distance).toBe(0);
 
         act(() => {
             result.current.stopGeo();
@@ -98,38 +102,45 @@ describe('useGeolocation', () => {
         const { result } = renderHook(() => useGeolocation());
 
         act(() => {
-            result.current.startGeo(0, []);
+            result.current.startGeo();
         });
 
         expect(result.current.isStartGeo).toBe(true);
-        expect(result.current.distance).toBe(1);
+        expect(result.current.distance).toBe(0);
         expect(result.current.routes).toEqual([{ lat: 10, lng: 20 }]);
 
         act(() => {
             result.current.setCurrentPosition({ lat: 20, lng: 25 });
         });
-        expect(result.current.distance).toBe(2);
+        expect(result.current.distance).toBe(1);
         expect(result.current.routes).toEqual([
             { lat: 10, lng: 20 },
             { lat: 20, lng: 25 },
         ]);
     });
 
-    test('geolocation 시작시 초기 설정 correctly', async () => {
+    test('storage 저장된 데이터 설정 correctly', async () => {
         const startPosition = { coords: { latitude: 10, longitude: 20 } };
 
         mockGeolocation.getCurrentPosition.mockImplementationOnce((success) => success(startPosition));
         mockGeolocation.watchPosition.mockImplementation((success) => success(startPosition));
+        act(() => {
+            useStore.setState({
+                distance: 3,
+                routes: [
+                    { lat: 10, lng: 20 },
+                    { lat: 20, lng: 30 },
+                    { lat: 30, lng: 40 },
+                ],
+            });
+        });
 
         const { result } = renderHook(() => useGeolocation());
 
         act(() => {
-            result.current.startGeo(3, [
-                { lat: 10, lng: 20 },
-                { lat: 20, lng: 30 },
-                { lat: 30, lng: 40 },
-            ]);
+            result.current.startGeo();
         });
+
         expect(result.current.isStartGeo).toBe(true);
         expect(result.current.distance).toBe(4);
         expect(result.current.routes).toEqual([

@@ -1,4 +1,5 @@
 import useStopWatch from '@/hooks/useStopWatch';
+import { useStore } from '@/store';
 import { renderHook } from '@testing-library/react';
 import { act } from 'react';
 import { vi } from 'vitest';
@@ -10,6 +11,7 @@ vi.mock('@/utils/time', () => ({
 describe('useStopWatch', () => {
     beforeEach(() => {
         vi.useFakeTimers();
+        useStore.setState({ startedAt: '' });
     });
 
     afterEach(() => {
@@ -30,7 +32,7 @@ describe('useStopWatch', () => {
         const { result } = renderHook(() => useStopWatch());
 
         act(() => {
-            result.current.startClock(undefined);
+            result.current.startClock();
         });
 
         expect(result.current.isStart).toBe(true);
@@ -39,10 +41,15 @@ describe('useStopWatch', () => {
 
     it('starts the clock with a start time', () => {
         const startTime = new Date().toISOString();
+
+        act(() => {
+            useStore.setState({ startedAt: startTime });
+        });
+
         const { result } = renderHook(() => useStopWatch());
 
         act(() => {
-            result.current.startClock(startTime);
+            result.current.startClock();
         });
 
         expect(result.current.isStart).toBe(true);
@@ -54,7 +61,7 @@ describe('useStopWatch', () => {
         const { result } = renderHook(() => useStopWatch());
 
         act(() => {
-            result.current.startClock(undefined);
+            result.current.startClock();
         });
         act(() => {
             result.current.stopClock();
@@ -67,7 +74,7 @@ describe('useStopWatch', () => {
         const { result } = renderHook(() => useStopWatch());
 
         act(() => {
-            result.current.startClock(undefined);
+            result.current.startClock();
         });
 
         act(() => {
@@ -80,14 +87,18 @@ describe('useStopWatch', () => {
         const startTime = new Date();
         startTime.setTime(startTime.getTime() - 3600000);
 
+        act(() => {
+            useStore.setState({ startedAt: startTime.toISOString() });
+        });
+
         const { result } = renderHook(() => useStopWatch());
 
         act(() => {
-            result.current.startClock(startTime.toString());
+            result.current.startClock();
         });
 
         expect(result.current.duration).toBe(3600);
-        expect(result.current.startedAt).toBe(startTime.toString());
+        expect(result.current.startedAt).toBe(startTime.toISOString());
         expect(result.current.isStart).toBe(true);
 
         act(() => {

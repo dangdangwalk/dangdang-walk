@@ -1,7 +1,7 @@
 import WeatherInfo from '@/components/home/WeatherInfo';
 import { useState } from 'react';
 import { Button } from '@/components/commons/Button';
-import { NAV_HEIGHT, TOP_BAR_HEIGHT, storageKeys } from '@/constants';
+import { NAV_HEIGHT, TOP_BAR_HEIGHT } from '@/constants';
 import Notification from '@/assets/icons/ic-notification.svg';
 import TopBar from '@/components/commons/Topbar';
 import BottomSheet from '@/components/commons/BottomSheet';
@@ -10,13 +10,12 @@ import useDogsStatistic from '@/hooks/useDogsStatistic';
 import { useNavigate } from 'react-router-dom';
 import { setFlagValueByKey, toggleCheckById } from '@/utils/check';
 import useWalkAvailable from '@/hooks/useWalkAvailableDog';
-import { getStorage, removeStorage } from '@/utils/storage';
-import { DogWalkData } from '@/pages/Walk';
 import useGeolocation from '@/hooks/useGeolocation';
 import useToast from '@/hooks/useToast';
 import { isArrayNotEmpty } from '@/utils/validate';
 import DogStatisticsView from '@/components/home/DogStatisticsView';
 import Navbar from '@/components/Navbar';
+import { useStore } from '@/store';
 
 function Home() {
     const [isDogBottomSheetOpen, setIsDogBottomSheetOpen] = useState<boolean>(false);
@@ -26,18 +25,17 @@ function Home() {
     const { dogsStatistic, isDogsPending } = useDogsStatistic();
     const navigate = useNavigate();
     const { show: showToast } = useToast();
+    const walkStartedAt = useStore((state) => state.startedAt);
+    const resetWalkData = useStore((state) => state.resetWalkData);
 
     const handleBottomSheetOpen = () => {
-        const storedData = getStorage(storageKeys.DOGS);
-        const dogData: DogWalkData | undefined = storedData ? JSON.parse(storedData) : undefined;
-
-        if (isDogsWalking(dogData)) {
+        if (isDogsWalking(walkStartedAt)) {
             navigate('/walk');
             return;
         }
         fetchWalkAvailableDogs();
         setIsDogBottomSheetOpen(true);
-        removeStorage(storageKeys.DOGS);
+        resetWalkData();
     };
 
     const handleBottomSheetClose = () => {
@@ -49,10 +47,9 @@ function Home() {
         navigate(url, { state });
     };
 
-    const isDogsWalking = (dogData: DogWalkData | undefined): boolean => {
-        if (!dogData || !dogData.startedAt) return false;
-
-        const diff = new Date().getTime() - new Date(dogData.startedAt).getTime();
+    const isDogsWalking = (startedAt: string): boolean => {
+        if (startedAt === '') return false;
+        const diff = new Date().getTime() - new Date(startedAt).getTime();
         const hour = diff / 1000 / 60 / 60;
         return hour <= 3;
     };
