@@ -1,5 +1,10 @@
 // Modified from https://github.com/faker-js/faker
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const seedrandom = require('seedrandom');
+
+const randomNumberGenerator = seedrandom(process.env.SEED ?? 'dangdangwalk');
+
 export function getRandomInt(
     options:
         | number
@@ -28,7 +33,7 @@ export function getRandomInt(
         throw new Error(`Max ${max} should be greater than min ${min}.`);
     }
 
-    return Math.floor(Math.random() * (effectiveMax - effectiveMin + 1)) + effectiveMin;
+    return Math.floor(randomNumberGenerator() * (effectiveMax - effectiveMin + 1)) + effectiveMin;
 }
 
 export function getRandomPastDate(
