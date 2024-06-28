@@ -52,11 +52,11 @@ const useGeolocation = () => {
     }, [startPosition, isStartGeo]);
 
     const startGeo = () => {
-        setIsStartGeo(true);
         if (routes?.length) {
             const position: Position = routes[routes.length - 1] as Position;
             setPrevPosition(position);
         }
+        setIsStartGeo(true);
     };
 
     const stopGeo = () => {

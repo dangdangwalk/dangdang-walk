@@ -18,10 +18,8 @@ const useStopWatch = () => {
             setStartedAt(new Date().toString());
         } else {
             const timeDiff = getElapsedTime(new Date(startedAt), new Date());
-            setStartedAt(startedAt);
             setDuration(timeDiff);
         }
-
         setIsStart(true);
     };
 
@@ -34,11 +32,6 @@ const useStopWatch = () => {
         }
         return () => clearInterval(intervalId);
     }, [isStart, duration]);
-
-    useEffect(() => {
-        const startTime = localStorage.getItem('startedAt');
-        if (!startTime) return;
-    }, []);
 
     return { isStart, duration, stopClock, startClock, startedAt };
 };
