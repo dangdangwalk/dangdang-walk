@@ -109,13 +109,11 @@ const useDeactivate = (mutationOptions?: UseMutationCustomOptions) => {
 };
 
 const useGetProfile = (queryOptions?: UseQueryCustomOptions) => {
-    const isSignedIn = useStore((state) => state.isSignedIn);
     return useQuery({
         queryKey: [queryKeys.GET_PROFILE],
         queryFn: requestProfile,
         gcTime: ONE_DAY_IN_MS,
         staleTime: TEN_TO_A_DAY,
-        enabled: isSignedIn,
         ...queryOptions,
     });
 };
@@ -124,7 +122,7 @@ export const useAuth = () => {
     const signOut = useSignOut();
     const signUp = useSignUp();
     const refreshTokenQuery = useGetRefreshToken();
-    const getProfileQuery = useGetProfile();
+    const getProfileQuery = useGetProfile({ enabled: refreshTokenQuery.isSuccess });
     const deactivate = useDeactivate();
     return {
         signIn,

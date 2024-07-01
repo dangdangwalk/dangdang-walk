@@ -19,6 +19,7 @@ import MemoSection from '@/components/journals/MemoSection';
 import PhotoSection from '@/components/journals/PhotoSection';
 import Map from '@/components/walk/Map';
 import WalkInfo from '@/components/walk/WalkInfo';
+import { useAuth } from '@/hooks/useAuth';
 import useToast from '@/hooks/useToast';
 import { WalkingDog } from '@/models/dog';
 import { Position } from '@/models/location';
@@ -31,6 +32,7 @@ export default function CreateForm() {
     const navigate = useNavigate();
     const location = useLocation();
     const { show: showToast } = useToast();
+    const { refreshTokenQuery } = useAuth();
 
     const addSpinner = useStore((state) => state.spinnerAdd);
     const removeSpinner = useStore((state) => state.spinnerRemove);
@@ -104,7 +106,12 @@ export default function CreateForm() {
                     <Divider />
                     <MemoSection textAreaRef={textAreaRef} />
                 </div>
-                <Button rounded="none" className="h-16 w-full" disabled={isSaving} onClick={handleSave}>
+                <Button
+                    rounded="none"
+                    className="h-16 w-full"
+                    disabled={isSaving}
+                    onClick={() => handleSave(refreshTokenQuery.isSuccess)}
+                >
                     저장하기
                 </Button>
             </div>
@@ -123,7 +130,7 @@ export default function CreateForm() {
         </>
     );
 
-    async function handleSave() {
+    async function handleSave(tokenState: boolean) {
         setIsSaving(true);
         addSpinner();
 
@@ -157,18 +164,19 @@ export default function CreateForm() {
                 urineLocations: stringUrineLocations,
             };
         });
+        if (tokenState) {
+            await createJournal({
+                dogs: dogIds,
+                journalInfo,
+                excrements: excrements ?? [],
+            });
 
-        await createJournal({
-            dogs: dogIds,
-            journalInfo,
-            excrements: excrements ?? [],
-        });
+            setIsSaving(false);
+            removeSpinner();
+            showToast('산책 기록이 저장되었습니다.');
 
-        setIsSaving(false);
-        removeSpinner();
-        showToast('산책 기록이 저장되었습니다.');
-
-        navigate('/');
+            navigate('/');
+        }
     }
 
     function handleCancelSave() {

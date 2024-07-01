@@ -18,6 +18,7 @@ import { Position } from '@/models/location';
 import { useStore } from '@/store';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { uploadImages } from '@/utils/image';
+import { useAuth } from '@/hooks/useAuth';
 
 export interface DogWalkData {
     dogs: WalkingDog[] | DogAvatar[];
@@ -45,6 +46,7 @@ export default function Walk() {
     const photoUrls = useStore((state) => state.photoUrls);
     const setPhotoUrls = useStore((state) => state.setPhotoUrls);
     const resetWalkData = useStore((state) => state.resetWalkData);
+    const { refreshTokenQuery } = useAuth();
 
     const handleBottomSheet = () => {
         setIsDogBottomSheetOpen(!isDogBottomSheetOpen);
@@ -64,14 +66,16 @@ export default function Walk() {
         spinnerAdd();
         stopClock();
         stopGeo();
-        const ok = await requestWalkStop(dogs.map((d) => d.id));
-        if (ok) {
-            resetWalkData();
-            navigate('/journals/create', {
-                state: { dogs, distance, duration, calories: getCalories(duration), startedAt, routes, photoUrls },
-            });
+        if (refreshTokenQuery.isSuccess) {
+            const ok = await requestWalkStop(dogs.map((d) => d.id));
+            if (ok) {
+                resetWalkData();
+                navigate('/journals/create', {
+                    state: { dogs, distance, duration, calories: getCalories(duration), startedAt, routes, photoUrls },
+                });
+            }
+            spinnerRemove();
         }
-        spinnerRemove();
     };
 
     const handleWalkStop = (isStop: boolean) => {

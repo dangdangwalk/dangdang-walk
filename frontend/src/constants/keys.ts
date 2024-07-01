@@ -22,7 +22,6 @@ const queryKeys = {
 const storageKeys = {
     REDIRECT_URI: 'redirectURI',
     PROVIDER: 'provider',
-    IS_SIGNED_IN: 'isSignedIn',
     DATA_URL: 'dataUrl',
 } as const;
 
