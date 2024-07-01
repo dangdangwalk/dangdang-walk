@@ -65,6 +65,32 @@ describe('S3Controller (e2e)', () => {
             });
         });
 
+        context('사용자가 유효하지 않은 body로 presignedUrl 요청을 보내면', () => {
+            it('400 상태 코드를 반환해야 한다.', () => {
+                return request(app.getHttpServer())
+                    .post('/images/presigned-url')
+                    .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
+                    .send(['jpeg', 'avi'])
+                    .expect(400);
+            });
+
+            it('400 상태 코드를 반환해야 한다.', () => {
+                return request(app.getHttpServer())
+                    .post('/images/presigned-url')
+                    .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
+                    .send([1, 'gif'])
+                    .expect(400);
+            });
+
+            it('400 상태 코드를 반환해야 한다.', () => {
+                return request(app.getHttpServer())
+                    .post('/images/presigned-url')
+                    .set('Authorization', `Bearer ${VALID_ACCESS_TOKEN_100_YEARS}`)
+                    .send('png')
+                    .expect(400);
+            });
+        });
+
         testUnauthorizedAccess('이미지 업로드를 위한 presignedUrl', 'post', '/images/presigned-url');
     });
 
