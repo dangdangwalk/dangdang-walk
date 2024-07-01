@@ -1,12 +1,10 @@
 import Spinner from '@/components/commons/Spinner';
 import { Toast } from '@/components/commons/Toast';
-import { useAuth } from '@/hooks/useAuth';
 import { useStore } from '@/store';
 import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 
 function App() {
-    useAuth();
     const spinnerCount = useStore((state) => state.spinnerCount);
 
     useEffect(() => {
