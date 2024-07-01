@@ -1,5 +1,6 @@
 import { Body, Controller, Delete, HttpCode, ParseArrayPipe, Post } from '@nestjs/common';
 
+import { FileType, FileTypeValidationPipe } from './pipes/file-type-validation.pipe';
 import { S3Service } from './s3.service';
 
 import { PresignedUrlInfo } from './types/presigned-url-info.type';
@@ -15,7 +16,7 @@ export class S3Controller {
     @HttpCode(200)
     async presignedUrl(
         @User() user: AccessTokenPayload,
-        @Body(new ParseArrayPipe({ items: String, separator: ',' })) type: string[],
+        @Body(new FileTypeValidationPipe()) type: FileType[],
     ): Promise<PresignedUrlInfo[]> {
         return await this.s3Service.createPresignedUrlWithClientForPut(user.userId, type);
     }

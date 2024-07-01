@@ -3,6 +3,7 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
+import { FileType } from './pipes/file-type-validation.pipe';
 import { PresignedUrlInfo } from './types/presigned-url-info.type';
 
 import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
@@ -20,13 +21,13 @@ export class S3Service {
         this.s3Client = new S3Client({ region: this.configService.getOrThrow('AWS_S3_REGION') });
     }
 
-    private makeFileName(userId: number, type: string[]): string[] {
+    private makeFileName(userId: number, type: FileType[]): string[] {
         return type.map((curType) => `${userId}/${generateUuid()}.${curType}`);
     }
 
-    async createPresignedUrlWithClientForPut(userId: number, type: string[]): Promise<PresignedUrlInfo[]> {
+    async createPresignedUrlWithClientForPut(userId: number, type: FileType[]): Promise<PresignedUrlInfo[]> {
         const filenameArray = this.makeFileName(userId, type);
-        const presignedUrlInfoPromises = await filenameArray.map(async (curFileName) => {
+        const presignedUrlInfoPromises = filenameArray.map(async (curFileName) => {
             const command = new PutObjectCommand({
                 Bucket: BUCKET_NAME,
                 ContentType: `image/${type}`,
