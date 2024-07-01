@@ -133,3 +133,5 @@ delete:
       description: 회원이 소유한 강아지가 아닌 경우
     "404":
       description: 회원 또는 강아지를 찾을 수 없는 경우
+    "409":
+      description: 강아지의 상태가 산책 중(is_walking === true)인 경우 
