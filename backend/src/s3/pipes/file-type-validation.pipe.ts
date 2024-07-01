@@ -25,15 +25,17 @@ const allowedFileTypes = [
 export type FileType = (typeof allowedFileTypes)[number];
 
 @Injectable()
-export class FileTypeValidationPipe implements PipeTransform {
+export class FileTypeValidationPipe implements PipeTransform<any, FileType[]> {
     readonly allowedExtensions = allowedFileTypes;
 
-    transform(value: any) {
+    transform(value: any): FileType[] {
         if (!isTypedArray(value, 'string')) {
             throw new BadRequestException('Validation failed (string array expected)');
         }
 
-        const invalidFiles = value.filter((type: any) => !this.allowedExtensions.includes(type.toLowerCase()));
+        const invalidFiles = value.filter(
+            (type: string) => !this.allowedExtensions.includes(type.toLowerCase() as FileType),
+        );
 
         if (invalidFiles.length > 0) {
             throw new BadRequestException(
@@ -41,6 +43,6 @@ export class FileTypeValidationPipe implements PipeTransform {
             );
         }
 
-        return value;
+        return value as FileType[];
     }
 }
