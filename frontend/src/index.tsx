@@ -1,12 +1,13 @@
-import { fetchJournal } from '@/api/journal';
 import queryClient from '@/api/queryClient';
+import AuthLayout from '@/components/AuthLayout';
 import Health from '@/pages/Health';
 import Home from '@/pages/Home';
+import Journals from '@/pages/Journals';
 import JournalCreateForm from '@/pages/Journals/CreateForm';
 import Detail from '@/pages/Journals/Detail';
-import Journals from '@/pages/Journals';
-import OauthCallback from '@/pages/OauthCallback';
 import MyPage from '@/pages/MyPage';
+import OauthCallback from '@/pages/OauthCallback';
+import SignUp from '@/pages/SignUp';
 import Walk from '@/pages/Walk';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -15,8 +16,6 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import App from './App';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import SignUp from '@/pages/SignUp';
-import AuthLayout from '@/components/AuthLayout';
 const router = createBrowserRouter([
     {
         path: '/',
@@ -70,10 +69,6 @@ const router = createBrowserRouter([
             {
                 path: '/journals/:journalId',
                 element: <Detail />,
-                loader: async ({ params }) => {
-                    const journalId = Number(params.journalId);
-                    return await fetchJournal(journalId);
-                },
             },
         ],
     },
