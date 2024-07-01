@@ -1,4 +1,4 @@
-import { JournalDetail, remove as removeJournal, update as updateJournal } from '@/api/journal';
+import { remove as removeJournal, update as updateJournal } from '@/api/journal';
 import { deleteImages, getUploadUrl, uploadImage } from '@/api/upload';
 import { ReactComponent as Arrow } from '@/assets/icons/ic-arrow-right.svg';
 import { ReactComponent as Meatball } from '@/assets/icons/ic-meatball.svg';
@@ -22,14 +22,16 @@ import Navbar from '@/components/journals/Navbar';
 import PhotoSection from '@/components/journals/PhotoSection';
 import Map from '@/components/walk/Map';
 import WalkInfo from '@/components/walk/WalkInfo';
+import useJournal from '@/hooks/useJournal';
 import useToast from '@/hooks/useToast';
 import { useStore } from '@/store';
 import { getFileName } from '@/utils/url';
 import { FormEvent, useEffect, useRef, useState } from 'react';
-import { useLoaderData, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 export default function Detail() {
-    const journalDetail = useLoaderData() as JournalDetail;
+    const params = useParams();
+    const journalDetail = useJournal(Number(params.journalId));
     const { journalInfo, dogs: dogsFromAPI, excrements = [] } = journalDetail;
     const { id: journalId, routes, memo, photoUrls: photoFileNames } = journalInfo;
 
@@ -82,7 +84,7 @@ export default function Detail() {
     useEffect(() => {
         if (textAreaRef.current === null) return;
         textAreaRef.current.value = memo;
-    }, []);
+    }, [journalDetail]);
 
     return (
         <>
