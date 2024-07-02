@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { EntityManager, FindOneOptions, FindOptionsWhere, In } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
@@ -61,13 +61,19 @@ export class DogsService {
     @Transactional()
     async deleteDogFromUser(userId: number, dogId: number) {
         const dog = await this.dogsRepository.findOne({ where: { id: dogId } });
+        if (dog.isWalking) {
+            const error = new ConflictException(`강아지 ${dog.id}은/는 산책 중입니다. 삭제할 수 없습니다`);
+            this.logger.error(`강아지 ${dog.id}은/는 산책 중입니다. 삭제할 수 없습니다`, {
+                trace: error.stack ?? '스택 없음',
+            });
+            throw error;
+        }
 
         await this.dogWalkDayService.delete({ id: dog.walkDayId });
         await this.todayWalkTimeService.delete({ id: dog.todayWalkTimeId });
         if (dog.profilePhotoUrl) {
             await this.s3Service.deleteSingleObject(userId, dog.profilePhotoUrl);
         }
-
         return dog;
     }
 
