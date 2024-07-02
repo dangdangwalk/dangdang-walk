@@ -1,4 +1,5 @@
 import { Location, journalLocation } from '../dtos/create-journal.dto';
+import { Journals } from '../journals.entity';
 
 export interface CreateExcrementsInfo {
     dogId: number;
@@ -15,11 +16,8 @@ export class CreateJournalInfo {
     memo: string;
     photoUrls: string[];
 
-    static getKeysForJournalTable() {
+    static getKeysForJournalTable(): Array<keyof Journals> {
         return ['distance', 'calories', 'startedAt', 'duration', 'routes', 'memo'];
-    }
-    static getKeysForJournalPhotoTable() {
-        return ['photoUrls'];
     }
 }
 
