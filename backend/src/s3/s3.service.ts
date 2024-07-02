@@ -48,12 +48,19 @@ export class S3Service {
     }
 
     async deleteObjects(userId: number, filenames: string[]) {
-        const objectArray = filenames.map((curFilename) => {
+        const objectArray: {
+            Key: string;
+        }[] = [];
+
+        for (const curFilename of filenames) {
+            if (curFilename.startsWith('default/')) continue;
+
             if (!this.checkUserIdInFilename(userId, curFilename)) {
                 throw new ForbiddenException(`유저 ${userId}은 ${curFilename}에 대한 접근 권한이 없습니다`);
             }
-            return { Key: curFilename };
-        });
+
+            objectArray.push({ Key: curFilename });
+        }
 
         const input = {
             Bucket: BUCKET_NAME,
@@ -72,6 +79,8 @@ export class S3Service {
     }
 
     async deleteSingleObject(userId: number, filename: string) {
+        if (filename.startsWith('default/')) return;
+
         if (!this.checkUserIdInFilename(userId, filename)) {
             throw new ForbiddenException(`유저 ${userId}은/는 ${filename}에 대한 접근 권한이 없습니다`);
         }

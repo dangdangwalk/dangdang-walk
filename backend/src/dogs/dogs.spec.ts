@@ -18,7 +18,7 @@ describe('Dogs', () => {
             birth: null,
             isNeutered: true,
             weight: 2,
-            profilePhotoUrl: 'mock_profile_photo.jpg',
+            profilePhotoUrl: 'default/profile.png',
             isWalking: false,
             updatedAt: expect.any(Date),
         });
