@@ -57,10 +57,10 @@ export class DogsService {
         }
     }
 
-    //TODO: Promise all 사용하여 병렬적으로 삭제 쿼리 날리기
     @Transactional()
     async deleteDogFromUser(userId: number, dogId: number) {
         const dog = await this.dogsRepository.findOne({ where: { id: dogId } });
+
         if (dog.isWalking) {
             const error = new ConflictException(`강아지 ${dog.id}은/는 산책 중입니다. 삭제할 수 없습니다`);
             this.logger.error(`강아지 ${dog.id}은/는 산책 중입니다. 삭제할 수 없습니다`, {
@@ -69,11 +69,12 @@ export class DogsService {
             throw error;
         }
 
-        await this.dogWalkDayService.delete({ id: dog.walkDayId });
-        await this.todayWalkTimeService.delete({ id: dog.todayWalkTimeId });
-        if (dog.profilePhotoUrl) {
-            await this.s3Service.deleteSingleObject(userId, dog.profilePhotoUrl);
-        }
+        await Promise.all([
+            this.dogWalkDayService.delete({ id: dog.walkDayId }),
+            this.todayWalkTimeService.delete({ id: dog.todayWalkTimeId }),
+            dog.profilePhotoUrl ? this.s3Service.deleteSingleObject(userId, dog.profilePhotoUrl) : Promise.resolve(),
+        ]);
+
         return dog;
     }
 
