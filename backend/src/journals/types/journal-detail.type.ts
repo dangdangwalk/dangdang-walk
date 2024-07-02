@@ -1,5 +1,9 @@
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
+import { Dogs } from 'src/dogs/dogs.entity';
+
+import { Journals } from '../journals.entity';
+
 export class PhotoUrlType {
     @IsNotEmpty()
     @IsString()
@@ -22,7 +26,7 @@ export class DogInfoForDetail {
     profilePhotoUrl: string | null;
 
     // TODO: reflect-metadata 사용하도록 변경
-    static getKeysForDogTable() {
+    static getKeysForDogTable(): Array<keyof Dogs> {
         return ['id', 'name', 'profilePhotoUrl'];
     }
 }
@@ -52,11 +56,8 @@ export class JournalInfoForDetail {
     @IsString({ each: true })
     photoUrls: string[];
 
-    static getKeysForJournalTable() {
+    static getKeysForJournalTable(): Array<keyof Journals> {
         return ['routes', 'memo'];
-    }
-    static getKeysForJournalPhotoTable() {
-        return ['photoUrls'];
     }
 }
 
