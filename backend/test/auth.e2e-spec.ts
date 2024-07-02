@@ -14,8 +14,20 @@ import {
     VALID_REFRESH_TOKEN_100_YEARS,
 } from './constants';
 
-import { clearUsers, closeTestApp, insertMockUsers, setupTestApp, testUnauthorizedAccess } from './test-utils';
+import {
+    clearDogs,
+    clearUsers,
+    closeTestApp,
+    insertMockDogs,
+    insertMockUsers,
+    setupTestApp,
+    testUnauthorizedAccess,
+} from './test-utils';
 
+import { DogWalkDay } from '../src/dog-walk-day/dog-walk-day.entity';
+import { Dogs } from '../src/dogs/dogs.entity';
+import { GENDER } from '../src/dogs/types/gender.type';
+import { TodayWalkTime } from '../src/today-walk-time/today-walk-time.entity';
 import { ROLE } from '../src/users/types/role.type';
 import { Users } from '../src/users/users.entity';
 
@@ -360,9 +372,43 @@ describe('AuthController (e2e)', () => {
                         createdAt: new Date('2019-01-01'),
                     }),
                 });
+                await insertMockDogs({
+                    mockDogs: [
+                        new Dogs({
+                            id: 1,
+                            walkDay: new DogWalkDay(),
+                            todayWalkTime: new TodayWalkTime(),
+                            name: '덕지',
+                            breedId: 1,
+                            gender: GENDER.Male,
+                            birth: null,
+                            isNeutered: true,
+                            weight: 2,
+                            profilePhotoUrl: '1/mock_profile_photo.jpg',
+                            isWalking: false,
+                            updatedAt: new Date('2019-01-01'),
+                        }),
+                        new Dogs({
+                            id: 2,
+                            walkDay: new DogWalkDay(),
+                            todayWalkTime: new TodayWalkTime(),
+                            name: '루이',
+                            breedId: 2,
+                            gender: GENDER.Female,
+                            birth: null,
+                            isNeutered: false,
+                            weight: 1,
+                            profilePhotoUrl: 'default/profile.png',
+                            isWalking: false,
+                            updatedAt: new Date('2019-01-01'),
+                        }),
+                    ],
+                    userId: 1,
+                });
             });
 
             afterEach(async () => {
+                await clearDogs();
                 await clearUsers();
             });
 
@@ -374,6 +420,7 @@ describe('AuthController (e2e)', () => {
                     .expect('set-cookie', /refreshToken=;/);
 
                 expect(await dataSource.getRepository(Users).findOne({ where: { id: 1 } })).toBe(null);
+                expect(await dataSource.getRepository(Dogs).count()).toBe(0);
             });
         });
 
