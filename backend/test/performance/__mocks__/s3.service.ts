@@ -14,6 +14,8 @@ export const MockS3Service = {
 
     deleteObjects: (userId: number, filenames: string[]) => {
         for (const curFilename of filenames) {
+            if (curFilename.startsWith('default/')) return true;
+
             if (parseInt(curFilename.split('/')[0]) !== userId) {
                 throw new ForbiddenException(`User ${userId} is not owner of the file ${curFilename}`);
             }

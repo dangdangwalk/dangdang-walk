@@ -13,7 +13,7 @@ export const mockDog = new Dogs({
     birth: null,
     isNeutered: true,
     weight: 2,
-    profilePhotoUrl: 'mock_profile_photo.jpg',
+    profilePhotoUrl: 'default/profile.png',
     isWalking: false,
     updatedAt: new Date('2019-01-01'),
 });
@@ -26,7 +26,7 @@ export const mockDogProfile = {
     isNeutered: true,
     birth: null,
     weight: 2,
-    profilePhotoUrl: 'mock_profile_photo.jpg',
+    profilePhotoUrl: 'default/profile.png',
 };
 
 export const mockDog2 = new Dogs({
@@ -39,7 +39,7 @@ export const mockDog2 = new Dogs({
     birth: null,
     isNeutered: false,
     weight: 1,
-    profilePhotoUrl: 'mock_profile_photo2.jpg',
+    profilePhotoUrl: 'default/profile.png',
     isWalking: false,
     updatedAt: new Date('2019-01-01'),
 });
@@ -52,5 +52,5 @@ export const mockDog2Profile = {
     isNeutered: false,
     birth: null,
     weight: 1,
-    profilePhotoUrl: 'mock_profile_photo2.jpg',
+    profilePhotoUrl: 'default/profile.png',
 };
