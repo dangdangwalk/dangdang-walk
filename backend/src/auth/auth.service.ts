@@ -132,11 +132,8 @@ export class AuthService {
 
     @Transactional()
     private async deleteUserData(userId: number) {
-        const dogIds = await this.usersService.getOwnDogsList(userId);
-
-        await Promise.all(dogIds.map((dogId) => this.dogsService.deleteDogFromUser(userId, dogId)));
-
-        await Promise.all([this.usersService.delete({ id: userId }), this.s3Service.deleteObjectFolder(userId)]);
+        await this.dogsService.deleteOwnDogs(userId);
+        await this.usersService.delete(userId);
     }
 
     async validateAccessToken(token: string): Promise<AccessTokenPayload> {

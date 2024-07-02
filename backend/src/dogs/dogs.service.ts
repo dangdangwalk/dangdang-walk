@@ -16,6 +16,7 @@ import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
 import { S3Service } from '../s3/s3.service';
 import { TodayWalkTime } from '../today-walk-time/today-walk-time.entity';
 import { TodayWalkTimeService } from '../today-walk-time/today-walk-time.service';
+import { UsersService } from '../users/users.service';
 import { UsersDogs } from '../users-dogs/users-dogs.entity';
 import { UsersDogsService } from '../users-dogs/users-dogs.service';
 
@@ -25,6 +26,7 @@ import { makeSubObjectsArray } from '../utils/manipulate.util';
 export class DogsService {
     constructor(
         private readonly dogsRepository: DogsRepository,
+        private readonly usersService: UsersService,
         private readonly usersDogsService: UsersDogsService,
         private readonly breedService: BreedService,
         private readonly dogWalkDayService: DogWalkDayService,
@@ -76,6 +78,28 @@ export class DogsService {
         ]);
 
         return dog;
+    }
+
+    @Transactional()
+    async deleteOwnDogs(userId: number) {
+        const dogIds = await this.usersService.getOwnDogsList(userId);
+
+        if (!dogIds.length) return;
+
+        const dogs = await this.dogsRepository.find({
+            where: { id: In(dogIds) },
+            select: ['walkDayId', 'todayWalkTimeId', 'profilePhotoUrl'],
+        });
+
+        const walkDayIds = dogs.map((dog) => dog.walkDayId);
+        const todayWalkTimeIds = dogs.map((dog) => dog.todayWalkTimeId);
+        const profilePhotoUrls = dogs.map((dog) => dog.profilePhotoUrl).filter((url): url is string => url !== null);
+
+        await Promise.all([
+            this.dogWalkDayService.delete({ id: In(walkDayIds) }),
+            this.todayWalkTimeService.delete({ id: In(todayWalkTimeIds) }),
+            profilePhotoUrls.length ? this.s3Service.deleteObjects(userId, profilePhotoUrls) : Promise.resolve(),
+        ]);
     }
 
     async findOne(where: FindOneOptions<Dogs>) {
