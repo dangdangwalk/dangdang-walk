@@ -59,9 +59,8 @@ export class JournalsService {
         return this.journalsRepository.updateAndFindOne(where, partialEntity);
     }
 
-    //TODO: map을 사용하지 않도록 select 조건 추가
     private async getOwnJournalIds(userId: number): Promise<number[]> {
-        const ownJournals = await this.journalsRepository.find({ where: { userId: userId } });
+        const ownJournals = await this.journalsRepository.find({ where: { userId }, select: ['id'] });
 
         return ownJournals.map((cur) => cur.id);
     }
@@ -71,9 +70,11 @@ export class JournalsService {
         return checkIfExistsInArr(myJournalIds, journalIds);
     }
 
-    //TODO: select 적용하기
     async getJournalInfoForDetail(journalId: number): Promise<JournalInfoForDetail> {
-        const journalInfoRaw = await this.journalsRepository.findOne({ where: { id: journalId } });
+        const journalInfoRaw = await this.journalsRepository.findOne({
+            where: { id: journalId },
+            select: JournalInfoForDetail.getKeysForJournalTable(),
+        });
         const journalInfo = makeSubObject(journalInfoRaw, JournalInfoForDetail.getKeysForJournalTable());
         journalInfo.id = journalId;
         journalInfo.routes = JSON.parse(journalInfo.routes);
@@ -100,8 +101,11 @@ export class JournalsService {
     }
 
     async getDogsInfoForDetail(dogId: number): Promise<DogInfoForDetail> {
-        const dogInfoRaw = await this.dogsService.findOne({ where: { id: dogId } });
-        //TODO: select로 바꾸기
+        const dogInfoRaw = await this.dogsService.findOne({
+            where: { id: dogId },
+            select: DogInfoForDetail.getKeysForDogTable(),
+        });
+
         const dogInfo: DogInfoForDetail = makeSubObject(dogInfoRaw, DogInfoForDetail.getKeysForDogTable());
 
         return dogInfo;
@@ -319,7 +323,8 @@ export class JournalsService {
         const startEndDate = getStartAndEndOfDay(new Date(date));
         const result = await this.entityManager
             .createQueryBuilder(Journals, 'journals')
-            .orderBy('journals_id', 'ASC')
+            .select('journals.id')
+            .orderBy('journals.id', 'ASC')
             .innerJoin(JournalsDogs, 'journals_dogs', 'journals.id = journals_dogs.journal_id')
             .where('journals_dogs.dog_id = :dogId', { dogId })
             .andWhere('journals.started_at >= :startDate', { startDate: startEndDate.startDate })
@@ -347,15 +352,17 @@ export class JournalsService {
         }
 
         //TODO: Promise all 적용하기
-        const journalInfosRaw = await this.journalsRepository.find({ where: { id: In(journalIds) } });
-        //TODO: select로 바꾸기
+        const journalInfosRaw = await this.journalsRepository.find({
+            where: { id: In(journalIds) },
+            select: JournalInfoForList.getKeysForJournalTable(),
+        });
+
         const journalInfos = await makeSubObjectsArray(
             journalInfosRaw,
             JournalInfoForList.getAttributesForJournalTable(),
             JournalInfoForList.getKeysForJournalTable(),
         );
-        //TODO: select로 journalId 바로 가져오기
-        const findResult = await this.journalsDogsService.find({ where: { dogId } });
+        const findResult = await this.journalsDogsService.find({ where: { dogId }, select: ['journalId'] });
         //TODO: jd -> journal Data 변수명 수정, 로직 개선
         const journalCntForFirstRow = findResult.findIndex((jd) => jd.journalId === journalInfos[0].journalId);
         const result = this.putDogCntToJournalList(journalInfos, journalCntForFirstRow + 1);
