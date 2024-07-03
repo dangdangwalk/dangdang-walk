@@ -21,6 +21,7 @@ import DogDetail from '@/pages/MyPage/DogDetail';
 import { RecentMonthStatisticsResponse, fetchDogRecentMonthStatistics } from '@/api/dog';
 import { Dog } from '@/models/dog';
 import Navbar from '@/components/Navbar';
+import { withMainAuthenticated } from '@/components/hoc/withMainAuthenticated';
 function MyPage() {
     const navigate = useNavigate();
     const { fetchDog } = useDog();
@@ -167,4 +168,6 @@ function MyPage() {
     );
 }
 
-export default MyPage;
+const AuthenticatedMyPage = withMainAuthenticated(MyPage);
+
+export default AuthenticatedMyPage;
