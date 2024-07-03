@@ -595,6 +595,7 @@ describe('JournalsController (e2e)', () => {
                     {
                         dogId: 2,
                         fecesCnt: 1,
+                        urineCnt: 0,
                     },
                 ],
             };
