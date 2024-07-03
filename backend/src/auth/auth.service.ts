@@ -97,21 +97,15 @@ export class AuthService {
     async reissueTokens({ oauthId, provider }: RefreshTokenPayload): Promise<AuthData> {
         const { id: userId, oauthRefreshToken } = await this.usersService.findOne({ where: { oauthId } });
 
-        // TODO: Promise.all로 병렬처리 한 후 성능 비교하기
-        // const [
-        //     { access_token: newOauthAccessToken, refresh_token: newOauthRefreshToken },
-        //     newAccessToken,
-        //     newRefreshToken,
-        // ] = await Promise.all([
-        //     this[`${provider}Service`].requestTokenRefresh(oauthRefreshToken),
-        //     this.tokenService.signAccessToken(userId, provider),
-        //     this.tokenService.signRefreshToken(oauthId, provider),
-        // ]);
-        const { access_token: newOauthAccessToken, refresh_token: newOauthRefreshToken } =
-            await this[`${provider}Service`].requestTokenRefresh(oauthRefreshToken);
-
-        const newAccessToken = await this.tokenService.signAccessToken(userId, provider);
-        const newRefreshToken = await this.tokenService.signRefreshToken(oauthId, provider);
+        const [
+            { access_token: newOauthAccessToken, refresh_token: newOauthRefreshToken },
+            newAccessToken,
+            newRefreshToken,
+        ] = await Promise.all([
+            this[`${provider}Service`].requestTokenRefresh(oauthRefreshToken),
+            this.tokenService.signAccessToken(userId, provider),
+            this.tokenService.signRefreshToken(oauthId, provider),
+        ]);
 
         const attributes: Partial<Users> = { oauthAccessToken: newOauthAccessToken, refreshToken: newRefreshToken };
 
@@ -138,16 +132,8 @@ export class AuthService {
 
     @Transactional()
     private async deleteUserData(userId: number) {
-        const dogIds = await this.usersService.getOwnDogsList(userId);
-
-        // TODO: for문 없애고 batch delete 하기
-        for (const dogId of dogIds) {
-            await this.dogsService.deleteDogFromUser(userId, dogId);
-        }
-
-        // TODO: Promise.all로 병렬 처리
-        await this.usersService.delete({ id: userId });
-        await this.s3Service.deleteObjectFolder(userId);
+        await this.dogsService.deleteOwnDogs(userId);
+        await this.usersService.delete(userId);
     }
 
     async validateAccessToken(token: string): Promise<AccessTokenPayload> {

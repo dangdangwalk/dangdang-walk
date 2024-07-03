@@ -35,8 +35,8 @@ export class UsersService {
         return this.usersRepository.updateAndFindOne(where, partialEntity);
     }
 
-    async delete(where: FindOptionsWhere<Users>) {
-        return this.usersRepository.delete(where);
+    async delete(userId: number) {
+        await Promise.all([this.usersRepository.delete({ id: userId }), this.s3Service.deleteObjectFolder(userId)]);
     }
 
     async createIfNotExists({ oauthNickname, ...otherAttributes }: CreateUser) {

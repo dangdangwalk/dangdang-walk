@@ -16,6 +16,7 @@ import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
 import { S3Service } from '../s3/s3.service';
 import { TodayWalkTime } from '../today-walk-time/today-walk-time.entity';
 import { TodayWalkTimeService } from '../today-walk-time/today-walk-time.service';
+import { UsersService } from '../users/users.service';
 import { UsersDogs } from '../users-dogs/users-dogs.entity';
 import { UsersDogsService } from '../users-dogs/users-dogs.service';
 
@@ -25,6 +26,7 @@ import { makeSubObjectsArray } from '../utils/manipulate.util';
 export class DogsService {
     constructor(
         private readonly dogsRepository: DogsRepository,
+        private readonly usersService: UsersService,
         private readonly usersDogsService: UsersDogsService,
         private readonly breedService: BreedService,
         private readonly dogWalkDayService: DogWalkDayService,
@@ -57,10 +59,10 @@ export class DogsService {
         }
     }
 
-    //TODO: Promise all 사용하여 병렬적으로 삭제 쿼리 날리기
     @Transactional()
     async deleteDogFromUser(userId: number, dogId: number) {
         const dog = await this.dogsRepository.findOne({ where: { id: dogId } });
+
         if (dog.isWalking) {
             const error = new ConflictException(`강아지 ${dog.id}은/는 산책 중입니다. 삭제할 수 없습니다`);
             this.logger.error(`강아지 ${dog.id}은/는 산책 중입니다. 삭제할 수 없습니다`, {
@@ -69,12 +71,35 @@ export class DogsService {
             throw error;
         }
 
-        await this.dogWalkDayService.delete({ id: dog.walkDayId });
-        await this.todayWalkTimeService.delete({ id: dog.todayWalkTimeId });
-        if (dog.profilePhotoUrl) {
-            await this.s3Service.deleteSingleObject(userId, dog.profilePhotoUrl);
-        }
+        await Promise.all([
+            this.dogWalkDayService.delete({ id: dog.walkDayId }),
+            this.todayWalkTimeService.delete({ id: dog.todayWalkTimeId }),
+            dog.profilePhotoUrl ? this.s3Service.deleteSingleObject(userId, dog.profilePhotoUrl) : Promise.resolve(),
+        ]);
+
         return dog;
+    }
+
+    @Transactional()
+    async deleteOwnDogs(userId: number) {
+        const dogIds = await this.usersService.getOwnDogsList(userId);
+
+        if (!dogIds.length) return;
+
+        const dogs = await this.dogsRepository.find({
+            where: { id: In(dogIds) },
+            select: ['walkDayId', 'todayWalkTimeId', 'profilePhotoUrl'],
+        });
+
+        const walkDayIds = dogs.map((dog) => dog.walkDayId);
+        const todayWalkTimeIds = dogs.map((dog) => dog.todayWalkTimeId);
+        const profilePhotoUrls = dogs.map((dog) => dog.profilePhotoUrl).filter((url): url is string => url !== null);
+
+        await Promise.all([
+            this.dogWalkDayService.delete({ id: In(walkDayIds) }),
+            this.todayWalkTimeService.delete({ id: In(todayWalkTimeIds) }),
+            profilePhotoUrls.length ? this.s3Service.deleteObjects(userId, profilePhotoUrls) : Promise.resolve(),
+        ]);
     }
 
     async findOne(where: FindOneOptions<Dogs>) {
