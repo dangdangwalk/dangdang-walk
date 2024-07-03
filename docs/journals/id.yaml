@@ -155,6 +155,7 @@ get:
             required:
               - journalInfo
               - dogs
+              - excrements
     "401":
       description: Authorization header가 없거나 유효한 access token이 아닌 경우
     "403":

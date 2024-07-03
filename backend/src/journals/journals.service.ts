@@ -90,13 +90,9 @@ export class JournalsService {
         //TODO: GROUP_BY type을 사용해 한번에 가져오게 바꾸기
         const fecesCnt = await this.excrementsService.getExcrementsCount(journalId, dogId, EXCREMENT.Feces);
         const urineCnt = await this.excrementsService.getExcrementsCount(journalId, dogId, EXCREMENT.Urine);
-        if (!fecesCnt && !urineCnt) {
-            return;
-        }
-        //TODO: 없어도 0을 넣기
-        fecesCnt ? (excrementsInfo.fecesCnt = fecesCnt) : fecesCnt;
-        urineCnt ? (excrementsInfo.urineCnt = urineCnt) : urineCnt;
 
+        excrementsInfo.fecesCnt = fecesCnt;
+        excrementsInfo.urineCnt = urineCnt;
         return excrementsInfo;
     }
 

@@ -71,6 +71,6 @@ export class JournalDetail {
     constructor(journalInfo: JournalInfoForDetail, dogInfo: DogInfoForDetail[], excrements: ExcrementsInfoForDetail[]) {
         this.journalInfo = journalInfo;
         this.dogs = dogInfo;
-        excrements.length ? (this.excrements = excrements) : excrements;
+        this.excrements = excrements;
     }
 }
