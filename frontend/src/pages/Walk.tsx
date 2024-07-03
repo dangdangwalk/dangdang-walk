@@ -18,7 +18,7 @@ import { Position } from '@/models/location';
 import { useStore } from '@/store';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { uploadImages } from '@/utils/image';
-import { useAuth } from '@/hooks/useAuth';
+import { withAuthenticated } from '@/components/hoc/withAuthenticated';
 
 export interface DogWalkData {
     dogs: WalkingDog[] | DogAvatar[];
@@ -30,8 +30,7 @@ export interface DogWalkData {
 export interface JournalCreateFromState extends DogWalkData {
     calories: number;
 }
-
-export default function Walk() {
+function Walk() {
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -46,8 +45,6 @@ export default function Walk() {
     const photoUrls = useStore((state) => state.photoUrls);
     const setPhotoUrls = useStore((state) => state.setPhotoUrls);
     const resetWalkData = useStore((state) => state.resetWalkData);
-    const { refreshTokenQuery } = useAuth();
-
     const handleBottomSheet = () => {
         setIsDogBottomSheetOpen(!isDogBottomSheetOpen);
         if (isDogBottomSheetOpen) {
@@ -66,16 +63,14 @@ export default function Walk() {
         spinnerAdd();
         stopClock();
         stopGeo();
-        if (refreshTokenQuery.isSuccess) {
-            const ok = await requestWalkStop(dogs.map((d) => d.id));
-            if (ok) {
-                resetWalkData();
-                navigate('/journals/create', {
-                    state: { dogs, distance, duration, calories: getCalories(duration), startedAt, routes, photoUrls },
-                });
-            }
-            spinnerRemove();
+        const ok = await requestWalkStop(dogs.map((d) => d.id));
+        if (ok) {
+            resetWalkData();
+            navigate('/journals/create', {
+                state: { dogs, distance, duration, calories: getCalories(duration), startedAt, routes, photoUrls },
+            });
         }
+        spinnerRemove();
     };
 
     const handleWalkStop = (isStop: boolean) => {
@@ -156,3 +151,7 @@ export default function Walk() {
 interface ReceivedState {
     dogs: DogAvatar[];
 }
+
+const AuthenticatedWalk = withAuthenticated(Walk);
+
+export default AuthenticatedWalk;

@@ -4,7 +4,7 @@ import { useStore } from '@/store';
 import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 
-function App() {
+export default function App() {
     const spinnerCount = useStore((state) => state.spinnerCount);
 
     useEffect(() => {
@@ -23,5 +23,3 @@ function App() {
         </div>
     );
 }
-
-export default App;

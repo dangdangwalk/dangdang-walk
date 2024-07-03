@@ -15,6 +15,7 @@ import {
     ModalHeader,
     ModalTitle,
 } from '@/components/commons/Modal';
+import { withAuthenticated } from '@/components/hoc/withAuthenticated';
 import CompanionDogSection, { CompanionDog } from '@/components/journals/CompanionDogSection';
 import Heading from '@/components/journals/Heading';
 import MemoSection from '@/components/journals/MemoSection';
@@ -29,7 +30,7 @@ import { getFileName } from '@/utils/url';
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-export default function Detail() {
+function Detail() {
     const params = useParams();
     const journalDetail = useJournal(Number(params.journalId));
     const { journalInfo, dogs: dogsFromAPI, excrements = [] } = journalDetail;
@@ -241,3 +242,7 @@ interface ReceivedState {
 }
 
 export type ImageFileName = string;
+
+const AuthenticatedDetail = withAuthenticated(Detail);
+
+export default AuthenticatedDetail;

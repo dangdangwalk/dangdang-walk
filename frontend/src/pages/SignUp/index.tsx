@@ -26,11 +26,12 @@ import ImageCropper from '@/components/ImageCropper';
 export default function SignUp() {
     const navigate = useNavigate();
     const provider = getStorage(storageKeys.PROVIDER);
-    if (!provider) navigate('/');
     const location = useLocation();
     const currentPage = location.state;
     const { signUp } = useAuth();
     const { createDog } = useDog();
+    const isSignedIn = useStore((state) => state.isSignedIn);
+    if (!provider || isSignedIn) navigate('/');
     const spinnerAdd = useStore((state) => state.spinnerAdd);
     const spinnerRemove = useStore((state) => state.spinnerRemove);
     const cropError = useStore((state) => state.cropError);
