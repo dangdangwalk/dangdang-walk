@@ -68,6 +68,8 @@ const useGetRefreshToken = () => {
     useEffect(() => {
         if (isSuccess) {
             storeSignIn(data?.accessToken);
+            removeStorage(storageKeys.REDIRECT_URI);
+            removeStorage(storageKeys.PROVIDER);
         }
     }, [isSuccess, data]);
 
