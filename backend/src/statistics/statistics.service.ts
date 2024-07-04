@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { In } from 'typeorm';
 
 import { Period } from './pipes/period-validation.pipe';
@@ -28,29 +28,27 @@ export class StatisticsService {
         private readonly logger: WinstonLoggerService,
     ) {}
 
-    //TODO: Date 값 함수로 만들어서 반환 -> 유효하지 않은 period면 Error 던지기
     async getDogStatistics(userId: number, dogId: number, period: Period) {
-        let startDate: Date;
-        let endDate: Date;
-        startDate = endDate = new Date();
+        let startDate: Date, endDate: Date;
 
         if (period === 'month') {
-            startDate = getOneMonthAgo(new Date());
+            ({ startDate, endDate } = getOneMonthAgo(new Date()));
+        } else {
+            throw new BadRequestException(`유효하지 않은 period: ${period}`);
         }
 
         return this.journalsService.findJournalsAndGetTotal(userId, dogId, startDate, endDate);
     }
 
-    //TODO: Date 값 함수로 만들어서 반환 -> 유효하지 않은 period면 Error 던지기
     async getDogWalkCnt(userId: number, dogId: number, date: string, period: Period) {
-        let startDate: Date;
-        let endDate: Date;
-        startDate = endDate = new Date();
+        let startDate: Date, endDate: Date;
 
         if (period === 'month') {
             ({ startDate, endDate } = getStartAndEndOfMonth(new Date(date)));
         } else if (period === 'week') {
             ({ startDate, endDate } = getStartAndEndOfWeek(new Date(date)));
+        } else {
+            throw new BadRequestException(`유효하지 않은 period: ${period}`);
         }
 
         return this.journalsService.findJournalsAndAggregateByDay(userId, dogId, startDate, endDate);
