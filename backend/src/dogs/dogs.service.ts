@@ -154,19 +154,20 @@ export class DogsService {
         //TODO: key를 반환하는 함수 만들어 인자로 넣기
         return makeSubObjectsArray(dogs, ['id', 'name', 'profilePhotoUrl']);
     }
-    //TODO: DogSummary에 해당하는 컬럼을 애초에 select 해서 가져오기
+
     async getDogsSummaryList(where: FindOptionsWhere<Dogs>): Promise<DogSummary[]> {
-        const dogInfos = await this.dogsRepository.find({ where });
+        const dogInfos = await this.dogsRepository.find({ where, select: ['id', 'name', 'profilePhotoUrl'] });
         return this.makeDogsSummaryList(dogInfos);
     }
 
-    //TODO : makeProfile 함수로 하지 않고 애초에 select 해서 가져오기
     async getProfile(dogId: number): Promise<DogProfile> {
-        const dogInfo = await this.dogsRepository.findOne({ where: { id: dogId } });
+        const dogInfo = await this.dogsRepository.findOne({
+            where: { id: dogId },
+            select: ['id', 'name', 'breed', 'gender', 'isNeutered', 'birth', 'weight', 'profilePhotoUrl'],
+        });
         return this.makeProfile(dogInfo);
     }
 
-    //TODO: 쿼리 빌더를 쓸 것인지, 각자 테이블에서 가져와서 코드상으로 가공할 것인지 성능 테스트?
     async getProfileList(userId: number): Promise<DogProfile[]> {
         const dogProfiles = await this.entityManager
             .createQueryBuilder(Dogs, 'dogs')
