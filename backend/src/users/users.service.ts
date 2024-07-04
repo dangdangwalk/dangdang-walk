@@ -66,22 +66,23 @@ export class UsersService {
     }
 
     async getOwnDogsList(userId: number): Promise<number[]> {
-        //TODO: select로 변경
-        const foundDogs = await this.usersDogsService.find({ where: { userId } });
-        return foundDogs.map((cur) => cur.dogId);
+        return (await this.usersDogsService.find({ where: { userId }, select: ['dogId'] })).map((cur) => cur.dogId);
     }
 
     async checkDogOwnership(userId: number, dogId: number | number[]): Promise<[boolean, number[]]> {
-        //TODO: select로 변경
-        const ownDogs = await this.usersDogsService.find({ where: { userId } });
-        const myDogIds = ownDogs.map((cur) => cur.dogId);
+        const myDogIds = (await this.usersDogsService.find({ where: { userId }, select: ['dogId'] })).map(
+            (cur) => cur.dogId,
+        );
 
         return checkIfExistsInArr(myDogIds, dogId);
     }
 
     async getUserProfile({ userId, provider }: AccessTokenPayload): Promise<UserProfile> {
-        //TODO: select로 변경
-        const { nickname, email, profileImageUrl } = await this.usersRepository.findOne({ where: { id: userId } });
+        const { nickname, email, profileImageUrl } = await this.usersRepository.findOne({
+            where: { id: userId },
+            select: ['nickname', 'email', 'profileImageUrl'],
+        });
+
         return { nickname, email, profileImageUrl, provider };
     }
 
