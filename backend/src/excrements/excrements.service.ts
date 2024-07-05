@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
 
+import { ExcrementsCount } from 'src/journals/types/journal-detail.type';
+import { EntityManager } from 'typeorm';
+
 import { Excrements } from './excrements.entity';
 import { ExcrementsRepository } from './excrements.repository';
 import { Excrement } from './types/excrement.type';
@@ -8,7 +11,10 @@ import { Location } from '../journals/dtos/create-journal.dto';
 
 @Injectable()
 export class ExcrementsService {
-    constructor(private readonly excrementsRepository: ExcrementsRepository) {}
+    constructor(
+        private readonly excrementsRepository: ExcrementsRepository,
+        private readonly entityManager: EntityManager,
+    ) {}
 
     async createNewExcrements(
         journalId: number,
@@ -23,11 +29,15 @@ export class ExcrementsService {
         return excrementsPromise;
     }
 
-    //TODO: typeorm의 count? 함수 찾아서 적용하기
-    async getExcrementsCount(journalId: number, dogId: number, type: Excrement): Promise<number> {
-        const excrements = await this.excrementsRepository.find({ where: { journalId, dogId, type } });
-
-        return excrements.length;
+    async getExcrementsCount(journalId: number, dogIds: number[]): Promise<ExcrementsCount[]> {
+        return this.entityManager
+            .createQueryBuilder(Excrements, 'excrements')
+            .select(['dog_id AS dogId', 'type', 'COUNT(*) AS count'])
+            .where('excrements.journal_id  = :journalId', { journalId })
+            .andWhere('excrements.dog_id IN (:...dogIds)', { dogIds: dogIds })
+            .groupBy('excrements.dog_id')
+            .addGroupBy('excrements.type')
+            .getRawMany();
     }
 
     protected async createIfNotExists(data: Partial<Excrements>): Promise<Excrements> {
