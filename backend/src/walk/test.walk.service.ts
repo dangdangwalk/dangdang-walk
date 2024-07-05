@@ -11,7 +11,7 @@ export class TestWalkService extends WalkService {
         super(usersService, dogsService);
     }
 
-    async checkAvailableDogs(_dogIds: number[]) {
+    async updateExpiredWalkStatus(_dogIds: number[]) {
         return Promise.resolve();
     }
 }

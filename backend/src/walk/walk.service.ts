@@ -16,22 +16,30 @@ export class WalkService {
 
     async getAvailableDogs(userId: number): Promise<DogSummary[]> {
         const ownDogIds = await this.usersService.getOwnDogsList(userId);
-        await this.checkAvailableDogs(ownDogIds);
+        await this.updateExpiredWalkStatus(ownDogIds);
 
         return await this.dogsService.getDogsSummaryList({ id: In(ownDogIds), isWalking: false });
     }
 
-    protected async checkAvailableDogs(dogIds: number[]) {
-        //TODO: batch 로 변경 for문 없애기
-        for (const curDogId of dogIds) {
-            const curDogInfo = await this.dogsService.findOne({ where: { id: curDogId } });
-            const updatedAt = curDogInfo.updatedAt;
-            const curTime = new Date();
+    protected async updateExpiredWalkStatus(dogIds: number[]) {
+        const dogs = await this.dogsService.find({
+            where: { id: In(dogIds) },
+            select: ['id', 'isWalking', 'updatedAt'],
+        });
 
-            updatedAt.setHours(updatedAt.getHours() + MAX_WALK_TIME);
-            if (curTime >= updatedAt) {
-                await this.dogsService.updateIsWalking(curDogId, false);
-            }
+        const expiredWalkDogIds = dogs
+            .filter((dog) => {
+                if (!dog.isWalking) return false;
+
+                const expirationTime = dog.updatedAt;
+                expirationTime.setHours(expirationTime.getHours() + MAX_WALK_TIME);
+
+                return new Date() >= expirationTime;
+            })
+            .map((dog) => dog.id);
+
+        if (expiredWalkDogIds.length > 0) {
+            await this.dogsService.updateIsWalking(expiredWalkDogIds, false);
         }
     }
 }
