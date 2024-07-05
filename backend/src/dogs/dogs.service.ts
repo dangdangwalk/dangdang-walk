@@ -1,5 +1,5 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { EntityManager, FindOneOptions, FindOptionsWhere, In } from 'typeorm';
+import { EntityManager, FindManyOptions, FindOneOptions, FindOptionsWhere, In } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import { Dogs } from './dogs.entity';
@@ -20,7 +20,7 @@ import { UsersService } from '../users/users.service';
 import { UsersDogs } from '../users-dogs/users-dogs.entity';
 import { UsersDogsService } from '../users-dogs/users-dogs.service';
 
-import { makeSubObjectsArray } from '../utils/manipulate.util';
+import { makeSubObject, makeSubObjectsArray } from '../utils/manipulate.util';
 
 @Injectable()
 export class DogsService {
@@ -102,6 +102,10 @@ export class DogsService {
         ]);
     }
 
+    async find(where: FindManyOptions<Dogs>): Promise<Dogs[]> {
+        return this.dogsRepository.find(where);
+    }
+
     async findOne(where: FindOneOptions<Dogs>) {
         return this.dogsRepository.findOne(where);
     }
@@ -139,14 +143,8 @@ export class DogsService {
 
     private makeProfile(dogInfo: Dogs): DogProfile {
         return {
-            id: dogInfo.id,
-            name: dogInfo.name,
+            ...makeSubObject(dogInfo, ['id', 'name', 'gender', 'isNeutered', 'birth', 'weight', 'profilePhotoUrl']),
             breed: dogInfo.breed.koreanName,
-            gender: dogInfo.gender,
-            isNeutered: dogInfo.isNeutered,
-            birth: dogInfo.birth,
-            weight: dogInfo.weight,
-            profilePhotoUrl: dogInfo.profilePhotoUrl,
         };
     }
 
@@ -154,28 +152,29 @@ export class DogsService {
         //TODO: key를 반환하는 함수 만들어 인자로 넣기
         return makeSubObjectsArray(dogs, ['id', 'name', 'profilePhotoUrl']);
     }
-    //TODO: DogSummary에 해당하는 컬럼을 애초에 select 해서 가져오기
+
     async getDogsSummaryList(where: FindOptionsWhere<Dogs>): Promise<DogSummary[]> {
-        const dogInfos = await this.dogsRepository.find({ where });
+        const dogInfos = await this.dogsRepository.find({ where, select: ['id', 'name', 'profilePhotoUrl'] });
         return this.makeDogsSummaryList(dogInfos);
     }
 
-    //TODO : makeProfile 함수로 하지 않고 애초에 select 해서 가져오기
     async getProfile(dogId: number): Promise<DogProfile> {
-        const dogInfo = await this.dogsRepository.findOne({ where: { id: dogId } });
+        const dogInfo = await this.dogsRepository.findOne({
+            where: { id: dogId },
+            select: ['id', 'name', 'breed', 'gender', 'isNeutered', 'birth', 'weight', 'profilePhotoUrl'],
+        });
         return this.makeProfile(dogInfo);
     }
 
-    //TODO: 쿼리 빌더를 쓸 것인지, 각자 테이블에서 가져와서 코드상으로 가공할 것인지 성능 테스트?
     async getProfileList(userId: number): Promise<DogProfile[]> {
-        const dogProfiles = await this.entityManager
+        const dogInfos = await this.entityManager
             .createQueryBuilder(Dogs, 'dogs')
             .innerJoin(UsersDogs, 'users_dogs', 'users_dogs.dogId = dogs.id')
             .innerJoinAndSelect('dogs.breed', 'breed')
             .where('users_dogs.userId = :userId', { userId })
             .getMany();
 
-        return dogProfiles.map((dog) => this.makeProfile(dog));
+        return dogInfos.map((dogInfo) => this.makeProfile(dogInfo));
     }
 
     async getRelatedTableIdList(

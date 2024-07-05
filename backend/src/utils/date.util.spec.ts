@@ -57,9 +57,10 @@ describe('getStartAndEndOfDay', () => {
 describe('getOneMonthAgo', () => {
     it('주어진 날짜로부터 한 달 전의 정확한 날짜를 반환한다', () => {
         const date = new Date('2024-03-01');
-        const oneMonthAgoDate = getOneMonthAgo(date);
+        const { startDate, endDate } = getOneMonthAgo(date);
 
-        expect(formatDate(oneMonthAgoDate)).toBe('2024-02-01');
+        expect(formatDate(startDate)).toBe('2024-02-01');
+        expect(formatDate(endDate)).toBe('2024-03-01');
     });
 });
 

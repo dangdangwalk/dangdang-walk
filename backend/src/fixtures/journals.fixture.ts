@@ -112,7 +112,7 @@ export const mockJournalProfile = {
         {
             dogId: 2,
             fecesCnt: 1,
-            // TODO: urineCnt: 0이 더 자연스럽지 않나.. 논의해보기
+            urineCnt: 0,
         },
     ],
 };
