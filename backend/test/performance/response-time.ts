@@ -23,15 +23,11 @@ const runPostmanCollectionWithNewman = async (
     }
 };
 
-const DATA_SIZE = parseInt(process.env.DATA_SIZE!);
 const COLLECTION_ID = process.env.COLLECTION_ID!;
 const REQUEST_OR_FOLDER_ID = process.env.REQUEST_OR_FOLDER_ID!;
 const ITERATION_COUNT = parseInt(process.env.ITERATION_COUNT!);
 
 const validateParameters = () => {
-    if (isNaN(DATA_SIZE)) {
-        throw new Error('DATA_SIZE가 정의되지 않았거나 유효한 숫자가 아닙니다. .env.test 파일을 수정해주세요.');
-    }
     if (!COLLECTION_ID) {
         throw new Error('COLLECTION_ID가 정의되지 않았습니다. .env.test 파일을 수정해주세요.');
     }
