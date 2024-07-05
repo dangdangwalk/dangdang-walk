@@ -106,13 +106,13 @@ export class CreateMockEntity {
             this.dataSource
                 .createQueryBuilder(DogWalkDay, 'dogWalkDay')
                 .insert()
-                .values(Array(this.n).fill(new DogWalkDay()))
+                .values(Array(this.dogs.length).fill(new DogWalkDay()))
                 .updateEntity(false)
                 .execute(),
             this.dataSource
                 .createQueryBuilder(TodayWalkTime, 'todayWalkTime')
                 .insert()
-                .values(Array(this.n).fill(new TodayWalkTime()))
+                .values(Array(this.dogs.length).fill(new TodayWalkTime()))
                 .updateEntity(false)
                 .execute(),
         ]);
