@@ -1,8 +1,11 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 import { Dogs } from 'src/dogs/dogs.entity';
 
+import { Excrement } from 'src/excrements/types/excrement.type';
+
 import { Journals } from '../journals.entity';
+
 
 export class PhotoUrlType {
     @IsNotEmpty()
@@ -30,18 +33,26 @@ export class DogInfoForDetail {
         return ['id', 'name', 'profilePhotoUrl'];
     }
 }
+export class ExcrementsCount {
+    dogId: number;
+    type: Excrement;
+    count: number;
+}
 
 export class ExcrementsInfoForDetail {
-    @IsNotEmpty()
     dogId: number;
 
-    @IsOptional()
-    @IsNumber()
     fecesCnt: number;
 
-    @IsOptional()
-    @IsNumber()
     urineCnt: number;
+
+    constructor() {
+        return {
+            dogId: 0,
+            fecesCnt: 0,
+            urineCnt: 0,
+        };
+    }
 }
 
 export class JournalInfoForDetail {

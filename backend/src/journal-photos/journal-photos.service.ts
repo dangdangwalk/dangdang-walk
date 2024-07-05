@@ -35,12 +35,18 @@ export class JournalPhotosService {
             await this.createIfNotExists(data, keys);
         }
     }
+    makePhotoUrls(photoUrlsRaw: Partial<JournalPhotos[]>): string[] {
+        return photoUrlsRaw.map((cur) => {
+            cur = cur as JournalPhotos;
+            return cur.photoUrl;
+        });
+    }
 
     //TODO: map을 쓰지 않도록 select 조건 추가하기
     async getPhotoUrlsByJournalId(journalId: number): Promise<string[]> {
-        const findResult = await this.journalPhotosRepository.find({ where: { journalId } });
-        return findResult.map((cur) => {
-            return cur.photoUrl;
+        const photoUrlsRaw: Partial<JournalPhotos[]> = await this.journalPhotosRepository.find({
+            where: { journalId },
         });
+        return this.makePhotoUrls(photoUrlsRaw);
     }
 }
