@@ -46,6 +46,7 @@ export class JournalPhotosService {
     async getPhotoUrlsByJournalId(journalId: number): Promise<string[]> {
         const photoUrlsRaw: Partial<JournalPhotos[]> = await this.journalPhotosRepository.find({
             where: { journalId },
+            select: ['photoUrl'],
         });
         return this.makePhotoUrls(photoUrlsRaw);
     }
