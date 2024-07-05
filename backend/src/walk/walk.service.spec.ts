@@ -57,7 +57,7 @@ describe('WalkService', () => {
         context('사용자 id가 주어지면', () => {
             beforeEach(() => {
                 jest.spyOn(usersService, 'getOwnDogsList').mockResolvedValueOnce(ownDogIds);
-                jest.spyOn(service, 'checkAvailableDogs').mockResolvedValueOnce();
+                jest.spyOn(service, 'updateExpiredWalkStatus').mockResolvedValueOnce();
                 jest.spyOn(dogsService, 'getDogsSummaryList').mockResolvedValue(availableDogs);
             });
 
