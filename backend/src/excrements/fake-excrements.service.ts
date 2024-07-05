@@ -1,13 +1,15 @@
 import { Injectable } from '@nestjs/common';
 
+import { EntityManager } from 'typeorm';
+
 import { Excrements } from './excrements.entity';
 import { ExcrementsRepository } from './excrements.repository';
 import { ExcrementsService } from './excrements.service';
 
 @Injectable()
 export class FakeExcrementsService extends ExcrementsService {
-    constructor(excrementsRepository: ExcrementsRepository) {
-        super(excrementsRepository);
+    constructor(excrementsRepository: ExcrementsRepository, entityManager: EntityManager) {
+        super(excrementsRepository, entityManager);
     }
 
     async createIfNotExists(data: Partial<Excrements>): Promise<Excrements> {

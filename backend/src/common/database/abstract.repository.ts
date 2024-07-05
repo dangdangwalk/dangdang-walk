@@ -61,7 +61,13 @@ export abstract class AbstractRepository<T extends ObjectLiteral> {
     }
 
     async find(where: FindManyOptions<T>): Promise<T[]> {
-        return this.entityRepository.find(where);
+        const result = this.entityRepository.find(where);
+
+        if (!result) {
+            throw new NotFoundException('findOne: Entity not found');
+        }
+
+        return result;
     }
 
     async update(where: FindOptionsWhere<T>, partialEntity: QueryDeepPartialEntity<T>): Promise<UpdateResult> {

@@ -8,6 +8,7 @@ import { JournalsRepository } from './journals.repository';
 import { CreateExcrementsInfo, CreateJournalData, CreateJournalInfo } from './types/create-journal-data.type';
 import {
     DogInfoForDetail,
+    ExcrementsCount,
     ExcrementsInfoForDetail,
     JournalDetail,
     JournalInfoForDetail,
@@ -70,58 +71,77 @@ export class JournalsService {
         return checkIfExistsInArr(myJournalIds, journalIds);
     }
 
-    async getJournalInfoForDetail(journalId: number): Promise<JournalInfoForDetail> {
-        const journalInfoRaw = await this.journalsRepository.findOne({
-            where: { id: journalId },
-            select: JournalInfoForDetail.getKeysForJournalTable(),
-        });
+    private makeJournalInfoForDetail(journalId: number, journalInfoRaw: Partial<Journals>, photoUrls: string[]) {
         const journalInfo = makeSubObject(journalInfoRaw, JournalInfoForDetail.getKeysForJournalTable());
+
         journalInfo.id = journalId;
         journalInfo.routes = JSON.parse(journalInfo.routes);
-        journalInfo.photoUrls = await this.journalPhotosService.getPhotoUrlsByJournalId(journalId);
+        journalInfo.photoUrls = photoUrls;
 
         return journalInfo;
     }
 
-    async getExcrementsInfoForDetail(journalId: number, dogId: number): Promise<ExcrementsInfoForDetail | void> {
-        const excrementsInfo = new ExcrementsInfoForDetail();
-
-        excrementsInfo.dogId = dogId;
-        //TODO: GROUP_BY type을 사용해 한번에 가져오게 바꾸기
-        const fecesCnt = await this.excrementsService.getExcrementsCount(journalId, dogId, EXCREMENT.Feces);
-        const urineCnt = await this.excrementsService.getExcrementsCount(journalId, dogId, EXCREMENT.Urine);
-
-        excrementsInfo.fecesCnt = fecesCnt;
-        excrementsInfo.urineCnt = urineCnt;
-        return excrementsInfo;
-    }
-
-    async getDogsInfoForDetail(dogId: number): Promise<DogInfoForDetail> {
-        const dogInfoRaw = await this.dogsService.findOne({
-            where: { id: dogId },
-            select: DogInfoForDetail.getKeysForDogTable(),
+    async getJournalInfoForDetail(journalId: number): Promise<JournalInfoForDetail> {
+        const journalInfoRawPromise = this.journalsRepository.findOne({
+            where: { id: journalId },
+            select: JournalInfoForDetail.getKeysForJournalTable(),
         });
 
-        const dogInfo: DogInfoForDetail = makeSubObject(dogInfoRaw, DogInfoForDetail.getKeysForDogTable());
+        const [journalInfoRaw, photoUrls]: [Partial<Journals>, string[]] = await Promise.all([
+            journalInfoRawPromise,
+            this.journalPhotosService.getPhotoUrlsByJournalId(journalId),
+        ]);
 
-        return dogInfo;
+        return this.makeJournalInfoForDetail(journalId, journalInfoRaw, photoUrls);
     }
 
-    //TODO: journalInfo, journalDogIds 병렬적으로 가져오기 (Promise.all)
-    async getJournalDetail(journalId: number): Promise<JournalDetail> {
-        const journalInfo = await this.getJournalInfoForDetail(journalId);
+    private makeExcrementsInfoForDetail(dogIds: number[], excrementsCount: any[]): ExcrementsInfoForDetail[] {
+        const excrementsInfoArray: ExcrementsInfoForDetail[] = [];
 
-        const journalDogIds = await this.journalsDogsService.getDogIdsByJournalId(journalId);
+        for (let i = 0; i < dogIds.length; i++) {
+            const excrementsInfo = new ExcrementsInfoForDetail();
 
-        const dogInfo: DogInfoForDetail[] = [];
-        const excrementsInfo: ExcrementsInfoForDetail[] = [];
-
-        //TODO : In 사용해서 dogInfo, excrementsInfo 다 for문 사용 안하고 한 번에 가져오게 바꾸기
-        for (const curDogId of journalDogIds) {
-            dogInfo.push(await this.getDogsInfoForDetail(curDogId));
-            const curExcrements = await this.getExcrementsInfoForDetail(journalId, curDogId);
-            curExcrements ? excrementsInfo.push(curExcrements) : curExcrements;
+            excrementsInfo.dogId = dogIds[i];
+            for (let j = 0; j < excrementsCount.length; j++) {
+                if (excrementsCount[j].dogId === dogIds[i]) {
+                    excrementsCount[j].type === 'FECES'
+                        ? (excrementsInfo.fecesCnt = parseInt(excrementsCount[j].count))
+                        : (excrementsInfo.urineCnt = parseInt(excrementsCount[j].count));
+                }
+            }
+            excrementsInfoArray.push(excrementsInfo);
         }
+        return excrementsInfoArray;
+    }
+
+    async getDogsInfoForDetail(dogIds: number[]): Promise<DogInfoForDetail[]> {
+        const dogInfoRaw = await this.dogsService.find({
+            where: { id: In(dogIds) },
+            select: DogInfoForDetail.getKeysForDogTable(),
+        });
+        return makeSubObjectsArray(dogInfoRaw, DogInfoForDetail.getKeysForDogTable());
+    }
+
+    async getExcrementsInfoForDetail(journalId: number, journalDogIds: number[]) {
+        const excrementsCountRaw: ExcrementsCount[] = await this.excrementsService.getExcrementsCount(
+            journalId,
+            journalDogIds,
+        );
+        return this.makeExcrementsInfoForDetail(journalDogIds, excrementsCountRaw);
+    }
+
+    async getJournalDetail(journalId: number): Promise<JournalDetail> {
+        const journalDogIds: number[] = await this.journalsDogsService.getDogIdsByJournalId(journalId);
+
+        const [journalInfo, dogInfo, excrementsInfo]: [
+            JournalInfoForDetail,
+            DogInfoForDetail[],
+            ExcrementsInfoForDetail[],
+        ] = await Promise.all([
+            this.getJournalInfoForDetail(journalId),
+            this.getDogsInfoForDetail(journalDogIds),
+            this.getExcrementsInfoForDetail(journalId, journalDogIds),
+        ]);
 
         return new JournalDetail(journalInfo, dogInfo, excrementsInfo);
     }
@@ -135,7 +155,6 @@ export class JournalsService {
         return await this.create(journalInfo);
     }
 
-    //TODO: select로 바꾸기
     private makeJournalData(userId: number, createJournalInfo: CreateJournalInfo): Partial<Journals> {
         const journalData: Partial<Journals> = makeSubObject(
             createJournalInfo,
