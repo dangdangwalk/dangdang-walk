@@ -32,7 +32,6 @@ export class Users {
     @Column({ name: 'main_dog_id', nullable: true })
     mainDogId: number | null;
 
-    //TODO: 인덱스 테스트
     @Column({ name: 'oauth_id', unique: true })
     oauthId: string;
 

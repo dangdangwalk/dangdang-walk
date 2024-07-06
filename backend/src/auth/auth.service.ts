@@ -95,7 +95,10 @@ export class AuthService {
     }
 
     async reissueTokens({ oauthId, provider }: RefreshTokenPayload): Promise<AuthData> {
-        const { id: userId, oauthRefreshToken } = await this.usersService.findOne({ where: { oauthId } });
+        const { id: userId, oauthRefreshToken } = await this.usersService.findOne({
+            where: { oauthId },
+            select: ['id', 'oauthRefreshToken'],
+        });
 
         const [
             { access_token: newOauthAccessToken, refresh_token: newOauthRefreshToken },
