@@ -5,6 +5,7 @@ import {
     FindManyOptions,
     FindOneOptions,
     FindOptionsWhere,
+    InsertResult,
     ObjectLiteral,
     Repository,
     UpdateResult,
@@ -44,6 +45,10 @@ export abstract class AbstractRepository<T extends ObjectLiteral> {
         }
 
         return this.create(entity);
+    }
+
+    async insert(entity: QueryDeepPartialEntity<T> | QueryDeepPartialEntity<T>[]): Promise<InsertResult> {
+        return this.entityRepository.insert(entity);
     }
 
     async findOneWithNoException(where: FindOptionsWhere<T>): Promise<T | null> {
