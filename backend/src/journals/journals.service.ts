@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { DeleteResult, EntityManager, FindOptionsWhere, In } from 'typeorm';
+import { Excrements } from 'src/excrements/excrements.entity';
+import { DeleteResult, EntityManager, FindOptionsWhere, In, InsertResult } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { Transactional } from 'typeorm-transactional';
 
@@ -20,7 +21,7 @@ import { UpdateJournalData } from './types/update-journal-data.type';
 import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
 import { DogsService } from '../dogs/dogs.service';
 import { ExcrementsService } from '../excrements/excrements.service';
-import { EXCREMENT } from '../excrements/types/excrement.type';
+import { EXCREMENT, Excrement } from '../excrements/types/excrement.type';
 import { JournalPhotosService } from '../journal-photos/journal-photos.service';
 import { JournalsDogs } from '../journals-dogs/journals-dogs.entity';
 import { JournalsDogsService } from '../journals-dogs/journals-dogs.service';
@@ -190,48 +191,57 @@ export class JournalsService {
         }
     }
 
-    async excrementsLoop(journalId: number, excrements: CreateExcrementsInfo[]) {
-        let dogId;
-        //TODO: 이 for 문까지 합치기?
+    async createExcrements(journalId: number, excrements: CreateExcrementsInfo[]): Promise<InsertResult> {
+        const excrementsEntity: Partial<Excrements>[] = [];
+
         for (const curExcrements of excrements) {
-            dogId = curExcrements.dogId;
+            const { dogId, fecesLocations, urineLocations } = curExcrements;
 
-            //TODO: batch create 하고 feces랑 urine도 합치기
-            for (const curFeces of curExcrements.fecesLocations) {
-                await this.excrementsService.createNewExcrements(journalId, dogId, EXCREMENT.Feces, curFeces);
-            }
+            const createExcrementEntity = (
+                journalId: number,
+                dogId: number,
+                type: Excrement,
+                coordinate: { lat: string; lng: string },
+            ) => ({
+                journalId,
+                dogId,
+                type,
+                coordinate: this.excrementsService.makeCoordinate(coordinate.lat, coordinate.lng),
+            });
 
-            for (const curUrine of curExcrements.urineLocations) {
-                await this.excrementsService.createNewExcrements(journalId, dogId, EXCREMENT.Urine, curUrine);
-            }
+            excrementsEntity.push(
+                ...fecesLocations.map((coordinate) =>
+                    createExcrementEntity(journalId, dogId, EXCREMENT.Feces, coordinate),
+                ),
+                ...urineLocations.map((coordinate) =>
+                    createExcrementEntity(journalId, dogId, EXCREMENT.Urine, coordinate),
+                ),
+            );
         }
+
+        return this.excrementsService.insert(excrementsEntity);
     }
 
     @Transactional()
     async createJournal(userId: number, createJournalData: CreateJournalData) {
         const dogIds = createJournalData.dogs;
-        const journalData = this.makeJournalData(userId, createJournalData.journalInfo);
-        //TODO: createNewJournal, createNewJournalDogs Promise all 적용하기
-        const createJournalResult = await this.createNewJournal(userId, journalData);
-        await this.journalsDogsService.createNewJournalDogs(createJournalResult.id, dogIds);
-
         const photoUrls = this.checkPhotoUrlExist(createJournalData.journalInfo.photoUrls);
-        await this.journalPhotosService.createNewPhotoUrls(createJournalResult.id, photoUrls);
+        const journalData = this.makeJournalData(userId, createJournalData.journalInfo);
+        const createJournalResult = await this.createNewJournal(userId, journalData);
 
-        //TODO: if 조건 and로 연결해 한 줄로 줄이기
-        if (createJournalData.excrements) {
-            const excrements: CreateExcrementsInfo[] = createJournalData.excrements;
-            if (excrements.length) {
-                await this.excrementsLoop(createJournalResult.id, excrements);
-            }
-        }
-        //TODO: promise all로 병렬 처리하기
+        //TODO: createNewJournal, createNewJournalDogs Promise all 적용하기
+        await this.journalsDogsService.createNewJournalDogs(createJournalResult.id, dogIds);
+        await this.journalPhotosService.createNewPhotoUrls(createJournalResult.id, photoUrls);
         await this.updateDogWalkDay(dogIds, (current: number) => (current += 1));
         await this.updateTodayWalkTime(
             dogIds,
             createJournalData.journalInfo.duration,
             (current: number, value: number) => current + value,
         );
+
+        if (createJournalData.excrements && createJournalData.excrements.length) {
+            await this.createExcrements(createJournalResult.id, createJournalData.excrements);
+        }
     }
 
     @Transactional()
