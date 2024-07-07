@@ -8,11 +8,13 @@ import { Transactional, initializeTransactionalContext } from 'typeorm-transacti
 import { CreateMockEntity } from './createMockEntity.util';
 
 import { AppModule } from '../../../src/app.module';
+import { AuthService } from '../../../src/auth/auth.service';
 import { GoogleService } from '../../../src/auth/oauth/google.service';
 import { KakaoService } from '../../../src/auth/oauth/kakao.service';
 import { NaverService } from '../../../src/auth/oauth/naver.service';
 import { S3Service } from '../../../src/s3/s3.service';
 import { color } from '../../../src/utils/ansi.util';
+import { MockAuthService } from '../__mocks__/auth.service';
 import { MockOauthService } from '../__mocks__/oauth.service';
 import { MockS3Service } from '../__mocks__/s3.service';
 
@@ -34,6 +36,8 @@ export class TestApp {
             .useValue(MockOauthService)
             .overrideProvider(S3Service)
             .useValue(MockS3Service)
+            .overrideProvider(AuthService)
+            .useClass(MockAuthService)
             .compile();
 
         this.app = moduleFixture.createNestApplication();
