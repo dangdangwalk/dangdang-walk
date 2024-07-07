@@ -147,23 +147,15 @@ export class JournalsService {
         return new JournalDetail(journalInfo, dogInfo, excrementsInfo);
     }
 
-    async createNewJournal(userId: number, journalInfo: Partial<Journals>) {
-        if (!journalInfo.memo) {
-            journalInfo.memo = '';
-        }
-        //TODO: 밖에서 아예 만들기
-        journalInfo.userId = userId;
-        return await this.create(journalInfo);
-    }
-
     private makeJournalData(userId: number, createJournalInfo: CreateJournalInfo): Partial<Journals> {
-        const journalData: Partial<Journals> = makeSubObject(
-            createJournalInfo,
-            CreateJournalInfo.getKeysForJournalTable(),
-        );
-        journalData.userId = userId;
+        const journalData = {
+            ...makeSubObject(createJournalInfo, CreateJournalInfo.getKeysForJournalTable()),
+            userId,
+        };
+        if (!journalData.memo) {
+            journalData.memo = '';
+        }
         journalData.routes = JSON.stringify(journalData.routes);
-
         return journalData;
     }
 
@@ -180,15 +172,6 @@ export class JournalsService {
     ) {
         const todayWalkTimeIds = await this.dogsService.getRelatedTableIdList(dogIds, 'todayWalkTimeId');
         this.todayWalkTimeService.updateDurations(todayWalkTimeIds, duration, operation);
-    }
-
-    //TODO: 3항 연산자로 변경
-    private checkPhotoUrlExist(photoUrls: string[] | undefined): string[] {
-        if (!photoUrls) {
-            return [];
-        } else {
-            return photoUrls;
-        }
     }
 
     async createExcrements(journalId: number, excrements: CreateExcrementsInfo[]): Promise<InsertResult> {
@@ -225,9 +208,9 @@ export class JournalsService {
     @Transactional()
     async createJournal(userId: number, createJournalData: CreateJournalData) {
         const dogIds = createJournalData.dogs;
-        const photoUrls = this.checkPhotoUrlExist(createJournalData.journalInfo.photoUrls);
+        const photoUrls = createJournalData.journalInfo.photoUrls ? createJournalData.journalInfo.photoUrls : [];
         const journalData = this.makeJournalData(userId, createJournalData.journalInfo);
-        const createJournalResult = await this.createNewJournal(userId, journalData);
+        const createJournalResult = await this.create(journalData);
 
         //TODO: createNewJournal, createNewJournalDogs Promise all 적용하기
         await this.journalsDogsService.createNewJournalDogs(createJournalResult.id, dogIds);
