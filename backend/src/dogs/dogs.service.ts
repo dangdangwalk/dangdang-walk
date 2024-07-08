@@ -71,12 +71,11 @@ export class DogsService {
             throw error;
         }
 
-        await Promise.all([
-            this.dogWalkDayService.delete({ id: dog.walkDayId }),
-            this.todayWalkTimeService.delete({ id: dog.todayWalkTimeId }),
-            dog.profilePhotoUrl ? this.s3Service.deleteSingleObject(userId, dog.profilePhotoUrl) : Promise.resolve(),
-        ]);
-
+        await this.dogWalkDayService.delete({ id: dog.walkDayId });
+        await this.todayWalkTimeService.delete({ id: dog.todayWalkTimeId });
+        if (dog.profilePhotoUrl) {
+            await this.s3Service.deleteSingleObject(userId, dog.profilePhotoUrl);
+        }
         return dog;
     }
 

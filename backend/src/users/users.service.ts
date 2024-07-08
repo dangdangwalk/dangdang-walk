@@ -36,7 +36,8 @@ export class UsersService {
     }
 
     async delete(userId: number) {
-        await Promise.all([this.usersRepository.delete({ id: userId }), this.s3Service.deleteObjectFolder(userId)]);
+        await this.usersRepository.delete({ id: userId });
+        await this.s3Service.deleteObjectFolder(userId);
     }
 
     async createIfNotExists({ oauthNickname, ...otherAttributes }: CreateUser) {
