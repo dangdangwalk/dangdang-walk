@@ -40,7 +40,7 @@ export abstract class AbstractRepository<T extends ObjectLiteral> {
         const existingEntity = await this.entityRepository.findOne({ where });
 
         if (existingEntity) {
-            throw new ConflictException('createIfNotExists: Duplicate entry');
+            throw new ConflictException('createIfNotExists: 이미 존재하는 레코드입니다');
         }
 
         return this.create(entity);
@@ -54,7 +54,7 @@ export abstract class AbstractRepository<T extends ObjectLiteral> {
         const entity = await this.entityRepository.findOne(where);
 
         if (!entity) {
-            throw new NotFoundException('findOne: Entity not found');
+            throw new NotFoundException('findOne: 존재하지 않는 레코드입니다');
         }
 
         return entity;
@@ -64,7 +64,7 @@ export abstract class AbstractRepository<T extends ObjectLiteral> {
         const result = this.entityRepository.find(where);
 
         if (!result) {
-            throw new NotFoundException('findOne: Entity not found');
+            throw new NotFoundException('find: 존재하지 않는 레코드입니다');
         }
 
         return result;
@@ -74,7 +74,7 @@ export abstract class AbstractRepository<T extends ObjectLiteral> {
         const updateResult = await this.entityRepository.update(where, partialEntity);
 
         if (!updateResult.affected) {
-            throw new NotFoundException('update: Entity not found');
+            throw new NotFoundException('update: 존재하지 않는 레코드입니다');
         }
 
         return updateResult;
@@ -84,7 +84,7 @@ export abstract class AbstractRepository<T extends ObjectLiteral> {
         const deleteResult = await this.entityRepository.delete(where);
 
         if (!deleteResult.affected) {
-            throw new NotFoundException('delete: Entity not found');
+            throw new NotFoundException('delete: 존재하지 않는 레코드입니다');
         }
 
         return deleteResult;
@@ -94,7 +94,7 @@ export abstract class AbstractRepository<T extends ObjectLiteral> {
         const updateResult = await this.entityRepository.update(where, partialEntity);
 
         if (!updateResult.affected) {
-            throw new NotFoundException('update: Entity not found');
+            throw new NotFoundException('update: 존재하지 않는 레코드입니다');
         }
         const options: FindOneOptions = { where };
 
