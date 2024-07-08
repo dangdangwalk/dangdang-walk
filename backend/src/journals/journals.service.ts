@@ -213,7 +213,7 @@ export class JournalsService {
         const createJournalResult = await this.create(journalData);
 
         //TODO: createNewJournal, createNewJournalDogs Promise all 적용하기
-        await this.journalsDogsService.createNewJournalDogs(createJournalResult.id, dogIds);
+        await this.journalsDogsService.createJournalDogs(createJournalResult.id, dogIds);
         await this.journalPhotosService.createNewPhotoUrls(createJournalResult.id, photoUrls);
         await this.updateDogWalkDay(dogIds, (current: number) => (current += 1));
         await this.updateTodayWalkTime(
