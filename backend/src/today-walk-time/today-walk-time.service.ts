@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { UpdateTodayWalkTimeOperation } from 'src/journals/types/update-journal-data.type';
 import { FindOptionsWhere, In, UpdateResult } from 'typeorm';
 
 import { TodayWalkTime } from './today-walk-time.entity';
@@ -33,7 +34,7 @@ export class TodayWalkTimeService {
     async updateDurations(
         walkTimeIds: number[],
         duration: number,
-        operation: (current: number, operand: number) => number,
+        operation: UpdateTodayWalkTimeOperation,
     ): Promise<void> {
         //TODO: batch 업데이트
         const todayWalkTimes = await this.findWalkTimesByIds(walkTimeIds);

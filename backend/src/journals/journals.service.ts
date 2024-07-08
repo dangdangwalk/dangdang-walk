@@ -16,7 +16,7 @@ import {
 } from './types/journal-detail.type';
 
 import { JournalInfoForList } from './types/journal-info.type';
-import { UpdateJournalData } from './types/update-journal-data.type';
+import { UpdateJournalData, UpdateTodayWalkTimeOperation } from './types/update-journal-data.type';
 
 import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
 import { DogsService } from '../dogs/dogs.service';
@@ -164,12 +164,7 @@ export class JournalsService {
         await this.dogWalkDayService.updateDailyWalkCount(dogWalkDayIds, operation);
     }
 
-    //TODO: optional - operation에 타입을 지정해서 좀 더 명시적으로 만들기 (더하기? 빼기?)
-    private async updateTodayWalkTime(
-        dogIds: number[],
-        duration: number,
-        operation: (current: number, operand: number) => number,
-    ) {
+    private async updateTodayWalkTime(dogIds: number[], duration: number, operation: UpdateTodayWalkTimeOperation) {
         const todayWalkTimeIds = await this.dogsService.getRelatedTableIdList(dogIds, 'todayWalkTimeId');
         this.todayWalkTimeService.updateDurations(todayWalkTimeIds, duration, operation);
     }
@@ -212,15 +207,13 @@ export class JournalsService {
         const journalData = this.makeJournalData(userId, createJournalData.journalInfo);
         const createJournalResult = await this.create(journalData);
 
-        //TODO: createNewJournal, createNewJournalDogs Promise all 적용하기
         await this.journalsDogsService.createJournalDogs(createJournalResult.id, dogIds);
         await this.journalPhotosService.createNewPhotoUrls(createJournalResult.id, photoUrls);
-        await this.updateDogWalkDay(dogIds, (current: number) => (current += 1));
-        await this.updateTodayWalkTime(
-            dogIds,
-            createJournalData.journalInfo.duration,
-            (current: number, value: number) => current + value,
-        );
+
+        const addDogWalkDay = (current: number) => (current += 1);
+        const addTodayWalkTime = (current: number, value: number) => current + value;
+        await this.updateDogWalkDay(dogIds, addDogWalkDay);
+        await this.updateTodayWalkTime(dogIds, createJournalData.journalInfo.duration, addTodayWalkTime);
 
         if (createJournalData.excrements && createJournalData.excrements.length) {
             await this.createExcrements(createJournalResult.id, createJournalData.excrements);
@@ -250,12 +243,11 @@ export class JournalsService {
         const journalInfo = await this.journalsRepository.findOne({ where: { id: journalId } });
 
         //TODO: promise-all로 병렬 처리하기
-        await this.updateDogWalkDay(dogIds, (current: number) => (current -= 1));
-        await this.updateTodayWalkTime(
-            dogIds,
-            journalInfo.duration,
-            (current: number, value: number) => current - value,
-        );
+        const subtractTodayWalkTime = (current: number, value: number) => current - value;
+        const subtractDogWalkDay = (current: number) => (current -= 1);
+        await this.updateDogWalkDay(dogIds, subtractDogWalkDay);
+        await this.updateTodayWalkTime(dogIds, journalInfo.duration, subtractTodayWalkTime);
+
         await this.s3Service.deleteObjects(userId, photoUrls);
         await this.delete(journalId);
     }
