@@ -36,7 +36,6 @@ export class TodayWalkTimeService {
         duration: number,
         operation: UpdateTodayWalkTimeOperation,
     ): Promise<void> {
-        //TODO: batch 업데이트
         const todayWalkTimes = await this.findWalkTimesByIds(walkTimeIds);
         if (!todayWalkTimes.length) {
             const error = new NotFoundException(`id: ${walkTimeIds}와 일치하는 레코드가 없습니다`);
@@ -46,6 +45,7 @@ export class TodayWalkTimeService {
             throw error;
         }
 
+        //TODO: batch 업데이트
         await Promise.all(
             todayWalkTimes.map(async (walkTime): Promise<UpdateResult> => {
                 const updateDuration = operation(walkTime.duration, duration);
