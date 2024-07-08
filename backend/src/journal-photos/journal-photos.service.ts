@@ -1,5 +1,7 @@
-import { Injectable } from '@nestjs/common';
-import { DeleteResult, FindManyOptions, FindOptionsWhere } from 'typeorm';
+import { ConflictException, Injectable } from '@nestjs/common';
+import { DeleteResult, FindManyOptions, FindOptionsWhere, InsertResult } from 'typeorm';
+
+import { QueryPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 import { JournalPhotos } from './journal-photos.entity';
 import { JournalPhotosRepository } from './journal-photos.repository';
@@ -24,17 +26,38 @@ export class JournalPhotosService {
         return this.journalPhotosRepository.delete(where);
     }
 
-    async createNewPhotoUrls(journalId: number, photoUrls: string[]) {
-        const keys: (keyof JournalPhotos)[] = ['journalId', 'photoUrl'];
-        const data: Partial<JournalPhotos> = {};
-
-        //TODO: batch create 하기 (for문 없애기)
-        data.journalId = journalId;
-        for (const curUrl of photoUrls) {
-            data.photoUrl = curUrl;
-            await this.createIfNotExists(data, keys);
-        }
+    async insert(
+        entity: QueryPartialEntity<JournalPhotos> | QueryPartialEntity<JournalPhotos>[],
+    ): Promise<InsertResult> {
+        return this.journalPhotosRepository.insert(entity);
     }
+
+    async findDuplicate(journalId: number, photoUrls: string[]): Promise<boolean> {
+        const toCompare = await this.journalPhotosRepository.find({
+            where: { journalId },
+            select: ['photoUrl'],
+        });
+
+        if (!toCompare.length) {
+            return false;
+        }
+
+        const photoUrlSet = new Set(photoUrls);
+        const result = toCompare.filter((curCompare) => photoUrlSet.has(curCompare.photoUrl));
+
+        if (!result.length) {
+            return false;
+        }
+        return true;
+    }
+
+    async createNewPhotoUrls(journalId: number, photoUrls: string[]) {
+        if (await this.findDuplicate(journalId, photoUrls)) {
+            throw new ConflictException('이미 존재하는 레코드입니다');
+        }
+        await this.insert(photoUrls.map((cur) => ({ journalId, photoUrl: cur })));
+    }
+
     makePhotoUrls(photoUrlsRaw: Partial<JournalPhotos[]>): string[] {
         return photoUrlsRaw.map((cur) => {
             cur = cur as JournalPhotos;
@@ -42,7 +65,6 @@ export class JournalPhotosService {
         });
     }
 
-    //TODO: map을 쓰지 않도록 select 조건 추가하기
     async getPhotoUrlsByJournalId(journalId: number): Promise<string[]> {
         const photoUrlsRaw: Partial<JournalPhotos[]> = await this.journalPhotosRepository.find({
             where: { journalId },
