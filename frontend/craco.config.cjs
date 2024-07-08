@@ -1,4 +1,6 @@
 const cracoAlias = require('craco-alias');
+const SpeedMeasurePlugin = require('speed-measure-webpack-plugin');
+const smp = new SpeedMeasurePlugin();
 
 module.exports = {
     plugins: [
@@ -18,5 +20,10 @@ module.exports = {
                 ? [['babel-plugin-react-remove-properties', { properties: ['data-testid'] }]]
                 : []),
         ],
+    },
+    webpack: {
+        configure: (webpackConfig) => {
+            return smp.wrap(webpackConfig);
+        },
     },
 };
