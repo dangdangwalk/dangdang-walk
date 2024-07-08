@@ -237,12 +237,12 @@ export class JournalsService {
         }
     }
 
+    @Transactional()
     async deleteJournal(userId: number, journalId: number) {
         const photoUrls: string[] = await this.journalPhotosService.getPhotoUrlsByJournalId(journalId);
         const dogIds: number[] = await this.journalsDogsService.getDogIdsByJournalId(journalId);
         const journalInfo = await this.journalsRepository.findOne({ where: { id: journalId } });
 
-        //TODO: promise-all로 병렬 처리하기
         const subtractTodayWalkTime = (current: number, value: number) => current - value;
         const subtractDogWalkDay = (current: number) => (current -= 1);
         await this.updateDogWalkDay(dogIds, subtractDogWalkDay);
