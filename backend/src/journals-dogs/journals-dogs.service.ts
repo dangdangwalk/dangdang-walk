@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { FindManyOptions } from 'typeorm';
+import { FindManyOptions, InsertResult } from 'typeorm';
+
+import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 import { JournalsDogs } from './journals-dogs.entity';
 import { JournalsDogsRepository } from './journals-dogs.repository';
@@ -17,13 +19,22 @@ export class JournalsDogsService {
         return this.journalsDogsRepository.find(where);
     }
 
-    //TODO: batch create 하게 바꾸기, return도 없애기
-    async createNewJournalDogs(journalId: number, dogIds: number[]) {
-        for (const curId of dogIds) {
-            await this.createIfNotExists(journalId, curId);
-        }
+    private makeDogData(journalId: number, dogIds: number[]): Partial<JournalsDogs>[] {
+        return dogIds.map((curId) => ({
+            journalId: journalId,
+            dogId: curId,
+        }));
+    }
 
-        return;
+    async insert(
+        entity: QueryDeepPartialEntity<JournalsDogs> | QueryDeepPartialEntity<JournalsDogs>[],
+    ): Promise<InsertResult> {
+        return this.journalsDogsRepository.insert(entity);
+    }
+
+    async createJournalDogs(journalId: number, dogIds: number[]) {
+        const journalDogsData: Partial<JournalsDogs>[] = this.makeDogData(journalId, dogIds);
+        return await this.insert(journalDogsData);
     }
 
     //TODO: map 안쓰게 select 사용

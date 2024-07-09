@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { UpdateDogWalkDayOperation } from 'src/journals/types/update-journal-data.type';
 import { FindOptionsWhere } from 'typeorm';
 
 import { DogWalkDay } from './dog-walk-day.entity';
@@ -28,7 +29,7 @@ export class DogWalkDayService {
         return Object.values(makeSubObject(dogWalkDay, ['mon', 'tue', 'wed', 'thr', 'fri', 'sat', 'sun']));
     }
 
-    async updateDailyWalkCount(dogWalkDayIds: number[], operation: (current: number) => number): Promise<void> {
+    async updateDailyWalkCount(dogWalkDayIds: number[], operation: UpdateDogWalkDayOperation): Promise<void> {
         const weekDay = ['sun', 'mon', 'tue', 'wed', 'thr', 'fri', 'sat'];
         const today = new Date().getDay();
         const day = weekDay[today];
