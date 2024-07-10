@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UpdateDogWalkDayOperation } from 'src/journals/types/update-journal-data.type';
-import { FindOptionsWhere } from 'typeorm';
+import { EntityManager, FindOptionsWhere, In } from 'typeorm';
 
 import { DogWalkDay } from './dog-walk-day.entity';
 
@@ -14,6 +14,7 @@ import { makeSubObject } from '../utils/manipulate.util';
 export class DogWalkDayService {
     constructor(
         private readonly dogWalkDayRepository: DogWalkDayRepository,
+        private readonly entityManager: EntityManager,
         private readonly logger: WinstonLoggerService,
     ) {}
 
@@ -34,14 +35,19 @@ export class DogWalkDayService {
         const today = new Date().getDay();
         const day = weekDay[today];
 
-        //TODO: for 문을 안 쓰는 방향으로..? batch 업데이트? 알고리즘까지.. (log N -> 상수시간?)
-        for (const dogWalkDayId of dogWalkDayIds) {
-            const findDogWalkDay = await this.dogWalkDayRepository.findOne({ where: { id: dogWalkDayId } });
-            const dogWalkDayCount = findDogWalkDay[day] as number;
-            const updateCount = operation(dogWalkDayCount);
+        const findDogWalkDays = await this.dogWalkDayRepository.find({ where: { id: In(dogWalkDayIds) } });
+        const updateEntities: Partial<DogWalkDay>[] = findDogWalkDays.map((curDogWalkDay) => {
+            const dogWalkDayCount = curDogWalkDay[day] as number;
+            return new DogWalkDay({ id: curDogWalkDay.id, [day]: operation(dogWalkDayCount) });
+        });
 
-            await this.dogWalkDayRepository.update({ id: dogWalkDayId }, { [day]: updateCount });
-        }
+        this.entityManager
+            .createQueryBuilder(DogWalkDay, 'dogWalkDay')
+            .insert()
+            .into(DogWalkDay, ['id', day])
+            .values(updateEntities)
+            .orUpdate([day], ['id'])
+            .execute();
     }
 
     async delete(where: FindOptionsWhere<DogWalkDay>) {
