@@ -15,4 +15,8 @@ export class TodayWalkTime {
     setUpdatedAtBeforeUpdate() {
         this.updatedAt = new Date();
     }
+
+    constructor(entityData: Partial<TodayWalkTime>) {
+        Object.assign(this, entityData);
+    }
 }
