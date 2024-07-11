@@ -45,8 +45,8 @@ export class DogsService {
 
             const newDog = new Dogs({
                 breed,
-                walkDay: new DogWalkDay(),
-                todayWalkTime: new TodayWalkTime(),
+                walkDay: new DogWalkDay({}),
+                todayWalkTime: new TodayWalkTime({}),
                 ...otherAttributes,
             });
 

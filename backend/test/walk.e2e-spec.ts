@@ -52,8 +52,8 @@ describe('WalkController (e2e)', () => {
             mockDogs: [
                 new Dogs({
                     id: 1,
-                    walkDay: new DogWalkDay(),
-                    todayWalkTime: new TodayWalkTime(),
+                    walkDay: new DogWalkDay({}),
+                    todayWalkTime: new TodayWalkTime({}),
                     name: '덕지',
                     breedId: 1,
                     gender: GENDER.Male,
@@ -66,8 +66,8 @@ describe('WalkController (e2e)', () => {
                 }),
                 new Dogs({
                     id: 2,
-                    walkDay: new DogWalkDay(),
-                    todayWalkTime: new TodayWalkTime(),
+                    walkDay: new DogWalkDay({}),
+                    todayWalkTime: new TodayWalkTime({}),
                     name: '루이',
                     breedId: 2,
                     gender: GENDER.Female,
