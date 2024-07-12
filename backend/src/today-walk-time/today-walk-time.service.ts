@@ -18,7 +18,7 @@ export class TodayWalkTimeService {
     ) {}
 
     async delete(where: FindOptionsWhere<TodayWalkTime>) {
-        return this.todayWalkTimeRepository.delete(where);
+        return await this.todayWalkTimeRepository.delete(where);
     }
 
     async updateIfStaleAndGetDuration(todayWalkTime: TodayWalkTime): Promise<number> {
@@ -45,11 +45,12 @@ export class TodayWalkTimeService {
             });
             throw error;
         }
+
         const updateEntities: Partial<TodayWalkTime>[] = todayWalkTimes.map(
             (cur) => new TodayWalkTime({ id: cur.id, duration: operation(cur.duration, duration) }),
         );
 
-        this.entityManager
+        await this.entityManager
             .createQueryBuilder(TodayWalkTime, 'todayWalkTime')
             .insert()
             .into(TodayWalkTime, ['id', 'duration'])

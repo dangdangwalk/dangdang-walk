@@ -41,7 +41,7 @@ export class DogWalkDayService {
             return new DogWalkDay({ id: curDogWalkDay.id, [day]: operation(dogWalkDayCount) });
         });
 
-        this.entityManager
+        await this.entityManager
             .createQueryBuilder(DogWalkDay, 'dogWalkDay')
             .insert()
             .into(DogWalkDay, ['id', day])
@@ -51,6 +51,6 @@ export class DogWalkDayService {
     }
 
     async delete(where: FindOptionsWhere<DogWalkDay>) {
-        return this.dogWalkDayRepository.delete(where);
+        return await this.dogWalkDayRepository.delete(where);
     }
 }

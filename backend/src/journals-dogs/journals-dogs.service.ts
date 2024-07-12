@@ -16,7 +16,7 @@ export class JournalsDogsService {
     }
 
     async find(where: FindManyOptions<JournalsDogs>): Promise<JournalsDogs[]> {
-        return this.journalsDogsRepository.find(where);
+        return await this.journalsDogsRepository.find(where);
     }
 
     private makeDogData(journalId: number, dogIds: number[]): Partial<JournalsDogs>[] {
@@ -29,7 +29,7 @@ export class JournalsDogsService {
     async insert(
         entity: QueryDeepPartialEntity<JournalsDogs> | QueryDeepPartialEntity<JournalsDogs>[],
     ): Promise<InsertResult> {
-        return this.journalsDogsRepository.insert(entity);
+        return await this.journalsDogsRepository.insert(entity);
     }
 
     async createJournalDogs(journalId: number, dogIds: number[]) {

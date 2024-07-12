@@ -10,10 +10,10 @@ export class UsersDogsService {
 
     async create(entityData: UsersDogs) {
         const userDog = new UsersDogs(entityData);
-        return this.usersDogsRepository.create(userDog);
+        return await this.usersDogsRepository.create(userDog);
     }
 
     async find(where: FindManyOptions<UsersDogs>) {
-        return this.usersDogsRepository.find(where);
+        return await this.usersDogsRepository.find(where);
     }
 }

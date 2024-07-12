@@ -24,15 +24,15 @@ export class UsersService {
     ) {}
 
     async findOne(where: FindOneOptions<Users>) {
-        return this.usersRepository.findOne(where);
+        return await this.usersRepository.findOne(where);
     }
 
     async update(where: FindOptionsWhere<Users>, partialEntity: QueryDeepPartialEntity<Users>) {
-        return this.usersRepository.update(where, partialEntity);
+        return await this.usersRepository.update(where, partialEntity);
     }
 
     async updateAndFindOne(where: FindOptionsWhere<Users>, partialEntity: QueryDeepPartialEntity<Users>) {
-        return this.usersRepository.updateAndFindOne(where, partialEntity);
+        return await this.usersRepository.updateAndFindOne(where, partialEntity);
     }
 
     async delete(userId: number) {

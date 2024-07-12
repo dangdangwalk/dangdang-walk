@@ -52,7 +52,7 @@ export class DogsService {
 
             const dog = await this.dogsRepository.create(newDog);
 
-            return this.usersDogsService.create({ userId, dogId: dog.id });
+            return await this.usersDogsService.create({ userId, dogId: dog.id });
         } catch (error) {
             this.logger.error(`존재하지 않는 견종입니다`, { trace: error.stack ?? '스택 없음' });
             throw error;
@@ -102,11 +102,11 @@ export class DogsService {
     }
 
     async find(where: FindManyOptions<Dogs>): Promise<Dogs[]> {
-        return this.dogsRepository.find(where);
+        return await this.dogsRepository.find(where);
     }
 
     async findOne(where: FindOneOptions<Dogs>) {
-        return this.dogsRepository.findOne(where);
+        return await this.dogsRepository.findOne(where);
     }
 
     async updateDog(userId: number, dogId: number, dogDto: Partial<DogData>) {
@@ -125,7 +125,7 @@ export class DogsService {
         }
 
         const updateData = breed ? { breedId: breed.id, ...otherAttributes } : otherAttributes;
-        return this.dogsRepository.update({ id: dogId }, updateData);
+        return await this.dogsRepository.update({ id: dogId }, updateData);
     }
 
     async updateIsWalking(dogIds: number | number[], stateToUpdate: boolean) {
