@@ -46,19 +46,19 @@ export class JournalsService {
 
     private async create(entityData: Partial<Journals>): Promise<Journals> {
         const journals = new Journals(entityData);
-        return this.journalsRepository.create(journals);
+        return await this.journalsRepository.create(journals);
     }
 
     private async delete(journalId: number): Promise<DeleteResult> {
         const where: FindOptionsWhere<Journals> = { id: journalId };
-        return this.journalsRepository.delete(where);
+        return await this.journalsRepository.delete(where);
     }
 
     private async updateAndFindOne(
         where: FindOptionsWhere<Journals>,
         partialEntity: QueryDeepPartialEntity<Journals>,
     ): Promise<Journals | null> {
-        return this.journalsRepository.updateAndFindOne(where, partialEntity);
+        return await this.journalsRepository.updateAndFindOne(where, partialEntity);
     }
 
     private async getOwnJournalIds(userId: number): Promise<number[]> {
@@ -83,14 +83,14 @@ export class JournalsService {
     }
 
     async getJournalInfoForDetail(journalId: number): Promise<JournalInfoForDetail> {
-        const journalInfoRawPromise = this.journalsRepository.findOne({
+        const journalInfoRawPromise = await this.journalsRepository.findOne({
             where: { id: journalId },
             select: JournalInfoForDetail.getKeysForJournalTable(),
         });
 
         const [journalInfoRaw, photoUrls]: [Partial<Journals>, string[]] = await Promise.all([
             journalInfoRawPromise,
-            this.journalPhotosService.getPhotoUrlsByJournalId(journalId),
+            await this.journalPhotosService.getPhotoUrlsByJournalId(journalId),
         ]);
 
         return this.makeJournalInfoForDetail(journalId, journalInfoRaw, photoUrls);
@@ -166,7 +166,7 @@ export class JournalsService {
 
     private async updateTodayWalkTime(dogIds: number[], duration: number, operation: UpdateTodayWalkTimeOperation) {
         const todayWalkTimeIds = await this.dogsService.getRelatedTableIdList(dogIds, 'todayWalkTimeId');
-        this.todayWalkTimeService.updateDurations(todayWalkTimeIds, duration, operation);
+        await this.todayWalkTimeService.updateDurations(todayWalkTimeIds, duration, operation);
     }
 
     async createExcrements(journalId: number, excrements: CreateExcrementsInfo[]): Promise<InsertResult> {
@@ -197,7 +197,7 @@ export class JournalsService {
             );
         }
 
-        return this.excrementsService.insert(excrementsEntity);
+        return await this.excrementsService.insert(excrementsEntity);
     }
 
     @Transactional()
@@ -254,7 +254,7 @@ export class JournalsService {
 
     //TODO: join을 하지 않고 테이블을 따로 select해서 코드로 계산하는게 더 빠른지 지금처럽 builder로 join 하는 게 나은지
     private async findJournals(userId: number, dogId: number, startDate: Date, endDate: Date): Promise<Journals[]> {
-        return this.entityManager
+        return await this.entityManager
             .createQueryBuilder(Journals, 'journals')
             .innerJoin(JournalsDogs, 'journals_dogs', 'journals.id = journals_dogs.journal_id')
             .where('journals.user_id = :userId', { userId })
@@ -265,10 +265,7 @@ export class JournalsService {
     }
 
     //TODO: reduce 하나에서 모두 계산
-    //TODO: async, Promise 없애기
-    private async getTotal(
-        journals: Journals[],
-    ): Promise<{ totalWalkCnt: number; totalDistance: number; totalTime: number }> {
+    private getTotal(journals: Journals[]): { totalWalkCnt: number; totalDistance: number; totalTime: number } {
         const totalDistance = journals.reduce((acc, journal) => acc + journal.distance, 0);
         const totalTime = journals.reduce((acc, journal) => acc + journal.duration, 0);
         return { totalWalkCnt: journals.length, totalDistance, totalTime };
@@ -284,12 +281,7 @@ export class JournalsService {
         return this.getTotal(dogJournals);
     }
 
-    //TODO: async 제외하기
-    async aggregateJournalsByDay(
-        journals: Journals[],
-        startDate: Date,
-        endDate: Date,
-    ): Promise<{ [date: string]: number }> {
+    private aggregateJournalsByDay(journals: Journals[], startDate: Date, endDate: Date): { [date: string]: number } {
         const journalCntAMonth: { [date: string]: number } = {};
 
         const currentDate = new Date(startDate);
@@ -357,7 +349,7 @@ export class JournalsService {
             select: JournalInfoForList.getKeysForJournalTable(),
         });
 
-        const journalInfos = await makeSubObjectsArray(
+        const journalInfos = makeSubObjectsArray(
             journalInfosRaw,
             JournalInfoForList.getAttributesForJournalTable(),
             JournalInfoForList.getKeysForJournalTable(),

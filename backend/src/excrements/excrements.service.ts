@@ -18,11 +18,11 @@ export class ExcrementsService {
     async insert(
         entity: QueryDeepPartialEntity<Excrements> | QueryDeepPartialEntity<Excrements>[],
     ): Promise<InsertResult> {
-        return this.excrementsRepository.insert(entity);
+        return await this.excrementsRepository.insert(entity);
     }
 
     async getExcrementsCount(journalId: number, dogIds: number[]): Promise<ExcrementsCount[]> {
-        return this.entityManager
+        return await this.entityManager
             .createQueryBuilder(Excrements, 'excrements')
             .select(['dog_id AS dogId', 'type', 'COUNT(*) AS count'])
             .where('excrements.journal_id  = :journalId', { journalId })

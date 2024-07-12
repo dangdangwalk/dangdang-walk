@@ -29,5 +29,9 @@ export class DogWalkDay {
     @UpdateDateColumn({ name: 'updated_at', type: 'timestamp' })
     updatedAt: Date;
 
+    constructor(entityData: Partial<DogWalkDay>) {
+        Object.assign(this, entityData);
+    }
+
     [key: string]: number | Date;
 }

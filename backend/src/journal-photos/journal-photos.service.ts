@@ -19,17 +19,17 @@ export class JournalPhotosService {
     }
 
     async find(where: FindManyOptions<JournalPhotos>): Promise<JournalPhotos[]> {
-        return this.journalPhotosRepository.find(where);
+        return await this.journalPhotosRepository.find(where);
     }
 
     async delete(where: FindOptionsWhere<JournalPhotos>): Promise<DeleteResult> {
-        return this.journalPhotosRepository.delete(where);
+        return await this.journalPhotosRepository.delete(where);
     }
 
     async insert(
         entity: QueryPartialEntity<JournalPhotos> | QueryPartialEntity<JournalPhotos>[],
     ): Promise<InsertResult> {
-        return this.journalPhotosRepository.insert(entity);
+        return await this.journalPhotosRepository.insert(entity);
     }
 
     async findDuplicate(journalId: number, photoUrls: string[]): Promise<boolean> {

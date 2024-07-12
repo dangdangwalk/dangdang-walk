@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateTodayWalkTimeOperation } from 'src/journals/types/update-journal-data.type';
-import { FindOptionsWhere, In, UpdateResult } from 'typeorm';
+import { EntityManager, FindOptionsWhere, In } from 'typeorm';
 
 import { TodayWalkTime } from './today-walk-time.entity';
 
@@ -14,10 +14,11 @@ export class TodayWalkTimeService {
     constructor(
         private readonly todayWalkTimeRepository: TodayWalkTimeRepository,
         private readonly logger: WinstonLoggerService,
+        private readonly entityManager: EntityManager,
     ) {}
 
     async delete(where: FindOptionsWhere<TodayWalkTime>) {
-        return this.todayWalkTimeRepository.delete(where);
+        return await this.todayWalkTimeRepository.delete(where);
     }
 
     async updateIfStaleAndGetDuration(todayWalkTime: TodayWalkTime): Promise<number> {
@@ -45,14 +46,17 @@ export class TodayWalkTimeService {
             throw error;
         }
 
-        //TODO: batch 업데이트
-        await Promise.all(
-            todayWalkTimes.map(async (walkTime): Promise<UpdateResult> => {
-                const updateDuration = operation(walkTime.duration, duration);
-
-                return this.todayWalkTimeRepository.update({ id: walkTime.id }, { duration: updateDuration });
-            }),
+        const updateEntities: Partial<TodayWalkTime>[] = todayWalkTimes.map(
+            (cur) => new TodayWalkTime({ id: cur.id, duration: operation(cur.duration, duration) }),
         );
+
+        await this.entityManager
+            .createQueryBuilder(TodayWalkTime, 'todayWalkTime')
+            .insert()
+            .into(TodayWalkTime, ['id', 'duration'])
+            .values(updateEntities)
+            .orUpdate(['duration'], ['id'])
+            .execute();
     }
 
     private async findWalkTimesByIds(walkTimeIds: number[]): Promise<TodayWalkTime[]> {

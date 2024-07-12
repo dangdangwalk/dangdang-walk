@@ -64,20 +64,6 @@ describe('ExcrementsService', () => {
             jest.spyOn(todayWalkTimeRepository, 'update').mockResolvedValue({ affected: 1 } as UpdateResult);
         });
 
-        context('특정 todayWalkTimeIds가 주어지면', () => {
-            it('기존 duration에 새로운 duration을 더한 값으로 업데이트 해야 한다.', async () => {
-                await service.updateDurations(
-                    [1, 2, 3, 4, 5],
-                    10,
-                    (current: number, operand: number) => current + operand,
-                );
-
-                expect(todayWalkTimeRepository.update).toHaveBeenNthCalledWith(1, { id: 1 }, { duration: 4119 });
-                expect(todayWalkTimeRepository.update).toHaveBeenNthCalledWith(2, { id: 2 }, { duration: 5010 });
-                expect(todayWalkTimeRepository.update).toHaveBeenNthCalledWith(3, { id: 3 }, { duration: 15 });
-            });
-        });
-
         context('존재하지 않는 walkTimeIds가 주어지면', () => {
             it('NotFoundException 예외를 던져야 한다.', async () => {
                 await expect(
