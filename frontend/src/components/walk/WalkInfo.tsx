@@ -1,5 +1,5 @@
 import { Divider } from '@/components/commons/Divider';
-import { distanceUnit, formatDistance } from '@/utils/distance';
+import { formatDistance } from '@/utils/distance';
 import { formatTime } from '@/utils/format';
 import { cn } from '@/utils/tailwindClass';
 
@@ -19,9 +19,7 @@ export default function WalkInfo({ duration, calories, distance, isDivider = tru
         >
             <div className="h-15 flex w-[100px] flex-col items-center justify-center">
                 <div className="text-lg font-bold leading-[27px] text-amber-500">{formatDistance(distance)}</div>
-                <div className="text-center text-xs font-normal leading-[18px] text-zinc-500">
-                    {distanceUnit(distance)}
-                </div>
+                <div className="text-center text-xs font-normal leading-[18px] text-zinc-500">km</div>
             </div>
             {isDivider && <Divider orientation={'vertical'} />}
             <div className="flex w-[100px] flex-col items-center justify-center">

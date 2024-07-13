@@ -38,13 +38,17 @@ const useGeolocation = () => {
         if (!startPosition || !isStartGeo || !navigator.geolocation) return;
         const onSuccess = (position: GeolocationPosition) => {
             if (!isStartGeo) return;
-            const { latitude: lat, longitude: lng } = position.coords;
+            const { latitude: lat, longitude: lng, accuracy } = position.coords;
+            if (accuracy > 30) return;
             setCurrentPosition({ lat, lng });
         };
 
         const onError = (error: GeolocationPositionError) => {};
 
-        const watchId = navigator.geolocation.watchPosition(onSuccess, onError, { enableHighAccuracy: true });
+        const watchId = navigator.geolocation.watchPosition(onSuccess, onError, {
+            enableHighAccuracy: true,
+            maximumAge: 1000,
+        });
 
         return () => {
             navigator.geolocation.clearWatch(watchId);
@@ -69,7 +73,8 @@ const useGeolocation = () => {
 
         if (prevPosition) {
             const newDistance = calculateDistance(prevPosition.lat, prevPosition.lng, lat, lng);
-            addDistance(newDistance);
+            if (newDistance < 10) return;
+            addDistance(Math.floor(newDistance));
         }
         addRoutes({ lat, lng });
         setPrevPosition({ lat, lng });
