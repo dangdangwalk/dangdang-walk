@@ -6,7 +6,7 @@ import { act } from 'react';
 import { vi, expect } from 'vitest';
 
 vi.mock('@/utils/geo', () => ({
-    calculateDistance: vi.fn(() => 1),
+    calculateDistance: vi.fn(() => 10),
 }));
 
 const mockGeolocation = {
@@ -112,7 +112,7 @@ describe('useGeolocation', () => {
         act(() => {
             result.current.setCurrentPosition({ lat: 20, lng: 25 });
         });
-        expect(result.current.distance).toBe(1);
+        expect(result.current.distance).toBe(10);
         expect(result.current.routes).toEqual([
             { lat: 10, lng: 20 },
             { lat: 20, lng: 25 },
@@ -142,7 +142,7 @@ describe('useGeolocation', () => {
         });
 
         expect(result.current.isStartGeo).toBe(true);
-        expect(result.current.distance).toBe(4);
+        expect(result.current.distance).toBe(13);
         expect(result.current.routes).toEqual([
             { lat: 10, lng: 20 },
             { lat: 20, lng: 30 },
