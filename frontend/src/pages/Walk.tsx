@@ -19,6 +19,7 @@ import { useStore } from '@/store';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { uploadImages } from '@/utils/image';
 import { withAuthenticated } from '@/components/hoc/withAuthenticated';
+import { delay } from 'msw';
 
 export interface DogWalkData {
     dogs: WalkingDog[] | DogAvatar[];
@@ -66,10 +67,12 @@ function Walk() {
         const ok = await requestWalkStop(dogs.map((d) => d.id));
         if (ok) {
             resetWalkData();
+            await delay(400);
             navigate('/journals/create', {
                 state: { dogs, distance, duration, calories: getCalories(duration), startedAt, routes, photoUrls },
             });
         }
+
         spinnerRemove();
     };
 

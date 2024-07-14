@@ -80,3 +80,7 @@ export const getCurrentWeek = (date: Date): Date[] => {
         return day;
     });
 };
+
+export const delay = (ms: number) => {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+};

@@ -24,7 +24,7 @@ export const createSpinnerSlice: StateCreator<State, [['zustand/devtools', never
         set(
             (state) => {
                 return {
-                    spinnerCount: state.spinnerCount - 1,
+                    spinnerCount: state.spinnerCount ? state.spinnerCount - 1 : 0,
                 };
             },
             false,
