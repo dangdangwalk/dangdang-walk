@@ -253,7 +253,12 @@ export class JournalsService {
     }
 
     //TODO: join을 하지 않고 테이블을 따로 select해서 코드로 계산하는게 더 빠른지 지금처럽 builder로 join 하는 게 나은지
-    private async findJournals(userId: number, dogId: number, startDate: Date, endDate: Date): Promise<Journals[]> {
+    private async findUserDogJournalsByDate(
+        userId: number,
+        dogId: number,
+        startDate: Date,
+        endDate: Date,
+    ): Promise<Journals[]> {
         return await this.entityManager
             .createQueryBuilder(Journals, 'journals')
             .innerJoin(JournalsDogs, 'journals_dogs', 'journals.id = journals_dogs.journal_id')
@@ -264,11 +269,17 @@ export class JournalsService {
             .getMany();
     }
 
-    //TODO: reduce 하나에서 모두 계산
     private getTotal(journals: Journals[]): { totalWalkCnt: number; totalDistance: number; totalTime: number } {
-        const totalDistance = journals.reduce((acc, journal) => acc + journal.distance, 0);
-        const totalTime = journals.reduce((acc, journal) => acc + journal.duration, 0);
-        return { totalWalkCnt: journals.length, totalDistance, totalTime };
+        const totals = journals.reduce(
+            (acc, journal) => {
+                acc.totalWalkCnt += 1;
+                acc.totalDistance += journal.distance;
+                acc.totalTime += journal.duration;
+                return acc;
+            },
+            { totalWalkCnt: 0, totalDistance: 0, totalTime: 0 },
+        );
+        return totals;
     }
 
     async findJournalsAndGetTotal(
@@ -277,11 +288,11 @@ export class JournalsService {
         startDate: Date,
         endDate: Date,
     ): Promise<{ [date: string]: number }> {
-        const dogJournals = await this.findJournals(userId, dogId, startDate, endDate);
-        return this.getTotal(dogJournals);
+        const dogJournals = await this.findUserDogJournalsByDate(userId, dogId, startDate, endDate);
+        return Promise.resolve(this.getTotal(dogJournals));
     }
 
-    private aggregateJournalsByDay(journals: Journals[], startDate: Date, endDate: Date): { [date: string]: number } {
+    private aggregateJournalsByDate(journals: Journals[], startDate: Date, endDate: Date): { [date: string]: number } {
         const journalCntAMonth: { [date: string]: number } = {};
 
         const currentDate = new Date(startDate);
@@ -306,8 +317,8 @@ export class JournalsService {
         startDate: Date,
         endDate: Date,
     ): Promise<{ [date: string]: number }> {
-        const dogJournals = await this.findJournals(userId, dogId, startDate, endDate);
-        return this.aggregateJournalsByDay(dogJournals, startDate, endDate);
+        const dogJournals = await this.findUserDogJournalsByDate(userId, dogId, startDate, endDate);
+        return Promise.resolve(this.aggregateJournalsByDate(dogJournals, startDate, endDate));
     }
 
     //TODO: 코드로 바꿨을 때 성능 향상 되는지 확인해보기
@@ -323,7 +334,6 @@ export class JournalsService {
             .andWhere('journals.started_at < :endDate', { endDate: startEndDate.endDate })
             .getRawMany();
 
-        //TODO: select 적용해서 map 없애기
         return result.map((cur) => cur.journals_id);
     }
 
@@ -343,7 +353,6 @@ export class JournalsService {
             return [];
         }
 
-        //TODO: Promise all 적용하기
         const journalInfosRaw = await this.journalsRepository.find({
             where: { id: In(journalIds) },
             select: JournalInfoForList.getKeysForJournalTable(),
@@ -355,8 +364,9 @@ export class JournalsService {
             JournalInfoForList.getKeysForJournalTable(),
         );
         const findResult = await this.journalsDogsService.find({ where: { dogId }, select: ['journalId'] });
-        //TODO: jd -> journal Data 변수명 수정, 로직 개선
-        const journalCntForFirstRow = findResult.findIndex((jd) => jd.journalId === journalInfos[0].journalId);
+        const journalCntForFirstRow = findResult.findIndex(
+            (journalData) => journalData.journalId === journalInfos[0].journalId,
+        );
         const result = this.putDogCntToJournalList(journalInfos, journalCntForFirstRow + 1);
         return result;
     }
