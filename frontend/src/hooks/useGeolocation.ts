@@ -47,7 +47,7 @@ const useGeolocation = () => {
 
         const watchId = navigator.geolocation.watchPosition(onSuccess, onError, {
             enableHighAccuracy: true,
-            maximumAge: 1000,
+            maximumAge: 2000,
         });
 
         return () => {
