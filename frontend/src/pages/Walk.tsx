@@ -3,7 +3,6 @@ import Map from '@/components/walk/Map';
 import WalkHeader from '@/components/walk/WalkHeader';
 import WalkInfo from '@/components/walk/WalkInfo';
 import WalkNavbar from '@/components/walk/WalkNavbar';
-import { DEFAULT_WALK_MET, DEFAULT_WEIGHT } from '@/constants';
 import useGeolocation from '@/hooks/useGeolocation';
 import useStopWatch from '@/hooks/useStopWatch';
 import useWalkingDogs from '@/hooks/useWalkingDogs';
@@ -20,6 +19,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { uploadImages } from '@/utils/image';
 import { withAuthenticated } from '@/components/hoc/withAuthenticated';
 import { delay } from 'msw';
+import { DEFAULT_WEIGHT, WALKING_FACTOR } from '@/constants';
 
 export interface DogWalkData {
     dogs: WalkingDog[] | DogAvatar[];
@@ -69,7 +69,7 @@ function Walk() {
             resetWalkData();
             await delay(400);
             navigate('/journals/create', {
-                state: { dogs, distance, duration, calories: getCalories(duration), startedAt, routes, photoUrls },
+                state: { dogs, distance, duration, calories: getCalories(distance), startedAt, routes, photoUrls },
             });
         }
 
@@ -89,7 +89,7 @@ function Walk() {
         startClock();
         startGeo();
     };
-    const getCalories = (time: number) => Math.round((DEFAULT_WALK_MET * DEFAULT_WEIGHT * time) / 3600);
+    const getCalories = (distance: number) => Math.floor((distance / 1000) * DEFAULT_WEIGHT * WALKING_FACTOR);
 
     const handleAddImages = async (e: FormEvent<HTMLInputElement>) => {
         const files = e.currentTarget.files;
@@ -126,7 +126,7 @@ function Walk() {
     return (
         <div className="inset-0 h-dvh overflow-hidden">
             <WalkHeader />
-            <WalkInfo duration={duration} calories={getCalories(duration)} distance={distance} />
+            <WalkInfo duration={duration} calories={getCalories(distance)} distance={distance} />
 
             <Map startPosition={startPosition} path={routes} />
 
