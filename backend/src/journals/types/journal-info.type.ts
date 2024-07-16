@@ -1,7 +1,5 @@
 import { IsDate, IsInt, IsNumber } from 'class-validator';
 
-import { Journals } from '../journals.entity';
-
 export class JournalInfoForList {
     @IsNumber()
     journalId: number;
@@ -21,11 +19,7 @@ export class JournalInfoForList {
     @IsNumber()
     duration: number;
 
-    static getAttributesForJournalTable() {
-        return ['journalId', 'startedAt', 'distance', 'calories', 'duration'];
-    }
-
-    static getKeysForJournalTable(): Array<keyof Journals> {
-        return ['id', 'startedAt', 'distance', 'calories', 'duration'];
+    static getKeysForJournalInfoResponse() {
+        return ['journalId', 'startedAt', 'distance', 'calories', 'duration', 'journalCnt'];
     }
 }

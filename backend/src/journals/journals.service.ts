@@ -326,48 +326,34 @@ export class JournalsService {
         const startEndDate = getStartAndEndOfDay(new Date(date));
         const result = await this.entityManager
             .createQueryBuilder(Journals, 'journals')
-            .select('journals.id')
-            .orderBy('journals.id', 'ASC')
+            .select([
+                'journals.id AS "journalId"',
+                'journals.started_at AS "startedAt"',
+                'distance',
+                'calories',
+                'duration',
+                '(SELECT COUNT(*) FROM journals_dogs jd WHERE jd.dog_id = :dogId AND jd.journal_id <= journals.id ) AS "journalCnt"',
+            ])
             .innerJoin(JournalsDogs, 'journals_dogs', 'journals.id = journals_dogs.journal_id')
             .where('journals_dogs.dog_id = :dogId', { dogId })
             .andWhere('journals.started_at >= :startDate', { startDate: startEndDate.startDate })
             .andWhere('journals.started_at < :endDate', { endDate: startEndDate.endDate })
             .getRawMany();
 
-        return result.map((cur) => cur.journals_id);
-    }
-
-    private putDogCntToJournalList(journalInfos: JournalInfoForList[], firstJournalCnt: number): JournalInfoForList[] {
-        return journalInfos.map((cur) => {
-            const newJournal: JournalInfoForList = {
-                ...cur,
-                journalCnt: firstJournalCnt++,
-            };
-            return newJournal;
-        });
+        return result.map((cur) => ({
+            ...cur,
+            journalCnt: parseInt(cur.journalCnt),
+        }));
     }
 
     async getJournalList(dogId: number, date: string): Promise<JournalInfoForList[]> {
-        const journalIds = await this.getJournalIdsByDogIdAndDate(dogId, date);
-        if (!journalIds.length) {
+        const journalInfosRaw = await this.getJournalIdsByDogIdAndDate(dogId, date);
+        if (!journalInfosRaw.length) {
             return [];
         }
 
-        const journalInfosRaw = await this.journalsRepository.find({
-            where: { id: In(journalIds) },
-            select: JournalInfoForList.getKeysForJournalTable(),
-        });
+        const journalInfos = makeSubObjectsArray(journalInfosRaw, JournalInfoForList.getKeysForJournalInfoResponse());
 
-        const journalInfos = makeSubObjectsArray(
-            journalInfosRaw,
-            JournalInfoForList.getAttributesForJournalTable(),
-            JournalInfoForList.getKeysForJournalTable(),
-        );
-        const findResult = await this.journalsDogsService.find({ where: { dogId }, select: ['journalId'] });
-        const journalCntForFirstRow = findResult.findIndex(
-            (journalData) => journalData.journalId === journalInfos[0].journalId,
-        );
-        const result = this.putDogCntToJournalList(journalInfos, journalCntForFirstRow + 1);
-        return result;
+        return journalInfos;
     }
 }
