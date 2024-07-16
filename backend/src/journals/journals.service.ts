@@ -289,7 +289,7 @@ export class JournalsService {
         endDate: Date,
     ): Promise<{ [date: string]: number }> {
         const dogJournals = await this.findUserDogJournalsByDate(userId, dogId, startDate, endDate);
-        return Promise.resolve(this.getTotal(dogJournals));
+        return this.getTotal(dogJournals);
     }
 
     private aggregateJournalsByDate(journals: Journals[], startDate: Date, endDate: Date): { [date: string]: number } {
