@@ -179,12 +179,12 @@ export class JournalsService {
                 journalId: number,
                 dogId: number,
                 type: Excrement,
-                coordinate: { lat: string; lng: string },
+                coordinate: [number, number],
             ) => ({
                 journalId,
                 dogId,
                 type,
-                coordinate: this.excrementsService.makeCoordinate(coordinate.lat, coordinate.lng),
+                coordinate: this.excrementsService.makeCoordinate(coordinate[0], coordinate[1]),
             });
 
             excrementsEntity.push(

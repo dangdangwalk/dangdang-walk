@@ -32,7 +32,7 @@ export class ExcrementsService {
             .getRawMany();
     }
 
-    makeCoordinate(lat: string, lng: string): string {
-        return `POINT(${lat} ${lng})`;
+    makeCoordinate(lat: number, lng: number): string {
+        return `POINT(${lat.toString()} ${lng.toString()})`;
     }
 }
