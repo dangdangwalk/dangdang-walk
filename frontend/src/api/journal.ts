@@ -1,7 +1,7 @@
 import { httpClient } from '@/api/http';
 import { DogAvatar } from '@/models/dog';
 import { Journal } from '@/models/journal';
-import { Position as NumberPosition, Position } from '@/models/location';
+import { Coords } from '@/models/location';
 import { formatDate } from '@/utils/time';
 
 export const fetchJournals = async (dogId: number, date: string = formatDate(new Date())): Promise<Journal[]> => {
@@ -35,7 +35,7 @@ interface JournalCreateForm {
         calories: number;
         startedAt: string;
         duration: number;
-        routes: Array<NumberPosition>;
+        routes: Coords[];
         photoUrls: string[];
         memo: string;
     };
@@ -56,7 +56,7 @@ interface StringPosition {
 export interface JournalDetail {
     journalInfo: {
         id: number;
-        routes: Array<Position>;
+        routes: Array<Coords>;
         memo: string;
         photoUrls: Array<string>;
     };

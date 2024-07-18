@@ -1,6 +1,6 @@
 import Spinner from '@/components/commons/Spinner';
 import { NAV_HEIGHT, TOP_BAR_HEIGHT, WALK_INFO_HEIGHT, DEFAULT_LAT, DEFAULT_LNG } from '@/constants';
-import { Position } from '@/models/location';
+import { Coords, Position } from '@/models/location';
 import { cn } from '@/utils/tailwindClass';
 import { useEffect, useState } from 'react';
 
@@ -8,7 +8,7 @@ const { REACT_APP_KAKAO_MAP_ID: KAKAO_MAP_ID = '' } = window._ENV ?? process.env
 
 interface MapProps {
     startPosition: Position | null | undefined;
-    path: Position[];
+    path: Coords[];
     className?: string;
     height?: string;
 }
@@ -64,7 +64,7 @@ export default function Map({ startPosition, path, className, height }: MapProps
 
     useEffect(() => {
         if (!map || !path.length) return;
-        polyline.setPath(path.map((position) => new window.kakao.maps.LatLng(position.lat, position.lng)));
+        polyline.setPath(path.map((coords) => new window.kakao.maps.LatLng(coords[0], coords[1])));
     }, [path, map]);
     return (
         <>

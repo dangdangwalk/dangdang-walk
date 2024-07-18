@@ -13,7 +13,7 @@ import StopToast from '@/components/walk/StopToast';
 import useAlertToast from '@/hooks/useAlertToast';
 import useToast from '@/hooks/useToast';
 import { DogAvatar, WalkingDog } from '@/models/dog';
-import { Position } from '@/models/location';
+import { Coords } from '@/models/location';
 import { useStore } from '@/store';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { uploadImages } from '@/utils/image';
@@ -25,7 +25,7 @@ export interface DogWalkData {
     dogs: WalkingDog[] | DogAvatar[];
     startedAt: string | undefined;
     distance: number | undefined;
-    routes: Position[] | undefined;
+    routes: Coords[] | undefined;
     photoUrls: string[] | undefined;
 }
 export interface JournalCreateFromState extends DogWalkData {
