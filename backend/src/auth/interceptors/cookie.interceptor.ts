@@ -20,6 +20,7 @@ export class CookieInterceptor implements NestInterceptor {
     private readonly sessionCookieOptions: CookieOptions = {
         httpOnly: true,
         secure: this.isProduction,
+        sameSite: 'lax',
     };
 
     private readonly refreshCookieOptions: CookieOptions = {
