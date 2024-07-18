@@ -3,4 +3,4 @@ export interface Position {
     lng: number;
 }
 
-export type Coords = [Number, Number];
+export type Coords = [number, number];
