@@ -13,10 +13,8 @@ Content-Type: application/json
     "startedAt": "2024-06-25T16:41:44.586Z",
     "duration": 3600,
     "routes": [
-      {
-        "lat": 303,
-        "lng": 100
-      }
+      [ 10, 10.12 ],
+      [ 30.4, 180 ]
     ],
     "photoUrls": [
       "/1/sdofijwoejf.jpg"
@@ -27,16 +25,12 @@ Content-Type: application/json
     {
       "dogId": 2,
       "fecesLocations": [
-        {
-          "lat": "75.23",
-          "lng": "104.4839"
-        }
+        [ 10, 10.12 ],
+        [ 30.4, 180 ]
       ],
       "urineLocations": [
-        {
-          "lat": "202",
-          "lng": "120"
-        }
+        [ 10, 10.12 ],
+        [ 30.4, 180 ]
       ]
     }
   ]

@@ -1,10 +1,9 @@
-import { Location, journalLocation } from '../dtos/create-journal.dto';
 import { Journals } from '../journals.entity';
 
 export interface CreateExcrementsInfo {
     dogId: number;
-    fecesLocations: Location[];
-    urineLocations: Location[];
+    fecesLocations: [number, number][];
+    urineLocations: [number, number][];
 }
 
 export class CreateJournalInfo {
@@ -12,7 +11,7 @@ export class CreateJournalInfo {
     calories: number;
     startedAt: Date;
     duration: number;
-    routes: journalLocation[];
+    routes: [number, number][];
     memo: string;
     photoUrls: string[];
 

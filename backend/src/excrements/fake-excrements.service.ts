@@ -28,7 +28,7 @@ export class FakeExcrementsService extends ExcrementsService {
         return Promise.resolve(expectedExcrement);
     }
 
-    makeCoordinate(lat: string, lng: string): string {
+    makeCoordinate(lat: number, lng: number): string {
         return `POINT(${lat} ${lng})`;
     }
 }

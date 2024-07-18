@@ -13,38 +13,15 @@ import {
 
 import { IsWGS84 } from '../validators/WGS84.validator';
 
-export class Location {
-    @IsWGS84({ message: 'The provided point is not in WGS84 format' })
-    @IsString()
-    lat: string;
-
-    @IsWGS84({ message: 'The provided point is not in WGS84 format' })
-    @IsString()
-    lng: string;
-}
-
-//TODO: GeoJSON으로 넘어가기 전 임시로 사용
-export class journalLocation {
-    @IsNumber()
-    lat: number;
-
-    @IsNumber()
-    lng: number;
-}
-
 export class ExcrementsInfoForCreate {
     @IsNotEmpty()
     dogId: number;
 
-    @IsArray()
-    @ValidateNested()
-    @Type(() => Location)
-    fecesLocations: Location[];
+    @IsWGS84()
+    fecesLocations: [number, number][];
 
-    @IsArray()
-    @ValidateNested()
-    @Type(() => Location)
-    urineLocations: Location[];
+    @IsWGS84()
+    urineLocations: [number, number][];
 }
 
 export class JournalInfoForCreate {
@@ -68,10 +45,8 @@ export class JournalInfoForCreate {
     @Min(0)
     duration: number;
 
-    @IsArray()
-    @ValidateNested()
-    @Type(() => journalLocation)
-    routes: journalLocation[];
+    @IsWGS84()
+    routes: [number, number][];
 
     @IsOptional()
     @IsString()
