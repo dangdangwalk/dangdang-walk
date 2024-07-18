@@ -44,13 +44,8 @@ interface JournalCreateForm {
 
 interface Excrement {
     dogId: number;
-    fecesLocations: Array<StringPosition>;
-    urineLocations: Array<StringPosition>;
-}
-
-interface StringPosition {
-    lat: string;
-    lng: string;
+    fecesLocations: Array<Coords>;
+    urineLocations: Array<Coords>;
 }
 
 export interface JournalDetail {

@@ -139,23 +139,10 @@ function CreateForm() {
             memo: textAreaRef.current?.value ?? '',
         };
         const excrements = dogs.map((dog) => {
-            const stringFecesLocations = dog.fecesLocations.map((position) => {
-                return {
-                    lat: String(position.lat),
-                    lng: String(position.lng),
-                };
-            });
-            const stringUrineLocations = dog.fecesLocations.map((position) => {
-                return {
-                    lat: String(position.lat),
-                    lng: String(position.lng),
-                };
-            });
-
             return {
                 dogId: dog.id,
-                fecesLocations: stringFecesLocations,
-                urineLocations: stringUrineLocations,
+                fecesLocations: dog.fecesLocations,
+                urineLocations: dog.fecesLocations,
             };
         });
         await createJournal({
