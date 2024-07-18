@@ -1,5 +1,5 @@
 import { WalkingDog } from '@/models/dog';
-import { Position } from '@/models/location';
+import { Coords } from '@/models/location';
 import { StateCreator } from 'zustand';
 
 const initialState: State = {
@@ -26,10 +26,10 @@ const createWalkSlice: StateCreator<StateAndActions, [['zustand/devtools', never
     addDistance: (distance: number) => {
         set((state) => ({ distance: state.distance + distance }), false, 'walk/addDistance');
     },
-    addRoutes: (route: Position) => {
+    addRoutes: (route: Coords) => {
         set((state) => ({ routes: [...state.routes, route] }), false, 'walk/addRoutes');
     },
-    setRoutes: (routes: Position[]) => {
+    setRoutes: (routes: Coords[]) => {
         set({ routes }, false, 'walk/setRoutes');
     },
     setStartedAt: (startedAt: string) => {
@@ -45,7 +45,7 @@ const createWalkSlice: StateCreator<StateAndActions, [['zustand/devtools', never
 
 interface State {
     walkingDogs: WalkingDog[];
-    routes: Position[];
+    routes: Coords[];
     distance: number;
     startedAt: string;
     photoUrls: string[];
@@ -55,8 +55,8 @@ interface Actions {
     updateWalkingDogs: (updateFn: (dogs: WalkingDog[]) => WalkingDog[]) => void;
     setDistance: (distance: number) => void;
     addDistance: (distance: number) => void;
-    addRoutes: (routes: Position) => void;
-    setRoutes: (routes: Position[]) => void;
+    addRoutes: (routes: Coords) => void;
+    setRoutes: (routes: Coords[]) => void;
     setStartedAt: (startedAt: string) => void;
     setPhotoUrls: (photoUrls: string[]) => void;
     resetWalkData: () => void;

@@ -1,5 +1,5 @@
 import { DEFAULT_LAT, DEFAULT_LNG } from '@/constants';
-import { Position } from '@/models/location';
+import { Coords, Position } from '@/models/location';
 import { useStore } from '@/store';
 import { calculateDistance } from '@/utils/geo';
 import { useEffect, useState } from 'react';
@@ -57,8 +57,9 @@ const useGeolocation = () => {
 
     const startGeo = () => {
         if (routes?.length) {
-            const position: Position = routes[routes.length - 1] as Position;
-            setPrevPosition(position);
+            const [lat, lng]: Coords = routes[routes.length - 1] as Coords;
+
+            setPrevPosition({ lat, lng });
         }
         setIsStartGeo(true);
     };
@@ -76,7 +77,7 @@ const useGeolocation = () => {
             if (newDistance < 10) return;
             addDistance(Math.floor(newDistance));
         }
-        addRoutes({ lat, lng });
+        addRoutes([lat, lng]);
         setPrevPosition({ lat, lng });
     }, [currentPosition]);
 

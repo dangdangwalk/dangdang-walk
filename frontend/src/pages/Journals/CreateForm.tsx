@@ -22,7 +22,7 @@ import Map from '@/components/walk/Map';
 import WalkInfo from '@/components/walk/WalkInfo';
 import useToast from '@/hooks/useToast';
 import { WalkingDog } from '@/models/dog';
-import { Position } from '@/models/location';
+import { Coords } from '@/models/location';
 import { useStore } from '@/store';
 import { getFileName } from '@/utils/url';
 import { FormEvent, useEffect, useRef, useState } from 'react';
@@ -78,7 +78,7 @@ function CreateForm() {
                 </div>
                 <div className={`h-[calc(100dvh-3rem-4rem)] overflow-y-auto`}>
                     <Map
-                        startPosition={routes[0]}
+                        startPosition={routes[0] ? { lat: routes[0][0], lng: routes[0][1] } : null}
                         path={routes}
                         className="overflow-hidden rounded-lg"
                         height="216px"
@@ -139,23 +139,10 @@ function CreateForm() {
             memo: textAreaRef.current?.value ?? '',
         };
         const excrements = dogs.map((dog) => {
-            const stringFecesLocations = dog.fecesLocations.map((position) => {
-                return {
-                    lat: String(position.lat),
-                    lng: String(position.lng),
-                };
-            });
-            const stringUrineLocations = dog.fecesLocations.map((position) => {
-                return {
-                    lat: String(position.lat),
-                    lng: String(position.lng),
-                };
-            });
-
             return {
                 dogId: dog.id,
-                fecesLocations: stringFecesLocations,
-                urineLocations: stringUrineLocations,
+                fecesLocations: dog.fecesLocations,
+                urineLocations: dog.fecesLocations,
             };
         });
         await createJournal({
@@ -211,7 +198,7 @@ interface ReceivedState {
     dogs: WalkingDog[];
     startedAt: string;
     distance: number;
-    routes: Position[];
+    routes: Coords[];
     calories: number;
     duration: number;
     photoUrls: string[];

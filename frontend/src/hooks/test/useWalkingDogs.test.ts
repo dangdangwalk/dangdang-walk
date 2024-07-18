@@ -161,8 +161,8 @@ describe('useWalkingDogs', () => {
 
         const expectedDogs1 = expectedDogs.map((dog) => ({
             ...dog,
-            fecesLocations: dog.id === 2 ? [{ lat: 10, lng: 20 }] : [],
-            urineLocations: dog.id === 1 ? [{ lat: 10, lng: 20 }] : [],
+            fecesLocations: dog.id === 2 ? [[10, 20]] : [],
+            urineLocations: dog.id === 1 ? [[10, 20]] : [],
         }));
         expect(result.current.walkingDogs).toEqual(expectedDogs1);
     });

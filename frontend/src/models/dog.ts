@@ -1,4 +1,4 @@
-import { Position } from '@/models/location';
+import { Coords } from '@/models/location';
 
 export interface Dog {
     id: number;
@@ -15,8 +15,8 @@ export type DogAvatar = Pick<Dog, 'id' | 'name' | 'profilePhotoUrl'>;
 export interface WalkingDog extends DogAvatar {
     isUrineChecked: boolean;
     isFecesChecked: boolean;
-    fecesLocations: Position[];
-    urineLocations: Position[];
+    fecesLocations: Coords[];
+    urineLocations: Coords[];
 }
 
 export type Gender = 'MALE' | 'FEMALE' | '';

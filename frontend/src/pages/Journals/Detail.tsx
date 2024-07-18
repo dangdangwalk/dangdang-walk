@@ -106,7 +106,7 @@ function Detail() {
                 </div>
                 <div className={`h-[calc(100dvh-3rem-4rem)] overflow-y-auto`}>
                     <Map
-                        startPosition={routes[0]}
+                        startPosition={routes[0] ? { lat: routes[0][0], lng: routes[0][1] } : null}
                         path={routes}
                         className="overflow-hidden rounded-lg"
                         height="216px"

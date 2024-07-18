@@ -15,8 +15,8 @@ const useWalkingDogs = () => {
         updateDogs((prevWalkingDogs: WalkingDog[]) =>
             prevWalkingDogs.map((dog: WalkingDog) => ({
                 ...dog,
-                fecesLocations: dog.isFecesChecked ? [...dog.fecesLocations, { lat, lng }] : dog.fecesLocations,
-                urineLocations: dog.isUrineChecked ? [...dog.urineLocations, { lat, lng }] : dog.urineLocations,
+                fecesLocations: dog.isFecesChecked ? [...dog.fecesLocations, [lat, lng]] : dog.fecesLocations,
+                urineLocations: dog.isUrineChecked ? [...dog.urineLocations, [lat, lng]] : dog.urineLocations,
                 isFecesChecked: false,
                 isUrineChecked: false,
             }))

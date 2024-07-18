@@ -107,15 +107,15 @@ describe('useGeolocation', () => {
 
         expect(result.current.isStartGeo).toBe(true);
         expect(result.current.distance).toBe(0);
-        expect(result.current.routes).toEqual([{ lat: 10, lng: 20 }]);
+        expect(result.current.routes).toEqual([[10, 20]]);
 
         act(() => {
             result.current.setCurrentPosition({ lat: 20, lng: 25 });
         });
         expect(result.current.distance).toBe(10);
         expect(result.current.routes).toEqual([
-            { lat: 10, lng: 20 },
-            { lat: 20, lng: 25 },
+            [10, 20],
+            [20, 25],
         ]);
     });
 
@@ -128,9 +128,9 @@ describe('useGeolocation', () => {
             useStore.setState({
                 distance: 3,
                 routes: [
-                    { lat: 10, lng: 20 },
-                    { lat: 20, lng: 30 },
-                    { lat: 30, lng: 40 },
+                    [10, 20],
+                    [20, 30],
+                    [30, 40],
                 ],
             });
         });
@@ -144,10 +144,10 @@ describe('useGeolocation', () => {
         expect(result.current.isStartGeo).toBe(true);
         expect(result.current.distance).toBe(13);
         expect(result.current.routes).toEqual([
-            { lat: 10, lng: 20 },
-            { lat: 20, lng: 30 },
-            { lat: 30, lng: 40 },
-            { lat: 10, lng: 20 },
+            [10, 20],
+            [20, 30],
+            [30, 40],
+            [10, 20],
         ]);
     });
 });
