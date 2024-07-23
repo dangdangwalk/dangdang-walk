@@ -1,8 +1,9 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 import { Users } from '../users/users.entity';
 
 @Entity('journals')
+@Index(['userId', 'startedAt'])
 export class Journals {
     @PrimaryGeneratedColumn()
     id: number;
