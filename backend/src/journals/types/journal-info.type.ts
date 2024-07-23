@@ -1,5 +1,16 @@
 import { IsDate, IsInt, IsNumber } from 'class-validator';
 
+interface JournalWalkDistance {
+    distance: number;
+    duration: number;
+}
+
+interface JournalWalkDate {
+    startedAt: Date;
+}
+
+export type DogWalkJournalEntry = JournalWalkDistance & JournalWalkDate;
+
 export class JournalInfoForList {
     @IsNumber()
     journalId: number;
