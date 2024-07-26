@@ -27,6 +27,9 @@ export class Journals {
     @Column()
     duration: number;
 
+    @Column({ name: 'journal_photos' })
+    journalPhotos: string;
+
     @Column({ type: 'mediumtext' })
     routes: string;
 
