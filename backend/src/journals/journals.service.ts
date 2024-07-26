@@ -155,6 +155,9 @@ export class JournalsService {
         if (!journalData.memo) {
             journalData.memo = '';
         }
+        journalData.journalPhotos = JSON.stringify(
+            createJournalInfo.journalPhotos ? createJournalInfo.journalPhotos : [],
+        );
         journalData.routes = JSON.stringify(journalData.routes);
         return journalData;
     }
@@ -203,12 +206,10 @@ export class JournalsService {
     @Transactional()
     async createJournal(userId: number, createJournalData: CreateJournalData) {
         const dogIds = createJournalData.dogs;
-        const photoUrls = createJournalData.journalInfo.photoUrls ? createJournalData.journalInfo.photoUrls : [];
         const journalData = this.makeJournalData(userId, createJournalData.journalInfo);
         const createJournalResult = await this.create(journalData);
 
         await this.journalsDogsService.createJournalDogs(createJournalResult.id, dogIds);
-        await this.journalPhotosService.createNewPhotoUrls(createJournalResult.id, photoUrls);
 
         const addDogWalkDay = (current: number) => (current += 1);
         const addTodayWalkTime = (current: number, value: number) => current + value;

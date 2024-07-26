@@ -13,10 +13,10 @@ export class CreateJournalInfo {
     duration: number;
     routes: [number, number][];
     memo: string;
-    photoUrls: string[];
+    journalPhotos: string[];
 
     static getKeysForJournalTable(): Array<keyof Journals> {
-        return ['distance', 'calories', 'startedAt', 'duration', 'routes', 'memo'];
+        return ['distance', 'calories', 'journalPhotos', 'startedAt', 'duration', 'routes', 'memo'];
     }
 }
 

@@ -55,7 +55,7 @@ export class JournalInfoForCreate {
     @IsOptional()
     @IsArray()
     @IsString({ each: true })
-    photoUrls: string[];
+    journalPhotos: string[];
 }
 
 export class CreateJournalDto {
