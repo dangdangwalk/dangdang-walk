@@ -379,8 +379,8 @@ describe('JournalsController (e2e)', () => {
                     startedAt: '2024-06-12T00:00:00Z',
                     duration: 3600,
                     routes: [
-                        { lat: 87.4, lng: 85.222 },
-                        { lat: 75.23, lng: 104.4839 },
+                        [87.4, 85.222],
+                        [75.23, 104.4839],
                     ],
                     photoUrls: ['1/photo1.jpeg', '1/photo2.png'],
                     memo: 'Enjoyed the walk with Buddy!',
@@ -388,12 +388,12 @@ describe('JournalsController (e2e)', () => {
                 excrements: [
                     {
                         dogId: 1,
-                        fecesLocations: [{ lat: '87.4', lng: '85.222' }],
-                        urineLocations: [{ lat: '87.4', lng: '85.222' }],
+                        fecesLocations: [[87.4, 85.222]],
+                        urineLocations: [[87.4, 85.222]],
                     },
                     {
                         dogId: 2,
-                        fecesLocations: [{ lat: '75.23', lng: '104.4839' }],
+                        fecesLocations: [[75.23, 104.4839]],
                         urineLocations: [],
                     },
                 ],

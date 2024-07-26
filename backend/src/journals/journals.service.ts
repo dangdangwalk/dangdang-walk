@@ -15,7 +15,7 @@ import {
     JournalInfoForDetail,
 } from './types/journal-detail.type';
 
-import { JournalInfoForList } from './types/journal-info.type';
+import { DogWalkJournalEntry, JournalInfoForList } from './types/journal-info.type';
 import { UpdateJournalData, UpdateTodayWalkTimeOperation } from './types/update-journal-data.type';
 
 import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
@@ -258,18 +258,26 @@ export class JournalsService {
         dogId: number,
         startDate: Date,
         endDate: Date,
-    ): Promise<Journals[]> {
-        return await this.entityManager
-            .createQueryBuilder(Journals, 'journals')
-            .innerJoin(JournalsDogs, 'journals_dogs', 'journals.id = journals_dogs.journal_id')
-            .where('journals.user_id = :userId', { userId })
-            .andWhere('journals_dogs.dog_id = :dogId', { dogId })
-            .andWhere('journals.started_at >= :startDate', { startDate })
-            .andWhere('journals.started_at < :endDate', { endDate })
-            .getMany();
+    ): Promise<DogWalkJournalEntry[]> {
+        return await this.entityManager.query(
+            `
+        SELECT STRAIGHT_JOIN journals.distance, journals.duration, journals.started_at as startedAt 
+        FROM journals 
+        INNER JOIN journals_dogs ON journals.id = journals_dogs.journal_id
+        WHERE journals.user_id = ?
+          AND journals_dogs.dog_id = ?
+          AND journals.started_at >= ?
+          AND journals.started_at < ?
+      `,
+            [userId, dogId, startDate, endDate],
+        );
     }
 
-    private getTotal(journals: Journals[]): { totalWalkCnt: number; totalDistance: number; totalTime: number } {
+    private getTotal(journals: DogWalkJournalEntry[]): {
+        totalWalkCnt: number;
+        totalDistance: number;
+        totalTime: number;
+    } {
         const totals = journals.reduce(
             (acc, journal) => {
                 acc.totalWalkCnt += 1;
@@ -292,7 +300,11 @@ export class JournalsService {
         return this.getTotal(dogJournals);
     }
 
-    private aggregateJournalsByDate(journals: Journals[], startDate: Date, endDate: Date): { [date: string]: number } {
+    private aggregateJournalsByDate(
+        journals: DogWalkJournalEntry[],
+        startDate: Date,
+        endDate: Date,
+    ): { [date: string]: number } {
         const journalCntAMonth: { [date: string]: number } = {};
 
         const currentDate = new Date(startDate);
