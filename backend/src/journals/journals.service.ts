@@ -217,19 +217,17 @@ export class JournalsService {
 
     @Transactional()
     async updateJournal(journalId: number, updateJournalData: UpdateJournalData) {
-        if (updateJournalData.memo) {
-            await this.updateAndFindOne({ id: journalId }, { memo: updateJournalData.memo });
+        const updateData: { memo?: string; journalPhotos?: string } = {};
+        if (updateJournalData.memo && updateJournalData.journalPhotos) {
+            updateData.memo = updateJournalData.memo;
+            updateData.journalPhotos = JSON.stringify(updateJournalData.journalPhotos);
+        } else if (updateJournalData.memo && !updateJournalData.journalPhotos) {
+            updateData.memo = updateJournalData.memo;
+        } else if (!updateJournalData.memo && updateJournalData.journalPhotos) {
+            updateData.journalPhotos = JSON.stringify(updateJournalData.journalPhotos);
         }
 
-        if (updateJournalData.photoUrls) {
-            const journalPhotos = await this.journalPhotosService.find({ where: { journalId } });
-            if (journalPhotos.length) {
-                await this.journalPhotosService.delete({ journalId });
-            }
-            if (updateJournalData.photoUrls.length) {
-                await this.journalPhotosService.createNewPhotoUrls(journalId, updateJournalData.photoUrls);
-            }
-        }
+        await this.updateAndFindOne({ id: journalId }, updateData);
     }
 
     @Transactional()
