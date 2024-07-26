@@ -72,28 +72,22 @@ export class JournalsService {
         return checkIfExistsInArr(myJournalIds, journalIds);
     }
 
-    private makeJournalInfoForDetail(journalId: number, journalInfoRaw: Partial<Journals>, photoUrls: string[]) {
+    private makeJournalInfoForDetail(journalId: number, journalInfoRaw: Partial<Journals>) {
         const journalInfo = makeSubObject(journalInfoRaw, JournalInfoForDetail.getKeysForJournalTable());
 
         journalInfo.id = journalId;
         journalInfo.routes = JSON.parse(journalInfo.routes);
-        journalInfo.photoUrls = photoUrls;
-
+        journalInfo.journalPhotos = JSON.parse(journalInfo.journalPhotos);
         return journalInfo;
     }
 
     async getJournalInfoForDetail(journalId: number): Promise<JournalInfoForDetail> {
-        const journalInfoRawPromise = await this.journalsRepository.findOne({
+        const journalInfoRaw = await this.journalsRepository.findOne({
             where: { id: journalId },
             select: JournalInfoForDetail.getKeysForJournalTable(),
         });
 
-        const [journalInfoRaw, photoUrls]: [Partial<Journals>, string[]] = await Promise.all([
-            journalInfoRawPromise,
-            await this.journalPhotosService.getPhotoUrlsByJournalId(journalId),
-        ]);
-
-        return this.makeJournalInfoForDetail(journalId, journalInfoRaw, photoUrls);
+        return this.makeJournalInfoForDetail(journalId, journalInfoRaw);
     }
 
     private makeExcrementsInfoForDetail(dogIds: number[], excrementsCount: any[]): ExcrementsInfoForDetail[] {

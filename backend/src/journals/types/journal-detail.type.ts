@@ -6,7 +6,6 @@ import { Excrement } from 'src/excrements/types/excrement.type';
 
 import { Journals } from '../journals.entity';
 
-
 export class PhotoUrlType {
     @IsNotEmpty()
     @IsString()
@@ -68,7 +67,7 @@ export class JournalInfoForDetail {
     photoUrls: string[];
 
     static getKeysForJournalTable(): Array<keyof Journals> {
-        return ['routes', 'memo'];
+        return ['journalPhotos', 'routes', 'memo'];
     }
 }
 
