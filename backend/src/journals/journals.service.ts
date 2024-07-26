@@ -232,16 +232,16 @@ export class JournalsService {
 
     @Transactional()
     async deleteJournal(userId: number, journalId: number) {
-        const photoUrls: string[] = await this.journalPhotosService.getPhotoUrlsByJournalId(journalId);
         const dogIds: number[] = await this.journalsDogsService.getDogIdsByJournalId(journalId);
         const journalInfo = await this.journalsRepository.findOne({ where: { id: journalId } });
+        const journalPhotos: string[] = JSON.parse(journalInfo.journalPhotos);
 
         const subtractTodayWalkTime = (current: number, value: number) => current - value;
         const subtractDogWalkDay = (current: number) => (current -= 1);
         await this.updateDogWalkDay(dogIds, subtractDogWalkDay);
         await this.updateTodayWalkTime(dogIds, journalInfo.duration, subtractTodayWalkTime);
 
-        await this.s3Service.deleteObjects(userId, photoUrls);
+        await this.s3Service.deleteObjects(userId, journalPhotos);
         await this.delete(journalId);
     }
 
