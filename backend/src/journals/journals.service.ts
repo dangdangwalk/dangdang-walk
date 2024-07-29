@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Excrements } from 'src/excrements/excrements.entity';
 import { DeleteResult, EntityManager, FindOptionsWhere, In, InsertResult } from 'typeorm';
-import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { Transactional } from 'typeorm-transactional';
 
 import { Journals } from './journals.entity';
@@ -54,11 +53,8 @@ export class JournalsService {
         return await this.journalsRepository.delete(where);
     }
 
-    private async updateAndFindOne(
-        where: FindOptionsWhere<Journals>,
-        partialEntity: QueryDeepPartialEntity<Journals>,
-    ): Promise<Journals | null> {
-        return await this.journalsRepository.updateAndFindOne(where, partialEntity);
+    private async update(journalId: number, updateData: Partial<Journals>) {
+        this.journalsRepository.update({ id: journalId }, updateData);
     }
 
     private async getOwnJournalIds(userId: number): Promise<number[]> {
@@ -227,7 +223,7 @@ export class JournalsService {
             updateData.journalPhotos = JSON.stringify(updateJournalData.journalPhotos);
         }
 
-        await this.updateAndFindOne({ id: journalId }, updateData);
+        await this.update(journalId, updateData);
     }
 
     @Transactional()
