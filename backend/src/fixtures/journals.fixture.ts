@@ -58,7 +58,7 @@ export const createMockJournal = {
             { lat: 87.4, lng: 85.222 },
             { lat: 75.23, lng: 104.4839 },
         ],
-        photoUrls: ['1/photo1.jpeg', '1/photo2.png'],
+        journalPhotos: ['1/photo1.jpeg', '1/photo2.png'],
         memo: 'Enjoyed the walk with Buddy!',
     },
     excrements: [
@@ -89,7 +89,7 @@ export const mockJournalProfile = {
             },
         ],
         memo: 'Enjoyed the walk with Buddy!',
-        photoUrls: ['1/photo1.jpeg', '1/photo2.png'],
+        journalPhotos: ['1/photo1.jpeg', '1/photo2.png'],
     },
     dogs: [
         {

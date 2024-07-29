@@ -64,7 +64,7 @@ export class JournalInfoForDetail {
 
     @IsNotEmpty()
     @IsString({ each: true })
-    photoUrls: string[];
+    journalPhotos: string[];
 
     static getKeysForJournalTable(): Array<keyof Journals> {
         return ['journalPhotos', 'routes', 'memo'];

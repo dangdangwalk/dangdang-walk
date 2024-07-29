@@ -175,7 +175,6 @@ interface ExcrementData {
 interface InsertMockJournalWithPhotosAndExcrementsParams {
     mockJournal: Journals;
     dogIds: number | number[];
-    photoUrls: string | string[];
     excrements: ExcrementData | ExcrementData[];
 }
 
@@ -183,21 +182,17 @@ interface InsertMockJournalWithPhotosAndExcrementsParams {
 export const insertMockJournalWithPhotosAndExcrements = async ({
     mockJournal,
     dogIds,
-    photoUrls,
     excrements,
 }: InsertMockJournalWithPhotosAndExcrementsParams) => {
     dogIds = Array.isArray(dogIds) ? dogIds : [dogIds];
-    photoUrls = Array.isArray(photoUrls) ? photoUrls : [photoUrls];
     excrements = Array.isArray(excrements) ? excrements : [excrements];
 
     const mockJournalDogs = dogIds.map((dogId) => ({ dogId, journalId: mockJournal.id }));
-    const mockJournalPhotos = photoUrls.map((photoUrl) => ({ photoUrl, journalId: mockJournal.id }));
     const mockExcrements = excrements.map((excrements) => ({ ...excrements, journalId: mockJournal.id }));
 
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 0;');
     await dataSource.getRepository(Journals).save(mockJournal);
     await dataSource.getRepository(JournalsDogs).save(mockJournalDogs);
-    await dataSource.getRepository(JournalPhotos).save(mockJournalPhotos);
     await dataSource.getRepository(Excrements).save(mockExcrements);
     await dataSource.getRepository(DogWalkDay).update({ id: In(dogIds) }, { wed: 1 });
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 1;');

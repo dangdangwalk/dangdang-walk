@@ -30,7 +30,6 @@ import { Dogs } from '../src/dogs/dogs.entity';
 import { GENDER } from '../src/dogs/types/gender.type';
 import { Excrements } from '../src/excrements/excrements.entity';
 import { EXCREMENT } from '../src/excrements/types/excrement.type';
-import { JournalPhotos } from '../src/journal-photos/journal-photos.entity';
 import { Journals } from '../src/journals/journals.entity';
 import { JournalsDogs } from '../src/journals-dogs/journals-dogs.entity';
 import { TodayWalkTime } from '../src/today-walk-time/today-walk-time.entity';
@@ -141,39 +140,55 @@ describe('JournalsController (e2e)', () => {
                         new Journals({
                             id: 1,
                             userId: 1,
-                            routes: '[{"lat": 60.7749, "lng" : 120.4839}, {"lat": 60.7749, "lng" : 104.4839}]',
+                            routes: JSON.stringify([
+                                [87.4, 85.222],
+                                [75.23, 104.4839],
+                            ]),
                             calories: 500,
                             memo: '좋은 날씨',
                             startedAt: new Date('2024-05-05T10:00:00Z'),
+                            journalPhotos: JSON.stringify(['1/test.jpg']),
                             duration: 30,
                             distance: 2000,
                         }),
                         new Journals({
                             id: 2,
                             userId: 1,
-                            routes: '[{"lat": 60.7749, "lng" : 120.4839}, {"lat": 60.7749, "lng" : 104.4839}]',
+                            routes: JSON.stringify([
+                                [87.4, 85.222],
+                                [75.23, 104.4839],
+                            ]),
                             calories: 700,
                             startedAt: new Date('2024-05-07T12:00:00Z'),
+                            journalPhotos: JSON.stringify(['1/test.jpg']),
                             duration: 60,
                             distance: 3000,
                         }),
                         new Journals({
                             id: 3,
                             userId: 1,
-                            routes: '[{"lat": 60.7749, "lng" : 120.4839}, {"lat": 60.7749, "lng" : 104.4839}]',
+                            routes: JSON.stringify([
+                                [87.4, 85.222],
+                                [75.23, 104.4839],
+                            ]),
                             calories: 1200,
                             memo: '산책 중에 친구 만남',
                             startedAt: new Date('2024-05-09T17:00:00Z'),
+                            journalPhotos: JSON.stringify(['1/test.jpg']),
                             duration: 135,
                             distance: 5500,
                         }),
                         new Journals({
                             id: 4,
                             userId: 1,
-                            routes: '[{"lat": 60.7749, "lng" : 120.4839}, {"lat": 60.7749, "lng" : 104.4839}]',
+                            routes: JSON.stringify([
+                                [87.4, 85.222],
+                                [75.23, 104.4839],
+                            ]),
                             calories: 1300,
                             memo: '산책 후 독서',
                             startedAt: new Date('2024-05-09T18:00:00Z'),
+                            journalPhotos: JSON.stringify(['1/test.jpg']),
                             duration: 150,
                             distance: 6000,
                         }),
@@ -382,7 +397,7 @@ describe('JournalsController (e2e)', () => {
                         [87.4, 85.222],
                         [75.23, 104.4839],
                     ],
-                    photoUrls: ['1/photo1.jpeg', '1/photo2.png'],
+                    journalPhotos: ['1/photo1.jpeg', '1/photo2.png'],
                     memo: 'Enjoyed the walk with Buddy!',
                 },
                 excrements: [
@@ -408,7 +423,6 @@ describe('JournalsController (e2e)', () => {
 
                 expect(await dataSource.getRepository(Journals).count()).toBe(1);
                 expect(await dataSource.getRepository(JournalsDogs).count()).toBe(2);
-                expect(await dataSource.getRepository(JournalPhotos).count()).toBe(2);
                 expect(await dataSource.getRepository(Excrements).count({ where: { dogId: 1 } })).toBe(2);
                 expect(await dataSource.getRepository(Excrements).count({ where: { dogId: 2 } })).toBe(1);
 
@@ -452,10 +466,10 @@ describe('JournalsController (e2e)', () => {
                     startedAt: '2024-06-12T00:00:00Z',
                     duration: 3600,
                     routes: [
-                        { lat: 87.4, lng: 85.222 },
-                        { lat: 75.23, lng: 104.4839 },
+                        [87.4, 85.222],
+                        [75.23, 104.4839],
                     ],
-                    photoUrls: ['1/photo1.jpeg', '1/photo2.png'],
+                    journalPhotos: ['1/photo1.jpeg', '1/photo2.png'],
                     memo: 'Enjoyed the walk with Buddy!',
                 },
                 excrements: [
@@ -524,15 +538,18 @@ describe('JournalsController (e2e)', () => {
                     mockJournal: new Journals({
                         id: 1,
                         userId: 1,
-                        routes: '[{"lat": 87.4, "lng" : 85.222}, {"lat": 75.23, "lng" : 104.4839}]',
+                        routes: JSON.stringify([
+                            [87.4, 85.222],
+                            [75.23, 104.4839],
+                        ]),
                         calories: 500,
                         memo: 'Enjoyed the walk with Buddy!',
                         startedAt: new Date('2024-06-12T00:00:00Z'),
+                        journalPhotos: JSON.stringify(['1/photo1.jpeg', '1/photo2.png']),
                         duration: 30,
                         distance: 5,
                     }),
                     dogIds: [1, 2],
-                    photoUrls: ['1/photo1.jpeg', '1/photo2.png'],
                     excrements: [
                         {
                             dogId: 1,
@@ -562,17 +579,11 @@ describe('JournalsController (e2e)', () => {
                 journalInfo: {
                     id: 1,
                     routes: [
-                        {
-                            lat: 87.4,
-                            lng: 85.222,
-                        },
-                        {
-                            lat: 75.23,
-                            lng: 104.4839,
-                        },
+                        [87.4, 85.222],
+                        [75.23, 104.4839],
                     ],
                     memo: 'Enjoyed the walk with Buddy!',
-                    photoUrls: ['1/photo1.jpeg', '1/photo2.png'],
+                    journalPhotos: ['1/photo1.jpeg', '1/photo2.png'],
                 },
                 dogs: [
                     {
@@ -662,15 +673,18 @@ describe('JournalsController (e2e)', () => {
                     mockJournal: new Journals({
                         id: 1,
                         userId: 1,
-                        routes: '[{"lat": 87.4, "lng" : 85.222}, {"lat": 75.23, "lng" : 104.4839}]',
+                        routes: JSON.stringify([
+                            [87.4, 85.222],
+                            [75.23, 104.4839],
+                        ]),
                         calories: 500,
                         memo: 'Enjoyed the walk with Buddy!',
                         startedAt: new Date('2024-06-12T00:00:00Z'),
+                        journalPhotos: JSON.stringify(['1/photo1.jpeg', '1/photo2.png']),
                         duration: 30,
                         distance: 5,
                     }),
                     dogIds: [1, 2],
-                    photoUrls: ['1/photo1.jpeg', '1/photo2.png'],
                     excrements: [
                         {
                             dogId: 1,
@@ -698,7 +712,7 @@ describe('JournalsController (e2e)', () => {
 
             const updateJournalMock = {
                 memo: '메모 수정',
-                photoUrls: ['1/test1.png', '1/test2.jpeg'],
+                journalPhotos: ['1/photo1.png', '1/photo2.jpeg'],
             };
 
             it('204 상태 코드를 반환해야 한다.', async () => {
@@ -711,16 +725,8 @@ describe('JournalsController (e2e)', () => {
                 const updatedJournal = await dataSource.getRepository(Journals).findOne({ where: { id: 1 } });
                 if (!updatedJournal) throw new Error('id가 1인 산책일지를 찾을 수 없습니다');
 
-                const updatedJournalPhotos = await dataSource
-                    .getRepository(JournalPhotos)
-                    .find({ where: { journalId: 1 } });
-                if (!updatedJournalPhotos) throw new Error('id가 1인 산책일지를 찾을 수 없습니다');
-
                 expect(updatedJournal.memo).toBe(updateJournalMock.memo);
-                expect(updatedJournalPhotos).toHaveLength(updateJournalMock.photoUrls.length);
-                expect(updatedJournalPhotos.map((journalPhoto) => journalPhoto.photoUrl)).toMatchObject(
-                    updateJournalMock.photoUrls,
-                );
+                expect(JSON.parse(updatedJournal.journalPhotos)).toEqual(updateJournalMock.journalPhotos);
             });
         });
 
@@ -780,11 +786,11 @@ describe('JournalsController (e2e)', () => {
                         calories: 500,
                         memo: 'Enjoyed the walk with Buddy!',
                         startedAt: new Date('2024-06-12T00:00:00Z'),
+                        journalPhotos: '[]',
                         duration: 30,
                         distance: 5,
                     }),
                     dogIds: [1, 2],
-                    photoUrls: ['1/photo1.jpeg', '1/photo2.png'],
                     excrements: [
                         {
                             dogId: 1,
