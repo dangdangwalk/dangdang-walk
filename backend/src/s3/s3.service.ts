@@ -56,7 +56,7 @@ export class S3Service {
             if (curFilename.startsWith('default/')) continue;
 
             if (!this.checkUserIdInFilename(userId, curFilename)) {
-                throw new ForbiddenException(`유저 ${userId}은 ${curFilename}에 대한 접근 권한이 없습니다`);
+                throw new ForbiddenException(`유저 ${userId}은 이미지 ${curFilename}에 대한 접근 권한이 없습니다`);
             }
 
             objectArray.push({ Key: curFilename });

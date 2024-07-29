@@ -12,7 +12,6 @@ import { Breed } from '../../breed/breed.entity';
 import { DogWalkDay } from '../../dog-walk-day/dog-walk-day.entity';
 import { Dogs } from '../../dogs/dogs.entity';
 import { Excrements } from '../../excrements/excrements.entity';
-import { JournalPhotos } from '../../journal-photos/journal-photos.entity';
 import { Journals } from '../../journals/journals.entity';
 import { JournalsDogs } from '../../journals-dogs/journals-dogs.entity';
 import { TodayWalkTime } from '../../today-walk-time/today-walk-time.entity';
@@ -41,7 +40,6 @@ import { WinstonLoggerService } from '../logger/winstonLogger.service';
                         DogWalkDay,
                         Dogs,
                         Excrements,
-                        JournalPhotos,
                         Journals,
                         JournalsDogs,
                         TodayWalkTime,

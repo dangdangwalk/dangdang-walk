@@ -21,7 +21,6 @@ import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
 import { DogsService } from '../dogs/dogs.service';
 import { ExcrementsService } from '../excrements/excrements.service';
 import { EXCREMENT, Excrement } from '../excrements/types/excrement.type';
-import { JournalPhotosService } from '../journal-photos/journal-photos.service';
 import { JournalsDogs } from '../journals-dogs/journals-dogs.entity';
 import { JournalsDogsService } from '../journals-dogs/journals-dogs.service';
 import { S3Service } from '../s3/s3.service';
@@ -35,7 +34,6 @@ export class JournalsService {
         private readonly journalsRepository: JournalsRepository,
         private readonly journalsDogsService: JournalsDogsService,
         private readonly dogsService: DogsService,
-        private readonly journalPhotosService: JournalPhotosService,
         private readonly excrementsService: ExcrementsService,
         private readonly dogWalkDayService: DogWalkDayService,
         private readonly todayWalkTimeService: TodayWalkTimeService,
