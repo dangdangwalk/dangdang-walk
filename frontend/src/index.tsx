@@ -16,7 +16,9 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import App from './App';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
+import NotFound from '@/components/error/NotFound';
 const router = createBrowserRouter([
+    { path: '*', element: <NotFound /> },
     {
         path: '/',
         element: <App />,
