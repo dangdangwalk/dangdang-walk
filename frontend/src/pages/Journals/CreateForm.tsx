@@ -51,7 +51,7 @@ function CreateForm() {
         calories,
         duration,
         startedAt: serializedStartedAt,
-        photoUrls: photoFileNames,
+        journalPhotos: photoFileNames,
         routes,
     } = receivedState;
     const startedAt = new Date(serializedStartedAt);
@@ -135,7 +135,7 @@ function CreateForm() {
             startedAt: startedAt.toJSON(),
             duration,
             routes,
-            photoUrls: photoFileNames ?? [],
+            journalPhotos: imageFileNames ?? [],
             memo: textAreaRef.current?.value ?? '',
         };
         const excrements = dogs.map((dog) => {
@@ -209,7 +209,7 @@ interface ReceivedState {
     routes: Coords[];
     calories: number;
     duration: number;
-    photoUrls: string[];
+    journalPhotos: string[];
 }
 
 export type ImageFileName = string;

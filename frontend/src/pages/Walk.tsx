@@ -26,7 +26,7 @@ export interface DogWalkData {
     startedAt: string | undefined;
     distance: number | undefined;
     routes: Coords[] | undefined;
-    photoUrls: string[] | undefined;
+    journalPhotos: string[] | undefined;
 }
 export interface JournalCreateFromState extends DogWalkData {
     calories: number;
@@ -43,8 +43,8 @@ function Walk() {
     const { show: showToast } = useToast();
     const spinnerAdd = useStore((state) => state.spinnerAdd);
     const spinnerRemove = useStore((state) => state.spinnerRemove);
-    const photoUrls = useStore((state) => state.photoUrls);
-    const setPhotoUrls = useStore((state) => state.setPhotoUrls);
+    const journalPhotos = useStore((state) => state.journalPhotos);
+    const setJournalPhotos = useStore((state) => state.setJournalPhotos);
     const resetWalkData = useStore((state) => state.resetWalkData);
     const handleBottomSheet = () => {
         setIsDogBottomSheetOpen(!isDogBottomSheetOpen);
@@ -69,7 +69,7 @@ function Walk() {
             resetWalkData();
             await delay(400);
             navigate('/journals/create', {
-                state: { dogs, distance, duration, calories: getCalories(distance), startedAt, routes, photoUrls },
+                state: { dogs, distance, duration, calories: getCalories(distance), startedAt, routes, journalPhotos },
             });
         }
 
@@ -96,7 +96,7 @@ function Walk() {
         if (files === null) return;
 
         const filenames = await uploadImages(files);
-        setPhotoUrls(filenames);
+        setJournalPhotos(filenames);
         showToast('사진이 저장되었습니다 :)');
     };
 

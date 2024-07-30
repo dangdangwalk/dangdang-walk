@@ -36,7 +36,7 @@ interface JournalCreateForm {
         startedAt: string;
         duration: number;
         routes: Coords[];
-        photoUrls: string[];
+        journalPhotos: string[];
         memo: string;
     };
     excrements: Array<Excrement>;
@@ -53,10 +53,10 @@ export interface JournalDetail {
         id: number;
         routes: Array<Coords>;
         memo: string;
-        photoUrls: Array<string>;
+        journalPhotos: Array<string>;
+        excrementCount?: Array<ExcrementCounts>;
     };
     dogs: Array<DogAvatar>;
-    excrements?: Array<ExcrementCounts>;
 }
 
 interface ExcrementCounts {
@@ -67,5 +67,5 @@ interface ExcrementCounts {
 
 interface JournalUpdateForm {
     memo?: string;
-    photoUrls?: Array<string>;
+    journalPhotos?: Array<string>;
 }
