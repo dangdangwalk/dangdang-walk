@@ -97,31 +97,27 @@ export class DogInfoForDetail {
     }
 }
 
-export class ExcrementsInfoForDetail {
-    dogId: number;
-
-    fecesCnt: number;
-
-    urineCnt: number;
-
-    constructor() {
-        return {
-            dogId: 0,
-            fecesCnt: 0,
-            urineCnt: 0,
-        };
-    }
-}
+export type JournalDetailRaw = {
+    id: number;
+    routes: string;
+    memo: string;
+    journalPhotos: string;
+    excrementCount: string;
+};
 
 export class JournalInfoForDetail {
-    routes: Location[];
+    id: number;
+
+    routes: [number, number][];
 
     memo: string;
 
     journalPhotos: string[];
 
+    excrementCount: ExcrementCount[];
+
     static getKeysForJournalTable(): Array<keyof Journals> {
-        return ['routes', 'memo'];
+        return ['id', 'routes', 'memo', 'journalPhotos', 'excrementCount'];
     }
 }
 
@@ -130,11 +126,8 @@ export class JournalDetail {
 
     dogs: DogInfoForDetail[];
 
-    excrements: ExcrementsInfoForDetail[];
-
-    constructor(journalInfo: JournalInfoForDetail, dogInfo: DogInfoForDetail[], excrements: ExcrementsInfoForDetail[]) {
+    constructor(journalInfo: JournalInfoForDetail, dogInfo: DogInfoForDetail[]) {
         this.journalInfo = journalInfo;
         this.dogs = dogInfo;
-        this.excrements = excrements;
     }
 }
