@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 
-import { ExcrementsCount } from 'src/journals/types/journal-detail.type';
 import { EntityManager, InsertResult } from 'typeorm';
 
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
 import { Excrements } from './excrements.entity';
 import { ExcrementsRepository } from './excrements.repository';
+import { Excrement } from './types/excrement.type';
 
 @Injectable()
 export class ExcrementsService {
@@ -21,7 +21,16 @@ export class ExcrementsService {
         return await this.excrementsRepository.insert(entity);
     }
 
-    async getExcrementsCount(journalId: number, dogIds: number[]): Promise<ExcrementsCount[]> {
+    async getExcrementsCount(
+        journalId: number,
+        dogIds: number[],
+    ): Promise<
+        {
+            dogId: number;
+            type: Excrement;
+            count: number;
+        }[]
+    > {
         return await this.entityManager
             .createQueryBuilder(Excrements, 'excrements')
             .select(['dog_id AS dogId', 'type', 'COUNT(*) AS count'])

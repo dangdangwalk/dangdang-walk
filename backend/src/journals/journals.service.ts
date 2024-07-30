@@ -5,17 +5,20 @@ import { Transactional } from 'typeorm-transactional';
 
 import { Journals } from './journals.entity';
 import { JournalsRepository } from './journals.repository';
-import { CreateExcrementsInfo, CreateJournalData, CreateJournalInfo } from './types/create-journal-data.type';
 import {
+    CreateExcrementsInfo,
+    CreateJournalData,
+    CreateJournalInfo,
     DogInfoForDetail,
-    ExcrementsCount,
+    DogWalkJournalEntry,
+    ExcrementCount,
     ExcrementsInfoForDetail,
     JournalDetail,
     JournalInfoForDetail,
-} from './types/journal-detail.type';
-
-import { DogWalkJournalEntry, JournalInfoForList } from './types/journal-info.type';
-import { UpdateJournalData, UpdateTodayWalkTimeOperation } from './types/update-journal-data.type';
+    JournalInfoForList,
+    UpdateJournalData,
+    UpdateTodayWalkTimeOperation,
+} from './types/journal.types';
 
 import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
 import { DogsService } from '../dogs/dogs.service';
@@ -112,10 +115,11 @@ export class JournalsService {
     }
 
     async getExcrementsInfoForDetail(journalId: number, journalDogIds: number[]) {
-        const excrementsCountRaw: ExcrementsCount[] = await this.excrementsService.getExcrementsCount(
-            journalId,
-            journalDogIds,
-        );
+        const excrementsCountRaw: {
+            dogId: number;
+            type: Excrement;
+            count: number;
+        }[] = await this.excrementsService.getExcrementsCount(journalId, journalDogIds);
         return this.makeExcrementsInfoForDetail(journalDogIds, excrementsCountRaw);
     }
 
@@ -135,17 +139,25 @@ export class JournalsService {
         return new JournalDetail(journalInfo, dogInfo, excrementsInfo);
     }
 
-    private makeJournalData(userId: number, createJournalInfo: CreateJournalInfo): Partial<Journals> {
+    private makeJournalData(
+        userId: number,
+        journalInfo: CreateJournalInfo,
+        excrementsInfo: CreateExcrementsInfo[],
+    ): Partial<Journals> {
         const journalData = {
-            ...makeSubObject(createJournalInfo, CreateJournalInfo.getKeysForJournalTable()),
+            ...makeSubObject(journalInfo, CreateJournalInfo.getKeysForJournalTable()),
             userId,
         };
         if (!journalData.memo) {
             journalData.memo = '';
         }
-        journalData.journalPhotos = JSON.stringify(
-            createJournalInfo.journalPhotos ? createJournalInfo.journalPhotos : [],
-        );
+        const excrementsCntArr: ExcrementCount[] = excrementsInfo.map((cur) => ({
+            dogId: cur.dogId,
+            fecesCnt: cur.fecesLocations.length,
+            urineCnt: cur.urineLocations.length,
+        }));
+        journalData.excrementCount = JSON.stringify(excrementsCntArr);
+        journalData.journalPhotos = JSON.stringify(journalInfo.journalPhotos ? journalInfo.journalPhotos : []);
         journalData.routes = JSON.stringify(journalData.routes);
         return journalData;
     }
@@ -194,7 +206,7 @@ export class JournalsService {
     @Transactional()
     async createJournal(userId: number, createJournalData: CreateJournalData) {
         const dogIds = createJournalData.dogs;
-        const journalData = this.makeJournalData(userId, createJournalData.journalInfo);
+        const journalData = this.makeJournalData(userId, createJournalData.journalInfo, createJournalData.excrements);
         const createJournalResult = await this.create(journalData);
 
         await this.journalsDogsService.createJournalDogs(createJournalResult.id, dogIds);
