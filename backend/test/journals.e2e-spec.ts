@@ -29,7 +29,6 @@ import { DogWalkDay } from '../src/dog-walk-day/dog-walk-day.entity';
 import { Dogs } from '../src/dogs/dogs.entity';
 import { GENDER } from '../src/dogs/types/gender.type';
 import { Excrements } from '../src/excrements/excrements.entity';
-import { EXCREMENT } from '../src/excrements/types/excrement.type';
 import { Journals } from '../src/journals/journals.entity';
 import { JournalsDogs } from '../src/journals-dogs/journals-dogs.entity';
 import { TodayWalkTime } from '../src/today-walk-time/today-walk-time.entity';
@@ -150,6 +149,18 @@ describe('JournalsController (e2e)', () => {
                             journalPhotos: JSON.stringify(['1/test.jpg']),
                             duration: 30,
                             distance: 2000,
+                            excrementCount: JSON.stringify([
+                                {
+                                    dogId: 1,
+                                    fecesCnt: 1,
+                                    urineCnt: 1,
+                                },
+                                {
+                                    dogId: 2,
+                                    fecesCnt: 2,
+                                    urineCnt: 0,
+                                },
+                            ]),
                         }),
                         new Journals({
                             id: 2,
@@ -163,6 +174,18 @@ describe('JournalsController (e2e)', () => {
                             journalPhotos: JSON.stringify(['1/test.jpg']),
                             duration: 60,
                             distance: 3000,
+                            excrementCount: JSON.stringify([
+                                {
+                                    dogId: 1,
+                                    fecesCnt: 1,
+                                    urineCnt: 1,
+                                },
+                                {
+                                    dogId: 2,
+                                    fecesCnt: 2,
+                                    urineCnt: 0,
+                                },
+                            ]),
                         }),
                         new Journals({
                             id: 3,
@@ -177,6 +200,18 @@ describe('JournalsController (e2e)', () => {
                             journalPhotos: JSON.stringify(['1/test.jpg']),
                             duration: 135,
                             distance: 5500,
+                            excrementCount: JSON.stringify([
+                                {
+                                    dogId: 1,
+                                    fecesCnt: 1,
+                                    urineCnt: 1,
+                                },
+                                {
+                                    dogId: 2,
+                                    fecesCnt: 2,
+                                    urineCnt: 0,
+                                },
+                            ]),
                         }),
                         new Journals({
                             id: 4,
@@ -191,6 +226,18 @@ describe('JournalsController (e2e)', () => {
                             journalPhotos: JSON.stringify(['1/test.jpg']),
                             duration: 150,
                             distance: 6000,
+                            excrementCount: JSON.stringify([
+                                {
+                                    dogId: 1,
+                                    fecesCnt: 1,
+                                    urineCnt: 1,
+                                },
+                                {
+                                    dogId: 2,
+                                    fecesCnt: 2,
+                                    urineCnt: 0,
+                                },
+                            ]),
                         }),
                     ],
                     dogId: 1,
@@ -548,25 +595,20 @@ describe('JournalsController (e2e)', () => {
                         journalPhotos: JSON.stringify(['1/photo1.jpeg', '1/photo2.png']),
                         duration: 30,
                         distance: 5,
+                        excrementCount: JSON.stringify([
+                            {
+                                dogId: 1,
+                                fecesCnt: 1,
+                                urineCnt: 1,
+                            },
+                            {
+                                dogId: 2,
+                                fecesCnt: 2,
+                                urineCnt: 0,
+                            },
+                        ]),
                     }),
                     dogIds: [1, 2],
-                    excrements: [
-                        {
-                            dogId: 1,
-                            type: EXCREMENT.Feces,
-                            coordinate: `POINT(87.4 85.222)`,
-                        },
-                        {
-                            dogId: 1,
-                            type: EXCREMENT.Urine,
-                            coordinate: `POINT(87.4 85.222)`,
-                        },
-                        {
-                            dogId: 2,
-                            type: EXCREMENT.Feces,
-                            coordinate: `POINT(75.23 104.4839)`,
-                        },
-                    ],
                 });
             });
 
@@ -584,6 +626,18 @@ describe('JournalsController (e2e)', () => {
                     ],
                     memo: 'Enjoyed the walk with Buddy!',
                     journalPhotos: ['1/photo1.jpeg', '1/photo2.png'],
+                    excrementCount: [
+                        {
+                            dogId: 1,
+                            fecesCnt: 1,
+                            urineCnt: 1,
+                        },
+                        {
+                            dogId: 2,
+                            fecesCnt: 2,
+                            urineCnt: 0,
+                        },
+                    ],
                 },
                 dogs: [
                     {
@@ -595,18 +649,6 @@ describe('JournalsController (e2e)', () => {
                         id: 2,
                         name: '루이',
                         profilePhotoUrl: 'mock_profile_photo2.jpg',
-                    },
-                ],
-                excrements: [
-                    {
-                        dogId: 1,
-                        fecesCnt: 1,
-                        urineCnt: 1,
-                    },
-                    {
-                        dogId: 2,
-                        fecesCnt: 1,
-                        urineCnt: 0,
                     },
                 ],
             };
@@ -683,25 +725,20 @@ describe('JournalsController (e2e)', () => {
                         journalPhotos: JSON.stringify(['1/photo1.jpeg', '1/photo2.png']),
                         duration: 30,
                         distance: 5,
+                        excrementCount: JSON.stringify([
+                            {
+                                dogId: 1,
+                                fecesCnt: 1,
+                                urineCnt: 1,
+                            },
+                            {
+                                dogId: 2,
+                                fecesCnt: 2,
+                                urineCnt: 0,
+                            },
+                        ]),
                     }),
                     dogIds: [1, 2],
-                    excrements: [
-                        {
-                            dogId: 1,
-                            type: EXCREMENT.Feces,
-                            coordinate: `POINT(87.4 85.222)`,
-                        },
-                        {
-                            dogId: 1,
-                            type: EXCREMENT.Urine,
-                            coordinate: `POINT(87.4 85.222)`,
-                        },
-                        {
-                            dogId: 2,
-                            type: EXCREMENT.Feces,
-                            coordinate: `POINT(75.23 104.4839)`,
-                        },
-                    ],
                 });
             });
 
@@ -789,25 +826,20 @@ describe('JournalsController (e2e)', () => {
                         journalPhotos: '[]',
                         duration: 30,
                         distance: 5,
+                        excrementCount: JSON.stringify([
+                            {
+                                dogId: 1,
+                                fecesCnt: 1,
+                                urineCnt: 1,
+                            },
+                            {
+                                dogId: 2,
+                                fecesCnt: 2,
+                                urineCnt: 0,
+                            },
+                        ]),
                     }),
                     dogIds: [1, 2],
-                    excrements: [
-                        {
-                            dogId: 1,
-                            type: EXCREMENT.Feces,
-                            coordinate: `POINT(87.4 85.222)`,
-                        },
-                        {
-                            dogId: 1,
-                            type: EXCREMENT.Urine,
-                            coordinate: `POINT(87.4 85.222)`,
-                        },
-                        {
-                            dogId: 2,
-                            type: EXCREMENT.Feces,
-                            coordinate: `POINT(75.23 104.4839)`,
-                        },
-                    ],
                 });
                 const fakeDate = new Date('2024-06-12T00:00:00Z');
                 setFakeDate(fakeDate);
