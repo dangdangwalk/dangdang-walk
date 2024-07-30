@@ -164,13 +164,21 @@ function CreateForm() {
         navigate('/');
     }
 
+    function getFileType(file: File) {
+        let fileType: string = file.type.split('/').pop()?.toLowerCase() || '';
+        if (fileType === '') {
+            fileType = file.name.split('.').pop()?.toLowerCase() || '';
+        }
+        return fileType;
+    }
+
     async function handleAddImages(e: FormEvent<HTMLInputElement>) {
         const files = e.currentTarget.files;
 
         if (files === null) return;
         setIsUploading(true);
 
-        const fileTypes = Array.from(files).map((file) => file.type);
+        const fileTypes: string[] = Array.from(files).map((file) => getFileType(file));
         const uploadUrlResponses = await getUploadUrl(fileTypes);
         const uploadUrls = uploadUrlResponses.map((uploadUrlResponse) => uploadUrlResponse.url);
 
