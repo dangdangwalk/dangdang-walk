@@ -1,25 +1,27 @@
 import { JournalDetail, fetchJournal } from '@/api/journal';
+import { queryKeys } from '@/constants';
 import { useStore } from '@/store';
+import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 const useJournal = (journalId: number) => {
     const isSignedIn = useStore((state) => state.isSignedIn);
     const [journal, setJournal] = useState<JournalDetail>({
-        journalInfo: { id: 0, routes: [], memo: '', photoUrls: [] },
+        journalInfo: { id: 0, routes: [], memo: '', journalPhotos: [], excrementCount: [] },
         dogs: [],
+    });
+    const { data, isSuccess } = useQuery<JournalDetail>({
+        queryKey: [queryKeys.JOURNAL, journalId],
+        queryFn: () => fetchJournal(journalId),
+        staleTime: 0,
+        enabled: isSignedIn,
     });
 
     useEffect(() => {
-        if (isSignedIn) {
-            const asyncFunction = async () => {
-                const fetchedJournal = await fetchJournal(journalId);
-                setJournal(fetchedJournal);
-            };
-            asyncFunction();
-        }
-    }, [isSignedIn]);
+        if (data) setJournal(data);
+    }, [isSuccess]);
 
-    return journal;
+    return journal as JournalDetail;
 };
 
 export default useJournal;

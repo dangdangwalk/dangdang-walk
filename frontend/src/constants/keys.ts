@@ -17,6 +17,7 @@ const queryKeys = {
     SUNSET_SUNRISE: 'sunsetSunrise',
     WEATHER: 'weather',
     JOURNALS: 'journals',
+    JOURNAL: 'journal',
 } as const;
 
 const storageKeys = {
