@@ -21,7 +21,7 @@ export const useStore = create<AuthState & CropState & LoginBottomSheetState & S
                 routes: state.routes,
                 distance: state.distance,
                 startedAt: state.startedAt,
-                photoUrls: state.photoUrls,
+                journalPhotos: state.journalPhotos,
             }),
             storage: createJSONStorage(() => localStorage),
         })(...args),

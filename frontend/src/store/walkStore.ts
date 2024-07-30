@@ -7,7 +7,7 @@ const initialState: State = {
     distance: 0,
     startedAt: '',
     routes: [],
-    photoUrls: [],
+    journalPhotos: [],
 };
 
 const createWalkSlice: StateCreator<StateAndActions, [['zustand/devtools', never], ['zustand/persist', unknown]]> = (
@@ -35,8 +35,8 @@ const createWalkSlice: StateCreator<StateAndActions, [['zustand/devtools', never
     setStartedAt: (startedAt: string) => {
         set({ startedAt }, false, 'walk/setStartedAt');
     },
-    setPhotoUrls: (photoUrls: string[]) => {
-        set((state) => ({ photoUrls: [...state.photoUrls, ...photoUrls] }), false, 'walk/setPhotoUrls');
+    setJournalPhotos: (journalPhotos: string[]) => {
+        set((state) => ({ journalPhotos: [...state.journalPhotos, ...journalPhotos] }), false, 'walk/setJournalPhotos');
     },
     resetWalkData: () => {
         set(initialState, false, 'walk/resetWalkData');
@@ -48,7 +48,7 @@ interface State {
     routes: Coords[];
     distance: number;
     startedAt: string;
-    photoUrls: string[];
+    journalPhotos: string[];
 }
 interface Actions {
     setWalkingDogs: (dogs: WalkingDog[]) => void;
@@ -58,7 +58,7 @@ interface Actions {
     addRoutes: (routes: Coords) => void;
     setRoutes: (routes: Coords[]) => void;
     setStartedAt: (startedAt: string) => void;
-    setPhotoUrls: (photoUrls: string[]) => void;
+    setJournalPhotos: (journalPhotos: string[]) => void;
     resetWalkData: () => void;
 }
 export interface StateAndActions extends State, Actions {}

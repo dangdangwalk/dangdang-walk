@@ -1,4 +1,5 @@
-import { remove as removeJournal, update as updateJournal } from '@/api/journal';
+import { JournalDetail, remove as removeJournal, update as updateJournal } from '@/api/journal';
+import queryClient from '@/api/queryClient';
 import { deleteImages, getUploadUrl, uploadImage } from '@/api/upload';
 import { ReactComponent as Arrow } from '@/assets/icons/ic-arrow-right.svg';
 import { ReactComponent as Meatball } from '@/assets/icons/ic-meatball.svg';
@@ -23,6 +24,7 @@ import Navbar from '@/components/journals/Navbar';
 import PhotoSection from '@/components/journals/PhotoSection';
 import Map from '@/components/walk/Map';
 import WalkInfo from '@/components/walk/WalkInfo';
+import { queryKeys } from '@/constants';
 import useJournal from '@/hooks/useJournal';
 import useToast from '@/hooks/useToast';
 import { useStore } from '@/store';
@@ -33,8 +35,8 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 function Detail() {
     const params = useParams();
     const journalDetail = useJournal(Number(params.journalId));
-    const { journalInfo, dogs: dogsFromAPI, excrements = [] } = journalDetail;
-    const { id: journalId, routes, memo, photoUrls: photoFileNames } = journalInfo;
+    const { journalInfo, dogs: dogsFromAPI } = journalDetail as JournalDetail;
+    const { id: journalId, routes, memo, journalPhotos, excrementCount = [] } = journalInfo;
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -45,7 +47,7 @@ function Detail() {
 
     const [openModal, setOpenModal] = useState(false);
     const [isBottomsheetOpen, setIsBottomsheetOpen] = useState(false);
-    const [imageFileNames, setImageFileNames] = useState<Array<ImageFileName>>([]);
+    const [imageFileNames, setImageFileNames] = useState<Array<ImageFileName>>(journalPhotos);
     const [isUploading, setIsUploading] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [isModifying, setIsModifying] = useState(false);
@@ -66,7 +68,7 @@ function Detail() {
     const { dogName, journalCnt: journalCount, calories, duration, distance } = receivedState;
 
     const dogs: Array<CompanionDog> = dogsFromAPI.map((dog) => {
-        const foundExcrement = excrements.find((excrement) => excrement.dogId === dog.id);
+        const foundExcrement = excrementCount.find((excrement) => excrement.dogId === dog.id);
         const fecesCount = foundExcrement?.fecesCnt ?? 0;
         const urineCount = foundExcrement?.urineCnt ?? 0;
 
@@ -78,13 +80,13 @@ function Detail() {
             if (!dog.profilePhotoUrl) return;
             dog.profilePhotoUrl = getFileName(dog.profilePhotoUrl);
         });
-
-        setImageFileNames(photoFileNames);
     }, [location]);
 
     useEffect(() => {
         if (textAreaRef.current === null) return;
         textAreaRef.current.value = memo;
+
+        setImageFileNames(journalPhotos);
     }, [journalDetail]);
 
     return (
@@ -175,9 +177,9 @@ function Detail() {
         addSpinner();
 
         const memo = textAreaRef.current?.value ?? '';
-        const photoUrls = imageFileNames;
-        await updateJournal(journalId, { memo, photoUrls });
-
+        const journalPhotos = imageFileNames;
+        await updateJournal(journalId, { memo, journalPhotos });
+        queryClient.invalidateQueries({ queryKey: [queryKeys.JOURNAL, journalId] });
         setIsSaving(false);
         removeSpinner();
         showToast('산책 기록이 저장되었습니다.');
@@ -193,13 +195,21 @@ function Detail() {
         navigate(-1);
     }
 
+    function getFileType(file: File) {
+        let fileType: string = file.type.split('/').pop()?.toLowerCase() || '';
+        if (fileType === '') {
+            fileType = file.name.split('.').pop()?.toLowerCase() || '';
+        }
+        return fileType;
+    }
+
     async function handleAddImages(e: FormEvent<HTMLInputElement>) {
         const files = e.currentTarget.files;
 
         if (files === null) return;
         setIsUploading(true);
 
-        const fileTypes = Array.from(files).map((file) => file.type);
+        const fileTypes: string[] = Array.from(files).map((file) => getFileType(file));
         const uploadUrlResponses = await getUploadUrl(fileTypes);
         const uploadUrls = uploadUrlResponses.map((uploadUrlResponse) => uploadUrlResponse.url);
 
