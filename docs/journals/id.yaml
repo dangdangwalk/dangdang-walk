@@ -19,7 +19,7 @@ patch:
             memo:
               type: string
               description: 산책일지 메모
-            journalsPhotos:
+            journalPhotos:
               type: array
               items:
                 type: string
@@ -101,15 +101,39 @@ get:
                     type: string
                     description: 산책일지 메모
                     example: "메모 1"
-                  journalsPhotos:
+                  journalPhotos:
                     type: array
                     items:
                       type: string
                     description: S3에 업로드한 산책일지 사진 경로
                     example: "1/oifjwe.jpg"
+                  excrementCount:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        dogId:
+                          type: number
+                          description: 배변한 강아지 id
+                          example: 2
+                        fecesCnt:
+                          type: number
+                          description: 대변 본 횟수
+                          example: 1
+                        urineCnt:
+                          type: number
+                          description: 소변 본 횟수
+                          example: 2
+                      required:
+                        - dogId
+                        - fecesCnt
+                        - urineCnt
                 required:
                   - id
                   - routes
+                  - memo
+                  - journalPhotos
+                  - excrementCount
               dogs:
                 type: array
                 items:
@@ -131,27 +155,7 @@ get:
                     - id
                     - name
                     - profilePhotoUrl
-              excrements:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    dogId:
-                      type: number
-                      description: 배변한 강아지 id
-                      example: 2
-                    fecesCnt:
-                      type: number
-                      description: 대변 본 횟수
-                      example: 1
-                    urineCnt:
-                      type: number
-                      description: 소변 본 횟수
-                      example: 2
-                  required:
-                    - dogId
-                    - fecesCnt
-                    - urineCnt
+
             required:
               - journalInfo
               - dogs

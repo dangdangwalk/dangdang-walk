@@ -104,6 +104,18 @@ describe('StatisticsController (e2e)', () => {
                     journalPhotos: JSON.stringify(['1/238723740234.jpg']),
                     duration: 30,
                     distance: 2000,
+                    excrementCount: JSON.stringify([
+                        {
+                            dogId: 1,
+                            fecesCnt: 1,
+                            urineCnt: 1,
+                        },
+                        {
+                            dogId: 2,
+                            fecesCnt: 2,
+                            urineCnt: 0,
+                        },
+                    ]),
                 }),
                 new Journals({
                     id: 2,
@@ -117,6 +129,18 @@ describe('StatisticsController (e2e)', () => {
                     journalPhotos: JSON.stringify(['1/238723740234.jpg']),
                     duration: 60,
                     distance: 3000,
+                    excrementCount: JSON.stringify([
+                        {
+                            dogId: 1,
+                            fecesCnt: 1,
+                            urineCnt: 1,
+                        },
+                        {
+                            dogId: 2,
+                            fecesCnt: 2,
+                            urineCnt: 0,
+                        },
+                    ]),
                 }),
                 new Journals({
                     id: 3,
@@ -131,6 +155,18 @@ describe('StatisticsController (e2e)', () => {
                     journalPhotos: JSON.stringify(['1/238723740234.jpg']),
                     duration: 135,
                     distance: 5500,
+                    excrementCount: JSON.stringify([
+                        {
+                            dogId: 1,
+                            fecesCnt: 1,
+                            urineCnt: 1,
+                        },
+                        {
+                            dogId: 2,
+                            fecesCnt: 2,
+                            urineCnt: 0,
+                        },
+                    ]),
                 }),
                 new Journals({
                     id: 4,
@@ -145,6 +181,18 @@ describe('StatisticsController (e2e)', () => {
                     journalPhotos: JSON.stringify(['1/238723740234.jpg']),
                     duration: 150,
                     distance: 6000,
+                    excrementCount: JSON.stringify([
+                        {
+                            dogId: 1,
+                            fecesCnt: 1,
+                            urineCnt: 1,
+                        },
+                        {
+                            dogId: 2,
+                            fecesCnt: 2,
+                            urineCnt: 0,
+                        },
+                    ]),
                 }),
             ],
             dogId: 1,

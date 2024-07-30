@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { UpdateDogWalkDayOperation } from 'src/journals/types/update-journal-data.type';
+import { UpdateDogWalkDayOperation } from 'src/journals/types/journal.types';
 import { EntityManager, FindOptionsWhere, In } from 'typeorm';
 
 import { DogWalkDay } from './dog-walk-day.entity';

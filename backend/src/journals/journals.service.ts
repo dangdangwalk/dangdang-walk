@@ -5,17 +5,20 @@ import { Transactional } from 'typeorm-transactional';
 
 import { Journals } from './journals.entity';
 import { JournalsRepository } from './journals.repository';
-import { CreateExcrementsInfo, CreateJournalData, CreateJournalInfo } from './types/create-journal-data.type';
 import {
+    CreateExcrementsInfo,
+    CreateJournalData,
+    CreateJournalInfo,
     DogInfoForDetail,
-    ExcrementsCount,
-    ExcrementsInfoForDetail,
+    DogWalkJournalEntry,
+    ExcrementCount,
     JournalDetail,
+    JournalDetailRaw,
     JournalInfoForDetail,
-} from './types/journal-detail.type';
-
-import { DogWalkJournalEntry, JournalInfoForList } from './types/journal-info.type';
-import { UpdateJournalData, UpdateTodayWalkTimeOperation } from './types/update-journal-data.type';
+    JournalInfoForList,
+    UpdateJournalData,
+    UpdateTodayWalkTimeOperation,
+} from './types/journal.types';
 
 import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
 import { DogsService } from '../dogs/dogs.service';
@@ -66,41 +69,18 @@ export class JournalsService {
         return checkIfExistsInArr(myJournalIds, journalIds);
     }
 
-    private makeJournalInfoForDetail(journalId: number, journalInfoRaw: Partial<Journals>) {
-        const journalInfo = makeSubObject(journalInfoRaw, JournalInfoForDetail.getKeysForJournalTable());
+    private makeJournalInfoForDetail(journalId: number, journalInfoRaw: JournalDetailRaw) {
+        const journalInfo: JournalInfoForDetail = makeSubObject(
+            journalInfoRaw,
+            JournalInfoForDetail.getKeysForJournalTable(),
+        );
 
         journalInfo.id = journalId;
-        journalInfo.routes = JSON.parse(journalInfo.routes);
-        journalInfo.journalPhotos = JSON.parse(journalInfo.journalPhotos);
+        journalInfo.routes = JSON.parse(journalInfoRaw.routes);
+        journalInfo.journalPhotos = JSON.parse(journalInfoRaw.journalPhotos);
+        journalInfo.excrementCount = JSON.parse(journalInfoRaw.excrementCount);
+
         return journalInfo;
-    }
-
-    async getJournalInfoForDetail(journalId: number): Promise<JournalInfoForDetail> {
-        const journalInfoRaw = await this.journalsRepository.findOne({
-            where: { id: journalId },
-            select: JournalInfoForDetail.getKeysForJournalTable(),
-        });
-
-        return this.makeJournalInfoForDetail(journalId, journalInfoRaw);
-    }
-
-    private makeExcrementsInfoForDetail(dogIds: number[], excrementsCount: any[]): ExcrementsInfoForDetail[] {
-        const excrementsInfoArray: ExcrementsInfoForDetail[] = [];
-
-        for (let i = 0; i < dogIds.length; i++) {
-            const excrementsInfo = new ExcrementsInfoForDetail();
-
-            excrementsInfo.dogId = dogIds[i];
-            for (let j = 0; j < excrementsCount.length; j++) {
-                if (excrementsCount[j].dogId === dogIds[i]) {
-                    excrementsCount[j].type === 'FECES'
-                        ? (excrementsInfo.fecesCnt = parseInt(excrementsCount[j].count))
-                        : (excrementsInfo.urineCnt = parseInt(excrementsCount[j].count));
-                }
-            }
-            excrementsInfoArray.push(excrementsInfo);
-        }
-        return excrementsInfoArray;
     }
 
     async getDogsInfoForDetail(dogIds: number[]): Promise<DogInfoForDetail[]> {
@@ -111,41 +91,40 @@ export class JournalsService {
         return makeSubObjectsArray(dogInfoRaw, DogInfoForDetail.getKeysForDogTable());
     }
 
-    async getExcrementsInfoForDetail(journalId: number, journalDogIds: number[]) {
-        const excrementsCountRaw: ExcrementsCount[] = await this.excrementsService.getExcrementsCount(
-            journalId,
-            journalDogIds,
-        );
-        return this.makeExcrementsInfoForDetail(journalDogIds, excrementsCountRaw);
-    }
-
     async getJournalDetail(journalId: number): Promise<JournalDetail> {
         const journalDogIds: number[] = await this.journalsDogsService.getDogIdsByJournalId(journalId);
 
-        const [journalInfo, dogInfo, excrementsInfo]: [
-            JournalInfoForDetail,
-            DogInfoForDetail[],
-            ExcrementsInfoForDetail[],
-        ] = await Promise.all([
-            this.getJournalInfoForDetail(journalId),
+        const [journalInfoRaw, dogInfo]: [JournalDetailRaw, DogInfoForDetail[]] = await Promise.all([
+            await this.journalsRepository.findOne({
+                where: { id: journalId },
+                select: [...JournalInfoForDetail.getKeysForJournalTable()],
+            }),
             this.getDogsInfoForDetail(journalDogIds),
-            this.getExcrementsInfoForDetail(journalId, journalDogIds),
         ]);
+        const journalInfo: JournalInfoForDetail = this.makeJournalInfoForDetail(journalId, journalInfoRaw);
 
-        return new JournalDetail(journalInfo, dogInfo, excrementsInfo);
+        return new JournalDetail(journalInfo, dogInfo);
     }
 
-    private makeJournalData(userId: number, createJournalInfo: CreateJournalInfo): Partial<Journals> {
+    private makeJournalData(
+        userId: number,
+        journalInfo: CreateJournalInfo,
+        excrementsInfo: CreateExcrementsInfo[],
+    ): Partial<Journals> {
         const journalData = {
-            ...makeSubObject(createJournalInfo, CreateJournalInfo.getKeysForJournalTable()),
+            ...makeSubObject(journalInfo, CreateJournalInfo.getKeysForJournalTable()),
             userId,
         };
         if (!journalData.memo) {
             journalData.memo = '';
         }
-        journalData.journalPhotos = JSON.stringify(
-            createJournalInfo.journalPhotos ? createJournalInfo.journalPhotos : [],
-        );
+        const excrementsCntArr: ExcrementCount[] = excrementsInfo.map((cur) => ({
+            dogId: cur.dogId,
+            fecesCnt: cur.fecesLocations.length,
+            urineCnt: cur.urineLocations.length,
+        }));
+        journalData.excrementCount = JSON.stringify(excrementsCntArr);
+        journalData.journalPhotos = JSON.stringify(journalInfo.journalPhotos ? journalInfo.journalPhotos : []);
         journalData.routes = JSON.stringify(journalData.routes);
         return journalData;
     }
@@ -194,7 +173,7 @@ export class JournalsService {
     @Transactional()
     async createJournal(userId: number, createJournalData: CreateJournalData) {
         const dogIds = createJournalData.dogs;
-        const journalData = this.makeJournalData(userId, createJournalData.journalInfo);
+        const journalData = this.makeJournalData(userId, createJournalData.journalInfo, createJournalData.excrements);
         const createJournalResult = await this.create(journalData);
 
         await this.journalsDogsService.createJournalDogs(createJournalResult.id, dogIds);
@@ -323,6 +302,7 @@ export class JournalsService {
     //TODO: 코드로 바꿨을 때 성능 향상 되는지 확인해보기
     private async getJournalIdsByDogIdAndDate(dogId: number, date: string): Promise<number[]> {
         const startEndDate = getStartAndEndOfDay(new Date(date));
+
         const result = await this.entityManager
             .createQueryBuilder(Journals, 'journals')
             .select([
