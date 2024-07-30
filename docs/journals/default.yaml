@@ -54,7 +54,7 @@ post:
                         type: number
                         description: 경도
                         example: 100
-                photoUrls:
+                journalPhotos:
                   type: array
                   items:
                     type: string

@@ -19,7 +19,7 @@ patch:
             memo:
               type: string
               description: 산책일지 메모
-            photoUrls:
+            journalsPhotos:
               type: array
               items:
                 type: string
@@ -101,7 +101,7 @@ get:
                     type: string
                     description: 산책일지 메모
                     example: "메모 1"
-                  photoUrls:
+                  journalsPhotos:
                     type: array
                     items:
                       type: string

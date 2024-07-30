@@ -8,5 +8,5 @@ export class UpdateJournalDto {
     @IsOptional()
     @IsArray()
     @IsString({ each: true })
-    photoUrls: string[];
+    journalPhotos: string[];
 }

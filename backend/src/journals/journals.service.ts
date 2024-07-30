@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Excrements } from 'src/excrements/excrements.entity';
 import { DeleteResult, EntityManager, FindOptionsWhere, In, InsertResult } from 'typeorm';
-import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 import { Transactional } from 'typeorm-transactional';
 
 import { Journals } from './journals.entity';
@@ -22,7 +21,6 @@ import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
 import { DogsService } from '../dogs/dogs.service';
 import { ExcrementsService } from '../excrements/excrements.service';
 import { EXCREMENT, Excrement } from '../excrements/types/excrement.type';
-import { JournalPhotosService } from '../journal-photos/journal-photos.service';
 import { JournalsDogs } from '../journals-dogs/journals-dogs.entity';
 import { JournalsDogsService } from '../journals-dogs/journals-dogs.service';
 import { S3Service } from '../s3/s3.service';
@@ -36,7 +34,6 @@ export class JournalsService {
         private readonly journalsRepository: JournalsRepository,
         private readonly journalsDogsService: JournalsDogsService,
         private readonly dogsService: DogsService,
-        private readonly journalPhotosService: JournalPhotosService,
         private readonly excrementsService: ExcrementsService,
         private readonly dogWalkDayService: DogWalkDayService,
         private readonly todayWalkTimeService: TodayWalkTimeService,
@@ -54,11 +51,8 @@ export class JournalsService {
         return await this.journalsRepository.delete(where);
     }
 
-    private async updateAndFindOne(
-        where: FindOptionsWhere<Journals>,
-        partialEntity: QueryDeepPartialEntity<Journals>,
-    ): Promise<Journals | null> {
-        return await this.journalsRepository.updateAndFindOne(where, partialEntity);
+    private async update(journalId: number, updateData: Partial<Journals>) {
+        this.journalsRepository.update({ id: journalId }, updateData);
     }
 
     private async getOwnJournalIds(userId: number): Promise<number[]> {
@@ -72,28 +66,22 @@ export class JournalsService {
         return checkIfExistsInArr(myJournalIds, journalIds);
     }
 
-    private makeJournalInfoForDetail(journalId: number, journalInfoRaw: Partial<Journals>, photoUrls: string[]) {
+    private makeJournalInfoForDetail(journalId: number, journalInfoRaw: Partial<Journals>) {
         const journalInfo = makeSubObject(journalInfoRaw, JournalInfoForDetail.getKeysForJournalTable());
 
         journalInfo.id = journalId;
         journalInfo.routes = JSON.parse(journalInfo.routes);
-        journalInfo.photoUrls = photoUrls;
-
+        journalInfo.journalPhotos = JSON.parse(journalInfo.journalPhotos);
         return journalInfo;
     }
 
     async getJournalInfoForDetail(journalId: number): Promise<JournalInfoForDetail> {
-        const journalInfoRawPromise = await this.journalsRepository.findOne({
+        const journalInfoRaw = await this.journalsRepository.findOne({
             where: { id: journalId },
             select: JournalInfoForDetail.getKeysForJournalTable(),
         });
 
-        const [journalInfoRaw, photoUrls]: [Partial<Journals>, string[]] = await Promise.all([
-            journalInfoRawPromise,
-            await this.journalPhotosService.getPhotoUrlsByJournalId(journalId),
-        ]);
-
-        return this.makeJournalInfoForDetail(journalId, journalInfoRaw, photoUrls);
+        return this.makeJournalInfoForDetail(journalId, journalInfoRaw);
     }
 
     private makeExcrementsInfoForDetail(dogIds: number[], excrementsCount: any[]): ExcrementsInfoForDetail[] {
@@ -155,6 +143,9 @@ export class JournalsService {
         if (!journalData.memo) {
             journalData.memo = '';
         }
+        journalData.journalPhotos = JSON.stringify(
+            createJournalInfo.journalPhotos ? createJournalInfo.journalPhotos : [],
+        );
         journalData.routes = JSON.stringify(journalData.routes);
         return journalData;
     }
@@ -203,12 +194,10 @@ export class JournalsService {
     @Transactional()
     async createJournal(userId: number, createJournalData: CreateJournalData) {
         const dogIds = createJournalData.dogs;
-        const photoUrls = createJournalData.journalInfo.photoUrls ? createJournalData.journalInfo.photoUrls : [];
         const journalData = this.makeJournalData(userId, createJournalData.journalInfo);
         const createJournalResult = await this.create(journalData);
 
         await this.journalsDogsService.createJournalDogs(createJournalResult.id, dogIds);
-        await this.journalPhotosService.createNewPhotoUrls(createJournalResult.id, photoUrls);
 
         const addDogWalkDay = (current: number) => (current += 1);
         const addTodayWalkTime = (current: number, value: number) => current + value;
@@ -222,33 +211,31 @@ export class JournalsService {
 
     @Transactional()
     async updateJournal(journalId: number, updateJournalData: UpdateJournalData) {
-        if (updateJournalData.memo) {
-            await this.updateAndFindOne({ id: journalId }, { memo: updateJournalData.memo });
+        const updateData: { memo?: string; journalPhotos?: string } = {};
+        if (updateJournalData.memo && updateJournalData.journalPhotos) {
+            updateData.memo = updateJournalData.memo;
+            updateData.journalPhotos = JSON.stringify(updateJournalData.journalPhotos);
+        } else if (updateJournalData.memo && !updateJournalData.journalPhotos) {
+            updateData.memo = updateJournalData.memo;
+        } else if (!updateJournalData.memo && updateJournalData.journalPhotos) {
+            updateData.journalPhotos = JSON.stringify(updateJournalData.journalPhotos);
         }
 
-        if (updateJournalData.photoUrls) {
-            const journalPhotos = await this.journalPhotosService.find({ where: { journalId } });
-            if (journalPhotos.length) {
-                await this.journalPhotosService.delete({ journalId });
-            }
-            if (updateJournalData.photoUrls.length) {
-                await this.journalPhotosService.createNewPhotoUrls(journalId, updateJournalData.photoUrls);
-            }
-        }
+        await this.update(journalId, updateData);
     }
 
     @Transactional()
     async deleteJournal(userId: number, journalId: number) {
-        const photoUrls: string[] = await this.journalPhotosService.getPhotoUrlsByJournalId(journalId);
         const dogIds: number[] = await this.journalsDogsService.getDogIdsByJournalId(journalId);
         const journalInfo = await this.journalsRepository.findOne({ where: { id: journalId } });
+        const journalPhotos: string[] = JSON.parse(journalInfo.journalPhotos);
 
         const subtractTodayWalkTime = (current: number, value: number) => current - value;
         const subtractDogWalkDay = (current: number) => (current -= 1);
         await this.updateDogWalkDay(dogIds, subtractDogWalkDay);
         await this.updateTodayWalkTime(dogIds, journalInfo.duration, subtractTodayWalkTime);
 
-        await this.s3Service.deleteObjects(userId, photoUrls);
+        await this.s3Service.deleteObjects(userId, journalPhotos);
         await this.delete(journalId);
     }
 

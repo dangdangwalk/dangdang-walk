@@ -19,7 +19,6 @@ import { DogWalkDay } from '../src/dog-walk-day/dog-walk-day.entity';
 import { Dogs } from '../src/dogs/dogs.entity';
 import { Excrements } from '../src/excrements/excrements.entity';
 import { Excrement } from '../src/excrements/types/excrement.type';
-import { JournalPhotos } from '../src/journal-photos/journal-photos.entity';
 import { Journals } from '../src/journals/journals.entity';
 import { JournalsDogs } from '../src/journals-dogs/journals-dogs.entity';
 import { MockS3Service } from '../src/s3/__mocks__/s3.service';
@@ -175,7 +174,6 @@ interface ExcrementData {
 interface InsertMockJournalWithPhotosAndExcrementsParams {
     mockJournal: Journals;
     dogIds: number | number[];
-    photoUrls: string | string[];
     excrements: ExcrementData | ExcrementData[];
 }
 
@@ -183,21 +181,17 @@ interface InsertMockJournalWithPhotosAndExcrementsParams {
 export const insertMockJournalWithPhotosAndExcrements = async ({
     mockJournal,
     dogIds,
-    photoUrls,
     excrements,
 }: InsertMockJournalWithPhotosAndExcrementsParams) => {
     dogIds = Array.isArray(dogIds) ? dogIds : [dogIds];
-    photoUrls = Array.isArray(photoUrls) ? photoUrls : [photoUrls];
     excrements = Array.isArray(excrements) ? excrements : [excrements];
 
     const mockJournalDogs = dogIds.map((dogId) => ({ dogId, journalId: mockJournal.id }));
-    const mockJournalPhotos = photoUrls.map((photoUrl) => ({ photoUrl, journalId: mockJournal.id }));
     const mockExcrements = excrements.map((excrements) => ({ ...excrements, journalId: mockJournal.id }));
 
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 0;');
     await dataSource.getRepository(Journals).save(mockJournal);
     await dataSource.getRepository(JournalsDogs).save(mockJournalDogs);
-    await dataSource.getRepository(JournalPhotos).save(mockJournalPhotos);
     await dataSource.getRepository(Excrements).save(mockExcrements);
     await dataSource.getRepository(DogWalkDay).update({ id: In(dogIds) }, { wed: 1 });
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 1;');
@@ -209,7 +203,6 @@ export const clearJournal = async ({ dogIds }: Pick<InsertMockJournalWithPhotosA
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 0;');
     await dataSource.getRepository(DogWalkDay).update({ id: In(dogIds) }, { wed: 0 });
     await dataSource.getRepository(Excrements).clear();
-    await dataSource.getRepository(JournalPhotos).clear();
     await dataSource.getRepository(JournalsDogs).clear();
     await dataSource.getRepository(Journals).clear();
     await dataSource.query('SET FOREIGN_KEY_CHECKS = 1;');

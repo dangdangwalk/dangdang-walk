@@ -3,5 +3,5 @@ export type UpdateDogWalkDayOperation = (current: number) => number;
 
 export interface UpdateJournalData {
     memo: string;
-    photoUrls: string[];
+    journalPhotos: string[];
 }
