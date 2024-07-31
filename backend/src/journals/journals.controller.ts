@@ -18,7 +18,7 @@ import { CreateJournalDto } from './dtos/create-journal.dto';
 import { UpdateJournalDto } from './dtos/update-journal.dto';
 import { AuthJournalGuard } from './guards/auth-journal.guard';
 import { JournalsService } from './journals.service';
-import { JournalInfoForList } from './types/journal.types';
+import { JournalListResponse } from './types/journal.types';
 
 import { AccessTokenPayload } from '../auth/token/token.service';
 import { AuthDogGuard } from '../dogs/guards/auth-dog.guard';
@@ -37,7 +37,7 @@ export class JournalsController {
     async getJournalList(
         @Query('dogId', ParseIntPipe) dogId: number,
         @Query('date', DateValidationPipe) date: string,
-    ): Promise<JournalInfoForList[]> {
+    ): Promise<JournalListResponse[]> {
         return await this.journalsService.getJournalList(dogId, date);
     }
 
