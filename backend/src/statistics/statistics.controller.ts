@@ -16,27 +16,27 @@ export class StatisticsController {
 
     @Get('/:id(\\d+)/statistics/recent')
     @UseGuards(AuthDogGuard)
-    async getDogStatistics(
+    async getDogMonthlyWalkingTotal(
         @User() { userId }: AccessTokenPayload,
         @Param('id', ParseIntPipe) dogId: number,
         @Query('period', new PeriodValidationPipe(['month'])) period: Period,
     ) {
-        return await this.statisticsService.getDogStatistics(userId, dogId, period);
+        return await this.statisticsService.getDogMonthlyWalkingTotal(userId, dogId, period);
     }
 
     @Get('/:id(\\d+)/statistics')
     @UseGuards(AuthDogGuard)
-    async getDogWalkCnt(
+    async getDogDailyWalkCountsByPeriod(
         @User() { userId }: AccessTokenPayload,
         @Param('id', ParseIntPipe) dogId: number,
         @Query('date', DateValidationPipe) date: string,
         @Query('period', new PeriodValidationPipe(['month', 'week'])) period: Period,
     ) {
-        return await this.statisticsService.getDogWalkCnt(userId, dogId, date, period);
+        return await this.statisticsService.getDogDailyWalkCountsByPeriod(userId, dogId, date, period);
     }
 
     @Get('/statistics')
-    async getDogsStatistics(@User() { userId }: AccessTokenPayload) {
-        return await this.statisticsService.getDogsStatistics(userId);
+    async getDogsWeeklyWalkingOverview(@User() { userId }: AccessTokenPayload) {
+        return await this.statisticsService.getDogsWeeklyWalkingOverview(userId);
     }
 }
