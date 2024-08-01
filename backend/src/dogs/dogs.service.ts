@@ -5,9 +5,7 @@ import { Transactional } from 'typeorm-transactional';
 import { Dogs } from './dogs.entity';
 import { DogsRepository } from './dogs.repository';
 
-import { DogData } from './types/dog-data.type';
-import { DogProfile } from './types/dog-profile.type';
-import { DogSummary } from './types/dog-summary.type';
+import { CreateDogRequest, UpdateDogRequest, DogProfileResponse, DogSummaryResponse } from './types/dogs.type';
 
 import { BreedService } from '../breed/breed.service';
 import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
@@ -37,7 +35,7 @@ export class DogsService {
     ) {}
 
     @Transactional()
-    async createDogToUser(userId: number, dogDto: DogData) {
+    async createDogToUser(userId: number, dogDto: CreateDogRequest): Promise<void> {
         try {
             const { breed: breedName, ...otherAttributes } = dogDto;
 
@@ -52,7 +50,7 @@ export class DogsService {
 
             const dog = await this.dogsRepository.create(newDog);
 
-            return await this.usersDogsService.create({ userId, dogId: dog.id });
+            await this.usersDogsService.create({ userId, dogId: dog.id });
         } catch (error) {
             this.logger.error(`존재하지 않는 견종입니다`, { trace: error.stack ?? '스택 없음' });
             throw error;
@@ -60,7 +58,7 @@ export class DogsService {
     }
 
     @Transactional()
-    async deleteDogFromUser(userId: number, dogId: number) {
+    async deleteDogFromUser(userId: number, dogId: number): Promise<void> {
         const dog = await this.dogsRepository.findOne({ where: { id: dogId } });
 
         if (dog.isWalking) {
@@ -76,7 +74,6 @@ export class DogsService {
         if (dog.profilePhotoUrl) {
             await this.s3Service.deleteSingleObject(userId, dog.profilePhotoUrl);
         }
-        return dog;
     }
 
     @Transactional()
@@ -109,7 +106,7 @@ export class DogsService {
         return await this.dogsRepository.findOne(where);
     }
 
-    async updateDog(userId: number, dogId: number, dogDto: Partial<DogData>) {
+    async updateDog(userId: number, dogId: number, dogDto: UpdateDogRequest): Promise<void> {
         const { breed: breedName, ...otherAttributes } = dogDto;
         let breed;
 
@@ -125,7 +122,7 @@ export class DogsService {
         }
 
         const updateData = breed ? { breedId: breed.id, ...otherAttributes } : otherAttributes;
-        return await this.dogsRepository.update({ id: dogId }, updateData);
+        await this.dogsRepository.update({ id: dogId }, updateData);
     }
 
     async updateIsWalking(dogIds: number | number[], stateToUpdate: boolean) {
@@ -140,32 +137,34 @@ export class DogsService {
         return dogIds;
     }
 
-    private makeProfile(dogInfo: Dogs): DogProfile {
+    private makeProfile(dogInfo: Dogs): DogProfileResponse {
         return {
-            ...makeSubObject(dogInfo, ['id', 'name', 'gender', 'isNeutered', 'birth', 'weight', 'profilePhotoUrl']),
+            ...makeSubObject(dogInfo, DogProfileResponse.getFieldsForDogTableAndRaw()),
             breed: dogInfo.breed.koreanName,
         };
     }
 
-    private makeDogsSummaryList(dogs: Dogs[]): DogSummary[] {
-        //TODO: key를 반환하는 함수 만들어 인자로 넣기
-        return makeSubObjectsArray(dogs, ['id', 'name', 'profilePhotoUrl']);
+    private makeDogsSummaryList(dogs: Dogs[]): DogSummaryResponse[] {
+        return makeSubObjectsArray(dogs, DogSummaryResponse.getFieldsForDogTableAndRaw());
     }
 
-    async getDogsSummaryList(where: FindOptionsWhere<Dogs>): Promise<DogSummary[]> {
-        const dogInfos = await this.dogsRepository.find({ where, select: ['id', 'name', 'profilePhotoUrl'] });
+    async getDogsSummaryList(where: FindOptionsWhere<Dogs>): Promise<DogSummaryResponse[]> {
+        const dogInfos = await this.dogsRepository.find({
+            where,
+            select: DogSummaryResponse.getFieldsForDogTableAndRaw(),
+        });
         return this.makeDogsSummaryList(dogInfos);
     }
 
-    async getProfile(dogId: number): Promise<DogProfile> {
+    async getProfile(dogId: number): Promise<DogProfileResponse> {
         const dogInfo = await this.dogsRepository.findOne({
             where: { id: dogId },
-            select: ['id', 'name', 'breed', 'gender', 'isNeutered', 'birth', 'weight', 'profilePhotoUrl'],
+            select: DogProfileResponse.getFieldsForDogTableAndRaw(),
         });
         return this.makeProfile(dogInfo);
     }
 
-    async getProfileList(userId: number): Promise<DogProfile[]> {
+    async getProfileList(userId: number): Promise<DogProfileResponse[]> {
         const dogInfos = await this.entityManager
             .createQueryBuilder(Dogs, 'dogs')
             .innerJoin(UsersDogs, 'users_dogs', 'users_dogs.dogId = dogs.id')

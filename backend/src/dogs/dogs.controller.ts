@@ -18,6 +18,8 @@ import { CreateDogDto } from './dtos/create-dog.dto';
 import { UpdateDogDto } from './dtos/update-dog.dto';
 import { AuthDogGuard } from './guards/auth-dog.guard';
 
+import { DogProfileResponse } from './types/dogs.type';
+
 import { AccessTokenPayload } from '../auth/token/token.service';
 import { User } from '../users/decorators/user.decorator';
 
@@ -27,7 +29,7 @@ export class DogsController {
     constructor(private readonly dogsService: DogsService) {}
 
     @Get()
-    async getProfileList(@User() { userId }: AccessTokenPayload) {
+    async getProfileList(@User() { userId }: AccessTokenPayload): Promise<DogProfileResponse[]> {
         return this.dogsService.getProfileList(userId);
     }
 
@@ -38,7 +40,7 @@ export class DogsController {
 
     @Get('/:id(\\d+)')
     @UseGuards(AuthDogGuard)
-    async getProfile(@Param('id', ParseIntPipe) dogId: number) {
+    async getProfile(@Param('id', ParseIntPipe) dogId: number): Promise<DogProfileResponse> {
         return this.dogsService.getProfile(dogId);
     }
 

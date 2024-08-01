@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { DogSummaryResponse } from 'src/dogs/types/dogs.type';
 import { Repository } from 'typeorm';
 
 import { TestWalkService } from './test.walk.service';
@@ -7,7 +8,6 @@ import { WalkService } from './walk.service';
 
 import { Dogs } from '../dogs/dogs.entity';
 import { DogsService } from '../dogs/dogs.service';
-import { DogSummary } from '../dogs/types/dog-summary.type';
 import { UsersService } from '../users/users.service';
 
 describe('WalkService', () => {
@@ -49,7 +49,7 @@ describe('WalkService', () => {
     describe('getAvailableDogs', () => {
         const userId = 1;
         const ownDogIds = [1, 2, 3];
-        const availableDogs: DogSummary[] = [
+        const availableDogs: DogSummaryResponse[] = [
             { id: 1, name: 'dangdang1', profilePhotoUrl: 'https://example.com/dog1.jpg' },
             { id: 2, name: 'dangdang2', profilePhotoUrl: 'https://example.com/dog2.jpg' },
         ];
