@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 /* eslint-disable react-hooks/rules-of-hooks */
+import Spinner from '@/components/commons/Spinner';
 import { useAuth } from '@/hooks/useAuth';
-import { useStore } from '@/store';
 import React, { ComponentType, useEffect } from 'react';
 
 export const withMainAuthenticated = (Component: ComponentType): React.FC => {
@@ -9,11 +9,6 @@ export const withMainAuthenticated = (Component: ComponentType): React.FC => {
         const {
             refreshTokenQuery: { isLoading },
         } = useAuth();
-
-        const spinnerAdd = useStore((state) => state.spinnerAdd);
-        const spinnerRemove = useStore((state) => state.spinnerRemove);
-
-        isLoading ? spinnerAdd() : spinnerRemove();
 
         useEffect(() => {
             window.onpageshow = function (event) {
@@ -23,6 +18,6 @@ export const withMainAuthenticated = (Component: ComponentType): React.FC => {
             };
         }, []);
 
-        return <Component />;
+        return <>{isLoading ? <Spinner className="absolute z-40 bg-neutral-800/40" /> : <Component />}</>;
     };
 };
