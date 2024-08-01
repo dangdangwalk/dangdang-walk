@@ -1,6 +1,7 @@
+import { GENDER } from 'src/dogs/types/dogs.type';
+
 import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
 import { Dogs } from '../dogs/dogs.entity';
-import { GENDER } from '../dogs/types/gender.type';
 import { TodayWalkTime } from '../today-walk-time/today-walk-time.entity';
 
 export const mockDog = new Dogs({

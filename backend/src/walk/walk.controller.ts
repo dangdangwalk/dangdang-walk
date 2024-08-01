@@ -10,12 +10,13 @@ import {
     ValidationPipe,
 } from '@nestjs/common';
 
+import { DogSummaryResponse } from 'src/dogs/types/dogs.type';
+
 import { AuthDogsGuard } from './guards/auth-dogs.guard';
 import { WalkService } from './walk.service';
 
 import { AccessTokenPayload } from '../auth/token/token.service';
 import { DogsService } from '../dogs/dogs.service';
-import { DogSummary } from '../dogs/types/dog-summary.type';
 
 import { User } from '../users/decorators/user.decorator';
 
@@ -42,7 +43,7 @@ export class WalkController {
     }
 
     @Get('/available')
-    async getAvailableDogs(@User() { userId }: AccessTokenPayload): Promise<DogSummary[]> {
+    async getAvailableDogs(@User() { userId }: AccessTokenPayload): Promise<DogSummaryResponse[]> {
         return this.walkService.getAvailableDogs(userId);
     }
 }

@@ -1,6 +1,6 @@
 import { IsBoolean, IsEnum, IsOptional, IsPositive, IsString } from 'class-validator';
 
-import { GENDER, Gender } from '../types/gender.type';
+import { GENDER, Gender } from '../types/dogs.type';
 
 export class UpdateDogDto {
     @IsString()

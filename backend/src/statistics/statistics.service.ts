@@ -3,7 +3,7 @@ import { In } from 'typeorm';
 
 import { Period } from './pipes/period-validation.pipe';
 
-import { DogStatistic } from './types/statistic.type';
+import { DogWalkingTotalResponse, DogsWeeklyWalkOverviewResponse } from './types/statistic.type';
 
 import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
 import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
@@ -26,7 +26,7 @@ export class StatisticsService {
         private readonly logger: WinstonLoggerService,
     ) {}
 
-    async getDogStatistics(userId: number, dogId: number, period: Period) {
+    async getDogMonthlyWalkingTotal(userId: number, dogId: number, period: Period): Promise<DogWalkingTotalResponse> {
         let startDate: Date, endDate: Date;
 
         if (period === 'month') {
@@ -38,7 +38,12 @@ export class StatisticsService {
         return this.journalsService.findJournalsAndGetTotal(userId, dogId, startDate, endDate);
     }
 
-    async getDogWalkCnt(userId: number, dogId: number, date: string, period: Period) {
+    async getDogDailyWalkCountsByPeriod(
+        userId: number,
+        dogId: number,
+        date: string,
+        period: Period,
+    ): Promise<{ [date: string]: number }> {
         let startDate: Date, endDate: Date;
 
         if (period === 'month') {
@@ -52,7 +57,7 @@ export class StatisticsService {
         return this.journalsService.findJournalsAndAggregateByDay(userId, dogId, startDate, endDate);
     }
 
-    async getDogsStatistics(userId: number): Promise<DogStatistic[]> {
+    async getDogsWeeklyWalkingOverview(userId: number): Promise<DogsWeeklyWalkOverviewResponse[]> {
         const ownDogIds = await this.usersService.getOwnDogsList(userId);
 
         const ownDogInfos = await this.dogsService.find({

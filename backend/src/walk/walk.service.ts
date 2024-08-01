@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
+import { DogSummaryResponse } from 'src/dogs/types/dogs.type';
 import { In } from 'typeorm';
 
 import { DogsService } from '../dogs/dogs.service';
-import { DogSummary } from '../dogs/types/dog-summary.type';
 import { UsersService } from '../users/users.service';
 
 const MAX_WALK_TIME = 3;
@@ -14,7 +14,7 @@ export class WalkService {
         private readonly dogsService: DogsService,
     ) {}
 
-    async getAvailableDogs(userId: number): Promise<DogSummary[]> {
+    async getAvailableDogs(userId: number): Promise<DogSummaryResponse[]> {
         const ownDogIds = await this.usersService.getOwnDogsList(userId);
         await this.updateExpiredWalkStatus(ownDogIds);
 

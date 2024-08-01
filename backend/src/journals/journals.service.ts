@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Excrements } from 'src/excrements/excrements.entity';
+import { DogWalkingTotalResponse } from 'src/statistics/types/statistic.type';
 import { DeleteResult, EntityManager, FindOptionsWhere, In, InsertResult } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
@@ -242,11 +243,7 @@ export class JournalsService {
         );
     }
 
-    private getTotal(journals: DogWalkJournalRaw[]): {
-        totalWalkCnt: number;
-        totalDistance: number;
-        totalTime: number;
-    } {
+    private getTotal(journals: DogWalkJournalRaw[]): DogWalkingTotalResponse {
         const totals = journals.reduce(
             (acc, journal) => {
                 acc.totalWalkCnt += 1;
@@ -264,7 +261,7 @@ export class JournalsService {
         dogId: number,
         startDate: Date,
         endDate: Date,
-    ): Promise<{ [date: string]: number }> {
+    ): Promise<DogWalkingTotalResponse> {
         const dogJournals = await this.findUserDogJournalsByDate(userId, dogId, startDate, endDate);
         return this.getTotal(dogJournals);
     }

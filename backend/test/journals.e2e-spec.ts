@@ -27,7 +27,7 @@ import {
 
 import { DogWalkDay } from '../src/dog-walk-day/dog-walk-day.entity';
 import { Dogs } from '../src/dogs/dogs.entity';
-import { GENDER } from '../src/dogs/types/gender.type';
+import { GENDER } from '../src/dogs/types/dogs.type';
 import { Excrements } from '../src/excrements/excrements.entity';
 import { Journals } from '../src/journals/journals.entity';
 import { JournalsDogs } from '../src/journals-dogs/journals-dogs.entity';

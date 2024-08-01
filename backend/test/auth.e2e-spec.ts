@@ -26,7 +26,7 @@ import {
 
 import { DogWalkDay } from '../src/dog-walk-day/dog-walk-day.entity';
 import { Dogs } from '../src/dogs/dogs.entity';
-import { GENDER } from '../src/dogs/types/gender.type';
+import { GENDER } from '../src/dogs/types/dogs.type';
 import { TodayWalkTime } from '../src/today-walk-time/today-walk-time.entity';
 import { ROLE } from '../src/users/types/role.type';
 import { Users } from '../src/users/users.entity';
