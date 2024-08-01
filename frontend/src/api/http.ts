@@ -27,7 +27,6 @@ export const createClient = (config?: AxiosRequestConfig): AxiosInstance => {
                     queryKeys.AUTH,
                     queryKeys.GET_ACCESS_TOKEN,
                 ]);
-
                 if (data) {
                     const { accessToken } = data;
                     request.headers[tokenKeys.AUTHORIZATION] = `Bearer ${accessToken}`;
@@ -40,9 +39,7 @@ export const createClient = (config?: AxiosRequestConfig): AxiosInstance => {
         }
     );
 
-    axiosInstance.interceptors.response.use((response) => {
-        return response;
-    });
+    axiosInstance.interceptors.response.use((response) => response);
 
     return axiosInstance;
 };
