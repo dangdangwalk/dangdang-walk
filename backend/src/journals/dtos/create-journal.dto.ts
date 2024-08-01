@@ -13,7 +13,7 @@ import {
 
 import { IsWGS84 } from '../validators/WGS84.validator';
 
-export class ExcrementsInfoForCreate {
+class Excrements {
     @IsNotEmpty()
     dogId: number;
 
@@ -24,7 +24,7 @@ export class ExcrementsInfoForCreate {
     urineLocations: [number, number][];
 }
 
-export class JournalInfoForCreate {
+class JournalInfo {
     @IsNotEmpty()
     @Max(100000) //TODO: 합의 필요
     @Min(0)
@@ -66,12 +66,12 @@ export class CreateJournalDto {
 
     @IsNotEmpty()
     @ValidateNested()
-    @Type(() => JournalInfoForCreate)
-    journalInfo: JournalInfoForCreate;
+    @Type(() => JournalInfo)
+    journalInfo: JournalInfo;
 
     @IsOptional()
     @IsArray()
     @ValidateNested()
-    @Type(() => ExcrementsInfoForCreate)
-    excrements: ExcrementsInfoForCreate[];
+    @Type(() => Excrements)
+    excrements: Excrements[];
 }

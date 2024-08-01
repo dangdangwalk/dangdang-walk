@@ -2,41 +2,53 @@ import { Dogs } from 'src/dogs/dogs.entity';
 
 import { Journals } from '../journals.entity';
 
+type Coordinate = [number, number];
+
 //산책일지 생성
-export interface CreateExcrementsInfo {
+export interface ExcrementsInputForCreate {
     dogId: number;
-    fecesLocations: [number, number][];
-    urineLocations: [number, number][];
+    fecesLocations: Coordinate[];
+    urineLocations: Coordinate[];
 }
 
-export class CreateJournalInfo {
+export interface JournalInputForCreate {
     distance: number;
     calories: number;
     startedAt: Date;
     duration: number;
-    routes: [number, number][];
+    routes: Coordinate[];
     memo: string;
     journalPhotos: string[];
-
-    static getKeysForJournalTable(): Array<keyof Journals> {
-        return ['distance', 'calories', 'startedAt', 'duration', 'routes', 'memo'];
-    }
 }
 
-export interface CreateJournalData {
+export interface CreateJournalRequest {
     dogs: number[];
-    journalInfo: CreateJournalInfo;
-    excrements: CreateExcrementsInfo[];
+    journalInfo: JournalInputForCreate;
+    excrements: ExcrementsInputForCreate[];
 }
 
-export type ExcrementCount = {
+export interface ExcrementCount {
     dogId: number;
     fecesCnt: number;
     urineCnt: number;
-};
+}
+
+export class CreateJournalDatabaseInput {
+    distance: number;
+    calories: number;
+    startedAt: Date;
+    duration: number;
+    routes: string;
+    memo: string;
+    journalPhotos: string;
+    excrementCount: string;
+
+    static getKeysForJournalRequest(): Array<keyof Journals> {
+        return ['distance', 'calories', 'startedAt', 'duration'];
+    }
+}
 
 //산책일지 목록
-
 interface JournalWalkDistance {
     distance: number;
     duration: number;
@@ -46,22 +58,17 @@ interface JournalWalkDate {
     startedAt: Date;
 }
 
-export type DogWalkJournalEntry = JournalWalkDistance & JournalWalkDate;
+export type DogWalkJournalRaw = JournalWalkDistance & JournalWalkDate;
 
-export class JournalInfoForList {
+export class JournalListResponse {
     journalId: number;
-
     journalCnt: number;
-
     startedAt: Date;
-
     distance: number;
-
     calories: number;
-
     duration: number;
 
-    static getKeysForJournalInfoResponse() {
+    static getKeysForJournalListRaw() {
         return ['journalId', 'startedAt', 'distance', 'calories', 'duration', 'journalCnt'];
     }
 }
@@ -70,63 +77,52 @@ export class JournalInfoForList {
 export type UpdateTodayWalkTimeOperation = (current: number, operand: number) => number;
 export type UpdateDogWalkDayOperation = (current: number) => number;
 
-export interface UpdateJournalData {
-    memo: string;
-    journalPhotos: string[];
-}
+export type UpdateJournalRequest = {
+    memo?: string;
+    journalPhotos?: string[];
+};
+
+export type UpdateJournalDatabaseInput = {
+    memo?: string;
+    journalPhotos?: string;
+};
 
 //산책일지 상세
-export class PhotoUrlType {
-    photoUrl: string;
-
-    static getKey() {
-        return 'photoUrl';
-    }
-}
-
-export class DogInfoForDetail {
+export class DogOutputForDetail {
     id: number;
-
     name: string;
-
     profilePhotoUrl: string | null;
 
-    // TODO: reflect-metadata 사용하도록 변경
-    static getKeysForDogTable(): Array<keyof Dogs> {
+    static getFieldForDogTable(): Array<keyof Dogs> {
         return ['id', 'name', 'profilePhotoUrl'];
     }
 }
 
-export type JournalDetailRaw = {
+export interface JournalDetailRaw {
     id: number;
     routes: string;
     memo: string;
     journalPhotos: string;
     excrementCount: string;
-};
+}
 
-export class JournalInfoForDetail {
+export class JournalOutputForDetail {
     id: number;
-
     routes: [number, number][];
-
     memo: string;
-
     journalPhotos: string[];
-
     excrementCount: ExcrementCount[];
 
-    static getKeysForJournalTable(): Array<keyof Journals> {
+    static getFieldForJournalTable(): Array<keyof Journals> {
         return ['id', 'routes', 'memo', 'journalPhotos', 'excrementCount'];
     }
 }
 
-export class JournalDetail {
-    journalInfo: JournalInfoForDetail;
+export class JournalDetailResponse {
+    journalInfo: JournalOutputForDetail;
+    dogs: DogOutputForDetail[];
 
-    dogs: DogInfoForDetail[];
-
-    constructor(journalInfo: JournalInfoForDetail, dogInfo: DogInfoForDetail[]) {
+    constructor(journalInfo: JournalOutputForDetail, dogInfo: DogOutputForDetail[]) {
         this.journalInfo = journalInfo;
         this.dogs = dogInfo;
     }
