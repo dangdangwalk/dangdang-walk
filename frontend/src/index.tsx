@@ -17,8 +17,6 @@ import App from './App';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import NotFound from '@/components/error/NotFound';
-import Spinner from '@/components/commons/Spinner';
-import { Suspense } from 'react';
 const router = createBrowserRouter([
     { path: '*', element: <NotFound /> },
     {
@@ -80,10 +78,8 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
     <QueryClientProvider client={queryClient}>
-        <Suspense fallback={<Spinner className="absolute z-40 bg-neutral-800/40" />}>
-            <RouterProvider router={router} />
-            <ReactQueryDevtools />
-        </Suspense>
+        <RouterProvider router={router} />
+        <ReactQueryDevtools />
     </QueryClientProvider>
 );
 
