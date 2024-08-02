@@ -1,15 +1,12 @@
 /* eslint-disable react/display-name */
 /* eslint-disable react-hooks/rules-of-hooks */
 import Spinner from '@/components/commons/Spinner';
-import { useAuth } from '@/hooks/useAuth';
+import { useRefreshToken } from '@/hooks/useAuth';
 import React, { ComponentType, useEffect } from 'react';
 
 export const withMainAuthenticated = (Component: ComponentType): React.FC => {
     return () => {
-        const {
-            refreshTokenQuery: { isPending },
-        } = useAuth();
-
+        const { isPending } = useRefreshToken();
         useEffect(() => {
             window.onpageshow = function (event) {
                 if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {

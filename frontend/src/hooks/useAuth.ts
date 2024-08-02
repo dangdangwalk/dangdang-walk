@@ -17,7 +17,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const useSignIn = (mutationOptions?: UseMutationCustomOptions) => {
+export const useSignIn = (mutationOptions?: UseMutationCustomOptions) => {
     const storeSignIn = useStore((state) => state.storeSignIn);
     const navigate = useNavigate();
     return useMutation({
@@ -40,7 +40,7 @@ const useSignIn = (mutationOptions?: UseMutationCustomOptions) => {
     });
 };
 
-const useSignUp = (mutationOptions?: UseMutationCustomOptions) => {
+export const useSignUp = (mutationOptions?: UseMutationCustomOptions) => {
     const storeSignIn = useStore((state) => state.storeSignIn);
     return useMutation({
         mutationFn: requestSignUp,
@@ -54,7 +54,7 @@ const useSignUp = (mutationOptions?: UseMutationCustomOptions) => {
     });
 };
 
-const useGetRefreshToken = () => {
+export const useRefreshToken = () => {
     const storeSignIn = useStore((state) => state.storeSignIn);
     const { isSuccess, data, isLoading, isPending, isError } = useQuery({
         queryKey: [queryKeys.GET_ACCESS_TOKEN],
@@ -76,7 +76,7 @@ const useGetRefreshToken = () => {
     return { isSuccess, data, isLoading, isPending, isError };
 };
 
-const useSignOut = (mutationOptions?: UseMutationCustomOptions) => {
+export const useSignOut = (mutationOptions?: UseMutationCustomOptions) => {
     const storeSignOut = useStore((state) => state.storeSignOut);
     return useMutation({
         mutationFn: requestSignOut,
@@ -94,7 +94,7 @@ const useSignOut = (mutationOptions?: UseMutationCustomOptions) => {
     });
 };
 
-const useDeactivate = (mutationOptions?: UseMutationCustomOptions) => {
+export const useDeactivate = (mutationOptions?: UseMutationCustomOptions) => {
     const storeSignOut = useStore((state) => state.storeSignOut);
     return useMutation({
         mutationFn: requestDeactivate,
@@ -110,7 +110,7 @@ const useDeactivate = (mutationOptions?: UseMutationCustomOptions) => {
     });
 };
 
-const useGetProfile = (queryOptions?: UseQueryCustomOptions) => {
+export const useGetProfile = (queryOptions?: UseQueryCustomOptions) => {
     return useQuery({
         queryKey: [queryKeys.GET_PROFILE],
         queryFn: requestProfile,
@@ -123,7 +123,7 @@ export const useAuth = () => {
     const signIn = useSignIn();
     const signOut = useSignOut();
     const signUp = useSignUp();
-    const refreshTokenQuery = useGetRefreshToken();
+    const refreshTokenQuery = useRefreshToken();
     const getProfileQuery = useGetProfile({ enabled: refreshTokenQuery.isSuccess });
     const deactivate = useDeactivate();
     return {
