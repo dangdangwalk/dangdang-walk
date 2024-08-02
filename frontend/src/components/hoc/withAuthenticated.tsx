@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 /* eslint-disable react-hooks/rules-of-hooks */
 import Spinner from '@/components/commons/Spinner';
-import { useAuth } from '@/hooks/useAuth';
+import { useRefreshToken } from '@/hooks/useAuth';
 import { useStore } from '@/store';
 import React, { ComponentType } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -10,9 +10,7 @@ export const withAuthenticated = (Component: ComponentType): React.FC => {
     return () => {
         const isSignedIn = useStore((state) => state.isSignedIn);
 
-        const {
-            refreshTokenQuery: { isLoading, isSuccess, isError },
-        } = useAuth();
+        const { isLoading, isError, isSuccess } = useRefreshToken();
 
         const navigate = useNavigate();
 

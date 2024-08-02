@@ -8,11 +8,11 @@ import {
     ModalHeader,
     ModalTitle,
 } from '@/components/commons/Modal';
-import { useAuth } from '@/hooks/useAuth';
+import { useDeactivate } from '@/hooks/useAuth';
 import React from 'react';
 
 export default function DeactivateModal({ setDeactivate }: { setDeactivate: (state: boolean) => void }) {
-    const { deactivate } = useAuth();
+    const deactivate = useDeactivate();
     return (
         <div className="fixed">
             <Modal open={true}>
