@@ -1,5 +1,6 @@
 /* eslint-disable react/display-name */
 /* eslint-disable react-hooks/rules-of-hooks */
+import Spinner from '@/components/commons/Spinner';
 import { useAuth } from '@/hooks/useAuth';
 import { useStore } from '@/store';
 import React, { ComponentType } from 'react';
@@ -10,12 +11,15 @@ export const withAuthenticated = (Component: ComponentType): React.FC => {
         const isSignedIn = useStore((state) => state.isSignedIn);
 
         const {
-            refreshTokenQuery: { isSuccess },
+            refreshTokenQuery: { isLoading, isSuccess, isError },
         } = useAuth();
 
         const navigate = useNavigate();
 
-        if (!isSuccess) {
+        if (isLoading) {
+            return <Spinner className="absolute z-40 bg-neutral-800/40" />;
+        }
+        if (isError) {
             navigate('/');
             return <></>;
         }

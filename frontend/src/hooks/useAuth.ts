@@ -13,7 +13,7 @@ import { FIFTY_MIN, ONE_DAY_IN_MS, ONE_HOUR, TEN_TO_A_DAY, queryKeys, storageKey
 import { useStore } from '@/store';
 import { UseMutationCustomOptions, UseQueryCustomOptions } from '@/types/common';
 import { getStorage, removeStorage } from '@/utils/storage';
-import { useMutation, useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -56,7 +56,7 @@ const useSignUp = (mutationOptions?: UseMutationCustomOptions) => {
 
 const useGetRefreshToken = () => {
     const storeSignIn = useStore((state) => state.storeSignIn);
-    const { isSuccess, data, isLoading } = useSuspenseQuery({
+    const { isSuccess, data, isLoading, isPending, isError } = useQuery({
         queryKey: [queryKeys.GET_ACCESS_TOKEN],
         queryFn: refreshAccessToken,
         gcTime: ONE_HOUR,
@@ -73,7 +73,7 @@ const useGetRefreshToken = () => {
         }
     }, [isSuccess, data]);
 
-    return { isSuccess, data, isLoading };
+    return { isSuccess, data, isLoading, isPending, isError };
 };
 
 const useSignOut = (mutationOptions?: UseMutationCustomOptions) => {
