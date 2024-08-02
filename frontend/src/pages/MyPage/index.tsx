@@ -22,7 +22,6 @@ import { RecentMonthStatisticsResponse, fetchDogRecentMonthStatistics } from '@/
 import { Dog } from '@/models/dog';
 import Navbar from '@/components/Navbar';
 import { withMainAuthenticated } from '@/components/hoc/withMainAuthenticated';
-import { ProfileResponse } from '@/api/auth';
 import { useStore } from '@/store';
 function MyPage() {
     const navigate = useNavigate();
@@ -31,7 +30,7 @@ function MyPage() {
     const [dogs, setDogs] = useState<Dog[]>([]);
     const isSignIn = useStore((state) => state.isSignedIn);
     const signOut = useSignOut();
-    const profileData = useGetProfile({ enabled: isSignIn })?.data as ProfileResponse;
+    const { profileData } = useGetProfile({ enabled: isSignIn });
     const nickname = profileData?.nickname.substring(0, profileData?.nickname.indexOf('#'));
     const provider = profileData?.provider;
     const [isProfileOpen, setIsProfileOpen] = useState(false);
