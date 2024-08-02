@@ -13,7 +13,6 @@ import {
     ModalHeader,
     ModalTitle,
 } from '@/components/commons/Modal';
-import { withAuthenticated } from '@/components/hoc/withAuthenticated';
 import CompanionDogSection from '@/components/journals/CompanionDogSection';
 import Heading from '@/components/journals/Heading';
 import MemoSection from '@/components/journals/MemoSection';
@@ -214,6 +213,4 @@ interface ReceivedState {
 
 export type ImageFileName = string;
 
-const AuthenticatedCreateForm = withAuthenticated(CreateForm);
-
-export default AuthenticatedCreateForm;
+export default CreateForm;

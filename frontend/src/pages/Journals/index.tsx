@@ -12,7 +12,6 @@ import Avatar from '@/components/commons/Avatar';
 import SelectBox from '@/components/commons/SelectBox';
 import { JournalsState } from '@/components/home/DogStatisticsView';
 import { formatDate } from '@/utils/time';
-import { withAuthenticated } from '@/components/hoc/withAuthenticated';
 
 function Journals() {
     const location = useLocation();
@@ -86,6 +85,4 @@ function Journals() {
     );
 }
 
-const AuthenticatedJournals = withAuthenticated(Journals);
-
-export default AuthenticatedJournals;
+export default Journals;
