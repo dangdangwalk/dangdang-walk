@@ -29,8 +29,14 @@ const createWalkSlice: StateCreator<StateAndActions, [['zustand/devtools', never
     addRoutes: (route: Coords) => {
         set((state) => ({ routes: [...state.routes, route] }), false, 'walk/addRoutes');
     },
-    setRoutes: (routes: Coords[]) => {
-        set({ routes }, false, 'walk/setRoutes');
+    setRoutes: (routesOrUpdateFn: Coords[] | ((prevRoutes: Coords[]) => Coords[])) => {
+        set(
+            (state) => ({
+                routes: typeof routesOrUpdateFn === 'function' ? routesOrUpdateFn(state.routes) : routesOrUpdateFn,
+            }),
+            false,
+            'walk/setRoutes'
+        );
     },
     setStartedAt: (startedAt: string) => {
         set({ startedAt }, false, 'walk/setStartedAt');
@@ -56,7 +62,7 @@ interface Actions {
     setDistance: (distance: number) => void;
     addDistance: (distance: number) => void;
     addRoutes: (routes: Coords) => void;
-    setRoutes: (routes: Coords[]) => void;
+    setRoutes: (routesOrUpdateFn: Coords[] | ((prevRoutes: Coords[]) => Coords[])) => void;
     setStartedAt: (startedAt: string) => void;
     setJournalPhotos: (journalPhotos: string[]) => void;
     resetWalkData: () => void;
