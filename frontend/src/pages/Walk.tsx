@@ -63,13 +63,21 @@ function Walk() {
         if (!dogs.length) return;
         spinnerAdd();
         stopClock();
-        stopGeo();
+        const simplifiedRoutes = await stopGeo();
         const ok = await requestWalkStop(dogs.map((d) => d.id));
         if (ok) {
             resetWalkData();
             await delay(400);
             navigate('/journals/create', {
-                state: { dogs, distance, duration, calories: getCalories(distance), startedAt, routes, journalPhotos },
+                state: {
+                    dogs,
+                    distance,
+                    duration,
+                    calories: getCalories(distance),
+                    startedAt,
+                    routes: simplifiedRoutes,
+                    journalPhotos,
+                },
             });
         }
 
