@@ -75,10 +75,16 @@ const useGeolocation = () => {
     };
 
     const stopGeo = () => {
-        setIsStartGeo(false);
+        return new Promise<Coords[]>((resolve) => {
+            setIsStartGeo(false);
 
-        const simplifiedRoutes = applyRDP(routes);
-        setRoutes(simplifiedRoutes);
+            setRoutes((prevRoutes) => {
+                const simplifiedRoutes = applyRDP(prevRoutes);
+                resolve(simplifiedRoutes);
+
+                return simplifiedRoutes;
+            });
+        });
     };
 
     useEffect(() => {
