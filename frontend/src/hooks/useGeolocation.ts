@@ -1,11 +1,12 @@
 import { DEFAULT_LAT, DEFAULT_LNG } from '@/constants';
 import { Coords, Position } from '@/models/location';
 import { useStore } from '@/store';
-import { calculateDistance } from '@/utils/geo';
+import { calculateDistance, rdpAlgorithm } from '@/utils/geo';
 import { useEffect, useState } from 'react';
 
 const useGeolocation = () => {
     const addRoutes = useStore((state) => state.addRoutes);
+    const setRoutes = useStore((state) => state.setRoutes);
     const routes = useStore((state) => state.routes);
     const distance = useStore((state) => state.distance);
     const addDistance = useStore((state) => state.addDistance);
@@ -64,8 +65,20 @@ const useGeolocation = () => {
         setIsStartGeo(true);
     };
 
+    const applyRDP = (routePoints: Coords[]): Coords[] => {
+        if (!routePoints || routePoints.length === 0) {
+            return [];
+        }
+        const epsilon = 0.00005;
+        const acceptedPointsIndices = rdpAlgorithm(routePoints, 0, routePoints.length - 1, epsilon);
+        return routePoints.filter((_, index) => acceptedPointsIndices[index]);
+    };
+
     const stopGeo = () => {
         setIsStartGeo(false);
+
+        const simplifiedRoutes = applyRDP(routes);
+        setRoutes(simplifiedRoutes);
     };
 
     useEffect(() => {
@@ -75,6 +88,7 @@ const useGeolocation = () => {
         if (prevPosition) {
             const newDistance = calculateDistance(prevPosition.lat, prevPosition.lng, lat, lng);
             if (newDistance < 10) return;
+
             addDistance(Math.floor(newDistance));
         }
         addRoutes([lat, lng]);

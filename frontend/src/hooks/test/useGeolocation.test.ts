@@ -7,6 +7,9 @@ import { vi, expect } from 'vitest';
 
 vi.mock('@/utils/geo', () => ({
     calculateDistance: vi.fn(() => 10),
+    rdpAlgorithm: vi.fn((points, startIndex, lastIndex) => {
+        return new Array(lastIndex - startIndex + 1).fill(true);
+    }),
 }));
 
 const mockGeolocation = {
