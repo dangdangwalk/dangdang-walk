@@ -1,3 +1,5 @@
+import { Coords, Position } from '@/models/location';
+
 const RE = 6371.00877; // 지구 반경(km)
 const GRID = 5.0; // 격자 간격(km)
 const SLAT1 = 30.0; // 투영 위도1(degree)
@@ -78,4 +80,52 @@ export const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2
 
 const deg2rad = (deg: number): number => {
     return deg * (Math.PI / 180);
+};
+
+const pointLineDistance = (point: Position, start: Position, end: Position): number => {
+    if (start.lat === end.lat && start.lng === end.lng) {
+        return calculateDistance(point.lat, point.lng, start.lat, start.lng);
+    }
+
+    const n = Math.abs(
+        (end.lng - start.lng) * (start.lat - point.lat) - (start.lng - point.lng) * (end.lat - start.lat)
+    );
+    const d = Math.sqrt((end.lng - start.lng) ** 2 + (end.lat - start.lat) ** 2);
+
+    return n / d;
+};
+
+export const rdpAlgorithm = (points: Coords[], startIndex: number, lastIndex: number, epsilon: number): boolean[] => {
+    const stack: [number, number][] = [[startIndex, lastIndex]];
+    const bitArray = new Array(lastIndex - startIndex + 1).fill(true);
+
+    while (stack.length > 0) {
+        const [start, end] = stack.pop()!;
+        let dmax = 0;
+        let index = start;
+        const startPoint: Position = { lat: points[start]![0], lng: points[start]![1] };
+        const endPoint: Position = { lat: points[end]![0], lng: points[end]![1] };
+
+        for (let i = start + 1; i < end; i++) {
+            const currentPoint: Position = { lat: points[i]![0], lng: points[i]![1] };
+            if (bitArray[i - startIndex]) {
+                const d = pointLineDistance(currentPoint, startPoint, endPoint);
+                if (d > dmax) {
+                    index = i;
+                    dmax = d;
+                }
+            }
+        }
+
+        if (dmax > epsilon) {
+            stack.push([start, index]);
+            stack.push([index, end]);
+        } else {
+            for (let i = start + 1; i < end; i++) {
+                bitArray[i - startIndex] = false;
+            }
+        }
+    }
+
+    return bitArray;
 };
