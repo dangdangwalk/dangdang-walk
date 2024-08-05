@@ -75,14 +75,21 @@ const useGeolocation = () => {
     };
 
     const stopGeo = () => {
-        return new Promise<Coords[]>((resolve) => {
+        return new Promise<Coords[]>((resolve, reject) => {
             setIsStartGeo(false);
 
             setRoutes((prevRoutes) => {
-                const simplifiedRoutes = applyRDP(prevRoutes);
-                resolve(simplifiedRoutes);
-
-                return simplifiedRoutes;
+                try {
+                    const simplifiedRoutes = applyRDP(prevRoutes);
+                    if (prevRoutes.length && !simplifiedRoutes) {
+                        throw new Error('경로가 비어있습니다');
+                    }
+                    setTimeout(() => resolve(simplifiedRoutes), 0);
+                    return simplifiedRoutes;
+                } catch (error: any) {
+                    setTimeout(() => reject(new Error('경로 변환에 실패했습니다: ' + error.message)), 0);
+                    return prevRoutes;
+                }
             });
         });
     };
