@@ -1,4 +1,4 @@
-import { DEFAULT_LAT, DEFAULT_LNG } from '@/constants';
+import { DEFAULT_LAT, DEFAULT_LNG, RDP_EPSILON } from '@/constants';
 import { Coords, Position } from '@/models/location';
 import { useStore } from '@/store';
 import { calculateDistance, rdpAlgorithm } from '@/utils/geo';
@@ -69,7 +69,7 @@ const useGeolocation = () => {
         if (!routePoints || routePoints.length === 0) {
             return [];
         }
-        const epsilon = 0.00005;
+        const epsilon = RDP_EPSILON;
         const acceptedPointsIndices = rdpAlgorithm(routePoints, 0, routePoints.length - 1, epsilon);
         return routePoints.filter((_, index) => acceptedPointsIndices[index]);
     };
