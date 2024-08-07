@@ -79,7 +79,8 @@ export class WinstonLoggerService implements LoggerService {
         }
 
         this.logger = winston.createLogger({
-            level: isProduction ? 'info' : 'debug',
+            //level: isProduction ? 'info' : 'debug',
+            level: 'debug',
             format: winston.format.json(),
             transports,
         });
