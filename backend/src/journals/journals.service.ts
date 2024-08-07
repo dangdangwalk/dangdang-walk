@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+
 import { Excrements } from 'src/excrements/excrements.entity';
 import { DogWalkingTotalResponse } from 'src/statistics/types/statistic.type';
 import { DeleteResult, EntityManager, FindOptionsWhere, In, InsertResult } from 'typeorm';
@@ -23,6 +24,8 @@ import {
     JournalInputForCreate,
 } from './types/journal.types';
 
+import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
+
 import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
 import { DogsService } from '../dogs/dogs.service';
 import { ExcrementsService } from '../excrements/excrements.service';
@@ -45,6 +48,7 @@ export class JournalsService {
         private readonly todayWalkTimeService: TodayWalkTimeService,
         private readonly entityManager: EntityManager,
         private readonly s3Service: S3Service,
+        private readonly logger: WinstonLoggerService,
     ) {}
 
     private async create(entityData: Partial<Journals>): Promise<Journals> {
@@ -79,8 +83,11 @@ export class JournalsService {
         );
 
         journalInfo.id = journalId;
+        this.logger.debug('before route: ' + journalInfoRaw.routes);
         journalInfo.routes = JSON.parse(journalInfoRaw.routes);
+        this.logger.debug('before journalPhotos: ' + journalInfoRaw.journalPhotos);
         journalInfo.journalPhotos = JSON.parse(journalInfoRaw.journalPhotos);
+        this.logger.debug('before excrementCount: ' + journalInfoRaw.excrementCount);
         journalInfo.excrementCount = JSON.parse(journalInfoRaw.excrementCount);
 
         return journalInfo;
@@ -128,6 +135,7 @@ export class JournalsService {
         journalData.journalPhotos = JSON.stringify(
             journalInputForCreate.journalPhotos ? journalInputForCreate.journalPhotos : [],
         );
+
         journalData.routes = JSON.stringify(journalInputForCreate.routes);
         return journalData;
     }
