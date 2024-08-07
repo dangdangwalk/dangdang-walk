@@ -30,7 +30,7 @@ export class Journals {
     @Column({ name: 'journal_photos' })
     journalPhotos: string;
 
-    @Column({ type: 'mediumtext' })
+    @Column({ type: 'text' })
     routes: string;
 
     @Column({ nullable: true })
