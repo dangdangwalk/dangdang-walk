@@ -83,12 +83,9 @@ export class JournalsService {
         );
 
         journalInfo.id = journalId;
-        this.logger.debug('before route: ' + journalInfoRaw.routes);
-        journalInfo.routes = JSON.parse(journalInfoRaw.routes);
-        this.logger.debug('before journalPhotos: ' + journalInfoRaw.journalPhotos);
-        journalInfo.journalPhotos = JSON.parse(journalInfoRaw.journalPhotos);
-        this.logger.debug('before excrementCount: ' + journalInfoRaw.excrementCount);
-        journalInfo.excrementCount = JSON.parse(journalInfoRaw.excrementCount);
+        journalInfo.routes = journalInfoRaw.routes ? JSON.parse(journalInfoRaw.routes) : [];
+        journalInfo.journalPhotos = journalInfoRaw.journalPhotos ? JSON.parse(journalInfoRaw.journalPhotos) : '';
+        journalInfo.excrementCount = journalInfoRaw.excrementCount ? JSON.parse(journalInfoRaw.excrementCount) : {};
 
         return journalInfo;
     }
