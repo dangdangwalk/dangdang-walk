@@ -17,7 +17,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const useSignIn = (mutationOptions?: UseMutationCustomOptions) => {
+export const useSignIn = (mutationOptions?: UseMutationCustomOptions) => {
     const storeSignIn = useStore((state) => state.storeSignIn);
     const navigate = useNavigate();
     return useMutation({
@@ -40,7 +40,7 @@ const useSignIn = (mutationOptions?: UseMutationCustomOptions) => {
     });
 };
 
-const useSignUp = (mutationOptions?: UseMutationCustomOptions) => {
+export const useSignUp = (mutationOptions?: UseMutationCustomOptions) => {
     const storeSignIn = useStore((state) => state.storeSignIn);
     return useMutation({
         mutationFn: requestSignUp,
@@ -54,9 +54,18 @@ const useSignUp = (mutationOptions?: UseMutationCustomOptions) => {
     });
 };
 
-const useGetRefreshToken = () => {
+//TODO: 로그인 내부로직 react-query에서 interceptor로 변경
+export const useRefreshToken = () => {
     const storeSignIn = useStore((state) => state.storeSignIn);
-    const { isSuccess, data, isLoading } = useQuery({
+    const isAuthLoading = useStore((state) => state.isAuthLoading);
+    const setIsAuthLoading = useStore((state) => state.setIsAuthLoading);
+    const {
+        isSuccess,
+        data,
+        isLoading: isTokenLoading,
+        isPending,
+        isError,
+    } = useQuery({
         queryKey: [queryKeys.GET_ACCESS_TOKEN],
         queryFn: refreshAccessToken,
         gcTime: ONE_HOUR,
@@ -71,12 +80,15 @@ const useGetRefreshToken = () => {
             removeStorage(storageKeys.REDIRECT_URI);
             removeStorage(storageKeys.PROVIDER);
         }
-    }, [isSuccess, data]);
+        if (isError) {
+            setIsAuthLoading(false);
+        }
+    }, [isSuccess, isError, data]);
 
-    return { isSuccess, data, isLoading };
+    return { isSuccess, data, isLoading: isAuthLoading || isTokenLoading, isPending, isError };
 };
 
-const useSignOut = (mutationOptions?: UseMutationCustomOptions) => {
+export const useSignOut = (mutationOptions?: UseMutationCustomOptions) => {
     const storeSignOut = useStore((state) => state.storeSignOut);
     return useMutation({
         mutationFn: requestSignOut,
@@ -94,7 +106,7 @@ const useSignOut = (mutationOptions?: UseMutationCustomOptions) => {
     });
 };
 
-const useDeactivate = (mutationOptions?: UseMutationCustomOptions) => {
+export const useDeactivate = (mutationOptions?: UseMutationCustomOptions) => {
     const storeSignOut = useStore((state) => state.storeSignOut);
     return useMutation({
         mutationFn: requestDeactivate,
@@ -110,28 +122,13 @@ const useDeactivate = (mutationOptions?: UseMutationCustomOptions) => {
     });
 };
 
-const useGetProfile = (queryOptions?: UseQueryCustomOptions) => {
-    return useQuery({
+export const useGetProfile = (queryOptions?: UseQueryCustomOptions) => {
+    const { data, isError, isLoading } = useQuery({
         queryKey: [queryKeys.GET_PROFILE],
         queryFn: requestProfile,
         gcTime: ONE_DAY_IN_MS,
         staleTime: TEN_TO_A_DAY,
         ...queryOptions,
     });
-};
-export const useAuth = () => {
-    const signIn = useSignIn();
-    const signOut = useSignOut();
-    const signUp = useSignUp();
-    const refreshTokenQuery = useGetRefreshToken();
-    const getProfileQuery = useGetProfile({ enabled: refreshTokenQuery.isSuccess });
-    const deactivate = useDeactivate();
-    return {
-        signIn,
-        signOut,
-        signUp,
-        refreshTokenQuery,
-        deactivate,
-        profileData: getProfileQuery.data as ProfileResponse,
-    };
+    return { isError, isLoading, profileData: data as ProfileResponse };
 };

@@ -7,7 +7,7 @@ import { Button } from '@/components/commons/Button';
 import { Divider } from '@/components/commons/Divider';
 import TopBar from '@/components/commons/Topbar';
 import { storageKeys } from '@/constants';
-import { useAuth } from '@/hooks/useAuth';
+import { useSignUp } from '@/hooks/useAuth';
 import { uploadImg, useDog } from '@/hooks/useDog';
 import { DogCreateForm } from '@/models/dog';
 import Agreements from '@/pages/SignUp/Agreements';
@@ -27,7 +27,7 @@ export default function SignUp() {
     const navigate = useNavigate();
     const location = useLocation();
     const currentPage = location.state;
-    const { signUp } = useAuth();
+    const signUp = useSignUp();
     const { createDog } = useDog();
     const spinnerAdd = useStore((state) => state.spinnerAdd);
     const spinnerRemove = useStore((state) => state.spinnerRemove);

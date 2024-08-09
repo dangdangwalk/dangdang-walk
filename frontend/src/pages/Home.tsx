@@ -16,7 +16,6 @@ import { isArrayNotEmpty } from '@/utils/validate';
 import DogStatisticsView from '@/components/home/DogStatisticsView';
 import Navbar from '@/components/Navbar';
 import { useStore } from '@/store';
-import { withMainAuthenticated } from '@/components/hoc/withMainAuthenticated';
 
 function Home() {
     const [isDogBottomSheetOpen, setIsDogBottomSheetOpen] = useState<boolean>(false);
@@ -136,6 +135,4 @@ const HomeHeader = () => {
     );
 };
 
-const AuthenticatedHome = withMainAuthenticated(Home);
-
-export default AuthenticatedHome;
+export default Home;
