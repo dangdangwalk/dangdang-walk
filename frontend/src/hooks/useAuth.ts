@@ -54,9 +54,18 @@ export const useSignUp = (mutationOptions?: UseMutationCustomOptions) => {
     });
 };
 
+//TODO: 로그인 내부로직 react-query에서 interceptor로 변경
 export const useRefreshToken = () => {
     const storeSignIn = useStore((state) => state.storeSignIn);
-    const { isSuccess, data, isLoading, isPending, isError } = useQuery({
+    const isAuthLoading = useStore((state) => state.isAuthLoading);
+    const setIsAuthLoading = useStore((state) => state.setIsAuthLoading);
+    const {
+        isSuccess,
+        data,
+        isLoading: isTokenLoading,
+        isPending,
+        isError,
+    } = useQuery({
         queryKey: [queryKeys.GET_ACCESS_TOKEN],
         queryFn: refreshAccessToken,
         gcTime: ONE_HOUR,
@@ -71,9 +80,12 @@ export const useRefreshToken = () => {
             removeStorage(storageKeys.REDIRECT_URI);
             removeStorage(storageKeys.PROVIDER);
         }
-    }, [isSuccess, data]);
+        if (isError) {
+            setIsAuthLoading(false);
+        }
+    }, [isSuccess, isError, data]);
 
-    return { isSuccess, data, isLoading, isPending, isError };
+    return { isSuccess, data, isLoading: isAuthLoading || isTokenLoading, isPending, isError };
 };
 
 export const useSignOut = (mutationOptions?: UseMutationCustomOptions) => {

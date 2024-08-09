@@ -37,11 +37,9 @@ const router = createBrowserRouter([
             {
                 path: '/mypage',
                 element: (
-                    <WithAuthenticated>
-                        <AuthLayout>
-                            <MyPage />
-                        </AuthLayout>
-                    </WithAuthenticated>
+                    <AuthLayout>
+                        <MyPage />
+                    </AuthLayout>
                 ),
             },
             {
