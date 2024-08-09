@@ -39,6 +39,7 @@ export const createClient = (config?: AxiosRequestConfig): AxiosInstance => {
         }
     );
 
+    //TODO: 401error시 토큰요청 로직 추가 필요
     axiosInstance.interceptors.response.use((response) => response);
 
     return axiosInstance;

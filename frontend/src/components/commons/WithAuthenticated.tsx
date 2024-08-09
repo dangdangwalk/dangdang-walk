@@ -7,6 +7,5 @@ interface Props {
 
 export default function WithAuthenticated({ children }: Props) {
     const isSignedIn = useStore((state) => state.isSignedIn);
-    console.log(isSignedIn);
     return isSignedIn ? children : <Navigate to="/" />;
 }
