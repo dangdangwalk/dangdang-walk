@@ -17,7 +17,6 @@ import { Coords } from '@/models/location';
 import { useStore } from '@/store';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { uploadImages } from '@/utils/image';
-import { withAuthenticated } from '@/components/hoc/withAuthenticated';
 import { delay } from 'msw';
 import { DEFAULT_WEIGHT, WALKING_FACTOR } from '@/constants';
 
@@ -169,6 +168,4 @@ interface ReceivedState {
     dogs: DogAvatar[];
 }
 
-const AuthenticatedWalk = withAuthenticated(Walk);
-
-export default AuthenticatedWalk;
+export default Walk;

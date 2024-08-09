@@ -2,13 +2,13 @@ import LoginAlertModal from '@/components/LoginAlertModal';
 import OAuthButton from '@/components/OAuthButton';
 import BottomSheet from '@/components/commons/BottomSheet';
 import { OAUTH } from '@/constants';
-import { useAuth } from '@/hooks/useAuth';
+import { useStore } from '@/store';
 import React, { useState } from 'react';
 interface Props {
     children: React.ReactNode;
 }
 export default function AuthLayout({ children }: Props) {
-    const { refreshTokenQuery } = useAuth();
+    const isSignIn = useStore((state) => state.isSignedIn);
     const [isLoginBottomSheetOpen, setLoginBottomSheetState] = useState(false);
     const handleClose = () => {
         setLoginBottomSheetState(false);
@@ -19,7 +19,7 @@ export default function AuthLayout({ children }: Props) {
     return (
         <div className="flex max-w-screen-sm flex-col overflow-x-hidden">
             {children}
-            {!refreshTokenQuery.isSuccess && !refreshTokenQuery.isLoading && !isLoginBottomSheetOpen && (
+            {!isSignIn && !isLoginBottomSheetOpen && (
                 <LoginAlertModal isOpen={isLoginBottomSheetOpen} setToggle={handleToggle} />
             )}
             <BottomSheet isOpen={isLoginBottomSheetOpen} onClose={handleClose}>

@@ -16,7 +16,11 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import App from './App';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
+import NotFound from '@/components/error/NotFound';
+import WithAuthenticated from '@/components/commons/WithAuthenticated';
+
 const router = createBrowserRouter([
+    { path: '*', element: <NotFound /> },
     {
         path: '/',
         element: <App />,
@@ -48,7 +52,11 @@ const router = createBrowserRouter([
             },
             {
                 path: '/walk',
-                element: <Walk />,
+                element: (
+                    <WithAuthenticated>
+                        <Walk />
+                    </WithAuthenticated>
+                ),
             },
             {
                 path: '/callback',
@@ -56,19 +64,29 @@ const router = createBrowserRouter([
             },
             {
                 path: '/journals/create',
-                element: <JournalCreateForm />,
+                element: (
+                    <WithAuthenticated>
+                        <JournalCreateForm />
+                    </WithAuthenticated>
+                ),
             },
             {
                 path: '/journals',
                 element: (
-                    <AuthLayout>
-                        <Journals />
-                    </AuthLayout>
+                    <WithAuthenticated>
+                        <AuthLayout>
+                            <Journals />
+                        </AuthLayout>
+                    </WithAuthenticated>
                 ),
             },
             {
                 path: '/journals/:journalId',
-                element: <Detail />,
+                element: (
+                    <WithAuthenticated>
+                        <Detail />
+                    </WithAuthenticated>
+                ),
             },
         ],
     },

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useAuth } from '@/hooks/useAuth';
+import { useGetProfile, useSignOut } from '@/hooks/useAuth';
 import TopBar from '@/components/commons/Topbar';
 import { useDog } from '@/hooks/useDog';
 import Avatar from '@/components/commons/Avatar';
@@ -21,13 +21,16 @@ import DogDetail from '@/pages/MyPage/DogDetail';
 import { RecentMonthStatisticsResponse, fetchDogRecentMonthStatistics } from '@/api/dog';
 import { Dog } from '@/models/dog';
 import Navbar from '@/components/Navbar';
-import { withMainAuthenticated } from '@/components/hoc/withMainAuthenticated';
+import { useStore } from '@/store';
+
 function MyPage() {
     const navigate = useNavigate();
     const { fetchDog } = useDog();
     const { data, isSuccess } = fetchDog;
     const [dogs, setDogs] = useState<Dog[]>([]);
-    const { signOut, profileData } = useAuth();
+    const isSignIn = useStore((state) => state.isSignedIn);
+    const signOut = useSignOut();
+    const { profileData } = useGetProfile({ enabled: isSignIn });
     const nickname = profileData?.nickname.substring(0, profileData?.nickname.indexOf('#'));
     const provider = profileData?.provider;
     const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -168,6 +171,4 @@ function MyPage() {
     );
 }
 
-const AuthenticatedMyPage = withMainAuthenticated(MyPage);
-
-export default AuthenticatedMyPage;
+export default MyPage;
