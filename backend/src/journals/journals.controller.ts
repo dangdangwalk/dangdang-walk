@@ -37,8 +37,9 @@ export class JournalsController {
     async getJournalList(
         @Query('dogId', ParseIntPipe) dogId: number,
         @Query('date', DateValidationPipe) date: string,
+        @User() user: AccessTokenPayload,
     ): Promise<JournalListResponse[]> {
-        return await this.journalsService.getJournalList(dogId, date);
+        return await this.journalsService.getJournalList(user.userId, dogId, date);
     }
 
     @Post()

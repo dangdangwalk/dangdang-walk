@@ -304,7 +304,7 @@ export class JournalsService {
         return Promise.resolve(this.aggregateJournalsByDate(dogJournals, startDate, endDate));
     }
 
-    private async getJournalIdsByDogIdAndDate(dogId: number, date: string): Promise<number[]> {
+    private async getJournalIdsByDogIdAndDate(userId: number, dogId: number, date: string): Promise<number[]> {
         const startEndDate = getStartAndEndOfDay(new Date(date));
 
         const result = await this.entityManager
@@ -319,6 +319,7 @@ export class JournalsService {
             ])
             .innerJoin(JournalsDogs, 'journals_dogs', 'journals.id = journals_dogs.journal_id')
             .where('journals_dogs.dog_id = :dogId', { dogId })
+            .andWhere('journals.user_id = :userId', { userId })
             .andWhere('journals.started_at >= :startDate', { startDate: startEndDate.startDate })
             .andWhere('journals.started_at < :endDate', { endDate: startEndDate.endDate })
             .getRawMany();
@@ -329,8 +330,8 @@ export class JournalsService {
         }));
     }
 
-    async getJournalList(dogId: number, date: string): Promise<JournalListResponse[]> {
-        const journalListRaw = await this.getJournalIdsByDogIdAndDate(dogId, date);
+    async getJournalList(userId: number, dogId: number, date: string): Promise<JournalListResponse[]> {
+        const journalListRaw = await this.getJournalIdsByDogIdAndDate(userId, dogId, date);
         if (!journalListRaw.length) {
             return [];
         }
