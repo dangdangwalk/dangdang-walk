@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../src/users/types/role.type.ts"],"sourcesContent":["export const ROLE = {\n    Admin: 'ADMIN',\n    User: 'USER',\n} as const;\n\nexport type Role = (typeof ROLE)[keyof typeof ROLE];\n"],"names":["ROLE","Admin","User"],"rangeMappings":";;;;;;;;;;","mappings":";+BAAaA;;;eAAAA;;;AAAN,MAAMA,OAAO;IAChBC,OAAO;IACPC,MAAM;AACV"}
