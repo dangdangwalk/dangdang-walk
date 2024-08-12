@@ -4,7 +4,7 @@ on:
   push:
     branches: [ main ]
     paths:
-      - "backend/**"
+      - "backend/server/**"
 
 env:
   IMAGE: dangdangwalk
@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./backend
+        working-directory: ./backend/server
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -29,7 +29,7 @@ jobs:
         id: cache
         uses: actions/cache@v3
         with:
-          path: backend/node_modules
+          path: backend/server/node_modules
           key: |
             ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('backend/package-lock.json') }}
           restore-keys: |
@@ -73,10 +73,10 @@ jobs:
         env:
           ENV_FILE: ${{ secrets.ENV_FILE_BACKEND }}
         run: |
-          if [ ! -d "backend" ]; then 
-            mkdir backend;  
+          if [ ! -d "backend/server" ]; then 
+            mkdir backend/server;  
           fi
-          echo "$ENV_FILE" > ./backend/.env.prod
+          echo "$ENV_FILE" > ./backend/server/.env.prod
       - name: Deploy to Amazon EC2
         run : |
           chmod 777 /home/ubuntu/run-backend.sh
