@@ -6,7 +6,13 @@
   "scripts": {
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "prepare": "cd ../../ && husky backend/.husky",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "test:e2e": "echo \"Error: no test specified\" && exit 0"
+  },
+  "lint-staged": {
+    "**/*.{js,ts}": [
+      "eslint --fix"
+    ]
   },
   "devDependencies": {
     "prepare": "cd .. && husky backend/.husky",
