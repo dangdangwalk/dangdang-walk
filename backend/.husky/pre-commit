@@ -16,20 +16,55 @@ echo -e "${GREEN}[INFO]${NC} 현재 pre-commit script가 위치한 directory: ${
 current_branch=$(git symbolic-ref --short HEAD)
 echo -e "${GREEN}[INFO]${NC} 현재 branch name: ${BLUE}${current_branch}${NC}"
 
-# Check if the current branch name follows project's naming convention
+# Check if the current branch starts with "frontend" or "infra"
 if [[ ! $current_branch =~ ^(frontend|backend|infra)\/DANG-[1-9][0-9]*$ ]]; then
 	echo -e "${RED}[ERROR]${NC} 현재 branch name의 형식이 맞지 않습니다. (ex. frontend/DANG-1, backend/DANG-26, infra/DANG-72)"
 	exit 1
 fi
-
-# Check if the current branch starts with "backend"
 if [[ $current_branch == frontend* ]]; then
 	echo -e "${YELLOW}[WARNING]${NC} frontend 폴더에서 작업하셨나요? 현재 실행 중인 스크립트가 backend 폴더에 위치하고 있습니다."
 	echo -e "${YELLOW}[WARNING]${NC} frontend 설정으로 스크립트를 실행하려면 ${PINK}frontend 폴더에서${NC} ${MAGENTA}npm run prepare${NC}를 실행 한 뒤 다시 ${MAGENTA}git commit${NC}을 시도하세요."
 fi
 
-cd backend
+# Get the git root directory
+git_root=$(git rev-parse --show-toplevel)
+backend_dir="$git_root/backend"
 
-# Apply linter and formatter
-echo -e "${GREEN}[INFO]${NC} staged된 파일에 대해 linter와 formatter 적용"
-npx lint-staged
+run_lint_staged() {
+    echo -e "${GREEN}[INFO]${NC} $1 모듈의 staged된 파일에 대해 linter와 formatter 적용"
+    cd "$2" && npx lint-staged
+    return $?
+}
+
+# Get the list of changed files in the backend directory
+changed_files=$(git diff --cached --name-only -- "$backend_dir")
+
+if [ -z "$changed_files" ]; then
+    echo -e "${YELLOW}[WARNING]${NC} backend 디렉토리에서 변경된 파일이 없습니다."
+    exit 0
+fi
+
+# Check if there are changes in the server directory
+if echo "$changed_files" | grep -q "^backend/server/"; then
+    echo -e "${GREEN}[INFO]${NC} server 폴더에서 변경 사항 감지. server 모듈 검사합니다."
+    run_lint_staged "server" "$backend_dir/server"
+    server_exit_code=$?
+else
+    server_exit_code=0
+fi
+
+# Check if there are changes in the weather-api-module directory
+if echo "$changed_files" | grep -q "^backend/weather-api-module/"; then
+    echo -e "${GREEN}[INFO]${NC} weather-api-module 폴더에서 변경 사항 감지. weather-api-module 검사합니다."
+    run_lint_staged "weather-api-module" "$backend_dir/weather-api-module"
+    weather_api_exit_code=$?
+else
+    weather_api_exit_code=0
+fi
+
+if [ $server_exit_code -ne 0 ] || [ $weather_api_exit_code -ne 0 ]; then
+    echo -e "${RED}[ERROR]${NC} linter 또는 formatter 적용 중 오류가 발생했습니다."
+    exit 1
+fi
+
+exit 0

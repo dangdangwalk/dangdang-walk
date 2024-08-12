@@ -4,6 +4,10 @@ NC='\033[0m'
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 
+# Get the git root directory
+git_root=$(git rev-parse --show-toplevel)
+backend_dir="$git_root/backend"
+
 check_and_start_mysql_container() {
 	local_mysql_container_exists=$(docker ps -aq -f name=local-mysql)	# Get local-mysql container ID
 	local_mysql_container_running=$(docker ps -q -f name=local-mysql)	# Get running local-mysql container ID
@@ -30,28 +34,60 @@ check_and_start_mysql_container() {
 	fi
 }
 
+run_tests() {
+    local module=$1
+    cd "$backend_dir/$module"
+
+    check_and_start_mysql_container $module
+
+    echo -e "${GREEN}[INFO]${NC} $module Unit test 시작..."
+    if ! npm run test; then
+        echo -e "${RED}[ERROR]${NC} $module Unit test를 통과하지 못했습니다."
+        exit 1
+    fi
+
+    echo -e "${GREEN}[INFO]${NC} $module E2E test 시작..."
+    if ! npm run test:e2e; then
+        echo -e "${RED}[ERROR]${NC} $module E2E test를 통과하지 못했습니다."
+        exit 1
+    fi
+
+    echo -e "${GREEN}[INFO]${NC} $module 모든 test를 통과했습니다."
+    cd "$backend_dir"
+}
+
 # Check if docker is running
 if ! docker info > /dev/null 2>&1; then
     echo -e "${RED}[ERROR]${NC} Docker deamon이 실행 중이 아닙니다. Docker를 실행하고 다시 시도해주세요."
     exit 1
 fi
 
-cd backend
+cd backend && check_and_start_mysql_container
 
-check_and_start_mysql_container
-
-# Run unit tests
-echo -e "${GREEN}[INFO]${NC} Unit test 시작..."
-if ! npm run test; then
-	echo -e "${RED}[ERROR]${NC} Unit test를 통과하지 못했습니다."
-	exit 1
+# Get the range of commits being pushed
+if [ -z "$1" ]; then
+    # If pushing current branch
+    range="origin/$(git rev-parse --abbrev-ref HEAD)@{push}"
+else
+    # If pushing to a specific remote and branch
+    range="$1"
 fi
 
-# Run e2e tests
-echo -e "${GREEN}[INFO]${NC} E2E test 시작..."
-if ! npm run test:e2e; then
-	echo -e "${RED}[ERROR]${NC} E2E test를 통과하지 못했습니다."
-	exit 1
+# Get list of changed files in the backend directory
+changed_files=$(git diff --name-only origin/$(git rev-parse --abbrev-ref HEAD) HEAD -- "$backend_dir")
+
+# Check if there are changes in the weather-api-module directory
+if echo "$changed_files" | grep -q "^backend/weather-api-module/"; then
+    echo -e "${GREEN}[INFO]${NC} weather-api-module 폴더에서 변경 사항 감지. weather-api-module 테스트를 실행합니다."
+    run_tests "weather-api-module"
 fi
 
-echo -e "${GREEN}[INFO]${NC} 모든 test를 통과했습니다."
+# Check if there are changes in the server directory
+if echo "$changed_files" | grep -q "^backend/server/"; then
+    echo -e "${GREEN}[INFO]${NC} server 폴더에서 변경 사항 감지. server 모듈 테스트를 실행합니다."
+    run_tests "server"
+fi
+
+
+echo -e "${GREEN}[INFO]${NC} 모든 필요한 테스트를 통과했습니다."
+exit 0
