@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../src/common/config/settings.ts"],"sourcesContent":["export const PORT = process.env.PORT ?? 3333;\n"],"names":["PORT","process","env"],"rangeMappings":";;;;;;;;","mappings":";+BAAaA;;;eAAAA;;;IAAOC;AAAb,MAAMD,OAAOC,CAAAA,oBAAAA,QAAQC,GAAG,CAACF,IAAI,cAAhBC,+BAAAA,oBAAoB"}

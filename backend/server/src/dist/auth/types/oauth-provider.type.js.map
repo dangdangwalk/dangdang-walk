@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../src/auth/types/oauth-provider.type.ts"],"sourcesContent":["export const OAUTH_PROVIDERS = ['google', 'kakao', 'naver'] as const;\n\nexport type OauthProvider = (typeof OAUTH_PROVIDERS)[number];\n"],"names":["OAUTH_PROVIDERS"],"rangeMappings":";;;;;;;;;;;","mappings":";+BAAaA;;;eAAAA;;;AAAN,MAAMA,kBAAkB;IAAC;IAAU;IAAS;CAAQ"}

@@ -12,12 +12,15 @@ local-mysql-e2e:
     --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
 
 docker-build:
+	cd ./backend/server && \
 	docker-compose -f docker-compose-dev.yml build
 
 docker-up:
+	cd ./backend/server && \
 	docker-compose -f docker-compose-dev.yml up
 
 docker-down:
+	cd ./backend/server && \
 	docker-compose -f docker-compose-dev.yml down
 
 front-start:
@@ -25,5 +28,5 @@ front-start:
 	npm run dev
 
 backend-start:
-	cd ./backend && \
+	cd ./backend/server && \
 	npm run start

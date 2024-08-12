@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "/Users/acho/Code/proj/dangdang-walk/backend/server/log/.42976183c6d77af296da1022069e4260577f22f6-audit.json",
+    "files": [
+        {
+            "date": 1723390581115,
+            "name": "/Users/acho/Code/proj/dangdang-walk/backend/server/log/2024-08-12.log",
+            "hash": "93056d008006df4d41623c50b33f7f02792a94d9c99e2101236be7a55f1ef2ea"
+        }
+    ],
+    "hashType": "sha256"
+}
