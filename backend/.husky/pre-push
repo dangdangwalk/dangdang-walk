@@ -66,15 +66,21 @@ cd backend && check_and_start_mysql_container
 
 # Get the range of commits being pushed
 if [ -z "$1" ]; then
-    # If pushing current branch
-    range="origin/$(git rev-parse --abbrev-ref HEAD)@{push}"
+    # 현재 브랜치 이름 변수에 저장 
+    current_branch=$(git rev-parse --abbrev-ref HEAD)
+    # 원격 저장소에 해당 브랜치가 있는지 확인
+    if git rev-parse --verify origin/$current_branch > /dev/null 2>&1; then
+        range="origin/$current_branch..HEAD"
+    else
+        range="$(git merge-base origin/main HEAD)..HEAD"
+    fi
 else
     # If pushing to a specific remote and branch
     range="$1"
 fi
 
 # Get list of changed files in the backend directory
-changed_files=$(git diff --name-only origin/$(git rev-parse --abbrev-ref HEAD) HEAD -- "$backend_dir")
+changed_files=$(git diff --name-only $range -- "$backend_dir")
 
 # Check if there are changes in the weather-api-module directory
 if echo "$changed_files" | grep -q "^backend/weather-api-module/"; then
