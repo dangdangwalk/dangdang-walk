@@ -42,7 +42,7 @@ COPY --chown=nestjs:nodejs . .
 
 RUN if [ ! -d "/app/log" ]; then mkdir -p /app/log; fi && \
     npm run build && \
-    npm ci --omit=dev && \
+    npm ci --ignore-scripts --omit=dev && \
     npm cache clean --force
 
 USER nestjs
