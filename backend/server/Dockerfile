@@ -1,6 +1,15 @@
+# Builder stage
+FROM node:18-alpine AS builder
+WORKDIR /backend
+COPY . .
+WORKDIR /backend/server
+RUN apk add --no-cache libc6-compat curl && \
+    apk update && \
+    rm -rf /var/cache/apk/*
+RUN npm ci && npm run build
+
 # Development
 FROM node:18-alpine AS dev
-
 RUN apk add --no-cache libc6-compat && \
     apk update && \
     apk add --update curl && \
@@ -8,11 +17,11 @@ RUN apk add --no-cache libc6-compat && \
 
 USER root
 WORKDIR /app
-
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nestjs
 
-COPY --chown=nestjs:nodejs . .
+COPY --chown=nestjs:nodejs --from=builder /backend/server .
+COPY --chown=nestjs:nodejs --from=builder /backend/server .
 
 RUN npm ci && npm cache clean --force
 
@@ -22,9 +31,7 @@ USER nestjs
 
 # Production Build
 FROM node:18-alpine AS build
-
 ENV NODE_ENV prod
-
 RUN apk add --no-cache libc6-compat && \
     apk update && \
     apk add --update curl && \
@@ -32,21 +39,12 @@ RUN apk add --no-cache libc6-compat && \
 
 USER root
 WORKDIR /app
-
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nestjs
 
 COPY --chown=node:node --from=dev /app/node_modules /app/node_modules
-
-COPY --chown=nestjs:nodejs . .
-
-# Debug information
-RUN echo "Current working directory:" && pwd && \
-    echo "Contents of current directory:" && ls -la && \
-    echo "Contents of parent directory:" && ls -la .. && \
-    echo "Content of tsconfig.json:" && cat tsconfig.json && \
-    echo "Content of ../tsconfig.json:" && cat ../tsconfig.json || echo "../tsconfig.json not found"
-
+COPY --chown=nestjs:nodejs --from=builder /backend/server .
+COPY --chown=nestjs:nodejs --from=builder /backend/tsconfig.json /app/
 
 RUN if [ ! -d "/app/log" ]; then mkdir -p /app/log; fi && \
     npm run build && \
