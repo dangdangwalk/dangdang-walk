@@ -2,7 +2,7 @@ name: Backend Deploy
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
     paths:
       - "backend/server/**"
 
@@ -56,12 +56,6 @@ jobs:
           else
             aws ecr batch-delete-image --repository-name ${{ env.IMAGE }} --image-ids imageTag=$IMAGE_TAG
           fi
-      - name: Debug Info
-        run: |
-          pwd
-          ls -R
-          cat tsconfig.json
-          cat ../tsconfig.json
       - name: Docker build
         run: |
           docker build --platform linux/amd64 -t ${{ env.IMAGE }} --target prod .
@@ -73,7 +67,7 @@ jobs:
   deploy:
     name: ECR Deploy
     needs: build
-    runs-on: [ self-hosted, label-api ]
+    runs-on: [self-hosted, label-api]
     steps:
       - name: Create .env
         env:
@@ -84,6 +78,6 @@ jobs:
           fi
           echo "$ENV_FILE" > ./backend/server/.env.prod
       - name: Deploy to Amazon EC2
-        run : |
+        run: |
           chmod 777 /home/ubuntu/run-backend.sh
           /home/ubuntu/run-backend.sh ${{ env.TAG }} .env.prod ${{ env.REPO }} ${{ env.IMAGE }}
