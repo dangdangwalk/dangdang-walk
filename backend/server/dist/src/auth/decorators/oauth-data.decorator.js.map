@@ -1,1 +1,0 @@
-{"version":3,"file":"oauth-data.decorator.js","sourceRoot":"","sources":["../../../../src/auth/decorators/oauth-data.decorator.ts"],"names":[],"mappings":";;;AAAA,2CAAwE;AAI3D,QAAA,YAAY,GAAG,IAAA,6BAAoB,EAAC,CAAC,IAAW,EAAE,OAAyB,EAAa,EAAE;IACnG,MAAM,OAAO,GAAG,OAAO,CAAC,YAAY,EAAE,CAAC,UAAU,EAAE,CAAC;IACpD,OAAO,OAAO,CAAC,SAAS,CAAC;AAC7B,CAAC,CAAC,CAAC"}
