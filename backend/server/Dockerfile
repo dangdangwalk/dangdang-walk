@@ -50,7 +50,7 @@ COPY --chown=nestjs:nodejs --from=builder /backend/tsconfig.json /app/
 # Debug information
 RUN echo "Current working directory:" && pwd && \
     echo "Contents of current directory:" && ls -la && \
-    echo "Contents of parent directory:" && ls -la .. && \
+    echo "Contents of parent directory:" && ls -la ..
 
 RUN if [ ! -d "/app/log" ]; then mkdir -p /app/log; fi && \
     npm run build && \
