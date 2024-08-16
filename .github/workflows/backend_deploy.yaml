@@ -56,6 +56,12 @@ jobs:
           else
             aws ecr batch-delete-image --repository-name ${{ env.IMAGE }} --image-ids imageTag=$IMAGE_TAG
           fi
+      - name: Debug Info
+        run: |
+          pwd
+          ls -R
+          cat tsconfig.json
+          cat ../tsconfig.json
       - name: Docker build
         run: |
           docker build --platform linux/amd64 -t ${{ env.IMAGE }} --target prod .

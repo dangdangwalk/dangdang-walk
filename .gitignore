@@ -152,6 +152,8 @@ docker-compose-prod.yml
 **/.DS_Store/**
 
 /log
+backend/server/log/
+log/
 
 */log/*
 
