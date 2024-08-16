@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - "backend/server/**"
+      - "backend/**"
 
 env:
   IMAGE: dangdangwalk
@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./backend/server
+        working-directory: ./backend/
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -31,13 +31,15 @@ jobs:
         with:
           path: backend/server/node_modules
           key: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('backend/package-lock.json') }}
+            ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('backend/server/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('backend/package-lock.json') }}
+            ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('backend/server/package-lock.json') }}
       - name: Install Dependencies
         if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
+        working-directory: ./backend/server
         run: npm ci
       - name: Run build
+        working-directory: ./backend/server
         run: npm run build
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -58,7 +60,7 @@ jobs:
           fi
       - name: Docker build
         run: |
-          docker build --platform linux/amd64 -t ${{ env.IMAGE }} --target prod .
+          docker build --platform linux/amd64 -t ${{ env.IMAGE }} --target prod -f server/Dockerfile .
       - name: ECR push
         run: |
           aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ env.REPO }}
