@@ -1,12 +1,7 @@
 import { Redis } from "ioredis";
+import { WeatherData } from "weather-type";
 
-interface WeatherData {
-  maxTemperature: number;
-  minTemperature: number;
-  temperature: number;
-  sky: number;
-  precipitation: number;
-}
+
 
 export class DataStore {
   public redis;
