@@ -6,4 +6,17 @@ export interface WeatherData {
     precipitation: number;
 }
 
-export type WeatherApiType ='realtimeOneHour' | 'predicateDay' | 'predicateSixHour'
+export type WeatherApiType = 'realtimeOneHour' | 'predicateDay' | 'predicateSixHour';
+
+export type WeatherDataMap = {[key: string]: WeatherData};
+
+export interface todayWeatherPredicate {
+    baseDate: string;
+    baseTime: string;
+    category: string;
+    fcstDate: string;
+    fcstTime: string;
+    fcstValue: string;
+    nx: number;
+    ny: number;
+}

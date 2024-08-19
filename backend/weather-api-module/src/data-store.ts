@@ -1,43 +1,61 @@
-import { Redis } from "ioredis";
-import { WeatherData } from "weather-type";
+import { Redis } from 'ioredis';
 
-
+import { WeatherData, WeatherDataMap } from './weather-type';
 
 export class DataStore {
-  public redis;
-  constructor() {
-    this.redis = new Redis({
-      host: "localhost",
-      port: 6379,
-      db: 0,
-    });
-  }
+    private readonly redis;
 
-  async saveWeatherData(
-    x: number,
-    y: number,
-    data: WeatherData,
-  ): Promise<void> {
-    const timestamp = Math.floor(Date.now() / 600000);
-    const key = `weather:${x}:${y}:${timestamp}`;
+    constructor() {
+        this.redis = new Redis({
+            host: 'localhost',
+            port: parseInt(process.env.PORT as string),
+            db: 0,
+        });
+    }
 
-    await this.redis.hset(key, data);
-  }
+    private getTimeKey(time: string): string {
+        const hour = time.substring(0, 2);
+        const minute = Math.floor(parseInt(time.substring(2)) / 10) * 10;
+        return `${hour}${minute.toString().padStart(2, '0')}`;
+    }
 
-  async getWeatherData(x: number, y: number): Promise<WeatherData | null> {
-    const timestamp = Math.floor(Date.now() / 600000);
-    const key = `weather:${x}:${y}:${timestamp}`;
+    private getCurrentTimeKey(): string {
+        const now = new Date();
+        const hour = now.getHours().toString().padStart(2, '0');
+        const minute = Math.floor(now.getMinutes() / 10) * 10;
+        return `${hour}${minute.toString().padStart(2, '0')}`;
+    }
 
-    const data = await this.redis.hgetall(key);
+    async saveWeatherDataOneHour(x: number, y: number, data: WeatherData, time: string): Promise<void> {
+        const baseTimeKey = this.getTimeKey(time);
+        const key = `weather:${x}:${y}`;
 
-    if (Object.keys(data).length === 0) return null;
+        for (let i = 0; i < 6; i++) {
+            const minute = i * 10;
+            const timeKey = `${baseTimeKey.substring(0, 2)}${minute.toString().padStart(2, '0')}`;
+            await this.redis.hset(key, timeKey, JSON.stringify(data));
+        }
+    }
 
-    return {
-      maxTemperature: parseFloat(data.maxTemperature),
-      minTemperature: parseFloat(data.minTemperature),
-      temperature: parseFloat(data.temperature),
-      sky: parseFloat(data.sky),
-      precipitation: parseFloat(data.precipitation),
-    };
-  }
+    async saveFullDayPredicate(nx: number, ny: number, fullDayPredicateDataList: WeatherDataMap) {
+        Object.entries(fullDayPredicateDataList).forEach(([time, weatherData]) => {
+            this.saveWeatherDataOneHour(nx, ny, weatherData as WeatherData, time);
+        });
+    }
+
+    async getWeatherData(x: number, y: number): Promise<WeatherData | null> {
+        const key = `weather:${x}:${y}`;
+
+        const timeKey = this.getCurrentTimeKey();
+        const data = await this.redis.hget(key, timeKey);
+
+        if (!data) return null;
+
+        return JSON.parse(data);
+    }
+
+}
+
+export function getDataInstance(): DataStore {
+    return new DataStore();
 }
