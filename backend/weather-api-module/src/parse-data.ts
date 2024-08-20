@@ -1,8 +1,17 @@
-import { todayWeatherPredicate, WeatherData, WeatherDataMap } from './weather-type';
+import {
+    OneHourWeatherRealRaw,
+    TodayWeatherPredicateRaw,
+    TodayWeatherPredicateData,
+    TodayWeatherPredicateDataMap,
+    OneHourRealWeatherDataMap,
+} from './weather-type';
+export interface ParseData<T, U> {
+    parse(data: T): U;
+}
 
-export class ParseData {
-    parseTodayWeatherPredicate(weatherDataList: todayWeatherPredicate[]): WeatherDataMap {
-        const consolidatedData: { [key: string]: WeatherData } = {};
+export class parseTodayWeatherPredicate implements ParseData<TodayWeatherPredicateRaw[], TodayWeatherPredicateDataMap> {
+    parse(weatherDataList: TodayWeatherPredicateRaw[]): TodayWeatherPredicateDataMap {
+        const consolidatedData: { [key: string]: TodayWeatherPredicateData } = {};
 
         weatherDataList.forEach((weatherData) => {
             const key = weatherData.fcstTime;
@@ -39,6 +48,37 @@ export class ParseData {
     }
 }
 
-export function getParserInstance(): ParseData {
-    return new ParseData();
+export class parseRealWeatherOneHour implements ParseData<OneHourWeatherRealRaw[], OneHourRealWeatherDataMap> {
+    parse(weatherDataList: OneHourWeatherRealRaw[]): OneHourRealWeatherDataMap {
+        const consolidatedData: OneHourRealWeatherDataMap = {};
+
+        weatherDataList.forEach((weatherData) => {
+            const key = weatherData.baseTime;
+            if (!consolidatedData[key]) {
+                consolidatedData[key] = {
+                    temperature: 0,
+                    precipitation: 0,
+                };
+            }
+
+            switch (weatherData.category) {
+                case 'T1H':
+                    consolidatedData[key].temperature = Number(weatherData.obsrValue);
+                    break;
+                case 'PTY':
+                    consolidatedData[key].precipitation = Number(weatherData.obsrValue);
+                    break;
+            }
+        });
+
+        return consolidatedData;
+    }
+}
+
+export function getTodayParserInstance(): ParseData<TodayWeatherPredicateRaw[], TodayWeatherPredicateDataMap> {
+    return new parseTodayWeatherPredicate();
+}
+
+export function getRealWeatherOneHour(): ParseData<OneHourWeatherRealRaw[], OneHourRealWeatherDataMap> {
+    return new parseRealWeatherOneHour();
 }

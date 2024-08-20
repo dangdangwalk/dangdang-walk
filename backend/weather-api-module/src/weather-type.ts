@@ -1,16 +1,6 @@
-export interface WeatherData {
-    maxTemperature: number;
-    minTemperature: number;
-    temperature: number;
-    sky: number;
-    precipitation: number;
-}
+export type WeatherApiType = 'realtimeOneHour' | 'predicateDay';
 
-export type WeatherApiType = 'realtimeOneHour' | 'predicateDay' | 'predicateSixHour';
-
-export type WeatherDataMap = {[key: string]: WeatherData};
-
-export interface todayWeatherPredicate {
+export interface TodayWeatherPredicateRaw {
     baseDate: string;
     baseTime: string;
     category: string;
@@ -20,3 +10,28 @@ export interface todayWeatherPredicate {
     nx: number;
     ny: number;
 }
+
+export interface OneHourWeatherRealRaw {
+    baseDate: string;
+    baseTime: string;
+    category: string;
+    obsrValue: string;
+    nx: number;
+    ny: number;
+}
+
+export interface TodayWeatherPredicateData {
+    maxTemperature: number;
+    minTemperature: number;
+    temperature: number;
+    sky: number;
+    precipitation: number;
+}
+
+export interface OneHourWeatherRealData {
+    temperature: number;
+    precipitation: number;
+}
+
+export type TodayWeatherPredicateDataMap = { [key: string]: TodayWeatherPredicateData };
+export type OneHourRealWeatherDataMap = { [key: string]: OneHourWeatherRealData };
