@@ -1,9 +1,10 @@
-import { DataStore, getDataInstance } from './data-store';
-
-import { HttpClient } from './http-client';
-import { getRealWeatherOneHour, getTodayParserInstance, ParseData } from './parse-data';
-import { UrlBuilder } from './urlBuilder';
 import { WeatherApiType } from './weather-type';
+
+import { DataStore, getDataInstance } from '../data/data-store';
+
+import { HttpClient } from '../http/http-client';
+import { getRealWeatherOneHour, getTodayParserInstance, ParseData } from '../parser/parse-data';
+import { UrlBuilder } from '../url/urlBuilder';
 
 type ParserMap = {
     [K in WeatherApiType]: ParseData<any, any>;

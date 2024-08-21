@@ -1,5 +1,6 @@
 import { Url } from './url';
-import { WeatherApiType } from './weather-type';
+
+import { WeatherApiType } from '../weather/weather-type';
 
 export class UrlBuilder {
     private apiTypeSignature: string;

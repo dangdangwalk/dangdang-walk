@@ -1,22 +1,26 @@
 import { Redis } from 'ioredis';
 
-import { getCurrentTimeKey } from './util';
+import { getLogger } from '../logger/logger-factory';
+import { WinstonLoggerService } from '../logger/winston-logger';
+import { getCurrentTimeKey } from '../util';
 import {
     OneHourRealWeatherDataMap,
     OneHourWeatherRealData,
     TodayWeatherPredicateData,
     TodayWeatherPredicateDataMap,
-} from './weather-type';
+} from '../weather/weather-type';
 
 export class DataStore {
     private readonly redis;
+    private readonly logger: WinstonLoggerService;
 
-    constructor() {
+    constructor(logger: WinstonLoggerService) {
         this.redis = new Redis({
             host: 'localhost',
             port: parseInt(process.env.PORT as string),
             db: 0,
         });
+        this.logger = logger;
     }
 
     async updateRealData(nx: number, ny: number, data: OneHourWeatherRealData, timeKey: string): Promise<void> {
@@ -66,11 +70,11 @@ export class DataStore {
         try {
             return await this.redis.keys(pattern);
         } catch (error) {
-            console.log('Redis: getKeys error');
+            this.logger.reportRedisErr('getKeys', error.message);
         }
     }
 }
 
 export function getDataInstance(): DataStore {
-    return new DataStore();
+    return new DataStore(getLogger());
 }
