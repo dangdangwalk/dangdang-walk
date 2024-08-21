@@ -1,16 +1,20 @@
 import * as cron from 'node-cron';
 
-import { DataStore, getDataInstance } from './data-store';
-import { getCurrentTimeKey } from './util';
-import { getWeatherServiceInstance, WeatherService } from './weather-service';
+import { DataStore, getDataInstance } from '../data/data-store';
+import { getLogger } from '../logger/logger-factory';
+import { WinstonLoggerService } from '../logger/winston-logger';
+import { getCurrentTimeKey } from '../util';
+import { getWeatherServiceInstance, WeatherService } from '../weather/weather-service';
 
 export class Scheduler {
     private readonly dataStore: DataStore;
     private readonly weatherService: WeatherService;
+    private readonly logger: WinstonLoggerService;
 
-    constructor(dataStore: DataStore, weatherService: WeatherService) {
+    constructor(dataStore: DataStore, weatherService: WeatherService, logger: WinstonLoggerService) {
         this.dataStore = dataStore;
         this.weatherService = weatherService;
+        this.logger = logger;
     }
 
     async getKeys(): Promise<string[]> {
@@ -26,7 +30,7 @@ export class Scheduler {
                 this.weatherService.saveTodayWeatherPredicate(parseInt(x), parseInt(y));
             }
         });
-        console.log('하루 예보 데이터에 대한 cron job이 등록되었습니다. 지역 갯수 : ', keys.length);
+        this.logger.info(`하루 예보 데이터에 대한 cron job이 등록되었습니다. 지역 갯수 : ${keys.length}`);
     }
 
     async scheduleOneHourRealWeatherPredicate() {
@@ -38,10 +42,10 @@ export class Scheduler {
                 this.weatherService.saveOneHourWeatherReal(parseInt(x), parseInt(y), time);
             }
         });
-        console.log('한시간 실황 데이터에 대한 cron job이 등록되었습니다. 지역 갯수 : ', keys.length);
+        this.logger.info(`한시간 실황 데이터에 대한 cron job이 등록되었습니다. 지역 갯수 : ${keys.length}`);
     }
 }
 
 export function getSchedulerInstance() {
-    return new Scheduler(getDataInstance(), getWeatherServiceInstance());
+    return new Scheduler(getDataInstance(), getWeatherServiceInstance(), getLogger());
 }

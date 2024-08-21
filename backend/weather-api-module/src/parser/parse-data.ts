@@ -4,7 +4,7 @@ import {
     TodayWeatherPredicateData,
     TodayWeatherPredicateDataMap,
     OneHourRealWeatherDataMap,
-} from './weather-type';
+} from '../weather/weather-type';
 export interface ParseData<T, U> {
     parse(data: T): U;
 }

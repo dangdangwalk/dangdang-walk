@@ -1,4 +1,4 @@
-import { getSchedulerInstance } from './scheduler';
+import { getSchedulerInstance } from './scheduler/scheduler';
 
 function init() {
     const scheduler = getSchedulerInstance();
