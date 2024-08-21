@@ -3,7 +3,6 @@ import { DataStore, getDataInstance } from './data-store';
 import { HttpClient } from './http-client';
 import { getRealWeatherOneHour, getTodayParserInstance, ParseData } from './parse-data';
 import { UrlBuilder } from './urlBuilder';
-import { getCurrentTimeKey } from './util';
 import { WeatherApiType } from './weather-type';
 
 type ParserMap = {
@@ -61,9 +60,8 @@ export class WeatherService {
         }
     }
 
-    async saveOneHourWeatherReal(nx: number, ny: number) {
+    async saveOneHourWeatherReal(nx: number, ny: number, time: string) {
         try {
-            const time = getCurrentTimeKey();
             const parsedData = await this.fetchAndParseData(nx, ny, time, 'realtimeOneHour');
 
             this.dataStore.updateOneHourReal(nx, ny, parsedData);
