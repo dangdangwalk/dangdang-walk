@@ -11,8 +11,7 @@ export class UrlBuilder {
 
     setApiType(apiType: WeatherApiType) {
         if (apiType === 'predicateDay') this.apiTypeSignature = 'getVilageFcst';
-        if (apiType === 'predicateSixHour') this.apiTypeSignature = 'getUltrSrtFcst';
-        if (apiType === 'realtimeOneHour') this.apiTypeSignature = 'getUltrSrtNcst';
+        if (apiType === 'realtimeOneHour') this.apiTypeSignature = 'getUltraSrtNcst';
         return this;
     }
 
