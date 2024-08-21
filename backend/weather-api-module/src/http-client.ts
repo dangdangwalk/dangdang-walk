@@ -2,6 +2,9 @@ import * as http from 'http';
 
 import 'dotenv/config';
 
+import { publicWeatherAPIError } from './public-weather-error';
+import { isXML, parseErrorCode } from './xml-util';
+
 export class HttpClient {
     private readonly url: string;
 
@@ -18,12 +21,19 @@ export class HttpClient {
                     data += chunk;
                 });
 
-                res.on('end', () => {
+                res.on('end', async () => {
                     if (res.statusCode === 200) {
                         try {
+                            if (isXML(data)) {
+                                throw new publicWeatherAPIError(await parseErrorCode(data));
+                            }
                             resolve(JSON.parse(data));
                         } catch (error) {
-                            reject('Failed to parte API response');
+                            if (error instanceof publicWeatherAPIError) {
+                                reject(error.message);
+                            } else {
+                                reject('Failed to parse API response');
+                            }
                         }
                     } else {
                         reject(`API request failed with status code : ${res.statusCode}`);

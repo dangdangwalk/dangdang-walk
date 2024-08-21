@@ -1,6 +1,12 @@
 import { Redis } from 'ioredis';
 
-import { WeatherData, WeatherDataMap } from './weather-type';
+import { getCurrentTimeKey } from './util';
+import {
+    OneHourRealWeatherDataMap,
+    OneHourWeatherRealData,
+    TodayWeatherPredicateData,
+    TodayWeatherPredicateDataMap,
+} from './weather-type';
 
 export class DataStore {
     private readonly redis;
@@ -13,47 +19,48 @@ export class DataStore {
         });
     }
 
-    private getTimeKey(time: string): string {
-        const hour = time.substring(0, 2);
-        const minute = Math.floor(parseInt(time.substring(2)) / 10) * 10;
-        return `${hour}${minute.toString().padStart(2, '0')}`;
-    }
+    async updateRealData(nx: number, ny: number, data: OneHourWeatherRealData, timeKey: string): Promise<void> {
+        const key = `weather:${nx}:${ny}`;
 
-    private getCurrentTimeKey(): string {
-        const now = new Date();
-        const hour = now.getHours().toString().padStart(2, '0');
-        const minute = Math.floor(now.getMinutes() / 10) * 10;
-        return `${hour}${minute.toString().padStart(2, '0')}`;
-    }
+        const existingData = await this.redis.hget(key, timeKey);
+        let updatedData: TodayWeatherPredicateData;
 
-    async saveWeatherDataOneHour(x: number, y: number, data: WeatherData, time: string): Promise<void> {
-        const baseTimeKey = this.getTimeKey(time);
-        const key = `weather:${x}:${y}`;
-
-        for (let i = 0; i < 6; i++) {
-            const minute = i * 10;
-            const timeKey = `${baseTimeKey.substring(0, 2)}${minute.toString().padStart(2, '0')}`;
-            await this.redis.hset(key, timeKey, JSON.stringify(data));
+        if (existingData) {
+            updatedData = { ...JSON.parse(existingData), ...data };
+        } else {
+            updatedData = {
+                ...data,
+                sky: 0,
+                minTemperature: 0,
+                maxTemperature: 0,
+            };
         }
+        await this.redis.hset(key, timeKey, JSON.stringify(updatedData));
     }
 
-    async saveFullDayPredicate(nx: number, ny: number, fullDayPredicateDataList: WeatherDataMap) {
+    async saveFullDayPredicate(nx: number, ny: number, fullDayPredicateDataList: TodayWeatherPredicateDataMap) {
         Object.entries(fullDayPredicateDataList).forEach(([time, weatherData]) => {
-            this.saveWeatherDataOneHour(nx, ny, weatherData as WeatherData, time);
+            const key = `weather:${nx}:${ny}`;
+            this.redis.hset(key, time, JSON.stringify(weatherData));
         });
     }
 
-    async getWeatherData(x: number, y: number): Promise<WeatherData | null> {
+    async updateOneHourReal(nx: number, ny: number, oneHourRealDataList: OneHourRealWeatherDataMap) {
+        Object.entries(oneHourRealDataList).forEach(([time, data]) => {
+            this.updateRealData(nx, ny, data, time);
+        });
+    }
+
+    async getWeatherData(x: number, y: number): Promise<TodayWeatherPredicateData | null> {
         const key = `weather:${x}:${y}`;
 
-        const timeKey = this.getCurrentTimeKey();
+        const timeKey = getCurrentTimeKey();
         const data = await this.redis.hget(key, timeKey);
 
         if (!data) return null;
 
         return JSON.parse(data);
     }
-
 }
 
 export function getDataInstance(): DataStore {

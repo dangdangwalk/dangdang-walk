@@ -1,17 +1,22 @@
 import { DataStore, getDataInstance } from './data-store';
 
 import { HttpClient } from './http-client';
-import { getParserInstance, ParseData } from './parse-data';
+import { getRealWeatherOneHour, getTodayParserInstance, ParseData } from './parse-data';
 import { UrlBuilder } from './urlBuilder';
-import { WeatherApiType, WeatherDataMap } from './weather-type';
+import { getCurrentTimeKey } from './util';
+import { WeatherApiType } from './weather-type';
+
+type ParserMap = {
+    [K in WeatherApiType]: ParseData<any, any>;
+};
 
 export class WeatherService {
-    private readonly dataStore;
-    private readonly parser;
+    private readonly dataStore: DataStore;
+    private readonly parsers: ParserMap;
 
-    constructor(dataStore: DataStore, parser: ParseData) {
+    constructor(dataStore: DataStore, parsers: ParserMap) {
         this.dataStore = dataStore;
-        this.parser = parser;
+        this.parsers = parsers;
     }
 
     private buildUrl(nx: number, ny: number, baseTime: string, type: WeatherApiType): string {
@@ -30,28 +35,48 @@ export class WeatherService {
         return await new HttpClient(url).fetchData();
     }
 
-    private parseWeatherData(data: any) {
+    private parseWeatherData(data: any, type: WeatherApiType) {
         if (!this.isValidResponse(data)) throw new Error('Invalid API response structure');
 
-        return this.parser.parseTodayWeatherPredicate(data.response.body.items.item);
+        return this.parsers[type].parse(data.response.body.items.item);
     }
 
     private isValidResponse(data: any): boolean {
         return data && data.response && data.response.body && data.response.body.items && data.response.body.items.item;
     }
 
+    async fetchAndParseData(nx: number, ny: number, time: string, type: WeatherApiType) {
+        const data = await this.fetchWeatherData(nx, ny, time, type);
+        return this.parseWeatherData(data, type);
+    }
+
     async saveTodayWeatherPredicate(nx: number, ny: number) {
         try {
-            const data = await this.fetchWeatherData(nx, ny, '0200', 'predicateDay');
-            const parsedData: WeatherDataMap = this.parseWeatherData(data);
+            const parsedData = await this.fetchAndParseData(nx, ny, '0200', 'predicateDay');
+
             this.dataStore.saveFullDayPredicate(nx, ny, parsedData);
         } catch (error) {
             console.error('Error in getTodayWeatherPredicate:', error);
             throw error;
         }
     }
+
+    async saveOneHourWeatherReal(nx: number, ny: number) {
+        try {
+            const time = getCurrentTimeKey();
+            const parsedData = await this.fetchAndParseData(nx, ny, time, 'realtimeOneHour');
+
+            this.dataStore.updateOneHourReal(nx, ny, parsedData);
+        } catch (error) {
+            console.error('Error in saveOneHourWeatherReal:', error);
+        }
+    }
 }
 
 export function getWeatherServiceInstance() {
-    return new WeatherService(getDataInstance(), getParserInstance());
+    const parsers: ParserMap = {
+        predicateDay: getTodayParserInstance(),
+        realtimeOneHour: getRealWeatherOneHour(),
+    };
+    return new WeatherService(getDataInstance(), parsers);
 }
