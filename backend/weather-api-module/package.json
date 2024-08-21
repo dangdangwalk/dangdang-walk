@@ -2,7 +2,7 @@
     "name": "weather-api-module",
     "version": "1.0.0",
     "description": "",
-    "main": "dist/weather-service.js",
+    "main": "dist/init.js",
     "type": "commonjs",
     "scripts": {
         "clean": "rm -rf dist",
@@ -22,6 +22,7 @@
         "@swc/cli": "^0.3.10",
         "@swc/core": "^1.5.0",
         "@swc/jest": "^0.2.29",
+        "@types/node-cron": "^3.0.11",
         "@types/xml2js": "^0.4.14",
         "@typescript-eslint/eslint-plugin": "^6.21.0",
         "@typescript-eslint/parser": "^6.21.0",
@@ -44,6 +45,7 @@
         "cross-env": "^7.0.3",
         "dotenv": "^16.4.5",
         "ioredis": "^5.4.1",
+        "node-cron": "^3.0.3",
         "xml2js": "^0.6.2"
     }
 }

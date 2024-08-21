@@ -61,6 +61,14 @@ export class DataStore {
 
         return JSON.parse(data);
     }
+
+    async getKeys(pattern: string) {
+        try {
+            return await this.redis.keys(pattern);
+        } catch (error) {
+            console.log('Redis: getKeys error');
+        }
+    }
 }
 
 export function getDataInstance(): DataStore {
