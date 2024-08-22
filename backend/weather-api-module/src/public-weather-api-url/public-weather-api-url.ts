@@ -1,6 +1,6 @@
 const WEATHER_BASE_URL = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/';
 
-export class Url {
+export class PublicWeatherApiUrl {
     private apiTypeSignature: string;
     private numOfRows: number;
     private pageNo: number;
