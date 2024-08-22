@@ -1,10 +1,15 @@
-import { getSchedulerInstance } from './scheduler/scheduler';
+import { loadConfig } from './env';
+import { getServerInstance } from './http/http-server';
+import { initializeScheduler } from './scheduler/scheduler';
 
 function init() {
-    const scheduler = getSchedulerInstance();
+    const server = getServerInstance();
 
-    scheduler.scheduleOneHourRealWeatherPredicate();
-    scheduler.scheduleTodayWeatherPredicate();
+    loadConfig();
+
+    server.initServer();
+
+    initializeScheduler();
 }
 
 init();

@@ -49,3 +49,10 @@ export class Scheduler {
 export function getSchedulerInstance() {
     return new Scheduler(getDataInstance(), getWeatherServiceInstance(), getLogger());
 }
+
+export function initializeScheduler() {
+    const scheduler = getSchedulerInstance();
+
+    scheduler.scheduleOneHourRealWeatherPredicate();
+    scheduler.scheduleTodayWeatherPredicate();
+}

@@ -17,7 +17,7 @@ export class DataStore {
     constructor(logger: WinstonLoggerService) {
         this.redis = new Redis({
             host: 'localhost',
-            port: parseInt(process.env.PORT as string),
+            port: parseInt(process.env.REDIS_PORT as string),
             db: 0,
         });
         this.logger = logger;

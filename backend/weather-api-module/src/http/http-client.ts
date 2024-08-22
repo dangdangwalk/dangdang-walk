@@ -1,7 +1,5 @@
 import * as http from 'http';
 
-import 'dotenv/config';
-
 import { publicWeatherAPIError } from './public-weather-error';
 import { isXML, parseErrorCode } from './xml-util';
 
