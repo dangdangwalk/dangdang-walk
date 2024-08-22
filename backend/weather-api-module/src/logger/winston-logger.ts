@@ -1,10 +1,11 @@
 import * as fs from 'fs';
+import { IncomingMessage } from 'http';
 import * as path from 'path';
 
 import * as winston from 'winston';
 import * as winstonDaily from 'winston-daily-rotate-file';
 
-import stripAnsi from './logger-util';
+import stripAnsi, { bold, color } from './logger-util';
 
 export class WinstonLoggerService {
     private readonly logger: winston.Logger;
@@ -99,24 +100,22 @@ export class WinstonLoggerService {
     debug(message: string, meta?: any) {
         this.logger.debug(message, meta);
     }
+
     //custom function
-    reportRequest = function (url: string, method: string): void {
-        this.info(`Received Request on ${url} by ${method}`);
+    receiveRequest = function (req: IncomingMessage): void {
+        this.info(
+            `${color('RECEIVED REQUEST', 'Cyan')}  [ ${bold(req.method as string)} | ${bold(req.url as string)} | ${req.socket.remoteAddress}]}`,
+        );
         return;
     };
 
-    reportResponse = function (url: string, method: string, message: any): void {
-        this.info(`Send response to ${url} by ${method} : ${message}`);
-    };
-
-    reportResponseErr = function (url: string, method: string, err: string): void {
-        this.error(`Request on ${url} by ${method} failed | ${err}`);
-        return;
+    sendResponse = function (req: IncomingMessage, responseTime: number): void {
+        this.logger.info(
+            `${color('   SEND RESPONSE', 'Magenta')} [ ${bold(req.method as string)} | ${bold(req.url as string)} | ${req.socket.remoteAddress} | ${req.statusCode} | ${color(`+${responseTime}ms`, 'Yellow')}]`,
+        );
     };
 
     reportRedisErr = function (method: string, err: string): void {
         this.error(`Redis error : Failed to excute a ${method} | ${err}`);
     };
 }
-
-
