@@ -11,16 +11,40 @@ import {
 } from '../weather/weather-type';
 
 export class DataStore {
-    private readonly redis;
+    private redis: Redis;
     private readonly logger: WinstonLoggerService;
+    private readonly maxRetry = 5;
+    private readonly retryDelay = 3000;
 
     constructor(logger: WinstonLoggerService) {
-        this.redis = new Redis({
-            host: 'localhost',
-            port: parseInt(process.env.REDIS_PORT as string),
-            db: 0,
-        });
         this.logger = logger;
+    }
+
+    async initialize() {
+        const retries = 0;
+        let redis: Redis | null = null;
+        while (retries < this.maxRetry && !this.redis) {
+            redis = new Redis({
+                host: 'localhost',
+                port: parseInt(process.env.REDIS_PORT as string),
+                db: 0,
+                maxRetriesPerRequest: 5,
+                retryStrategy: (times: number) => {
+                    if (times >= this.maxRetry) {
+                        return null;
+                    }
+                    return this.retryDelay;
+                },
+            });
+
+            redis.on('error', async (error) => {
+                this.logger.error(`Redis와 연결에 실패했습니다. ${error.message}`, error.stack);
+            });
+
+            await redis.ping();
+            this.logger.info(`Redis와 연결에 성공했습니다. PORT: ${process.env.REDIS_PORT}`);
+            this.redis = redis;
+        }
     }
 
     async updateRealData(nx: number, ny: number, data: OneHourWeatherRealData, timeKey: string): Promise<void> {
@@ -75,6 +99,6 @@ export class DataStore {
     }
 }
 
-export function getDataInstance(): DataStore {
+export function getDataStore(): DataStore {
     return new DataStore(getLogger());
 }
