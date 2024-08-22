@@ -2,14 +2,19 @@ import { loadConfig } from './env';
 import { getServerInstance } from './http/http-server';
 import { initializeScheduler } from './scheduler/scheduler';
 
-function init() {
-    const server = getServerInstance();
+async function init() {
+    try {
+        await loadConfig();
 
-    loadConfig();
+        const server = await getServerInstance();
 
-    server.initServer();
+        await server.initServer();
 
-    initializeScheduler();
+        initializeScheduler();
+    } catch (error) {
+        console.error('초기화 중 오류 발생. 프로세스를 종료합니다');
+        process.exit(1);
+    }
 }
 
 init();

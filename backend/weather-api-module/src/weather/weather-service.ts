@@ -67,15 +67,19 @@ export class WeatherService {
 
             this.dataStore.updateOneHourReal(nx, ny, parsedData);
         } catch (error) {
-            console.error('Error in saveOneHourWeatherReal:', error);
+            this.logger.error(
+                `한시간 실황 저장에 실패했습니다. 지역 : ${nx}:${ny}, 에러 메세지 : ${error.message}`,
+                error.stack,
+            );
+            throw error;
         }
     }
 }
 
-export function getWeatherServiceInstance() {
+export async function getWeatherServiceInstance() {
     const parsers: ParserMap = {
         predicateDay: getTodayParserInstance(),
         realtimeOneHour: getRealWeatherOneHour(),
     };
-    return new WeatherService(getDataInstance(), parsers);
+    return new WeatherService(await getDataInstance(), parsers, getLogger());
 }

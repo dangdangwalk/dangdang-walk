@@ -46,6 +46,6 @@ export class HttpServer {
     }
 }
 
-export function getServerInstance() {
-    return new HttpServer(getLogger(), getControllerInstance());
+export async function getServerInstance() {
+    return new HttpServer(getLogger(), await getControllerInstance());
 }

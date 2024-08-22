@@ -21,6 +21,6 @@ export class Controller {
     }
 }
 
-export function getControllerInstance() {
-    return new Controller();
+export async function getControllerInstance() {
+    return new Controller(await getDataInstance(), await getWeatherServiceInstance(), getLogger());
 }
