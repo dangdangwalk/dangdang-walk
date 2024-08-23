@@ -36,7 +36,6 @@ export class Controller {
         const { nx, ny } = query;
 
         if (!nx || !ny) {
-            console.log('1');
             res.writeHead(400, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ error: 'nx 또는 ny가 없습니다' }));
             return;

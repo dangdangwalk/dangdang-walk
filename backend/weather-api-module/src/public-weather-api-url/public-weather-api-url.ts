@@ -4,19 +4,24 @@ export class PublicWeatherApiUrl {
     private apiTypeSignature: string;
     private numOfRows: number;
     private pageNo: number;
+    private baseDate: string;
     private baseTime: string;
     private nx: number;
     private ny: number;
 
-    private getDate() {
-        const now = new Date();
-        return `${now.getFullYear().toString()}${(now.getMonth() + 1).toString().padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}`;
-    }
-
-    constructor(apiTypeSignature: string, numOfRows: number, pageNo: number, baseTime: string, nx: number, ny: number) {
+    constructor(
+        apiTypeSignature: string,
+        numOfRows: number,
+        pageNo: number,
+        baseDate: string,
+        baseTime: string,
+        nx: number,
+        ny: number,
+    ) {
         this.apiTypeSignature = apiTypeSignature;
         this.numOfRows = numOfRows;
         this.pageNo = pageNo;
+        this.baseDate = baseDate;
         this.baseTime = baseTime;
         this.nx = nx;
         this.ny = ny;
@@ -29,7 +34,7 @@ export class PublicWeatherApiUrl {
             `?serviceKey=${process.env.WEATHER_KEY}` +
             '&dataType=JSON' +
             `&numOfRows=${this.numOfRows}&pageNo=${this.pageNo}` +
-            `&base_date=${this.getDate()}&base_time=${this.baseTime}` +
+            `&base_date=${this.baseDate}&base_time=${this.baseTime}` +
             `&nx=${this.nx}&ny=${this.ny}`
         );
     }

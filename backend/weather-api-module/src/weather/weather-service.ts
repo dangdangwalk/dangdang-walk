@@ -8,6 +8,7 @@ import { getLogger } from '../logger/logger-factory';
 import { WinstonLoggerService } from '../logger/winston-logger';
 import { getRealWeatherOneHour, getTodayParserInstance, ParseData } from '../parser/parse-data';
 import { PublicWeatherApiUrlBuilder } from '../public-weather-api-url/public-weather-api-url-builder';
+import { getToday, getYesterday } from '../util';
 
 type ParserMap = {
     [K in WeatherApiType]: ParseData<any, any>;
@@ -24,47 +25,44 @@ export class WeatherService {
         this.logger = logger;
     }
 
-    private buildUrl(nx: number, ny: number, baseTime: string, type: WeatherApiType): string {
+    private buildUrl(nx: number, ny: number, baseDate: string, baseTime: string, type: WeatherApiType): string {
         return new PublicWeatherApiUrlBuilder()
             .setApiType(type)
-            .setNumOfRows(260)
+            .setNumOfRows(290)
             .setPageNo(1)
+            .setBaseDate(baseDate)
             .setBaseTime(baseTime)
             .setLocation(nx, ny)
             .build()
             .toString();
     }
 
-    private async fetchWeatherData(nx: number, ny: number, baseTime: string, type: WeatherApiType) {
-        const url = this.buildUrl(nx, ny, baseTime, type);
-        return await new HttpClient(url).fetchData();
-    }
-
     private isValidResponse(data: any): boolean {
         return data && data.response && data.response.body && data.response.body.items && data.response.body.items.item;
     }
 
-    async fetchAndParseData(nx: number, ny: number, time: string, type: WeatherApiType) {
-        const data = await this.fetchWeatherData(nx, ny, time, type);
+    async fetchData(nx: number, ny: number, date: string, time: string, type: WeatherApiType) {
+        const url = this.buildUrl(nx, ny, date, time, type);
+        const data = await new HttpClient(url).fetchData();
 
         if (!this.isValidResponse(data)) {
             if (data?.response?.header?.resultMsg === 'NO_DATA') {
-                this.logger.info('예보 / 실황 데이터가 존재하지 않습니다');
-                return;
+                const errorMsg = '예보 / 실황 데이터가 존재하지 않습니다';
+                this.logger.info(errorMsg);
+                throw new Error(errorMsg);
             } else {
-                this.logger.error(
-                    `유효하지 않은 응답입니다. location : ${nx}:${ny}, time:${time}, response: ${JSON.stringify(data)}`,
-                    null,
-                );
-                return;
+                const errorMsg = `유효하지 않은 응답입니다. location : ${nx}:${ny}, time:${time}, response: ${JSON.stringify(data)}`;
+                this.logger.error(errorMsg, null);
+                throw new Error(errorMsg);
             }
         }
-        return this.parsers[type].parse(data.response.body.items.item);
+        return data.response.body.items.item;
     }
 
     async saveTodayWeatherPredicate(nx: number, ny: number) {
         try {
-            const parsedData = await this.fetchAndParseData(nx, ny, '0200', 'predicateDay');
+            const data = await this.fetchData(nx, ny, getYesterday(), '2300', 'predicateDay');
+            const parsedData = this.parsers['predicateDay'].parse(data);
             this.dataStore.saveFullDayPredicate(nx, ny, parsedData);
             return parsedData;
         } catch (error) {
@@ -78,7 +76,8 @@ export class WeatherService {
 
     async saveOneHourWeatherReal(nx: number, ny: number, time: string) {
         try {
-            const parsedData = await this.fetchAndParseData(nx, ny, time, 'realtimeOneHour');
+            const data = await this.fetchData(nx, ny, getToday(), time, 'realtimeOneHour');
+            const parsedData = this.parsers['realtimeOneHour'].parse(data);
             this.dataStore.updateOneHourReal(nx, ny, parsedData);
             return parsedData;
         } catch (error) {

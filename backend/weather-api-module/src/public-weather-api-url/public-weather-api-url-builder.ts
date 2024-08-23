@@ -6,6 +6,7 @@ export class PublicWeatherApiUrlBuilder {
     private apiTypeSignature: string;
     private numOfRows: number;
     private pageNo: number;
+    private baseDate: string;
     private baseTime: string;
     private nx: number;
     private ny: number;
@@ -26,6 +27,11 @@ export class PublicWeatherApiUrlBuilder {
         return this;
     }
 
+    setBaseDate(baseDate: string) {
+        this.baseDate = baseDate;
+        return this;
+    }
+
     setBaseTime(baseTime: string) {
         this.baseTime = baseTime;
         return this;
@@ -42,6 +48,7 @@ export class PublicWeatherApiUrlBuilder {
             this.apiTypeSignature,
             this.numOfRows,
             this.pageNo,
+            this.baseDate,
             this.baseTime,
             this.nx,
             this.ny,
