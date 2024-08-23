@@ -10,6 +10,7 @@ import { getLogger } from '../logger/logger-factory';
 import { WinstonLoggerService } from '../logger/winston-logger';
 import { getCurrentTimeKey } from '../util';
 
+//TODO: erase
 export class Controller {
     private dataStore: DataStore;
     private weatherService: WeatherService;
