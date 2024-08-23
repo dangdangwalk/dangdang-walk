@@ -150,12 +150,10 @@ docker-compose-prod.yml
 
 **/.env.*
 
-**/.DS_Store/**
+backend/.DS_Store
+.DS_Store
 
-/log
-backend/server/log/
-log/
-
-*/log/*
+**/log/**  
+**/log
 
 *.sqlite
