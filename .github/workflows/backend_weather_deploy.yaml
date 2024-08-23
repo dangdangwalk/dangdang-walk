@@ -1,0 +1,88 @@
+name: Backend Weather Deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "backend/weather-api-module/**"
+
+env:
+  IMAGE: dangdangwalk/weather-api-module
+  TAG: ${GITHUB_SHA::7}
+
+jobs:
+  build:
+    name: Docker Hub Build and Push
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend/
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: backend/weather-api-module/node_modules
+          key: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('backend/weather-api-module/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('backend/weather-api-module/package-lock.json') }}
+      - name: Install Dependencies
+        if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
+        working-directory: ./backend/weather-api-module
+        run: npm ci
+      - name: Run build
+        working-directory: ./backend/weather-api-module
+        run: npm run build
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{secrets.DOCKERHUB_USERNAME}}
+          password: ${{secrets.DOCKERHUB_TOKEN}}
+      - name: Docker build
+        run: |
+          docker build --platform linux/amd64 -t ${{ env.IMAGE }} --target prod -f weather-api-module/Dockerfile .
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: ./backend
+          file: ./backend/weather-api-module/Dockerfile
+          push: true
+          tags: ${{ env.IMAGE }}:${{ env.TAG }}
+  deploy:
+    name: Oracle Instance Deploy
+    needs: build
+    runs-on: [self-hosted, label-weather] 
+    steps:
+      - name: Create .env
+        env:
+          ENV_FILE: ${{ secrets.ENV_FILE_BACKEND_WEATHER }}
+        run: |
+          if [ ! -d "backend/weather-api-module" ]; then 
+            mkdir backend/weather-api-module;  
+          fi
+          echo "$ENV_FILE" > ./backend/weather-api-module/.env.prod
+      - name: Setup Redis
+        run: |
+          REDIS_PORT=$(grep REDIS_PORT ./backend/weather-api-module/.env.prod | cut -d '=' -f2)
+          REDIS_PORT=${REDIS_PORT:-6379}
+
+          Add `runs-on: self-hosted` to your workflow's YAML to send jobs to this runner.if ! docker ps -a | grep -q redis-container; then
+          echo "Redis container does not exist, creating new one..."
+          docker volume create redis_data
+          docker run -d --name redis-container \
+            -v redis_data:/data \
+            -p ${REDIS_PORT}:6379 \
+            redis:7.0.15 \
+            redis-server --appendonly yes --dir /data
+          fi
+      - name: run module
+        run: |
+          chmod +x ./run-weather.sh
+          ./run-weather.sh ${{ env.TAG }} .env.prod ${{ env.IMAGE }}
