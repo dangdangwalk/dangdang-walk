@@ -1,6 +1,6 @@
 import { AirGrade } from '@/utils/weather';
 import { createClient } from './http';
-import { Weather, WeatherData } from '@/models/weather';
+import { Weather } from '@/models/weather';
 
 const { REACT_APP_WEATHER_MODULE_URL: WEATHER_MODULE_URL = '' } = window._ENV ?? process.env;
 const { REACT_APP_WEATHER_URL: WEATHER_URL = '' } = window._ENV ?? process.env;
@@ -19,7 +19,7 @@ const weatherClient = createClient({
 
 export const fetchCurrentWeather = async (nx: number, ny: number): Promise<Weather | undefined> => {
     try {
-        const response = await weatherModuleClient.get(`http://localhost:8050/weather/?nx=${nx}&ny=${ny}`);
+        const response = await weatherModuleClient.get(`/weather/?nx=${nx}&ny=${ny}`);
 
         return response.data;
     } catch (e: any) {
