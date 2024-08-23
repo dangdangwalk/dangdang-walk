@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - "backend/**"
+      - "backend/server/**"
 
 env:
   IMAGE: dangdangwalk
