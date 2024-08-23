@@ -10,18 +10,30 @@ export interface ParseData<T, U> {
 }
 
 export class parseTodayWeatherPredicate implements ParseData<TodayWeatherPredicateRaw[], TodayWeatherPredicateDataMap> {
-    parse(weatherDataList: TodayWeatherPredicateRaw[]): TodayWeatherPredicateDataMap {
-        const consolidatedData: { [key: string]: TodayWeatherPredicateData } = {};
+    private getMaxMinTemperature(weatherDataArr: TodayWeatherPredicateRaw[]) {
+        const [minTemperature, maxTemperature] = weatherDataArr.filter((cur) => {
+            return cur.category === 'TMN' || cur.category === 'TMX';
+        });
 
-        weatherDataList.forEach((weatherData) => {
+        return {
+            minTemperature: Number(minTemperature.fcstValue),
+            maxTemperature: Number(maxTemperature.fcstValue),
+        };
+    }
+
+    parse(weatherDataArr: TodayWeatherPredicateRaw[]): TodayWeatherPredicateDataMap {
+        const consolidatedData: { [key: string]: TodayWeatherPredicateData } = {};
+        const { minTemperature, maxTemperature } = this.getMaxMinTemperature(weatherDataArr);
+
+        weatherDataArr.forEach((weatherData) => {
             const key = weatherData.fcstTime;
             if (!consolidatedData[key]) {
                 consolidatedData[key] = {
                     temperature: 0,
                     sky: 0,
                     precipitation: 0,
-                    minTemperature: 0,
-                    maxTemperature: 0,
+                    minTemperature,
+                    maxTemperature,
                 };
             }
 
@@ -34,12 +46,6 @@ export class parseTodayWeatherPredicate implements ParseData<TodayWeatherPredica
                     break;
                 case 'PTY':
                     consolidatedData[key].precipitation = Number(weatherData.fcstValue);
-                    break;
-                case 'TMN':
-                    consolidatedData[key].minTemperature = Number(weatherData.fcstValue);
-                    break;
-                case 'TMX':
-                    consolidatedData[key].maxTemperature = Number(weatherData.fcstValue);
                     break;
             }
         });
