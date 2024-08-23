@@ -1,6 +1,7 @@
 import * as cron from 'node-cron';
 
-import { DataStore, getDataInstance } from '../data/data-store';
+import { getDataInstance } from '../data/data-factory';
+import { DataStore } from '../data/data-store';
 import { getLogger } from '../logger/logger-factory';
 import { WinstonLoggerService } from '../logger/winston-logger';
 import { getCurrentTimeKey } from '../util';
@@ -46,6 +47,13 @@ export class Scheduler {
     }
 }
 
-export function getSchedulerInstance() {
-    return new Scheduler(getDataInstance(), getWeatherServiceInstance(), getLogger());
+export async function getSchedulerInstance() {
+    return new Scheduler(await getDataInstance(), await getWeatherServiceInstance(), getLogger());
+}
+
+export async function initializeScheduler() {
+    const scheduler = await getSchedulerInstance();
+
+    scheduler.scheduleOneHourRealWeatherPredicate();
+    scheduler.scheduleTodayWeatherPredicate();
 }

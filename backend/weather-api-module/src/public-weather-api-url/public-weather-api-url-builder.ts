@@ -1,8 +1,8 @@
-import { Url } from './url';
+import { PublicWeatherApiUrl } from './public-weather-api-url';
 
 import { WeatherApiType } from '../weather/weather-type';
 
-export class UrlBuilder {
+export class PublicWeatherApiUrlBuilder {
     private apiTypeSignature: string;
     private numOfRows: number;
     private pageNo: number;
@@ -38,6 +38,13 @@ export class UrlBuilder {
     }
 
     build() {
-        return new Url(this.apiTypeSignature, this.numOfRows, this.pageNo, this.baseTime, this.nx, this.ny);
+        return new PublicWeatherApiUrl(
+            this.apiTypeSignature,
+            this.numOfRows,
+            this.pageNo,
+            this.baseTime,
+            this.nx,
+            this.ny,
+        );
     }
 }

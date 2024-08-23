@@ -1,14 +1,6 @@
-import * as path from 'path';
-
-import * as dotenv from 'dotenv';
-
 const WEATHER_BASE_URL = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/';
 
-const envPath = path.resolve(process.cwd(), '..', '.env');
-
-dotenv.config({ path: envPath });
-
-export class Url {
+export class PublicWeatherApiUrl {
     private apiTypeSignature: string;
     private numOfRows: number;
     private pageNo: number;
