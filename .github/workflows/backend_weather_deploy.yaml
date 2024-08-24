@@ -65,10 +65,6 @@ jobs:
     steps:
       - name: Set short SHA
         run: echo "SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_ENV
-      - name: variables
-        run: |
-          echo "TAG: ${{ env.SHORT_SHA }}"
-          echo "IMAGE: ${{ env.IMAGE }}"
       - name: Create .env
         env:
           ENV_FILE: ${{ secrets.ENV_FILE_BACKEND_WEATHER }}
