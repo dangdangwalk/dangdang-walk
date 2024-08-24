@@ -16,6 +16,8 @@ jobs:
     defaults:
       run:
         working-directory: ./backend/
+    outputs:
+      tag: ${{ steps.set_tag.outputs.tag }}
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -45,6 +47,7 @@ jobs:
           username: ${{secrets.DOCKERHUB_USERNAME}}
           password: ${{secrets.DOCKERHUB_TOKEN}}
       - name: Set TAG
+        id: set_tag
         run: echo "TAG=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
       - name: Docker build
         run: |
@@ -85,9 +88,9 @@ jobs:
           fi
       - name: variables
         run: |
-          echo ${{ env.TAG }}
+          echo ${{ needs.build.outputs.tag }}
           echo ${{ env.IMAGE }}
       - name: run module
         run: |
           chmod +x /home/opc/run-weather.sh
-          /home/opc/run-weather.sh ${{ env.TAG }} .env.prod ${{ env.IMAGE }}
+          /home/opc/run-weather.sh ${{ needs.build.outputs.tag }} .env.prod ${{ env.IMAGE }}
