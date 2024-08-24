@@ -8,7 +8,6 @@ on:
 
 env:
   IMAGE: dangdangwalk/weather-api-module
-  TAG: ${GITHUB_SHA::7}
 
 jobs:
   build:
@@ -45,6 +44,8 @@ jobs:
         with:
           username: ${{secrets.DOCKERHUB_USERNAME}}
           password: ${{secrets.DOCKERHUB_TOKEN}}
+      - name: Set TAG
+        run: echo "TAG=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
       - name: Docker build
         run: |
           docker build --platform linux/amd64 -t ${{ env.IMAGE }} --target prod -f weather-api-module/Dockerfile .
@@ -58,14 +59,14 @@ jobs:
   deploy:
     name: Oracle Instance Deploy
     needs: build
-    runs-on: [self-hosted, label-weather] 
+    runs-on: [self-hosted, label-weather]
     steps:
       - name: Create .env
         env:
           ENV_FILE: ${{ secrets.ENV_FILE_BACKEND_WEATHER }}
         run: |
           if [ ! -d "backend/weather-api-module" ]; then 
-            mkdir backend/weather-api-module;  
+            mkdir -p backend/weather-api-module;  
           fi
           echo "$ENV_FILE" > ./backend/weather-api-module/.env.prod
       - name: Setup Redis
@@ -73,7 +74,7 @@ jobs:
           REDIS_PORT=$(grep REDIS_PORT ./backend/weather-api-module/.env.prod | cut -d '=' -f2)
           REDIS_PORT=${REDIS_PORT:-6379}
 
-          Add `runs-on: self-hosted` to your workflow's YAML to send jobs to this runner.if ! docker ps -a | grep -q redis-container; then
+          if ! docker ps -a | grep -q redis-container; then
           echo "Redis container does not exist, creating new one..."
           docker volume create redis_data
           docker run -d --name redis-container \
