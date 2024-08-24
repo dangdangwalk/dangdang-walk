@@ -1,29 +1,29 @@
 import { AirGrade } from '@/utils/weather';
 import { createClient } from './http';
-import { WeatherData } from '@/models/weather';
+import { Weather } from '@/models/weather';
 
+const { REACT_APP_WEATHER_MODULE_URL: WEATHER_MODULE_URL = '' } = window._ENV ?? process.env;
 const { REACT_APP_WEATHER_URL: WEATHER_URL = '' } = window._ENV ?? process.env;
 const { REACT_APP_WEATHER_KEY: WEATHER_KEY = '' } = window._ENV ?? process.env;
+const weatherModuleClient = createClient({
+    headers: { 'Content-Type': `application/json;charset=UTF-8`, Accept: 'application/json' },
+    baseURL: WEATHER_MODULE_URL,
+    withCredentials: false,
+});
+
 const weatherClient = createClient({
     headers: { 'Content-Type': `application/json;charset=UTF-8`, Accept: 'application/json' },
     baseURL: WEATHER_URL,
     withCredentials: false,
 });
 
-export const fetchCurrentWeather = async (date: string, nx: number, ny: number): Promise<WeatherData[] | undefined> => {
+export const fetchCurrentWeather = async (nx: number, ny: number): Promise<Weather | undefined> => {
     try {
-        const response = (
-            await weatherClient.get(
-                `/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=${WEATHER_KEY}&dataType=JSON&numOfRows=260&pageNo=1&base_date=${date}&base_time=0200&nx=${nx}&ny=${ny}`
-            )
-        ).data.response;
+        const response = await weatherModuleClient.get(`/weather/?nx=${nx}&ny=${ny}`);
 
-        if (response.header.resultCode !== '00') {
-            throw new Error(response.header.resultMsg);
-        }
-        return response.body.items.item;
-    } catch (e) {
-        console.error(e);
+        return response.data;
+    } catch (e: any) {
+        console.error(e.message);
     }
 };
 
