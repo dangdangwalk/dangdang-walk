@@ -25,7 +25,7 @@ export class DataStore {
         let redis: Redis | null = null;
         while (retries < this.maxRetry && !this.redis) {
             redis = new Redis({
-                host: 'localhost',
+                host: process.env.REDIS_HOST,
                 port: parseInt(process.env.REDIS_PORT as string),
                 db: 0,
                 maxRetriesPerRequest: 5,
