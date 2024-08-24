@@ -88,4 +88,4 @@ COPY --chown=weather:nodejs --from=build /app/log /app/log
 
 USER weather
 
-CMD [ "node", "dist/main.js" ]
+CMD [ "node", "dist/init.js" ]
