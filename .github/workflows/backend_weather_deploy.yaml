@@ -46,9 +46,8 @@ jobs:
         with:
           username: ${{secrets.DOCKERHUB_USERNAME}}
           password: ${{secrets.DOCKERHUB_TOKEN}}
-      - name: Set TAG
-        id: set_tag
-        run: echo "TAG=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
+      - name: Set short SHA
+        run: echo "SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_ENV
       - name: Docker build
         run: |
           docker build --platform linux/amd64 -t ${{ env.IMAGE }} --target prod -f weather-api-module/Dockerfile .
@@ -58,12 +57,18 @@ jobs:
           context: ./backend
           file: ./backend/weather-api-module/Dockerfile
           push: true
-          tags: ${{ env.IMAGE }}:${{ env.TAG }}
+          tags: ${{ env.IMAGE }}:${{ env.SHORT_SHA }}
   deploy:
     name: Oracle Instance Deploy
     needs: build
     runs-on: [self-hosted, label-weather]
     steps:
+      - name: Set short SHA
+        run: echo "SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_ENV
+      - name: variables
+        run: |
+          echo "TAG: ${{ env.SHORT_SHA }}"
+          echo "IMAGE: ${{ env.IMAGE }}"
       - name: Create .env
         env:
           ENV_FILE: ${{ secrets.ENV_FILE_BACKEND_WEATHER }}
@@ -86,11 +91,7 @@ jobs:
             redis:7.0.15 \
             redis-server --appendonly yes --dir /data
           fi
-      - name: variables
-        run: |
-          echo ${{ needs.build.outputs.tag }}
-          echo ${{ env.IMAGE }}
       - name: run module
         run: |
           chmod +x /home/opc/run-weather.sh
-          /home/opc/run-weather.sh ${{ needs.build.outputs.tag }} .env.prod ${{ env.IMAGE }}
+          /home/opc/run-weather.sh ${{ env.SHORT_SHA }} .env.prod ${{ env.IMAGE }}
