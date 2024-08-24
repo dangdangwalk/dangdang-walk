@@ -83,7 +83,11 @@ jobs:
             redis:7.0.15 \
             redis-server --appendonly yes --dir /data
           fi
+      - name: variables
+        run: |
+          echo ${{ env.TAG }}
+          echo ${{ env.IMAGE }}
       - name: run module
         run: |
-          chmod +x home/opc/run-weather.sh
-          home/opc/run-weather.sh ${{ env.TAG }} .env.prod ${{ env.IMAGE }}
+          chmod +x /home/opc/run-weather.sh
+          /home/opc/run-weather.sh ${{ env.TAG }} .env.prod ${{ env.IMAGE }}
