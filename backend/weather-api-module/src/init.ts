@@ -1,4 +1,4 @@
-import { loadConfig } from './env';
+import { loadConfig } from './config/config';
 import { getServerInstance } from './http/http-server';
 import { initializeScheduler } from './scheduler/scheduler';
 
