@@ -12,7 +12,7 @@ async function init() {
 
         initializeScheduler();
     } catch (error) {
-        console.error('초기화 중 오류 발생. 프로세스를 종료합니다');
+        console.error('초기화 중 오류 발생. 프로세스를 종료합니다. Error: ', error.message);
         process.exit(1);
     }
 }
