@@ -61,10 +61,6 @@ jobs:
     needs: build
     runs-on: [self-hosted, label-weather]
     steps:
-      - name: Check current directory
-        run: |
-          pwd
-          ls -la
       - name: Create .env
         env:
           ENV_FILE: ${{ secrets.ENV_FILE_BACKEND_WEATHER }}
@@ -89,5 +85,5 @@ jobs:
           fi
       - name: run module
         run: |
-          chmod +x ../run-weather.sh
-          ../run-weather.sh ${{ env.TAG }} .env.prod ${{ env.IMAGE }}
+          chmod +x home/opc/run-weather.sh
+          home/opc/run-weather.sh ${{ env.TAG }} .env.prod ${{ env.IMAGE }}
