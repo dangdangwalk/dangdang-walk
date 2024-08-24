@@ -78,6 +78,7 @@ jobs:
           REDIS_PORT=$(grep REDIS_PORT ./backend/weather-api-module/.env.prod | cut -d '=' -f2)
           REDIS_PORT=${REDIS_PORT:-6379}
 
+          echo ${REDIS_PORT}
           if ! docker ps -a | grep -q redis-container; then
           echo "Redis container does not exist, creating new one..."
           docker volume create redis_data
