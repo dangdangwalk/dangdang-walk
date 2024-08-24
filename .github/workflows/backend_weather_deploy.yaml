@@ -78,15 +78,19 @@ jobs:
           REDIS_PORT=$(grep REDIS_PORT ./backend/weather-api-module/.env.prod | cut -d '=' -f2)
           REDIS_PORT=${REDIS_PORT:-6379}
 
-          echo ${REDIS_PORT}
-          if ! docker ps -a | grep -q redis-container; then
-          echo "Redis container does not exist, creating new one..."
+          IS_REDIS_RUNNING=$(docker inspect -f'{{.State.Status}}'  redis-container 2>/dev/null | grep running)
+
+          if [ -z "$IS_REDIS_RUNNING" ]; then
+          docker rm -f redis-container 2>/dev/null
           docker volume create redis_data
           docker run -d --name redis-container \
             -v redis_data:/data \
             -p ${REDIS_PORT}:6379 \
             redis:7.0.15 \
             redis-server --appendonly yes --dir /data
+            echo "Redis 컨테이너가 생성되었습니다."
+          else
+            echo "Redis 컨테이너가 이미 실행중입니다."
           fi
       - name: run module
         run: |
