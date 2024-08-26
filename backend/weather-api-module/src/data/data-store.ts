@@ -1,6 +1,5 @@
 import { Redis } from 'ioredis';
 
-import { getLogger } from '../logger/logger-factory';
 import { WinstonLoggerService } from '../logger/winston-logger';
 import { getCurrentTimeKey } from '../util';
 import {
@@ -11,6 +10,7 @@ import {
 } from '../weather/weather-type';
 
 export class DataStore {
+    private static instance: DataStore;
     private redis: Redis;
     private readonly logger: WinstonLoggerService;
     private readonly maxRetry = 5;
@@ -18,6 +18,14 @@ export class DataStore {
 
     constructor(logger: WinstonLoggerService) {
         this.logger = logger;
+    }
+
+    public static async getInstance(): Promise<DataStore> {
+        if (!DataStore.instance) {
+            DataStore.instance = new DataStore(WinstonLoggerService.getInstance());
+        }
+        await DataStore.instance.initialize();
+        return DataStore.instance;
     }
 
     async initialize() {
@@ -48,22 +56,26 @@ export class DataStore {
     }
 
     async updateRealData(nx: number, ny: number, data: OneHourWeatherRealData, timeKey: string): Promise<void> {
-        const key = `weather:${nx}:${ny}`;
+        try {
+            const key = `weather:${nx}:${ny}`;
 
-        const existingData = await this.redis.hget(key, timeKey);
-        let updatedData: TodayWeatherPredicateData;
+            const existingData = await this.redis.hget(key, timeKey);
+            let updatedData: TodayWeatherPredicateData;
 
-        if (existingData) {
-            updatedData = { ...JSON.parse(existingData), ...data };
-        } else {
-            updatedData = {
-                ...data,
-                sky: 0,
-                minTemperature: 0,
-                maxTemperature: 0,
-            };
+            if (existingData) {
+                updatedData = { ...JSON.parse(existingData), ...data };
+            } else {
+                updatedData = {
+                    ...data,
+                    sky: 0,
+                    minTemperature: 0,
+                    maxTemperature: 0,
+                };
+            }
+            await this.redis.hset(key, timeKey, JSON.stringify(updatedData));
+        } catch (e) {
+            this.logger.info('Error:', e.message);
         }
-        await this.redis.hset(key, timeKey, JSON.stringify(updatedData));
     }
 
     async saveFullDayPredicate(nx: number, ny: number, fullDayPredicateDataList: TodayWeatherPredicateDataMap) {
@@ -97,8 +109,4 @@ export class DataStore {
             this.logger.reportRedisErr('getKeys', error.message);
         }
     }
-}
-
-export function getDataStore(): DataStore {
-    return new DataStore(getLogger());
 }

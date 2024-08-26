@@ -1,10 +1,10 @@
 import { loadConfig } from './config/config';
 import { getServerInstance } from './http/http-server';
-import { getLogger } from './logger/logger-factory';
-import { initializeScheduler } from './scheduler/scheduler';
+import { WinstonLoggerService } from './logger/winston-logger';
+import { Scheduler } from './scheduler/scheduler';
 
 async function init() {
-    const logger = getLogger();
+    const logger = WinstonLoggerService.getInstance();
     try {
         logger.info('config를 로드합니다');
         await loadConfig();
@@ -16,7 +16,8 @@ async function init() {
         logger.info('Server가 성공적으로 실행되었습니다');
 
         logger.info('Scheduler를 실행합니다');
-        await initializeScheduler();
+        const scheduler = await Scheduler.getInstance();
+        await scheduler.initializeScheduler();
         logger.info('Scheduler가 성공적으로 실행되었습니다');
     } catch (error) {
         console.error(`초기화 중 오류 발생. 프로세스를 종료합니다. Error:  ${error.message}`, error.stack);
