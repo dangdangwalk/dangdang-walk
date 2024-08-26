@@ -2,11 +2,9 @@ import { IncomingMessage, ServerResponse } from 'http';
 
 import * as url from 'url';
 
-import { getWeatherServiceInstance, WeatherService } from './weather-service';
+import { WeatherService } from './weather-service';
 
-import { getDataInstance } from '../data/data-factory';
 import { DataStore } from '../data/data-store';
-import { getLogger } from '../logger/logger-factory';
 import { WinstonLoggerService } from '../logger/winston-logger';
 import { getCurrentTimeKey } from '../util';
 
@@ -76,5 +74,9 @@ export class Controller {
 }
 
 export async function getControllerInstance() {
-    return new Controller(await getDataInstance(), await getWeatherServiceInstance(), getLogger());
+    return new Controller(
+        await DataStore.getInstance(),
+        await WeatherService.getInstance(),
+        WinstonLoggerService.getInstance(),
+    );
 }

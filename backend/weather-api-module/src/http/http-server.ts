@@ -1,7 +1,6 @@
 import * as http from 'http';
 import { IncomingMessage, ServerResponse } from 'http';
 
-import { getLogger } from '../logger/logger-factory';
 import { WinstonLoggerService } from '../logger/winston-logger';
 import { Controller, getControllerInstance } from '../weather/weather-controller';
 
@@ -47,5 +46,5 @@ export class HttpServer {
 }
 
 export async function getServerInstance() {
-    return new HttpServer(getLogger(), await getControllerInstance());
+    return new HttpServer(WinstonLoggerService.getInstance(), await getControllerInstance());
 }

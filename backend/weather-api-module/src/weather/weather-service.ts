@@ -1,10 +1,8 @@
 import { WeatherApiType } from './weather-type';
 
-import { getDataInstance } from '../data/data-factory';
 import { DataStore } from '../data/data-store';
 
 import { HttpClient } from '../http/http-client';
-import { getLogger } from '../logger/logger-factory';
 import { WinstonLoggerService } from '../logger/winston-logger';
 import { getRealWeatherOneHour, getTodayParserInstance, ParseData } from '../parser/parse-data';
 import { PublicWeatherApiUrlBuilder } from '../public-weather-api-url/public-weather-api-url-builder';
@@ -18,11 +16,27 @@ export class WeatherService {
     private readonly dataStore: DataStore;
     private readonly parsers: ParserMap;
     private readonly logger: WinstonLoggerService;
+    private static instance: WeatherService;
 
     constructor(dataStore: DataStore, parsers: ParserMap, logger: WinstonLoggerService) {
         this.dataStore = dataStore;
         this.parsers = parsers;
         this.logger = logger;
+    }
+
+    public static async getInstance(): Promise<WeatherService> {
+        if (!WeatherService.instance) {
+            const parsers: ParserMap = {
+                predicateDay: getTodayParserInstance(),
+                realtimeOneHour: getRealWeatherOneHour(),
+            };
+            WeatherService.instance = new WeatherService(
+                await DataStore.getInstance(),
+                parsers,
+                WinstonLoggerService.getInstance(),
+            );
+        }
+        return WeatherService.instance;
     }
 
     private buildUrl(nx: number, ny: number, baseDate: string, baseTime: string, type: WeatherApiType): string {
@@ -49,7 +63,6 @@ export class WeatherService {
             if (data?.response?.header?.resultMsg === 'NO_DATA') {
                 const errorMsg = '예보 / 실황 데이터가 존재하지 않습니다';
                 this.logger.info(errorMsg);
-                throw new Error(errorMsg);
             } else {
                 const errorMsg = `유효하지 않은 응답입니다. location : ${nx}:${ny}, time:${time}, response: ${JSON.stringify(data)}`;
                 this.logger.error(errorMsg, null);
@@ -90,10 +103,4 @@ export class WeatherService {
     }
 }
 
-export async function getWeatherServiceInstance() {
-    const parsers: ParserMap = {
-        predicateDay: getTodayParserInstance(),
-        realtimeOneHour: getRealWeatherOneHour(),
-    };
-    return new WeatherService(await getDataInstance(), parsers, getLogger());
-}
+export async function getWeatherServiceInstance() {}

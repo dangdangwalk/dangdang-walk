@@ -2,7 +2,7 @@ import * as path from 'path';
 
 import * as dotenv from 'dotenv';
 
-import { getLogger } from '../logger/logger-factory';
+import { WinstonLoggerService } from '../logger/winston-logger';
 
 interface Config {
     WEATHER_KEY: string;
@@ -12,7 +12,7 @@ interface Config {
 }
 
 export async function loadConfig() {
-    const logger = getLogger();
+    const logger = WinstonLoggerService.getInstance();
     const envPath = path.resolve(process.cwd(), `.env.${process.env.NODE_ENV}`);
     const config: Config = {} as Config;
 

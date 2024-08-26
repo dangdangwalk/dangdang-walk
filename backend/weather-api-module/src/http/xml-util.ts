@@ -18,6 +18,7 @@ const parseXML = promisify(parseString);
 export async function parseErrorCode(error: string): Promise<string> {
     const errorXML: errorXML = (await parseXML(error)) as errorXML;
     const errorMsg = errorXML.OpenAPI_ServiceResponse.cmmMsgHeader[0].returnAuthMsg[0];
+    console.log(errorMsg);
     return errorMsg;
 }
 

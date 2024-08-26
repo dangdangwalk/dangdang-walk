@@ -9,6 +9,7 @@ import stripAnsi, { bold, color } from './logger-util';
 
 export class WinstonLoggerService {
     private readonly logger: winston.Logger;
+    private static instance: WinstonLoggerService;
 
     constructor() {
         const isProduction = process.env.NODE_ENV === 'prod';
@@ -80,11 +81,16 @@ export class WinstonLoggerService {
         this.logger = winston.createLogger({
             //level: isProduction ? 'info' : 'debug',
             level: 'debug',
-            format: winston.format.json(),
             transports,
         });
     }
 
+    public static getInstance(): WinstonLoggerService {
+        if (!WinstonLoggerService.instance) {
+            WinstonLoggerService.instance = new WinstonLoggerService();
+        }
+        return WinstonLoggerService.instance;
+    }
     info(message: string, meta?: any) {
         this.logger.info(message, meta);
     }
@@ -102,16 +108,17 @@ export class WinstonLoggerService {
     }
 
     //custom function
+
     receiveRequest = function (req: IncomingMessage): void {
         this.info(
-            `${color('RECEIVED REQUEST', 'Cyan')}  [ ${bold(req.method as string)} | ${bold(req.url as string)} | ${req.socket.remoteAddress}]}`,
+            `${color('RECEIVED REQUEST', 'Cyan')}  [ ${bold(req.method as string)} | ${bold(req.url as string)} | ${req.socket.remoteAddress}]`,
         );
         return;
     };
 
     sendResponse = function (req: IncomingMessage, responseTime: number): void {
         this.logger.info(
-            `${color('   SEND RESPONSE', 'Magenta')} [ ${bold(req.method as string)} | ${bold(req.url as string)} | ${req.socket.remoteAddress} | ${req.statusCode} | ${color(`+${responseTime}ms`, 'Yellow')}]`,
+            `${color('   SEND RESPONSE ', 'Magenta')} [ ${bold(req.method as string)} | ${bold(req.url as string)} | ${req.socket.remoteAddress} | ${req.statusCode} | ${color(`+${responseTime}ms`, 'Yellow')}]`,
         );
     };
 
