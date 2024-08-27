@@ -137,6 +137,22 @@ export class WinstonLoggerService {
         );
     };
 
+    sendRequest = function (nx: number, ny: number, type: WeatherApiType): void {
+        const apiType = type == 'predicateDay' ? '하루 예보' : '한시간 실황';
+
+        this.info(`${color('   SEND REQUEST', 'Cyan')}  [ ${bold(apiType)} | ${bold(`지역: ${nx}:${ny}`)} ]`);
+        return;
+    };
+
+    receiveResponse = function (nx: number, ny: number, type: WeatherApiType, duration: number): void {
+        const apiType = type == 'predicateDay' ? '하루 예보' : '한시간 실황';
+
+        this.info(
+            `${color('RECEIVED RESPONSE', 'Cyan')}  [ ${bold(apiType)} | ${bold(`지역: ${nx}:${ny}`)} |  ${color(`+${duration}ms`, 'Yellow')}]`,
+        );
+        return;
+    };
+
     reportRedisErr = function (method: string, error: any): void {
         this.error(`Redis error : Failed to excute a ${method} | ${error.message}`, error.stack);
     };

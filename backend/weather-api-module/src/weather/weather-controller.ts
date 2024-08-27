@@ -43,6 +43,7 @@ export class Controller {
         try {
             let weatherData = await this.dataStore.getWeatherData(nx, ny);
             if (!weatherData) {
+                this.logger.info(`데이터가 없습니다. 새 지역에 대한 정보를 수집합니다`);
                 const time = getCurrentTimeKey();
                 await Promise.all([
                     this.weatherService.saveTodayWeatherPredicate(nx, ny),
