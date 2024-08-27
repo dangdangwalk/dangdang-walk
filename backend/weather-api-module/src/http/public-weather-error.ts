@@ -11,3 +11,9 @@ export class XMLParseError extends PublicWeatherAPIError {
         super(message);
     }
 }
+
+export class NoDataError extends PublicWeatherAPIError {
+    constructor(message: string) {
+        super(message);
+    }
+}

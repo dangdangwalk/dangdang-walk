@@ -3,6 +3,7 @@ import { DataMap, DataValue, WeatherApiType } from './weather-type';
 import { DataStore } from '../data/data-store';
 
 import { HttpClient } from '../http/http-client';
+import { NoDataError } from '../http/public-weather-error';
 import { WinstonLoggerService } from '../logger/winston-logger';
 import { getRealWeatherOneHour, getTodayParserInstance, ParseData } from '../parser/parse-data';
 import { PublicWeatherApiUrlBuilder } from '../public-weather-api-url/public-weather-api-url-builder';
@@ -58,7 +59,7 @@ export class WeatherService {
         if (data?.response?.header?.resultCode !== '00') {
             if (data?.response?.header?.resultMsg === 'NO_DATA') {
                 const errorMsg = '예보 / 실황 데이터가 존재하지 않습니다';
-                this.logger.info(errorMsg);
+                throw new NoDataError(errorMsg);
             } else {
                 const errorMsg = `유효하지 않은 응답입니다. location : ${nx}:${ny}, time:${time}, response: ${JSON.stringify(data)}`;
                 this.logger.error(errorMsg, null);
@@ -98,6 +99,10 @@ export class WeatherService {
             this.dataStore.saveFullDayPredicate(nx, ny, parsedData);
             return parsedData;
         } catch (error) {
+            if (error instanceof NoDataError) {
+                this.logger.info(error.message);
+                return;
+            }
             this.logger.error(
                 `하루 예보 저장에 실패했습니다. 지역 : ${nx}:${ny}, 에러 메세지 : ${error.message}`,
                 error.stack,
@@ -114,6 +119,10 @@ export class WeatherService {
             await this.validateLocation(nx, ny, parsedData);
             return parsedData;
         } catch (error) {
+            if (error instanceof NoDataError) {
+                this.logger.info(error.message);
+                return;
+            }
             this.logger.error(
                 `한시간 실황 저장에 실패했습니다. 지역 : ${nx}:${ny}, 에러 메세지 : ${error.message}`,
                 error.stack,
