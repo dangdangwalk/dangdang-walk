@@ -46,7 +46,7 @@ export class DataStore {
             });
 
             redis.on('error', async (error) => {
-                this.logger.error(`Redis와 연결에 실패했습니다. ${error.message}`, error.stack);
+                this.logger.error(`Redis와 연결에 실패했습니다. ${error}`, error.stack);
             });
 
             await redis.ping();
@@ -57,8 +57,7 @@ export class DataStore {
 
     async updateRealData(nx: number, ny: number, data: OneHourWeatherRealData, timeKey: string): Promise<void> {
         try {
-            const key = `weather:${nx}:${ny}`;
-
+            const key = this.generateKey(nx, ny);
             const existingData = await this.redis.hget(key, timeKey);
             let updatedData: TodayWeatherPredicateData;
 
@@ -73,40 +72,62 @@ export class DataStore {
                 };
             }
             await this.redis.hset(key, timeKey, JSON.stringify(updatedData));
-        } catch (e) {
-            this.logger.info('Error:', e.message);
+        } catch (error) {
+            this.logger.reportRedisErr('updateRealData', error);
         }
     }
 
     async saveFullDayPredicate(nx: number, ny: number, fullDayPredicateDataList: TodayWeatherPredicateDataMap) {
-        Object.entries(fullDayPredicateDataList).forEach(([time, weatherData]) => {
-            const key = `weather:${nx}:${ny}`;
-            this.redis.hset(key, time, JSON.stringify(weatherData));
-        });
+        try {
+            Object.entries(fullDayPredicateDataList).forEach(([time, weatherData]) => {
+                this.redis.hset(this.generateKey(nx, ny), time, JSON.stringify(weatherData));
+            });
+        } catch (error) {
+            this.logger.reportRedisErr('saveFullDayPredicate', error);
+        }
     }
 
     async updateOneHourReal(nx: number, ny: number, oneHourRealDataList: OneHourRealWeatherDataMap) {
-        Object.entries(oneHourRealDataList).forEach(([time, data]) => {
-            this.updateRealData(nx, ny, data, time);
-        });
+        try {
+            Object.entries(oneHourRealDataList).forEach(([time, data]) => {
+                this.updateRealData(nx, ny, data, time);
+            });
+        } catch (error) {
+            this.logger.reportRedisErr('updateOneHourReal', error);
+        }
     }
 
-    async getWeatherData(x: number, y: number): Promise<TodayWeatherPredicateData | null> {
-        const key = `weather:${x}:${y}`;
+    async getWeatherData(nx: number, ny: number): Promise<TodayWeatherPredicateData | null> {
+        try {
+            const timeKey = getCurrentTimeKey();
+            const data = await this.redis.hget(this.generateKey(nx, ny), timeKey);
 
-        const timeKey = getCurrentTimeKey();
-        const data = await this.redis.hget(key, timeKey);
+            if (!data) return null;
 
-        if (!data) return null;
-
-        return JSON.parse(data);
+            return JSON.parse(data);
+        } catch (error) {
+            this.logger.reportRedisErr('getWeatherData', error);
+            return null;
+        }
     }
 
     async getKeys(pattern: string) {
         try {
             return await this.redis.keys(pattern);
         } catch (error) {
-            this.logger.reportRedisErr('getKeys', error.message);
+            this.logger.reportRedisErr('getKeys', error);
         }
+    }
+
+    async deleteLocation(nx: number, ny: number) {
+        try {
+            await this.redis.del(this.generateKey(nx, ny));
+        } catch (error) {
+            this.logger.reportRedisErr('deleteKeys', error);
+        }
+    }
+
+    private generateKey(nx: number, ny: number): string {
+        return `weather:${nx}:${ny}`;
     }
 }

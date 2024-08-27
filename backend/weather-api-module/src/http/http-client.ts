@@ -1,6 +1,6 @@
 import * as http from 'http';
 
-import { publicWeatherAPIError } from './public-weather-error';
+import { XMLParseError } from './public-weather-error';
 import { isXML, parseErrorCode } from './xml-util';
 
 export class HttpClient {
@@ -23,11 +23,11 @@ export class HttpClient {
                     if (res.statusCode === 200) {
                         try {
                             if (isXML(data)) {
-                                throw new publicWeatherAPIError(await parseErrorCode(data));
+                                throw new XMLParseError(await parseErrorCode(data));
                             }
                             resolve(JSON.parse(data));
                         } catch (error) {
-                            if (error instanceof publicWeatherAPIError) {
+                            if (error instanceof XMLParseError) {
                                 reject(error.message);
                             } else {
                                 reject('Failed to parse API response');

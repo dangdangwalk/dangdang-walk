@@ -35,26 +35,42 @@ export class Scheduler {
 
     async scheduleTodayWeatherPredicate() {
         const keys = await this.getKeys();
-        cron.schedule('0 0 2 * * *', async () => {
-            for (const key of keys) {
-                const [x, y] = key.split(':');
-                this.weatherService.saveTodayWeatherPredicate(parseInt(x), parseInt(y));
-            }
-        });
+        try {
+            cron.schedule('0 0 23 * * *', async () => {
+                const start = Date.now();
+                await Promise.all(
+                    keys.map(async (key) => {
+                        const [nx, ny] = key.split(':');
+                        this.weatherService.saveTodayWeatherPredicate(parseInt(nx), parseInt(ny));
+                    }),
+                );
+                const end = Date.now();
+                this.logger.cronJobFinished('predicateDay', keys.length, end - start);
+            });
+            this.logger.cronJobAdded('predicateDay', keys.length);
+        } catch (error) {
+            this.logger.error('CRON JOB FAILED | 하루 예보 저장에 실패했습니다.', error.stack);
+        }
     }
 
     async scheduleOneHourRealWeatherPredicate() {
         const keys = await this.getKeys();
         const time = getCurrentTimeKey();
         try {
-            cron.schedule('30 * * * * *', async () => {
-                for (const key of keys) {
-                    const [x, y] = key.split(':');
-                    this.weatherService.saveOneHourWeatherReal(parseInt(x), parseInt(y), time);
-                }
+            cron.schedule('0 11 * * * *', async () => {
+                const start = Date.now();
+                Promise.all(
+                    keys.map(async (key) => {
+                        const [nx, ny] = key.split(':');
+                        this.weatherService.saveOneHourWeatherReal(parseInt(nx), parseInt(ny), time);
+                    }),
+                );
+                const end = Date.now();
+                this.logger.cronJobFinished('realtimeOneHour', keys.length, end - start);
             });
-        } catch (e) {
-            console.log(e.message);
+            this.logger.cronJobAdded('realtimeOneHour', keys.length);
+        } catch (error) {
+            this.logger.error('CRON JOB FAILED | 한시간 실황 저장에 실패했습니다.', error.stack);
         }
     }
 
