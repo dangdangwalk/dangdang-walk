@@ -65,6 +65,7 @@ export class parseRealWeatherOneHour implements ParseData<OneHourWeatherRealRaw[
                 consolidatedData[key] = {
                     temperature: 0,
                     precipitation: 0,
+                    sky: 0,
                 };
             }
 
@@ -74,6 +75,9 @@ export class parseRealWeatherOneHour implements ParseData<OneHourWeatherRealRaw[
                     break;
                 case 'PTY':
                     consolidatedData[key].precipitation = Number(weatherData.obsrValue);
+                    break;
+                case 'SKY':
+                    consolidatedData[key].sky = Number(weatherData.obsrValue);
                     break;
             }
         });

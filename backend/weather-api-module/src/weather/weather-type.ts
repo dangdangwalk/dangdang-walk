@@ -31,7 +31,11 @@ export interface TodayWeatherPredicateData {
 export interface OneHourWeatherRealData {
     temperature: number;
     precipitation: number;
+    sky: number;
 }
 
 export type TodayWeatherPredicateDataMap = { [key: string]: TodayWeatherPredicateData };
 export type OneHourRealWeatherDataMap = { [key: string]: OneHourWeatherRealData };
+
+export type DataMap = TodayWeatherPredicateDataMap | OneHourRealWeatherDataMap;
+export type DataValue = DataMap[string];
