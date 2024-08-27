@@ -94,7 +94,14 @@ export class WeatherService {
 
     async saveTodayWeatherPredicate(nx: number, ny: number) {
         try {
+            const start = Date.now();
+            this.logger.sendRequest(nx, ny, 'predicateDay');
+
             const data = await this.fetchData(nx, ny, getYesterday(), '2300', 'predicateDay');
+
+            const end = Date.now();
+            this.logger.receiveResponse(nx, ny, 'predicateDay', end - start);
+
             const parsedData = this.parsers['predicateDay'].parse(data);
             this.dataStore.saveFullDayPredicate(nx, ny, parsedData);
             return parsedData;
@@ -113,7 +120,14 @@ export class WeatherService {
 
     async saveOneHourWeatherReal(nx: number, ny: number, time: string) {
         try {
+            const start = Date.now();
+            this.logger.sendRequest(nx, ny, 'realtimeOneHour');
+
             const data = await this.fetchData(nx, ny, getToday(), time, 'realtimeOneHour');
+
+            const end = Date.now();
+            this.logger.receiveResponse(nx, ny, 'realtimeOneHour', end - start);
+
             const parsedData = this.parsers['realtimeOneHour'].parse(data);
             this.dataStore.updateOneHourReal(nx, ny, parsedData);
             await this.validateLocation(nx, ny, parsedData);
