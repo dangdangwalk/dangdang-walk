@@ -1,4 +1,6 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { Cache } from 'cache-manager';
 import { In } from 'typeorm';
 
 import { Period } from './pipes/period-validation.pipe';
@@ -23,6 +25,7 @@ export class StatisticsService {
         private readonly dogWalkDayService: DogWalkDayService,
         private readonly todayWalkTimeService: TodayWalkTimeService,
         private readonly journalsService: JournalsService,
+        @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
         private readonly logger: WinstonLoggerService,
     ) {}
 
@@ -59,6 +62,8 @@ export class StatisticsService {
 
     async getDogsWeeklyWalkingOverview(userId: number): Promise<DogsWeeklyWalkOverviewResponse[]> {
         const ownDogIds = await this.usersService.getOwnDogsList(userId);
+        const CACHE_KEY = `statistics:${userId}`;
+        const CACHE_TTL = 5000;
 
         const ownDogInfos = await this.dogsService.find({
             where: { id: In(ownDogIds) },
@@ -69,13 +74,21 @@ export class StatisticsService {
             },
         });
 
-        return await Promise.all(
-            ownDogInfos.map(async (ownDogInfo) => ({
-                ...makeSubObject(ownDogInfo, ['id', 'name', 'profilePhotoUrl']),
-                recommendedWalkAmount: ownDogInfo.breed.recommendedWalkAmount,
-                todayWalkAmount: await this.todayWalkTimeService.updateIfStaleAndGetDuration(ownDogInfo.todayWalkTime),
-                weeklyWalks: await this.dogWalkDayService.updateIfStaleAndGetWeeklyWalks(ownDogInfo.walkDay),
-            })),
-        );
+        let result = await this.cacheManager.get(CACHE_KEY);
+        if (!result) {
+            result = await Promise.all(
+                ownDogInfos.map(async (ownDogInfo) => ({
+                    ...makeSubObject(ownDogInfo, ['id', 'name', 'profilePhotoUrl']),
+                    recommendedWalkAmount: ownDogInfo.breed.recommendedWalkAmount,
+                    todayWalkAmount: await this.todayWalkTimeService.updateIfStaleAndGetDuration(
+                        ownDogInfo.todayWalkTime,
+                    ),
+                    weeklyWalks: await this.dogWalkDayService.updateIfStaleAndGetWeeklyWalks(ownDogInfo.walkDay),
+                })),
+            );
+
+            await this.cacheManager.set(CACHE_KEY, result, CACHE_TTL);
+        }
+        return result as Promise<DogsWeeklyWalkOverviewResponse[]>;
     }
 }

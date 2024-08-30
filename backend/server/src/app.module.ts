@@ -1,3 +1,4 @@
+import { CacheModule } from '@nestjs/cache-manager';
 import { Module, Scope } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
@@ -17,6 +18,7 @@ import { WalkModule } from './walk/walk.module';
 @Module({
     imports: [
         DatabaseModule,
+        CacheModule.register(),
         WinstonLoggerModule,
         ConfigModule.forRoot({
             isGlobal: true,
