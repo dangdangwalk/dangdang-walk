@@ -1,5 +1,6 @@
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { OnEvent } from '@nestjs/event-emitter';
 import { Cache } from 'cache-manager';
 import { In } from 'typeorm';
 
@@ -60,11 +61,8 @@ export class StatisticsService {
         return this.journalsService.findJournalsAndAggregateByDay(userId, dogId, startDate, endDate);
     }
 
-    async getDogsWeeklyWalkingOverview(userId: number): Promise<DogsWeeklyWalkOverviewResponse[]> {
+    private async getDogsWeeklyWalkingOverviewData(userId: number): Promise<DogsWeeklyWalkOverviewResponse[]> {
         const ownDogIds = await this.usersService.getOwnDogsList(userId);
-        const CACHE_KEY = `statistics:${userId}`;
-        const CACHE_TTL = 5000;
-
         const ownDogInfos = await this.dogsService.find({
             where: { id: In(ownDogIds) },
             select: ['id', 'name', 'profilePhotoUrl', 'breed', 'todayWalkTime', 'walkDay'],
@@ -73,22 +71,38 @@ export class StatisticsService {
                 todayWalkTime: true,
             },
         });
+        return await Promise.all(
+            ownDogInfos.map(async (ownDogInfo) => ({
+                ...makeSubObject(ownDogInfo, ['id', 'name', 'profilePhotoUrl']),
+                recommendedWalkAmount: ownDogInfo.breed.recommendedWalkAmount,
+                todayWalkAmount: await this.todayWalkTimeService.updateIfStaleAndGetDuration(ownDogInfo.todayWalkTime),
+                weeklyWalks: await this.dogWalkDayService.updateIfStaleAndGetWeeklyWalks(ownDogInfo.walkDay),
+            })),
+        );
+    }
 
-        let result = await this.cacheManager.get(CACHE_KEY);
+    async getDogsWeeklyWalkingOverview(userId: number): Promise<DogsWeeklyWalkOverviewResponse[]> {
+        const cacheKey = this.generateCacheKey(userId);
+        let result = await this.cacheManager.get<DogsWeeklyWalkOverviewResponse[]>(cacheKey);
+
         if (!result) {
-            result = await Promise.all(
-                ownDogInfos.map(async (ownDogInfo) => ({
-                    ...makeSubObject(ownDogInfo, ['id', 'name', 'profilePhotoUrl']),
-                    recommendedWalkAmount: ownDogInfo.breed.recommendedWalkAmount,
-                    todayWalkAmount: await this.todayWalkTimeService.updateIfStaleAndGetDuration(
-                        ownDogInfo.todayWalkTime,
-                    ),
-                    weeklyWalks: await this.dogWalkDayService.updateIfStaleAndGetWeeklyWalks(ownDogInfo.walkDay),
-                })),
-            );
-
-            await this.cacheManager.set(CACHE_KEY, result, CACHE_TTL);
+            this.logger.log(`유저 ${userId}의 일주일 산책 통계 데이터에 대한 캐시 미스 발생, 데이터를 조회합니다`);
+            result = await this.getDogsWeeklyWalkingOverviewData(userId);
+            await this.cacheManager.set(cacheKey, result);
         }
-        return result as Promise<DogsWeeklyWalkOverviewResponse[]>;
+        return result;
+    }
+
+    @OnEvent('journal.created')
+    async handleJournalCreated(payload: { userId: number }) {
+        const { userId } = payload;
+        const cacheKey = this.generateCacheKey(userId);
+        const overviewData = await this.getDogsWeeklyWalkingOverviewData(userId);
+
+        await this.cacheManager.set(cacheKey, overviewData);
+    }
+
+    private generateCacheKey(userId: number) {
+        return `statistics:${userId}`;
     }
 }

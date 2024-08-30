@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { DeleteResult, EntityManager, FindOptionsWhere, In, InsertResult } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
@@ -40,6 +41,7 @@ import { checkIfExistsInArr, makeSubObject, makeSubObjectsArray } from '../utils
 @Injectable()
 export class JournalsService {
     constructor(
+        private readonly eventEmitter: EventEmitter2,
         private readonly journalsRepository: JournalsRepository,
         private readonly journalsDogsService: JournalsDogsService,
         private readonly dogsService: DogsService,
@@ -199,6 +201,8 @@ export class JournalsService {
         if (createJournalRequest.excrements && createJournalRequest.excrements.length) {
             await this.createExcrements(createJournalResult.id, createJournalRequest.excrements);
         }
+
+        this.eventEmitter.emit('journal.created', { userId });
     }
 
     @Transactional()
