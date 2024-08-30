@@ -37,6 +37,7 @@ export class StatisticsController {
 
     @Get('/statistics')
     async getDogsWeeklyWalkingOverview(@User() { userId }: AccessTokenPayload) {
-        return await this.statisticsService.getDogsWeeklyWalkingOverview(userId);
+        const result = await this.statisticsService.getDogsWeeklyWalkingOverview(userId);
+        return result;
     }
 }

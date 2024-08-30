@@ -1,6 +1,8 @@
+import { CacheModule } from '@nestjs/cache-manager';
 import { Module, Scope } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 
 import { AppController } from './app.controller';
@@ -17,6 +19,8 @@ import { WalkModule } from './walk/walk.module';
 @Module({
     imports: [
         DatabaseModule,
+        CacheModule.register(),
+        EventEmitterModule.forRoot(),
         WinstonLoggerModule,
         ConfigModule.forRoot({
             isGlobal: true,
