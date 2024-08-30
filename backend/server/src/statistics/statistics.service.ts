@@ -18,6 +18,7 @@ import { UsersService } from '../users/users.service';
 import { getOneMonthAgo, getStartAndEndOfMonth, getStartAndEndOfWeek } from '../utils/date.util';
 import { makeSubObject } from '../utils/manipulate.util';
 
+const CACHE_TTL = 1000 * 60 * 60;
 @Injectable()
 export class StatisticsService {
     constructor(
@@ -83,14 +84,14 @@ export class StatisticsService {
 
     async getDogsWeeklyWalkingOverview(userId: number): Promise<DogsWeeklyWalkOverviewResponse[]> {
         const cacheKey = this.generateCacheKey(userId);
-        let result = await this.cacheManager.get<DogsWeeklyWalkOverviewResponse[]>(cacheKey);
+        let overviewData = await this.cacheManager.get<DogsWeeklyWalkOverviewResponse[]>(cacheKey);
 
-        if (!result) {
+        if (!overviewData) {
             this.logger.log(`유저 ${userId}의 일주일 산책 통계 데이터에 대한 캐시 미스 발생, 데이터를 조회합니다`);
-            result = await this.getDogsWeeklyWalkingOverviewData(userId);
-            await this.cacheManager.set(cacheKey, result);
+            overviewData = await this.getDogsWeeklyWalkingOverviewData(userId);
+            await this.cacheManager.set(cacheKey, overviewData, CACHE_TTL);
         }
-        return result;
+        return overviewData;
     }
 
     @OnEvent('journal.created')
@@ -99,7 +100,7 @@ export class StatisticsService {
         const cacheKey = this.generateCacheKey(userId);
         const overviewData = await this.getDogsWeeklyWalkingOverviewData(userId);
 
-        await this.cacheManager.set(cacheKey, overviewData);
+        await this.cacheManager.set(cacheKey, overviewData, CACHE_TTL);
     }
 
     private generateCacheKey(userId: number) {
