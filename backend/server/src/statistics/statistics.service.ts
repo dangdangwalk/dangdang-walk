@@ -19,6 +19,7 @@ import { getOneMonthAgo, getStartAndEndOfMonth, getStartAndEndOfWeek } from '../
 import { makeSubObject } from '../utils/manipulate.util';
 
 const CACHE_TTL = 1000 * 60 * 60;
+
 @Injectable()
 export class StatisticsService {
     constructor(
