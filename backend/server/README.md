@@ -77,7 +77,7 @@ REFRESH_TOKEN_LIFETIME=14d
     -   `npm run test` 명령어를 입력하여 NestJS 테스트를 실행합니다.
     -   `npm run test:e2e` 명령어를 입력하여 NestJS e2e 테스트를 실행합니다.
 
-## 2. 데이터베이스 설정하기
+## 3. 데이터베이스 설정하기
 
 로컬 개발 환경에서는 MySQL 데이터베이스를 사용합니다. MySQL을 사용하려면 Docker를 실행해야 합니다.
 
