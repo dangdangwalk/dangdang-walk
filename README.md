@@ -63,7 +63,8 @@ git clone https://github.com/dangdangwalk/dangdang-walk.git
 
 환경 설정 방법은 각각 `backend`, `frontend` 폴더에 있는 `README.md` 파일에서 확인할 수 있습니다.
 
-- [Backend 환경 설정 안내](https://github.com/jihwooon/dangdang-walk/tree/main/backend#readme)
+- [Backend - 서버 환경 설정 안내](https://github.com/dangdangwalk/dangdang-walk/blob/main/backend/server/README.md)
+- [Backend - 날씨 api 모듈 환경 설정 안내](https://github.com/dangdangwalk/dangdang-walk/blob/main/backend/weather-api-module/README.md)
 - [Frontend 환경 설정 안내](https://github.com/jihwooon/dangdang-walk/tree/main/frontend#readme)
 
 # 🛠️ 기술 스택
