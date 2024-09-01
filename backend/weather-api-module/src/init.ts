@@ -20,7 +20,7 @@ async function init() {
         await scheduler.initializeScheduler();
         logger.info('Scheduler가 성공적으로 실행되었습니다');
     } catch (error) {
-        console.error(`초기화 중 오류 발생. 프로세스를 종료합니다. Error:  ${error.message}`, error.stack);
+        logger.error(`초기화 중 오류 발생. 프로세스를 종료합니다. Error:  ${error.message}`, error.stack);
         process.exit(1);
     }
 }
