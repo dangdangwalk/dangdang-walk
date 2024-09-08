@@ -9,6 +9,7 @@ import { Period } from './pipes/period-validation.pipe';
 import { DogWalkingTotalResponse, DogsWeeklyWalkOverviewResponse } from './types/statistic.type';
 
 import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
+import { CACHE_TTL, EVENTS } from '../const/cache-const';
 import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
 import { DogsService } from '../dogs/dogs.service';
 import { JournalsService } from '../journals/journals.service';
@@ -17,8 +18,6 @@ import { UsersService } from '../users/users.service';
 
 import { getOneMonthAgo, getStartAndEndOfMonth, getStartAndEndOfWeek } from '../utils/date.util';
 import { makeSubObject } from '../utils/manipulate.util';
-
-const CACHE_TTL = 1000 * 60 * 60;
 
 @Injectable()
 export class StatisticsService {
@@ -95,13 +94,25 @@ export class StatisticsService {
         return overviewData;
     }
 
-    @OnEvent('journal.created')
-    async handleJournalCreated(payload: { userId: number }) {
+    @OnEvent(EVENTS.DOG_CREATED)
+    @OnEvent(EVENTS.DOG_DELETED)
+    @OnEvent(EVENTS.DOG_UPDATED)
+    @OnEvent(EVENTS.JOURNAL_CREATED)
+    @OnEvent(EVENTS.JOURNAL_DELETED)
+    async updateDogWalkingStatisticsCache(payload: { userId: number }) {
         const { userId } = payload;
         const cacheKey = this.generateCacheKey(userId);
-        const overviewData = await this.getDogsWeeklyWalkingOverviewData(userId);
+        try {
+            const overviewData = await this.getDogsWeeklyWalkingOverviewData(userId);
 
-        await this.cacheManager.set(cacheKey, overviewData, CACHE_TTL);
+            await this.cacheManager.set(cacheKey, overviewData, CACHE_TTL);
+            this.logger.log('statistics 캐시 데이터를 업데이트 했습니다.');
+            this.logger.debug(JSON.stringify(overviewData));
+        } catch (error) {
+            this.logger.error(`캐시 업데이트 중 오류 발생: ${error.message}`, error.stack);
+            await this.cacheManager.del(cacheKey);
+            this.logger.log(`유저 ${payload.userId}의 캐시를 무효화했습니다.`);
+        }
     }
 
     private generateCacheKey(userId: number) {

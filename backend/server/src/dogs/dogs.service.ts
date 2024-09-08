@@ -1,14 +1,16 @@
 import { ConflictException, Injectable } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { EntityManager, FindManyOptions, FindOneOptions, FindOptionsWhere, In } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import { Dogs } from './dogs.entity';
 import { DogsRepository } from './dogs.repository';
 
-import { CreateDogRequest, UpdateDogRequest, DogProfileResponse, DogSummaryResponse } from './types/dogs.type';
+import { CreateDogRequest, DogProfileResponse, DogSummaryResponse, UpdateDogRequest } from './types/dogs.type';
 
 import { BreedService } from '../breed/breed.service';
 import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
+import { EVENTS } from '../const/cache-const';
 import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
 import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
 import { S3Service } from '../s3/s3.service';
@@ -23,6 +25,7 @@ import { makeSubObject, makeSubObjectsArray } from '../utils/manipulate.util';
 @Injectable()
 export class DogsService {
     constructor(
+        private readonly eventEmitter: EventEmitter2,
         private readonly dogsRepository: DogsRepository,
         private readonly usersService: UsersService,
         private readonly usersDogsService: UsersDogsService,
@@ -51,6 +54,7 @@ export class DogsService {
             const dog = await this.dogsRepository.create(newDog);
 
             await this.usersDogsService.create({ userId, dogId: dog.id });
+            await this.eventEmitter.emit(EVENTS.DOG_CREATED, { userId });
         } catch (error) {
             this.logger.error(`존재하지 않는 견종입니다`, { trace: error.stack ?? '스택 없음' });
             throw error;
@@ -74,6 +78,7 @@ export class DogsService {
         if (dog.profilePhotoUrl) {
             await this.s3Service.deleteSingleObject(userId, dog.profilePhotoUrl);
         }
+        await this.eventEmitter.emit(EVENTS.DOG_DELETED, { userId });
     }
 
     @Transactional()
@@ -123,6 +128,7 @@ export class DogsService {
 
         const updateData = breed ? { breedId: breed.id, ...otherAttributes } : otherAttributes;
         await this.dogsRepository.update({ id: dogId }, updateData);
+        await this.eventEmitter.emit(EVENTS.DOG_UPDATED, { userId });
     }
 
     async updateIsWalking(dogIds: number | number[], stateToUpdate: boolean) {

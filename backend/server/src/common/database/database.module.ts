@@ -52,6 +52,7 @@ import { WinstonLoggerService } from '../logger/winstonLogger.service';
                     ...(enableQueryLogger
                         ? { logger: new FileLogger(true, { logPath: `log/ormlogs.${nodeEnv}.log` }) }
                         : {}),
+                    logging: process.env.NODE_ENV === 'local',
                 };
             },
             async dataSourceFactory(options) {
