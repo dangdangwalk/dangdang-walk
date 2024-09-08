@@ -34,7 +34,15 @@ function Walk() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const { walkingDogs, saveFecesAndUrine, initialSetDogs, handleToggle, cancelCheckedAll } = useWalkingDogs();
+    const {
+        walkingDogs,
+        saveFecesAndUrine,
+        initialSetDogs,
+        handleToggle,
+        cancelCheckedAll,
+        fecesCheckedList,
+        urineCheckedList,
+    } = useWalkingDogs();
     const { duration, isStart: isWalk, stopClock, startClock, startedAt } = useStopWatch();
     const { distance, position: startPosition, currentPosition, stopGeo, routes, startGeo } = useGeolocation();
     const [isDogBottomSheetOpen, setIsDogBottomSheetOpen] = useState<boolean>(false);
@@ -150,12 +158,18 @@ function Walk() {
                 <BottomSheet.Header> 강아지 산책</BottomSheet.Header>
                 <BottomSheet.Body>
                     {walkingDogs?.map((dog) => (
-                        <DogFecesAndUrineCheckList dog={dog} toggleCheck={handleToggle} key={dog.id} />
+                        <DogFecesAndUrineCheckList
+                            dog={dog}
+                            toggleCheck={handleToggle}
+                            key={dog.id}
+                            urineCheckedList={urineCheckedList}
+                            fecesCheckedList={fecesCheckedList}
+                        />
                     ))}
                 </BottomSheet.Body>
                 <BottomSheet.ConfirmButton
                     onConfirm={handleConfirm}
-                    disabled={walkingDogs?.find((d) => d.isUrineChecked || d.isFecesChecked) ? false : true}
+                    disabled={urineCheckedList.size === 0 && fecesCheckedList.size === 0}
                 >
                     확인
                 </BottomSheet.ConfirmButton>
