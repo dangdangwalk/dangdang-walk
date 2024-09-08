@@ -99,19 +99,15 @@ export class StatisticsService {
     @OnEvent(EVENTS.DOG_UPDATED)
     @OnEvent(EVENTS.JOURNAL_CREATED)
     @OnEvent(EVENTS.JOURNAL_DELETED)
-    async updateDogWalkingStatisticsCache(payload: { userId: number }) {
+    async invalidateUserDogStatisticsCache(payload: { userId: number }) {
+        this.logger.debug(`handleJournalCreated 이벤트 수신 시간: ${new Date().toISOString()}`);
         const { userId } = payload;
         const cacheKey = this.generateCacheKey(userId);
         try {
-            const overviewData = await this.getDogsWeeklyWalkingOverviewData(userId);
-
-            await this.cacheManager.set(cacheKey, overviewData, CACHE_TTL);
-            this.logger.log('statistics 캐시 데이터를 업데이트 했습니다.');
-            this.logger.debug(JSON.stringify(overviewData));
-        } catch (error) {
-            this.logger.error(`캐시 업데이트 중 오류 발생: ${error.message}`, error.stack);
             await this.cacheManager.del(cacheKey);
             this.logger.log(`유저 ${payload.userId}의 캐시를 무효화했습니다.`);
+        } catch (error) {
+            this.logger.error(`캐시 삭제 중 오류 발생: ${error.message}`, error.stack);
         }
     }
 
