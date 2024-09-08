@@ -28,8 +28,4 @@ export interface DogStatistic extends DogAvatar {
     profilePhotoUrl: string;
 }
 
-export interface WalkAvailableDog extends DogAvatar {
-    isChecked: boolean;
-}
-
 export type DogCreateForm = Omit<Dog, 'id'>;

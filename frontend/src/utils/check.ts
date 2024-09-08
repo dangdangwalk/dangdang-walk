@@ -13,3 +13,13 @@ export const setFlagValueByKey = <T extends { id: number }>(
     }
     return array.map((item) => ({ ...item, [key1]: flag }));
 };
+
+export const updateSet = (set: Set<number>, id: number): Set<number> => {
+    const newSet = new Set<number>(set);
+    if (set.has(id)) {
+        newSet.delete(id);
+    } else {
+        newSet.add(id);
+    }
+    return newSet;
+};
