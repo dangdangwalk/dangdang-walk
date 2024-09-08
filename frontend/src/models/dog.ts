@@ -13,8 +13,6 @@ export interface Dog {
 
 export type DogAvatar = Pick<Dog, 'id' | 'name' | 'profilePhotoUrl'>;
 export interface WalkingDog extends DogAvatar {
-    isUrineChecked: boolean;
-    isFecesChecked: boolean;
     fecesLocations: Coords[];
     urineLocations: Coords[];
 }
@@ -26,10 +24,6 @@ export interface DogStatistic extends DogAvatar {
     todayWalkAmount: number;
     weeklyWalks: number[];
     profilePhotoUrl: string;
-}
-
-export interface WalkAvailableDog extends DogAvatar {
-    isChecked: boolean;
 }
 
 export type DogCreateForm = Omit<Dog, 'id'>;

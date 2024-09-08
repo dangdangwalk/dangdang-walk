@@ -1,12 +1,12 @@
 import { httpClient } from '@/api/http';
-import { WalkAvailableDog, Dog, DogCreateForm, DogStatistic } from '@/models/dog';
+import { Dog, DogCreateForm, DogStatistic, DogAvatar } from '@/models/dog';
 export type Period = 'week' | 'month';
 export const fetchDogStatistic = async (): Promise<DogStatistic[]> => {
     const { data } = await httpClient.get('/dogs/statistics');
     return data;
 };
 
-export const fetchWalkAvailableDogs = async (): Promise<WalkAvailableDog[]> => {
+export const fetchWalkAvailableDogs = async (): Promise<DogAvatar[]> => {
     const { data } = await httpClient.get('/dogs/walks/available');
     return data;
 };

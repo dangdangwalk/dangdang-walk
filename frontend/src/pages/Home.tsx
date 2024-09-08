@@ -8,7 +8,7 @@ import BottomSheet from '@/components/commons/BottomSheet';
 import AvailableDogCheckList from '@/components/home/AvailableDogCheckList';
 import useDogsStatistic from '@/hooks/useDogsStatistic';
 import { useNavigate } from 'react-router-dom';
-import { setFlagValueByKey, toggleCheckById } from '@/utils/check';
+import { updateSet } from '@/utils/check';
 import useWalkAvailable from '@/hooks/useWalkAvailableDog';
 import useGeolocation from '@/hooks/useGeolocation';
 import useToast from '@/hooks/useToast';
@@ -16,12 +16,18 @@ import { isArrayNotEmpty } from '@/utils/validate';
 import DogStatisticsView from '@/components/home/DogStatisticsView';
 import Navbar from '@/components/Navbar';
 import { useStore } from '@/store';
+import { DogAvatar } from '@/models/dog';
 
 function Home() {
     const [isDogBottomSheetOpen, setIsDogBottomSheetOpen] = useState<boolean>(false);
     const { position, isLocationDisabled } = useGeolocation();
-    const { isAvailableDogsLoading, fetchWalkAvailableDogs, walkAvailableDogs, setWalkAvailableDogs } =
-        useWalkAvailable();
+    const {
+        isAvailableDogsLoading,
+        fetchWalkAvailableDogs,
+        walkAvailableDogs,
+        checkedAvailableDogs,
+        setCheckedAvailableDogs,
+    } = useWalkAvailable();
     const { dogsStatistic, isDogsPending } = useDogsStatistic();
     const navigate = useNavigate();
     const { show: showToast } = useToast();
@@ -53,6 +59,7 @@ function Home() {
         const hour = diff / 1000 / 60 / 60;
         return hour <= 3;
     };
+    const isChecked = (dog: DogAvatar) => checkedAvailableDogs.has(dog.id);
 
     const handleConfirm = () => {
         setIsDogBottomSheetOpen(false);
@@ -61,20 +68,20 @@ function Home() {
             handleCheckAll(false);
             return;
         }
-        const dogs =
-            walkAvailableDogs?.length === 1 ? walkAvailableDogs : walkAvailableDogs?.filter((d) => d.isChecked);
+        const dogs = walkAvailableDogs?.filter(isChecked);
+
         navigate('/walk', { state: { dogs } });
     };
 
     const handleToggle = (id: number) => {
-        setWalkAvailableDogs((prevAvailableDogs) =>
-            prevAvailableDogs?.length ? toggleCheckById(prevAvailableDogs, id, 'isChecked') : prevAvailableDogs
-        );
+        setCheckedAvailableDogs((prev) => updateSet(prev, id));
     };
-    const handleCheckAll = (flag: boolean) => {
-        setWalkAvailableDogs((prevAvailableDogs) =>
-            prevAvailableDogs?.length ? setFlagValueByKey(prevAvailableDogs, flag, 'isChecked') : prevAvailableDogs
-        );
+    const handleCheckAll = (checked: boolean) => {
+        if (checked) {
+            setCheckedAvailableDogs(new Set(walkAvailableDogs?.map((dog) => dog.id)));
+        } else {
+            setCheckedAvailableDogs(new Set());
+        }
     };
 
     return (
@@ -107,15 +114,13 @@ function Home() {
                             dogs={walkAvailableDogs}
                             onToggle={handleToggle}
                             checkAll={handleCheckAll}
+                            checkedList={checkedAvailableDogs}
                         />
                     ) : (
                         <div>모든 강아지가 산책중입니다</div>
                     )}
                 </BottomSheet.Body>
-                <BottomSheet.ConfirmButton
-                    onConfirm={handleConfirm}
-                    disabled={walkAvailableDogs?.find((d) => d.isChecked) ? false : true}
-                >
+                <BottomSheet.ConfirmButton onConfirm={handleConfirm} disabled={checkedAvailableDogs.size === 0}>
                     확인
                 </BottomSheet.ConfirmButton>
             </BottomSheet>

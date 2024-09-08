@@ -11,8 +11,6 @@ describe('useWalkingDogs', () => {
             id: 1,
             name: 'Dog 1',
             profilePhotoUrl: null,
-            isFecesChecked: false,
-            isUrineChecked: false,
             fecesLocations: [],
             urineLocations: [],
         },
@@ -20,8 +18,6 @@ describe('useWalkingDogs', () => {
             id: 2,
             name: 'Dog 2',
             profilePhotoUrl: null,
-            isFecesChecked: false,
-            isUrineChecked: false,
             fecesLocations: [],
             urineLocations: [],
         },
@@ -51,8 +47,6 @@ describe('useWalkingDogs', () => {
         expect(result.current.walkingDogs).toEqual(
             initialDogs.map((dog) => ({
                 ...dog,
-                isFecesChecked: false,
-                isUrineChecked: false,
                 fecesLocations: [],
                 urineLocations: [],
             }))
@@ -67,37 +61,24 @@ describe('useWalkingDogs', () => {
         });
 
         act(() => {
-            result.current.handleToggle(2, 'isFecesChecked');
+            result.current.handleToggle(2, 'feces');
         });
 
-        const expectedDogs = initialDogs.map((dog) => ({
-            ...dog,
-            isFecesChecked: dog.id === 2 ? !dog.isFecesChecked : dog.isFecesChecked,
-        }));
-
-        expect(result.current.walkingDogs).toEqual(expectedDogs);
+        expect(result.current.fecesCheckedList.has(2)).toEqual(true);
 
         act(() => {
-            result.current.handleToggle(1, 'isUrineChecked');
+            result.current.handleToggle(1, 'urine');
         });
 
-        const expectedDogs1 = expectedDogs.map((dog) => ({
-            ...dog,
-            isUrineChecked: dog.id === 1 ? !dog.isUrineChecked : dog.isUrineChecked,
-        }));
-        expect(result.current.walkingDogs).toEqual(expectedDogs1);
+        expect(result.current.urineCheckedList.has(1)).toEqual(true);
 
         act(() => {
-            result.current.handleToggle(1, 'isUrineChecked');
-            result.current.handleToggle(2, 'isFecesChecked');
+            result.current.handleToggle(1, 'urine');
+            result.current.handleToggle(2, 'feces');
         });
-        const expectedDogs2 = expectedDogs1.map((dog) => ({
-            ...dog,
-            isUrineChecked: dog.id === 1 ? !dog.isUrineChecked : dog.isUrineChecked,
-            isFecesChecked: dog.id === 2 ? !dog.isFecesChecked : dog.isFecesChecked,
-        }));
 
-        expect(result.current.walkingDogs).toEqual(expectedDogs2);
+        expect(result.current.urineCheckedList.size).toEqual(0);
+        expect(result.current.fecesCheckedList.size).toEqual(0);
     });
 
     it('cancels all checks correctly', () => {
@@ -108,28 +89,19 @@ describe('useWalkingDogs', () => {
         });
 
         act(() => {
-            result.current.handleToggle(1, 'isUrineChecked');
-            result.current.handleToggle(2, 'isFecesChecked');
+            result.current.handleToggle(1, 'urine');
+            result.current.handleToggle(2, 'feces');
         });
-        const expectedDogs = initialDogs.map((dog) => ({
-            ...dog,
-            isUrineChecked: dog.id === 1 ? !dog.isUrineChecked : dog.isUrineChecked,
-            isFecesChecked: dog.id === 2 ? !dog.isFecesChecked : dog.isFecesChecked,
-        }));
 
-        expect(result.current.walkingDogs).toEqual(expectedDogs);
+        expect(result.current.urineCheckedList.has(1)).toEqual(true);
+        expect(result.current.fecesCheckedList.has(2)).toEqual(true);
 
         act(() => {
             result.current.cancelCheckedAll();
         });
 
-        const expectedDogs1 = initialDogs.map((dog) => ({
-            ...dog,
-            isFecesChecked: false,
-            isUrineChecked: false,
-        }));
-
-        expect(result.current.walkingDogs).toEqual(expectedDogs1);
+        expect(result.current.urineCheckedList.size).toEqual(0);
+        expect(result.current.fecesCheckedList.size).toEqual(0);
     });
 
     it('saves feces and urine locations correctly', () => {
@@ -148,14 +120,16 @@ describe('useWalkingDogs', () => {
             ...dog,
             fecesLocations: [],
             urineLocations: [],
-            isFecesChecked: false,
-            isUrineChecked: false,
         }));
+
         expect(result.current.walkingDogs).toEqual(expectedDogs);
 
         act(() => {
-            result.current.handleToggle(1, 'isUrineChecked');
-            result.current.handleToggle(2, 'isFecesChecked');
+            result.current.handleToggle(1, 'urine');
+            result.current.handleToggle(2, 'feces');
+        });
+
+        act(() => {
             result.current.saveFecesAndUrine(position);
         });
 
@@ -164,7 +138,10 @@ describe('useWalkingDogs', () => {
             fecesLocations: dog.id === 2 ? [[10, 20]] : [],
             urineLocations: dog.id === 1 ? [[10, 20]] : [],
         }));
+
         expect(result.current.walkingDogs).toEqual(expectedDogs1);
+        expect(result.current.urineCheckedList.size).toEqual(0);
+        expect(result.current.fecesCheckedList.size).toEqual(0);
     });
 
     it('does not update locations if no position is provided', () => {
@@ -181,8 +158,6 @@ describe('useWalkingDogs', () => {
         expect(result.current.walkingDogs).toEqual(
             initialDogs.map((dog) => ({
                 ...dog,
-                isFecesChecked: false,
-                isUrineChecked: false,
                 fecesLocations: [],
                 urineLocations: [],
             }))
