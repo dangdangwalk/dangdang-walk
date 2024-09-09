@@ -9,6 +9,7 @@ import { Period } from './pipes/period-validation.pipe';
 import { DogWalkingTotalResponse, DogsWeeklyWalkOverviewResponse } from './types/statistic.type';
 
 import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
+import { CACHE_TTL, EVENTS } from '../const/cache-const';
 import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
 import { DogsService } from '../dogs/dogs.service';
 import { JournalsService } from '../journals/journals.service';
@@ -17,8 +18,6 @@ import { UsersService } from '../users/users.service';
 
 import { getOneMonthAgo, getStartAndEndOfMonth, getStartAndEndOfWeek } from '../utils/date.util';
 import { makeSubObject } from '../utils/manipulate.util';
-
-const CACHE_TTL = 1000 * 60 * 60;
 
 @Injectable()
 export class StatisticsService {
@@ -95,13 +94,21 @@ export class StatisticsService {
         return overviewData;
     }
 
-    @OnEvent('journal.created')
-    async handleJournalCreated(payload: { userId: number }) {
+    @OnEvent(EVENTS.DOG_CREATED)
+    @OnEvent(EVENTS.DOG_DELETED)
+    @OnEvent(EVENTS.DOG_UPDATED)
+    @OnEvent(EVENTS.JOURNAL_CREATED)
+    @OnEvent(EVENTS.JOURNAL_DELETED)
+    async invalidateUserDogStatisticsCache(payload: { userId: number }) {
+        this.logger.debug(`handleJournalCreated 이벤트 수신 시간: ${new Date().toISOString()}`);
         const { userId } = payload;
         const cacheKey = this.generateCacheKey(userId);
-        const overviewData = await this.getDogsWeeklyWalkingOverviewData(userId);
-
-        await this.cacheManager.set(cacheKey, overviewData, CACHE_TTL);
+        try {
+            await this.cacheManager.del(cacheKey);
+            this.logger.log(`유저 ${payload.userId}의 캐시를 무효화했습니다.`);
+        } catch (error) {
+            this.logger.error(`캐시 삭제 중 오류 발생: ${error.message}`, error.stack);
+        }
     }
 
     private generateCacheKey(userId: number) {
