@@ -11,6 +11,10 @@ local-mysql-e2e:
     -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=test mysql:8.4.0 \
     --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
 
+local-redis:
+	docker run -d --name local-redis --platform linux/amd64 -p 6379:6379 \
+	redis:7.0.15 redis-server
+
 docker-build:
 	cd ./backend/server && \
 	docker-compose -f docker-compose-dev.yml build

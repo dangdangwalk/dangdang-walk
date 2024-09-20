@@ -18,7 +18,8 @@
 
 ```shell
 REACT_APP_BASE_URL=http://localhost:3000
-REACT_APP_NEST_BASE_URL='서버 주소'
+REACT_APP_NEST_BASE_URL=http://localhost:3333
+REACT_APP_WEATHER_MODULE_URL=http://localhost:3335
 
 REACT_APP_WEATHER_URL=http://apis.data.go.kr
 REACT_APP_WEATHER_KEY='공공데이터 api key'
