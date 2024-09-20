@@ -16,11 +16,10 @@ RUN apk add --no-cache libc6-compat && \
     rm -rf /var/cache/apk/*
 
 USER root
-WORKDIR /app
+WORKDIR /backend
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nestjs
 
-COPY --chown=nestjs:nodejs --from=builder /backend/server .
 COPY --chown=nestjs:nodejs --from=builder /backend/server .
 
 RUN npm ci && npm cache clean --force
