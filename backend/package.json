@@ -9,7 +9,9 @@
     "lint:server": "eslint \"server/**/*.ts\" --fix",
     "lint:weather": "eslint \"weather-api-module/**/*.ts\" --fix",
     "lint": "npm run lint:server && npm run lint:weather",
-    "prepare": "cd .. && husky backend/.husky"
+    "prepare": "cd .. && husky backend/.husky",
+    "start:all": "docker compose -f ../docker-compose-dev.yml up server weather",
+    "stop:all" : "docker-compose -f  ../docker-compose-dev.yml down "
   },
   "lint-staged": {
     "server/**/*.{ts, tsx}": [

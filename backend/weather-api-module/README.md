@@ -19,28 +19,12 @@ REDIS_HOST=localhost
 CORS_ORIGIN=http://localhost:3000
 ```
 
-### 데이터베이스 설정하기
-
--   redis 7.0.15 버전의 Docker 이미지를 생성합니다.
-
-```dockerfile
-FROM redis:7.0.15
-
-EXPOSE 6379
-
-CMD ["redis-server"]
-```
-
--   다음 명령어를 실행해 Docker dㅣ미지를 빌드합니다.
+### Redis 도커 실행하기 
+- 아래 명령어를 입력해 Redis 도커를 실행합니다.
 
 ```shell
-docker build -t my-redis:7.0.15 .
-```
-
--   빌드된 이미지를 사용하여 Redis 컨테이너를 실행합니다.
-
-```shell
-docker run -d --name my-redis-container -p 6379:6379 my-redis:7.0.15
+docker run -d --name local-redis --platform linux/amd64 -p 6379:6379 \
+redis:7.0.15 redis-server
 ```
 
 ## 1. 의존성 설치하기

@@ -1,0 +1,113 @@
+services:
+  db:
+    container_name: dangdang-mysql 
+    image: mysql:8.0.22
+    platform: linux/amd64
+    environment:
+      TZ: Asia/Seoul
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: root
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    env_file:
+      - ./backend/server/.env.local
+    ports:
+      - 3306:3306
+    restart: unless-stopped
+    volumes:
+      - ./db/mysql/data:/var/lib/mysql
+      - ./db/mysql/config:/etc/mysql/conf.d
+    networks:
+      - my_network
+
+  server:
+    container_name: dangdang-server
+    image: dangdang-server
+    platform: linux/amd64
+    restart: unless-stopped
+    build:
+      context: ./backend
+      dockerfile: ./server/Dockerfile
+    environment:
+      - MYSQL_HOST=db 
+    env_file:
+      - ./backend/server/.env.local
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    ports:
+      - 3333:3333
+    networks:
+      - my_network
+    depends_on:
+      - db
+    working_dir: /app/server
+    command: npm run start
+
+  redis:
+    container_name: dangdang-weather-redis
+    image: redis:7.0.15
+    platform: linux/amd64
+    ports:
+      - 6379:6379
+    networks:
+      - my_network
+    command: redis-server
+    volumes:
+      - ./backend/weather-api-module/redis-backup:/data
+
+  weather:
+    container_name: dangdang-weather-api-module
+    image: dangdang-weather-api-module
+    platform: linux/amd64
+    restart: unless-stopped
+    build:
+      context: ./backend
+      dockerfile: ./weather-api-module/Dockerfile
+    environment: 
+      - REDIS_HOST=redis
+    env_file:
+      - ./backend/weather-api-module/.env.local
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    ports:
+      - 3335:3335
+    networks:
+      - my_network
+    depends_on:
+      - redis
+    working_dir: /app/weather-api-module
+    command: npm run start
+
+
+  front:
+    container_name: dangdang-frontend
+    image: dangdang-front
+    platform: linux/amd64
+    restart: unless-stopped
+    #    build:
+    #  context: ./frontend
+    #  dockerfile: Dockerfile
+    #  target: dev 
+    environment: 
+      - REACT_APP_NEST_BASE_URL=server:3333
+      - REACT_APP_WEATHER_MODULE_URL=weather:3335
+    env_file:
+      - ./frontend/.env.local
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    working_dir: /app
+    ports:
+      - 3000:3000
+    networks:
+      - my_network
+    command: npm start
+  
+networks:
+  my_network:
+    driver: bridge
+volumes:
+  db:
+    driver: local
+
