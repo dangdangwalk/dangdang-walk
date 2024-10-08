@@ -4,10 +4,10 @@ import { EntityManager, Repository } from 'typeorm';
 
 import { DogWalkDay } from './dog-walk-day.entity';
 
-import { AbstractRepository } from '../common/database/abstract.repository';
+import { TypeORMRepository } from '../common/database/typeorm.repository';
 
 @Injectable()
-export class DogWalkDayRepository extends AbstractRepository<DogWalkDay> {
+export class DogWalkDayRepository extends TypeORMRepository<DogWalkDay> {
     constructor(
         @InjectRepository(DogWalkDay)
         dogWalkDayRepository: Repository<DogWalkDay>,

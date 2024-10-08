@@ -12,7 +12,9 @@ import {
 } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
-export abstract class AbstractRepository<T extends ObjectLiteral> {
+import { IBaseRepository } from './base.interface';
+
+export abstract class TypeORMRepository<T extends ObjectLiteral> implements IBaseRepository<T> {
     constructor(
         private readonly entityRepository: Repository<T>,
         private readonly entityManager: EntityManager,
