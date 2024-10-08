@@ -3,9 +3,9 @@ import { EntityManager, Repository } from 'typeorm';
 
 import { Excrements } from './excrements.entity';
 
-import { AbstractRepository } from '../common/database/abstract.repository';
+import { TypeORMRepository } from '../common/database/typeorm.repository';
 
-export class ExcrementsRepository extends AbstractRepository<Excrements> {
+export class ExcrementsRepository extends TypeORMRepository<Excrements> {
     constructor(
         @InjectRepository(Excrements) excrementsRepository: Repository<Excrements>,
         entityManager: EntityManager,
