@@ -3,6 +3,8 @@ name: Labeler and Validator
 on:
   pull_request:
     types: [opened, edited]
+    branches-ignore:
+      - swagger-ui-updates
 
 jobs:
   label_and_validate:
