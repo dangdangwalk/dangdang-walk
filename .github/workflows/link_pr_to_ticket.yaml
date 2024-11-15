@@ -3,6 +3,8 @@ name: Link PR to Ticket
 on:
   pull_request:
     types: [opened]
+    branches-ignore:
+      - swagger-ui-updates
 
 jobs:
   link_pr_to_ticket:

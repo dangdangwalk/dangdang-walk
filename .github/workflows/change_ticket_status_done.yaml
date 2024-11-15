@@ -3,6 +3,8 @@ name: Change Ticket Status to Done
 on:
   pull_request:
     types: [closed]
+    branches-ignore:
+      - swagger-ui-updates
 
 jobs:
   change_ticket_status_to_done_if_merged:
