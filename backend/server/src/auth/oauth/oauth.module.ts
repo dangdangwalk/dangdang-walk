@@ -1,10 +1,14 @@
-import { HttpModule } from '@nestjs/axios';
+import { HttpModule, HttpService } from '@nestjs/axios';
 import { Module, Type } from '@nestjs/common';
+
+import { ConfigService } from '@nestjs/config';
 
 import { GoogleService } from './google.service';
 import { KakaoService } from './kakao.service';
 import { NaverService } from './naver.service';
 import { OauthService } from './oauth.service.interface';
+
+import { WinstonLoggerService } from '../../common/logger/winstonLogger.service';
 
 export const OAUTH_REGISTRY = new Map<string, Type<OauthService>>([
     ['google', GoogleService],
@@ -17,15 +21,16 @@ export const OAUTH_REGISTRY = new Map<string, Type<OauthService>>([
     providers: [
         {
             provide: 'OAUTH_SERVICES',
-            useFactory: () => {
+            useFactory: (configService: ConfigService, httpService: HttpService, logger: WinstonLoggerService) => {
                 const oauthServices = new Map<string, OauthService>();
 
                 for (const [provider, ServiceClass] of OAUTH_REGISTRY) {
-                    oauthServices.set(provider, new ServiceClass());
+                    oauthServices.set(provider, new ServiceClass(configService, httpService, logger));
                 }
 
                 return oauthServices;
             },
+            inject: [ConfigService, HttpService, WinstonLoggerService],
         },
         GoogleService,
         KakaoService,
