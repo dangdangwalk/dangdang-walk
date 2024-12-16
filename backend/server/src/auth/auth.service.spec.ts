@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { AuthService } from './auth.service';
-import { OauthService } from './oauth/oauth.service.interface';
+import { OauthService } from './oauth/oauth.service.base';
 import { AccessTokenPayload, RefreshTokenPayload, TokenService } from './token/token.service';
 import { OauthAuthorizeData } from './types/oauth-authorize-data.type';
 import { OauthData } from './types/oauth-data.type';

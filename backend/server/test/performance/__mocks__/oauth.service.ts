@@ -1,11 +1,15 @@
-import { RequestToken, RequestTokenRefresh, RequestUserInfo } from '../../../src/auth/oauth/oauth.service.interface';
+import {
+    RequestTokenRefreshResponse,
+    RequestTokenResponse,
+    UserInfo,
+} from '../../../src/auth/oauth/oauth.service.base';
 
 export const MockOauthService = {
     requestToken: () =>
         ({
             access_token: 'mock_oauth_access_token',
             refresh_token: 'mock_oauth_refresh_token',
-        }) as RequestToken,
+        }) as RequestTokenResponse,
 
     requestUserInfo: () =>
         ({
@@ -13,7 +17,7 @@ export const MockOauthService = {
             oauthNickname: 'mock_oauth_nickname',
             email: 'mock_email@example.com',
             profileImageUrl: 'mock_profile_image.jpg',
-        }) as RequestUserInfo,
+        }) as UserInfo,
 
     requestTokenExpiration: () => {},
 
@@ -23,5 +27,5 @@ export const MockOauthService = {
         ({
             access_token: 'new_mock_oauth_access_token',
             refresh_token: 'new_mock_oauth_refresh_token',
-        }) as RequestTokenRefresh,
+        }) as RequestTokenRefreshResponse,
 };
