@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { AuthService } from './auth.service';
-import { OauthService } from './oauth/oauth.service.interface';
+import { OauthService } from './oauth/oauth.service.base';
 import { AccessTokenPayload, RefreshTokenPayload, TokenService } from './token/token.service';
 import { OauthAuthorizeData } from './types/oauth-authorize-data.type';
 import { OauthData } from './types/oauth-data.type';
@@ -25,16 +25,9 @@ describe('AuthService', () => {
     beforeEach(async () => {
         mockOauthServices = new Map<string, OauthService>();
 
-        const mockTokenResponse = {
-            access_token: mockUser.oauthAccessToken,
-            expires_in: 3600,
-            refresh_token: mockUser.oauthRefreshToken,
-            refresh_token_expires_in: 3600,
-            scope: 'scope',
-            token_type: 'bearer',
-        };
-
-        const mockUserInfo = {
+        const mockOauthLoginData = {
+            oauthAccessToken: mockUser.oauthAccessToken,
+            oauthRefreshToken: mockUser.oauthRefreshToken,
             oauthId: mockUser.oauthId,
             oauthNickname: 'test',
             email: 'test@mail.com',
@@ -43,13 +36,21 @@ describe('AuthService', () => {
 
         OAUTH_PROVIDERS.forEach((provider) => {
             const mockOauthService = {
-                requestToken: jest.fn().mockResolvedValue(mockTokenResponse),
-                requestUserInfo: jest.fn().mockResolvedValue(mockUserInfo),
-                requestTokenExpiration: jest.fn().mockResolvedValue(undefined),
-                requestTokenRefresh: jest.fn().mockResolvedValue(mockTokenResponse),
-                requestUnlink: provider === 'kakao' ? jest.fn().mockResolvedValue(undefined) : undefined,
+                login: jest.fn().mockResolvedValue(mockOauthLoginData),
+                signup: jest.fn().mockResolvedValue({
+                    oauthId: mockUser.oauthId,
+                    oauthNickname: 'test',
+                    email: 'test@mail.com',
+                    profileImageUrl: 'test.jpg',
+                }),
+                logout: jest.fn().mockResolvedValue(undefined),
+                reissueTokens: jest.fn().mockResolvedValue({
+                    oauthAccessToken: 'new_' + mockUser.oauthAccessToken,
+                    oauthRefreshToken: 'new_' + mockUser.oauthRefreshToken,
+                }),
+                deactivate: provider === 'kakao' ? jest.fn().mockResolvedValue(undefined) : undefined,
             };
-            mockOauthServices.set(provider, mockOauthService as OauthService);
+            mockOauthServices.set(provider, mockOauthService as unknown as OauthService);
         });
 
         const module: TestingModule = await Test.createTestingModule({

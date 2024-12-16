@@ -6,7 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { GoogleService } from './google.service';
 import { KakaoService } from './kakao.service';
 import { NaverService } from './naver.service';
-import { OauthService } from './oauth.service.interface';
+import { OauthService } from './oauth.service.base';
 
 import { WinstonLoggerService } from '../../common/logger/winstonLogger.service';
 

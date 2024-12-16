@@ -4,11 +4,18 @@ import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 import { firstValueFrom } from 'rxjs';
 
-import { OauthService, RequestToken, RequestTokenRefresh, RequestUserInfo } from './oauth.service.interface';
+import {
+    OauthLoginData,
+    OauthReissueData,
+    OauthService,
+    OauthSignupData,
+    RequestTokenRefreshResponse,
+    RequestTokenResponse,
+} from './oauth.service.base';
 
 import { WinstonLoggerService } from '../../common/logger/winstonLogger.service';
 
-interface TokenResponse {
+interface TokenResponse extends RequestTokenResponse {
     access_token: string;
     refresh_token: string;
     token_type: string;
@@ -26,26 +33,65 @@ interface UserInfoResponse {
     };
 }
 
-interface TokenRefreshResponse {
+interface TokenRefreshResponse extends RequestTokenRefreshResponse {
     access_token: string;
     token_type: string;
     expires_in: number;
 }
 
 @Injectable()
-export class NaverService implements OauthService {
+export class NaverService extends OauthService {
     constructor(
-        private readonly configService: ConfigService,
-        private readonly httpService: HttpService,
-        private readonly logger: WinstonLoggerService,
-    ) {}
+        readonly configService: ConfigService,
+        readonly httpService: HttpService,
+        readonly logger: WinstonLoggerService,
+    ) {
+        super(configService, httpService, logger);
+    }
 
     private readonly CLIENT_ID = this.configService.get<string>('NAVER_CLIENT_ID');
     private readonly CLIENT_SECRET = this.configService.get<string>('NAVER_CLIENT_SECRET');
     private readonly TOKEN_API = this.configService.get<string>('NAVER_TOKEN_API')!;
     private readonly USER_INFO_API = this.configService.get<string>('NAVER_USER_INFO_API')!;
 
-    async requestToken(authorizeCode: string): Promise<RequestToken> {
+    async login(authorizeCode: string, _redirectURI: string): Promise<OauthLoginData> {
+        const tokens = await this.requestToken(authorizeCode);
+        const userInfo = await this.requestUserInfo(tokens.access_token);
+
+        return {
+            oauthAccessToken: tokens.access_token,
+            oauthRefreshToken: tokens.refresh_token,
+            oauthId: userInfo.response.id,
+            oauthNickname: userInfo.response.nickname,
+            email: userInfo.response.email,
+            profileImageUrl: userInfo.response.profile_image,
+        };
+    }
+
+    async signup(oauthAccessToken: string): Promise<OauthSignupData> {
+        const userInfo = await this.requestUserInfo(oauthAccessToken);
+
+        return {
+            oauthId: userInfo.response.id,
+            oauthNickname: userInfo.response.nickname,
+            email: userInfo.response.email,
+            profileImageUrl: userInfo.response.profile_image,
+        };
+    }
+
+    async logout(_oauthAccessToken: string): Promise<void> {}
+
+    async reissueTokens(oauthRefreshToken: string): Promise<OauthReissueData> {
+        const tokens = await this.requestTokenRefresh(oauthRefreshToken);
+
+        return { oauthAccessToken: tokens.access_token, oauthRefreshToken: tokens.refresh_token };
+    }
+
+    async deactivate(oauthAccessToken: string): Promise<void> {
+        await this.requestTokenExpiration(oauthAccessToken);
+    }
+
+    private async requestToken(authorizeCode: string): Promise<TokenResponse> {
         try {
             const { data } = await firstValueFrom(
                 this.httpService.get<TokenResponse>(this.TOKEN_API, {
@@ -72,7 +118,7 @@ export class NaverService implements OauthService {
         }
     }
 
-    async requestUserInfo(accessToken: string): Promise<RequestUserInfo> {
+    private async requestUserInfo(accessToken: string): Promise<UserInfoResponse> {
         try {
             const { data } = await firstValueFrom(
                 this.httpService.get<UserInfoResponse>(this.USER_INFO_API, {
@@ -84,12 +130,7 @@ export class NaverService implements OauthService {
 
             this.logger.log('requestUserInfo', { ...data });
 
-            return {
-                oauthId: data.response.id,
-                oauthNickname: data.response.nickname,
-                email: data.response.email,
-                profileImageUrl: data.response.profile_image,
-            };
+            return data;
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
                 this.logger.error('Naver: 유저 정보 조회 요청이 실패했습니다', {
@@ -102,7 +143,7 @@ export class NaverService implements OauthService {
         }
     }
 
-    async requestTokenExpiration(accessToken: string) {
+    private async requestTokenExpiration(accessToken: string): Promise<void> {
         try {
             await firstValueFrom(
                 this.httpService.get<{ access_token: string; result: string }>(this.TOKEN_API, {
@@ -127,7 +168,7 @@ export class NaverService implements OauthService {
         }
     }
 
-    async requestTokenRefresh(refreshToken: string): Promise<RequestTokenRefresh> {
+    private async requestTokenRefresh(refreshToken: string): Promise<TokenRefreshResponse> {
         try {
             const { data } = await firstValueFrom(
                 this.httpService.get<TokenRefreshResponse>(this.TOKEN_API, {

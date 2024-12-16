@@ -1,24 +1,28 @@
-import { RequestToken, RequestTokenRefresh, RequestUserInfo } from '../oauth.service.interface';
+import { OauthLoginData, OauthReissueData, OauthSignupData } from '../oauth.service.base';
 
 export const MockOauthService = {
-    requestToken: jest.fn().mockResolvedValue({
-        access_token: 'mock_oauth_access_token',
-        refresh_token: 'mock_oauth_refresh_token',
-    } as RequestToken),
-
-    requestUserInfo: jest.fn().mockResolvedValue({
+    login: jest.fn().mockResolvedValue({
+        oauthAccessToken: 'mock_oauth_access_token',
+        oauthRefreshToken: 'mock_oauth_refresh_token',
         oauthId: '12345',
         oauthNickname: 'mock_oauth_nickname',
         email: 'mock_email@example.com',
         profileImageUrl: 'mock_profile_image.jpg',
-    } as RequestUserInfo),
+    } as OauthLoginData),
 
-    requestTokenExpiration: jest.fn(),
+    signup: jest.fn().mockResolvedValue({
+        oauthId: '12345',
+        oauthNickname: 'mock_oauth_nickname',
+        email: 'mock_email@example.com',
+        profileImageUrl: 'mock_profile_image.jpg',
+    } as OauthSignupData),
 
-    requestUnlink: jest.fn(),
+    logout: jest.fn(),
 
-    requestTokenRefresh: jest.fn().mockResolvedValue({
-        access_token: 'new_mock_oauth_access_token',
-        refresh_token: 'new_mock_oauth_refresh_token',
-    } as RequestTokenRefresh),
+    reissueTokens: jest.fn().mockResolvedValue({
+        oauthAccessToken: 'new_mock_oauth_access_token',
+        oauthRefreshToken: 'new_mock_oauth_refresh_token',
+    } as OauthReissueData),
+
+    deactivate: jest.fn(),
 };
