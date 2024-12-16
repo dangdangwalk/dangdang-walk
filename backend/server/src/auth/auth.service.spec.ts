@@ -1,10 +1,13 @@
+import { HttpService } from '@nestjs/axios';
 import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { AuthService } from './auth.service';
-import { OauthService } from './oauth/oauth.service.interface';
+import { GoogleService } from './oauth/google.service';
+import { KakaoService } from './oauth/kakao.service';
+import { NaverService } from './oauth/naver.service';
 import { AccessTokenPayload, RefreshTokenPayload, TokenService } from './token/token.service';
 import { OauthAuthorizeData } from './types/oauth-authorize-data.type';
 import { OauthData } from './types/oauth-data.type';
@@ -13,17 +16,55 @@ import { OAUTH_PROVIDERS } from './types/oauth-provider.type';
 import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
 import { DogsService } from '../dogs/dogs.service';
 import { mockUser } from '../fixtures/users.fixture';
+import { S3Service } from '../s3/s3.service';
 import { Users } from '../users/users.entity';
+import { UsersRepository } from '../users/users.repository';
 import { UsersService } from '../users/users.service';
 
 describe('AuthService', () => {
     let service: AuthService;
     let usersService: UsersService;
     let tokenService: TokenService;
-    let mockOauthServices: Map<string, OauthService>;
+    let googleService: GoogleService;
+    let kakaoService: KakaoService;
+    let naverService: NaverService;
 
     beforeEach(async () => {
-        mockOauthServices = new Map<string, OauthService>();
+        const module: TestingModule = await Test.createTestingModule({
+            providers: [
+                AuthService,
+                {
+                    provide: S3Service,
+                    useValue: { deleteObjectFolder: jest.fn() },
+                },
+                {
+                    provide: UsersService,
+                    useValue: { updateAndFindOne: jest.fn(), createIfNotExists: jest.fn(), findOne: jest.fn() },
+                },
+                {
+                    provide: DogsService,
+                    useValue: { deleteDogFromUser: jest.fn() },
+                },
+                { provide: UsersRepository, useValue: {} },
+                TokenService,
+                JwtService,
+                { provide: HttpService, useValue: {} },
+                GoogleService,
+                KakaoService,
+                NaverService,
+                ConfigService,
+                WinstonLoggerService,
+            ],
+        }).compile();
+
+        service = module.get<AuthService>(AuthService);
+        usersService = module.get<UsersService>(UsersService);
+        tokenService = module.get<TokenService>(TokenService);
+        googleService = module.get<GoogleService>(GoogleService);
+        kakaoService = module.get<KakaoService>(KakaoService);
+        naverService = module.get<NaverService>(NaverService);
+
+        const oauthServiceList = [googleService, kakaoService, naverService];
 
         const mockTokenResponse = {
             access_token: mockUser.oauthAccessToken,
@@ -34,67 +75,29 @@ describe('AuthService', () => {
             token_type: 'bearer',
         };
 
-        const mockUserInfo = {
-            oauthId: mockUser.oauthId,
-            oauthNickname: 'test',
-            email: 'test@mail.com',
-            profileImageUrl: 'test.jpg',
-        };
+        for (const oauthService of oauthServiceList) {
+            jest.spyOn(oauthService, 'requestToken').mockResolvedValue(mockTokenResponse);
+            jest.spyOn(oauthService, 'requestUserInfo').mockResolvedValue({
+                oauthId: mockUser.oauthId,
+                oauthNickname: 'test',
+                email: 'test@mail.com',
+                profileImageUrl: 'test.jpg',
+            });
+            jest.spyOn(oauthService, 'requestTokenExpiration').mockResolvedValue();
+            jest.spyOn(oauthService, 'requestTokenRefresh').mockResolvedValue(mockTokenResponse);
+        }
 
-        OAUTH_PROVIDERS.forEach((provider) => {
-            const mockOauthService = {
-                requestToken: jest.fn().mockResolvedValue(mockTokenResponse),
-                requestUserInfo: jest.fn().mockResolvedValue(mockUserInfo),
-                requestTokenExpiration: jest.fn().mockResolvedValue(undefined),
-                requestTokenRefresh: jest.fn().mockResolvedValue(mockTokenResponse),
-                requestUnlink: provider === 'kakao' ? jest.fn().mockResolvedValue(undefined) : undefined,
-            };
-            mockOauthServices.set(provider, mockOauthService as OauthService);
-        });
-
-        const module: TestingModule = await Test.createTestingModule({
-            providers: [
-                AuthService,
-                TokenService,
-                {
-                    provide: UsersService,
-                    useValue: {
-                        updateAndFindOne: jest.fn(),
-                        createIfNotExists: jest.fn(),
-                        findOne: jest.fn(),
-                        delete: jest.fn(),
-                        update: jest.fn(),
-                    },
-                },
-                {
-                    provide: DogsService,
-                    useValue: {
-                        deleteOwnDogs: jest.fn(),
-                    },
-                },
-                {
-                    provide: 'OAUTH_SERVICES',
-                    useValue: mockOauthServices,
-                },
-                ConfigService,
-                JwtService,
-                WinstonLoggerService,
-            ],
-        }).compile();
-
-        service = module.get<AuthService>(AuthService);
-        usersService = module.get<UsersService>(UsersService);
-        tokenService = module.get<TokenService>(TokenService);
-
-        jest.spyOn(tokenService, 'signRefreshToken').mockResolvedValue(mockUser.refreshToken);
-        jest.spyOn(tokenService, 'signAccessToken').mockResolvedValue(mockUser.refreshToken);
+        jest.spyOn(kakaoService, 'requestUnlink').mockResolvedValue();
+        jest.spyOn(tokenService, 'signRefreshToken').mockResolvedValue(Promise.resolve(mockUser.refreshToken));
+        jest.spyOn(tokenService, 'signAccessToken').mockResolvedValue(Promise.resolve(mockUser.refreshToken));
     });
 
     const authorizeCode = 'authorizeCode';
 
     describe('login', () => {
         context('사용자가 존재하면', () => {
-            for (const provider of OAUTH_PROVIDERS) {
+            for (let i = 0; i < 3; i++) {
+                const provider = OAUTH_PROVIDERS[i];
                 it(`${provider} 로그인 후 access token과 refresh token을 반환해야 한다.`, async () => {
                     jest.spyOn(usersService, 'updateAndFindOne').mockResolvedValue({ id: 1 } as Users);
 
@@ -109,7 +112,8 @@ describe('AuthService', () => {
         });
 
         context('사용자가 존재하지 않으면', () => {
-            for (const provider of OAUTH_PROVIDERS) {
+            for (let i = 0; i < 3; i++) {
+                const provider = OAUTH_PROVIDERS[i];
                 it(`${provider} 로그인 후 oauth data를 반환해야 한다.`, async () => {
                     jest.spyOn(usersService, 'updateAndFindOne').mockRejectedValue(new NotFoundException());
 
@@ -127,7 +131,8 @@ describe('AuthService', () => {
 
     describe('signup', () => {
         context('사용자가 존재하지 않으면', () => {
-            for (const provider of OAUTH_PROVIDERS) {
+            for (let i = 0; i < 3; i++) {
+                const provider = OAUTH_PROVIDERS[i];
                 it(`${provider} 회원가입 후 access token과 refresh token을 반환해야 한다.`, async () => {
                     jest.spyOn(usersService, 'createIfNotExists').mockResolvedValue({ id: 1 } as Users);
 

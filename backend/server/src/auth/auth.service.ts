@@ -1,9 +1,10 @@
-import { Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Transactional } from 'typeorm-transactional';
 
+import { GoogleService } from './oauth/google.service';
 import { KakaoService } from './oauth/kakao.service';
-import { OauthService } from './oauth/oauth.service.interface';
+import { NaverService } from './oauth/naver.service';
 import { AccessTokenPayload, RefreshTokenPayload, TokenService } from './token/token.service';
 import { AuthData } from './types/auth-data.type';
 import { OauthAuthorizeData } from './types/oauth-authorize-data.type';
@@ -11,6 +12,7 @@ import { OauthData } from './types/oauth-data.type';
 
 import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
 import { DogsService } from '../dogs/dogs.service';
+import { S3Service } from '../s3/s3.service';
 import { Users } from '../users/users.entity';
 import { UsersService } from '../users/users.service';
 
@@ -20,30 +22,23 @@ export class AuthService {
         private readonly tokenService: TokenService,
         private readonly usersService: UsersService,
         private readonly dogsService: DogsService,
-        @Inject('OAUTH_SERVICES')
-        private readonly oauthServices: Map<string, OauthService>,
+        private readonly googleService: GoogleService,
+        private readonly kakaoService: KakaoService,
+        private readonly naverService: NaverService,
         private readonly configService: ConfigService,
+        private readonly s3Service: S3Service,
         private readonly logger: WinstonLoggerService,
     ) {}
 
     private readonly REDIRECT_URI = this.configService.get<string>('CORS_ORIGIN') + '/callback';
     private readonly S3_PROFILE_IMAGE_PATH = 'default/profile.png';
 
-    private getOauthService(provider: string): OauthService {
-        const oauthService = this.oauthServices.get(provider);
-        if (!oauthService) throw new Error(`Unknown provider: ${provider}`);
-        return oauthService;
-    }
-
     async login({ authorizeCode, provider }: OauthAuthorizeData): Promise<AuthData | OauthData | undefined> {
-        const oauthService = this.getOauthService(provider);
+        const { access_token: oauthAccessToken, refresh_token: oauthRefreshToken } = await this[
+            `${provider}Service`
+        ].requestToken(authorizeCode, this.REDIRECT_URI);
 
-        const { access_token: oauthAccessToken, refresh_token: oauthRefreshToken } = await oauthService.requestToken(
-            authorizeCode,
-            this.REDIRECT_URI,
-        );
-
-        const { oauthId } = await oauthService.requestUserInfo(oauthAccessToken);
+        const { oauthId } = await this[`${provider}Service`].requestUserInfo(oauthAccessToken);
 
         const refreshToken = await this.tokenService.signRefreshToken(oauthId, provider);
         this.logger.debug('login - signRefreshToken', { refreshToken });
@@ -68,9 +63,7 @@ export class AuthService {
     }
 
     async signup({ oauthAccessToken, oauthRefreshToken, provider }: OauthData): Promise<AuthData> {
-        const oauthService = this.getOauthService(provider);
-
-        const { oauthId, oauthNickname, email } = await oauthService.requestUserInfo(oauthAccessToken);
+        const { oauthId, oauthNickname, email } = await this[`${provider}Service`].requestUserInfo(oauthAccessToken);
         const profileImageUrl = this.S3_PROFILE_IMAGE_PATH;
 
         const refreshToken = await this.tokenService.signRefreshToken(oauthId, provider);
@@ -93,19 +86,15 @@ export class AuthService {
     }
 
     async logout({ userId, provider }: AccessTokenPayload): Promise<void> {
-        const oauthService = this.getOauthService(provider);
-
         const { oauthAccessToken } = await this.usersService.findOne({ where: { id: userId } });
         this.logger.debug('logout - oauthAccessToken', { oauthAccessToken });
 
         if (provider === 'kakao') {
-            await (oauthService as KakaoService).requestTokenExpiration(oauthAccessToken);
+            await this.kakaoService.requestTokenExpiration(oauthAccessToken);
         }
     }
 
     async reissueTokens({ oauthId, provider }: RefreshTokenPayload): Promise<AuthData> {
-        const oauthService = this.getOauthService(provider);
-
         const { id: userId, oauthRefreshToken } = await this.usersService.findOne({
             where: { oauthId },
             select: ['id', 'oauthRefreshToken'],
@@ -116,7 +105,7 @@ export class AuthService {
             newAccessToken,
             newRefreshToken,
         ] = await Promise.all([
-            oauthService.requestTokenRefresh(oauthRefreshToken),
+            this[`${provider}Service`].requestTokenRefresh(oauthRefreshToken),
             this.tokenService.signAccessToken(userId, provider),
             this.tokenService.signRefreshToken(oauthId, provider),
         ]);
@@ -133,14 +122,12 @@ export class AuthService {
     }
 
     async deactivate({ userId, provider }: AccessTokenPayload): Promise<void> {
-        const oauthService = this.getOauthService(provider);
-
         const { oauthAccessToken } = await this.usersService.findOne({ where: { id: userId } });
 
         if (provider === 'kakao') {
-            await (oauthService as KakaoService).requestUnlink(oauthAccessToken);
+            await this.kakaoService.requestUnlink(oauthAccessToken);
         } else {
-            await oauthService.requestTokenExpiration(oauthAccessToken);
+            await this[`${provider}Service`].requestTokenExpiration(oauthAccessToken);
         }
 
         await this.deleteUserData(userId);
