@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Constants
-readonly ROOT_PATH="/home/ubuntu/actions-runner/_work/dangdang-walk/dangdang-walk/backend/server"
-readonly HEALTH_CHECK_MAX_RETRIES=10
-readonly HEALTH_CHECK_INTERVAL=3
+readonly ROOT_PATH=${ROOT_PATH:-"/home/ubuntu/actions-runner/_work/dangdang-walk/dangdang-walk/backend/server"}
+readonly HEALTH_CHECK_MAX_RETRIES=${HEALTH_CHECK_MAX_RETRIES:-10}
+readonly HEALTH_CHECK_INTERVAL=${HEALTH_CHECK_INTERVAL:-3}
 readonly CONTAINER_INTERNAL_PORT=3031
 readonly BLUE_EXTERNAL_PORT=3032
 readonly GREEN_EXTERNAL_PORT=3031
@@ -34,13 +34,36 @@ validate_deployment_args() {
     fi
   done
 
+  # Check if ENV file exists and has read permissions
+  if [ ! -f "$ENV_FILE_PATH" ]; then
+    log_error "Environment file not found: $ENV_FILE_PATH"
+    exit 1
+  fi
+
+  if [ ! -r "$ENV_FILE_PATH" ]; then
+    log_error "Environment file is not readable: $ENV_FILE_PATH"
+    exit 1
+  fi
+
   log_info "Deployment arguments validated."
 }
 
 # AWS ECR Authentication
 authenticate_to_ecr() {
   log_info "Authenticating with AWS ECR..."
-  aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin "$REPO"
+  
+  local aws_login_password
+  if ! aws_login_password=$(aws ecr get-login-password --region ap-northeast-2); then
+    log_error "Failed to get AWS ECR login password"
+    exit 1
+  fi
+  
+  if ! echo "$aws_login_password" | docker login --username AWS --password-stdin "$REPO"; then
+    log_error "Failed to authenticate with AWS ECR"
+    exit 1
+  fi
+  
+  log_success "Successfully authenticated with AWS ECR"
 }
 
 # Docker Container Management
@@ -87,9 +110,16 @@ verify_container_health() {
 perform_deployment() {
   local container_name=$1
   local port=$2
+  
   log_info "Starting deployment for $container_name on port $port..."
+  
   cleanup_container "$container_name"
-  docker pull "$CONTAINER_IMAGE"
+  
+  if ! docker pull "$CONTAINER_IMAGE"; then
+    log_error "Failed to pull container image: $CONTAINER_IMAGE"
+    exit 1
+  fi
+  
   deploy_new_container "$container_name" "$port"
 }
 
@@ -128,10 +158,10 @@ main() {
   GREEN_CONTAINER_STATUS=$(docker inspect -f '{{.State.Status}}' dangdang-api-green 2>/dev/null)
 
   if [ "$BLUE_CONTAINER_STATUS" == "running" ]; then
-    log_info "Active: Blue container - Switching to Green deployment..."
+    log_info "Blue container is running - Switching to Green container..."
     activate_green_deployment
   elif [ "$GREEN_CONTAINER_STATUS" == "running" ]; then
-    log_info "Active: Green container - Switching to Blue deployment..."
+    log_info "Green container is running - Switching to Blue container..."
     activate_blue_deployment
   else
     log_info "No active deployment found - Initiating Blue deployment..."
