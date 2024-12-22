@@ -1,7 +1,12 @@
 #!/bin/bash
 
 # Constants
-ROOT_PATH="/home/ubuntu/actions-runner/_work/dangdang-walk/dangdang-walk/backend/server"
+readonly ROOT_PATH="/home/ubuntu/actions-runner/_work/dangdang-walk/dangdang-walk/backend/server"
+readonly HEALTH_CHECK_MAX_RETRIES=10
+readonly HEALTH_CHECK_INTERVAL=3
+readonly CONTAINER_INTERNAL_PORT=3031
+readonly BLUE_EXTERNAL_PORT=3032
+readonly GREEN_EXTERNAL_PORT=3031
 
 # Variables
 TAG=$1
@@ -20,10 +25,15 @@ log_error() { echo -e "\033[1;31m[ERROR]\033[0m $1" >&2; }
 
 # Input Validation
 validate_deployment_args() {
-  if [ -z "$TAG" ]; then
-    log_error "Image tag argument is missing."
-    exit 1
-  fi
+  local required_vars=("TAG" "ENV_FILE" "REPO" "IMAGE")
+  
+  for var in "${required_vars[@]}"; do
+    if [ -z "${!var}" ]; then
+      log_error "Required variable $var is not set"
+      exit 1
+    fi
+  done
+
   log_info "Deployment arguments validated."
 }
 
@@ -47,7 +57,7 @@ deploy_new_container() {
   docker run -d \
     --name "$container_name" \
     --restart always \
-    -p "$port":3031 \
+    -p "$port":"$CONTAINER_INTERNAL_PORT" \
     --env-file "$ENV_FILE_PATH" \
     -v logs:/app/log \
     "$CONTAINER_IMAGE"
@@ -56,22 +66,21 @@ deploy_new_container() {
 
 verify_container_health() {
   local port=$1
-  local max_retries=10
   local retries=0
 
   log_info "Verifying container health on port: $port"
 
-  while [ $retries -lt $max_retries ]; do
-    sleep 3
+  while [ $retries -lt $HEALTH_CHECK_MAX_RETRIES ]; do
+    sleep $HEALTH_CHECK_INTERVAL
     if curl -s http://localhost:"$port" > /dev/null; then
       log_success "Container health check passed on port: $port"
       return 0
     fi
     retries=$((retries + 1))
-    log_info "Retrying health check... ($retries/$max_retries)"
+    log_info "Retrying health check... ($retries/$HEALTH_CHECK_MAX_RETRIES)"
   done
 
-  log_error "Health check failed after $max_retries attempts."
+  log_error "Health check failed after $HEALTH_CHECK_MAX_RETRIES attempts."
   exit 1
 }
 
@@ -95,13 +104,13 @@ reload_nginx() {
 
 # Blue-Green Deployment Functions
 activate_blue_deployment() {
-  perform_deployment "dangdang-api-blue" 3032
+  perform_deployment "dangdang-api-blue" $BLUE_EXTERNAL_PORT
   reload_nginx
   cleanup_container "dangdang-api-green"
 }
 
 activate_green_deployment() {
-  perform_deployment "dangdang-api-green" 3031
+  perform_deployment "dangdang-api-green" $GREEN_EXTERNAL_PORT
   reload_nginx
   cleanup_container "dangdang-api-blue"
 }
