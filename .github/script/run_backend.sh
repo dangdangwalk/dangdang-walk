@@ -1,33 +1,64 @@
 #!/bin/bash
 
+# Constants
+ROOT_PATH="/home/ubuntu/actions-runner/_work/dangdang-walk/dangdang-walk/backend/server"
+
+# Variables
 TAG=$1
 ENV_FILE=$2
 REPO=$3
 IMAGE=$4
-ENV_PATH="/home/ubuntu/actions-runner/_work/dangdang-walk/dangdang-walk/backend/server"
-FILE_PATH="$ENV_PATH/$ENV_FILE"
 
+CONTAINER_IMAGE="$REPO/$IMAGE:$TAG"
+ENV_FILE_PATH="$ROOT_PATH/$ENV_FILE"
 
-echo"TAG: "
-echo $TAG
+# Print debug information
+echo "CONTAINER IMAGE: $CONTAINER_IMAGE"
+echo "ENV FILE PATH: $ENV_FILE_PATH"
 
-echo "ENV_FILE: "
-echo $ENV_FILE
-
-echo "REPO: "
-echo $REPO
-
-echo "IMAGE: "
-echo $IMAGE
-
-echo"FILE PATH: "
-echo $FILE_PATH
-
+# AWS ECR Login
 aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin "$REPO"
 
-IS_BLUE_RUNNING=$(docker inspect -f '{{.State.Status}}' dangdang-api-blue | grep running)
-echo "Blue : "
-echo "$IS_BLUE_RUNNING"
+# Helper Functions
+stop_and_remove_container() {
+  local container_name=$1
+  echo "Stopping and removing container: $container_name"
+  docker stop "$container_name" 2>/dev/null && docker rm "$container_name" 2>/dev/null
+}
+
+run_and_health_check_container() {
+  local container_name=$1
+  local port=$2
+  echo "Running container: $container_name on port: $port"
+  docker run -d --name "$container_name" --restart always -p "$port":3031 --env-file "$ENV_FILE_PATH" -v logs:/app/log "$CONTAINER_IMAGE"
+
+  echo "Starting health check on port: $port"
+  while true; do
+    sleep 3
+    if curl -s http://localhost:"$port" > /dev/null; then
+      echo "Health check successful on port: $port"
+      break
+    fi
+  done
+}
+
+deploy_container() {
+  local container_name=$1
+  local port=$2
+  log_info "Deploying $container_name on port $port..."
+  stop_and_remove_container "$container_name"
+  docker pull "$CONTAINER_IMAGE"
+  run_and_health_check_container "$container_name" "$port"
+}
+
+reload_nginx() {
+  echo "Reloading Nginx"
+  sudo nginx -s reload
+}
+
+# Main Deployment Logic
+IS_BLUE_RUNNING=$(docker inspect -f '{{.State.Status}}' dangdang-api-blue 2>/dev/null | grep running)
+echo "Blue container running: $IS_BLUE_RUNNING"
 
 if [ -z "$TAG" ]; then
   echo "ERROR: Image tag argument is missing."
@@ -35,60 +66,17 @@ if [ -z "$TAG" ]; then
 fi
 
 if [ -n "$IS_BLUE_RUNNING" ]; then
-  echo "Green 배포를 시작합니다."
-
-  docker stop dangdang-api-green && docker rm dangdang-api-green
-  docker pull "$REPO"/"$IMAGE":"$TAG"
-
-  docker run -d --name dangdang-api-green --restart always -p 3031:3031 --env-file "$FILE_PATH" -v logs:/app/log "$REPO"/"$IMAGE":"$TAG"
-
-  while [ 1 = 1 ]; do
-    echo "Green Health check를 시작합니다."
-  sleep 3
-
-  REQUEST=$(curl http://localhost:3031)
-    if [ -n "$REQUEST" ]; then
-      echo "Green Health check 성공했습니다."
-      break ;
-    fi
-  done;
-
-  echo "Nginx를 재시작합니다."
-  sudo nginx -s reload
-
-  echo "Blue Container 종료합니다."
-  docker stop dangdang-api-blue
-
-  echo "Green 배포를 성공적으로 종료합니다."
+  echo "Switching to Green container..."
+  deploy_container "dangdang-api-green" 3031
+  reload_nginx
+  stop_and_remove_container "dangdang-api-blue"
 else
-   echo "Green : running"
-   echo "Blue 배포를 시작합니다."
-
-   docker stop dangdang-api-blue && docker rm dangdang-api-blue
-   docker pull "$REPO"/"$IMAGE":"$TAG"
-   docker run -d --name dangdang-api-blue --restart always -p 3032:3031 --env-file "$FILE_PATH" -v logs:/app/log "$REPO"/"$IMAGE":"$TAG"
-
-   while [ 1 = 1 ]; do
-     echo "Blue Health check를 시작합니다."
-     sleep 3
-
-   REQUEST=$(curl http://localhost:3032)
-     if [ -n "$REQUEST" ]; then
-       echo "Blue Health check 성공했습니다."
-       break ;
-     fi
-       done;
-
-     echo "Nginx를 재시작합니다."
-     sudo nginx -s reload
-
-     echo "Green Container ��료합니다."
-     docker stop dangdang-api-green
-
-     echo "Blue 배포를 성공적으로 종료합니다."
+  echo "Switching to Blue container..."
+  deploy_container "dangdang-api-blue" 3032
+  reload_nginx
+  stop_and_remove_container "dangdang-api-green"
 fi
 
-sleep 3
-
-echo "이전 이미지를 삭제합니다."
+# Cleanup unused Docker images
+echo "Pruning unused images"
 docker image prune -af
