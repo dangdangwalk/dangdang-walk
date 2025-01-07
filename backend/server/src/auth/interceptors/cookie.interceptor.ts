@@ -3,17 +3,13 @@ import { ConfigService } from '@nestjs/config';
 import { CookieOptions, Response } from 'express';
 import { Observable, map } from 'rxjs';
 
-import { WinstonLoggerService } from '../../common/logger/winstonLogger.service';
 import { TokenService } from '../token/token.service';
 import { AuthData } from '../types/auth-data.type';
 import { OauthData } from '../types/oauth-data.type';
 
 @Injectable()
 export class CookieInterceptor implements NestInterceptor {
-    constructor(
-        private configService: ConfigService,
-        private logger: WinstonLoggerService,
-    ) {}
+    constructor(private configService: ConfigService) {}
 
     private readonly isProduction = this.configService.get<string>('NODE_ENV') === 'prod';
 
@@ -44,13 +40,9 @@ export class CookieInterceptor implements NestInterceptor {
                     return { accessToken: data.accessToken };
                 } else if ('oauthAccessToken' in data && 'oauthRefreshToken' in data && 'provider' in data) {
                     this.setOauthCookies(response, data);
-
-                    const error = new NotFoundException('일치하는 유저를 찾을 수 없습니다. 계정을 생성해주세요');
-                    this.logger.error(
-                        `일치하는 유저를 찾을 수 없습니다. 계정을 생성해주세요`,
-                        error.stack ?? '스택 없음',
-                    );
-                    throw error;
+                    throw new NotFoundException('일치하는 유저를 찾을 수 없습니다. 계정을 생성해주세요', {
+                        cause: data,
+                    });
                 }
             }),
         );

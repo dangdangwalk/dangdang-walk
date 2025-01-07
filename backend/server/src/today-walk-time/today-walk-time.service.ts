@@ -40,11 +40,7 @@ export class TodayWalkTimeService {
     ): Promise<void> {
         const todayWalkTimes = await this.findWalkTimesByIds(walkTimeIds);
         if (!todayWalkTimes.length) {
-            const error = new NotFoundException(`id: ${walkTimeIds}와 일치하는 레코드가 없습니다`);
-            this.logger.error(`id: ${walkTimeIds}와 일치하는 레코드가 없습니다`, {
-                trace: error.stack ?? '스택 없음',
-            });
-            throw error;
+            throw new NotFoundException(`id: ${walkTimeIds}와 일치하는 레코드가 없습니다`);
         }
 
         const updateEntities: Partial<TodayWalkTime>[] = todayWalkTimes.map(
