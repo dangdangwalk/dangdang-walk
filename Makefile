@@ -15,17 +15,17 @@ local-redis:
 	docker run -d --name local-redis --platform linux/amd64 -p 6379:6379 \
 	redis:7.0.15 redis-server
 
-docker-build:
-	cd ./backend/server && \
-	docker-compose -f docker-compose-dev.yml build
+docker-build-server:
+	docker-compose -f docker-compose-dev.yml --profile server up -d --build
 
-docker-up:
-	cd ./backend/server && \
-	docker-compose -f docker-compose-dev.yml up
+docker-down-server:
+	docker-compose -f docker-compose-dev.yml --profile server down
 
-docker-down:
-	cd ./backend/server && \
-	docker-compose -f docker-compose-dev.yml down
+docker-build-weather:
+	docker-compose -f docker-compose-dev.yml --profile weather up -d --build
+
+docker-down--weather:
+	docker-compose -f docker-compose-dev.yml --profile weather down
 
 front-start:
 	cd ./frontend && \

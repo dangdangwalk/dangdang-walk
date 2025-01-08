@@ -21,6 +21,7 @@ services:
   db:
     <<: *mysql-image
     container_name: dangdang-mysql
+    profiles: ['server']
     environment:
       TZ: Asia/Seoul
       MYSQL_ROOT_USER: root
@@ -31,12 +32,19 @@ services:
       - 3306:3306
     restart: unless-stopped
     volumes:
-      - ./db/mysql/data:/var/lib/mysql
-      - ./db/mysql/config:/etc/mysql/conf.d
+      - ./db/mysql/data:/var/lib/mysql --user 1000
+      - ./db/mysql/config:/etc/mysql/conf.d --user 1000
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "--password=root"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
 
   server:
     <<: *backend-common
     container_name: dangdang-server
+    profiles: ['server']
     image: dangdang-server
     restart: unless-stopped
     build:
@@ -60,6 +68,7 @@ services:
   redis:
     <<: *redis-image
     container_name: dangdang-weather-redis
+    profiles: ['weather']
     ports:
       - 6379:6379
     networks:
@@ -71,6 +80,7 @@ services:
   weather:
     <<: *backend-common
     container_name: dangdang-weather-api-module
+    profiles: ['weather']
     image: dangdang-weather-api-module
     restart: unless-stopped
     build:
