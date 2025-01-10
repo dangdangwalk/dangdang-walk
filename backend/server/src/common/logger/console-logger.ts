@@ -27,51 +27,54 @@ export function createLogger(): winston.Logger {
 
     const consoleTransport = new winston.transports.Console({ format: consoleFormat });
 
-    let transports;
+    const transports: any[] = [];
+
     if (isTest) {
-        transports = [
+        transports.push(
             new winston.transports.Console({
                 silent: true,
             }),
-        ];
-    } else {
-        const fileTransport = new winstonDaily({
-            filename: path.join(directory, '%DATE%.log'),
-            datePattern: 'YYYY-MM-DD',
-            zippedArchive: true,
-            maxSize: '20m',
-            maxFiles: '14d',
-            format: winston.format.combine(
-                winston.format((info) => ({ ...info, message: stripAnsi(info.message) }))(),
-                winston.format.timestamp(),
-                winston.format.json(),
-            ),
-        });
-
-        const errorFileTransport = new winstonDaily({
-            filename: path.join(directory, '%DATE%.error.log'),
-            datePattern: 'YYYY-MM-DD',
-            zippedArchive: true,
-            maxSize: '20m',
-            maxFiles: '14d',
-            level: 'error',
-            format: winston.format.combine(
-                winston.format((info) => ({ ...info, message: stripAnsi(info.message) }))(),
-                winston.format.timestamp(),
-                winston.format.json(),
-            ),
-        });
-
-        if (isProduction) {
-            transports = [fileTransport, errorFileTransport];
-        } else {
-            transports = [consoleTransport, fileTransport, errorFileTransport];
-        }
+        );
     }
 
-    return winston.createLogger({
+    const fileTransport = new winstonDaily({
+        filename: path.join(directory, '%DATE%.log'),
+        datePattern: 'YYYY-MM-DD',
+        zippedArchive: true,
+        maxSize: '20m',
+        maxFiles: '14d',
+        format: winston.format.combine(
+            winston.format((info) => ({ ...info, message: stripAnsi(info.message) }))(),
+            winston.format.timestamp(),
+            winston.format.json(),
+        ),
+    });
+
+    const errorFileTransport = new winstonDaily({
+        filename: path.join(directory, '%DATE%.error.log'),
+        datePattern: 'YYYY-MM-DD',
+        zippedArchive: true,
+        maxSize: '20m',
+        maxFiles: '14d',
+        level: 'error',
+        format: winston.format.combine(
+            winston.format((info) => ({ ...info, message: stripAnsi(info.message) }))(),
+            winston.format.timestamp(),
+            winston.format.json(),
+        ),
+    });
+
+    if (isProduction) {
+        transports.push(fileTransport, errorFileTransport);
+    } else {
+        transports.push(consoleTransport, fileTransport, errorFileTransport);
+    }
+
+    const logger = winston.createLogger({
         level: 'debug',
         format: winston.format.json(),
         transports,
     });
+
+    return logger;
 }
