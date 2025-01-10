@@ -11,6 +11,10 @@ export class WinstonLoggerService implements LoggerService {
         this.logger = createLogger();
     }
 
+    onModuleDestroy() {
+        this.logger.close();
+    }
+
     log(message: string, meta?: any) {
         this.logger.info(message, meta);
     }

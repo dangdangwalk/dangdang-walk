@@ -37,8 +37,7 @@ export function createLogger(): winston.Logger {
         );
     }
 
-    const fileTransport = new winstonDaily({
-        filename: path.join(directory, '%DATE%.log'),
+    const commonTransportOptions = {
         datePattern: 'YYYY-MM-DD',
         zippedArchive: true,
         maxSize: '20m',
@@ -48,20 +47,17 @@ export function createLogger(): winston.Logger {
             winston.format.timestamp(),
             winston.format.json(),
         ),
+    };
+
+    const fileTransport = new winstonDaily({
+        filename: path.join(directory, '%DATE%.log'),
+        ...commonTransportOptions,
     });
 
     const errorFileTransport = new winstonDaily({
         filename: path.join(directory, '%DATE%.error.log'),
-        datePattern: 'YYYY-MM-DD',
-        zippedArchive: true,
-        maxSize: '20m',
-        maxFiles: '14d',
         level: 'error',
-        format: winston.format.combine(
-            winston.format((info) => ({ ...info, message: stripAnsi(info.message) }))(),
-            winston.format.timestamp(),
-            winston.format.json(),
-        ),
+        ...commonTransportOptions,
     });
 
     if (isProduction) {
