@@ -11,7 +11,8 @@ import { PORT } from './common/config/settings';
 import { WinstonLoggerService } from './common/logger/winstonLogger.service';
 
 async function configureApplication(app: INestApplication<any>) {
-    app.useLogger(new WinstonLoggerService());
+    const logger = app.get(WinstonLoggerService);
+    app.useLogger(logger);
 
     app.enableCors({
         origin: [
