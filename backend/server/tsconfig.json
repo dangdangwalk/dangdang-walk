@@ -6,6 +6,9 @@
         "paths": {
             "common": [
               "src/common/index"
+            ],
+            "utils": [
+              "src/utils/index"
             ]
           }
     },
