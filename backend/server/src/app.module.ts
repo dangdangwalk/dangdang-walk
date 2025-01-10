@@ -14,6 +14,7 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { ProfilingInterceptor } from './common/interceptors/profilingInterceptor';
 import { PrometheusInterceptor } from './common/interceptors/prometheus.interceptor';
 import { WinstonLoggerModule } from './common/logger/winstonLogger.module';
+import { HealthModule } from './modules/health.module';
 import { StatisticsModule } from './statistics/statistics.module';
 import { WalkModule } from './walk/walk.module';
 
@@ -36,8 +37,9 @@ import { WalkModule } from './walk/walk.module';
         AuthModule,
         StatisticsModule,
         WalkModule,
+        HealthModule,
     ],
-    controllers: [AppController, HealthController],
+    controllers: [AppController],
     providers: [
         {
             provide: APP_INTERCEPTOR,
