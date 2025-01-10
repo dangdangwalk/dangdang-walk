@@ -7,7 +7,7 @@ import { runSeeders } from 'typeorm-extension';
 import { addTransactionalDataSource, getDataSourceByName } from 'typeorm-transactional';
 
 import { Breed } from '../breed/breed.entity';
-import BreedSeeder from '../common/database/seeds/breed.seeder';
+import BreedSeeder from '../common/database/breed.seeder';
 
 import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
 import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
