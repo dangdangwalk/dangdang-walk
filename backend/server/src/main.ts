@@ -38,6 +38,8 @@ async function bootstrap() {
 
     await configureApplication(app);
 
+    app.enableShutdownHooks();
+
     app.listen(PORT, () => {
         console.log(`Server running at http://${process.env.MYSQL_HOST}:${PORT}`);
     });
