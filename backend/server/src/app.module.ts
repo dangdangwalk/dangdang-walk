@@ -1,5 +1,4 @@
 import { Module, Scope } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { CacheModule } from 'modules/cache.module';
@@ -22,7 +21,7 @@ import { WalkModule } from './walk/walk.module';
         DatabaseModule,
         CacheModule,
         ConfigModule,
-        EventEmitterModule.forRoot(),
+        EventemitterModule,
         PrometheusModule,
         AuthModule,
         StatisticsModule,
