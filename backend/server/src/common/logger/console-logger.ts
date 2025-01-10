@@ -1,18 +1,14 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
+import stripAnsi from 'utils/ansi.util';
+import { isProduction, isTest, directory } from 'utils/etc';
 import * as winston from 'winston';
 import * as winstonDaily from 'winston-daily-rotate-file';
 
-import stripAnsi from '../../utils/ansi.util';
-
 export function createLogger(): winston.Logger {
-    const isProduction = process.env.NODE_ENV === 'prod';
-    const isTest = process.env.NODE_ENV === 'test';
-
-    const logDir = path.join(process.cwd(), 'log');
-    if (!isTest && !fs.existsSync(logDir)) {
-        fs.mkdirSync(logDir, { recursive: true });
+    if (!(isTest || fs.existsSync(directory))) {
+        fs.mkdirSync(directory, { recursive: true });
     }
 
     const consoleLogFormat = winston.format.printf(({ timestamp, level, message, ...meta }) => {
@@ -28,6 +24,7 @@ export function createLogger(): winston.Logger {
         winston.format.timestamp(),
         consoleLogFormat,
     );
+
     const consoleTransport = new winston.transports.Console({ format: consoleFormat });
 
     let transports;
@@ -39,7 +36,7 @@ export function createLogger(): winston.Logger {
         ];
     } else {
         const fileTransport = new winstonDaily({
-            filename: path.join(logDir, '%DATE%.log'),
+            filename: path.join(directory, '%DATE%.log'),
             datePattern: 'YYYY-MM-DD',
             zippedArchive: true,
             maxSize: '20m',
@@ -52,7 +49,7 @@ export function createLogger(): winston.Logger {
         });
 
         const errorFileTransport = new winstonDaily({
-            filename: path.join(logDir, '%DATE%.error.log'),
+            filename: path.join(directory, '%DATE%.error.log'),
             datePattern: 'YYYY-MM-DD',
             zippedArchive: true,
             maxSize: '20m',
