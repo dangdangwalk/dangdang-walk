@@ -1,6 +1,6 @@
 import * as process from 'node:process';
 
-import { Logger } from '@nestjs/common';
+import { INestApplication } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import * as cookieParser from 'cookie-parser';
 import 'reflect-metadata';
@@ -10,11 +10,7 @@ import { AppModule } from './app.module';
 import { PORT } from './common/config/settings';
 import { WinstonLoggerService } from './common/logger/winstonLogger.service';
 
-async function bootstrap() {
-    initializeTransactionalContext();
-
-    const app = await NestFactory.create(AppModule);
-
+async function configureApplication(app: INestApplication<any>) {
     app.useLogger(new WinstonLoggerService());
 
     app.enableCors({
@@ -32,14 +28,18 @@ async function bootstrap() {
     });
 
     app.use(cookieParser());
+}
 
-    const logger = app.get(Logger);
+async function bootstrap() {
+    initializeTransactionalContext();
 
-    await (async () => {
-        await app.listen(PORT, () => {
-            logger.log(`Server running at http://${process.env.MYSQL_HOST}:${PORT}`);
-        });
-    })();
+    const app = await NestFactory.create(AppModule);
+
+    await configureApplication(app);
+
+    app.listen(PORT, () => {
+        console.log(`Server running at http://${process.env.MYSQL_HOST}:${PORT}`);
+    });
 }
 
 bootstrap();
