@@ -7,12 +7,11 @@ import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 
 import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
-import { DatabaseModule } from './common/database/database.module';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
-import { HealthController } from './common/health/health.controller';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { ProfilingInterceptor } from './common/interceptors/profilingInterceptor';
 import { PrometheusInterceptor } from './common/interceptors/prometheus.interceptor';
+import { DatabaseModule } from './modules/database.module';
 import { HealthModule } from './modules/health.module';
 import { StatisticsModule } from './statistics/statistics.module';
 import { WalkModule } from './walk/walk.module';

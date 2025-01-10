@@ -6,19 +6,19 @@ import { DataSource, FileLogger } from 'typeorm';
 import { runSeeders } from 'typeorm-extension';
 import { addTransactionalDataSource, getDataSourceByName } from 'typeorm-transactional';
 
-import BreedSeeder from './seeds/breed.seeder';
+import { Breed } from '../breed/breed.entity';
+import BreedSeeder from '../common/database/seeds/breed.seeder';
 
-import { Breed } from '../../breed/breed.entity';
-import { DogWalkDay } from '../../dog-walk-day/dog-walk-day.entity';
-import { Dogs } from '../../dogs/dogs.entity';
-import { Excrements } from '../../excrements/excrements.entity';
-import { Journals } from '../../journals/journals.entity';
-import { JournalsDogs } from '../../journals-dogs/journals-dogs.entity';
-import { TodayWalkTime } from '../../today-walk-time/today-walk-time.entity';
-import { Users } from '../../users/users.entity';
-import { UsersDogs } from '../../users-dogs/users-dogs.entity';
-import { color } from '../../utils/ansi.util';
-import { WinstonLoggerService } from '../logger/winstonLogger.service';
+import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
+import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
+import { Dogs } from '../dogs/dogs.entity';
+import { Excrements } from '../excrements/excrements.entity';
+import { Journals } from '../journals/journals.entity';
+import { JournalsDogs } from '../journals-dogs/journals-dogs.entity';
+import { TodayWalkTime } from '../today-walk-time/today-walk-time.entity';
+import { Users } from '../users/users.entity';
+import { UsersDogs } from '../users-dogs/users-dogs.entity';
+import { color } from '../utils/ansi.util';
 
 @Module({
     imports: [

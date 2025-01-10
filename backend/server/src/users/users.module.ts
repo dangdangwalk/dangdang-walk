@@ -8,7 +8,7 @@ import { UsersRepository } from './users.repository';
 
 import { UsersService } from './users.service';
 
-import { DatabaseModule } from '../common/database/database.module';
+import { DatabaseModule } from '../modules/database.module';
 import { S3Module } from '../s3/s3.module';
 import { UsersDogs } from '../users-dogs/users-dogs.entity';
 import { UsersDogsModule } from '../users-dogs/users-dogs.module';

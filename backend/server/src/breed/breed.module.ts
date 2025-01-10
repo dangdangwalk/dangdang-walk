@@ -5,7 +5,7 @@ import { Breed } from './breed.entity';
 import { BreedRepository } from './breed.repository';
 import { BreedService } from './breed.service';
 
-import { DatabaseModule } from '../common/database/database.module';
+import { DatabaseModule } from '../modules/database.module';
 
 @Module({
     imports: [DatabaseModule.forFeature([Breed])],
