@@ -9,7 +9,6 @@ import { DogsRepository } from './dogs.repository';
 import { CreateDogRequest, DogProfileResponse, DogSummaryResponse, UpdateDogRequest } from './types/dogs.type';
 
 import { BreedService } from '../breed/breed.service';
-import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
 import { EVENTS } from '../const/cache-const';
 import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
 import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
@@ -34,31 +33,25 @@ export class DogsService {
         private readonly todayWalkTimeService: TodayWalkTimeService,
         private readonly s3Service: S3Service,
         private readonly entityManager: EntityManager,
-        private readonly logger: WinstonLoggerService,
     ) {}
 
     @Transactional()
     async createDogToUser(userId: number, dogDto: CreateDogRequest): Promise<void> {
-        try {
-            const { breed: breedName, ...otherAttributes } = dogDto;
+        const { breed: breedName, ...otherAttributes } = dogDto;
 
-            const breed = await this.breedService.findOne({ where: { koreanName: breedName } });
+        const breed = await this.breedService.findOne({ where: { koreanName: breedName } });
 
-            const newDog = new Dogs({
-                breed,
-                walkDay: new DogWalkDay({}),
-                todayWalkTime: new TodayWalkTime({}),
-                ...otherAttributes,
-            });
+        const newDog = new Dogs({
+            breed,
+            walkDay: new DogWalkDay({}),
+            todayWalkTime: new TodayWalkTime({}),
+            ...otherAttributes,
+        });
 
-            const dog = await this.dogsRepository.create(newDog);
+        const dog = await this.dogsRepository.create(newDog);
 
-            await this.usersDogsService.create({ userId, dogId: dog.id });
-            await this.eventEmitter.emit(EVENTS.DOG_CREATED, { userId });
-        } catch (error) {
-            this.logger.error(`존재하지 않는 견종입니다`, { trace: error.stack ?? '스택 없음' });
-            throw error;
-        }
+        await this.usersDogsService.create({ userId, dogId: dog.id });
+        this.eventEmitter.emit(EVENTS.DOG_CREATED, { userId });
     }
 
     @Transactional()
@@ -66,11 +59,7 @@ export class DogsService {
         const dog = await this.dogsRepository.findOne({ where: { id: dogId } });
 
         if (dog.isWalking) {
-            const error = new ConflictException(`강아지 ${dog.id}은/는 산책 중입니다. 삭제할 수 없습니다`);
-            this.logger.error(`강아지 ${dog.id}은/는 산책 중입니다. 삭제할 수 없습니다`, {
-                trace: error.stack ?? '스택 없음',
-            });
-            throw error;
+            throw new ConflictException(`강아지 ${dog.id}은/는 산책 중입니다. 삭제할 수 없습니다`);
         }
 
         await this.dogWalkDayService.delete({ id: dog.walkDayId });
@@ -78,7 +67,7 @@ export class DogsService {
         if (dog.profilePhotoUrl) {
             await this.s3Service.deleteSingleObject(userId, dog.profilePhotoUrl);
         }
-        await this.eventEmitter.emit(EVENTS.DOG_DELETED, { userId });
+        this.eventEmitter.emit(EVENTS.DOG_DELETED, { userId });
     }
 
     @Transactional()
@@ -128,7 +117,7 @@ export class DogsService {
 
         const updateData = breed ? { breedId: breed.id, ...otherAttributes } : otherAttributes;
         await this.dogsRepository.update({ id: dogId }, updateData);
-        await this.eventEmitter.emit(EVENTS.DOG_UPDATED, { userId });
+        this.eventEmitter.emit(EVENTS.DOG_UPDATED, { userId });
     }
 
     async updateIsWalking(dogIds: number | number[], stateToUpdate: boolean) {

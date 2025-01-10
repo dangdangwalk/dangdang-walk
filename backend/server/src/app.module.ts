@@ -1,13 +1,14 @@
 import { CacheModule } from '@nestjs/cache-manager';
 import { Module, Scope } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 
 import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './common/database/database.module';
+import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { HealthController } from './common/health/health.controller';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { ProfilingInterceptor } from './common/interceptors/profilingInterceptor';
@@ -46,6 +47,10 @@ import { WalkModule } from './walk/walk.module';
             provide: APP_INTERCEPTOR,
             scope: Scope.REQUEST,
             useClass: LoggingInterceptor,
+        },
+        {
+            provide: APP_FILTER,
+            useClass: AllExceptionsFilter,
         },
         ...(process.env.ENABLE_PROFILING === 'true'
             ? [
