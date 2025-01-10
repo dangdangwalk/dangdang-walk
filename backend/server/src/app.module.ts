@@ -5,6 +5,8 @@ import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 
+import { ConfigModule as CustomConfigModule } from 'modules/config.module';
+
 import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
@@ -20,11 +22,8 @@ import { WalkModule } from './walk/walk.module';
     imports: [
         DatabaseModule,
         CacheModule.register(),
+        ConfigModule,
         EventEmitterModule.forRoot(),
-        ConfigModule.forRoot({
-            isGlobal: true,
-            envFilePath: `.env.${process.env.NODE_ENV}`,
-        }),
         PrometheusModule.register({
             path: '/metrics',
             defaultMetrics: {
