@@ -7,8 +7,8 @@ import 'reflect-metadata';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 
 import { AppModule } from './app.module';
-import { PORT } from './common/config/settings';
-import { WinstonLoggerService } from './common/logger/winstonLogger.service';
+import { PORT } from './shared/config/settings';
+import { WinstonLoggerService } from './shared/logger/winstonLogger.service';
 
 async function configureApplication(app: INestApplication<any>) {
     const logger = app.get(WinstonLoggerService);

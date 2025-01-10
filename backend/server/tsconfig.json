@@ -4,8 +4,8 @@
         "outDir": "./dist",
         "baseUrl": "./src",
         "paths": {
-            "common": [
-              "src/common/index"
+            "shared": [
+              "src/shared/index"
             ],
             "utils": [
               "src/utils/index"

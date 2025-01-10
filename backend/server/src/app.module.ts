@@ -4,10 +4,10 @@ import { Modules } from 'modules';
 
 import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
-import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
-import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
-import { ProfilingInterceptor } from './common/interceptors/profilingInterceptor';
-import { PrometheusInterceptor } from './common/interceptors/prometheus.interceptor';
+import { AllExceptionsFilter } from './shared/filters/all-exceptions.filter';
+import { LoggingInterceptor } from './shared/interceptors/logging.interceptor';
+import { ProfilingInterceptor } from './shared/interceptors/profilingInterceptor';
+import { PrometheusInterceptor } from './shared/interceptors/prometheus.interceptor';
 import { StatisticsModule } from './statistics/statistics.module';
 import { WalkModule } from './walk/walk.module';
 

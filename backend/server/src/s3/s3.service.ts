@@ -6,7 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { FileType } from './pipes/file-type-validation.pipe';
 import { PresignedUrlInfo } from './types/presigned-url-info.type';
 
-import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
+import { WinstonLoggerService } from '../shared/logger/winstonLogger.service';
 import { generateUuid } from '../utils/hash.util';
 
 const BUCKET_NAME = 'dangdangbucket';

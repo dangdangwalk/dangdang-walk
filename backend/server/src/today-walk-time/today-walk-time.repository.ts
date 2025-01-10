@@ -4,7 +4,7 @@ import { EntityManager, Repository } from 'typeorm';
 
 import { TodayWalkTime } from './today-walk-time.entity';
 
-import { TypeORMRepository } from '../common/database/typeorm.repository';
+import { TypeORMRepository } from '../shared/database/typeorm.repository';
 
 @Injectable()
 export class TodayWalkTimeRepository extends TypeORMRepository<TodayWalkTime> {

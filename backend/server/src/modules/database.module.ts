@@ -7,14 +7,14 @@ import { runSeeders } from 'typeorm-extension';
 import { addTransactionalDataSource, getDataSourceByName } from 'typeorm-transactional';
 
 import { Breed } from '../breed/breed.entity';
-import BreedSeeder from '../common/database/breed.seeder';
 
-import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
 import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
 import { Dogs } from '../dogs/dogs.entity';
 import { Excrements } from '../excrements/excrements.entity';
 import { Journals } from '../journals/journals.entity';
 import { JournalsDogs } from '../journals-dogs/journals-dogs.entity';
+import BreedSeeder from '../shared/database/breed.seeder';
+import { WinstonLoggerService } from '../shared/logger/winstonLogger.service';
 import { TodayWalkTime } from '../today-walk-time/today-walk-time.entity';
 import { Users } from '../users/users.entity';
 import { UsersDogs } from '../users-dogs/users-dogs.entity';

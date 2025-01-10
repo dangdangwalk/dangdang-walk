@@ -1,5 +1,5 @@
 import { Global, Logger, Module } from '@nestjs/common';
-import { WinstonLoggerService } from 'common/logger/winstonLogger.service';
+import { WinstonLoggerService } from 'shared/logger/winstonLogger.service';
 
 @Global()
 @Module({

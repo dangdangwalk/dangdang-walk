@@ -8,7 +8,7 @@ import { KakaoService } from './kakao.service';
 import { NaverService } from './naver.service';
 import { OauthService } from './oauth.service.base';
 
-import { WinstonLoggerService } from '../../common/logger/winstonLogger.service';
+import { WinstonLoggerService } from '../../shared/logger/winstonLogger.service';
 
 export const OAUTH_REGISTRY = new Map<string, Type<OauthService>>([
     ['google', GoogleService],

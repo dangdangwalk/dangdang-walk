@@ -23,8 +23,6 @@ import {
     UpdateTodayWalkTimeOperation,
 } from './types/journal.types';
 
-import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
-
 import { EVENTS } from '../const/cache-const';
 import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
 import { DogsService } from '../dogs/dogs.service';
@@ -34,6 +32,7 @@ import { EXCREMENT, Excrement } from '../excrements/types/excrement.type';
 import { JournalsDogs } from '../journals-dogs/journals-dogs.entity';
 import { JournalsDogsService } from '../journals-dogs/journals-dogs.service';
 import { S3Service } from '../s3/s3.service';
+import { WinstonLoggerService } from '../shared/logger/winstonLogger.service';
 import { DogWalkingTotalResponse } from '../statistics/types/statistic.type';
 import { TodayWalkTimeService } from '../today-walk-time/today-walk-time.service';
 import { formatDate, getStartAndEndOfDay } from '../utils/date.util';
