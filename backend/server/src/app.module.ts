@@ -3,9 +3,10 @@ import { Module, Scope } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 
 import { ConfigModule as CustomConfigModule } from 'modules/config.module';
+
+import { PrometheusModule } from 'modules/prometheus.module';
 
 import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
@@ -24,12 +25,7 @@ import { WalkModule } from './walk/walk.module';
         CacheModule.register(),
         ConfigModule,
         EventEmitterModule.forRoot(),
-        PrometheusModule.register({
-            path: '/metrics',
-            defaultMetrics: {
-                enabled: true,
-            },
-        }),
+        PrometheusModule,
         AuthModule,
         StatisticsModule,
         WalkModule,
