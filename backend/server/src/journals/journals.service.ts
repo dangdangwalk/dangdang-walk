@@ -5,6 +5,8 @@ import { DogWalkDayService } from 'applications/dog-walk-day/dog-walk-day.servic
 import { Excrements } from 'applications/excrements/excrements.entity';
 import { ExcrementsService } from 'applications/excrements/excrements.service';
 import { Excrement, EXCREMENT } from 'applications/excrements/types';
+import { JournalsDogs } from 'applications/journals-dogs/journals-dogs.entity';
+import { JournalsDogsService } from 'applications/journals-dogs/journals-dogs.service';
 import { TodayWalkTimeService } from 'applications/today-walk-time/today-walk-time.service';
 import { DeleteResult, EntityManager, FindOptionsWhere, In, InsertResult } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
@@ -32,8 +34,6 @@ import {
 
 import { DogsService } from '../applications/dogs/dogs.service';
 import { DogWalkingTotalResponse } from '../applications/statistics/types/statistic.type';
-import { JournalsDogs } from '../journals-dogs/journals-dogs.entity';
-import { JournalsDogsService } from '../journals-dogs/journals-dogs.service';
 import { S3Service } from '../s3/s3.service';
 import { WinstonLoggerService } from '../shared/logger/winstonLogger.service';
 import { formatDate, getStartAndEndOfDay } from '../utils/date.util';

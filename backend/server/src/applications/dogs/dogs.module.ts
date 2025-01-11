@@ -6,6 +6,7 @@ import { DogWalkDay } from 'applications/dog-walk-day/dog-walk-day.entity';
 
 import { DogWalkDayModule } from 'applications/dog-walk-day/dog-walk-day.module';
 
+import { JournalsDogsModule } from 'applications/journals-dogs/journals-dogs.module';
 import { TodayWalkTime, TodayWalkTimeModule } from 'applications/today-walk-time';
 
 import { DogsController } from './dogs.controller';
@@ -13,7 +14,6 @@ import { Dogs } from './dogs.entity';
 import { DogsRepository } from './dogs.repository';
 import { DogsService } from './dogs.service';
 
-import { JournalsDogsModule } from '../../journals-dogs/journals-dogs.module';
 import { DatabaseModule } from '../../modules/database.module';
 import { UsersModule } from '../../users/users.module';
 
