@@ -1,8 +1,8 @@
 import { Controller, Get } from '@nestjs/common';
 
-import { BreedService } from './breed.service';
+import { SkipAuthGuard } from 'applications/auth/decorators/public.decorator';
 
-import { SkipAuthGuard } from '../auth/decorators/public.decorator';
+import { BreedService } from './breed.service';
 
 @Controller('/breeds')
 export class BreedController {

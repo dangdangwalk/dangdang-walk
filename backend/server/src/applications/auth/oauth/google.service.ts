@@ -4,6 +4,8 @@ import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 import { firstValueFrom } from 'rxjs';
 
+import { WinstonLoggerService } from 'shared/logger';
+
 import {
     OauthLoginData,
     OauthReissueData,
@@ -13,34 +15,30 @@ import {
     RequestTokenResponse,
 } from './oauth.service.base';
 
-import { WinstonLoggerService } from '../../shared/logger/winstonLogger.service';
-
 interface TokenResponse extends RequestTokenResponse {
     access_token: string;
-    refresh_token: string;
-    token_type: string;
     expires_in: number;
+    refresh_token: string;
+    scope: string;
+    token_type: string;
 }
 
 interface UserInfoResponse {
-    resultcode: string;
-    message: string;
-    response: {
-        id: string;
-        nickname: string;
-        email: string;
-        profile_image: string;
-    };
+    id: string;
+    email: string;
+    name: string;
+    picture: string;
 }
 
 interface TokenRefreshResponse extends RequestTokenRefreshResponse {
     access_token: string;
-    token_type: string;
     expires_in: number;
+    scope: string;
+    token_type: string;
 }
 
 @Injectable()
-export class NaverService extends OauthService {
+export class GoogleService extends OauthService {
     constructor(
         readonly configService: ConfigService,
         readonly httpService: HttpService,
@@ -49,22 +47,23 @@ export class NaverService extends OauthService {
         super(configService, httpService, logger);
     }
 
-    private readonly CLIENT_ID = this.configService.get<string>('NAVER_CLIENT_ID');
-    private readonly CLIENT_SECRET = this.configService.get<string>('NAVER_CLIENT_SECRET');
-    private readonly TOKEN_API = this.configService.get<string>('NAVER_TOKEN_API')!;
-    private readonly USER_INFO_API = this.configService.get<string>('NAVER_USER_INFO_API')!;
+    private readonly CLIENT_ID = this.configService.get<string>('GOOGLE_CLIENT_ID');
+    private readonly CLIENT_SECRET = this.configService.get<string>('GOOGLE_CLIENT_SECRET');
+    private readonly TOKEN_API = this.configService.get<string>('GOOGLE_TOKEN_API')!;
+    private readonly USER_INFO_API = this.configService.get<string>('GOOGLE_USER_INFO_API')!;
+    private readonly REVOKE_API = this.configService.get<string>('GOOGLE_REVOKE_API')!;
 
-    async login(authorizeCode: string, _redirectURI: string): Promise<OauthLoginData> {
-        const tokens = await this.requestToken(authorizeCode);
+    async login(authorizeCode: string, redirectURI: string): Promise<OauthLoginData> {
+        const tokens = await this.requestToken(authorizeCode, redirectURI);
         const userInfo = await this.requestUserInfo(tokens.access_token);
 
         return {
             oauthAccessToken: tokens.access_token,
             oauthRefreshToken: tokens.refresh_token,
-            oauthId: userInfo.response.id,
-            oauthNickname: userInfo.response.nickname,
-            email: userInfo.response.email,
-            profileImageUrl: userInfo.response.profile_image,
+            oauthId: userInfo.id,
+            oauthNickname: userInfo.name,
+            email: userInfo.email,
+            profileImageUrl: userInfo.picture,
         };
     }
 
@@ -72,10 +71,10 @@ export class NaverService extends OauthService {
         const userInfo = await this.requestUserInfo(oauthAccessToken);
 
         return {
-            oauthId: userInfo.response.id,
-            oauthNickname: userInfo.response.nickname,
-            email: userInfo.response.email,
-            profileImageUrl: userInfo.response.profile_image,
+            oauthId: userInfo.id,
+            oauthNickname: userInfo.name,
+            email: userInfo.email,
+            profileImageUrl: userInfo.picture,
         };
     }
 
@@ -91,28 +90,26 @@ export class NaverService extends OauthService {
         await this.requestTokenExpiration(oauthAccessToken);
     }
 
-    private async requestToken(authorizeCode: string): Promise<TokenResponse> {
+    private async requestToken(authorizeCode: string, redirectURI: string): Promise<TokenResponse> {
         try {
             const { data } = await firstValueFrom(
-                this.httpService.get<TokenResponse>(this.TOKEN_API, {
-                    params: {
-                        grant_type: 'authorization_code',
-                        client_id: this.CLIENT_ID,
-                        client_secret: this.CLIENT_SECRET,
-                        code: authorizeCode,
-                        state: 'naverLoginState',
-                    },
+                this.httpService.post<TokenResponse>(this.TOKEN_API, {
+                    client_id: this.CLIENT_ID,
+                    client_secret: this.CLIENT_SECRET,
+                    code: authorizeCode,
+                    grant_type: 'authorization_code',
+                    redirect_uri: redirectURI,
                 }),
             );
 
             return data;
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
-                this.logger.error('Naver: Token 발급 요청이 실패했습니다', {
-                    trace: error.stack ?? 'No stack',
+                this.logger.error('Google: Token 발급 요청이 실패했습니다', {
+                    trace: error.stack ?? '스택 없음',
                     response: error.response.data,
                 });
-                error = new BadRequestException('Naver: Token 발급 요청이 실패했습니다');
+                error = new BadRequestException('Google: Token 발급 요청이 실패했습니다');
             }
             throw error;
         }
@@ -133,11 +130,11 @@ export class NaverService extends OauthService {
             return data;
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
-                this.logger.error('Naver: 유저 정보 조회 요청이 실패했습니다', {
+                this.logger.error('Google: 유저 정보 조회 요청이 실패했습니다', {
                     trace: error.stack ?? 'No stack',
                     response: error.response.data,
                 });
-                error = new BadRequestException('Naver: 유저 정보 조회 요청이 실패했습니다');
+                error = new BadRequestException('Google: 유저 정보 조회 요청이 실패했습니다');
             }
             throw error;
         }
@@ -146,23 +143,26 @@ export class NaverService extends OauthService {
     private async requestTokenExpiration(accessToken: string): Promise<void> {
         try {
             await firstValueFrom(
-                this.httpService.get<{ access_token: string; result: string }>(this.TOKEN_API, {
-                    params: {
-                        grant_type: 'delete',
-                        client_id: this.CLIENT_ID,
-                        client_secret: this.CLIENT_SECRET,
-                        access_token: accessToken,
-                        service_provider: 'NAVER',
+                this.httpService.post(
+                    this.REVOKE_API,
+                    {},
+                    {
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        params: {
+                            token: accessToken,
+                        },
                     },
-                }),
+                ),
             );
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
-                this.logger.error('Naver: Token 만료 기간 조회 요청이 실패했습니다', {
+                this.logger.error('Google: Token 만료 기간 조회 요청이 실패했습니다', {
                     trace: error.stack ?? 'No stack',
                     response: error.response.data,
                 });
-                error = new BadRequestException('Naver: Token 만료 기간 조회 요청이 실패했습니다');
+                error = new BadRequestException('Google: Token 만료 기간 조회 요청이 실패했습니다');
             }
             throw error;
         }
@@ -171,24 +171,22 @@ export class NaverService extends OauthService {
     private async requestTokenRefresh(refreshToken: string): Promise<TokenRefreshResponse> {
         try {
             const { data } = await firstValueFrom(
-                this.httpService.get<TokenRefreshResponse>(this.TOKEN_API, {
-                    params: {
-                        grant_type: 'refresh_token',
-                        client_id: this.CLIENT_ID,
-                        client_secret: this.CLIENT_SECRET,
-                        refresh_token: refreshToken,
-                    },
+                this.httpService.post<TokenRefreshResponse>(this.TOKEN_API, {
+                    client_id: this.CLIENT_ID,
+                    client_secret: this.CLIENT_SECRET,
+                    grant_type: 'refresh_token',
+                    refresh_token: refreshToken,
                 }),
             );
 
             return data;
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
-                this.logger.error('Naver: Token 갱신 요청이 실패했습니다', {
+                this.logger.error('Google: Token 갱신 요청이 실패했습니다', {
                     trace: error.stack ?? 'No stack',
                     response: error.response.data,
                 });
-                error = new BadRequestException('Naver: Token 갱신 요청이 실패했습니다');
+                error = new BadRequestException('Google: Token 갱신 요청이 실패했습니다');
             }
             throw error;
         }

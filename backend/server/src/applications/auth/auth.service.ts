@@ -1,17 +1,17 @@
 import { Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { DogsService } from 'dogs/dogs.service';
+import { WinstonLoggerService } from 'shared/logger';
 import { Transactional } from 'typeorm-transactional';
+
+import { Users } from 'users/users.entity';
+import { UsersService } from 'users/users.service';
 
 import { OauthService } from './oauth/oauth.service.base';
 import { AccessTokenPayload, RefreshTokenPayload, TokenService } from './token/token.service';
 import { AuthData } from './types/auth-data.type';
 import { OauthAuthorizeData } from './types/oauth-authorize-data.type';
 import { OauthData } from './types/oauth-data.type';
-
-import { DogsService } from '../dogs/dogs.service';
-import { WinstonLoggerService } from '../shared/logger/winstonLogger.service';
-import { Users } from '../users/users.entity';
-import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class AuthService {

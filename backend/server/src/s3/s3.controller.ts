@@ -1,11 +1,12 @@
 import { Body, Controller, Delete, HttpCode, ParseArrayPipe, Post } from '@nestjs/common';
 
+import { AccessTokenPayload } from 'applications/auth/token/token.service';
+
 import { FileType, FileTypeValidationPipe } from './pipes/file-type-validation.pipe';
 import { S3Service } from './s3.service';
 
 import { PresignedUrlInfo } from './types/presigned-url-info.type';
 
-import { AccessTokenPayload } from '../auth/token/token.service';
 import { User } from '../users/decorators/user.decorator';
 
 @Controller('/images')

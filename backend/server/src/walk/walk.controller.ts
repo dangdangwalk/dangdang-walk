@@ -10,10 +10,11 @@ import {
     ValidationPipe,
 } from '@nestjs/common';
 
+import { AccessTokenPayload } from 'applications/auth/token/token.service';
+
 import { AuthDogsGuard } from './guards/auth-dogs.guard';
 import { WalkService } from './walk.service';
 
-import { AccessTokenPayload } from '../auth/token/token.service';
 import { DogsService } from '../dogs/dogs.service';
 import { DogSummaryResponse } from '../dogs/types/dogs.type';
 

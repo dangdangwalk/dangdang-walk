@@ -4,6 +4,8 @@ import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
 import { firstValueFrom } from 'rxjs';
 
+import { WinstonLoggerService } from 'shared/logger';
+
 import {
     OauthLoginData,
     OauthReissueData,
@@ -12,8 +14,6 @@ import {
     RequestTokenRefreshResponse,
     RequestTokenResponse,
 } from './oauth.service.base';
-
-import { WinstonLoggerService } from '../../shared/logger/winstonLogger.service';
 
 interface TokenResponse extends RequestTokenResponse {
     token_type: string;

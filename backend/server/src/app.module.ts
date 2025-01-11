@@ -1,9 +1,9 @@
 import { Module, Scope } from '@nestjs/common';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
+import { AuthModule } from 'applications/auth/auth.module';
 import { Modules } from 'modules';
 
 import { AppController } from './app.controller';
-import { AuthModule } from './auth/auth.module';
 import { AllExceptionsFilter } from './shared/filters/all-exceptions.filter';
 import { LoggingInterceptor } from './shared/interceptors/logging.interceptor';
 import { ProfilingInterceptor } from './shared/interceptors/profilingInterceptor';

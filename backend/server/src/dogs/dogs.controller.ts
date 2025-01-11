@@ -13,6 +13,8 @@ import {
     ValidationPipe,
 } from '@nestjs/common';
 
+import { AccessTokenPayload } from 'applications/auth/token/token.service';
+
 import { DogsService } from './dogs.service';
 import { CreateDogDto } from './dtos/create-dog.dto';
 import { UpdateDogDto } from './dtos/update-dog.dto';
@@ -20,7 +22,6 @@ import { AuthDogGuard } from './guards/auth-dog.guard';
 
 import { DogProfileResponse } from './types/dogs.type';
 
-import { AccessTokenPayload } from '../auth/token/token.service';
 import { User } from '../users/decorators/user.decorator';
 
 @Controller('/dogs')

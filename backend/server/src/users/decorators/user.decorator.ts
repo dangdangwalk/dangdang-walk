@@ -1,6 +1,5 @@
 import { ExecutionContext, createParamDecorator } from '@nestjs/common';
-
-import { AccessTokenPayload, RefreshTokenPayload } from '../../auth/token/token.service';
+import { AccessTokenPayload, RefreshTokenPayload } from 'applications/auth/token/token.service';
 
 export const User = createParamDecorator(
     (data: never, context: ExecutionContext): AccessTokenPayload | RefreshTokenPayload => {

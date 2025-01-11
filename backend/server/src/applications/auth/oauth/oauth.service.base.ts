@@ -1,7 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
-
-import { WinstonLoggerService } from '../../shared/logger/winstonLogger.service';
+import { WinstonLoggerService } from 'shared/logger';
 
 export interface RequestTokenResponse {
     access_token: string;
