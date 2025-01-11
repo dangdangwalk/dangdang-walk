@@ -5,8 +5,8 @@ import * as winston from 'winston';
 
 import * as winstonDaily from 'winston-daily-rotate-file';
 
+import { directory, isProduction, isTest } from '../utils';
 import stripAnsi from '../utils/ansi.util';
-import { isProduction, isTest, directory } from '../utils/etc';
 
 export function createLogger(): winston.Logger {
     if (!(isTest || fs.existsSync(directory))) {
@@ -14,7 +14,7 @@ export function createLogger(): winston.Logger {
     }
 
     const consoleLogFormat = winston.format.printf(({ timestamp, level, message, ...meta }) => {
-        const seoulTimestamp = new Date(timestamp).toLocaleString('ko-KR');
+        const seoulTimestamp = new Date(timestamp as string).toLocaleString('ko-KR');
         const metaString = Object.keys(meta).length > 0 ? `\n${JSON.stringify(meta, null, 2)}` : '';
         return `${seoulTimestamp} | ${level}| ${message}${metaString}`;
     });
@@ -45,7 +45,7 @@ export function createLogger(): winston.Logger {
         maxSize: '20m',
         maxFiles: '14d',
         format: winston.format.combine(
-            winston.format((info) => ({ ...info, message: stripAnsi(info.message) }))(),
+            winston.format((info) => ({ ...info, message: stripAnsi(info.message as string) }))(),
             winston.format.timestamp(),
             winston.format.json(),
         ),
