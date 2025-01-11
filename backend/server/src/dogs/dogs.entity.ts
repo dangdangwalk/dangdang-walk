@@ -1,8 +1,8 @@
+import { Breed } from 'applications/breed/breed.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 import { GENDER, Gender } from './types/dogs.type';
 
-import { Breed } from '../breed/breed.entity';
 import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
 import { TodayWalkTime } from '../today-walk-time/today-walk-time.entity';
 

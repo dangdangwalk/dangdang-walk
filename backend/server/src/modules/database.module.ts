@@ -2,11 +2,10 @@ import { DynamicModule, Inject, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule, getDataSourceToken } from '@nestjs/typeorm';
 import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
+import { Breed } from 'applications/breed';
 import { DataSource, FileLogger } from 'typeorm';
 import { runSeeders } from 'typeorm-extension';
 import { addTransactionalDataSource, getDataSourceByName } from 'typeorm-transactional';
-
-import { Breed } from '../breed/breed.entity';
 
 import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
 import { Dogs } from '../dogs/dogs.entity';
