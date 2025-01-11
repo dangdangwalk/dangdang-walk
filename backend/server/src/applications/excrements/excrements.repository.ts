@@ -1,9 +1,8 @@
 import { InjectRepository } from '@nestjs/typeorm';
+import { TypeORMRepository } from 'shared/database/typeorm.repository';
 import { EntityManager, Repository } from 'typeorm';
 
 import { Excrements } from './excrements.entity';
-
-import { TypeORMRepository } from '../shared/database/typeorm.repository';
 
 export class ExcrementsRepository extends TypeORMRepository<Excrements> {
     constructor(

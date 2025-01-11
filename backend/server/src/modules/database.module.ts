@@ -4,13 +4,13 @@ import { TypeOrmModule, getDataSourceToken } from '@nestjs/typeorm';
 import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
 import { Breed } from 'applications/breed';
 import { DogWalkDay } from 'applications/dog-walk-day/dog-walk-day.entity';
+import { Excrements } from 'applications/excrements/excrements.entity';
 import { UsersDogs } from 'applications/users-dogs/users-dogs.entity';
 import { DataSource, FileLogger } from 'typeorm';
 import { runSeeders } from 'typeorm-extension';
 import { addTransactionalDataSource, getDataSourceByName } from 'typeorm-transactional';
 
 import { Dogs } from '../applications/dogs/dogs.entity';
-import { Excrements } from '../excrements/excrements.entity';
 import { Journals } from '../journals/journals.entity';
 import { JournalsDogs } from '../journals-dogs/journals-dogs.entity';
 import BreedSeeder from '../shared/database/breed.seeder';

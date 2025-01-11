@@ -3,13 +3,12 @@ import { Test, TestingModule } from '@nestjs/testing';
 
 import { getRepositoryToken } from '@nestjs/typeorm';
 
+import { mockBreed } from '_tests_/breed.fixture';
 import { EntityManager, Repository } from 'typeorm';
 
 import { Breed } from './breed.entity';
 import { BreedRepository } from './breed.repository';
 import { BreedService } from './breed.service';
-
-import { mockBreed } from '../_tests_/breed.fixture';
 
 describe('BreedService', () => {
     let service: BreedService;

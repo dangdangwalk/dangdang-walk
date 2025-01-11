@@ -1,4 +1,4 @@
-import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
+import { DogWalkDay } from 'applications/dog-walk-day/dog-walk-day.entity';
 
 export const mockDogWalkDays = [
     {
