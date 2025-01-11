@@ -1,10 +1,9 @@
 import { Breed } from 'applications/breed/breed.entity';
 import { DogWalkDay } from 'applications/dog-walk-day/dog-walk-day.entity';
+import { TodayWalkTime } from 'applications/today-walk-time/today-walk-time.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 import { GENDER, Gender } from './types/dogs.type';
-
-import { TodayWalkTime } from '../../today-walk-time/today-walk-time.entity';
 
 @Entity('dogs')
 export class Dogs {

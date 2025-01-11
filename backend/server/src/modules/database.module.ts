@@ -5,6 +5,7 @@ import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-clas
 import { Breed } from 'applications/breed';
 import { DogWalkDay } from 'applications/dog-walk-day/dog-walk-day.entity';
 import { Excrements } from 'applications/excrements/excrements.entity';
+import { TodayWalkTime } from 'applications/today-walk-time/today-walk-time.entity';
 import { UsersDogs } from 'applications/users-dogs/users-dogs.entity';
 import { DataSource, FileLogger } from 'typeorm';
 import { runSeeders } from 'typeorm-extension';
@@ -15,7 +16,6 @@ import { Journals } from '../journals/journals.entity';
 import { JournalsDogs } from '../journals-dogs/journals-dogs.entity';
 import BreedSeeder from '../shared/database/breed.seeder';
 import { WinstonLoggerService } from '../shared/logger/winstonLogger.service';
-import { TodayWalkTime } from '../today-walk-time/today-walk-time.entity';
 import { Users } from '../users/users.entity';
 import { color } from '../utils/ansi.util';
 

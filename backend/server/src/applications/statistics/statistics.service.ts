@@ -2,6 +2,7 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { DogWalkDayService } from 'applications/dog-walk-day/dog-walk-day.service';
+import { TodayWalkTimeService } from 'applications/today-walk-time/today-walk-time.service';
 import { Cache } from 'cache-manager';
 import { In } from 'typeorm';
 
@@ -13,7 +14,6 @@ import { DogWalkingTotalResponse, DogsWeeklyWalkOverviewResponse } from './types
 
 import { JournalsService } from '../../journals/journals.service';
 import { WinstonLoggerService } from '../../shared/logger/winstonLogger.service';
-import { TodayWalkTimeService } from '../../today-walk-time/today-walk-time.service';
 import { UsersService } from '../../users/users.service';
 
 import { getOneMonthAgo, getStartAndEndOfMonth, getStartAndEndOfWeek } from '../../utils/date.util';

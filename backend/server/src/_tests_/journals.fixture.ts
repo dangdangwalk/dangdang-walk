@@ -1,4 +1,4 @@
-import { EXCREMENT } from '../excrements/types/excrement.type';
+import { EXCREMENT } from 'applications/excrements/types/excrement.type';
 
 export const mockJournal = {
     userId: 1,

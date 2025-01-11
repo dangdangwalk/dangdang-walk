@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { TypeORMRepository } from 'shared/database/typeorm.repository';
 import { EntityManager, Repository } from 'typeorm';
 
 import { TodayWalkTime } from './today-walk-time.entity';
-
-import { TypeORMRepository } from '../shared/database/typeorm.repository';
 
 @Injectable()
 export class TodayWalkTimeRepository extends TypeORMRepository<TodayWalkTime> {

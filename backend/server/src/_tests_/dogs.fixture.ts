@@ -1,8 +1,9 @@
 import { DogWalkDay } from 'applications/dog-walk-day/dog-walk-day.entity';
 
+import { TodayWalkTime } from 'applications/today-walk-time/today-walk-time.entity';
+
 import { Dogs } from '../applications/dogs/dogs.entity';
 import { GENDER } from '../applications/dogs/types/dogs.type';
-import { TodayWalkTime } from '../today-walk-time/today-walk-time.entity';
 
 export const mockDog = new Dogs({
     id: 1,

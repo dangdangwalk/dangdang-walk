@@ -3,6 +3,8 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { BreedService } from 'applications/breed';
 import { DogWalkDay } from 'applications/dog-walk-day/dog-walk-day.entity';
 import { DogWalkDayService } from 'applications/dog-walk-day/dog-walk-day.service';
+import { TodayWalkTime } from 'applications/today-walk-time/today-walk-time.entity';
+import { TodayWalkTimeService } from 'applications/today-walk-time/today-walk-time.service';
 import { UsersDogs } from 'applications/users-dogs/users-dogs.entity';
 import { UsersDogsService } from 'applications/users-dogs/users-dogs.service';
 import { EntityManager, FindManyOptions, FindOneOptions, FindOptionsWhere, In } from 'typeorm';
@@ -16,8 +18,6 @@ import { DogsRepository } from './dogs.repository';
 import { CreateDogRequest, DogProfileResponse, DogSummaryResponse, UpdateDogRequest } from './types/dogs.type';
 
 import { S3Service } from '../../s3/s3.service';
-import { TodayWalkTime } from '../../today-walk-time/today-walk-time.entity';
-import { TodayWalkTimeService } from '../../today-walk-time/today-walk-time.service';
 import { UsersService } from '../../users/users.service';
 
 import { makeSubObject, makeSubObjectsArray } from '../../utils/manipulate.util';

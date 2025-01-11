@@ -4,7 +4,8 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { DogWalkDayService } from 'applications/dog-walk-day/dog-walk-day.service';
 import { Excrements } from 'applications/excrements/excrements.entity';
 import { ExcrementsService } from 'applications/excrements/excrements.service';
-import { EXCREMENT, Excrement } from 'applications/excrements/types/excrement.type';
+import { Excrement, EXCREMENT } from 'applications/excrements/types';
+import { TodayWalkTimeService } from 'applications/today-walk-time/today-walk-time.service';
 import { DeleteResult, EntityManager, FindOptionsWhere, In, InsertResult } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
@@ -35,7 +36,6 @@ import { JournalsDogs } from '../journals-dogs/journals-dogs.entity';
 import { JournalsDogsService } from '../journals-dogs/journals-dogs.service';
 import { S3Service } from '../s3/s3.service';
 import { WinstonLoggerService } from '../shared/logger/winstonLogger.service';
-import { TodayWalkTimeService } from '../today-walk-time/today-walk-time.service';
 import { formatDate, getStartAndEndOfDay } from '../utils/date.util';
 import { checkIfExistsInArr, makeSubObject, makeSubObjectsArray } from '../utils/manipulate.util';
 
