@@ -15,7 +15,7 @@ import { DogsRepository } from './dogs.repository';
 import { DogsService } from './dogs.service';
 
 import { DatabaseModule } from '../../modules/database.module';
-import { UsersModule } from '../../users/users.module';
+import { UsersModule } from '../users/users.module';
 
 @Module({
     imports: [

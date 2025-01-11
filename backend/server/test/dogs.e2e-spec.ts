@@ -24,10 +24,10 @@ DataSource;
 
 import { Dogs } from '../src/applications/dogs/dogs.entity';
 import { GENDER } from '../src/applications/dogs/types/dogs.type';
+import { ROLE } from '../src/applications/users/types/role.type';
+import { Users } from '../src/applications/users/users.entity';
 import { DogWalkDay } from '../src/dog-walk-day/dog-walk-day.entity';
 import { TodayWalkTime } from '../src/today-walk-time/today-walk-time.entity';
-import { ROLE } from '../src/users/types/role.type';
-import { Users } from '../src/users/users.entity';
 
 describe('DogsController (e2e)', () => {
     let app: INestApplication;

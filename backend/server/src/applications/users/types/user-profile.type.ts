@@ -1,4 +1,4 @@
-import { OauthProvider } from 'applications/auth/types/oauth-provider.type';
+import { OauthProvider } from '../../auth/types/oauth-provider.type';
 
 export interface UserProfile {
     nickname: string;

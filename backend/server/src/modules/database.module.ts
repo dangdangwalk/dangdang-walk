@@ -13,11 +13,11 @@ import { runSeeders } from 'typeorm-extension';
 import { addTransactionalDataSource, getDataSourceByName } from 'typeorm-transactional';
 
 import { Dogs } from '../applications/dogs/dogs.entity';
+import { Users } from '../applications/users/users.entity';
 import { Journals } from '../journals/journals.entity';
 import BreedSeeder from '../shared/database/breed.seeder';
 import { WinstonLoggerService } from '../shared/logger/winstonLogger.service';
 import { color } from '../shared/utils/ansi.util';
-import { Users } from '../users/users.entity';
 
 @Module({
     imports: [

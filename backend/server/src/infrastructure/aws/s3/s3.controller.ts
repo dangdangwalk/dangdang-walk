@@ -7,7 +7,7 @@ import { PresignedUrlInfo } from './types/presigned-url-info.type';
 
 import { AccessTokenPayload } from '../../../applications/auth/token/token.service';
 
-import { User } from '../../../users/decorators/user.decorator';
+import { User } from '../../../applications/users/decorators/user.decorator';
 
 @Controller('/images')
 export class S3Controller {

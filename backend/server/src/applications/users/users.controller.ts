@@ -1,11 +1,11 @@
 import { Body, Controller, Get, HttpCode, Patch, UsePipes, ValidationPipe } from '@nestjs/common';
 
-import { AccessTokenPayload } from 'applications/auth/token/token.service';
-
 import { User } from './decorators/user.decorator';
 import { UpdateUserDto } from './dtos/update-user.dto';
 
 import { UsersService } from './users.service';
+
+import { AccessTokenPayload } from '../auth/token/token.service';
 
 @Controller('/users')
 @UsePipes(new ValidationPipe({ whitelist: true }))

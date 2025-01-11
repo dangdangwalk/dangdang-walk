@@ -16,6 +16,7 @@ import { DataSource, In } from '../node_modules/typeorm';
 import { AppModule } from '../src/app.module';
 
 import { Dogs } from '../src/applications/dogs/dogs.entity';
+import { Users } from '../src/applications/users/users.entity';
 import { MockOauthService } from '../src/auth/oauth/__mocks__/oauth.service';
 import { GoogleService } from '../src/auth/oauth/google.service';
 import { KakaoService } from '../src/auth/oauth/kakao.service';
@@ -27,7 +28,6 @@ import { S3Service } from '../src/infrastructure/aws/s3/s3.service';
 import { Journals } from '../src/journals/journals.entity';
 import { JournalsDogs } from '../src/journals-dogs/journals-dogs.entity';
 import { TodayWalkTime } from '../src/today-walk-time/today-walk-time.entity';
-import { Users } from '../src/users/users.entity';
 import { UsersDogs } from '../src/users-dogs/users-dogs.entity';
 
 let app: INestApplication;

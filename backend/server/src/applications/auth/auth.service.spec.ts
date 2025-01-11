@@ -6,8 +6,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { mockUser } from '_tests_/users.fixture';
 import { DogsService } from 'applications/dogs/dogs.service';
 import { WinstonLoggerService } from 'shared/logger';
-import { Users } from 'users/users.entity';
-import { UsersService } from 'users/users.service';
 
 import { AuthService } from './auth.service';
 import { OauthService } from './oauth/oauth.service.base';
@@ -15,6 +13,9 @@ import { AccessTokenPayload, RefreshTokenPayload, TokenService } from './token/t
 import { OauthAuthorizeData } from './types/oauth-authorize-data.type';
 import { OauthData } from './types/oauth-data.type';
 import { OAUTH_PROVIDERS } from './types/oauth-provider.type';
+
+import { Users } from '../users/users.entity';
+import { UsersService } from '../users/users.service';
 
 describe('AuthService', () => {
     let service: AuthService;

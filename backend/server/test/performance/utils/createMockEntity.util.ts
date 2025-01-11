@@ -7,6 +7,8 @@ import { getObjectValue, getRandomElements, getRandomInt, getRandomPastDate } fr
 import { GENDER } from '../../../server/src/dogs/types/gender.type';
 import { JournalPhotos } from '../../../server/src/journal-photos/journal-photos.entity';
 import { Dogs } from '../../../src/applications/dogs/dogs.entity';
+import { ROLE } from '../../../src/applications/users/types/role.type';
+import { Users } from '../../../src/applications/users/users.entity';
 import { DogWalkDay } from '../../../src/dog-walk-day/dog-walk-day.entity';
 import { Excrements } from '../../../src/excrements/excrements.entity';
 import { EXCREMENT } from '../../../src/excrements/types/excrement.type';
@@ -14,8 +16,6 @@ import { Journals } from '../../../src/journals/journals.entity';
 import { JournalsDogs } from '../../../src/journals-dogs/journals-dogs.entity';
 import { generateUuid } from '../../../src/shared/utils/hash.util';
 import { TodayWalkTime } from '../../../src/today-walk-time/today-walk-time.entity';
-import { ROLE } from '../../../src/users/types/role.type';
-import { Users } from '../../../src/users/users.entity';
 import { UsersDogs } from '../../../src/users-dogs/users-dogs.entity';
 import { OAUTH_ACCESS_TOKEN, OAUTH_REFRESH_TOKEN, VALID_REFRESH_TOKEN_100_YEARS } from '../../constants';
 

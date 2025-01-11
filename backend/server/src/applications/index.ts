@@ -8,3 +8,4 @@ export * from './excrements';
 export * from './today-walk-time';
 export * from './walk';
 export * from './journals-dogs';
+export * from './users';

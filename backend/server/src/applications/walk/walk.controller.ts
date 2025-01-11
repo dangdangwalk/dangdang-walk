@@ -15,9 +15,9 @@ import { AccessTokenPayload } from 'applications/auth/token/token.service';
 import { AuthDogsGuard } from './guards/auth-dogs.guard';
 import { WalkService } from './walk.service';
 
-import { User } from '../../users/decorators/user.decorator';
 import { DogsService } from '../dogs/dogs.service';
 import { DogSummaryResponse } from '../dogs/types/dogs.type';
+import { User } from '../users/decorators/user.decorator';
 
 @Controller('/dogs/walks')
 @UsePipes(new ValidationPipe({ whitelist: true }))

@@ -4,8 +4,8 @@ import {
     VALID_PROVIDER_KAKAO,
     VALID_REFRESH_TOKEN_100_YEARS,
 } from '../../test/constants';
-import { ROLE } from '../users/types/role.type';
-import { Users } from '../users/users.entity';
+import { ROLE } from '../applications/users/types/role.type';
+import { Users } from '../applications/users/users.entity';
 
 export const mockUser = new Users({
     id: 1,

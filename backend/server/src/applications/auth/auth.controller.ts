@@ -11,8 +11,6 @@ import {
     ValidationPipe,
 } from '@nestjs/common';
 
-import { User } from 'users/decorators/user.decorator';
-
 import { AuthService } from './auth.service';
 import { OauthCookies } from './decorators/oauth-data.decorator';
 import { SkipAuthGuard } from './decorators/public.decorator';
@@ -22,6 +20,8 @@ import { OauthDataGuard } from './guards/oauth-data.guard';
 import { RefreshTokenGuard } from './guards/refresh-token.guard';
 import { CookieInterceptor } from './interceptors/cookie.interceptor';
 import { AccessTokenPayload, RefreshTokenPayload } from './token/token.service';
+
+import { User } from '../users/decorators/user.decorator';
 
 @Controller('/auth')
 @UseInterceptors(CookieInterceptor)

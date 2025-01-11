@@ -25,8 +25,8 @@ import { JournalListResponse } from './types/journal.types';
 import { AuthDogGuard } from '../applications/dogs/guards/auth-dog.guard';
 import { DateValidationPipe } from '../applications/statistics/pipes/date-validation.pipe';
 
+import { User } from '../applications/users/decorators/user.decorator';
 import { AuthDogsGuard } from '../applications/walk/guards/auth-dogs.guard';
-import { User } from '../users/decorators/user.decorator';
 
 @Controller('/journals')
 @UsePipes(new ValidationPipe({ validateCustomDecorators: true, whitelist: true }))

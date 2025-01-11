@@ -18,7 +18,7 @@ import { CreateDogRequest, DogProfileResponse, DogSummaryResponse, UpdateDogRequ
 import { S3Service } from '../../infrastructure/aws/s3/s3.service';
 import { EVENTS } from '../../shared/utils/etc';
 import { makeSubObject, makeSubObjectsArray } from '../../shared/utils/manipulate.util';
-import { UsersService } from '../../users/users.service';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class DogsService {
