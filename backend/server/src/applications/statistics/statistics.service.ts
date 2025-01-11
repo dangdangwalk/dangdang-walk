@@ -10,15 +10,15 @@ import { Period } from './pipes/period-validation.pipe';
 
 import { DogWalkingTotalResponse, DogsWeeklyWalkOverviewResponse } from './types/statistic.type';
 
-import { DogsService } from '../applications/dogs/dogs.service';
-import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
-import { JournalsService } from '../journals/journals.service';
-import { WinstonLoggerService } from '../shared/logger/winstonLogger.service';
-import { TodayWalkTimeService } from '../today-walk-time/today-walk-time.service';
-import { UsersService } from '../users/users.service';
+import { DogWalkDayService } from '../../dog-walk-day/dog-walk-day.service';
+import { JournalsService } from '../../journals/journals.service';
+import { WinstonLoggerService } from '../../shared/logger/winstonLogger.service';
+import { TodayWalkTimeService } from '../../today-walk-time/today-walk-time.service';
+import { UsersService } from '../../users/users.service';
 
-import { getOneMonthAgo, getStartAndEndOfMonth, getStartAndEndOfWeek } from '../utils/date.util';
-import { makeSubObject } from '../utils/manipulate.util';
+import { getOneMonthAgo, getStartAndEndOfMonth, getStartAndEndOfWeek } from '../../utils/date.util';
+import { makeSubObject } from '../../utils/manipulate.util';
+import { DogsService } from '../dogs/dogs.service';
 
 @Injectable()
 export class StatisticsService {

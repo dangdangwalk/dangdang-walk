@@ -26,6 +26,7 @@ import {
 } from './types/journal.types';
 
 import { DogsService } from '../applications/dogs/dogs.service';
+import { DogWalkingTotalResponse } from '../applications/statistics/types/statistic.type';
 import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
 import { Excrements } from '../excrements/excrements.entity';
 import { ExcrementsService } from '../excrements/excrements.service';
@@ -34,7 +35,6 @@ import { JournalsDogs } from '../journals-dogs/journals-dogs.entity';
 import { JournalsDogsService } from '../journals-dogs/journals-dogs.service';
 import { S3Service } from '../s3/s3.service';
 import { WinstonLoggerService } from '../shared/logger/winstonLogger.service';
-import { DogWalkingTotalResponse } from '../statistics/types/statistic.type';
 import { TodayWalkTimeService } from '../today-walk-time/today-walk-time.service';
 import { formatDate, getStartAndEndOfDay } from '../utils/date.util';
 import { checkIfExistsInArr, makeSubObject, makeSubObjectsArray } from '../utils/manipulate.util';

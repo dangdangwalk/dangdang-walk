@@ -4,11 +4,11 @@ import { AuthModule } from 'applications/auth/auth.module';
 import { Modules } from 'modules';
 
 import { AppController } from './app.controller';
+import { StatisticsModule } from './applications/statistics/statistics.module';
 import { AllExceptionsFilter } from './shared/filters/all-exceptions.filter';
 import { LoggingInterceptor } from './shared/interceptors/logging.interceptor';
 import { ProfilingInterceptor } from './shared/interceptors/profilingInterceptor';
 import { PrometheusInterceptor } from './shared/interceptors/prometheus.interceptor';
-import { StatisticsModule } from './statistics/statistics.module';
 import { WalkModule } from './walk/walk.module';
 
 @Module({
