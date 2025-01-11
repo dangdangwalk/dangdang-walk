@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { DogWalkDayService } from 'applications/dog-walk-day/dog-walk-day.service';
 import { DeleteResult, EntityManager, FindOptionsWhere, In, InsertResult } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
@@ -27,7 +28,6 @@ import {
 
 import { DogsService } from '../applications/dogs/dogs.service';
 import { DogWalkingTotalResponse } from '../applications/statistics/types/statistic.type';
-import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
 import { Excrements } from '../excrements/excrements.entity';
 import { ExcrementsService } from '../excrements/excrements.service';
 import { EXCREMENT, Excrement } from '../excrements/types/excrement.type';

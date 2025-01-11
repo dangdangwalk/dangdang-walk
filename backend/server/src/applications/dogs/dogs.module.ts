@@ -2,13 +2,15 @@ import { Module } from '@nestjs/common';
 
 import { Breed, BreedModule } from 'applications/breed';
 
+import { DogWalkDay } from 'applications/dog-walk-day/dog-walk-day.entity';
+
+import { DogWalkDayModule } from 'applications/dog-walk-day/dog-walk-day.module';
+
 import { DogsController } from './dogs.controller';
 import { Dogs } from './dogs.entity';
 import { DogsRepository } from './dogs.repository';
 import { DogsService } from './dogs.service';
 
-import { DogWalkDay } from '../../dog-walk-day/dog-walk-day.entity';
-import { DogWalkDayModule } from '../../dog-walk-day/dog-walk-day.module';
 import { JournalsDogsModule } from '../../journals-dogs/journals-dogs.module';
 import { DatabaseModule } from '../../modules/database.module';
 import { TodayWalkTime } from '../../today-walk-time/today-walk-time.entity';
