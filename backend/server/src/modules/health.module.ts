@@ -1,8 +1,8 @@
 import { Module, Controller, Get } from '@nestjs/common';
 
-import { LoggerModule } from './logger.module';
+import { SkipAuthGuard } from 'applications/auth/decorators/public.decorator';
 
-import { SkipAuthGuard } from '../auth/decorators/public.decorator';
+import { LoggerModule } from './logger.module';
 
 @Controller('/health')
 @SkipAuthGuard()

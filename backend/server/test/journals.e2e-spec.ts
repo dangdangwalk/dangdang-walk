@@ -26,15 +26,15 @@ import {
 import { INestApplication } from '../node_modules/@nestjs/common';
 import { DataSource } from '../node_modules/typeorm';
 
+import { Dogs } from '../src/applications/dogs/dogs.entity';
+import { GENDER } from '../src/applications/dogs/types/dogs.type';
+import { Journals } from '../src/applications/journals/journals.entity';
+import { ROLE } from '../src/applications/users/types/role.type';
+import { Users } from '../src/applications/users/users.entity';
 import { DogWalkDay } from '../src/dog-walk-day/dog-walk-day.entity';
-import { Dogs } from '../src/dogs/dogs.entity';
-import { GENDER } from '../src/dogs/types/dogs.type';
 import { Excrements } from '../src/excrements/excrements.entity';
-import { Journals } from '../src/journals/journals.entity';
 import { JournalsDogs } from '../src/journals-dogs/journals-dogs.entity';
 import { TodayWalkTime } from '../src/today-walk-time/today-walk-time.entity';
-import { ROLE } from '../src/users/types/role.type';
-import { Users } from '../src/users/users.entity';
 
 describe('JournalsController (e2e)', () => {
     let app: INestApplication;

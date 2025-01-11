@@ -11,8 +11,8 @@ import { clearUsers, closeTestApp, insertMockUsers, setupTestApp, testUnauthoriz
 
 import { INestApplication } from '../node_modules/@nestjs/common';
 
-import { ROLE } from '../src/users/types/role.type';
-import { Users } from '../src/users/users.entity';
+import { ROLE } from '../src/applications/users/types/role.type';
+import { Users } from '../src/applications/users/users.entity';
 
 const context = describe;
 

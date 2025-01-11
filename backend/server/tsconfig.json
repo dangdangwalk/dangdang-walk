@@ -1,16 +1,22 @@
 {
-    "extends": "../tsconfig.json",
-    "compilerOptions": {
-        "outDir": "./dist",
-        "baseUrl": "./src",
-        "paths": {
-            "shared": [
-              "src/shared/index"
-            ],
-            "utils": [
-              "src/utils/index"
-            ]
-          }
-    },
-    "include": ["src/**/*", "test/**/*"]
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "baseUrl": "./src",
+    "paths": {
+      "shared": [
+        "src/shared/index"
+      ],
+      "applications": [
+        "src/applications/index"
+      ],
+      "infrastructure": [
+        "src/infrastructure/index"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*",
+    "test/**/*"
+  ]
 }
