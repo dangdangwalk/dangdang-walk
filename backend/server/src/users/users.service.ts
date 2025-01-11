@@ -12,8 +12,8 @@ import { Users } from './users.entity';
 import { UsersRepository } from './users.repository';
 
 import { S3Service } from '../infrastructure/aws/s3/s3.service';
-import { generateUuid } from '../utils/hash.util';
-import { checkIfExistsInArr } from '../utils/manipulate.util';
+import { generateUuid } from '../shared/utils/hash.util';
+import { checkIfExistsInArr } from '../shared/utils/manipulate.util';
 
 @Injectable()
 export class UsersService {

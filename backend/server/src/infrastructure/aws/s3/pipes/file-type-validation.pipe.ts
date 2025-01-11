@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
 
-import { isTypedArray } from '../../../../utils/validator.util';
+import { isTypedArray } from '../../../../shared/utils/validator.util';
 
 const allowedFileTypes = [
     'xbm',

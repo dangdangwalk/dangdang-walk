@@ -1,6 +1,6 @@
 import { ForbiddenException } from '@nestjs/common';
 
-import { generateUuid } from '../../../../utils/hash.util';
+import { generateUuid } from '../../../../shared/utils/hash.util';
 import { PresignedUrlInfo } from '../types/presigned-url-info.type';
 
 export const MockS3Service = {

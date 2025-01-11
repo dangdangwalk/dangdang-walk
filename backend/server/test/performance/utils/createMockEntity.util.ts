@@ -12,11 +12,11 @@ import { Excrements } from '../../../src/excrements/excrements.entity';
 import { EXCREMENT } from '../../../src/excrements/types/excrement.type';
 import { Journals } from '../../../src/journals/journals.entity';
 import { JournalsDogs } from '../../../src/journals-dogs/journals-dogs.entity';
+import { generateUuid } from '../../../src/shared/utils/hash.util';
 import { TodayWalkTime } from '../../../src/today-walk-time/today-walk-time.entity';
 import { ROLE } from '../../../src/users/types/role.type';
 import { Users } from '../../../src/users/users.entity';
 import { UsersDogs } from '../../../src/users-dogs/users-dogs.entity';
-import { generateUuid } from '../../../src/utils/hash.util';
 import { OAUTH_ACCESS_TOKEN, OAUTH_REFRESH_TOKEN, VALID_REFRESH_TOKEN_100_YEARS } from '../../constants';
 
 interface ConsoleTableRowFormat {

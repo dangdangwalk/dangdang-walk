@@ -1,7 +1,7 @@
 import { BadRequestException, CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@nestjs/common';
 
+import { isTypedArray } from '../../../shared/utils/validator.util';
 import { UsersService } from '../../../users/users.service';
-import { isTypedArray } from '../../../utils/validator.util';
 
 @Injectable()
 export class AuthDogsGuard implements CanActivate {

@@ -6,18 +6,17 @@ import { TodayWalkTimeService } from 'applications/today-walk-time/today-walk-ti
 import { Cache } from 'cache-manager';
 import { In } from 'typeorm';
 
-import { CACHE_TTL, EVENTS } from 'utils/etc';
-
 import { Period } from './pipes/period-validation.pipe';
 
 import { DogWalkingTotalResponse, DogsWeeklyWalkOverviewResponse } from './types/statistic.type';
 
 import { JournalsService } from '../../journals/journals.service';
 import { WinstonLoggerService } from '../../shared/logger/winstonLogger.service';
-import { UsersService } from '../../users/users.service';
 
-import { getOneMonthAgo, getStartAndEndOfMonth, getStartAndEndOfWeek } from '../../utils/date.util';
-import { makeSubObject } from '../../utils/manipulate.util';
+import { getOneMonthAgo, getStartAndEndOfMonth, getStartAndEndOfWeek } from '../../shared/utils/date.util';
+import { CACHE_TTL, EVENTS } from '../../shared/utils/etc';
+import { makeSubObject } from '../../shared/utils/manipulate.util';
+import { UsersService } from '../../users/users.service';
 import { DogsService } from '../dogs/dogs.service';
 
 @Injectable()

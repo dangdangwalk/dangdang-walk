@@ -1,10 +1,12 @@
 import * as fs from 'fs';
 import * as path from 'path';
 
-import stripAnsi from 'utils/ansi.util';
-import { isProduction, isTest, directory } from 'utils/etc';
 import * as winston from 'winston';
+
 import * as winstonDaily from 'winston-daily-rotate-file';
+
+import stripAnsi from '../utils/ansi.util';
+import { isProduction, isTest, directory } from '../utils/etc';
 
 export function createLogger(): winston.Logger {
     if (!(isTest || fs.existsSync(directory))) {

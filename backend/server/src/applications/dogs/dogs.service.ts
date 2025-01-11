@@ -10,17 +10,15 @@ import { UsersDogsService } from 'applications/users-dogs/users-dogs.service';
 import { EntityManager, FindManyOptions, FindOneOptions, FindOptionsWhere, In } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
-import { EVENTS } from 'utils/etc';
-
 import { Dogs } from './dogs.entity';
 import { DogsRepository } from './dogs.repository';
 
 import { CreateDogRequest, DogProfileResponse, DogSummaryResponse, UpdateDogRequest } from './types/dogs.type';
 
 import { S3Service } from '../../infrastructure/aws/s3/s3.service';
+import { EVENTS } from '../../shared/utils/etc';
+import { makeSubObject, makeSubObjectsArray } from '../../shared/utils/manipulate.util';
 import { UsersService } from '../../users/users.service';
-
-import { makeSubObject, makeSubObjectsArray } from '../../utils/manipulate.util';
 
 @Injectable()
 export class DogsService {

@@ -7,9 +7,6 @@
             "shared": [
               "src/shared/index"
             ],
-            "utils": [
-              "src/utils/index"
-            ]
           }
     },
     "include": ["src/**/*", "test/**/*"]

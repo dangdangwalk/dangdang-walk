@@ -11,8 +11,6 @@ import { TodayWalkTimeService } from 'applications/today-walk-time/today-walk-ti
 import { DeleteResult, EntityManager, FindOptionsWhere, In, InsertResult } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
-import { EVENTS } from 'utils/etc';
-
 import { Journals } from './journals.entity';
 import { JournalsRepository } from './journals.repository';
 import {
@@ -36,8 +34,9 @@ import { DogsService } from '../applications/dogs/dogs.service';
 import { DogWalkingTotalResponse } from '../applications/statistics/types/statistic.type';
 import { S3Service } from '../infrastructure/aws/s3/s3.service';
 import { WinstonLoggerService } from '../shared/logger/winstonLogger.service';
-import { formatDate, getStartAndEndOfDay } from '../utils/date.util';
-import { checkIfExistsInArr, makeSubObject, makeSubObjectsArray } from '../utils/manipulate.util';
+import { formatDate, getStartAndEndOfDay } from '../shared/utils/date.util';
+import { EVENTS } from '../shared/utils/etc';
+import { checkIfExistsInArr, makeSubObject, makeSubObjectsArray } from '../shared/utils/manipulate.util';
 
 @Injectable()
 export class JournalsService {

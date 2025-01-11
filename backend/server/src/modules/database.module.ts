@@ -16,8 +16,8 @@ import { Dogs } from '../applications/dogs/dogs.entity';
 import { Journals } from '../journals/journals.entity';
 import BreedSeeder from '../shared/database/breed.seeder';
 import { WinstonLoggerService } from '../shared/logger/winstonLogger.service';
+import { color } from '../shared/utils/ansi.util';
 import { Users } from '../users/users.entity';
-import { color } from '../utils/ansi.util';
 
 @Module({
     imports: [

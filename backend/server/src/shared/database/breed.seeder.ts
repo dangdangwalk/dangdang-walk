@@ -4,8 +4,8 @@ import { Breed } from 'applications/breed';
 import { DataSource } from 'typeorm';
 import { Seeder } from 'typeorm-extension';
 
-import { color } from '../../utils/ansi.util';
 import { WinstonLoggerService } from '../logger/winstonLogger.service';
+import { color } from '../utils/ansi.util';
 
 export default class BreedSeeder implements Seeder {
     public async run(dataSource: DataSource): Promise<any> {

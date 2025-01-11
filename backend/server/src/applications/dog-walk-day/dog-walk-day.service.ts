@@ -4,13 +4,13 @@ import { UpdateDogWalkDayOperation } from 'journals/types/journal.types';
 import { WinstonLoggerService } from 'shared/logger';
 import { EntityManager, FindOptionsWhere, In } from 'typeorm';
 
-import { getLastSunday } from 'utils/date.util';
-
-import { makeSubObject } from 'utils/manipulate.util';
-
 import { DogWalkDay } from './dog-walk-day.entity';
 
 import { DogWalkDayRepository } from './dog-walk-day.repository';
+
+import { getLastSunday } from '../../shared/utils/date.util';
+
+import { makeSubObject } from '../../shared/utils/manipulate.util';
 
 @Injectable()
 export class DogWalkDayService {
