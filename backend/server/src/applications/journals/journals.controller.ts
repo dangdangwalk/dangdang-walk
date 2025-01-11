@@ -14,19 +14,19 @@ import {
     ValidationPipe,
 } from '@nestjs/common';
 
-import { AccessTokenPayload } from 'applications/auth/token/token.service';
-
 import { CreateJournalDto } from './dtos/create-journal.dto';
 import { UpdateJournalDto } from './dtos/update-journal.dto';
 import { AuthJournalGuard } from './guards/auth-journal.guard';
 import { JournalsService } from './journals.service';
 import { JournalListResponse } from './types/journal.types';
 
-import { AuthDogGuard } from '../applications/dogs/guards/auth-dog.guard';
-import { DateValidationPipe } from '../applications/statistics/pipes/date-validation.pipe';
+import { AccessTokenPayload } from '../auth/token/token.service';
 
-import { User } from '../applications/users/decorators/user.decorator';
-import { AuthDogsGuard } from '../applications/walk/guards/auth-dogs.guard';
+import { AuthDogGuard } from '../dogs/guards/auth-dog.guard';
+import { DateValidationPipe } from '../statistics/pipes/date-validation.pipe';
+
+import { User } from '../users/decorators/user.decorator';
+import { AuthDogsGuard } from '../walk/guards/auth-dogs.guard';
 
 @Controller('/journals')
 @UsePipes(new ValidationPipe({ validateCustomDecorators: true, whitelist: true }))

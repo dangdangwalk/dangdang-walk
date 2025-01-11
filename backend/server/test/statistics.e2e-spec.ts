@@ -26,10 +26,10 @@ import { DataSource } from '../node_modules/typeorm';
 
 import { Dogs } from '../src/applications/dogs/dogs.entity';
 import { GENDER } from '../src/applications/dogs/types/dogs.type';
+import { Journals } from '../src/applications/journals/journals.entity';
 import { ROLE } from '../src/applications/users/types/role.type';
 import { Users } from '../src/applications/users/users.entity';
 import { DogWalkDay } from '../src/dog-walk-day/dog-walk-day.entity';
-import { Journals } from '../src/journals/journals.entity';
 import { TodayWalkTime } from '../src/today-walk-time/today-walk-time.entity';
 
 describe('StatisticsController (e2e)', () => {

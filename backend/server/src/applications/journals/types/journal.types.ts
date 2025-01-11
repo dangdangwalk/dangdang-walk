@@ -1,4 +1,4 @@
-import { Dogs } from '../../applications/dogs/dogs.entity';
+import { Dogs } from '../../dogs/dogs.entity';
 
 import { Journals } from '../journals.entity';
 

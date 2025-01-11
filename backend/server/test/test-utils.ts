@@ -16,6 +16,7 @@ import { DataSource, In } from '../node_modules/typeorm';
 import { AppModule } from '../src/app.module';
 
 import { Dogs } from '../src/applications/dogs/dogs.entity';
+import { Journals } from '../src/applications/journals/journals.entity';
 import { Users } from '../src/applications/users/users.entity';
 import { MockOauthService } from '../src/auth/oauth/__mocks__/oauth.service';
 import { GoogleService } from '../src/auth/oauth/google.service';
@@ -25,7 +26,6 @@ import { DogWalkDay } from '../src/dog-walk-day/dog-walk-day.entity';
 import { Excrements } from '../src/excrements/excrements.entity';
 import { MockS3Service } from '../src/infrastructure/aws/s3/__mocks__/s3.service';
 import { S3Service } from '../src/infrastructure/aws/s3/s3.service';
-import { Journals } from '../src/journals/journals.entity';
 import { JournalsDogs } from '../src/journals-dogs/journals-dogs.entity';
 import { TodayWalkTime } from '../src/today-walk-time/today-walk-time.entity';
 import { UsersDogs } from '../src/users-dogs/users-dogs.entity';

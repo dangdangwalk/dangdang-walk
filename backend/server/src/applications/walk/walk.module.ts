@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { WalkController } from './walk.controller';
 import { WalkService } from './walk.service';
 
-import { JournalsModule } from '../../journals/journals.module';
+import { JournalsModule } from '../journals/journals.module';
 
 @Module({
     imports: [JournalsModule],

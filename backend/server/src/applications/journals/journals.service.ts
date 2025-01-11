@@ -1,13 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { DogWalkDayService } from 'applications/dog-walk-day/dog-walk-day.service';
-import { Excrements } from 'applications/excrements/excrements.entity';
-import { ExcrementsService } from 'applications/excrements/excrements.service';
-import { Excrement, EXCREMENT } from 'applications/excrements/types';
-import { JournalsDogs } from 'applications/journals-dogs/journals-dogs.entity';
-import { JournalsDogsService } from 'applications/journals-dogs/journals-dogs.service';
-import { TodayWalkTimeService } from 'applications/today-walk-time/today-walk-time.service';
+
 import { DeleteResult, EntityManager, FindOptionsWhere, In, InsertResult } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
@@ -30,13 +24,20 @@ import {
     UpdateTodayWalkTimeOperation,
 } from './types/journal.types';
 
-import { DogsService } from '../applications/dogs/dogs.service';
-import { DogWalkingTotalResponse } from '../applications/statistics/types/statistic.type';
-import { S3Service } from '../infrastructure/aws/s3/s3.service';
-import { WinstonLoggerService } from '../shared/logger/winstonLogger.service';
-import { formatDate, getStartAndEndOfDay } from '../shared/utils/date.util';
-import { EVENTS } from '../shared/utils/etc';
-import { checkIfExistsInArr, makeSubObject, makeSubObjectsArray } from '../shared/utils/manipulate.util';
+import { S3Service } from '../../infrastructure/aws/s3/s3.service';
+import { WinstonLoggerService } from '../../shared/logger/winstonLogger.service';
+import { formatDate, getStartAndEndOfDay } from '../../shared/utils/date.util';
+import { EVENTS } from '../../shared/utils/etc';
+import { checkIfExistsInArr, makeSubObject, makeSubObjectsArray } from '../../shared/utils/manipulate.util';
+import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
+import { DogsService } from '../dogs/dogs.service';
+import { Excrements } from '../excrements/excrements.entity';
+import { ExcrementsService } from '../excrements/excrements.service';
+import { Excrement, EXCREMENT } from '../excrements/types';
+import { JournalsDogs } from '../journals-dogs/journals-dogs.entity';
+import { JournalsDogsService } from '../journals-dogs/journals-dogs.service';
+import { DogWalkingTotalResponse } from '../statistics/types/statistic.type';
+import { TodayWalkTimeService } from '../today-walk-time/today-walk-time.service';
 
 @Injectable()
 export class JournalsService {

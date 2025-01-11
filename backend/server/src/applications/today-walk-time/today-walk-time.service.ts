@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 
-import { UpdateTodayWalkTimeOperation } from 'journals/types/journal.types';
 import { WinstonLoggerService } from 'shared/logger';
 import { EntityManager, FindOptionsWhere, In } from 'typeorm';
 
@@ -9,6 +8,7 @@ import { TodayWalkTime } from './today-walk-time.entity';
 import { TodayWalkTimeRepository } from './today-walk-time.repository';
 
 import { getStartOfToday } from '../../shared/utils/date.util';
+import { UpdateTodayWalkTimeOperation } from '../journals/types/journal.types';
 
 @Injectable()
 export class TodayWalkTimeService {

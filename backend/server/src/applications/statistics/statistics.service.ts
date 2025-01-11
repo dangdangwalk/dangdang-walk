@@ -10,13 +10,13 @@ import { Period } from './pipes/period-validation.pipe';
 
 import { DogWalkingTotalResponse, DogsWeeklyWalkOverviewResponse } from './types/statistic.type';
 
-import { JournalsService } from '../../journals/journals.service';
 import { WinstonLoggerService } from '../../shared/logger/winstonLogger.service';
 
 import { getOneMonthAgo, getStartAndEndOfMonth, getStartAndEndOfWeek } from '../../shared/utils/date.util';
 import { CACHE_TTL, EVENTS } from '../../shared/utils/etc';
 import { makeSubObject } from '../../shared/utils/manipulate.util';
 import { DogsService } from '../dogs/dogs.service';
+import { JournalsService } from '../journals/journals.service';
 import { UsersService } from '../users/users.service';
 
 @Injectable()

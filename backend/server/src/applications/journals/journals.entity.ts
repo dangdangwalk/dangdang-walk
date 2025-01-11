@@ -1,6 +1,6 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
-import { Users } from '../applications/users/users.entity';
+import { Users } from '../users/users.entity';
 
 @Entity('journals')
 @Index(['userId', 'startedAt'])

@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 
-import { UpdateDogWalkDayOperation } from 'journals/types/journal.types';
 import { WinstonLoggerService } from 'shared/logger';
 import { EntityManager, FindOptionsWhere, In } from 'typeorm';
 
@@ -11,6 +10,7 @@ import { DogWalkDayRepository } from './dog-walk-day.repository';
 import { getLastSunday } from '../../shared/utils/date.util';
 
 import { makeSubObject } from '../../shared/utils/manipulate.util';
+import { UpdateDogWalkDayOperation } from '../journals/types/journal.types';
 
 @Injectable()
 export class DogWalkDayService {
