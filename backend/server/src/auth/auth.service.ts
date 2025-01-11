@@ -8,8 +8,8 @@ import { AuthData } from './types/auth-data.type';
 import { OauthAuthorizeData } from './types/oauth-authorize-data.type';
 import { OauthData } from './types/oauth-data.type';
 
-import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
 import { DogsService } from '../dogs/dogs.service';
+import { WinstonLoggerService } from '../shared/logger/winstonLogger.service';
 import { Users } from '../users/users.entity';
 import { UsersService } from '../users/users.service';
 

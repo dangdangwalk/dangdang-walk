@@ -8,11 +8,11 @@ import { Period } from './pipes/period-validation.pipe';
 
 import { DogWalkingTotalResponse, DogsWeeklyWalkOverviewResponse } from './types/statistic.type';
 
-import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
 import { CACHE_TTL, EVENTS } from '../const/cache-const';
 import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
 import { DogsService } from '../dogs/dogs.service';
 import { JournalsService } from '../journals/journals.service';
+import { WinstonLoggerService } from '../shared/logger/winstonLogger.service';
 import { TodayWalkTimeService } from '../today-walk-time/today-walk-time.service';
 import { UsersService } from '../users/users.service';
 

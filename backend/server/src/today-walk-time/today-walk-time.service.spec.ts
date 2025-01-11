@@ -7,7 +7,7 @@ import { TodayWalkTime } from './today-walk-time.entity';
 import { TodayWalkTimeRepository } from './today-walk-time.repository';
 import { TodayWalkTimeService } from './today-walk-time.service';
 
-import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
+import { WinstonLoggerService } from '../shared/logger/winstonLogger.service';
 
 describe('ExcrementsService', () => {
     let service: TodayWalkTimeService;

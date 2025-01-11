@@ -6,8 +6,8 @@ import { DogWalkDay } from './dog-walk-day.entity';
 
 import { DogWalkDayRepository } from './dog-walk-day.repository';
 
-import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
 import { UpdateDogWalkDayOperation } from '../journals/types/journal.types';
+import { WinstonLoggerService } from '../shared/logger/winstonLogger.service';
 import { getLastSunday } from '../utils/date.util';
 import { makeSubObject } from '../utils/manipulate.util';
 

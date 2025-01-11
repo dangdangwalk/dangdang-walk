@@ -6,8 +6,8 @@ import { TodayWalkTime } from './today-walk-time.entity';
 
 import { TodayWalkTimeRepository } from './today-walk-time.repository';
 
-import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
 import { UpdateTodayWalkTimeOperation } from '../journals/types/journal.types';
+import { WinstonLoggerService } from '../shared/logger/winstonLogger.service';
 import { getStartOfToday } from '../utils/date.util';
 
 @Injectable()

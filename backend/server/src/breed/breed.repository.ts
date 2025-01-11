@@ -4,7 +4,7 @@ import { EntityManager, Repository } from 'typeorm';
 
 import { Breed } from './breed.entity';
 
-import { TypeORMRepository } from '../common/database/typeorm.repository';
+import { TypeORMRepository } from '../shared/database/typeorm.repository';
 
 @Injectable()
 export class BreedRepository extends TypeORMRepository<Breed> {

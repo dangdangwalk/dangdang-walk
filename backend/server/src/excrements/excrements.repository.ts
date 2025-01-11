@@ -3,7 +3,7 @@ import { EntityManager, Repository } from 'typeorm';
 
 import { Excrements } from './excrements.entity';
 
-import { TypeORMRepository } from '../common/database/typeorm.repository';
+import { TypeORMRepository } from '../shared/database/typeorm.repository';
 
 export class ExcrementsRepository extends TypeORMRepository<Excrements> {
     constructor(

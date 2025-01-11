@@ -13,7 +13,7 @@ import {
     RequestTokenResponse,
 } from './oauth.service.base';
 
-import { WinstonLoggerService } from '../../common/logger/winstonLogger.service';
+import { WinstonLoggerService } from '../../shared/logger/winstonLogger.service';
 
 interface TokenResponse extends RequestTokenResponse {
     access_token: string;

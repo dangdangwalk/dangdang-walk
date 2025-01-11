@@ -1,43 +1,19 @@
-import { CacheModule } from '@nestjs/cache-manager';
 import { Module, Scope } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
-import { EventEmitterModule } from '@nestjs/event-emitter';
-import { PrometheusModule } from '@willsoto/nestjs-prometheus';
+import { Modules } from 'modules';
 
 import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
-import { DatabaseModule } from './common/database/database.module';
-import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
-import { HealthController } from './common/health/health.controller';
-import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
-import { ProfilingInterceptor } from './common/interceptors/profilingInterceptor';
-import { PrometheusInterceptor } from './common/interceptors/prometheus.interceptor';
-import { WinstonLoggerModule } from './common/logger/winstonLogger.module';
+import { AllExceptionsFilter } from './shared/filters/all-exceptions.filter';
+import { LoggingInterceptor } from './shared/interceptors/logging.interceptor';
+import { ProfilingInterceptor } from './shared/interceptors/profilingInterceptor';
+import { PrometheusInterceptor } from './shared/interceptors/prometheus.interceptor';
 import { StatisticsModule } from './statistics/statistics.module';
 import { WalkModule } from './walk/walk.module';
 
 @Module({
-    imports: [
-        DatabaseModule,
-        CacheModule.register(),
-        EventEmitterModule.forRoot(),
-        WinstonLoggerModule,
-        ConfigModule.forRoot({
-            isGlobal: true,
-            envFilePath: `.env.${process.env.NODE_ENV}`,
-        }),
-        PrometheusModule.register({
-            path: '/metrics',
-            defaultMetrics: {
-                enabled: true,
-            },
-        }),
-        AuthModule,
-        StatisticsModule,
-        WalkModule,
-    ],
-    controllers: [AppController, HealthController],
+    imports: [Modules, AuthModule, StatisticsModule, WalkModule],
+    controllers: [AppController],
     providers: [
         {
             provide: APP_INTERCEPTOR,

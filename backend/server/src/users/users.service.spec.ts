@@ -9,9 +9,9 @@ import { UsersRepository } from './users.repository';
 
 import { UsersService } from './users.service';
 
-import { WinstonLoggerService } from '../common/logger/winstonLogger.service';
 import { mockUser } from '../fixtures/users.fixture';
 import { S3Service } from '../s3/s3.service';
+import { WinstonLoggerService } from '../shared/logger/winstonLogger.service';
 import { UsersDogs } from '../users-dogs/users-dogs.entity';
 import { UsersDogsRepository } from '../users-dogs/users-dogs.repository';
 import { UsersDogsService } from '../users-dogs/users-dogs.service';
