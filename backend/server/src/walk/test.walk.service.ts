@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { WalkService } from './walk.service';
 
-import { DogsService } from '../dogs/dogs.service';
+import { DogsService } from '../applications/dogs/dogs.service';
 import { UsersService } from '../users/users.service';
 
 @Injectable()

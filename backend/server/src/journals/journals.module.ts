@@ -8,7 +8,7 @@ import { JournalsRepository } from './journals.repository';
 
 import { JournalsService } from './journals.service';
 
-import { DogsModule } from '../dogs/dogs.module';
+import { DogsModule } from '../applications/dogs/dogs.module';
 import { Excrements } from '../excrements/excrements.entity';
 import { ExcrementsModule } from '../excrements/excrements.module';
 import { DatabaseModule } from '../modules/database.module';

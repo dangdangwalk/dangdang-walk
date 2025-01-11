@@ -22,7 +22,7 @@ import { AuthDogGuard } from './guards/auth-dog.guard';
 
 import { DogProfileResponse } from './types/dogs.type';
 
-import { User } from '../users/decorators/user.decorator';
+import { User } from '../../users/decorators/user.decorator';
 
 @Controller('/dogs')
 @UsePipes(new ValidationPipe({ validateCustomDecorators: true, whitelist: true }))

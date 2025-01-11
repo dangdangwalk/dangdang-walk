@@ -8,7 +8,7 @@ import { Period, PeriodValidationPipe } from './pipes/period-validation.pipe';
 
 import { StatisticsService } from './statistics.service';
 
-import { AuthDogGuard } from '../dogs/guards/auth-dog.guard';
+import { AuthDogGuard } from '../applications/dogs/guards/auth-dog.guard';
 import { User } from '../users/decorators/user.decorator';
 
 @Controller('/dogs')

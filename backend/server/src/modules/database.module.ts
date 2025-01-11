@@ -7,8 +7,8 @@ import { DataSource, FileLogger } from 'typeorm';
 import { runSeeders } from 'typeorm-extension';
 import { addTransactionalDataSource, getDataSourceByName } from 'typeorm-transactional';
 
+import { Dogs } from '../applications/dogs/dogs.entity';
 import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
-import { Dogs } from '../dogs/dogs.entity';
 import { Excrements } from '../excrements/excrements.entity';
 import { Journals } from '../journals/journals.entity';
 import { JournalsDogs } from '../journals-dogs/journals-dogs.entity';

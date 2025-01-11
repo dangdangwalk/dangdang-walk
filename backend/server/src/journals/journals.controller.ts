@@ -22,7 +22,7 @@ import { AuthJournalGuard } from './guards/auth-journal.guard';
 import { JournalsService } from './journals.service';
 import { JournalListResponse } from './types/journal.types';
 
-import { AuthDogGuard } from '../dogs/guards/auth-dog.guard';
+import { AuthDogGuard } from '../applications/dogs/guards/auth-dog.guard';
 import { DateValidationPipe } from '../statistics/pipes/date-validation.pipe';
 
 import { User } from '../users/decorators/user.decorator';

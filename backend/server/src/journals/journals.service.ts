@@ -25,8 +25,8 @@ import {
     UpdateTodayWalkTimeOperation,
 } from './types/journal.types';
 
+import { DogsService } from '../applications/dogs/dogs.service';
 import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
-import { DogsService } from '../dogs/dogs.service';
 import { Excrements } from '../excrements/excrements.entity';
 import { ExcrementsService } from '../excrements/excrements.service';
 import { EXCREMENT, Excrement } from '../excrements/types/excrement.type';

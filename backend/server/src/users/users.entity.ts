@@ -2,7 +2,7 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGenerat
 
 import { ROLE, Role } from './types/role.type';
 
-import { Dogs } from '../dogs/dogs.entity';
+import { Dogs } from '../applications/dogs/dogs.entity';
 
 @Entity()
 export class Users {

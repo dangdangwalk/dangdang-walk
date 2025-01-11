@@ -11,16 +11,16 @@ import { DogsRepository } from './dogs.repository';
 
 import { CreateDogRequest, DogProfileResponse, DogSummaryResponse, UpdateDogRequest } from './types/dogs.type';
 
-import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
-import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
-import { S3Service } from '../s3/s3.service';
-import { TodayWalkTime } from '../today-walk-time/today-walk-time.entity';
-import { TodayWalkTimeService } from '../today-walk-time/today-walk-time.service';
-import { UsersService } from '../users/users.service';
-import { UsersDogs } from '../users-dogs/users-dogs.entity';
-import { UsersDogsService } from '../users-dogs/users-dogs.service';
+import { DogWalkDay } from '../../dog-walk-day/dog-walk-day.entity';
+import { DogWalkDayService } from '../../dog-walk-day/dog-walk-day.service';
+import { S3Service } from '../../s3/s3.service';
+import { TodayWalkTime } from '../../today-walk-time/today-walk-time.entity';
+import { TodayWalkTimeService } from '../../today-walk-time/today-walk-time.service';
+import { UsersService } from '../../users/users.service';
+import { UsersDogs } from '../../users-dogs/users-dogs.entity';
+import { UsersDogsService } from '../../users-dogs/users-dogs.service';
 
-import { makeSubObject, makeSubObjectsArray } from '../utils/manipulate.util';
+import { makeSubObject, makeSubObjectsArray } from '../../utils/manipulate.util';
 
 @Injectable()
 export class DogsService {

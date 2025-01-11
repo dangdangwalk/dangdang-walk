@@ -6,9 +6,9 @@ import { Repository } from 'typeorm';
 import { TestWalkService } from './test.walk.service';
 import { WalkService } from './walk.service';
 
-import { Dogs } from '../dogs/dogs.entity';
-import { DogsService } from '../dogs/dogs.service';
-import { DogSummaryResponse } from '../dogs/types/dogs.type';
+import { Dogs } from '../applications/dogs/dogs.entity';
+import { DogsService } from '../applications/dogs/dogs.service';
+import { DogSummaryResponse } from '../applications/dogs/types/dogs.type';
 import { UsersService } from '../users/users.service';
 
 describe('WalkService', () => {

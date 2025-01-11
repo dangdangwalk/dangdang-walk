@@ -15,12 +15,12 @@ import { DataSource, In } from '../node_modules/typeorm';
 
 import { AppModule } from '../src/app.module';
 
+import { Dogs } from '../src/applications/dogs/dogs.entity';
 import { MockOauthService } from '../src/auth/oauth/__mocks__/oauth.service';
 import { GoogleService } from '../src/auth/oauth/google.service';
 import { KakaoService } from '../src/auth/oauth/kakao.service';
 import { NaverService } from '../src/auth/oauth/naver.service';
 import { DogWalkDay } from '../src/dog-walk-day/dog-walk-day.entity';
-import { Dogs } from '../src/dogs/dogs.entity';
 import { Excrements } from '../src/excrements/excrements.entity';
 import { Journals } from '../src/journals/journals.entity';
 import { JournalsDogs } from '../src/journals-dogs/journals-dogs.entity';

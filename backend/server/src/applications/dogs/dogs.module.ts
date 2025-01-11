@@ -7,13 +7,13 @@ import { Dogs } from './dogs.entity';
 import { DogsRepository } from './dogs.repository';
 import { DogsService } from './dogs.service';
 
-import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
-import { DogWalkDayModule } from '../dog-walk-day/dog-walk-day.module';
-import { JournalsDogsModule } from '../journals-dogs/journals-dogs.module';
-import { DatabaseModule } from '../modules/database.module';
-import { TodayWalkTime } from '../today-walk-time/today-walk-time.entity';
-import { TodayWalkTimeModule } from '../today-walk-time/today-walk-time.module';
-import { UsersModule } from '../users/users.module';
+import { DogWalkDay } from '../../dog-walk-day/dog-walk-day.entity';
+import { DogWalkDayModule } from '../../dog-walk-day/dog-walk-day.module';
+import { JournalsDogsModule } from '../../journals-dogs/journals-dogs.module';
+import { DatabaseModule } from '../../modules/database.module';
+import { TodayWalkTime } from '../../today-walk-time/today-walk-time.entity';
+import { TodayWalkTimeModule } from '../../today-walk-time/today-walk-time.module';
+import { UsersModule } from '../../users/users.module';
 
 @Module({
     imports: [

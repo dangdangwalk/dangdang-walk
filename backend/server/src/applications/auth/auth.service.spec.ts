@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { mockUser } from '_tests_/users.fixture';
-import { DogsService } from 'dogs/dogs.service';
+import { DogsService } from 'applications/dogs/dogs.service';
 import { WinstonLoggerService } from 'shared/logger';
 import { Users } from 'users/users.entity';
 import { UsersService } from 'users/users.service';

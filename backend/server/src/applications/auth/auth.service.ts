@@ -1,6 +1,6 @@
 import { Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { DogsService } from 'dogs/dogs.service';
+import { DogsService } from 'applications/dogs/dogs.service';
 import { WinstonLoggerService } from 'shared/logger';
 import { Transactional } from 'typeorm-transactional';
 

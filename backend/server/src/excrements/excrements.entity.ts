@@ -2,7 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 't
 
 import { EXCREMENT, Excrement } from './types/excrement.type';
 
-import { Dogs } from '../dogs/dogs.entity';
+import { Dogs } from '../applications/dogs/dogs.entity';
 import { Journals } from '../journals/journals.entity';
 
 @Entity('excrements')
