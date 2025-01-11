@@ -10,8 +10,8 @@ import { UsersRepository } from './users.repository';
 
 import { UsersService } from './users.service';
 
+import { S3Module } from '../infrastructure/aws/s3/s3.module';
 import { DatabaseModule } from '../modules/database.module';
-import { S3Module } from '../s3/s3.module';
 
 @Module({
     imports: [DatabaseModule.forFeature([Users, UsersDogs]), UsersDogsModule, S3Module],

@@ -11,7 +11,7 @@ import { UserProfile } from './types/user-profile.type';
 import { Users } from './users.entity';
 import { UsersRepository } from './users.repository';
 
-import { S3Service } from '../s3/s3.service';
+import { S3Service } from '../infrastructure/aws/s3/s3.service';
 import { generateUuid } from '../utils/hash.util';
 import { checkIfExistsInArr } from '../utils/manipulate.util';
 

@@ -34,7 +34,7 @@ import {
 
 import { DogsService } from '../applications/dogs/dogs.service';
 import { DogWalkingTotalResponse } from '../applications/statistics/types/statistic.type';
-import { S3Service } from '../s3/s3.service';
+import { S3Service } from '../infrastructure/aws/s3/s3.service';
 import { WinstonLoggerService } from '../shared/logger/winstonLogger.service';
 import { formatDate, getStartAndEndOfDay } from '../utils/date.util';
 import { checkIfExistsInArr, makeSubObject, makeSubObjectsArray } from '../utils/manipulate.util';

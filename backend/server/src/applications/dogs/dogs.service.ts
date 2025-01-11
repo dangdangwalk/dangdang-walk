@@ -17,7 +17,7 @@ import { DogsRepository } from './dogs.repository';
 
 import { CreateDogRequest, DogProfileResponse, DogSummaryResponse, UpdateDogRequest } from './types/dogs.type';
 
-import { S3Service } from '../../s3/s3.service';
+import { S3Service } from '../../infrastructure/aws/s3/s3.service';
 import { UsersService } from '../../users/users.service';
 
 import { makeSubObject, makeSubObjectsArray } from '../../utils/manipulate.util';

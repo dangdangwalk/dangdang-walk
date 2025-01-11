@@ -12,7 +12,7 @@ import { AuthService } from '../../../src/auth/auth.service';
 import { GoogleService } from '../../../src/auth/oauth/google.service';
 import { KakaoService } from '../../../src/auth/oauth/kakao.service';
 import { NaverService } from '../../../src/auth/oauth/naver.service';
-import { S3Service } from '../../../src/s3/s3.service';
+import { S3Service } from '../../../src/infrastructure/aws/s3/s3.service';
 import { color } from '../../../src/utils/ansi.util';
 import { MockAuthService } from '../__mocks__/auth.service';
 import { MockOauthService } from '../__mocks__/oauth.service';
