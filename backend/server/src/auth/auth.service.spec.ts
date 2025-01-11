@@ -10,8 +10,8 @@ import { OauthAuthorizeData } from './types/oauth-authorize-data.type';
 import { OauthData } from './types/oauth-data.type';
 import { OAUTH_PROVIDERS } from './types/oauth-provider.type';
 
+import { mockUser } from '../_tests_/users.fixture';
 import { DogsService } from '../dogs/dogs.service';
-import { mockUser } from '../fixtures/users.fixture';
 import { WinstonLoggerService } from '../shared/logger/winstonLogger.service';
 import { Users } from '../users/users.entity';
 import { UsersService } from '../users/users.service';

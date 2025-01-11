@@ -3,7 +3,7 @@ import { ROLE } from './types/role.type';
 import { Users } from './users.entity';
 
 import { OAUTH_ACCESS_TOKEN, OAUTH_REFRESH_TOKEN, VALID_REFRESH_TOKEN_100_YEARS } from '../../test/constants';
-import { mockUser } from '../fixtures/users.fixture';
+import { mockUser } from '../_tests_/users.fixture';
 
 describe('User', () => {
     it('user 정보가 주어지면 user 정보를 반환해야 한다.', () => {

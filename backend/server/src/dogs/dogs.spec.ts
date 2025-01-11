@@ -2,8 +2,8 @@ import { Dogs } from './dogs.entity';
 
 import { GENDER } from './types/dogs.type';
 
+import { mockDog } from '../_tests_/dogs.fixture';
 import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
-import { mockDog } from '../fixtures/dogs.fixture';
 import { TodayWalkTime } from '../today-walk-time/today-walk-time.entity';
 
 describe('Dogs', () => {

@@ -9,7 +9,7 @@ import { Breed } from './breed.entity';
 import { BreedRepository } from './breed.repository';
 import { BreedService } from './breed.service';
 
-import { mockBreed } from '../fixtures/breed.fixture';
+import { mockBreed } from '../_tests_/breed.fixture';
 
 describe('BreedService', () => {
     let service: BreedService;
