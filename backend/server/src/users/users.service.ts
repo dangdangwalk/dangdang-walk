@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { AccessTokenPayload } from 'applications/auth/token/token.service';
+import { UsersDogsService } from 'applications/users-dogs/users-dogs.service';
 import { FindOneOptions, FindOptionsWhere } from 'typeorm';
 import { QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
@@ -11,7 +12,6 @@ import { Users } from './users.entity';
 import { UsersRepository } from './users.repository';
 
 import { S3Service } from '../s3/s3.service';
-import { UsersDogsService } from '../users-dogs/users-dogs.service';
 import { generateUuid } from '../utils/hash.util';
 import { checkIfExistsInArr } from '../utils/manipulate.util';
 

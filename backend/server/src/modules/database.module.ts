@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule, getDataSourceToken } from '@nestjs/typeorm';
 import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
 import { Breed } from 'applications/breed';
+import { UsersDogs } from 'applications/users-dogs/users-dogs.entity';
 import { DataSource, FileLogger } from 'typeorm';
 import { runSeeders } from 'typeorm-extension';
 import { addTransactionalDataSource, getDataSourceByName } from 'typeorm-transactional';
@@ -16,7 +17,6 @@ import BreedSeeder from '../shared/database/breed.seeder';
 import { WinstonLoggerService } from '../shared/logger/winstonLogger.service';
 import { TodayWalkTime } from '../today-walk-time/today-walk-time.entity';
 import { Users } from '../users/users.entity';
-import { UsersDogs } from '../users-dogs/users-dogs.entity';
 import { color } from '../utils/ansi.util';
 
 @Module({

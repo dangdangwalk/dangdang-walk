@@ -1,6 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { BreedService } from 'applications/breed';
+import { UsersDogsService } from 'applications/users-dogs/users-dogs.service';
 import { EntityManager, FindManyOptions, FindOneOptions, FindOptionsWhere, In } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
@@ -17,8 +18,6 @@ import { S3Service } from '../../s3/s3.service';
 import { TodayWalkTime } from '../../today-walk-time/today-walk-time.entity';
 import { TodayWalkTimeService } from '../../today-walk-time/today-walk-time.service';
 import { UsersService } from '../../users/users.service';
-import { UsersDogs } from '../../users-dogs/users-dogs.entity';
-import { UsersDogsService } from '../../users-dogs/users-dogs.service';
 
 import { makeSubObject, makeSubObjectsArray } from '../../utils/manipulate.util';
 

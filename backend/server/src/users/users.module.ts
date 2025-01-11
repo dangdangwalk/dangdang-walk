@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 
+import { UsersDogs, UsersDogsModule } from 'applications/users-dogs';
+
 import { UsersController } from './users.controller';
 
 import { Users } from './users.entity';
@@ -10,8 +12,6 @@ import { UsersService } from './users.service';
 
 import { DatabaseModule } from '../modules/database.module';
 import { S3Module } from '../s3/s3.module';
-import { UsersDogs } from '../users-dogs/users-dogs.entity';
-import { UsersDogsModule } from '../users-dogs/users-dogs.module';
 
 @Module({
     imports: [DatabaseModule.forFeature([Users, UsersDogs]), UsersDogsModule, S3Module],

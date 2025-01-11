@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { TypeORMRepository } from 'shared/database/typeorm.repository';
 import { EntityManager, Repository } from 'typeorm';
 
 import { UsersDogs } from './users-dogs.entity';
-
-import { TypeORMRepository } from '../shared/database/typeorm.repository';
 
 @Injectable()
 export class UsersDogsRepository extends TypeORMRepository<UsersDogs> {
