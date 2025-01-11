@@ -4,6 +4,8 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { DeleteResult, EntityManager, FindOptionsWhere, In, InsertResult } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
+import { EVENTS } from 'utils/etc';
+
 import { Journals } from './journals.entity';
 import { JournalsRepository } from './journals.repository';
 import {
@@ -23,7 +25,6 @@ import {
     UpdateTodayWalkTimeOperation,
 } from './types/journal.types';
 
-import { EVENTS } from '../const/cache-const';
 import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
 import { DogsService } from '../dogs/dogs.service';
 import { Excrements } from '../excrements/excrements.entity';

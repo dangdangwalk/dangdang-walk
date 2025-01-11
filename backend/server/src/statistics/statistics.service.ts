@@ -4,11 +4,12 @@ import { OnEvent } from '@nestjs/event-emitter';
 import { Cache } from 'cache-manager';
 import { In } from 'typeorm';
 
+import { CACHE_TTL, EVENTS } from 'utils/etc';
+
 import { Period } from './pipes/period-validation.pipe';
 
 import { DogWalkingTotalResponse, DogsWeeklyWalkOverviewResponse } from './types/statistic.type';
 
-import { CACHE_TTL, EVENTS } from '../const/cache-const';
 import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
 import { DogsService } from '../dogs/dogs.service';
 import { JournalsService } from '../journals/journals.service';

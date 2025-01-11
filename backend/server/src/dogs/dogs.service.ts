@@ -3,13 +3,14 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { EntityManager, FindManyOptions, FindOneOptions, FindOptionsWhere, In } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
+import { EVENTS } from 'utils/etc';
+
 import { Dogs } from './dogs.entity';
 import { DogsRepository } from './dogs.repository';
 
 import { CreateDogRequest, DogProfileResponse, DogSummaryResponse, UpdateDogRequest } from './types/dogs.type';
 
 import { BreedService } from '../breed/breed.service';
-import { EVENTS } from '../const/cache-const';
 import { DogWalkDay } from '../dog-walk-day/dog-walk-day.entity';
 import { DogWalkDayService } from '../dog-walk-day/dog-walk-day.service';
 import { S3Service } from '../s3/s3.service';
