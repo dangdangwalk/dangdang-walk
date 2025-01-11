@@ -6,3 +6,4 @@ export * from './users-dogs';
 export * from './dog-walk-day';
 export * from './excrements';
 export * from './today-walk-time';
+export * from './walk';

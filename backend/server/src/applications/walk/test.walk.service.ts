@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 
 import { WalkService } from './walk.service';
 
-import { DogsService } from '../applications/dogs/dogs.service';
-import { UsersService } from '../users/users.service';
+import { UsersService } from '../../users/users.service';
+import { DogsService } from '../dogs/dogs.service';
 
 @Injectable()
 export class TestWalkService extends WalkService {
