@@ -23,7 +23,7 @@ export class WinstonLoggerService {
         }
 
         const consoleLogFormat = winston.format.printf(({ timestamp, level, message, ...meta }) => {
-            const seoulTimestamp = new Date(timestamp).toLocaleString('ko-KR');
+            const seoulTimestamp = new Date(timestamp as string).toLocaleString('ko-KR');
             const metaString = Object.keys(meta).length > 0 ? `\n${JSON.stringify(meta, null, 2)}` : '';
             return `${seoulTimestamp} | ${level}| ${message}${metaString}`;
         });
@@ -53,7 +53,7 @@ export class WinstonLoggerService {
                 maxSize: '20m',
                 maxFiles: '14d',
                 format: winston.format.combine(
-                    winston.format((info) => ({ ...info, message: stripAnsi(info.message) }))(),
+                    winston.format((info) => ({ ...info, message: stripAnsi(info.message as string) }))(),
                     winston.format.timestamp(),
                     winston.format.json(),
                 ),
@@ -67,7 +67,7 @@ export class WinstonLoggerService {
                 maxFiles: '14d',
                 level: 'error',
                 format: winston.format.combine(
-                    winston.format((info) => ({ ...info, message: stripAnsi(info.message) }))(),
+                    winston.format((info) => ({ ...info, message: stripAnsi(info.message as string) }))(),
                     winston.format.timestamp(),
                     winston.format.json(),
                 ),
