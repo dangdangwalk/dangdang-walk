@@ -3,7 +3,7 @@ import { getServerInstance } from './http/http-server';
 import { WinstonLoggerService } from './logger/winston-logger';
 import { Scheduler } from './scheduler/scheduler';
 
-async function init() {
+async function main() {
     const logger = WinstonLoggerService.getInstance();
     try {
         logger.info('config를 로드합니다');
@@ -25,4 +25,4 @@ async function init() {
     }
 }
 
-init();
+main();
