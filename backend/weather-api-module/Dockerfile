@@ -53,7 +53,6 @@ RUN echo "Current working directory:" && pwd && \
     echo "Contents of parent directory:" && ls -la ..
 
 RUN if [ ! -d "/app/log" ]; then mkdir -p /app/log; fi
-COPY --chown=weather:nodejs --from=builder /backend/weather-api-module/dist /app/dist
 
 RUN npm ci --ignore-scripts --omit=dev && \
     npm cache clean --force
@@ -88,4 +87,4 @@ COPY --chown=weather:nodejs --from=build /app/log /app/log
 
 USER weather
 
-CMD [ "node", "dist/init.js" ]
+CMD [ "node", "dist/main.js" ]

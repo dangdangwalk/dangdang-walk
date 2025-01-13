@@ -91,7 +91,8 @@ services:
     env_file: ./backend/weather-api-module/.env.local
     volumes:
       - ./backend:/app
-      - /app/node_modules
+      - /app/node_modules 
+      - ./backend/weather-api-module/log:/app/log
     environment:
       - REDIS_HOST=redis
     ports:
