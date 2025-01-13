@@ -1,9 +1,20 @@
+const csiStart = '[\\u001B\\u009B]'; // CSI 시퀀스의 시작
+const csiParams = '[[\\]()#;?]*'; // 파라미터 바이트 (0x30–0x3F)
+const csiIntermediate = '(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]+)*'; // 중간 바이트들을 포함한 파라미터 (0x20–0x2F)
+const csiIntermediate2 = '(?:[-a-zA-Z\\d\\/#&.:=?%@~_]*)';
+const csiFinal = '[a-zA-Z\\d]+'; // 파이널 바이트 (0x40–0x7E)
+const bellChar = '\\u0007'; // 벨 문자
+const csiCombinedPattern = `${csiStart}${csiParams}(?:(?:(?:${csiIntermediate})*|${csiFinal}${csiIntermediate2})?${bellChar})`;
+
+const sgrParam = '\\d{1,4}'; // 1~4자리 숫자
+const sgrDelimiter = ';'; // 세미콜론 구분자
+const sgrOptionalParams = `(?:${sgrDelimiter}\\d{0,4})*`; // 세미콜론과 0~4자리 숫자로 이루어진 선택적 파라미터
+const sgrFinal = '[\\dA-PR-TZcf-nq-uy=><~]'; // 파이널 바이트 (0x40–0x7E 범위 내 특정 문자들)
+const sgrCombinedPattern = `(?:(?:${sgrParam}${sgrOptionalParams})?${sgrFinal})`;
+
 // https://github.com/chalk/ansi-regex/blob/main/index.js
 function ansiRegex({ onlyFirst = false } = {}): RegExp {
-    const pattern = [
-        '[\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]+)*|[a-zA-Z\\d]+(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)',
-        '(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-nq-uy=><~]))',
-    ].join('|');
+    const pattern = [csiCombinedPattern, sgrCombinedPattern].join('|');
 
     return new RegExp(pattern, onlyFirst ? undefined : 'g');
 }
