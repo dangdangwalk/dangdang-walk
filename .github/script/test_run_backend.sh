@@ -152,6 +152,18 @@ case "$1" in
         fi
         exit 0
         ;;
+    "logs")
+        echo "[Nest] 1  - 01/14/2025, 2:32:56 PM     LOG [NestFactory] Starting Nest application..."
+        echo "[Nest] 1  - 01/14/2025, 2:32:57 PM     LOG [InstanceLoader] AppModule dependencies initialized"
+        echo "node:fs:596"
+        echo "  handleErrorFromBinding(ctx);"
+        echo "Error: ENOENT: no such file or directory, open './resources/breedData.json'"
+        ;;
+    "ps")
+        if [ "$3" = "publish=3031" ] || [ "$3" = "publish=3032" ]; then
+            echo "dangdang-api-${MOCK_CURRENT_CONTAINER:-blue}"
+        fi
+        ;;
     "pull"|"stop"|"rm"|"run"|"image")
         echo "[MOCK] Docker $1 executed"
         exit "${MOCK_DOCKER_EXIT_CODE:-0}"
@@ -305,7 +317,16 @@ test_health_check_failure() {
     export MOCK_HEALTH_CHECK_FAIL=true
     
     local result=0
+
     if ./run_backend.sh "test-tag" "test.env.prod" "test-repo" "test-image"; then
+        result=1
+    fi
+
+    local output
+    output=$(./run_backend.sh "test-tag" "test.env.prod" "test-repo" "test-image" 2>&1)
+
+    if ! echo "$output" | grep -q "Fetching recent logs"; then
+        echo "Expected log message 'Fetching recent logs' not found"
         result=1
     fi
     
@@ -422,7 +443,7 @@ main() {
         '
         
         context 'when health check fails' '
-            it \"should fail and rollback deployment\" test_health_check_failure
+            it \"should fail and display container logs\" test_health_check_failure
         '
     "
     
