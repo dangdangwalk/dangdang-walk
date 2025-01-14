@@ -3,11 +3,11 @@ FROM node:18-alpine AS builder
 WORKDIR /app
 
 COPY package*.json ./
-COPY weather-api-module/package*.json ./weather-api-module/
+COPY weather/package*.json ./weather/
 
 COPY . .
 
-WORKDIR /app/weather-api-module
+WORKDIR /app/weather
 RUN npm ci --ignore-scripts && \
     npm run build
 
@@ -32,8 +32,8 @@ RUN apk --no-cache add tzdata && \
     cp /usr/share/zoneinfo/Asia/Seoul /etc/localtime && \
     echo "Asia/Seoul" > /etc/timezone
 
-COPY --from=builder --chown=weather:nodejs /app/weather-api-module/dist ./dist
-COPY --from=builder --chown=weather:nodejs /app/weather-api-module/node_modules ./node_modules
+COPY --from=builder --chown=weather:nodejs /app/weather/dist ./dist
+COPY --from=builder --chown=weather:nodejs /app/weather/node_modules ./node_modules
 
 USER weather
 

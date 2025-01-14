@@ -1,10 +1,4 @@
-x-logging: &default-logging
-  options:
-    max-size: '10m'
-    max-file: '3'
-
 x-backend-common: &backend-common
-  logging: *default-logging
   platform: linux/amd64
   networks:
     - default
@@ -82,25 +76,25 @@ services:
 
   weather:
     <<: *backend-common
-    container_name: dangdang-weather-api-module
+    container_name: dangdang-weather
     profiles: ['weather']
-    image: dangdang-weather-api-module
+    image: dangdang-weather
     restart: unless-stopped
     build:
       context: .
-      dockerfile: ./weather-api-module/Dockerfile
-    env_file: ./weather-api-module/.env.local
+      dockerfile: ./weather/Dockerfile
+    env_file: ./weather/.env.local
     volumes:
       - ./:/app
-      - /app/node_modules 
-      - ./weather-api-module/log:/app/log
+      - /app/node_modules
+      - ./weather/log:/app/log
     environment:
       - REDIS_HOST=redis
     ports:
       - 3335:3335
     depends_on:
       - redis
-    working_dir: /app/weather-api-module
+    working_dir: /app/weather
     command: npm run start
 
 networks:
