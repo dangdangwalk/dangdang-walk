@@ -26,7 +26,7 @@ services:
       TZ: Asia/Seoul
       MYSQL_ROOT_USER: root
       MYSQL_ROOT_PASSWORD: root
-    env_file: ./backend/server/.env.local
+    env_file: ./server/.env.local
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     ports:
       - 3306:3306
@@ -48,12 +48,12 @@ services:
     image: dangdang-server
     restart: always
     build:
-      context: ./backend
+      context: .
       dockerfile: ./server/Dockerfile
-    env_file: ./backend/server/.env.local
+    env_file: ./server/.env.local
     volumes:
-      - ./backend/server/log:/app/log
-      - ./backend/server/resources:/app/resources
+      - ./server/log:/app/log
+      - ./server/resources:/app/resources
     ports:
       - 3333:3333
     networks:
@@ -78,7 +78,7 @@ services:
       - default
     command: redis-server
     volumes:
-      - ./backend/weather-api-module/redis-backup:/data
+      - ./db/redis/data:/data
 
   weather:
     <<: *backend-common
@@ -87,13 +87,13 @@ services:
     image: dangdang-weather-api-module
     restart: unless-stopped
     build:
-      context: ./backend
+      context: .
       dockerfile: ./weather-api-module/Dockerfile
-    env_file: ./backend/weather-api-module/.env.local
+    env_file: ./weather-api-module/.env.local
     volumes:
-      - ./backend:/app
+      - ./:/app
       - /app/node_modules 
-      - ./backend/weather-api-module/log:/app/log
+      - ./weather-api-module/log:/app/log
     environment:
       - REDIS_HOST=redis
     ports:
