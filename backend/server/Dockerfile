@@ -32,6 +32,7 @@ RUN apk add --no-cache tzdata && \
 
 COPY --from=builder --chown=nestjs:nodejs /app/server/dist ./dist
 COPY --from=builder --chown=nestjs:nodejs /app/server/node_modules ./node_modules
+COPY --from=builder --chown=nestjs:nodejs /app/server/resources ./resources
 
 USER nestjs
 
