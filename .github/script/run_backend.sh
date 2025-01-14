@@ -104,6 +104,17 @@ verify_container_health() {
   done
 
   log_error "Health check failed after $HEALTH_CHECK_MAX_RETRIES attempts."
+  log_info "Fetching recent logs from the container..."
+
+  local container_name=$(docker ps --filter "publish=$port" --format "{{.Names}}")
+
+  if [ -n "$container_name" ]; then
+    log_info "Container name: $container_name"
+    docker logs "$container_name" | awk '/\[Nest\].*LOG \[InstanceLoader\]/{p=NR+1}(NR>=p && p!=0)'
+  else
+    log_error "No running container found on port $port."
+  fi
+
   exit 1
 }
 
