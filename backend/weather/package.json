@@ -2,12 +2,12 @@
     "name": "weather-api-module",
     "version": "1.0.0",
     "description": "",
-    "main": "dist/init.js",
+    "main": "dist/main.js",
     "type": "commonjs",
     "scripts": {
         "clean": "rm -rf dist",
         "build": "npm run clean && tsc",
-        "start": "npm run build && cross-env NODE_ENV=local node .",
+        "start": "npm run build && cross-env NODE_ENV=local node ./dist/main.js",
         "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
         "prepare": "cd ../../ && husky backend/.husky",
         "test": "echo \"Error: no test specified\" && exit 0",
@@ -36,7 +36,6 @@
         "jest-plugin-context": "^2.9.0",
         "jest-when": "^3.6.0",
         "lint-staged": "^15.2.2",
-        "prepare": "cd .. && husky backend/.husky",
         "prettier": "^3.2.5",
         "ts-jest": "^29.1.2",
         "@types/ioredis": "^5.0.0"

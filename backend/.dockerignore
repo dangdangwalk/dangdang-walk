@@ -1,0 +1,9 @@
+*
+
+# Allow specific files
+!package.json
+!package-lock.json
+!tsconfig.json
+!tsconfig.build.json
+!server
+!weather
