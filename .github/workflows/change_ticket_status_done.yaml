@@ -3,12 +3,12 @@ name: Change Ticket Status to Done
 on:
   pull_request:
     types: [closed]
-    branches-ignore:
-      - swagger-ui-updates
 
 jobs:
   change_ticket_status_to_done_if_merged:
-    if: github.event.pull_request.merged == true
+    if: |
+      github.event.pull_request.merged == true &&
+      github.head_ref != 'swagger-ui-updates'
     runs-on: ubuntu-latest
     steps:
       - name: Change the status of corresponding Notion Ticket to Done
@@ -16,7 +16,7 @@ jobs:
           DATABASE_ID: 35e838520c274894b2206eb34a198575
           NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
         run: |
-          branch_name="${{ github.event.pull_request.head.ref }}"
+          branch_name="${{ github.head_ref }}"
 
           if [[ $branch_name =~ DANG-([0-9]+)$ ]]; then
             TASK_ID="${BASH_REMATCH[1]}"
