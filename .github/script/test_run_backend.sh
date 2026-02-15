@@ -175,19 +175,6 @@ case "$1" in
 esac
 EOF
 
-    # AWS mock
-    cat > "$ROOT_PATH/mock-bin/aws" << 'EOF'
-#!/bin/bash
-if [ "$1" = "ecr" ] && [ "$2" = "get-login-password" ]; then
-    if [ "${MOCK_AWS_EXIT_CODE:-0}" != "0" ]; then
-        echo "AWS ECR authentication failed" >&2
-        exit "${MOCK_AWS_EXIT_CODE}"
-    fi
-    echo "mock-password"
-    exit 0
-fi
-EOF
-
     # curl mock
     cat > "$ROOT_PATH/mock-bin/curl" << 'EOF'
 #!/bin/bash
@@ -237,7 +224,7 @@ test_basic_deployment() {
     export MOCK_NGINX_FAIL=false
     
     local result=0
-    ./run_backend.sh "test-tag" "test.env.prod" "test-repo" "test-image" || result=1
+    ./run_backend.sh "test-tag" "test.env.prod" "test-image" || result=1
     
     export MOCK_BLUE_STATUS="$temp_blue_status"
     export MOCK_GREEN_STATUS="$temp_green_status"
@@ -260,7 +247,7 @@ test_invalid_env_file() {
     rm -f "$TEST_ENV_PATH"  # 기존 env 파일 삭제
     
     local result=0
-    if ./run_backend.sh "test-tag" "test.env.prod" "test-repo" "test-image"; then
+    if ./run_backend.sh "test-tag" "test.env.prod" "test-image"; then
         result=1
     fi
     
@@ -270,30 +257,16 @@ test_invalid_env_file() {
     return $result
 }
 
-test_aws_ecr_login_failure() {
-    local temp_aws_exit_code="$MOCK_AWS_EXIT_CODE"
-    
-    export MOCK_AWS_EXIT_CODE=1
-    
-    local result=0
-    if ./run_backend.sh "test-tag" "test.env.prod" "test-repo" "test-image"; then
-        result=1
-    fi
-    
-    export MOCK_AWS_EXIT_CODE="$temp_aws_exit_code"
-    return $result
-}
-
 test_docker_login_failure() {
     local temp_docker_login="$MOCK_DOCKER_LOGIN_FAIL"
-    
+
     export MOCK_DOCKER_LOGIN_FAIL=true
-    
+
     local result=0
-    if ./run_backend.sh "test-tag" "test.env.prod" "test-repo" "test-image"; then
+    if ./run_backend.sh "test-tag" "test.env.prod" "test-image"; then
         result=1
     fi
-    
+
     export MOCK_DOCKER_LOGIN_FAIL="$temp_docker_login"
     return $result
 }
@@ -303,7 +276,7 @@ test_docker_pull_failure() {
     export MOCK_DOCKER_EXIT_CODE=1
     
     local result=0
-    if ./run_backend.sh "test-tag" "test.env.prod" "test-repo" "test-image"; then
+    if ./run_backend.sh "test-tag" "test.env.prod" "test-image"; then
         result=1
     fi
     
@@ -318,12 +291,12 @@ test_health_check_failure() {
     
     local result=0
 
-    if ./run_backend.sh "test-tag" "test.env.prod" "test-repo" "test-image"; then
+    if ./run_backend.sh "test-tag" "test.env.prod" "test-image"; then
         result=1
     fi
 
     local output
-    output=$(./run_backend.sh "test-tag" "test.env.prod" "test-repo" "test-image" 2>&1)
+    output=$(./run_backend.sh "test-tag" "test.env.prod" "test-image" 2>&1)
 
     if ! echo "$output" | grep -q "Fetching recent logs"; then
         echo "Expected log message 'Fetching recent logs' not found"
@@ -339,7 +312,7 @@ test_nginx_reload_failure() {
     export MOCK_NGINX_FAIL=true
     
     local result=0
-    if ./run_backend.sh "test-tag" "test.env.prod" "test-repo" "test-image"; then
+    if ./run_backend.sh "test-tag" "test.env.prod" "test-image"; then
         result=1
     fi
     
@@ -355,7 +328,7 @@ test_blue_to_green_deployment() {
     export MOCK_GREEN_STATUS=""
     
     local result=0
-    ./run_backend.sh "test-tag" "test.env.prod" "test-repo" "test-image" || result=1
+    ./run_backend.sh "test-tag" "test.env.prod" "test-image" || result=1
     
     export MOCK_BLUE_STATUS="$temp_blue_status"
     export MOCK_GREEN_STATUS="$temp_green_status"
@@ -371,7 +344,7 @@ test_green_to_blue_deployment() {
     export MOCK_GREEN_STATUS="running"
     
     local result=0
-    ./run_backend.sh "test-tag" "test.env.prod" "test-repo" "test-image" || result=1
+    ./run_backend.sh "test-tag" "test.env.prod" "test-image" || result=1
     
     export MOCK_BLUE_STATUS="$temp_blue_status"
     export MOCK_GREEN_STATUS="$temp_green_status"
@@ -427,11 +400,7 @@ main() {
         '
     "
 
-    describe "AWS Operations" "
-        context 'when AWS ECR login fails' '
-            it \"should fail with authentication error\" test_aws_ecr_login_failure
-        '
-        
+    describe "Docker Operations - Authentication" "
         context 'when Docker login fails' '
             it \"should fail with login error\" test_docker_login_failure
         '

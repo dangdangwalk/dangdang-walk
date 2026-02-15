@@ -7,7 +7,7 @@ on:
       - "backend/weather/**"
 
 env:
-  IMAGE: dangdangwalk/weather
+  IMAGE: aacho/dangdangwalk
 
 jobs:
   build:
@@ -48,16 +48,13 @@ jobs:
           password: ${{secrets.DOCKERHUB_TOKEN}}
       - name: Set short SHA
         run: echo "SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_ENV
-      - name: Docker build
-        run: |
-          docker build --platform linux/amd64 -t ${{ env.IMAGE }} --target prod -f weather/Dockerfile .
       - name: Build and push
         uses: docker/build-push-action@v2
         with:
           context: ./backend
           file: ./backend/weather/Dockerfile
           push: true
-          tags: ${{ env.IMAGE }}:${{ env.SHORT_SHA }}
+          tags: ${{ env.IMAGE }}:weather-${{ env.SHORT_SHA }}
   deploy:
     name: Oracle Instance Deploy
     needs: build
@@ -65,6 +62,8 @@ jobs:
     steps:
       - name: Set short SHA
         run: echo "SHORT_SHA=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_ENV
+      - name: Login to DockerHub
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
       - name: Create .env
         env:
           ENV_FILE: ${{ secrets.ENV_FILE_BACKEND_WEATHER }}
@@ -95,4 +94,4 @@ jobs:
       - name: run module
         run: |
           chmod +x /home/opc/run-weather.sh
-          /home/opc/run-weather.sh ${{ env.SHORT_SHA }} .env.prod ${{ env.IMAGE }}
+          /home/opc/run-weather.sh weather-${{ env.SHORT_SHA }} .env.prod ${{ env.IMAGE }}
