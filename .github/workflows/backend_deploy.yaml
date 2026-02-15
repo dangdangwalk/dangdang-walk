@@ -67,7 +67,7 @@ jobs:
           ENV_FILE: ${{ secrets.ENV_FILE_BACKEND }}
         run: |
           if [ ! -d "backend/server" ]; then
-            mkdir backend/server;
+            mkdir -p backend/server;
           fi
           echo "$ENV_FILE" > ./backend/server/.env.prod
       - name: Deploy to Oracle Cloud
