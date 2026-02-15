@@ -5,6 +5,9 @@ on:
     branches: [main]
     paths:
       - "backend/weather/**"
+      - ".github/workflows/backend_weather_deploy.yaml"
+      - ".github/script/run_backend.sh"
+  workflow_dispatch:
 
 env:
   IMAGE: aacho/dangdangwalk
