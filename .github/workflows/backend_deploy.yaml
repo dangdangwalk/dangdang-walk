@@ -5,6 +5,9 @@ on:
     branches: [main]
     paths:
       - "backend/server/**"
+      - ".github/workflows/backend_deploy.yaml"
+      - ".github/script/run_backend.sh"
+  workflow_dispatch:
 
 env:
   IMAGE: aacho/dangdangwalk
