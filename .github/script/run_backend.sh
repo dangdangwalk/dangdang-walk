@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Constants
-readonly ROOT_PATH=${ROOT_PATH:-"/home/ubuntu/actions-runner/_work/dangdang-walk/dangdang-walk/backend/server"}
+readonly ROOT_PATH=${ROOT_PATH:-"/home/opc/actions-runner/_work/dangdang-walk/dangdang-walk/backend/server"}
 readonly HEALTH_CHECK_MAX_RETRIES=${HEALTH_CHECK_MAX_RETRIES:-10}
 readonly HEALTH_CHECK_INTERVAL=${HEALTH_CHECK_INTERVAL:-3}
 readonly CONTAINER_INTERNAL_PORT=3031
@@ -11,10 +11,9 @@ readonly GREEN_EXTERNAL_PORT=3031
 # Variables
 TAG=$1
 ENV_FILE=$2
-REPO=$3
-IMAGE=$4
+IMAGE=$3
 
-CONTAINER_IMAGE="$REPO/$IMAGE:$TAG"
+CONTAINER_IMAGE="$IMAGE:$TAG"
 ENV_FILE_PATH="$ROOT_PATH/$ENV_FILE"
 
 # Logger Functions
@@ -25,8 +24,8 @@ log_error() { echo -e "\033[1;31m[ERROR]\033[0m $1" >&2; }
 
 # Input Validation
 validate_deployment_args() {
-  local required_vars=("TAG" "ENV_FILE" "REPO" "IMAGE")
-  
+  local required_vars=("TAG" "ENV_FILE" "IMAGE")
+
   for var in "${required_vars[@]}"; do
     if [ -z "${!var}" ]; then
       log_error "Required variable $var is not set"
@@ -48,22 +47,9 @@ validate_deployment_args() {
   log_info "Deployment arguments validated."
 }
 
-# AWS ECR Authentication
-authenticate_to_ecr() {
-  log_info "Authenticating with AWS ECR..."
-  
-  local aws_login_password
-  if ! aws_login_password=$(aws ecr get-login-password --region ap-northeast-2); then
-    log_error "Failed to get AWS ECR login password"
-    exit 1
-  fi
-  
-  if ! echo "$aws_login_password" | docker login --username AWS --password-stdin "$REPO"; then
-    log_error "Failed to authenticate with AWS ECR"
-    exit 1
-  fi
-  
-  log_success "Successfully authenticated with AWS ECR"
+# Docker Hub Authentication
+authenticate_to_docker_hub() {
+  log_info "Pulling image from Docker Hub..."
 }
 
 # Docker Container Management
@@ -162,7 +148,7 @@ main() {
   log_debug "Environment File Path: $ENV_FILE_PATH"
 
   validate_deployment_args
-  authenticate_to_ecr
+  authenticate_to_docker_hub
 
   log_info "Checking deployment status..."
   BLUE_CONTAINER_STATUS=$(docker inspect -f '{{.State.Status}}' dangdang-api-blue 2>/dev/null)

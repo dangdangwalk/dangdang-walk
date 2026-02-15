@@ -18,7 +18,15 @@ export class S3Service {
         private readonly configService: ConfigService,
         private readonly logger: WinstonLoggerService,
     ) {
-        this.s3Client = new S3Client({ region: this.configService.getOrThrow('AWS_S3_REGION') });
+        this.s3Client = new S3Client({
+            region: this.configService.getOrThrow('ORACLE_S3_REGION'),
+            endpoint: this.configService.getOrThrow('ORACLE_S3_ENDPOINT'),
+            credentials: {
+                accessKeyId: this.configService.getOrThrow('ORACLE_ACCESS_KEY'),
+                secretAccessKey: this.configService.getOrThrow('ORACLE_SECRET_ACCESS_KEY'),
+            },
+            forcePathStyle: true,
+        });
     }
 
     private makeFileName(userId: number, type: FileType[]): string[] {
