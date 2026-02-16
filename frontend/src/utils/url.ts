@@ -1,7 +1,7 @@
 const { REACT_APP_BASE_IMAGE_URL = '' } = window._ENV ?? process.env;
 
 function makeFileUrl(fileName: string) {
-    return `${REACT_APP_BASE_IMAGE_URL}/${fileName}`;
+    return `${REACT_APP_BASE_IMAGE_URL}/${encodeURIComponent(fileName)}`;
 }
 
 function getFileName(fileUrl: string) {
