@@ -69,9 +69,12 @@ deploy_new_container() {
     -p "$port":"$CONTAINER_INTERNAL_PORT" \
     --env-file "$ENV_FILE_PATH" \
     -v logs:/app/log \
+    -v "$ENV_FILE_PATH":/app/.env.prod \
     "$CONTAINER_IMAGE"
+
   verify_container_health "$port"
 }
+
 
 verify_container_health() {
   local port=$1
