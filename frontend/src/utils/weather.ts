@@ -28,7 +28,10 @@ export const getSkyGrade = ({ sky, precipitation, sunset, sunrise, time }: SkyPa
         return 'cloudy';
     }
 
-    if (Number(time) >= Number(sunrise) && Number(time) <= Number(sunset)) {
+    const sunriseTime = Number(sunrise) || 600;
+    const sunsetTime = Number(sunset) || 1800;
+
+    if (Number(time) >= sunriseTime && Number(time) <= sunsetTime) {
         return sky <= 2 ? 'dayClear' : 'dayCloudy';
     }
 
