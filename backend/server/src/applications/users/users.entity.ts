@@ -35,13 +35,13 @@ export class Users {
     @Column({ name: 'oauth_id', unique: true })
     oauthId: string;
 
-    @Column({ name: 'oauth_access_token' })
+    @Column({ name: 'oauth_access_token', length: 2048 })
     oauthAccessToken: string;
 
-    @Column({ name: 'oauth_refresh_token' })
+    @Column({ name: 'oauth_refresh_token', length: 2048 })
     oauthRefreshToken: string;
 
-    @Column({ name: 'refresh_token' })
+    @Column({ name: 'refresh_token', length: 512 })
     refreshToken: string;
 
     @CreateDateColumn()
