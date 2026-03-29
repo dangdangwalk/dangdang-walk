@@ -14,4 +14,8 @@ export const EVENTS = {
     DOG_DELETED: 'dog.deleted',
 } as const;
 
-export const CACHE_TTL = 1000 * 60 * 60;
+export const CACHE_TTL = {
+    STATISTICS: 1000 * 60 * 60,
+    DOG_PROFILES: 1000 * 60 * 30,
+    BREED_NAMES: 1000 * 60 * 60 * 24,
+} as const;
