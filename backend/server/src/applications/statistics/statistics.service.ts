@@ -72,13 +72,21 @@ export class StatisticsService {
                 todayWalkTime: true,
             },
         });
+
         return await Promise.all(
-            ownDogInfos.map(async (ownDogInfo) => ({
-                ...makeSubObject(ownDogInfo, ['id', 'name', 'profilePhotoUrl']),
-                recommendedWalkAmount: ownDogInfo.breed.recommendedWalkAmount,
-                todayWalkAmount: await this.todayWalkTimeService.updateIfStaleAndGetDuration(ownDogInfo.todayWalkTime),
-                weeklyWalks: await this.dogWalkDayService.updateIfStaleAndGetWeeklyWalks(ownDogInfo.walkDay),
-            })),
+            ownDogInfos.map(async (ownDogInfo) => {
+                const [todayWalkAmount, weeklyWalks] = await Promise.all([
+                    this.todayWalkTimeService.updateIfStaleAndGetDuration(ownDogInfo.todayWalkTime),
+                    this.dogWalkDayService.updateIfStaleAndGetWeeklyWalks(ownDogInfo.walkDay),
+                ]);
+
+                return {
+                    ...makeSubObject(ownDogInfo, ['id', 'name', 'profilePhotoUrl']),
+                    recommendedWalkAmount: ownDogInfo.breed.recommendedWalkAmount,
+                    todayWalkAmount,
+                    weeklyWalks,
+                };
+            }),
         );
     }
 
