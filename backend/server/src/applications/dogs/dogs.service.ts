@@ -1,5 +1,6 @@
-import { ConflictException, Injectable } from '@nestjs/common';
-import { EventEmitter2 } from '@nestjs/event-emitter';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { ConflictException, Inject, Injectable } from '@nestjs/common';
+import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 import { BreedService } from 'applications/breed';
 import { DogWalkDay } from 'applications/dog-walk-day/dog-walk-day.entity';
 import { DogWalkDayService } from 'applications/dog-walk-day/dog-walk-day.service';
@@ -7,6 +8,7 @@ import { TodayWalkTime } from 'applications/today-walk-time/today-walk-time.enti
 import { TodayWalkTimeService } from 'applications/today-walk-time/today-walk-time.service';
 import { UsersDogs } from 'applications/users-dogs/users-dogs.entity';
 import { UsersDogsService } from 'applications/users-dogs/users-dogs.service';
+import { Cache } from 'cache-manager';
 import { EntityManager, FindManyOptions, FindOneOptions, FindOptionsWhere, In } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
@@ -16,7 +18,7 @@ import { DogsRepository } from './dogs.repository';
 import { CreateDogRequest, DogProfileResponse, DogSummaryResponse, UpdateDogRequest } from './types/dogs.type';
 
 import { S3Service } from '../../infrastructure/aws/s3/s3.service';
-import { EVENTS } from '../../shared/utils/etc';
+import { CACHE_TTL, EVENTS } from '../../shared/utils/etc';
 import { makeSubObject, makeSubObjectsArray } from '../../shared/utils/manipulate.util';
 import { UsersService } from '../users/users.service';
 
@@ -32,6 +34,7 @@ export class DogsService {
         private readonly todayWalkTimeService: TodayWalkTimeService,
         private readonly s3Service: S3Service,
         private readonly entityManager: EntityManager,
+        @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
     ) {}
 
     @Transactional()
@@ -89,6 +92,7 @@ export class DogsService {
             this.todayWalkTimeService.delete({ id: In(todayWalkTimeIds) }),
             profilePhotoUrls.length ? this.s3Service.deleteObjects(userId, profilePhotoUrls) : Promise.resolve(),
         ]);
+        this.eventEmitter.emit(EVENTS.DOG_DELETED, { userId });
     }
 
     async find(where: FindManyOptions<Dogs>): Promise<Dogs[]> {
@@ -159,6 +163,13 @@ export class DogsService {
     }
 
     async getProfileList(userId: number): Promise<DogProfileResponse[]> {
+        const cacheKey = this.generateProfilesCacheKey(userId);
+        const cached = await this.cacheManager.get<DogProfileResponse[]>(cacheKey);
+
+        if (cached) {
+            return cached;
+        }
+
         const dogInfos = await this.entityManager
             .createQueryBuilder(Dogs, 'dogs')
             .innerJoin(UsersDogs, 'users_dogs', 'users_dogs.dogId = dogs.id')
@@ -166,7 +177,22 @@ export class DogsService {
             .where('users_dogs.userId = :userId', { userId })
             .getMany();
 
-        return dogInfos.map((dogInfo) => this.makeProfile(dogInfo));
+        const profiles = dogInfos.map((dogInfo) => this.makeProfile(dogInfo));
+        await this.cacheManager.set(cacheKey, profiles, CACHE_TTL.DOG_PROFILES);
+
+        return profiles;
+    }
+
+    @OnEvent(EVENTS.DOG_CREATED)
+    @OnEvent(EVENTS.DOG_DELETED)
+    @OnEvent(EVENTS.DOG_UPDATED)
+    async invalidateProfilesCache(payload: { userId: number }) {
+        const cacheKey = this.generateProfilesCacheKey(payload.userId);
+        await this.cacheManager.del(cacheKey);
+    }
+
+    private generateProfilesCacheKey(userId: number) {
+        return `dogs:profiles:${userId}`;
     }
 
     async getRelatedTableIdList(
