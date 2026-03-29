@@ -3,6 +3,7 @@ module.exports = {
     testEnvironment: 'node',
     moduleFileExtensions: ['js', 'json', 'ts'],
     setupFiles: ['jest-plugin-context/setup'],
+    modulePaths: ['<rootDir>/src'],
     moduleNameMapper: {
         '^src/(.*)$': '<rootDir>/src/$1',
     },
