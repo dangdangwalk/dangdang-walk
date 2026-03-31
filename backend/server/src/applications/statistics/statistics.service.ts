@@ -72,13 +72,21 @@ export class StatisticsService {
                 todayWalkTime: true,
             },
         });
+
         return await Promise.all(
-            ownDogInfos.map(async (ownDogInfo) => ({
-                ...makeSubObject(ownDogInfo, ['id', 'name', 'profilePhotoUrl']),
-                recommendedWalkAmount: ownDogInfo.breed.recommendedWalkAmount,
-                todayWalkAmount: await this.todayWalkTimeService.updateIfStaleAndGetDuration(ownDogInfo.todayWalkTime),
-                weeklyWalks: await this.dogWalkDayService.updateIfStaleAndGetWeeklyWalks(ownDogInfo.walkDay),
-            })),
+            ownDogInfos.map(async (ownDogInfo) => {
+                const [todayWalkAmount, weeklyWalks] = await Promise.all([
+                    this.todayWalkTimeService.updateIfStaleAndGetDuration(ownDogInfo.todayWalkTime),
+                    this.dogWalkDayService.updateIfStaleAndGetWeeklyWalks(ownDogInfo.walkDay),
+                ]);
+
+                return {
+                    ...makeSubObject(ownDogInfo, ['id', 'name', 'profilePhotoUrl']),
+                    recommendedWalkAmount: ownDogInfo.breed.recommendedWalkAmount,
+                    todayWalkAmount,
+                    weeklyWalks,
+                };
+            }),
         );
     }
 
@@ -89,7 +97,7 @@ export class StatisticsService {
         if (!overviewData) {
             this.logger.log(`유저 ${userId}의 일주일 산책 통계 데이터에 대한 캐시 미스 발생, 데이터를 조회합니다`);
             overviewData = await this.getDogsWeeklyWalkingOverviewData(userId);
-            await this.cacheManager.set(cacheKey, overviewData, CACHE_TTL);
+            await this.cacheManager.set(cacheKey, overviewData, CACHE_TTL.STATISTICS);
         }
         return overviewData;
     }
